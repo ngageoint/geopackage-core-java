@@ -7,7 +7,7 @@ import mil.nga.giat.geopackage.core.contents.ContentsDao;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
-import mil.nga.giat.geopackage.db.GeoPackageConnection;
+import mil.nga.giat.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.giat.geopackage.extension.ExtensionsDao;
 import mil.nga.giat.geopackage.features.columns.GeometryColumns;
 import mil.nga.giat.geopackage.features.columns.GeometryColumnsDao;
@@ -42,7 +42,7 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @return
 	 */
-	public GeoPackageConnection getDatabase();
+	public GeoPackageCoreConnection getDatabase();
 
 	/**
 	 * Get the connection source

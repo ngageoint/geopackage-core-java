@@ -10,7 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * 
  * @author osbornb
  */
-public interface GeoPackageConnection extends Closeable {
+public interface GeoPackageCoreConnection extends Closeable {
 
 	/**
 	 * Get a connection source

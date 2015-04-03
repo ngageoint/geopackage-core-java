@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.giat.geopackage.GeoPackageException;
-import mil.nga.giat.geopackage.db.GeoPackageConnection;
+import mil.nga.giat.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.giat.geopackage.features.columns.GeometryColumns;
 import mil.nga.giat.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.giat.geopackage.tiles.matrix.TileMatrix;
@@ -29,7 +29,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Database connection
 	 */
-	private GeoPackageConnection db;
+	private GeoPackageCoreConnection db;
 
 	/**
 	 * Geometry Columns DAO
@@ -63,7 +63,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * 
 	 * @param db
 	 */
-	public void setDatabase(GeoPackageConnection db) {
+	public void setDatabase(GeoPackageCoreConnection db) {
 		this.db = db;
 	}
 

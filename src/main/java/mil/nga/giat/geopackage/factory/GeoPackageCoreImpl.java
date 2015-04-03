@@ -17,7 +17,7 @@ import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSfSql;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
-import mil.nga.giat.geopackage.db.GeoPackageConnection;
+import mil.nga.giat.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.giat.geopackage.db.GeoPackageTableCreator;
 import mil.nga.giat.geopackage.extension.Extensions;
 import mil.nga.giat.geopackage.extension.ExtensionsDao;
@@ -53,12 +53,12 @@ import com.j256.ormlite.support.ConnectionSource;
  *
  * @author osbornb
  */
-public abstract class GeoPackageImpl implements GeoPackageCore {
+public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 	/**
 	 * SQLite database
 	 */
-	private final GeoPackageConnection database;
+	private final GeoPackageCoreConnection database;
 
 	/**
 	 * Connection source for creating data access objects
@@ -77,7 +77,7 @@ public abstract class GeoPackageImpl implements GeoPackageCore {
 	 * @param connectionSource
 	 * @param tableCreator
 	 */
-	protected GeoPackageImpl(GeoPackageConnection database,
+	protected GeoPackageCoreImpl(GeoPackageCoreConnection database,
 			ConnectionSource connectionSource,
 			GeoPackageTableCreator tableCreator) {
 		this.database = database;
@@ -98,7 +98,7 @@ public abstract class GeoPackageImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GeoPackageConnection getDatabase() {
+	public GeoPackageCoreConnection getDatabase() {
 		return database;
 	}
 

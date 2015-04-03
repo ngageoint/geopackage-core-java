@@ -23,14 +23,14 @@ public class GeoPackageTableCreator {
 	/**
 	 * SQLite database
 	 */
-	private final GeoPackageConnection db;
+	private final GeoPackageCoreConnection db;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param db
 	 */
-	public GeoPackageTableCreator(GeoPackageConnection db) {
+	public GeoPackageTableCreator(GeoPackageCoreConnection db) {
 		this.db = db;
 	}
 
