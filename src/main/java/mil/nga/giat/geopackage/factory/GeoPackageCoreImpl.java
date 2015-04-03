@@ -46,7 +46,6 @@ import mil.nga.giat.geopackage.tiles.user.TileTable;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.support.ConnectionSource;
 
 /**
  * A single GeoPackage database connection implementation
@@ -56,14 +55,14 @@ import com.j256.ormlite.support.ConnectionSource;
 public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 	/**
+	 * GeoPackage name
+	 */
+	private final String name;
+
+	/**
 	 * SQLite database
 	 */
 	private final GeoPackageCoreConnection database;
-
-	/**
-	 * Connection source for creating data access objects
-	 */
-	private final ConnectionSource connectionSource;
 
 	/**
 	 * Table creator
@@ -73,15 +72,16 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	/**
 	 * Constructor
 	 *
+	 * @param name
 	 * @param database
 	 * @param connectionSource
 	 * @param tableCreator
 	 */
-	protected GeoPackageCoreImpl(GeoPackageCoreConnection database,
-			ConnectionSource connectionSource,
+	protected GeoPackageCoreImpl(String name,
+			GeoPackageCoreConnection database,
 			GeoPackageTableCreator tableCreator) {
+		this.name = name;
 		this.database = database;
-		this.connectionSource = connectionSource;
 		this.tableCreator = tableCreator;
 	}
 
@@ -90,8 +90,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void close() {
-		connectionSource.closeQuietly();
 		database.close();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -100,14 +107,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public GeoPackageCoreConnection getDatabase() {
 		return database;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ConnectionSource getConnectionSource() {
-		return connectionSource;
 	}
 
 	/**
@@ -616,7 +615,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	private <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type) {
 		S dao;
 		try {
-			dao = DaoManager.createDao(connectionSource, type);
+			dao = DaoManager.createDao(database.getConnectionSource(), type);
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to create "
 					+ type.getSimpleName() + " dao", e);

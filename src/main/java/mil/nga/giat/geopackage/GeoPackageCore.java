@@ -23,8 +23,6 @@ import mil.nga.giat.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.giat.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.giat.geopackage.tiles.user.TileTable;
 
-import com.j256.ormlite.support.ConnectionSource;
-
 /**
  * A single GeoPackage database connection
  * 
@@ -38,18 +36,18 @@ public interface GeoPackageCore extends Closeable {
 	public void close();
 
 	/**
+	 * Get the GeoPackage name
+	 * 
+	 * @return
+	 */
+	public String getName();
+
+	/**
 	 * Get the SQLite database
 	 * 
 	 * @return
 	 */
 	public GeoPackageCoreConnection getDatabase();
-
-	/**
-	 * Get the connection source
-	 * 
-	 * @return
-	 */
-	public ConnectionSource getConnectionSource();
 
 	/**
 	 * Get the feature tables

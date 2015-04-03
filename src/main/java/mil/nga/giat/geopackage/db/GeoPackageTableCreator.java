@@ -2,16 +2,21 @@ package mil.nga.giat.geopackage.db;
 
 import java.io.File;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import mil.nga.giat.geopackage.GeoPackageException;
+import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.giat.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.giat.geopackage.property.GeoPackageProperties;
 import mil.nga.giat.geopackage.property.PropertyConstants;
 import mil.nga.giat.geopackage.user.UserColumn;
 import mil.nga.giat.geopackage.user.UserTable;
 import mil.nga.giat.geopackage.user.UserUniqueConstraint;
+
+import com.j256.ormlite.dao.DaoManager;
 
 /**
  * Executes database scripts to create GeoPackage tables
@@ -238,6 +243,32 @@ public class GeoPackageTableCreator {
 
 		// Create the table
 		db.execSQL(sql.toString());
+	}
+
+	/**
+	 * Create the minimum required GeoPackage tables
+	 */
+	public void createRequired() {
+
+		// Create the Spatial Reference System table (spec Requirement 10)
+		createSpatialReferenceSystem();
+
+		// Create the Contents table (spec Requirement 13)
+		createContents();
+
+		// Create the required Spatial Reference Systems (spec Requirement
+		// 11)
+		try {
+			SpatialReferenceSystemDao dao = DaoManager.createDao(
+					db.getConnectionSource(), SpatialReferenceSystem.class);
+			dao.createWgs84();
+			dao.createUndefinedCartesian();
+			dao.createUndefinedGeographic();
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Error creating default required Spatial Reference Systems",
+					e);
+		}
 	}
 
 }

@@ -1,6 +1,9 @@
 package mil.nga.giat.geopackage.db;
 
 import java.io.Closeable;
+import java.nio.ByteBuffer;
+
+import mil.nga.giat.geopackage.GeoPackageConstants;
 
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -10,21 +13,21 @@ import com.j256.ormlite.support.ConnectionSource;
  * 
  * @author osbornb
  */
-public interface GeoPackageCoreConnection extends Closeable {
+public abstract class GeoPackageCoreConnection implements Closeable {
 
 	/**
 	 * Get a connection source
 	 * 
 	 * @return
 	 */
-	public ConnectionSource getConnectionSource();
+	public abstract ConnectionSource getConnectionSource();
 
 	/**
 	 * Execute the sql
 	 * 
 	 * @param sql
 	 */
-	public void execSQL(String sql);
+	public abstract void execSQL(String sql);
 
 	/**
 	 * Check if the table exists
@@ -32,12 +35,23 @@ public interface GeoPackageCoreConnection extends Closeable {
 	 * @param tableName
 	 * @return
 	 */
-	public boolean tableExists(String tableName);
+	public abstract boolean tableExists(String tableName);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void close();
+	public abstract void close();
+
+	/**
+	 * Set the GeoPackage application id
+	 */
+	public void setApplicationId() {
+		// Set the application id as a GeoPackage
+		int applicationId = ByteBuffer
+				.wrap(GeoPackageConstants.APPLICATION_ID.getBytes())
+				.asIntBuffer().get();
+		execSQL(String.format("PRAGMA application_id = %d;", applicationId));
+	}
 
 }
