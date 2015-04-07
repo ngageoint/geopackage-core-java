@@ -38,6 +38,17 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public abstract boolean tableExists(String tableName);
 
 	/**
+	 * Convenience method for deleting rows in the database.
+	 * 
+	 * @param table
+	 * @param whereClause
+	 * @param whereArgs
+	 * @return
+	 */
+	public abstract int delete(String table, String whereClause,
+			String[] whereArgs);
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
