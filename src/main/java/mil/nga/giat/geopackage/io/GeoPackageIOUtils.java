@@ -103,9 +103,22 @@ public class GeoPackageIOUtils {
 	}
 
 	/**
+	 * Get the file bytes
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	public static byte[] fileBytes(File file) throws IOException {
+
+		FileInputStream fis = new FileInputStream(file);
+
+		return streamBytes(fis);
+	}
+
+	/**
 	 * Get the stream bytes
 	 * 
-	 * @param copyFrom
+	 * @param stream
 	 * @throws IOException
 	 */
 	public static byte[] streamBytes(InputStream stream) throws IOException {
