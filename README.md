@@ -51,7 +51,12 @@ The [GeoPackage Java](https://git.geointapps.org/geopackage/geopackage-java) lib
 
 ### Dependencies ###
 
+#### Remote ####
+
 * [WKB](https://git.geointapps.org/geopackage/wkb) (The MIT License (MIT)) - Well-Known Binary Library
 * [OrmLite](http://ormlite.com/) (Open Source License) - Object Relational Mapping (ORM) Library
+
+#### Embedded ####
+
 * [Proj4J](http://trac.osgeo.org/proj4j/) (Apache License, Version 2.0) - Projection Library
 
