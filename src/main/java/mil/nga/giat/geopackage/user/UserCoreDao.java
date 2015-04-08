@@ -532,7 +532,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @return
 	 */
-	public abstract int count(String where, String[] args);
+	public int count(String where, String[] args){
+		return db.count(getTableName(), where, args);
+	}
 
 	/**
 	 * Get the value tolerance range min and max values

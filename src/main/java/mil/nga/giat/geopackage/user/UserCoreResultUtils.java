@@ -13,27 +13,27 @@ public class UserCoreResultUtils {
 	/**
 	 * Integer field type
 	 */
-	private static final int FIELD_TYPE_INTEGER = 1;
+	public static final int FIELD_TYPE_INTEGER = 1;
 
 	/**
 	 * Float field type
 	 */
-	private static final int FIELD_TYPE_FLOAT = 2;
+	public static final int FIELD_TYPE_FLOAT = 2;
 
 	/**
 	 * String field type
 	 */
-	private static final int FIELD_TYPE_STRING = 3;
+	public static final int FIELD_TYPE_STRING = 3;
 
 	/**
 	 * Blob field type
 	 */
-	private static final int FIELD_TYPE_BLOB = 4;
+	public static final int FIELD_TYPE_BLOB = 4;
 
 	/**
 	 * Null field type
 	 */
-	private static final int FIELD_TYPE_NULL = 0;
+	public static final int FIELD_TYPE_NULL = 0;
 
 	/**
 	 * Get the value from the cursor from the provided column
@@ -110,6 +110,10 @@ public class UserCoreResultUtils {
 			throw new GeoPackageException("Data Type " + dataType
 					+ " is not an integer type");
 		}
+		
+		if(result.wasNull()){
+			value = null;
+		}
 
 		return value;
 	}
@@ -140,6 +144,10 @@ public class UserCoreResultUtils {
 		default:
 			throw new GeoPackageException("Data Type " + dataType
 					+ " is not a float type");
+		}
+		
+		if(result.wasNull()){
+			value = null;
 		}
 
 		return value;

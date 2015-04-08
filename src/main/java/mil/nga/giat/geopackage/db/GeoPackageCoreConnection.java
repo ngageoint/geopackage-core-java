@@ -30,14 +30,6 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public abstract void execSQL(String sql);
 
 	/**
-	 * Check if the table exists
-	 * 
-	 * @param tableName
-	 * @return
-	 */
-	public abstract boolean tableExists(String tableName);
-
-	/**
 	 * Convenience method for deleting rows in the database.
 	 * 
 	 * @param table
@@ -49,10 +41,31 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 			String[] whereArgs);
 
 	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 * @param where
+	 * @param args
+	 * @return
+	 */
+	public abstract int count(String table, String where, String[] args);
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public abstract void close();
+
+	/**
+	 * Check if the table exists
+	 * 
+	 * @param tableName
+	 * @return
+	 */
+	public boolean tableExists(String tableName) {
+		return count("sqlite_master", "tbl_name = ?",
+				new String[] { tableName }) > 0;
+	}
 
 	/**
 	 * Set the GeoPackage application id

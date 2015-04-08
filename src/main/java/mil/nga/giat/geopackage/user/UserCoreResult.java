@@ -54,6 +54,13 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	public TRow getRow();
 
 	/**
+	 * Get the count of results
+	 * 
+	 * @return
+	 */
+	public int getCount();
+
+	/**
 	 * Move the cursor to the next row.
 	 * 
 	 * @return
@@ -66,6 +73,13 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * @return
 	 */
 	public boolean moveToFirst();
+
+	/**
+	 * Move the cursor to an absolute position
+	 * 
+	 * @param position
+	 */
+	public boolean moveToPosition(int position);
 
 	/**
 	 * Returns data type of the given column's value
@@ -138,6 +152,13 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * @return
 	 */
 	public byte[] getBlob(int columnIndex);
+
+	/**
+	 * Was the last value retrieved null
+	 * 
+	 * @return
+	 */
+	public boolean wasNull();
 
 	/**
 	 * Close the result
