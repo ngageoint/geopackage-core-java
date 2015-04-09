@@ -43,11 +43,25 @@ public interface GeoPackageCore extends Closeable {
 	public String getName();
 
 	/**
+	 * Get the GeoPackage path
+	 * 
+	 * @return
+	 */
+	public String getPath();
+
+	/**
 	 * Get the SQLite database
 	 * 
 	 * @return
 	 */
 	public GeoPackageCoreConnection getDatabase();
+
+	/**
+	 * Is the GeoPackage writable
+	 * 
+	 * @return
+	 */
+	public boolean isWritable();
 
 	/**
 	 * Get the feature tables
@@ -269,5 +283,10 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tableName
 	 */
 	public void deleteTableQuietly(String tableName);
+
+	/**
+	 * Verify the GeoPackage is writable and throw an exception if it is not
+	 */
+	public void verifyWritable();
 
 }

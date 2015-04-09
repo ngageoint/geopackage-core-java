@@ -60,6 +60,11 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	private final String name;
 
 	/**
+	 * GeoPackage file path
+	 */
+	private final String path;
+
+	/**
 	 * SQLite database
 	 */
 	private final GeoPackageCoreConnection database;
@@ -70,19 +75,28 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	private final GeoPackageTableCreator tableCreator;
 
 	/**
+	 * Writable GeoPackage flag
+	 */
+	private final boolean writable;
+
+	/**
 	 * Constructor
 	 *
 	 * @param name
+	 * @param path
 	 * @param database
 	 * @param connectionSource
 	 * @param tableCreator
+	 * @param writable
 	 */
-	protected GeoPackageCoreImpl(String name,
+	protected GeoPackageCoreImpl(String name, String path,
 			GeoPackageCoreConnection database,
-			GeoPackageTableCreator tableCreator) {
+			GeoPackageTableCreator tableCreator, boolean writable) {
 		this.name = name;
+		this.path = path;
 		this.database = database;
 		this.tableCreator = tableCreator;
+		this.writable = writable;
 	}
 
 	/**
@@ -105,8 +119,24 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public GeoPackageCoreConnection getDatabase() {
 		return database;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isWritable() {
+		return writable;
 	}
 
 	/**
@@ -229,6 +259,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createGeometryColumnsTable() {
+		verifyWritable();
+
 		boolean created = false;
 		GeometryColumnsDao dao = getGeometryColumnsDao();
 		try {
@@ -248,6 +280,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void createFeatureTable(FeatureTable table) {
+		verifyWritable();
+
 		tableCreator.createTable(table);
 	}
 
@@ -319,6 +353,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createTileMatrixSetTable() {
+		verifyWritable();
+
 		boolean created = false;
 		TileMatrixSetDao dao = getTileMatrixSetDao();
 		try {
@@ -346,6 +382,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createTileMatrixTable() {
+		verifyWritable();
+
 		boolean created = false;
 		TileMatrixDao dao = getTileMatrixDao();
 		try {
@@ -365,6 +403,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void createTileTable(TileTable table) {
+		verifyWritable();
+
 		tableCreator.createTable(table);
 	}
 
@@ -463,6 +503,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createDataColumnsTable() {
+		verifyWritable();
+
 		boolean created = false;
 		DataColumnsDao dao = getDataColumnsDao();
 		try {
@@ -490,6 +532,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createDataColumnConstraintsTable() {
+		verifyWritable();
+
 		boolean created = false;
 		DataColumnConstraintsDao dao = getDataColumnConstraintsDao();
 		try {
@@ -517,6 +561,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createMetadataTable() {
+		verifyWritable();
+
 		boolean created = false;
 		MetadataDao dao = getMetadataDao();
 		try {
@@ -544,6 +590,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createMetadataReferenceTable() {
+		verifyWritable();
+
 		boolean created = false;
 		MetadataReferenceDao dao = getMetadataReferenceDao();
 		try {
@@ -571,6 +619,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean createExtensionsTable() {
+		verifyWritable();
+
 		boolean created = false;
 		ExtensionsDao dao = getExtensionsDao();
 		try {
@@ -590,6 +640,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void deleteTable(String table) {
+		verifyWritable();
+
 		ContentsDao contentsDao = getContentsDao();
 		contentsDao.deleteTable(table);
 	}
@@ -599,6 +651,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void deleteTableQuietly(String tableName) {
+		verifyWritable();
+
 		try {
 			deleteTable(tableName);
 		} catch (Exception e) {
@@ -616,24 +670,29 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @param geometryColumns
 	 */
 	protected void dropSQLiteTriggers(GeometryColumns geometryColumns) {
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_insert");
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_update1");
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_update2");
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_update3");
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_update4");
-		database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-				+ geometryColumns.getTableName() + "_"
-				+ geometryColumns.getColumnName() + "_delete");
+
+		if (writable) {
+
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_insert");
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_update1");
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_update2");
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_update3");
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_update4");
+			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getTableName() + "_"
+					+ geometryColumns.getColumnName() + "_delete");
+
+		}
 	}
 
 	/**
@@ -669,6 +728,18 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			throw new GeoPackageException(
 					"Failed to detect if table or view exists for dao: "
 							+ dao.getDataClass().getSimpleName(), e);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void verifyWritable() {
+		if (!writable) {
+			throw new GeoPackageException(
+					"GeoPackage file is not writable. Name: " + name
+							+ (path != null ? ", Path: " + path : ""));
 		}
 	}
 
