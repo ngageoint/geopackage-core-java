@@ -55,7 +55,6 @@ public class ProjectionRetriever {
 	private static Properties initializeConfigurationProperties() {
 		Properties properties = new Properties();
 
-		Thread.currentThread().setContextClassLoader(ProjectionRetriever.class.getClassLoader());
 		InputStream in = Thread.currentThread().getContextClassLoader()
 				.getResourceAsStream(PROJECTIONS_PROPERTY_FILE);
 		if (in != null) {
