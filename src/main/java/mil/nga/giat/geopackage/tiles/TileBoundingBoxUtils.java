@@ -112,10 +112,7 @@ public class TileBoundingBoxUtils {
 
 		double boxHeight = boundingBox.getMaxLatitude()
 				- boundingBox.getMinLatitude();
-		double offset = latitude - boundingBox.getMaxLatitude();
-		if (offset < 0) {
-			offset *= -1;
-		}
+		double offset = boundingBox.getMaxLatitude() - latitude;
 		double percentage = offset / boxHeight;
 		float pixel = (float) (percentage * height);
 
