@@ -404,6 +404,16 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the zoom level from the tiles per side
+	 * 
+	 * @param tilesPerSide
+	 * @return
+	 */
+	public static int zoomFromTilesPerSide(int tilesPerSide) {
+		return (int) (Math.log(tilesPerSide) / Math.log(2));
+	}
+
+	/**
 	 * Get the tile grid
 	 * 
 	 * @param webMercatorTotalBox
@@ -551,4 +561,27 @@ public class TileBoundingBoxUtils {
 		return boundingBox;
 	}
 
+	/**
+	 * Get the zoom level of where the web mercator bounding box fits into the
+	 * complete world
+	 * 
+	 * @param webMercatorBoundingBox
+	 * @return zoom level
+	 */
+	public static int getZoomLevel(BoundingBox webMercatorBoundingBox) {
+
+		double worldLength = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH * 2;
+
+		int widthTiles = (int) (worldLength / (webMercatorBoundingBox
+				.getMaxLongitude() - webMercatorBoundingBox.getMinLongitude()));
+		int heightTiles = (int) (worldLength / (webMercatorBoundingBox
+				.getMaxLatitude() - webMercatorBoundingBox.getMinLatitude()));
+
+		int tilesPerSide = Math.min(widthTiles, heightTiles);
+		tilesPerSide = Math.max(tilesPerSide, 1);
+
+		int zoom = zoomFromTilesPerSide(tilesPerSide);
+
+		return zoom;
+	}
 }
