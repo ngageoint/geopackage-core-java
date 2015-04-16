@@ -9,6 +9,7 @@ import mil.nga.giat.geopackage.GeoPackageConstants;
 import mil.nga.giat.geopackage.GeoPackageException;
 import mil.nga.giat.geopackage.extension.GeometryExtensions;
 import mil.nga.giat.wkb.geom.Geometry;
+import mil.nga.giat.wkb.geom.GeometryEnvelope;
 import mil.nga.giat.wkb.io.ByteReader;
 import mil.nga.giat.wkb.io.ByteWriter;
 import mil.nga.giat.wkb.io.WkbGeometryReader;
@@ -50,7 +51,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Envelope
 	 */
-	private GeoPackageGeometryEnvelope envelope;
+	private GeometryEnvelope envelope;
 
 	/**
 	 * Well-Known Binary Geometry index of where the bytes start
@@ -249,7 +250,7 @@ public class GeoPackageGeometryData {
 
 		// Add the envelope contents indicator code (3-bit unsigned integer to
 		// bits 3, 2, and 1)
-		int envelopeIndicator = envelope == null ? 0 : envelope.getIndicator();
+		int envelopeIndicator = envelope == null ? 0 : getIndicator(envelope);
 		flag += (envelopeIndicator << 1);
 
 		// Add the byte order to bit 0, 0 for Big Endian and 1 for Little
@@ -267,10 +268,10 @@ public class GeoPackageGeometryData {
 	 * @param reader
 	 * @return
 	 */
-	private GeoPackageGeometryEnvelope readEnvelope(int envelopeIndicator,
+	private GeometryEnvelope readEnvelope(int envelopeIndicator,
 			ByteReader reader) {
 
-		GeoPackageGeometryEnvelope envelope = null;
+		GeometryEnvelope envelope = null;
 
 		if (envelopeIndicator > 0) {
 
@@ -302,7 +303,7 @@ public class GeoPackageGeometryData {
 				maxM = reader.readDouble();
 			}
 
-			envelope = new GeoPackageGeometryEnvelope(hasZ, hasM);
+			envelope = new GeometryEnvelope(hasZ, hasM);
 
 			envelope.setMinX(minX);
 			envelope.setMaxX(maxX);
@@ -369,7 +370,7 @@ public class GeoPackageGeometryData {
 		return srsId;
 	}
 
-	public GeoPackageGeometryEnvelope getEnvelope() {
+	public GeometryEnvelope getEnvelope() {
 		return envelope;
 	}
 
@@ -393,7 +394,7 @@ public class GeoPackageGeometryData {
 		this.srsId = srsId;
 	}
 
-	public void setEnvelope(GeoPackageGeometryEnvelope envelope) {
+	public void setEnvelope(GeometryEnvelope envelope) {
 		this.envelope = envelope;
 	}
 
@@ -471,6 +472,24 @@ public class GeoPackageGeometryData {
 	 */
 	public int getWkbGeometryIndex() {
 		return wkbGeometryIndex;
+	}
+
+	/**
+	 * Get the envelope flag indicator
+	 * 
+	 * 1 for xy, 2 for xyz, 3 for xym, 4 for xyzm (null would be 0)
+	 * 
+	 * @return
+	 */
+	public static int getIndicator(GeometryEnvelope envelope) {
+		int indicator = 1;
+		if (envelope.hasZ()) {
+			indicator++;
+		}
+		if (envelope.hasM()) {
+			indicator += 2;
+		}
+		return indicator;
 	}
 
 }

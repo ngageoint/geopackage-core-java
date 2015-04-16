@@ -23,6 +23,11 @@ import mil.nga.giat.geopackage.projection.Projection;
 public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends UserTable<TColumn>, TRow extends UserCoreRow<TColumn, TTable>, TResult extends UserCoreResult<TColumn, TTable, TRow>> {
 
 	/**
+	 * Database
+	 */
+	private final String database;
+
+	/**
 	 * Database connection
 	 */
 	private final GeoPackageCoreConnection db;
@@ -45,13 +50,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Constructor
 	 * 
+	 * @param database
 	 * @param db
 	 * @param userDb
 	 * @param table
 	 */
-	protected UserCoreDao(GeoPackageCoreConnection db,
+	protected UserCoreDao(String database, GeoPackageCoreConnection db,
 			UserCoreConnection<TColumn, TTable, TRow, TResult> userDb,
 			TTable table) {
+		this.database = database;
 		this.db = db;
 		this.userDb = userDb;
 		this.table = table;
@@ -63,6 +70,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return
 	 */
 	public abstract TRow newRow();
+
+	/**
+	 * Get the database
+	 * 
+	 * @return
+	 */
+	public String getDatabase() {
+		return database;
+	}
 
 	/**
 	 * Get the database connection
@@ -532,7 +548,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @return
 	 */
-	public int count(String where, String[] args){
+	public int count(String where, String[] args) {
 		return db.count(getTableName(), where, args);
 	}
 
