@@ -98,41 +98,39 @@ public class ProjectionTransform {
 
 		ProjCoordinate lowerLeft = new ProjCoordinate(
 				boundingBox.getMinLongitude(), boundingBox.getMinLatitude());
+		ProjCoordinate lowerRight = new ProjCoordinate(
+				boundingBox.getMaxLongitude(), boundingBox.getMinLatitude());
 		ProjCoordinate upperRight = new ProjCoordinate(
 				boundingBox.getMaxLongitude(), boundingBox.getMaxLatitude());
+		ProjCoordinate upperLeft = new ProjCoordinate(
+				boundingBox.getMinLongitude(), boundingBox.getMaxLatitude());
 
 		ProjCoordinate projectedLowerLeft = transform(lowerLeft);
+		ProjCoordinate projectedLowerRight = transform(lowerRight);
 		ProjCoordinate projectedUpperRight = transform(upperRight);
+		ProjCoordinate projectedUpperLeft = transform(upperLeft);
 
-		BoundingBox projectedBoundingBox = new BoundingBox(
-				projectedLowerLeft.x, projectedUpperRight.x,
-				projectedLowerLeft.y, projectedUpperRight.y);
+		double minX = Math.min(projectedLowerLeft.x, projectedUpperLeft.x);
+		double maxX = Math.max(projectedLowerRight.x, projectedUpperRight.x);
+		double minY = Math.min(projectedLowerLeft.y, projectedLowerRight.y);
+		double maxY = Math.max(projectedUpperLeft.y, projectedUpperRight.y);
+
+		BoundingBox projectedBoundingBox = new BoundingBox(minX, maxX, minY,
+				maxY);
 
 		return projectedBoundingBox;
 	}
 
 	/**
-	 * Transform latitude
-	 * 
-	 * @param y
-	 * @return
-	 */
-	public double transformLatitude(double y) {
-		ProjCoordinate fromCoord = new ProjCoordinate(0, y);
-		ProjCoordinate toCoord = transform(fromCoord);
-		return toCoord.y;
-	}
-
-	/**
-	 * Transform longitude
+	 * Transform a x and y location
 	 * 
 	 * @param x
 	 * @return
 	 */
-	public double transformLongitude(double x) {
-		ProjCoordinate fromCoord = new ProjCoordinate(x, 0);
+	public double[] transform(double x, double y) {
+		ProjCoordinate fromCoord = new ProjCoordinate(x, y);
 		ProjCoordinate toCoord = transform(fromCoord);
-		return toCoord.x;
+		return new double[] { toCoord.x, toCoord.y };
 	}
 
 	/**
