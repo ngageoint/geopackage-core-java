@@ -365,7 +365,7 @@ public class TileBoundingBoxUtils {
 		if (tempMaxY % 1 == 0) {
 			maxY--;
 		}
-		maxX = Math.min(maxX, tilesPerSide - 1);
+		maxY = Math.min(maxY, tilesPerSide - 1);
 
 		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
 
