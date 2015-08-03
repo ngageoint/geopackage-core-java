@@ -9,9 +9,9 @@
 	<url>https://github.com/ngageoint/geopackage-core-java</url>
 	<description>Core functionality for GeoPackage implementations</description>
 	<scm>
-		<url>https://github.com/ngageoint/geopackage-core-java</url>
-		<connection>scm:git:ssh://git@github.com:ngageoint/geopackage-core-java.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:ngageoint/geopackage-core-java.git</developerConnection>
+		<url>git@github.com:ngageoint/geopackage-core-java.git</url>
+		<connection>scm:git:git@github.com:ngageoint/geopackage-core-java.git</connection>
+		<developerConnection>scm:git:git@github.com:ngageoint/geopackage-core-java.git</developerConnection>
 	</scm>
 	<licenses>
 		<license>
