@@ -6,17 +6,17 @@
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>GeoPackage Core</name>
-	<url>https://git.geointapps.org/geopackage/geopackage-core</url>
+	<url>https://github.com/ngageoint/geopackage-core-java</url>
 	<description>Core functionality for GeoPackage implementations</description>
 	<scm>
-		<url>https://git.geointapps.org/geopackage/geopackage-core</url>
-		<connection>scm:git:ssh://git@git.geointapps.org:geopackage/geopackage-core.git</connection>
-		<developerConnection>scm:git:ssh://git@git.geointapps.org:geopackage/geopackage-core.git</developerConnection>
+		<url>https://github.com/ngageoint/geopackage-core-java</url>
+		<connection>scm:git:ssh://git@github.com:ngageoint/geopackage-core-java.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:ngageoint/geopackage-core-java.git</developerConnection>
 	</scm>
 	<licenses>
 		<license>
 			<name>The MIT License (MIT)</name>
-			<url>https://git.geointapps.org/geopackage/geopackage-core/raw/master/LICENSE</url>
+			<url>https://github.com/ngageoint/geopackage-core-java/blob/master/LICENSE.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
