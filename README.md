@@ -29,6 +29,15 @@ The [GeoPackage MapCache](https://github.com/ngageoint/geopackage-mapcache-andro
 
 The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a Java GeoPackage implementation.
 
+### Build ###
+
+The following repository must be built first (Central Repository Artifacts Coming Soon):
+* [GeoPackage WKB Java] (https://github.com/ngageoint/geopackage-wkb-java)
+
+Build this repository using Maven:
+
+    mvn clean install
+
 ### Dependencies ###
 
 #### Remote ####
