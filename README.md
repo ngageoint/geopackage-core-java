@@ -34,7 +34,7 @@ The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a
 The following repository must be built first (Central Repository Artifacts Coming Soon):
 * [GeoPackage WKB Java] (https://github.com/ngageoint/geopackage-wkb-java)
 
-Build this repository using Maven:
+Build this repository using Eclipse and/or Maven:
 
     mvn clean install
 
