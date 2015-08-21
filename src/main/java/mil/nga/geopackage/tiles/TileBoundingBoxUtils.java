@@ -444,6 +444,18 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the standard y tile location as TMS
+	 * @param zoom
+	 * @param y
+	 * @return
+	 */
+	public static int getYAsTMS(int zoom, int y){
+		int tilesPerSide = tilesPerSide(zoom);
+		int tmsY = tilesPerSide - y - 1;
+		return tmsY;
+	}
+	
+	/**
 	 * Get the zoom level from the tiles per side
 	 *
 	 * @param tilesPerSide
