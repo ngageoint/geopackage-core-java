@@ -42,4 +42,9 @@ public class ProjectionConstants {
 	 */
 	public static double WEB_MERCATOR_HALF_WORLD_WIDTH = 20037508.342789244;
 
+	/**
+	 * Web mercator precision
+	 */
+	public static double WEB_MERCATOR_PRECISION = 0.0000000001;
+	
 }
