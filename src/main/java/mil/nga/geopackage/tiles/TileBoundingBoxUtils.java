@@ -352,19 +352,13 @@ public class TileBoundingBoxUtils {
 		int minX = (int) ((webMercatorBoundingBox.getMinLongitude() + ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize);
 		double tempMaxX = (webMercatorBoundingBox.getMaxLongitude() + ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
 				/ tileSize;
-		int maxX = (int) tempMaxX;
-		if (tempMaxX % 1 == 0) {
-			maxX--;
-		}
+		int maxX = (int) (tempMaxX - ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxX = Math.min(maxX, tilesPerSide - 1);
 
 		int minY = (int) (((webMercatorBoundingBox.getMaxLatitude() - ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1) / tileSize);
 		double tempMaxY = ((webMercatorBoundingBox.getMinLatitude() - ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
 				/ tileSize;
-		int maxY = (int) tempMaxY;
-		if (tempMaxY % 1 == 0) {
-			maxY--;
-		}
+		int maxY = (int) (tempMaxY - ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxY = Math.min(maxY, tilesPerSide - 1);
 
 		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
@@ -444,17 +438,18 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the standard y tile location as TMS
+	 * Get the standard y tile location as TMS or a TMS y location as standard
+	 * 
 	 * @param zoom
 	 * @param y
 	 * @return
 	 */
-	public static int getYAsTMS(int zoom, int y){
+	public static int getYAsOppositeTileFormat(int zoom, int y) {
 		int tilesPerSide = tilesPerSide(zoom);
-		int tmsY = tilesPerSide - y - 1;
-		return tmsY;
+		int oppositeY = tilesPerSide - y - 1;
+		return oppositeY;
 	}
-	
+
 	/**
 	 * Get the zoom level from the tiles per side
 	 *
@@ -587,11 +582,31 @@ public class TileBoundingBoxUtils {
 			BoundingBox webMercatorTotalBox, TileMatrix tileMatrix,
 			long tileColumn, long tileRow) {
 
+		return getWebMercatorBoundingBox(webMercatorTotalBox,
+				tileMatrix.getMatrixWidth(), tileMatrix.getMatrixHeight(),
+				tileColumn, tileRow);
+	}
+
+	/**
+	 * Get the web mercator bounding box of the Tile Row from the Tile Matrix
+	 * zoom level
+	 *
+	 * @param webMercatorTotalBox
+	 * @param matrixWidth
+	 * @param matrixHeight
+	 * @param tileColumn
+	 * @param tileRow
+	 * @return
+	 */
+	public static BoundingBox getWebMercatorBoundingBox(
+			BoundingBox webMercatorTotalBox, long tileMatrixWidth,
+			long tileMatrixHeight, long tileColumn, long tileRow) {
+
 		// Get the tile width
 		double matrixMinX = webMercatorTotalBox.getMinLongitude();
 		double matrixMaxX = webMercatorTotalBox.getMaxLongitude();
 		double matrixWidth = matrixMaxX - matrixMinX;
-		double tileWidth = matrixWidth / tileMatrix.getMatrixWidth();
+		double tileWidth = matrixWidth / tileMatrixWidth;
 
 		// Find the longitude range
 		double minLon = matrixMinX + (tileWidth * tileColumn);
@@ -601,7 +616,7 @@ public class TileBoundingBoxUtils {
 		double matrixMinY = webMercatorTotalBox.getMinLatitude();
 		double matrixMaxY = webMercatorTotalBox.getMaxLatitude();
 		double matrixHeight = matrixMaxY - matrixMinY;
-		double tileHeight = matrixHeight / tileMatrix.getMatrixHeight();
+		double tileHeight = matrixHeight / tileMatrixHeight;
 
 		// Find the latitude range
 		double maxLat = matrixMaxY - (tileHeight * tileRow);
@@ -636,4 +651,37 @@ public class TileBoundingBoxUtils {
 
 		return zoom;
 	}
+
+	/**
+	 * Get the pixel x size for the bounding box with matrix width and tile
+	 * width
+	 * 
+	 * @param webMercatorBoundingBox
+	 * @param matrixWidth
+	 * @param tileWidth
+	 * @return
+	 */
+	public static double getPixelXSize(BoundingBox webMercatorBoundingBox,
+			long matrixWidth, int tileWidth) {
+		double pixelXSize = (webMercatorBoundingBox.getMaxLongitude() - webMercatorBoundingBox
+				.getMinLongitude()) / matrixWidth / tileWidth;
+		return pixelXSize;
+	}
+
+	/**
+	 * Get the pixel y size for the bounding box with matrix height and tile
+	 * height
+	 * 
+	 * @param webMercatorBoundingBox
+	 * @param matrixHeight
+	 * @param tileHeight
+	 * @return
+	 */
+	public static double getPixelYSize(BoundingBox webMercatorBoundingBox,
+			long matrixHeight, int tileHeight) {
+		double pixelYSize = (webMercatorBoundingBox.getMaxLatitude() - webMercatorBoundingBox
+				.getMinLatitude()) / matrixHeight / tileHeight;
+		return pixelYSize;
+	}
+
 }
