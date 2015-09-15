@@ -13,7 +13,7 @@ Software source code previously released under an open source license and then m
 
 GeoPackage Core provides core functionality for GeoPackage implementations of the Open Geospatial Consortium [GeoPackage](http://www.geopackage.org/) [spec](http://www.geopackage.org/spec/).
 
-It is the core library of both the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK and [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library.
+It is the core library of the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK and [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library, both which can be found under [OGC GeoPackage Implementations](http://www.geopackage.org/#implementations) by the National Geospatial-Intelligence Agency.
 
 ### Usage ###
 
@@ -29,10 +29,17 @@ The [GeoPackage MapCache](https://github.com/ngageoint/geopackage-mapcache-andro
 
 The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a Java GeoPackage implementation.
 
-### Build ###
+### Installation ###
 
-The following repository must be built first (Central Repository Artifacts Coming Soon):
-* [GeoPackage WKB Java] (https://github.com/ngageoint/geopackage-wkb-java)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|1.0.0|jar)
+
+    <dependency>
+        <groupId>mil.nga.geopackage</groupId>
+        <artifactId>geopackage-core</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+
+### Build ###
 
 Build this repository using Eclipse and/or Maven:
 
