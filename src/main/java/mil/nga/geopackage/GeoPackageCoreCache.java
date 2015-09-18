@@ -1,7 +1,10 @@
 package mil.nga.geopackage;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Abstract GeoPackage Core Cache for maintaining and reusing open GeoPackage
@@ -24,6 +27,26 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 */
 	public GeoPackageCoreCache() {
 
+	}
+
+	/**
+	 * Get the names of the cached GeoPackages
+	 * 
+	 * @return set of cached GeoPackage names
+	 * @since 1.0.1
+	 */
+	public Set<String> getNames() {
+		return cache.keySet();
+	}
+
+	/**
+	 * Get the cached GeoPackages
+	 * 
+	 * @return collection of cached GeoPackages
+	 * @since 1.0.1
+	 */
+	public Collection<T> getGeoPackages() {
+		return cache.values();
 	}
 
 	/**
@@ -66,7 +89,8 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	}
 
 	/**
-	 * Remove the GeoPackage with the name
+	 * Remove the GeoPackage with the name but does not close it, call
+	 * {@link #close(String)} to close and remove
 	 * 
 	 * @param name
 	 * @return removed GeoPackage
@@ -76,17 +100,64 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	}
 
 	/**
-	 * Remove and close the GeoPackage with name
+	 * Clears all cached GeoPackages but does not close them, call
+	 * {@link #closeAll()} to close and clear all GeoPackages
+	 * 
+	 * @since 1.0.1
+	 */
+	public void clear() {
+		cache.clear();
+	}
+
+	/**
+	 * Remove and close the GeoPackage with name, same as {@link #close(String)}
 	 * 
 	 * @param name
 	 * @return true if found, removed, and closed
 	 */
 	public boolean removeAndClose(String name) {
+		return close(name);
+	}
+
+	/**
+	 * Close the GeoPackage with name
+	 * 
+	 * @param name
+	 * @return true if found and closed
+	 * @since 1.0.1
+	 */
+	public boolean close(String name) {
 		T geoPackage = remove(name);
 		if (geoPackage != null) {
 			geoPackage.close();
 		}
 		return geoPackage != null;
+	}
+
+	/**
+	 * Close GeoPackages not specified in the retain GeoPackage names
+	 * 
+	 * @param retain
+	 * @since 1.0.1
+	 */
+	public void closeRetain(Collection<String> retain) {
+		Set<String> close = new HashSet<>(cache.keySet());
+		close.removeAll(retain);
+		for (String name : close) {
+			close(name);
+		}
+	}
+
+	/**
+	 * Close GeoPackages with names
+	 * 
+	 * @param names
+	 * @since 1.0.1
+	 */
+	public void close(Collection<String> names) {
+		for (String name : names) {
+			close(name);
+		}
 	}
 
 }
