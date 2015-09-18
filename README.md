@@ -2,7 +2,7 @@
 
 #### GeoPackage Core Libs ####
 
-The GeoPackage Libraries were developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [BIT Systems](https://www.bit-sys.com/index.jsp). The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [MIT license](http://choosealicense.com/licenses/mit/).
+The [GeoPackage Libraries](http://ngageoint.github.io/GeoPackage/) were developed at the [National Geospatial-Intelligence Agency (NGA)](http://www.nga.mil/) in collaboration with [BIT Systems](http://www.bit-sys.com/). The government has "unlimited rights" and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [MIT license](http://choosealicense.com/licenses/mit/).
 
 ### Pull Requests ###
 If you'd like to contribute to this project, please make a pull request. We'll review the pull request and discuss the changes. All pull request contributions to this project will be released under the MIT license.
@@ -11,11 +11,13 @@ Software source code previously released under an open source license and then m
 
 ### About ###
 
-GeoPackage Core provides core functionality for GeoPackage implementations of the Open Geospatial Consortium [GeoPackage](http://www.geopackage.org/) [spec](http://www.geopackage.org/spec/).
+[GeoPackage Core](http://ngageoint.github.io/geopackage-core-java/) provides core functionality for [GeoPackage Library](http://ngageoint.github.io/GeoPackage/) implementations of the Open Geospatial Consortium [GeoPackage](http://www.geopackage.org/) [spec](http://www.geopackage.org/spec/).
 
 It is the core library of the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK and [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library, both which can be found under [OGC GeoPackage Implementations](http://www.geopackage.org/#implementations) by the National Geospatial-Intelligence Agency.
 
 ### Usage ###
+
+View the latest [Javadoc](http://ngageoint.github.io/geopackage-core-java/docs/api/)
 
 #### GeoPackage Android ####
 
