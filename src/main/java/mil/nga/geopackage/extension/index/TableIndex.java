@@ -1,0 +1,105 @@
+package mil.nga.geopackage.extension.index;
+
+import java.util.Date;
+
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
+/**
+ * Table Index object, for indexing data within user tables
+ * 
+ * @author osbornb
+ * @since 1.1.0
+ */
+@DatabaseTable(tableName = "nga_table_index", daoClass = TableIndexDao.class)
+public class TableIndex {
+
+	/**
+	 * Table name
+	 */
+	public static final String TABLE_NAME = "nga_table_index";
+
+	/**
+	 * tableName field name
+	 */
+	public static final String COLUMN_TABLE_NAME = "table_name";
+
+	/**
+	 * Last indexed column
+	 */
+	public static final String COLUMN_LAST_INDEXED = "last_indexed";
+
+	/**
+	 * Name of the table
+	 */
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false)
+	private String tableName;
+
+	/**
+	 * Last indexed date
+	 */
+	@DatabaseField(columnName = COLUMN_LAST_INDEXED, dataType = DataType.DATE_STRING, format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+	private Date lastIndexed;
+
+	/**
+	 * Geometry Indices
+	 */
+	@ForeignCollectionField(eager = false)
+	private ForeignCollection<GeometryIndex> geometryIndices;
+
+	/**
+	 * Default Constructor
+	 */
+	public TableIndex() {
+
+	}
+
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
+	public String getTableName() {
+		return tableName;
+	}
+
+	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 */
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	/**
+	 * Get the last indexed date
+	 * 
+	 * @return last indexed date
+	 */
+	public Date getLastIndexed() {
+		return lastIndexed;
+	}
+
+	/**
+	 * Set the last indexed date
+	 * 
+	 * @param lastIndexed
+	 */
+	public void setLastIndexed(Date lastIndexed) {
+		this.lastIndexed = lastIndexed;
+	}
+
+	/**
+	 * Get the Geometry Indices
+	 * 
+	 * @return collection of geometry indices
+	 */
+	public ForeignCollection<GeometryIndex> getGeometryIndices() {
+		return geometryIndices;
+	}
+
+}
