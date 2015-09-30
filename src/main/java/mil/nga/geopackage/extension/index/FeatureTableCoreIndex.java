@@ -13,6 +13,8 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.GeoPackageProgress;
+import mil.nga.geopackage.property.GeoPackageProperties;
+import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.wkb.geom.Geometry;
 import mil.nga.wkb.geom.GeometryEnvelope;
 import mil.nga.wkb.util.GeometryEnvelopeBuilder;
@@ -48,8 +50,14 @@ public abstract class FeatureTableCoreIndex {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions
-			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
+			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+
+	/**
+	 * Extension definition URL
+	 */
+	public static final String EXTENSION_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * GeoPackage
@@ -420,7 +428,7 @@ public abstract class FeatureTableCoreIndex {
 				extension.setColumnName(columnName);
 				extension.setExtensionName(EXTENSION_AUTHOR,
 						EXTENSION_NAME_NO_AUTHOR);
-				extension.setDefinition("TODO"); // TODO
+				extension.setDefinition(EXTENSION_DEFINITION);
 				extension.setScope(ExtensionScopeType.READ_WRITE);
 
 				extensionsDao.create(extension);
