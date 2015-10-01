@@ -492,7 +492,6 @@ public abstract class FeatureTableCoreIndex {
 	/**
 	 * Query for all Geometry Index count
 	 * 
-	 * @param envelope
 	 * @return count
 	 */
 	public long count() {
