@@ -229,10 +229,7 @@ public abstract class FeatureTableCoreIndex {
 	}
 
 	/**
-	 * Update the least indexed time
-	 *
-	 * @param db
-	 * @param geoPackageId
+	 * Update the last indexed time
 	 */
 	protected void updateLastIndexed() {
 
@@ -248,6 +245,52 @@ public abstract class FeatureTableCoreIndex {
 							+ geoPackage.getName() + ", Table Name: "
 							+ tableName, e);
 		}
+	}
+
+	/**
+	 * Delete the feature table index
+	 * 
+	 * @return true if index deleted
+	 */
+	public boolean deleteIndex() {
+
+		boolean deleted = false;
+		
+		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
+		try {
+			// Delete geometry indices and table index
+			deleted = tableIndexDao.deleteByIdCascade(tableName) > 0;
+			// Delete the extensions entry
+			deleted = extensionsDao.deleteByExtension(EXTENSION_NAME, tableName) > 0 || deleted;
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Table Index. GeoPackage: "
+							+ geoPackage.getName() + ", Table: " + tableName, e);
+		}
+
+		return deleted;
+	}
+
+	/**
+	 * Delete the index for the geometry id
+	 * 
+	 * @param geomId
+	 * 
+	 * @return deleted rows, should be 0 or 1
+	 */
+	public int deleteIndex(long geomId) {
+		int deleted = 0;
+		GeometryIndexKey key = new GeometryIndexKey(tableName, geomId);
+		try {
+			deleted = geometryIndexDao.deleteById(key);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete index, GeoPackage: "
+							+ geoPackage.getName() + ", Table Name: "
+							+ tableName + ", Geometry Id: " + geomId, e);
+		}
+		return deleted;
 	}
 
 	/**
