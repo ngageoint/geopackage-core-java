@@ -9,6 +9,8 @@ import java.util.Map;
 import mil.nga.geopackage.schema.TableColumnKey;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
@@ -100,6 +102,24 @@ public class GeometryColumnsSqlMmDao extends
 			count = update(readData);
 		}
 		return count;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int delete(GeometryColumnsSqlMm data) throws SQLException {
+		DeleteBuilder<GeometryColumnsSqlMm, TableColumnKey> db = deleteBuilder();
+
+		db.where()
+				.eq(GeometryColumnsSqlMm.COLUMN_TABLE_NAME, data.getTableName())
+				.and()
+				.eq(GeometryColumnsSqlMm.COLUMN_COLUMN_NAME,
+						data.getColumnName());
+
+		PreparedDelete<GeometryColumnsSqlMm> deleteQuery = db.prepare();
+		int deleted = delete(deleteQuery);
+		return deleted;
 	}
 
 	/**

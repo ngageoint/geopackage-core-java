@@ -10,6 +10,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.wkb.geom.GeometryEnvelope;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
@@ -98,6 +100,21 @@ public class GeometryIndexDao extends
 			count = update(readData);
 		}
 		return count;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int delete(GeometryIndex data) throws SQLException {
+		DeleteBuilder<GeometryIndex, GeometryIndexKey> db = deleteBuilder();
+
+		db.where().eq(GeometryIndex.COLUMN_TABLE_NAME, data.getTableName())
+				.and().eq(GeometryIndex.COLUMN_GEOM_ID, data.getGeomId());
+
+		PreparedDelete<GeometryIndex> deleteQuery = db.prepare();
+		int deleted = delete(deleteQuery);
+		return deleted;
 	}
 
 	/**
