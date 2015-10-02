@@ -8,7 +8,8 @@ import mil.nga.geopackage.GeoPackageException;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -52,11 +53,12 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 			// Delete Geometry Indices
 			GeometryIndexDao geometryIndexDao = getGeometryIndexDao();
 			if (geometryIndexDao.isTableExists()) {
-				ForeignCollection<GeometryIndex> geometryIndexCollection = tableIndex
-						.getGeometryIndices();
-				if (!geometryIndexCollection.isEmpty()) {
-					geometryIndexDao.delete(geometryIndexCollection);
-				}
+				DeleteBuilder<GeometryIndex, GeometryIndexKey> db = geometryIndexDao
+						.deleteBuilder();
+				db.where().eq(GeometryIndex.COLUMN_TABLE_NAME,
+						tableIndex.getTableName());
+				PreparedDelete<GeometryIndex> deleteQuery = db.prepare();
+				geometryIndexDao.delete(deleteQuery);
 			}
 
 			count = delete(tableIndex);
