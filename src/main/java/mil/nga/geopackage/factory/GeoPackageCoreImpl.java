@@ -21,6 +21,10 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.index.GeometryIndex;
+import mil.nga.geopackage.extension.index.GeometryIndexDao;
+import mil.nga.geopackage.extension.index.TableIndex;
+import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
@@ -696,12 +700,10 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	}
 
 	/**
-	 * Create a dao
-	 *
-	 * @param type
-	 * @return
+	 * {@inheritDoc}
 	 */
-	private <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type) {
+	@Override
+	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type) {
 		S dao;
 		try {
 			dao = DaoManager.createDao(database.getConnectionSource(), type);
@@ -743,4 +745,62 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TableIndexDao getTableIndexDao() {
+		return createDao(TableIndex.class);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createTableIndexTable() {
+		verifyWritable();
+
+		boolean created = false;
+		TableIndexDao dao = getTableIndexDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createTableIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ TableIndex.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryIndexDao getGeometryIndexDao() {
+		return createDao(GeometryIndex.class);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createGeometryIndexTable() {
+		verifyWritable();
+
+		boolean created = false;
+		GeometryIndexDao dao = getGeometryIndexDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GeometryIndex.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+	
 }

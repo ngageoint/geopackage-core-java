@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
@@ -91,6 +93,21 @@ public class TileMatrixDao extends BaseDaoImpl<TileMatrix, TileMatrixKey> {
 			count = update(readData);
 		}
 		return count;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int delete(TileMatrix data) throws SQLException {
+		DeleteBuilder<TileMatrix, TileMatrixKey> db = deleteBuilder();
+
+		db.where().eq(TileMatrix.COLUMN_TABLE_NAME, data.getTableName()).and()
+				.eq(TileMatrix.COLUMN_ZOOM_LEVEL, data.getZoomLevel());
+
+		PreparedDelete<TileMatrix> deleteQuery = db.prepare();
+		int deleted = delete(deleteQuery);
+		return deleted;
 	}
 
 	/**

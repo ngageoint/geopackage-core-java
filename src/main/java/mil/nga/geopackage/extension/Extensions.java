@@ -128,7 +128,7 @@ public class Extensions {
 	 * @param extensionName
 	 */
 	public void setExtensionName(String author, String extensionName) {
-		setExtensionName(author + EXTENSION_NAME_DIVIDER + extensionName);
+		setExtensionName(buildExtensionName(author, extensionName));
 	}
 
 	/**
@@ -137,12 +137,7 @@ public class Extensions {
 	 * @return
 	 */
 	public String getAuthor() {
-		String author = null;
-		if (extensionName != null) {
-			author = extensionName.substring(0,
-					extensionName.indexOf(EXTENSION_NAME_DIVIDER));
-		}
-		return author;
+		return getAuthor(extensionName);
 	}
 
 	/**
@@ -151,13 +146,7 @@ public class Extensions {
 	 * @return
 	 */
 	public String getExtensionNameNoAuthor() {
-		String value = null;
-		if (extensionName != null) {
-			value = extensionName.substring(
-					extensionName.indexOf(EXTENSION_NAME_DIVIDER) + 1,
-					extensionName.length());
-		}
-		return value;
+		return getExtensionNameNoAuthor(extensionName);
 	}
 
 	public String getDefinition() {
@@ -174,6 +163,49 @@ public class Extensions {
 
 	public void setScope(ExtensionScopeType scope) {
 		this.scope = scope.getValue();
+	}
+
+	/**
+	 * Build the extension name by combining the required parts
+	 * 
+	 * @param author
+	 * @param extensionName
+	 * @return extension name
+	 * @since 1.1.0
+	 */
+	public static String buildExtensionName(String author, String extensionName) {
+		return author + EXTENSION_NAME_DIVIDER + extensionName;
+	}
+
+	/**
+	 * Get the author from the beginning of the extension name
+	 * 
+	 * @return author
+	 * @since 1.1.0
+	 */
+	public static String getAuthor(String extensionName) {
+		String author = null;
+		if (extensionName != null) {
+			author = extensionName.substring(0,
+					extensionName.indexOf(EXTENSION_NAME_DIVIDER));
+		}
+		return author;
+	}
+
+	/**
+	 * Get the extension name with the author prefix removed
+	 * 
+	 * @return extension name, no author
+	 * @since 1.1.0
+	 */
+	public static String getExtensionNameNoAuthor(String extensionName) {
+		String value = null;
+		if (extensionName != null) {
+			value = extensionName.substring(
+					extensionName.indexOf(EXTENSION_NAME_DIVIDER) + 1,
+					extensionName.length());
+		}
+		return value;
 	}
 
 }

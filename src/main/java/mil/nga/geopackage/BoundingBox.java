@@ -1,5 +1,7 @@
 package mil.nga.geopackage;
 
+import mil.nga.wkb.geom.GeometryEnvelope;
+
 /**
  * Bounding Box with longitude and latitude ranges in degrees
  * 
@@ -80,6 +82,21 @@ public class BoundingBox {
 
 	public void setMaxLatitude(double maxLatitude) {
 		this.maxLatitude = maxLatitude;
+	}
+
+	/**
+	 * Build a Geometry Envelope from the bounding box
+	 * 
+	 * @return geometry envelope
+	 * @since 1.1.0
+	 */
+	public GeometryEnvelope buildEnvelope() {
+		GeometryEnvelope envelope = new GeometryEnvelope();
+		envelope.setMinX(minLongitude);
+		envelope.setMaxX(maxLongitude);
+		envelope.setMinY(minLatitude);
+		envelope.setMaxY(maxLatitude);
+		return envelope;
 	}
 
 	/**

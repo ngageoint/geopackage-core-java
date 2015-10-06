@@ -9,6 +9,8 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.index.GeometryIndexDao;
+import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -22,6 +24,8 @@ import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileTable;
+
+import com.j256.ormlite.dao.BaseDaoImpl;
 
 /**
  * A single GeoPackage database connection
@@ -285,8 +289,49 @@ public interface GeoPackageCore extends Closeable {
 	public void deleteTableQuietly(String tableName);
 
 	/**
+	 * Get a Table Index DAO
+	 * 
+	 * @return table index dao
+	 * @since 1.1.0
+	 */
+	public TableIndexDao getTableIndexDao();
+
+	/**
+	 * Create the Table Index Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 1.1.0
+	 */
+	public boolean createTableIndexTable();
+
+	/**
+	 * Get a Geometry Index DAO
+	 * 
+	 * @return geometry index dao
+	 * @since 1.1.0
+	 */
+	public GeometryIndexDao getGeometryIndexDao();
+
+	/**
+	 * Create Geometry Index Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 1.1.0
+	 */
+	public boolean createGeometryIndexTable();
+
+	/**
 	 * Verify the GeoPackage is writable and throw an exception if it is not
 	 */
 	public void verifyWritable();
+
+	/**
+	 * Create a dao
+	 *
+	 * @param type
+	 * @return base dao implementation
+	 * @since 1.1.0
+	 */
+	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type);
 
 }

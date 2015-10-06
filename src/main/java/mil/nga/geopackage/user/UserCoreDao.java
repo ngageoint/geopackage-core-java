@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.projection.Projection;
+import mil.nga.geopackage.projection.ProjectionConstants;
+import mil.nga.geopackage.projection.ProjectionTransform;
+import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 
 /**
  * Abstract User DAO for reading user tables
@@ -70,6 +74,14 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return
 	 */
 	public abstract TRow newRow();
+
+	/**
+	 * Get the bounding box of the user table data
+	 * 
+	 * @return bounding box of user table data
+	 * @since 1.1.0
+	 */
+	public abstract BoundingBox getBoundingBox();
 
 	/**
 	 * Get the database
@@ -550,6 +562,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int count(String where, String[] args) {
 		return db.count(getTableName(), where, args);
+	}
+
+	/**
+	 * Get the approximate zoom level of where the bounding box of the user data
+	 * fits into the world
+	 * 
+	 * @return zoom level
+	 * @since 1.1.0
+	 */
+	public int getZoomLevel() {
+		Projection projection = getProjection();
+		if (projection == null) {
+			throw new GeoPackageException(
+					"No projection was set which is required to determine the zoom level");
+		}
+		BoundingBox boundingBox = getBoundingBox();
+		ProjectionTransform webMercatorTransform = projection
+				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+		BoundingBox webMercatorBoundingBox = webMercatorTransform
+				.transform(boundingBox);
+		int zoomLevel = TileBoundingBoxUtils
+				.getZoomLevel(webMercatorBoundingBox);
+		return zoomLevel;
 	}
 
 	/**

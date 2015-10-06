@@ -140,6 +140,28 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create Table Index table
+	 * 
+	 * @return executed statements
+	 * @since 1.1.0
+	 */
+	public int createTableIndex() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "table_index"));
+	}
+
+	/**
+	 * Create Geometry Index table
+	 * 
+	 * @return executed statements
+	 * @since 1.1.0
+	 */
+	public int createGeometryIndex() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "geometry_index"));
+	}
+
+	/**
 	 * Create a table using the table script
 	 * 
 	 * @param tableScript
