@@ -337,6 +337,40 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the tile grid for the location specified as WGS84
+	 * 
+	 * @param point
+	 * @param zoom
+	 * @return tile grid
+	 * @since 1.1.0
+	 */
+	public static TileGrid getTileGridFromWGS84(Point point, int zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+		return getTileGrid(point, zoom, projection);
+	}
+
+	/**
+	 * Get the tile grid for the location specified as the projection
+	 * 
+	 * @param point
+	 * @param zoom
+	 * @param projection
+	 * @return tile grid
+	 * @since 1.1.0
+	 */
+	public static TileGrid getTileGrid(Point point, int zoom,
+			Projection projection) {
+		ProjectionTransform toWebMercator = projection
+				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+		Point webMercatorPoint = toWebMercator.transform(point);
+		BoundingBox boundingBox = new BoundingBox(webMercatorPoint.getX(),
+				webMercatorPoint.getX(), webMercatorPoint.getY(),
+				webMercatorPoint.getY());
+		return getTileGrid(boundingBox, zoom);
+	}
+
+	/**
 	 * Get the tile grid that includes the entire tile bounding box
 	 *
 	 * @param webMercatorBoundingBox
