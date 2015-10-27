@@ -13,7 +13,7 @@ Software source code previously released under an open source license and then m
 
 [GeoPackage Core](http://ngageoint.github.io/geopackage-core-java/) provides core functionality for [GeoPackage Library](http://ngageoint.github.io/GeoPackage/) implementations of the Open Geospatial Consortium [GeoPackage](http://www.geopackage.org/) [spec](http://www.geopackage.org/spec/).
 
-It is the core library of the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK and [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library, both which can be found under [OGC GeoPackage Implementations](http://www.geopackage.org/#implementations) by the National Geospatial-Intelligence Agency.
+It is the core library of the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK and [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library, both which can be found under [OGC GeoPackage Implementations](http://www.geopackage.org/#implementations_nga) by the National Geospatial-Intelligence Agency.
 
 ### Usage ###
 
