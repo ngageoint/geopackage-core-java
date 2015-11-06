@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.1 (TBD)
 
-* Javadoc project links to wkb
+* Javadoc project links to external libraries
 * TBD
 
 ## [1.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.0) (10-08-2015)
