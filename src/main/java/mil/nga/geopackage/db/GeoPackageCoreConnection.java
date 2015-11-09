@@ -35,7 +35,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param table
 	 * @param whereClause
 	 * @param whereArgs
-	 * @return
+	 * @return rows deleted
 	 */
 	public abstract int delete(String table, String whereClause,
 			String[] whereArgs);
@@ -46,9 +46,35 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param table
 	 * @param where
 	 * @param args
-	 * @return
+	 * @return count
 	 */
 	public abstract int count(String table, String where, String[] args);
+
+	/**
+	 * Get the min result of the column
+	 * 
+	 * @param table
+	 * @param column
+	 * @param where
+	 * @param args
+	 * @return min or null
+	 * @since 1.1.1
+	 */
+	public abstract Integer min(String table, String column, String where,
+			String[] args);
+
+	/**
+	 * Get the max result of the column
+	 * 
+	 * @param table
+	 * @param column
+	 * @param where
+	 * @param args
+	 * @return max or null
+	 * @since 1.1.1
+	 */
+	public abstract Integer max(String table, String column, String where,
+			String[] args);
 
 	/**
 	 * {@inheritDoc}
