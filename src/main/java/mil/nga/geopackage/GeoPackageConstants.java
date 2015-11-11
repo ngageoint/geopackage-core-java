@@ -42,4 +42,9 @@ public class GeoPackageConstants {
 	 */
 	public static final byte GEO_PACKAGE_GEOMETRY_VERSION_1 = 0;
 
+	/**
+	 * SQLite header string prefix
+	 */
+	public static final String SQLITE_HEADER_PREFIX = "SQLite format 3";
+
 }
