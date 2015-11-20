@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Additional GeoPackage createFeatureTableWithMetadata methods - [Issue #10](https://github.com/ngageoint/geopackage-core-java/issues/10)
 * min and max column query methods - [Issue #11](https://github.com/ngageoint/geopackage-core-java/issues/11)
 * Determine bounding box from Tile Grid methods - [Issue #12](https://github.com/ngageoint/geopackage-core-java/issues/12)
+* Data Columns Dao get data column by table and column names method
 * TBD
 
 ## [1.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.0) (10-08-2015)
