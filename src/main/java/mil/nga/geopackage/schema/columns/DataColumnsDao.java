@@ -185,4 +185,20 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 		return queryForEq(DataColumns.COLUMN_CONSTRAINT_NAME, constraintName);
 	}
 
+	/**
+	 * Get DataColumn by column name and table name
+	 * 
+	 * @param tableName
+	 *            table name to query for
+	 * @param columnName
+	 *            column name to query for
+	 * @return DataColumns
+	 * @throws SQLException
+	 */
+	public DataColumns getDataColumn(String tableName, String columnName)
+			throws SQLException {
+		TableColumnKey id = new TableColumnKey(tableName, columnName);
+		return queryForId(id);
+	}
+
 }

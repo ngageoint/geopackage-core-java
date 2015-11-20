@@ -295,6 +295,67 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns, BoundingBox boundingBox, long srsId) {
+		return createFeatureTableWithMetadata(geometryColumns, null, null,
+				boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTableWithMetadata(
+			GeometryColumns geometryColumns, String idColumnName,
+			BoundingBox boundingBox, long srsId) {
+		return createFeatureTableWithMetadata(geometryColumns, idColumnName,
+				null, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTableWithMetadata(
+			GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId) {
+		return createFeatureTableWithMetadata(geometryColumns, null,
+				additionalColumns, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTableWithMetadata(
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId) {
+
+		if (idColumnName == null) {
+			idColumnName = "id";
+		}
+
+		List<FeatureColumn> columns = new ArrayList<FeatureColumn>();
+		columns.add(FeatureColumn.createPrimaryKeyColumn(0, idColumnName));
+		columns.add(FeatureColumn.createGeometryColumn(1,
+				geometryColumns.getColumnName(),
+				geometryColumns.getGeometryType(), false, null));
+
+		if (additionalColumns != null) {
+			columns.addAll(additionalColumns);
+		}
+
+		return createFeatureTableWithMetadata(geometryColumns, boundingBox,
+				srsId, columns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTableWithMetadata(
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId, List<FeatureColumn> columns) {
 
 		// Get the SRS
 		SpatialReferenceSystem srs = getSrs(srsId);
@@ -303,11 +364,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		createGeometryColumnsTable();
 
 		// Create the user feature table
-		List<FeatureColumn> columns = new ArrayList<FeatureColumn>();
-		columns.add(FeatureColumn.createPrimaryKeyColumn(0, "id"));
-		columns.add(FeatureColumn.createGeometryColumn(1,
-				geometryColumns.getColumnName(),
-				geometryColumns.getGeometryType(), false, null));
 		FeatureTable table = new FeatureTable(geometryColumns.getTableName(),
 				columns);
 		createFeatureTable(table);
@@ -752,7 +808,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public TableIndexDao getTableIndexDao() {
 		return createDao(TableIndex.class);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -773,7 +829,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 		return created;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -781,7 +837,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public GeometryIndexDao getGeometryIndexDao() {
 		return createDao(GeometryIndex.class);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -802,5 +858,5 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 		return created;
 	}
-	
+
 }

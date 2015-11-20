@@ -558,10 +558,36 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the count
 	 * 
-	 * @return
+	 * @param where
+	 * @param args
+	 * @return count
 	 */
 	public int count(String where, String[] args) {
 		return db.count(getTableName(), where, args);
+	}
+
+	/**
+	 * Get the min result of the column
+	 * 
+	 * @param column
+	 * @param where
+	 * @param args
+	 * @return min or null
+	 */
+	public Integer min(String column, String where, String[] args) {
+		return db.min(getTableName(), column, where, args);
+	}
+
+	/**
+	 * Get the max result of the column
+	 * 
+	 * @param column
+	 * @param where
+	 * @param args
+	 * @return max or null
+	 */
+	public Integer max(String column, String where, String[] args) {
+		return db.max(getTableName(), column, where, args);
 	}
 
 	/**
