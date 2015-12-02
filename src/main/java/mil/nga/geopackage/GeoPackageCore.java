@@ -447,4 +447,12 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type);
 
+	/**
+	 * Execute the sql on the GeoPackage database
+	 * 
+	 * @param sql
+	 * @since 1.1.2
+	 */
+	public void execSQL(String sql);
+
 }
