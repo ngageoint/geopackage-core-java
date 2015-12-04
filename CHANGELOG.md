@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.2 (TBD)
 
-* Table Index Extension invalid foreign key fix
+* Table Index Extension invalid foreign key fix - [Issue #14](https://github.com/ngageoint/geopackage-core-java/issues/14)
 * Execute SQL on GeoPackage method
 * URL Tile Generator substitution variable properties
 
