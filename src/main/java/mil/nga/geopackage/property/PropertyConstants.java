@@ -47,23 +47,5 @@ public class PropertyConstants {
 	public static final String SQL = "sql";
 	
 	public static final String EXTENSIONS = GEO_PACKAGE + PROPERTY_DIVIDER + "extensions";
-
-	public static final String TILE_GENERATOR = GEO_PACKAGE + PROPERTY_DIVIDER + "tile_generator";
-	
-	public static final String TILE_GENERATOR_VARIABLE = TILE_GENERATOR + PROPERTY_DIVIDER + "variable";
-	
-	public static final String TILE_GENERATOR_VARIABLE_Z = "z";
-	
-	public static final String TILE_GENERATOR_VARIABLE_X = "x";
-	
-	public static final String TILE_GENERATOR_VARIABLE_Y = "y";
-	
-	public static final String TILE_GENERATOR_VARIABLE_MIN_LAT = "min_lat";
-	
-	public static final String TILE_GENERATOR_VARIABLE_MAX_LAT = "max_lat";
-	
-	public static final String TILE_GENERATOR_VARIABLE_MIN_LON = "min_lon";
-	
-	public static final String TILE_GENERATOR_VARIABLE_MAX_LON = "max_lon";
 	
 }
