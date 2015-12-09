@@ -47,5 +47,5 @@ public class PropertyConstants {
 	public static final String SQL = "sql";
 	
 	public static final String EXTENSIONS = GEO_PACKAGE + PROPERTY_DIVIDER + "extensions";
-
+	
 }
