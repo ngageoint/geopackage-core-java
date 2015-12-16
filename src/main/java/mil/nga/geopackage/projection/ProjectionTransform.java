@@ -1,6 +1,7 @@
 package mil.nga.geopackage.projection;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.wkb.geom.Geometry;
 import mil.nga.wkb.geom.Point;
 
 import org.osgeo.proj4j.CoordinateTransform;
@@ -63,27 +64,31 @@ public class ProjectionTransform {
 	 * Transform the projected point
 	 * 
 	 * @param from
-	 * @return
+	 *            point
+	 * @return projected point
 	 */
 	public Point transform(Point from) {
 
-		ProjCoordinate fromCoord;
-		if (from.hasZ()) {
-			fromCoord = new ProjCoordinate(from.getX(), from.getY(),
-					from.getZ() != null ? from.getZ() : Double.NaN);
-		} else {
-			fromCoord = new ProjCoordinate(from.getX(), from.getY());
-		}
+		GeometryProjectionTransform geometryTransform = new GeometryProjectionTransform(
+				this);
+		Point to = geometryTransform.transform(from);
 
-		ProjCoordinate toCoord = transform(fromCoord);
+		return to;
+	}
 
-		Point to = new Point(from.hasZ(), from.hasM(), toCoord.x, toCoord.y);
-		if (from.hasZ()) {
-			to.setZ(toCoord.z);
-		}
-		if (from.hasM()) {
-			to.setM(from.getM());
-		}
+	/**
+	 * Transform the projected geometry
+	 * 
+	 * @param from
+	 *            geometry
+	 * @return projected geometry
+	 * @since 1.1.3
+	 */
+	public Geometry transform(Geometry from) {
+
+		GeometryProjectionTransform geometryTransform = new GeometryProjectionTransform(
+				this);
+		Geometry to = geometryTransform.transform(from);
 
 		return to;
 	}

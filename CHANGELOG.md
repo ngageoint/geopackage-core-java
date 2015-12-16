@@ -4,9 +4,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.1.3 (TBD)
+## [1.1.3](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.3) (12-16-2015)
 
-* TBD
+* Geometry projection transformations
 
 ## [1.1.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.2) (12-14-2015)
 
