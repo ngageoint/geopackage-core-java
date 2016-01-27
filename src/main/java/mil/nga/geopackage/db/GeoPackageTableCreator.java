@@ -1,6 +1,5 @@
 package mil.nga.geopackage.db;
 
-import java.io.File;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
@@ -179,12 +178,11 @@ public class GeoPackageTableCreator {
 	 * @return
 	 */
 	private int createTable(String tableScript) {
-		InputStream scriptStream = Thread
-				.currentThread()
-				.getContextClassLoader()
-				.getResourceAsStream(
-						GeoPackageProperties.getProperty(PropertyConstants.SQL,
-								"directory") + File.separatorChar + tableScript);
+		InputStream scriptStream = getClass().getResourceAsStream(
+				"/"
+						+ GeoPackageProperties.getProperty(
+								PropertyConstants.SQL, "directory") + "/"
+						+ tableScript);
 		int statements = runScript(scriptStream);
 		return statements;
 	}
