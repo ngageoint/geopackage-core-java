@@ -1,5 +1,6 @@
 package mil.nga.geopackage.core.contents;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import mil.nga.geopackage.BoundingBox;
@@ -9,6 +10,7 @@ import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -286,7 +288,18 @@ public class Contents {
 					"Unexpected state. More than one GeometryColumn has a foreign key to the Contents. Count: "
 							+ geometryColumns.size());
 		} else if (geometryColumns.size() == 1) {
-			result = geometryColumns.iterator().next();
+			CloseableIterator<GeometryColumns> iterator = geometryColumns
+					.closeableIterator();
+			try {
+				result = iterator.next();
+			} finally {
+				try {
+					iterator.close();
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to close the Geometry Columns iterator", e);
+				}
+			}
 		}
 		return result;
 	}
@@ -305,7 +318,18 @@ public class Contents {
 					"Unexpected state. More than one TileMatrixSet has a foreign key to the Contents. Count: "
 							+ tileMatrixSet.size());
 		} else if (tileMatrixSet.size() == 1) {
-			result = tileMatrixSet.iterator().next();
+			CloseableIterator<TileMatrixSet> iterator = tileMatrixSet
+					.closeableIterator();
+			try {
+				result = iterator.next();
+			} finally {
+				try {
+					iterator.close();
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to close the Tile Matrix Set iterator", e);
+				}
+			}
 		}
 		return result;
 	}
