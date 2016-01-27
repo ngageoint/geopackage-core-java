@@ -231,4 +231,24 @@ public class GeometryIndexDao extends
 		return geometryIndex;
 	}
 
+	/**
+	 * Delete all geometry indices
+	 * 
+	 * @return rows deleted
+	 * @throws SQLException
+	 * @since 1.1.5
+	 */
+	public int deleteAll() throws SQLException {
+
+		int count = 0;
+
+		if (isTableExists()) {
+			DeleteBuilder<GeometryIndex, GeometryIndexKey> db = deleteBuilder();
+			PreparedDelete<GeometryIndex> deleteQuery = db.prepare();
+			count = delete(deleteQuery);
+		}
+
+		return count;
+	}
+
 }
