@@ -25,6 +25,8 @@ import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
+import mil.nga.geopackage.extension.link.FeatureTileLink;
+import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
@@ -805,6 +807,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void dropTable(String table) {
+		tableCreator.dropTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public TableIndexDao getTableIndexDao() {
 		return createDao(TableIndex.class);
 	}
@@ -854,6 +864,35 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
 					+ GeometryIndex.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public FeatureTileLinkDao getFeatureTileLinkDao() {
+		return createDao(FeatureTileLink.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createFeatureTileLinkTable() {
+		verifyWritable();
+
+		boolean created = false;
+		FeatureTileLinkDao dao = getFeatureTileLinkDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createFeatureTileLink() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ FeatureTileLink.class.getSimpleName()
 					+ " table exists and create it", e);
 		}
 		return created;

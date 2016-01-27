@@ -162,6 +162,17 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create Feature Tile Link table
+	 * 
+	 * @return executed statements
+	 * @since 1.1.5
+	 */
+	public int createFeatureTileLink() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "feature_tile_link"));
+	}
+
+	/**
 	 * Create a table using the table script
 	 * 
 	 * @param tableScript
@@ -291,6 +302,16 @@ public class GeoPackageTableCreator {
 					"Error creating default required Spatial Reference Systems",
 					e);
 		}
+	}
+
+	/**
+	 * Drop the table if it exists
+	 * 
+	 * @param table
+	 * @since 1.1.5
+	 */
+	public void dropTable(String table) {
+		db.execSQL("DROP TABLE IF EXISTS " + table);
 	}
 
 }

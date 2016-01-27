@@ -1,0 +1,5 @@
+CREATE TABLE nga_feature_tile_link (
+  feature_table_name TEXT NOT NULL,
+  tile_table_name TEXT NOT NULL,
+  CONSTRAINT pk_nftl PRIMARY KEY (feature_table_name, tile_table_name)
+);
