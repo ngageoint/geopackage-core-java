@@ -21,6 +21,7 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.NGAExtensions;
 import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
@@ -704,6 +705,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public void deleteTable(String table) {
 		verifyWritable();
 
+		NGAExtensions.deleteTableExtensions(this, table);
+		
 		ContentsDao contentsDao = getContentsDao();
 		contentsDao.deleteTable(table);
 	}

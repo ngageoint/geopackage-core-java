@@ -6,11 +6,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.5 (TBD)
 
-* Feature Tile Link Extension implementation - http://ngageoint.github.io/GeoPackage/docs/extensions/feature_tile_link.html
+* Feature Tile Link Extension implementation - http://ngageoint.github.io/GeoPackage/docs/extensions/feature-tile-link.html
 * GeoPackage drop table method
 * Added delete all methods for the Geometry Index extension data access objects
 * Contents open database connections fix - [Issue #20](https://github.com/ngageoint/geopackage-core-java/issues/20)
 * Resource loading change to fix table creation on Windows - [Issue #21](https://github.com/ngageoint/geopackage-core-java/issues/21)
+* Delete extensions when deleting a user table
 
 ## [1.1.4](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.4) (01-15-2016)
 
