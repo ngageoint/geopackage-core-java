@@ -164,4 +164,41 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 		return geometryIndexDao;
 	}
 
+	/**
+	 * Delete all table indices, cascading to geometry indices
+	 * 
+	 * @return rows deleted
+	 * @throws SQLException
+	 * @since 1.1.5
+	 */
+	public int deleteAllCascade() throws SQLException {
+
+		// Delete Geometry Indices
+		getGeometryIndexDao().deleteAll();
+
+		int count = deleteAll();
+
+		return count;
+	}
+
+	/**
+	 * Delete all table indices
+	 * 
+	 * @return rows deleted
+	 * @throws SQLException
+	 * @since 1.1.5
+	 */
+	public int deleteAll() throws SQLException {
+
+		int count = 0;
+
+		if (isTableExists()) {
+			DeleteBuilder<TableIndex, String> db = deleteBuilder();
+			PreparedDelete<TableIndex> deleteQuery = db.prepare();
+			count = delete(deleteQuery);
+		}
+
+		return count;
+	}
+
 }

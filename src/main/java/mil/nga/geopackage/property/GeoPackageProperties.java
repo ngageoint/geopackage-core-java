@@ -188,8 +188,8 @@ public class GeoPackageProperties {
 	private static Properties initializeConfigurationProperties() {
 		Properties properties = new Properties();
 
-		InputStream in = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(PropertyConstants.PROPERTIES_FILE);
+		InputStream in = GeoPackageProperties.class.getResourceAsStream("/"
+				+ PropertyConstants.PROPERTIES_FILE);
 		if (in != null) {
 			try {
 				properties.load(in);

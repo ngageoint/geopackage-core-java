@@ -1,6 +1,5 @@
 package mil.nga.geopackage.db;
 
-import java.io.File;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
@@ -162,18 +161,28 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create Feature Tile Link table
+	 * 
+	 * @return executed statements
+	 * @since 1.1.5
+	 */
+	public int createFeatureTileLink() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "feature_tile_link"));
+	}
+
+	/**
 	 * Create a table using the table script
 	 * 
 	 * @param tableScript
 	 * @return
 	 */
 	private int createTable(String tableScript) {
-		InputStream scriptStream = Thread
-				.currentThread()
-				.getContextClassLoader()
-				.getResourceAsStream(
-						GeoPackageProperties.getProperty(PropertyConstants.SQL,
-								"directory") + File.separatorChar + tableScript);
+		InputStream scriptStream = getClass().getResourceAsStream(
+				"/"
+						+ GeoPackageProperties.getProperty(
+								PropertyConstants.SQL, "directory") + "/"
+						+ tableScript);
 		int statements = runScript(scriptStream);
 		return statements;
 	}
@@ -291,6 +300,16 @@ public class GeoPackageTableCreator {
 					"Error creating default required Spatial Reference Systems",
 					e);
 		}
+	}
+
+	/**
+	 * Drop the table if it exists
+	 * 
+	 * @param table
+	 * @since 1.1.5
+	 */
+	public void dropTable(String table) {
+		db.execSQL("DROP TABLE IF EXISTS " + table);
 	}
 
 }

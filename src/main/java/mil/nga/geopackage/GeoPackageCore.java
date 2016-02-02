@@ -11,6 +11,7 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
+import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -388,18 +389,51 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createExtensionsTable();
 
 	/**
-	 * Delete the user table and all GeoPackage metadata
+	 * Delete the user table (a feature or tile table) and all GeoPackage
+	 * metadata
 	 * 
 	 * @param table
 	 */
 	public void deleteTable(String table);
 
 	/**
-	 * Attempt to delete the user table and all GeoPackage metadata quietly
+	 * Attempt to delete the user table (a feature or tile table) and all
+	 * GeoPackage metadata quietly
 	 * 
 	 * @param tableName
 	 */
 	public void deleteTableQuietly(String tableName);
+
+	/**
+	 * Verify the GeoPackage is writable and throw an exception if it is not
+	 */
+	public void verifyWritable();
+
+	/**
+	 * Create a dao
+	 *
+	 * @param type
+	 * @return base dao implementation
+	 * @since 1.1.0
+	 */
+	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type);
+
+	/**
+	 * Execute the sql on the GeoPackage database
+	 * 
+	 * @param sql
+	 * @since 1.1.2
+	 */
+	public void execSQL(String sql);
+
+	/**
+	 * Drop the table if it exists. Drops the table with the table name, not
+	 * limited to GeoPackage specific tables.
+	 * 
+	 * @param table
+	 * @since 1.1.5
+	 */
+	public void dropTable(String table);
 
 	/**
 	 * Get a Table Index DAO
@@ -434,25 +468,19 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createGeometryIndexTable();
 
 	/**
-	 * Verify the GeoPackage is writable and throw an exception if it is not
-	 */
-	public void verifyWritable();
-
-	/**
-	 * Create a dao
-	 *
-	 * @param type
-	 * @return base dao implementation
-	 * @since 1.1.0
-	 */
-	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type);
-
-	/**
-	 * Execute the sql on the GeoPackage database
+	 * Get a Feature Tile Link DAO
 	 * 
-	 * @param sql
-	 * @since 1.1.2
+	 * @return feature tile link dao
+	 * @since 1.1.5
 	 */
-	public void execSQL(String sql);
+	public FeatureTileLinkDao getFeatureTileLinkDao();
+
+	/**
+	 * Create the Feature Tile Link Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 1.1.5
+	 */
+	public boolean createFeatureTileLinkTable();
 
 }

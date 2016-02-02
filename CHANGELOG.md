@@ -6,15 +6,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.5 (TBD)
 
-* TBD
+* Feature Tile Link Extension implementation - http://ngageoint.github.io/GeoPackage/docs/extensions/feature-tile-link.html
+* GeoPackage drop table method
+* Added delete all methods for the Geometry Index extension data access objects
+* Contents open database connections fix - [Issue #20](https://github.com/ngageoint/geopackage-core-java/issues/20)
+* Resource loading change to fix table creation on Windows - [Issue #21](https://github.com/ngageoint/geopackage-core-java/issues/21)
+* Delete extensions when deleting a user table
 
 ## [1.1.4](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.4) (01-15-2016)
 
-* Added remote proj4j dependency and removed embedded proj4j code
+* Added remote proj4j dependency and removed embedded proj4j code - [Issue #18](https://github.com/ngageoint/geopackage-core-java/issues/18)
 
 ## [1.1.3](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.3) (12-16-2015)
 
-* Geometry projection transformations
+* Geometry projection transformations - [Issue #16](https://github.com/ngageoint/geopackage-core-java/issues/16)
 
 ## [1.1.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.2) (12-14-2015)
 
