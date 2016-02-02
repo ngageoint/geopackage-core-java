@@ -72,6 +72,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 * @param table
+	 * @since 1.1.5
 	 */
 	public static void deleteGeometryIndex(GeoPackageCore geoPackage,
 			String table) {
@@ -100,6 +101,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 * @param ignoreErrors
+	 * @since 1.1.5
 	 */
 	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage,
 			boolean ignoreErrors) {
@@ -136,6 +138,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 * @param table
+	 * @since 1.1.5
 	 */
 	public static void deleteFeatureTileLink(GeoPackageCore geoPackage,
 			String table) {
@@ -159,6 +162,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 * @param ignoreErrors
+	 * @since 1.1.5
 	 */
 	public static void deleteFeatureTileLinkExtension(
 			GeoPackageCore geoPackage, boolean ignoreErrors) {
