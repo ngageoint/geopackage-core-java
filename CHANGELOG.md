@@ -6,7 +6,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.6 (TBD)
 
-* TBD
+* Feature Tile Table Linker core abstraction
+* Additional Feature Tile Table Linker methods for retrieving table names
 
 ## [1.1.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.5) (02-02-2016)
 

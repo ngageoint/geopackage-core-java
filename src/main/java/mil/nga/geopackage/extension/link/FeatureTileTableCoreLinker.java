@@ -13,13 +13,13 @@ import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
 /**
- * Feature Tile Table linker, used to link feature and tile tables together when
- * the tiles represent the feature data
+ * Abstract Feature Tile Table linker, used to link feature and tile tables
+ * together when the tiles represent the feature data
  * 
  * @author osbornb
- * @since 1.1.5
+ * @since 1.1.6
  */
-public class FeatureTileTableLinker {
+public abstract class FeatureTileTableCoreLinker {
 
 	/**
 	 * Extension author
@@ -63,7 +63,7 @@ public class FeatureTileTableLinker {
 	 * 
 	 * @param geoPackage
 	 */
-	public FeatureTileTableLinker(GeoPackageCore geoPackage) {
+	protected FeatureTileTableCoreLinker(GeoPackageCore geoPackage) {
 		this.geoPackage = geoPackage;
 		extensionsDao = geoPackage.getExtensionsDao();
 		featureTileLinkDao = geoPackage.getFeatureTileLinkDao();
@@ -321,6 +321,44 @@ public class FeatureTileTableLinker {
 		}
 
 		return active;
+	}
+
+	/**
+	 * Query for the tile table names linked to a feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @return tiles tables
+	 */
+	public List<String> getTileTablesForFeatureTable(String featureTable) {
+
+		List<String> tileTables = new ArrayList<String>();
+
+		List<FeatureTileLink> links = queryForFeatureTable(featureTable);
+		for (FeatureTileLink link : links) {
+			tileTables.add(link.getTileTableName());
+		}
+
+		return tileTables;
+	}
+
+	/**
+	 * Query for the feature table names linked to a tile table
+	 * 
+	 * @param tileTable
+	 *            tile table
+	 * @return feature tables
+	 */
+	public List<String> getFeatureTablesForTileTable(String tileTable) {
+
+		List<String> featureTables = new ArrayList<String>();
+
+		List<FeatureTileLink> links = queryForTileTable(tileTable);
+		for (FeatureTileLink link : links) {
+			featureTables.add(link.getFeatureTableName());
+		}
+
+		return featureTables;
 	}
 
 }
