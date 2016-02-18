@@ -8,6 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * Feature Tile Table Linker core abstraction
 * Additional Feature Tile Table Linker methods for retrieving table names
+* Bounding box constructor from an existing bounding box
+* Bound a WGS 84 bounding box with Web Mercator limits utility method
 
 ## [1.1.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.5) (02-02-2016)
 

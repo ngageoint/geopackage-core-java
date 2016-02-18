@@ -773,4 +773,25 @@ public class TileBoundingBoxUtils {
 		return pixelYSize;
 	}
 
+	/**
+	 * Bound the uppper and lower bounds of the WGS84 bounding box with web
+	 * mercator limits
+	 * 
+	 * @param boundingBox
+	 *            wgs84 bounding box
+	 * @return bounding box
+	 * @since 1.1.6
+	 */
+	public static BoundingBox boundWgs84BoundingBoxWithWebMercatorLimits(
+			BoundingBox boundingBox) {
+		BoundingBox bounded = new BoundingBox(boundingBox);
+		if (bounded.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
+			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
+		}
+		if (bounded.getMaxLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
+			bounded.setMaxLatitude(ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
+		}
+		return bounded;
+	}
+
 }
