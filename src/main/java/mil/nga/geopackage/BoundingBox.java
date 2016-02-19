@@ -52,6 +52,17 @@ public class BoundingBox {
 		this.maxLatitude = maxLatitude;
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param boundingBox
+	 * @since 1.1.6
+	 */
+	public BoundingBox(BoundingBox boundingBox) {
+		this(boundingBox.getMinLongitude(), boundingBox.getMaxLongitude(),
+				boundingBox.getMinLatitude(), boundingBox.getMaxLatitude());
+	}
+
 	public double getMinLongitude() {
 		return minLongitude;
 	}

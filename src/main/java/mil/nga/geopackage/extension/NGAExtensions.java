@@ -11,7 +11,7 @@ import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
-import mil.nga.geopackage.extension.link.FeatureTileTableLinker;
+import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -179,7 +179,7 @@ public class NGAExtensions {
 			}
 			if (extensionsDao.isTableExists()) {
 				geoPackage.getExtensionsDao().deleteByExtension(
-						FeatureTileTableLinker.EXTENSION_NAME);
+						FeatureTileTableCoreLinker.EXTENSION_NAME);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
