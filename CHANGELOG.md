@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 1.1.7 (TBD)
+
+* TBD
+
 ## [1.1.6](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.6) (02-19-2016)
 
 * Feature Tile Table Linker core abstraction
