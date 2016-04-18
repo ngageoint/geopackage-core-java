@@ -3,7 +3,9 @@ package mil.nga.geopackage.factory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
@@ -185,6 +187,44 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			tableNames = new ArrayList<String>();
 		}
 		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables() {
+		List<String> tables = new ArrayList<String>();
+		tables.addAll(getFeatureTables());
+		tables.addAll(getTileTables());
+		return tables;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isFeatureTable(String table) {
+		Set<String> featureTables = new HashSet<String>(getFeatureTables());
+		return featureTables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTileTable(String table) {
+		Set<String> tileTables = new HashSet<String>(getTileTables());
+		return tileTables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isFeatureOrTileTable(String table) {
+		Set<String> tables = new HashSet<String>(getTables());
+		return tables.contains(table);
 	}
 
 	/**
@@ -706,7 +746,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		NGAExtensions.deleteTableExtensions(this, table);
-		
+
 		ContentsDao contentsDao = getContentsDao();
 		contentsDao.deleteTable(table);
 	}

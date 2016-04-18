@@ -33,12 +33,12 @@ The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a
 
 ### Installation ###
 
-Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|1.1.6|jar) (JAR, POM, Source, Javadoc)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|1.1.7|jar) (JAR, POM, Source, Javadoc)
 
     <dependency>
         <groupId>mil.nga.geopackage</groupId>
         <artifactId>geopackage-core</artifactId>
-        <version>1.1.6</version>
+        <version>1.1.7</version>
     </dependency>
 
 ### Build ###

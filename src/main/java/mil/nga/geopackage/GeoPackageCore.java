@@ -84,6 +84,44 @@ public interface GeoPackageCore extends Closeable {
 	public List<String> getTileTables();
 
 	/**
+	 * Get the feature and tile tables
+	 * 
+	 * @return feature and tile table names
+	 * @since 1.1.7
+	 */
+	public List<String> getTables();
+
+	/**
+	 * Check if the table is a feature table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a feature table
+	 * @since 1.1.7
+	 */
+	public boolean isFeatureTable(String table);
+
+	/**
+	 * Check if the table is a tile table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a tile table
+	 * @since 1.1.7
+	 */
+	public boolean isTileTable(String table);
+
+	/**
+	 * Check if the table exists as a feature or tile table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a feature or tile table
+	 * @since 1.1.7
+	 */
+	public boolean isFeatureOrTileTable(String table);
+
+	/**
 	 * Get a Spatial Reference System DAO
 	 * 
 	 * @return
