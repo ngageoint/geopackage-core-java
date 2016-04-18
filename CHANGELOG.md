@@ -4,9 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.1.7 (TBD)
+## [1.1.7](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.7) (04-18-2016)
 
-* TBD
+* Additional GeoPackage methods to get all tables and check table types
+* wkb version update to 1.0.2
 
 ## [1.1.6](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.6) (02-19-2016)
 
