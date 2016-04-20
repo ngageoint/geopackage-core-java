@@ -20,7 +20,7 @@ public class GeoPackageConstants {
 	/**
 	 * GeoPackage application id
 	 */
-	public static final String APPLICATION_ID = "GP10";
+	public static final String APPLICATION_ID = "GP11";
 
 	/**
 	 * GeoPackage author
