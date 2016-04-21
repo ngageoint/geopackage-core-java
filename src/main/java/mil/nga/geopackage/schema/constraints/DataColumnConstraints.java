@@ -47,7 +47,7 @@ public class DataColumnConstraints {
 	/**
 	 * minIsInclusive field name
 	 */
-	public static final String COLUMN_MIN_IS_INCLUSIVE = "minIsInclusive";
+	public static final String COLUMN_MIN_IS_INCLUSIVE = "min_is_inclusive";
 
 	/**
 	 * max field name
@@ -57,7 +57,7 @@ public class DataColumnConstraints {
 	/**
 	 * maxIsInclusive field name
 	 */
-	public static final String COLUMN_MAX_IS_INCLUSIVE = "maxIsInclusive";
+	public static final String COLUMN_MAX_IS_INCLUSIVE = "max_is_inclusive";
 
 	/**
 	 * description field name
