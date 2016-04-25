@@ -133,6 +133,38 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	}
 
 	/**
+	 * Delete by table name
+	 * 
+	 * @param tableName
+	 * @return rows deleted
+	 * @since 1.1.8
+	 */
+	public int deleteByTableName(String tableName) throws SQLException {
+
+		DeleteBuilder<Extensions, Void> db = deleteBuilder();
+
+		db.where().eq(Extensions.COLUMN_TABLE_NAME, tableName);
+
+		int deleted = db.delete();
+
+		return deleted;
+	}
+
+	/**
+	 * Delete all extensions
+	 * 
+	 * @return rows deleted
+	 * @since 1.1.8
+	 */
+	public int deleteAll() throws SQLException {
+
+		DeleteBuilder<Extensions, Void> db = deleteBuilder();
+		int deleted = db.delete();
+
+		return deleted;
+	}
+	
+	/**
 	 * Query by extension name
 	 * 
 	 * @param extensionName

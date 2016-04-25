@@ -23,16 +23,6 @@ public class GeoPackageConstants {
 	public static final String APPLICATION_ID = "GP11";
 
 	/**
-	 * GeoPackage author
-	 */
-	public static final String GEO_PACKAGE_EXTENSION_AUTHOR = GEOPACKAGE_EXTENSION;
-
-	/**
-	 * Geometry extension prefix
-	 */
-	public static final String GEOMETRY_EXTENSION_PREFIX = "geom";
-
-	/**
 	 * Expected magic number
 	 */
 	public static final String GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER = "GP";
@@ -47,4 +37,14 @@ public class GeoPackageConstants {
 	 */
 	public static final String SQLITE_HEADER_PREFIX = "SQLite format 3";
 
+	/**
+	 * GeoPackage author
+	 */
+	public static final String GEO_PACKAGE_EXTENSION_AUTHOR = GEOPACKAGE_EXTENSION;
+
+	/**
+	 * Geometry extension prefix
+	 */
+	public static final String GEOMETRY_EXTENSION_PREFIX = "geom";
+	
 }

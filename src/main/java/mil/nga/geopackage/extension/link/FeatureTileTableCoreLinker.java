@@ -6,9 +6,9 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
-import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
@@ -19,7 +19,7 @@ import mil.nga.geopackage.property.PropertyConstants;
  * @author osbornb
  * @since 1.1.6
  */
-public abstract class FeatureTileTableCoreLinker {
+public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 
 	/**
 	 * Extension author
@@ -44,16 +44,6 @@ public abstract class FeatureTileTableCoreLinker {
 			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
-	 * GeoPackage
-	 */
-	private final GeoPackageCore geoPackage;
-
-	/**
-	 * Extensions DAO
-	 */
-	private final ExtensionsDao extensionsDao;
-
-	/**
 	 * Feature Tile Link DAO
 	 */
 	private final FeatureTileLinkDao featureTileLinkDao;
@@ -64,8 +54,7 @@ public abstract class FeatureTileTableCoreLinker {
 	 * @param geoPackage
 	 */
 	protected FeatureTileTableCoreLinker(GeoPackageCore geoPackage) {
-		this.geoPackage = geoPackage;
-		extensionsDao = geoPackage.getExtensionsDao();
+		super(geoPackage);
 		featureTileLinkDao = geoPackage.getFeatureTileLinkDao();
 	}
 
@@ -251,29 +240,9 @@ public abstract class FeatureTileTableCoreLinker {
 	 * @return extensions object
 	 */
 	private Extensions getOrCreateExtension() {
-		Extensions extension = getExtension();
 
-		if (extension == null) {
-			try {
-				if (!extensionsDao.isTableExists()) {
-					geoPackage.createExtensionsTable();
-				}
-
-				extension = new Extensions();
-				extension.setTableName(null);
-				extension.setColumnName(null);
-				extension.setExtensionName(EXTENSION_AUTHOR,
-						EXTENSION_NAME_NO_AUTHOR);
-				extension.setDefinition(EXTENSION_DEFINITION);
-				extension.setScope(ExtensionScopeType.READ_WRITE);
-
-				extensionsDao.create(extension);
-			} catch (SQLException e) {
-				throw new GeoPackageException("Failed to create '"
-						+ EXTENSION_NAME + "' extension for GeoPackage: "
-						+ geoPackage.getName(), e);
-			}
-		}
+		Extensions extension = getOrCreate(EXTENSION_NAME, null,
+				null, EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
 
 		return extension;
 	}
@@ -281,23 +250,12 @@ public abstract class FeatureTileTableCoreLinker {
 	/**
 	 * Get the extension
 	 * 
-	 * @param tableName
 	 * @return extensions object or null if one does not exist
 	 */
 	public Extensions getExtension() {
 
-		Extensions extension = null;
-		try {
-			if (extensionsDao.isTableExists()) {
-				extension = extensionsDao.queryByExtension(EXTENSION_NAME,
-						null, null);
+		Extensions extension = get(EXTENSION_NAME, null, null);
 
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to query for '"
-					+ EXTENSION_NAME + "' extension for GeoPackage: "
-					+ geoPackage.getName(), e);
-		}
 		return extension;
 	}
 

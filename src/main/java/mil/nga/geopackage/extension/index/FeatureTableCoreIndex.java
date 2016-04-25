@@ -8,6 +8,7 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
@@ -35,7 +36,7 @@ import com.j256.ormlite.stmt.Where;
  * @author osbornb
  * @since 1.1.0
  */
-public abstract class FeatureTableCoreIndex {
+public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 	/**
 	 * Extension author
@@ -60,11 +61,6 @@ public abstract class FeatureTableCoreIndex {
 			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
-	 * GeoPackage
-	 */
-	private final GeoPackageCore geoPackage;
-
-	/**
 	 * Table name
 	 */
 	private final String tableName;
@@ -73,11 +69,6 @@ public abstract class FeatureTableCoreIndex {
 	 * Column name
 	 */
 	private final String columnName;
-
-	/**
-	 * Extensions DAO
-	 */
-	private final ExtensionsDao extensionsDao;
 
 	/**
 	 * Table Index DAO
@@ -103,10 +94,9 @@ public abstract class FeatureTableCoreIndex {
 	 */
 	protected FeatureTableCoreIndex(GeoPackageCore geoPackage,
 			String tableName, String columnName) {
-		this.geoPackage = geoPackage;
+		super(geoPackage);
 		this.tableName = tableName;
 		this.columnName = columnName;
-		extensionsDao = geoPackage.getExtensionsDao();
 		tableIndexDao = geoPackage.getTableIndexDao();
 		geometryIndexDao = geoPackage.getGeometryIndexDao();
 	}
@@ -255,14 +245,16 @@ public abstract class FeatureTableCoreIndex {
 	public boolean deleteIndex() {
 
 		boolean deleted = false;
-		
+
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
 		try {
 			// Delete geometry indices and table index
 			deleted = tableIndexDao.deleteByIdCascade(tableName) > 0;
 			// Delete the extensions entry
-			deleted = extensionsDao.deleteByExtension(EXTENSION_NAME, tableName) > 0 || deleted;
+			deleted = extensionsDao
+					.deleteByExtension(EXTENSION_NAME, tableName) > 0
+					|| deleted;
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table Index. GeoPackage: "
@@ -458,30 +450,9 @@ public abstract class FeatureTableCoreIndex {
 	 * @return extensions object
 	 */
 	private Extensions getOrCreateExtension() {
-		Extensions extension = getExtension();
 
-		if (extension == null) {
-			try {
-				if (!extensionsDao.isTableExists()) {
-					geoPackage.createExtensionsTable();
-				}
-
-				extension = new Extensions();
-				extension.setTableName(tableName);
-				extension.setColumnName(columnName);
-				extension.setExtensionName(EXTENSION_AUTHOR,
-						EXTENSION_NAME_NO_AUTHOR);
-				extension.setDefinition(EXTENSION_DEFINITION);
-				extension.setScope(ExtensionScopeType.READ_WRITE);
-
-				extensionsDao.create(extension);
-			} catch (SQLException e) {
-				throw new GeoPackageException("Failed to create '"
-						+ EXTENSION_NAME + "' extension for GeoPackage: "
-						+ geoPackage.getName() + ", Table Name: " + tableName
-						+ ", Column Name: " + columnName, e);
-			}
-		}
+		Extensions extension = getOrCreate(EXTENSION_NAME, tableName,
+				columnName, EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
 
 		return extension;
 	}
@@ -493,19 +464,8 @@ public abstract class FeatureTableCoreIndex {
 	 */
 	public Extensions getExtension() {
 
-		Extensions extension = null;
-		try {
-			if (extensionsDao.isTableExists()) {
-				extension = extensionsDao.queryByExtension(EXTENSION_NAME,
-						tableName, columnName);
+		Extensions extension = get(EXTENSION_NAME, tableName, columnName);
 
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to query for '"
-					+ EXTENSION_NAME + "' extension for GeoPackage: "
-					+ geoPackage.getName() + ", Table Name: " + tableName
-					+ ", Column Name: " + columnName, e);
-		}
 		return extension;
 	}
 
