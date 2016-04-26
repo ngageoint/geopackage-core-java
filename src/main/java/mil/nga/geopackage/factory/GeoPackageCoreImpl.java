@@ -21,6 +21,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
+import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.GeoPackageExtensions;
@@ -234,7 +235,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public SpatialReferenceSystemDao getSpatialReferenceSystemDao() {
-		return createDao(SpatialReferenceSystem.class);
+		SpatialReferenceSystemDao dao = createDao(SpatialReferenceSystem.class);
+		dao.setCrsWktExtension(new CrsWktExtension(this));
+		return dao;
 	}
 
 	/**

@@ -44,8 +44,14 @@ public class PropertyConstants {
 
 	public static final String DESCRIPTION = "description";
 
+	/**
+	 * @since 1.1.8
+	 */
+	public static final String DEFINITION_12_163 = "definition_12_163";
+
 	public static final String SQL = "sql";
-	
-	public static final String EXTENSIONS = GEO_PACKAGE + PROPERTY_DIVIDER + "extensions";
-	
+
+	public static final String EXTENSIONS = GEO_PACKAGE + PROPERTY_DIVIDER
+			+ "extensions";
+
 }
