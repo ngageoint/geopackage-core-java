@@ -3,6 +3,8 @@ package mil.nga.geopackage.projection;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
 
@@ -27,7 +29,7 @@ public class ProjectionFactory {
 	 * Get the projection for the EPSG code
 	 * 
 	 * @param epsg
-	 * @return
+	 * @return projection
 	 */
 	public static Projection getProjection(long epsg) {
 		Projection projection = projections.get(epsg);
@@ -41,6 +43,22 @@ public class ProjectionFactory {
 
 			projections.put(epsg, projection);
 		}
+		return projection;
+	}
+
+	/**
+	 * Get the projection for the Spatial Reference System
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @return projection
+	 * @since 1.1.8
+	 */
+	public static Projection getProjection(SpatialReferenceSystem srs) {
+
+		long epsg = srs.getOrganizationCoordsysId();
+		Projection projection = getProjection(epsg);
+
 		return projection;
 	}
 
