@@ -39,12 +39,7 @@ public class ProjectionRetriever {
 		if (mProperties == null) {
 			mProperties = initializeConfigurationProperties();
 		}
-		String value = mProperties.getProperty(String.valueOf(epsg));
-		if (value == null) {
-			value = mProperties.getProperty(String
-					.valueOf(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
-		}
-		return value;
+		return mProperties.getProperty(String.valueOf(epsg));
 	}
 
 	/**
