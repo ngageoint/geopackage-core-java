@@ -21,9 +21,12 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
+import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.NGAExtensions;
+import mil.nga.geopackage.extension.GeoPackageExtensions;
+import mil.nga.geopackage.extension.MetadataExtension;
+import mil.nga.geopackage.extension.SchemaExtension;
 import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
@@ -232,7 +235,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public SpatialReferenceSystemDao getSpatialReferenceSystemDao() {
-		return createDao(SpatialReferenceSystem.class);
+		SpatialReferenceSystemDao dao = createDao(SpatialReferenceSystem.class);
+		dao.setCrsWktExtension(new CrsWktExtension(this));
+		return dao;
 	}
 
 	/**
@@ -642,6 +647,11 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		try {
 			if (!dao.isTableExists()) {
 				created = tableCreator.createDataColumnConstraints() > 0;
+				if (created) {
+					// Create the schema extension record
+					SchemaExtension schemaExtension = new SchemaExtension(this);
+					schemaExtension.getOrCreate();
+				}
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
@@ -671,6 +681,12 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		try {
 			if (!dao.isTableExists()) {
 				created = tableCreator.createMetadata() > 0;
+				if (created) {
+					// Create the metadata extension record
+					MetadataExtension metadataExtension = new MetadataExtension(
+							this);
+					metadataExtension.getOrCreate();
+				}
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
@@ -745,7 +761,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public void deleteTable(String table) {
 		verifyWritable();
 
-		NGAExtensions.deleteTableExtensions(this, table);
+		GeoPackageExtensions.deleteTableExtensions(this, table);
 
 		ContentsDao contentsDao = getContentsDao();
 		contentsDao.deleteTable(table);

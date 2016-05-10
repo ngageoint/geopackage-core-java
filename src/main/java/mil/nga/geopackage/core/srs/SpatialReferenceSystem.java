@@ -97,6 +97,11 @@ public class SpatialReferenceSystem {
 	private String description;
 
 	/**
+	 * Well-known Text [34] Representation of the Spatial Reference System
+	 */
+	private String definition_12_163;
+
+	/**
 	 * Contents
 	 */
 	@ForeignCollectionField(eager = false)
@@ -175,6 +180,20 @@ public class SpatialReferenceSystem {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @since 1.1.8
+	 */
+	public String getDefinition_12_163() {
+		return definition_12_163;
+	}
+
+	/**
+	 * @since 1.1.8
+	 */
+	public void setDefinition_12_163(String definition_12_163) {
+		this.definition_12_163 = definition_12_163;
 	}
 
 	public ForeignCollection<Contents> getContents() {

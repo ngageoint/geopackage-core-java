@@ -6,7 +6,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.1.8 (TBD)
 
-* TBD
+* GeoPackage 1.1.0 spec updates
+* GeoPackage application id updated to GP11
+* OGC Well known text representation of Coordinate Reference Systems extension support
+* Core Connection column exists, add column, and query single result methods
+* Base extension with implementations and support for: CRS WKT, Geometries, Metadata, Schema, WebP, and Zoom Other
+* Projection creations from Spatial Reference Systems
+* Projection backup creation using proj4j configurations
+* Data Column Constraint column name changes per spec
 
 ## [1.1.7](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.7) (04-18-2016)
 

@@ -2,6 +2,11 @@ package mil.nga.geopackage.projection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
@@ -12,6 +17,12 @@ import org.osgeo.proj4j.CoordinateReferenceSystem;
  * @author osbornb
  */
 public class ProjectionFactory {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(ProjectionFactory.class.getName());
 
 	/**
 	 * Mapping of EPSG projection codes to projections
@@ -27,20 +38,76 @@ public class ProjectionFactory {
 	 * Get the projection for the EPSG code
 	 * 
 	 * @param epsg
-	 * @return
+	 * @return projection
 	 */
 	public static Projection getProjection(long epsg) {
 		Projection projection = projections.get(epsg);
 		if (projection == null) {
 
-			String parameters = ProjectionRetriever.getProjection(epsg);
+			CoordinateReferenceSystem crs = null;
 
-			CoordinateReferenceSystem crs = csFactory.createFromParameters(
-					String.valueOf(epsg), parameters);
+			// Get the projection parameters from the properties
+			String parameters = null;
+			if (epsg == -1 || epsg == 0) {
+				parameters = ProjectionRetriever
+						.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+			} else {
+				parameters = ProjectionRetriever.getProjection(epsg);
+			}
+
+			// Try to create the projection from the parameters
+			if (parameters != null) {
+				try {
+					crs = csFactory.createFromParameters(String.valueOf(epsg),
+							parameters);
+				} catch (Exception e) {
+					logger.log(Level.WARNING,
+							"Failed to create projection for epsg " + epsg
+									+ " from parameters: " + parameters, e);
+				}
+			}
+
+			// If failed try to create the projection from the EPSG name
+			String epsgName = null;
+			if (crs == null) {
+				epsgName = "EPSG:" + epsg;
+				try {
+					crs = csFactory.createFromName(epsgName);
+				} catch (Exception e) {
+					logger.log(Level.WARNING,
+							"Failed to create projection from name: "
+									+ epsgName, e);
+				}
+			}
+
+			// Throw an error if projection could not be supported
+			if (crs == null) {
+				throw new GeoPackageException(
+						"Failed to create projection for EPSG " + epsg
+								+ ". Parameters: " + parameters + ". Name: "
+								+ epsgName);
+			}
+
 			projection = new Projection(epsg, crs);
 
 			projections.put(epsg, projection);
 		}
+		return projection;
+	}
+
+	/**
+	 * Get the projection for the Spatial Reference System
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @return projection
+	 * @since 1.1.8
+	 */
+	public static Projection getProjection(SpatialReferenceSystem srs) {
+
+		long epsg = srs.getOrganizationCoordsysId();
+		Projection projection = getProjection(epsg);
+
 		return projection;
 	}
 

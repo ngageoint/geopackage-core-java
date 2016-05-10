@@ -122,7 +122,7 @@ public class NGAExtensions {
 						ignoreErrors);
 			}
 			if (extensionsDao.isTableExists()) {
-				geoPackage.getExtensionsDao().deleteByExtension(
+				extensionsDao.deleteByExtension(
 						FeatureTableCoreIndex.EXTENSION_NAME);
 			}
 		} catch (SQLException e) {
@@ -178,7 +178,7 @@ public class NGAExtensions {
 						ignoreErrors);
 			}
 			if (extensionsDao.isTableExists()) {
-				geoPackage.getExtensionsDao().deleteByExtension(
+				extensionsDao.deleteByExtension(
 						FeatureTileTableCoreLinker.EXTENSION_NAME);
 			}
 		} catch (SQLException e) {

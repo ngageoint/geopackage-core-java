@@ -1,7 +1,10 @@
 package mil.nga.geopackage.extension;
 
 import mil.nga.geopackage.GeoPackageConstants;
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.property.GeoPackageProperties;
+import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.wkb.geom.GeometryType;
 
 /**
@@ -9,7 +12,127 @@ import mil.nga.wkb.geom.GeometryType;
  * 
  * @author osbornb
  */
-public class GeometryExtensions {
+public class GeometryExtensions extends BaseExtension {
+
+	/**
+	 * Geometry Types Extension definition URL
+	 * 
+	 * @since 1.1.8
+	 */
+	public static final String GEOMETRY_TYPES_EXTENSION_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, "geometry_types");
+
+	/**
+	 * User Geometry Types Extension definition URL
+	 * 
+	 * @since 1.1.8
+	 */
+	public static final String USER_GEOMETRY_TYPES_EXTENSION_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, "user_geometry_types");
+
+	/**
+	 * Constructor
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @since 1.1.8
+	 */
+	public GeometryExtensions(GeoPackageCore geoPackage) {
+		super(geoPackage);
+	}
+
+	/**
+	 * Get or create the extension, non-linear geometry type
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param geometryType
+	 *            geometry type
+	 * @return extension
+	 * @since 1.1.8
+	 */
+	public Extensions getOrCreate(String tableName, String columnName,
+			GeometryType geometryType) {
+
+		String extensionName = getExtensionName(geometryType);
+		Extensions extension = getOrCreate(extensionName, tableName,
+				columnName, GEOMETRY_TYPES_EXTENSION_DEFINITION,
+				ExtensionScopeType.READ_WRITE);
+
+		return extension;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension, non-linear geometry type
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param geometryType
+	 *            geometry type
+	 * @return true if has extension
+	 * @since 1.1.8
+	 */
+	public boolean has(String tableName, String columnName,
+			GeometryType geometryType) {
+
+		String extensionName = getExtensionName(geometryType);
+		boolean exists = has(extensionName, tableName, columnName);
+
+		return exists;
+	}
+
+	/**
+	 * Get or create the extension, user defined geometry type
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param author
+	 *            user defined author
+	 * @param geometryType
+	 *            geometry type
+	 * @return extension
+	 * @since 1.1.8
+	 */
+	public Extensions getOrCreate(String tableName, String columnName,
+			String author, GeometryType geometryType) {
+
+		String extensionName = getExtensionName(author, geometryType);
+		String description = isGeoPackageExtension(geometryType) ? GEOMETRY_TYPES_EXTENSION_DEFINITION
+				: USER_GEOMETRY_TYPES_EXTENSION_DEFINITION;
+		Extensions extension = getOrCreate(extensionName, tableName,
+				columnName, description, ExtensionScopeType.READ_WRITE);
+
+		return extension;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension, user defined geometry type
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param author
+	 *            user defined author
+	 * @param geometryType
+	 *            geometry type
+	 * @return true if has extension
+	 * @since 1.1.8
+	 */
+	public boolean has(String tableName, String columnName, String author,
+			GeometryType geometryType) {
+
+		String extensionName = getExtensionName(author, geometryType);
+		boolean exists = has(extensionName, tableName, columnName);
+
+		return exists;
+	}
 
 	/**
 	 * Determine if the geometry type is an extension

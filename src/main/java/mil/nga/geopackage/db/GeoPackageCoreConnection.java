@@ -94,6 +94,43 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	}
 
 	/**
+	 * Check if the table column exists
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @return true if column exists
+	 * @since 1.1.8
+	 */
+	public abstract boolean columnExists(String tableName, String columnName);
+
+	/**
+	 * Add a new column to the table
+	 * 
+	 * @param tableName
+	 * @param columnName
+	 * @param columnDef
+	 * @since 1.1.8
+	 */
+	public void addColumn(String tableName, String columnName, String columnDef) {
+		execSQL("ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " "
+				+ columnDef + ";");
+	}
+
+	/**
+	 * Query for a single result string
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single result object
+	 * @since 1.1.8
+	 */
+	public abstract String querySingleStringResult(String sql, String[] args);
+
+	/**
 	 * Set the GeoPackage application id
 	 */
 	public void setApplicationId() {

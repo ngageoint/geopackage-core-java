@@ -3,10 +3,12 @@ package mil.nga.geopackage.core.srs;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.projection.ProjectionConstants;
@@ -45,6 +47,11 @@ public class SpatialReferenceSystemDao extends
 	private TileMatrixSetDao tileMatrixSetDao;
 
 	/**
+	 * CRS WKT Extension
+	 */
+	private CrsWktExtension crsWktExtension;
+
+	/**
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
@@ -54,6 +61,27 @@ public class SpatialReferenceSystemDao extends
 	public SpatialReferenceSystemDao(ConnectionSource connectionSource,
 			Class<SpatialReferenceSystem> dataClass) throws SQLException {
 		super(connectionSource, dataClass);
+	}
+
+	/**
+	 * Set the CRS WKT Extension
+	 * 
+	 * @param crsWktExtension
+	 * @since 1.1.8
+	 */
+	public void setCrsWktExtension(CrsWktExtension crsWktExtension) {
+		this.crsWktExtension = crsWktExtension;
+	}
+
+	/**
+	 * Determine if the SRS table contains the extension definition 12 163
+	 * column for CRS WKT
+	 * 
+	 * @return true if has extension
+	 * @since 1.1.8
+	 */
+	public boolean hasDefinition_12_163() {
+		return crsWktExtension != null && crsWktExtension.has();
 	}
 
 	/**
@@ -80,6 +108,13 @@ public class SpatialReferenceSystemDao extends
 		srs.setDescription(GeoPackageProperties.getProperty(
 				PropertyConstants.WGS_84, PropertyConstants.DESCRIPTION));
 		create(srs);
+		if (hasDefinition_12_163()) {
+			srs.setDefinition_12_163(GeoPackageProperties.getProperty(
+					PropertyConstants.WGS_84,
+					PropertyConstants.DEFINITION_12_163));
+			crsWktExtension.updateDefinition(srs.getSrsId(),
+					srs.getDefinition_12_163());
+		}
 
 		return srs;
 	}
@@ -114,6 +149,13 @@ public class SpatialReferenceSystemDao extends
 				PropertyConstants.UNDEFINED_CARTESIAN,
 				PropertyConstants.DESCRIPTION));
 		create(srs);
+		if (hasDefinition_12_163()) {
+			srs.setDefinition_12_163(GeoPackageProperties.getProperty(
+					PropertyConstants.UNDEFINED_CARTESIAN,
+					PropertyConstants.DEFINITION_12_163));
+			crsWktExtension.updateDefinition(srs.getSrsId(),
+					srs.getDefinition_12_163());
+		}
 
 		return srs;
 	}
@@ -148,6 +190,13 @@ public class SpatialReferenceSystemDao extends
 				PropertyConstants.UNDEFINED_GEOGRAPHIC,
 				PropertyConstants.DESCRIPTION));
 		create(srs);
+		if (hasDefinition_12_163()) {
+			srs.setDefinition_12_163(GeoPackageProperties.getProperty(
+					PropertyConstants.UNDEFINED_GEOGRAPHIC,
+					PropertyConstants.DEFINITION_12_163));
+			crsWktExtension.updateDefinition(srs.getSrsId(),
+					srs.getDefinition_12_163());
+		}
 
 		return srs;
 	}
@@ -176,8 +225,249 @@ public class SpatialReferenceSystemDao extends
 		srs.setDescription(GeoPackageProperties.getProperty(
 				PropertyConstants.WEB_MERCATOR, PropertyConstants.DESCRIPTION));
 		create(srs);
+		if (hasDefinition_12_163()) {
+			srs.setDefinition_12_163(GeoPackageProperties.getProperty(
+					PropertyConstants.WEB_MERCATOR,
+					PropertyConstants.DEFINITION_12_163));
+			crsWktExtension.updateDefinition(srs.getSrsId(),
+					srs.getDefinition_12_163());
+		}
 
 		return srs;
+	}
+
+	/**
+	 * Query to get the definition 12 163 value if the extension exists
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @return definition or null
+	 * @since 1.1.8
+	 */
+	public String getDefinition_12_163(long srsId) {
+		String definition = null;
+		if (hasDefinition_12_163()) {
+			definition = crsWktExtension.getDefinition(srsId);
+		}
+		return definition;
+	}
+
+	/**
+	 * Query and set the definition 12 163 in the srs object if the extension
+	 * exists
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @since 1.1.8
+	 */
+	public void setDefinition_12_163(SpatialReferenceSystem srs) {
+		if (srs != null) {
+			String definition = getDefinition_12_163(srs.getSrsId());
+			if (definition != null) {
+				srs.setDefinition_12_163(definition);
+			}
+		}
+	}
+
+	/**
+	 * Query and set the definition 12 163 in the srs objects if the extension
+	 * exists
+	 * 
+	 * @param srsList
+	 *            srs list
+	 * @since 1.1.8
+	 */
+	public void setDefinition_12_163(Collection<SpatialReferenceSystem> srsList) {
+		for (SpatialReferenceSystem srs : srsList) {
+			setDefinition_12_163(srs);
+		}
+	}
+
+	/**
+	 * Update the definition 12 163 in the database if the extension exists
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @param definition
+	 *            definition
+	 * @since 1.1.8
+	 */
+	public void updateDefinition_12_163(long srsId, String definition) {
+		if (hasDefinition_12_163()) {
+			crsWktExtension.updateDefinition(srsId, definition);
+		}
+	}
+
+	/**
+	 * Update the definition 12 163 in the database if the extension exists
+	 * 
+	 * @param srs
+	 *            srs
+	 * @since 1.1.8
+	 */
+	public void updateDefinition_12_163(SpatialReferenceSystem srs) {
+		if (srs != null) {
+			String definition = srs.getDefinition_12_163();
+			if (definition != null) {
+				updateDefinition_12_163(srs.getSrsId(), definition);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SpatialReferenceSystem queryForId(Long id) throws SQLException {
+		SpatialReferenceSystem srs = super.queryForId(id);
+		setDefinition_12_163(srs);
+		return srs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SpatialReferenceSystem queryForFirst(
+			PreparedQuery<SpatialReferenceSystem> preparedQuery)
+			throws SQLException {
+		SpatialReferenceSystem srs = super.queryForFirst(preparedQuery);
+		setDefinition_12_163(srs);
+		return srs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForAll() throws SQLException {
+		List<SpatialReferenceSystem> srsList = super.queryForAll();
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForEq(String fieldName,
+			Object value) throws SQLException {
+		List<SpatialReferenceSystem> srsList = super.queryForEq(fieldName,
+				value);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> query(
+			PreparedQuery<SpatialReferenceSystem> preparedQuery)
+			throws SQLException {
+		List<SpatialReferenceSystem> srsList = super.query(preparedQuery);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForMatching(
+			SpatialReferenceSystem matchObj) throws SQLException {
+		List<SpatialReferenceSystem> srsList = super.queryForMatching(matchObj);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForMatchingArgs(
+			SpatialReferenceSystem matchObj) throws SQLException {
+		List<SpatialReferenceSystem> srsList = super
+				.queryForMatchingArgs(matchObj);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForFieldValues(
+			Map<String, Object> fieldValues) throws SQLException {
+		List<SpatialReferenceSystem> srsList = super
+				.queryForFieldValues(fieldValues);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SpatialReferenceSystem> queryForFieldValuesArgs(
+			Map<String, Object> fieldValues) throws SQLException {
+		List<SpatialReferenceSystem> srsList = super
+				.queryForFieldValuesArgs(fieldValues);
+		setDefinition_12_163(srsList);
+		return srsList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SpatialReferenceSystem queryForSameId(SpatialReferenceSystem data)
+			throws SQLException {
+		SpatialReferenceSystem srs = super.queryForSameId(data);
+		setDefinition_12_163(srs);
+		return srs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int create(SpatialReferenceSystem srs) throws SQLException {
+		int result = super.create(srs);
+		updateDefinition_12_163(srs);
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SpatialReferenceSystem createIfNotExists(SpatialReferenceSystem data)
+			throws SQLException {
+		SpatialReferenceSystem srs = super.createIfNotExists(data);
+		updateDefinition_12_163(srs);
+		return srs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CreateOrUpdateStatus createOrUpdate(SpatialReferenceSystem data)
+			throws SQLException {
+		CreateOrUpdateStatus status = super.createOrUpdate(data);
+		updateDefinition_12_163(data);
+		return status;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int update(SpatialReferenceSystem data) throws SQLException {
+		int result = super.update(data);
+		updateDefinition_12_163(data);
+		return result;
 	}
 
 	/**
@@ -210,6 +500,8 @@ public class SpatialReferenceSystemDao extends
 						"Spatial Reference System not supported for metadata creation: "
 								+ srsId);
 			}
+		} else {
+			setDefinition_12_163(srs);
 		}
 
 		return srs;
