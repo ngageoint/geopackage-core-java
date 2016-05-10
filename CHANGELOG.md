@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.1.8 (TBD)
+## [1.1.8](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.8) (05-10-2016)
 
 * GeoPackage 1.1.0 spec updates
 * GeoPackage application id updated to GP11
