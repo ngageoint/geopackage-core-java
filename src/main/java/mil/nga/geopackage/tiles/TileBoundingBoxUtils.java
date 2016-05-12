@@ -497,20 +497,20 @@ public class TileBoundingBoxUtils {
 	/**
 	 * Get the tile grid
 	 *
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 * @param matrixWidth
 	 * @param matrixHeight
-	 * @param webMercatorBoundingBox
+	 * @param boundingBox
 	 * @return
 	 */
-	public static TileGrid getTileGrid(BoundingBox webMercatorTotalBox,
+	public static TileGrid getTileGrid(BoundingBox totalBox,
 			long matrixWidth, long matrixHeight,
-			BoundingBox webMercatorBoundingBox) {
+			BoundingBox boundingBox) {
 
-		long minColumn = getTileColumn(webMercatorTotalBox, matrixWidth,
-				webMercatorBoundingBox.getMinLongitude());
-		long maxColumn = getTileColumn(webMercatorTotalBox, matrixWidth,
-				webMercatorBoundingBox.getMaxLongitude());
+		long minColumn = getTileColumn(totalBox, matrixWidth,
+				boundingBox.getMinLongitude());
+		long maxColumn = getTileColumn(totalBox, matrixWidth,
+				boundingBox.getMaxLongitude());
 
 		if (minColumn < matrixWidth && maxColumn >= 0) {
 			if (minColumn < 0) {
@@ -521,10 +521,10 @@ public class TileBoundingBoxUtils {
 			}
 		}
 
-		long maxRow = getTileRow(webMercatorTotalBox, matrixHeight,
-				webMercatorBoundingBox.getMinLatitude());
-		long minRow = getTileRow(webMercatorTotalBox, matrixHeight,
-				webMercatorBoundingBox.getMaxLatitude());
+		long maxRow = getTileRow(totalBox, matrixHeight,
+				boundingBox.getMinLatitude());
+		long minRow = getTileRow(totalBox, matrixHeight,
+				boundingBox.getMaxLatitude());
 
 		if (minRow < matrixHeight && maxRow >= 0) {
 			if (minRow < 0) {
@@ -541,20 +541,20 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the tile column of the longitude in degrees
+	 * Get the tile column of the longitude in constant units
 	 *
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 * @param matrixWidth
 	 * @param longitude
-	 *            in meters
+	 *            in constant units
 	 * @return tile column if in the range, -1 if before,
 	 *         {@link TileMatrix#getMatrixWidth()} if after
 	 */
-	public static long getTileColumn(BoundingBox webMercatorTotalBox,
+	public static long getTileColumn(BoundingBox totalBox,
 			long matrixWidth, double longitude) {
 
-		double minX = webMercatorTotalBox.getMinLongitude();
-		double maxX = webMercatorTotalBox.getMaxLongitude();
+		double minX = totalBox.getMinLongitude();
+		double maxX = totalBox.getMaxLongitude();
 
 		long tileId;
 		if (longitude < minX) {
@@ -562,8 +562,8 @@ public class TileBoundingBoxUtils {
 		} else if (longitude >= maxX) {
 			tileId = matrixWidth;
 		} else {
-			double matrixWidthMeters = webMercatorTotalBox.getMaxLongitude()
-					- webMercatorTotalBox.getMinLongitude();
+			double matrixWidthMeters = totalBox.getMaxLongitude()
+					- totalBox.getMinLongitude();
 			double tileWidth = matrixWidthMeters / matrixWidth;
 			tileId = (long) ((longitude - minX) / tileWidth);
 		}
@@ -572,20 +572,20 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the tile row of the latitude in degrees
+	 * Get the tile row of the latitude in constant units
 	 *
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 * @param matrixHeight
 	 * @param latitude
-	 *            in meters
+	 *            in constant units
 	 * @return tile row if in the range, -1 if before,
 	 *         {@link TileMatrix#getMatrixHeight()} if after
 	 */
-	public static long getTileRow(BoundingBox webMercatorTotalBox,
+	public static long getTileRow(BoundingBox totalBox,
 			long matrixHeight, double latitude) {
 
-		double minY = webMercatorTotalBox.getMinLatitude();
-		double maxY = webMercatorTotalBox.getMaxLatitude();
+		double minY = totalBox.getMinLatitude();
+		double maxY = totalBox.getMaxLatitude();
 
 		long tileId;
 		if (latitude <= minY) {
@@ -593,8 +593,8 @@ public class TileBoundingBoxUtils {
 		} else if (latitude > maxY) {
 			tileId = -1;
 		} else {
-			double matrixHeightMeters = webMercatorTotalBox.getMaxLatitude()
-					- webMercatorTotalBox.getMinLatitude();
+			double matrixHeightMeters = totalBox.getMaxLatitude()
+					- totalBox.getMinLatitude();
 			double tileHeight = matrixHeightMeters / matrixHeight;
 			tileId = (long) ((maxY - latitude) / tileHeight);
 		}
@@ -603,10 +603,10 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the web mercator bounding box of the tile column and row in the tile
-	 * matrix using the total bounding box
+	 * Get the bounding box of the tile column and row in the tile
+	 * matrix using the total bounding box with constant units
 	 *
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 *            total bounding box
 	 * @param tileMatrix
 	 *            tile matrix
@@ -615,20 +615,21 @@ public class TileBoundingBoxUtils {
 	 * @param tileRow
 	 *            tile row
 	 * @return bounding box
+	 * @since 1.2.0
 	 */
-	public static BoundingBox getWebMercatorBoundingBox(
-			BoundingBox webMercatorTotalBox, TileMatrix tileMatrix,
+	public static BoundingBox getBoundingBox(
+			BoundingBox totalBox, TileMatrix tileMatrix,
 			long tileColumn, long tileRow) {
-		return getWebMercatorBoundingBox(webMercatorTotalBox,
+		return getBoundingBox(totalBox,
 				tileMatrix.getMatrixWidth(), tileMatrix.getMatrixHeight(),
 				tileColumn, tileRow);
 	}
 
 	/**
-	 * Get the web mercator bounding box of the tile column and row in the tile
-	 * width and height bounds using the total bounding box
+	 * Get the bounding box of the tile column and row in the tile
+	 * width and height bounds using the total bounding box with constant units
 	 *
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 *            total bounding box
 	 * @param matrixWidth
 	 *            matrix width
@@ -639,42 +640,43 @@ public class TileBoundingBoxUtils {
 	 * @param tileRow
 	 *            tile row
 	 * @return bounding box
+	 * @since 1.2.0
 	 */
-	public static BoundingBox getWebMercatorBoundingBox(
-			BoundingBox webMercatorTotalBox, long tileMatrixWidth,
+	public static BoundingBox getBoundingBox(
+			BoundingBox totalBox, long tileMatrixWidth,
 			long tileMatrixHeight, long tileColumn, long tileRow) {
 		TileGrid tileGrid = new TileGrid(tileColumn, tileColumn, tileRow,
 				tileRow);
-		return getWebMercatorBoundingBox(webMercatorTotalBox, tileMatrixWidth,
+		return getBoundingBox(totalBox, tileMatrixWidth,
 				tileMatrixHeight, tileGrid);
 	}
 
 	/**
-	 * Get the web mercator bounding box of the tile grid in the tile matrix
-	 * using the total bounding box
+	 * Get the bounding box of the tile grid in the tile matrix
+	 * using the total bounding box with constant units
 	 * 
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 *            total bounding box
 	 * @param tileMatrix
 	 *            tile matrix
 	 * @param tileGrid
 	 *            tile grid
 	 * @return bounding box
-	 * @since 1.1.1
+	 * @since 1.2.0
 	 */
-	public static BoundingBox getWebMercatorBoundingBox(
-			BoundingBox webMercatorTotalBox, TileMatrix tileMatrix,
+	public static BoundingBox getBoundingBox(
+			BoundingBox totalBox, TileMatrix tileMatrix,
 			TileGrid tileGrid) {
-		return getWebMercatorBoundingBox(webMercatorTotalBox,
+		return getBoundingBox(totalBox,
 				tileMatrix.getMatrixWidth(), tileMatrix.getMatrixHeight(),
 				tileGrid);
 	}
 
 	/**
-	 * Get the web mercator bounding box of the tile grid in the tile width and
-	 * height bounds using the total bounding box
+	 * Get the bounding box of the tile grid in the tile width and
+	 * height bounds using the total bounding box with constant units
 	 * 
-	 * @param webMercatorTotalBox
+	 * @param totalBox
 	 *            total bounding box
 	 * @param tileMatrixWidth
 	 *            matrix width
@@ -683,15 +685,15 @@ public class TileBoundingBoxUtils {
 	 * @param tileGrid
 	 *            tile grid
 	 * @return bounding box
-	 * @since 1.1.1
+	 * @since 1.2.0
 	 */
-	public static BoundingBox getWebMercatorBoundingBox(
-			BoundingBox webMercatorTotalBox, long tileMatrixWidth,
+	public static BoundingBox getBoundingBox(
+			BoundingBox totalBox, long tileMatrixWidth,
 			long tileMatrixHeight, TileGrid tileGrid) {
 
 		// Get the tile width
-		double matrixMinX = webMercatorTotalBox.getMinLongitude();
-		double matrixMaxX = webMercatorTotalBox.getMaxLongitude();
+		double matrixMinX = totalBox.getMinLongitude();
+		double matrixMaxX = totalBox.getMaxLongitude();
 		double matrixWidth = matrixMaxX - matrixMinX;
 		double tileWidth = matrixWidth / tileMatrixWidth;
 
@@ -701,8 +703,8 @@ public class TileBoundingBoxUtils {
 				+ (tileWidth * (tileGrid.getMaxX() + 1 - tileGrid.getMinX()));
 
 		// Get the tile height
-		double matrixMinY = webMercatorTotalBox.getMinLatitude();
-		double matrixMaxY = webMercatorTotalBox.getMaxLatitude();
+		double matrixMinY = totalBox.getMinLatitude();
+		double matrixMaxY = totalBox.getMaxLatitude();
 		double matrixHeight = matrixMaxY - matrixMinY;
 		double tileHeight = matrixHeight / tileMatrixHeight;
 
@@ -774,7 +776,7 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Bound the uppper and lower bounds of the WGS84 bounding box with web
+	 * Bound the upper and lower bounds of the WGS84 bounding box with web
 	 * mercator limits
 	 * 
 	 * @param boundingBox
