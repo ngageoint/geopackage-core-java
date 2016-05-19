@@ -442,6 +442,21 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the zoom level from the tile size in meters
+	 * 
+	 * @param tileSize
+	 *            tile size in meters
+	 * @return zoom level
+	 * @since 1.2.0
+	 */
+	public static double zoomLevelOfTileSize(double tileSize) {
+		double tilesPerSide = (2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
+				/ tileSize;
+		double zoom = Math.log(tilesPerSide) / Math.log(2);
+		return zoom;
+	}
+
+	/**
 	 * Get the tile width in degrees
 	 *
 	 * @param tilesPerSide
@@ -503,9 +518,8 @@ public class TileBoundingBoxUtils {
 	 * @param boundingBox
 	 * @return
 	 */
-	public static TileGrid getTileGrid(BoundingBox totalBox,
-			long matrixWidth, long matrixHeight,
-			BoundingBox boundingBox) {
+	public static TileGrid getTileGrid(BoundingBox totalBox, long matrixWidth,
+			long matrixHeight, BoundingBox boundingBox) {
 
 		long minColumn = getTileColumn(totalBox, matrixWidth,
 				boundingBox.getMinLongitude());
@@ -550,8 +564,8 @@ public class TileBoundingBoxUtils {
 	 * @return tile column if in the range, -1 if before,
 	 *         {@link TileMatrix#getMatrixWidth()} if after
 	 */
-	public static long getTileColumn(BoundingBox totalBox,
-			long matrixWidth, double longitude) {
+	public static long getTileColumn(BoundingBox totalBox, long matrixWidth,
+			double longitude) {
 
 		double minX = totalBox.getMinLongitude();
 		double maxX = totalBox.getMaxLongitude();
@@ -581,8 +595,8 @@ public class TileBoundingBoxUtils {
 	 * @return tile row if in the range, -1 if before,
 	 *         {@link TileMatrix#getMatrixHeight()} if after
 	 */
-	public static long getTileRow(BoundingBox totalBox,
-			long matrixHeight, double latitude) {
+	public static long getTileRow(BoundingBox totalBox, long matrixHeight,
+			double latitude) {
 
 		double minY = totalBox.getMinLatitude();
 		double maxY = totalBox.getMaxLatitude();
@@ -603,8 +617,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the bounding box of the tile column and row in the tile
-	 * matrix using the total bounding box with constant units
+	 * Get the bounding box of the tile column and row in the tile matrix using
+	 * the total bounding box with constant units
 	 *
 	 * @param totalBox
 	 *            total bounding box
@@ -617,17 +631,15 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 * @since 1.2.0
 	 */
-	public static BoundingBox getBoundingBox(
-			BoundingBox totalBox, TileMatrix tileMatrix,
-			long tileColumn, long tileRow) {
-		return getBoundingBox(totalBox,
-				tileMatrix.getMatrixWidth(), tileMatrix.getMatrixHeight(),
-				tileColumn, tileRow);
+	public static BoundingBox getBoundingBox(BoundingBox totalBox,
+			TileMatrix tileMatrix, long tileColumn, long tileRow) {
+		return getBoundingBox(totalBox, tileMatrix.getMatrixWidth(),
+				tileMatrix.getMatrixHeight(), tileColumn, tileRow);
 	}
 
 	/**
-	 * Get the bounding box of the tile column and row in the tile
-	 * width and height bounds using the total bounding box with constant units
+	 * Get the bounding box of the tile column and row in the tile width and
+	 * height bounds using the total bounding box with constant units
 	 *
 	 * @param totalBox
 	 *            total bounding box
@@ -642,18 +654,18 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 * @since 1.2.0
 	 */
-	public static BoundingBox getBoundingBox(
-			BoundingBox totalBox, long tileMatrixWidth,
-			long tileMatrixHeight, long tileColumn, long tileRow) {
+	public static BoundingBox getBoundingBox(BoundingBox totalBox,
+			long tileMatrixWidth, long tileMatrixHeight, long tileColumn,
+			long tileRow) {
 		TileGrid tileGrid = new TileGrid(tileColumn, tileColumn, tileRow,
 				tileRow);
-		return getBoundingBox(totalBox, tileMatrixWidth,
-				tileMatrixHeight, tileGrid);
+		return getBoundingBox(totalBox, tileMatrixWidth, tileMatrixHeight,
+				tileGrid);
 	}
 
 	/**
-	 * Get the bounding box of the tile grid in the tile matrix
-	 * using the total bounding box with constant units
+	 * Get the bounding box of the tile grid in the tile matrix using the total
+	 * bounding box with constant units
 	 * 
 	 * @param totalBox
 	 *            total bounding box
@@ -664,17 +676,15 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 * @since 1.2.0
 	 */
-	public static BoundingBox getBoundingBox(
-			BoundingBox totalBox, TileMatrix tileMatrix,
-			TileGrid tileGrid) {
-		return getBoundingBox(totalBox,
-				tileMatrix.getMatrixWidth(), tileMatrix.getMatrixHeight(),
-				tileGrid);
+	public static BoundingBox getBoundingBox(BoundingBox totalBox,
+			TileMatrix tileMatrix, TileGrid tileGrid) {
+		return getBoundingBox(totalBox, tileMatrix.getMatrixWidth(),
+				tileMatrix.getMatrixHeight(), tileGrid);
 	}
 
 	/**
-	 * Get the bounding box of the tile grid in the tile width and
-	 * height bounds using the total bounding box with constant units
+	 * Get the bounding box of the tile grid in the tile width and height bounds
+	 * using the total bounding box with constant units
 	 * 
 	 * @param totalBox
 	 *            total bounding box
@@ -687,9 +697,8 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 * @since 1.2.0
 	 */
-	public static BoundingBox getBoundingBox(
-			BoundingBox totalBox, long tileMatrixWidth,
-			long tileMatrixHeight, TileGrid tileGrid) {
+	public static BoundingBox getBoundingBox(BoundingBox totalBox,
+			long tileMatrixWidth, long tileMatrixHeight, TileGrid tileGrid) {
 
 		// Get the tile width
 		double matrixMinX = totalBox.getMinLongitude();

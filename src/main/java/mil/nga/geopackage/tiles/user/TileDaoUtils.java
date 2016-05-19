@@ -45,11 +45,14 @@ public class TileDaoUtils {
 	 * Get the zoom level for the provided width and height in the default units
 	 * 
 	 * @param widths
+	 *            sorted widths
 	 * @param heights
+	 *            sorted heights
 	 * @param tileMatrices
+	 *            tile matrices
 	 * @param length
-	 *            in meters
-	 * @return
+	 *            in default units
+	 * @return tile matrix zoom level
 	 */
 	public static Long getZoomLevel(double[] widths, double[] heights,
 			List<TileMatrix> tileMatrices, double length) {
@@ -68,11 +71,11 @@ public class TileDaoUtils {
 
 		// Find the closest width or verify it isn't too small or large
 		if (widthIndex == 0) {
-			if (length < widths[widthIndex] * .51) {
+			if (length < getMinLength(widths)) {
 				widthIndex = -1;
 			}
 		} else if (widthIndex == widths.length) {
-			if (length >= widths[widthIndex - 1] / .51) {
+			if (length >= getMaxLength(widths)) {
 				widthIndex = -1;
 			} else {
 				widthIndex = widthIndex - 1;
@@ -84,11 +87,11 @@ public class TileDaoUtils {
 
 		// Find the closest height or verify it isn't too small or large
 		if (heightIndex == 0) {
-			if (length < heights[heightIndex] * .51) {
+			if (length < getMinLength(heights)) {
 				heightIndex = -1;
 			}
 		} else if (heightIndex == heights.length) {
-			if (length >= heights[heightIndex - 1] / .51) {
+			if (length >= getMaxLength(heights)) {
 				heightIndex = -1;
 			} else {
 				heightIndex = heightIndex - 1;
@@ -111,6 +114,62 @@ public class TileDaoUtils {
 		}
 
 		return zoomLevel;
+	}
+
+	/**
+	 * Get the max distance length that matches the tile widths and heights
+	 * 
+	 * @param widths
+	 *            sorted tile matrix widths
+	 * @param heights
+	 *            sorted tile matrix heights
+	 * @return max length
+	 * @since 1.2.0
+	 */
+	public static double getMaxLength(double[] widths, double[] heights) {
+		double maxWidth = getMaxLength(widths);
+		double maxHeight = getMaxLength(heights);
+		double maxLength = Math.min(maxWidth, maxHeight);
+		return maxLength;
+	}
+
+	/**
+	 * Get the min distance length that matches the tile widths and heights
+	 * 
+	 * @param widths
+	 *            sorted tile matrix widths
+	 * @param heights
+	 *            sorted tile matrix heights
+	 * @return min length
+	 * @since 1.2.0
+	 */
+	public static double getMinLength(double[] widths, double[] heights) {
+		double minWidth = getMinLength(widths);
+		double minHeight = getMinLength(heights);
+		double minLength = Math.max(minWidth, minHeight);
+		return minLength;
+	}
+
+	/**
+	 * Get the max length distance value from the sorted array of lengths
+	 * 
+	 * @param lengths
+	 *            sorted tile matrix lengths
+	 * @return max length
+	 */
+	private static double getMaxLength(double[] lengths) {
+		return lengths[lengths.length - 1] / .51;
+	}
+
+	/**
+	 * Get the min length distance value from the sorted array of lengths
+	 * 
+	 * @param lengths
+	 *            sorted tile matrix lengths
+	 * @return min length
+	 */
+	private static double getMinLength(double[] lengths) {
+		return lengths[0] * .51;
 	}
 
 }
