@@ -473,16 +473,79 @@ public class SpatialReferenceSystemDao extends
 	/**
 	 * Get or Create the Spatial Reference System for the provided id
 	 * 
-	 * @param context
 	 * @param srsId
-	 * @return
+	 *            srs id
+	 * @return srs
 	 */
 	public SpatialReferenceSystem getOrCreate(long srsId) throws SQLException {
 
 		SpatialReferenceSystem srs = queryForId(srsId);
 
+		srs = createIfNeeded(srs, srsId);
+
+		return srs;
+	}
+
+	/**
+	 * Get or Create the Spatial Reference System for the provided epsg
+	 * 
+	 * @param epsg
+	 *            epsg
+	 * @return srs
+	 * @throws SQLException
+	 * @since 1.2.0
+	 */
+	public SpatialReferenceSystem getOrCreateFromEpsg(long epsg)
+			throws SQLException {
+
+		SpatialReferenceSystem srs = queryForOrganizationCoordsysId(epsg);
+
+		srs = createIfNeeded(srs, epsg);
+
+		return srs;
+	}
+
+	/**
+	 * Query for the organization coordsys id
+	 * 
+	 * @param organizationCoordsysId
+	 * @return srs
+	 * @throws SQLException
+	 * @since 1.2.0
+	 */
+	public SpatialReferenceSystem queryForOrganizationCoordsysId(
+			long organizationCoordsysId) throws SQLException {
+		SpatialReferenceSystem srs = null;
+		List<SpatialReferenceSystem> results = queryForEq(
+				SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
+				organizationCoordsysId);
+		if (!results.isEmpty()) {
+			if (results.size() > 1) {
+				throw new SQLException("More than one "
+						+ SpatialReferenceSystem.class.getSimpleName()
+						+ " returned for Organization Coordsys Id: "
+						+ organizationCoordsysId);
+			}
+			srs = results.get(0);
+		}
+		return srs;
+	}
+
+	/**
+	 * Create the srs if needed
+	 * 
+	 * @param srs
+	 *            srs if exists or null
+	 * @param id
+	 *            srs or epsg id
+	 * @return srs
+	 * @throws SQLException
+	 */
+	private SpatialReferenceSystem createIfNeeded(SpatialReferenceSystem srs,
+			long id) throws SQLException {
+
 		if (srs == null) {
-			switch ((int) srsId) {
+			switch ((int) id) {
 			case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM:
 				srs = createWgs84();
 				break;
@@ -498,7 +561,7 @@ public class SpatialReferenceSystemDao extends
 			default:
 				throw new GeoPackageException(
 						"Spatial Reference System not supported for metadata creation: "
-								+ srsId);
+								+ id);
 			}
 		} else {
 			setDefinition_12_163(srs);
