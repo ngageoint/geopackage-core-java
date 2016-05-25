@@ -6,7 +6,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.0 (TBD)
 
-* TBD
+* Spatial Reference System DAO create from EPSG code in addition to SRS id
+* Projection unit retrieval
+* Dropped web mercator terminology from method names that only require consistent units per pixel
+* Zoom level from tile size in meters method
+* Tile DAO utility methods
 
 ## [1.1.8](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.8) (05-10-2016)
 
