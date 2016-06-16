@@ -11,6 +11,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Dropped web mercator terminology from method names that only require consistent units per pixel
 * Zoom level from tile size in meters method
 * Tile DAO utility methods
+* WGS84 tile grid, bounding box, tiles per side, and tile size methods
 
 ## [1.1.8](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.1.8) (05-10-2016)
 
