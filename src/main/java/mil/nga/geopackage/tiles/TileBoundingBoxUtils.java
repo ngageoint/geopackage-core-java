@@ -805,4 +805,133 @@ public class TileBoundingBoxUtils {
 		return bounded;
 	}
 
+	/**
+	 * Get the tile grid that includes the entire tile bounding box
+	 *
+	 * @param wgs84BoundingBox
+	 *            wgs84 bounding box
+	 * @param zoom
+	 *            zoom level
+	 *
+	 * @return tile grid
+	 * @since 1.2.0
+	 */
+	public static TileGrid getTileGridWGS84(BoundingBox boundingBox, int zoom) {
+
+		int tilesPerLat = tilesPerWGS84LatSide(zoom);
+		int tilesPerLon = tilesPerWGS84LonSide(zoom);
+
+		double tileSizeLat = tileSizeLatPerWGS84Side(tilesPerLat);
+		double tileSizeLon = tileSizeLonPerWGS84Side(tilesPerLon);
+
+		int minX = (int) ((boundingBox.getMinLongitude() + ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH) / tileSizeLon);
+		double tempMaxX = (boundingBox.getMaxLongitude() + ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
+				/ tileSizeLon;
+		int maxX = (int) tempMaxX;
+		if (tempMaxX % 1 == 0) {
+			maxX--;
+		}
+		maxX = Math.min(maxX, tilesPerLon - 1);
+
+		int minY = (int) (((boundingBox.getMaxLatitude() - ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1) / tileSizeLat);
+		double tempMaxY = ((boundingBox.getMinLatitude() - ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1)
+				/ tileSizeLat;
+		int maxY = (int) tempMaxY;
+		if (tempMaxY % 1 == 0) {
+			maxY--;
+		}
+		maxY = Math.min(maxY, tilesPerLat - 1);
+
+		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
+
+		return grid;
+	}
+
+	/**
+	 * Get the WGS84 tile bounding box from the tile grid and zoom level
+	 *
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom
+	 *
+	 * @return wgs84 bounding box
+	 * @since 1.2.0
+	 */
+	public static BoundingBox getWGS84BoundingBox(TileGrid tileGrid, int zoom) {
+
+		int tilesPerLat = tilesPerWGS84LatSide(zoom);
+		int tilesPerLon = tilesPerWGS84LonSide(zoom);
+
+		double tileSizeLat = tileSizeLatPerWGS84Side(tilesPerLat);
+		double tileSizeLon = tileSizeLonPerWGS84Side(tilesPerLon);
+
+		double minLon = (-1 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
+				+ (tileGrid.getMinX() * tileSizeLon);
+		double maxLon = (-1 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
+				+ ((tileGrid.getMaxX() + 1) * tileSizeLon);
+		double minLat = ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT
+				- ((tileGrid.getMaxY() + 1) * tileSizeLat);
+		double maxLat = ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT
+				- (tileGrid.getMinY() * tileSizeLat);
+
+		BoundingBox box = new BoundingBox(minLon, maxLon, minLat, maxLat);
+
+		return box;
+	}
+
+	/**
+	 * Get the tiles per latitude side at the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 *
+	 * @return tiles per latitude side
+	 * @since 1.2.0
+	 */
+	public static int tilesPerWGS84LatSide(int zoom) {
+		return tilesPerSide(zoom);
+	}
+
+	/**
+	 * Get the tiles per longitude side at the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 *
+	 * @return tiles per longitude side
+	 * @since 1.2.0
+	 */
+	public static int tilesPerWGS84LonSide(int zoom) {
+		return 2 * tilesPerSide(zoom);
+	}
+
+	/**
+	 * Get the tile height in degrees latitude
+	 *
+	 * @param tilesPerLat
+	 *            tiles per latitude side
+	 *
+	 * @return degrees
+	 * @since 1.2.0
+	 */
+	public static double tileSizeLatPerWGS84Side(int tilesPerLat) {
+		return (2 * ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT)
+				/ tilesPerLat;
+	}
+
+	/**
+	 * Get the tile height in degrees longitude
+	 *
+	 * @param tilesPerLon
+	 *            tiles per longitude side
+	 *
+	 * @return degrees
+	 * @since 1.2.0
+	 */
+	public static double tileSizeLonPerWGS84Side(int tilesPerLon) {
+		return (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
+				/ tilesPerLon;
+	}
+
 }

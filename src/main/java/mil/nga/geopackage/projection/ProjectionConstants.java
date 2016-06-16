@@ -43,8 +43,22 @@ public class ProjectionConstants {
 	public static double WEB_MERCATOR_HALF_WORLD_WIDTH = 20037508.342789244;
 
 	/**
+	 * Half the world longitude width for WGS84
+	 * 
+	 * @since 1.2.0
+	 */
+	public static double WGS84_HALF_WORLD_LON_WIDTH = 180.0;
+
+	/**
+	 * Half the world latitude height for WGS84
+	 * 
+	 * @since 1.2.0
+	 */
+	public static double WGS84_HALF_WORLD_LAT_HEIGHT = 90.0;
+
+	/**
 	 * Web mercator precision
 	 */
 	public static double WEB_MERCATOR_PRECISION = 0.0000000001;
-	
+
 }
