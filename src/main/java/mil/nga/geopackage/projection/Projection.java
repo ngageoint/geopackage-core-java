@@ -1,8 +1,13 @@
 package mil.nga.geopackage.projection;
 
+import java.lang.reflect.Field;
+
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 
 import org.osgeo.proj4j.CoordinateReferenceSystem;
+import org.osgeo.proj4j.units.Unit;
+import org.osgeo.proj4j.units.Units;
 
 /**
  * Single EPSG Projection
@@ -95,6 +100,29 @@ public class Projection {
 	 */
 	public double toMeters(double value) {
 		return value / crs.getProjection().getFromMetres();
+	}
+
+	/**
+	 * Get the units of this projection
+	 * 
+	 * @return the projection unit
+	 * @since 1.2.0
+	 */
+	public Unit getUnit() {
+		Unit unit = null;
+		try {
+			// The unit is currently not publicly available, use reflection
+			Field f = org.osgeo.proj4j.proj.Projection.class.getDeclaredField("unit");
+			f.setAccessible(true);
+			unit = (Unit) f.get(crs.getProjection());
+			if (unit == null) {
+				unit = Units.METRES;
+			}
+		} catch (Exception e) {
+			throw new GeoPackageException(
+					"Failed to get projection unit for epsg: " + epsg, e);
+		}
+		return unit;
 	}
 
 }
