@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.2.0 (TBD)
+## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 
 * Spatial Reference System DAO create from EPSG code in addition to SRS id
 * Projection unit retrieval
