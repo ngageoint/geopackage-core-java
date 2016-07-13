@@ -1,26 +1,22 @@
-package mil.nga.geopackage.core.contents;
+package mil.nga.geopackage.extension.elevation;
 
 /**
- * Contents data type enumeration
+ * Gridded Coverage data type enumeration
  * 
  * @author osbornb
+ * @since 1.2.1
  */
-public enum ContentsDataType {
+public enum GriddedCoverageDataType {
 
 	/**
-	 * Features
+	 * Integer
 	 */
-	FEATURES("features"),
+	INTEGER("integer"),
 
 	/**
-	 * Tiles
+	 * Float
 	 */
-	TILES("tiles"),
-
-	/**
-	 * Tiled Gridded Elevation Data Extension
-	 */
-	ELEVATION_TILES("2d-gridded-coverage");
+	FLOAT("float");
 
 	/**
 	 * Data type name
@@ -32,7 +28,7 @@ public enum ContentsDataType {
 	 * 
 	 * @param name
 	 */
-	private ContentsDataType(String name) {
+	private GriddedCoverageDataType(String name) {
 		this.name = name;
 	}
 
@@ -51,10 +47,11 @@ public enum ContentsDataType {
 	 * @param name
 	 * @return
 	 */
-	public static ContentsDataType fromName(String name) {
-		ContentsDataType dataType = null;
+	public static GriddedCoverageDataType fromName(String name) {
+		GriddedCoverageDataType dataType = null;
 		if (name != null) {
-			for (ContentsDataType type : ContentsDataType.values()) {
+			for (GriddedCoverageDataType type : GriddedCoverageDataType
+					.values()) {
 				if (name.equals(type.getName())) {
 					dataType = type;
 					break;

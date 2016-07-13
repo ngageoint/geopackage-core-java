@@ -28,6 +28,13 @@ public class ProjectionConstants {
 	public static final int EPSG_WEB_MERCATOR = 3857;
 
 	/**
+	 * EPSG code for world geodetic system geographical 3d
+	 * 
+	 * @since 1.2.1
+	 */
+	public static final int EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D = 4979;
+
+	/**
 	 * Web Mercator Latitude Range (+ and -)
 	 */
 	public static final double WEB_MERCATOR_MAX_LAT_RANGE = 85.0511287798066;

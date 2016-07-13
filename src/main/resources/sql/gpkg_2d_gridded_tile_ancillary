@@ -1,0 +1,13 @@
+CREATE TABLE gpkg_2d_gridded_tile_ancillary (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tpudt_name TEXT NOT NULL,
+  tpudt_id INTEGER NOT NULL,
+  scale REAL DEFAULT 1.0,
+  offset REAL DEFAULT 0.0,
+  min REAL DEFAULT NULL,
+  max REAL DEFAULT NULL,
+  mean REAL DEFAULT NULL,
+  std_dev REAL DEFAULT NULL,
+  CONSTRAINT fk_g2dgtat_name FOREIGN KEY (tpudt_name) REFERENCES gpkg_contents(table_name),
+  UNIQUE (tpudt_name, tpudt_id)
+);

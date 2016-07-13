@@ -205,6 +205,27 @@ public class Contents {
 		this.dataType = dataType.getName();
 	}
 
+	/**
+	 * Get the data type string value
+	 * 
+	 * @return data type
+	 * @since 1.2.1
+	 */
+	public String getDataTypeString() {
+		return dataType;
+	}
+
+	/**
+	 * Set the data type string value
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @since 1.2.1
+	 */
+	public void setDataTypeString(String dataType) {
+		this.dataType = dataType;
+	}
+
 	public String getIdentifier() {
 		return identifier;
 	}

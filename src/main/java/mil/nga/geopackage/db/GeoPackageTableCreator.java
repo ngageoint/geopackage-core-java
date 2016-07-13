@@ -139,6 +139,28 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create the Tile Gridded Elevation Coverage extension table
+	 * 
+	 * @return executed statements
+	 * @since 1.2.1
+	 */
+	public int createGriddedCoverage() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "2d_gridded_coverage"));
+	}
+
+	/**
+	 * Create the Tile Gridded Elevation Tile extension table
+	 * 
+	 * @return executed statements
+	 * @since 1.2.1
+	 */
+	public int createGriddedTile() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "2d_gridded_tile"));
+	}
+
+	/**
 	 * Create Table Index table
 	 * 
 	 * @return executed statements

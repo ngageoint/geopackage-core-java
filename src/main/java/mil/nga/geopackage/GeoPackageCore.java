@@ -9,6 +9,8 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.elevation.GriddedCoverageDao;
+import mil.nga.geopackage.extension.elevation.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
@@ -472,6 +474,38 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.1.5
 	 */
 	public void dropTable(String table);
+
+	/**
+	 * Get a 2D Gridded Coverage DAO
+	 * 
+	 * @return 2d gridded coverage dao
+	 * @since 1.2.1
+	 */
+	public GriddedCoverageDao getGriddedCoverageDao();
+
+	/**
+	 * Create the 2D Gridded Coverage Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 1.2.1
+	 */
+	public boolean createGriddedCoverageTable();
+
+	/**
+	 * Get a 2D Gridded Tile DAO
+	 * 
+	 * @return 2d gridded tile dao
+	 * @since 1.2.1
+	 */
+	public GriddedTileDao getGriddedTileDao();
+
+	/**
+	 * Create the 2D Gridded Tile Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 1.2.1
+	 */
+	public boolean createGriddedTileTable();
 
 	/**
 	 * Get a Table Index DAO

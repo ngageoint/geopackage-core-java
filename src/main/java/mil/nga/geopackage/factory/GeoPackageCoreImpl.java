@@ -27,6 +27,10 @@ import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
+import mil.nga.geopackage.extension.elevation.GriddedCoverage;
+import mil.nga.geopackage.extension.elevation.GriddedCoverageDao;
+import mil.nga.geopackage.extension.elevation.GriddedTile;
+import mil.nga.geopackage.extension.elevation.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
@@ -868,6 +872,64 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public void dropTable(String table) {
 		tableCreator.dropTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GriddedCoverageDao getGriddedCoverageDao() {
+		return createDao(GriddedCoverage.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createGriddedCoverageTable() {
+		verifyWritable();
+
+		boolean created = false;
+		GriddedCoverageDao dao = getGriddedCoverageDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createGriddedCoverage() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GriddedCoverage.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GriddedTileDao getGriddedTileDao() {
+		return createDao(GriddedTile.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createGriddedTileTable() {
+		verifyWritable();
+
+		boolean created = false;
+		GriddedTileDao dao = getGriddedTileDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createGriddedTile() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GriddedTile.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
 	}
 
 	/**

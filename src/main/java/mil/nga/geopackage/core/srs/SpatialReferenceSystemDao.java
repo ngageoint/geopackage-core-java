@@ -237,6 +237,42 @@ public class SpatialReferenceSystemDao extends
 	}
 
 	/**
+	 * Creates the required EPSG WGS84 Geographical 3D Spatial Reference System
+	 *
+	 * @return spatial reference system
+	 * @throws SQLException
+	 * @since 1.2.1
+	 */
+	public SpatialReferenceSystem createWgs84Geographical3D()
+			throws SQLException {
+
+		SpatialReferenceSystem srs = new SpatialReferenceSystem();
+		srs.setSrsName(GeoPackageProperties.getProperty(
+				PropertyConstants.WGS_84_3D, PropertyConstants.SRS_NAME));
+		srs.setSrsId(GeoPackageProperties.getIntegerProperty(
+				PropertyConstants.WGS_84_3D, PropertyConstants.SRS_ID));
+		srs.setOrganization(GeoPackageProperties.getProperty(
+				PropertyConstants.WGS_84_3D, PropertyConstants.ORGANIZATION));
+		srs.setOrganizationCoordsysId(GeoPackageProperties.getIntegerProperty(
+				PropertyConstants.WGS_84_3D,
+				PropertyConstants.ORGANIZATION_COORDSYS_ID));
+		srs.setDefinition(GeoPackageProperties.getProperty(
+				PropertyConstants.WGS_84_3D, PropertyConstants.DEFINITION));
+		srs.setDescription(GeoPackageProperties.getProperty(
+				PropertyConstants.WGS_84_3D, PropertyConstants.DESCRIPTION));
+		create(srs);
+		if (hasDefinition_12_163()) {
+			srs.setDefinition_12_163(GeoPackageProperties.getProperty(
+					PropertyConstants.WGS_84_3D,
+					PropertyConstants.DEFINITION_12_163));
+			crsWktExtension.updateDefinition(srs.getSrsId(),
+					srs.getDefinition_12_163());
+		}
+
+		return srs;
+	}
+
+	/**
 	 * Query to get the definition 12 163 value if the extension exists
 	 * 
 	 * @param srsId
@@ -557,6 +593,9 @@ public class SpatialReferenceSystemDao extends
 				break;
 			case ProjectionConstants.EPSG_WEB_MERCATOR:
 				srs = createWebMercator();
+				break;
+			case ProjectionConstants.EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D:
+				srs = createWgs84Geographical3D();
 				break;
 			default:
 				throw new GeoPackageException(

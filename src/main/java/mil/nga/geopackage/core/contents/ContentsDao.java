@@ -332,28 +332,11 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				break;
 
 			case TILES:
-				// Tiles require Tile Matrix Set table (Spec Requirement 37)
-				TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
-				if (!tileMatrixSetDao.isTableExists()) {
-					throw new GeoPackageException(
-							"A data type of "
-									+ dataType.getName()
-									+ " requires the "
-									+ TileMatrixSet.class.getSimpleName()
-									+ " table to first be created using the GeoPackage.");
-				}
+				verifyTiles(dataType);
+				break;
 
-				// Tiles require Tile Matrix table (Spec Requirement 41)
-				TileMatrixDao tileMatrixDao = getTileMatrixDao();
-				if (!tileMatrixDao.isTableExists()) {
-					throw new GeoPackageException(
-							"A data type of "
-									+ dataType.getName()
-									+ " requires the "
-									+ TileMatrix.class.getSimpleName()
-									+ " table to first be created using the GeoPackage.");
-				}
-
+			case ELEVATION_TILES:
+				verifyTiles(dataType);
 				break;
 
 			default:
@@ -368,6 +351,33 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 					"No table exists for Content Table Name: "
 							+ contents.getTableName()
 							+ ". Table must first be created.");
+		}
+	}
+
+	/**
+	 * Verify the required tile tables exist
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @throws SQLException
+	 */
+	private void verifyTiles(ContentsDataType dataType) throws SQLException {
+		// Tiles require Tile Matrix Set table (Spec Requirement 37)
+		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
+		if (!tileMatrixSetDao.isTableExists()) {
+			throw new GeoPackageException("A data type of "
+					+ dataType.getName() + " requires the "
+					+ TileMatrixSet.class.getSimpleName()
+					+ " table to first be created using the GeoPackage.");
+		}
+
+		// Tiles require Tile Matrix table (Spec Requirement 41)
+		TileMatrixDao tileMatrixDao = getTileMatrixDao();
+		if (!tileMatrixDao.isTableExists()) {
+			throw new GeoPackageException("A data type of "
+					+ dataType.getName() + " requires the "
+					+ TileMatrix.class.getSimpleName()
+					+ " table to first be created using the GeoPackage.");
 		}
 	}
 
