@@ -9,6 +9,8 @@ import mil.nga.geopackage.core.contents.Contents;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 /**
@@ -17,7 +19,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.2.1
  */
-public class GriddedTileDao extends BaseDaoImpl<GriddedTile, String> {
+public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -46,6 +48,7 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, String> {
 	 * Query by table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @return gridded tile list
 	 */
 	public List<GriddedTile> query(String tableName) {
@@ -55,9 +58,34 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, String> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Gridded Tile objects by Table Name: "
-							+ tableName);
+							+ tableName, e);
 		}
 		return results;
+	}
+
+	/**
+	 * Query by table name and table id
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param tileId
+	 *            tile id
+	 * @return gridded tile
+	 */
+	public GriddedTile query(String tableName, long tileId) {
+		GriddedTile griddedTile = null;
+		try {
+			QueryBuilder<GriddedTile, Long> qb = queryBuilder();
+			qb.where().eq(GriddedTile.COLUMN_TABLE_NAME, tableName).and()
+					.eq(GriddedTile.COLUMN_TABLE_ID, tileId);
+			PreparedQuery<GriddedTile> query = qb.prepare();
+			griddedTile = queryForFirst(query);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for Gridded Tile objects by Table Name: "
+							+ tableName + ", Tile Id: " + tileId, e);
+		}
+		return griddedTile;
 	}
 
 	/**
@@ -78,7 +106,7 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, String> {
 	 * @return deleted count
 	 */
 	public int delete(String tableName) {
-		DeleteBuilder<GriddedTile, String> db = deleteBuilder();
+		DeleteBuilder<GriddedTile, Long> db = deleteBuilder();
 
 		int deleted = 0;
 
@@ -89,7 +117,8 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, String> {
 			deleted = delete(deleteQuery);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
-					"Failed to delete Gridded Tile by Table Name: " + tableName);
+					"Failed to delete Gridded Tile by Table Name: " + tableName,
+					e);
 		}
 
 		return deleted;

@@ -67,7 +67,7 @@ public class GriddedTile {
 	/**
 	 * Auto increment primary key
 	 */
-	@DatabaseField(columnName = COLUMN_ID, id = true, canBeNull = false, generatedId = true)
+	@DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
 	private long id;
 
 	/**
@@ -197,8 +197,8 @@ public class GriddedTile {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public Float getScale() {
-		return scale;
+	public float getScale() {
+		return scale != null ? scale : 1.0f;
 	}
 
 	/**
@@ -216,8 +216,8 @@ public class GriddedTile {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public Float getOffset() {
-		return offset;
+	public float getOffset() {
+		return offset != null ? offset : 0.0f;
 	}
 
 	/**

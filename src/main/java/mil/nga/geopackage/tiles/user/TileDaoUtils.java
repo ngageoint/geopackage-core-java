@@ -56,6 +56,46 @@ public class TileDaoUtils {
 	 */
 	public static Long getZoomLevel(double[] widths, double[] heights,
 			List<TileMatrix> tileMatrices, double length) {
+		return getZoomLevel(widths, heights, tileMatrices, length, true);
+	}
+
+	/**
+	 * Get the closest zoom level for the provided width and height in the
+	 * default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param length
+	 *            in default units
+	 * @return tile matrix zoom level
+	 */
+	public static Long getClosestZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double length) {
+		return getZoomLevel(widths, heights, tileMatrices, length, false);
+	}
+
+	/**
+	 * Get the zoom level for the provided width and height in the default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param length
+	 *            in default units
+	 * @param lengthChecks
+	 *            perform length checks for values too far away from the zoom
+	 *            level
+	 * @return tile matrix zoom level
+	 */
+	private static Long getZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double length, boolean lengthChecks) {
 
 		Long zoomLevel = null;
 
@@ -71,11 +111,11 @@ public class TileDaoUtils {
 
 		// Find the closest width or verify it isn't too small or large
 		if (widthIndex == 0) {
-			if (length < getMinLength(widths)) {
+			if (lengthChecks && length < getMinLength(widths)) {
 				widthIndex = -1;
 			}
 		} else if (widthIndex == widths.length) {
-			if (length >= getMaxLength(widths)) {
+			if (lengthChecks && length >= getMaxLength(widths)) {
 				widthIndex = -1;
 			} else {
 				widthIndex = widthIndex - 1;
@@ -87,11 +127,11 @@ public class TileDaoUtils {
 
 		// Find the closest height or verify it isn't too small or large
 		if (heightIndex == 0) {
-			if (length < getMinLength(heights)) {
+			if (lengthChecks && length < getMinLength(heights)) {
 				heightIndex = -1;
 			}
 		} else if (heightIndex == heights.length) {
-			if (length >= getMaxLength(heights)) {
+			if (lengthChecks && length >= getMaxLength(heights)) {
 				heightIndex = -1;
 			} else {
 				heightIndex = heightIndex - 1;

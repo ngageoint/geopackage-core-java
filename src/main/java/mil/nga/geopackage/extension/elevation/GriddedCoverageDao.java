@@ -17,7 +17,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.2.1
  */
-public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, String> {
+public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -57,7 +57,7 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, String> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Gridded Coverage objects by Tile Matrix Set Name: "
-							+ tileMatrixSetName);
+							+ tileMatrixSetName, e);
 		}
 		return results;
 	}
@@ -81,7 +81,7 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, String> {
 	 * @return deleted count
 	 */
 	public int delete(String tileMatrixSetName) {
-		DeleteBuilder<GriddedCoverage, String> db = deleteBuilder();
+		DeleteBuilder<GriddedCoverage, Long> db = deleteBuilder();
 
 		int deleted = 0;
 
@@ -94,7 +94,7 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, String> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Gridded Coverage by Tile Matrix Set Name: "
-							+ tileMatrixSetName);
+							+ tileMatrixSetName, e);
 		}
 
 		return deleted;
