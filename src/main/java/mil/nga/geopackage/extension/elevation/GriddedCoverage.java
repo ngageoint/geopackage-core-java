@@ -87,31 +87,31 @@ public class GriddedCoverage {
 	 * Scale as a multiple relative to the unit of measure
 	 */
 	@DatabaseField(columnName = COLUMN_SCALE)
-	private Float scale;
+	private Double scale;
 
 	/**
 	 * The offset to the 0 value
 	 */
 	@DatabaseField(columnName = COLUMN_OFFSET)
-	private Float offset;
+	private Double offset;
 
 	/**
 	 * The smallest value that has meaning for this dataset
 	 */
 	@DatabaseField(columnName = COLUMN_PRECISION)
-	private Float precision;
+	private Double precision;
 
 	/**
 	 * The value that indicates NULL
 	 */
 	@DatabaseField(columnName = COLUMN_DATA_NULL)
-	private Float dataNull;
+	private Double dataNull;
 
 	/**
 	 * The value that indicates data is missing
 	 */
 	@DatabaseField(columnName = COLUMN_DATA_MISSING)
-	private Float dataMissing;
+	private Double dataMissing;
 
 	/**
 	 * Default Constructor
@@ -186,8 +186,8 @@ public class GriddedCoverage {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public float getScale() {
-		return scale != null ? scale : 1.0f;
+	public double getScale() {
+		return scale != null ? scale : 1.0;
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class GriddedCoverage {
 	 * @param scale
 	 *            scale as a multiple relative to the unit of measure
 	 */
-	public void setScale(Float scale) {
+	public void setScale(Double scale) {
 		this.scale = scale;
 	}
 
@@ -205,8 +205,8 @@ public class GriddedCoverage {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public float getOffset() {
-		return offset != null ? offset : 0.0f;
+	public double getOffset() {
+		return offset != null ? offset : 0.0;
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class GriddedCoverage {
 	 * @param offset
 	 *            offset to the 0 value
 	 */
-	public void setOffset(Float offset) {
+	public void setOffset(Double offset) {
 		this.offset = offset;
 	}
 
@@ -224,8 +224,8 @@ public class GriddedCoverage {
 	 * 
 	 * @return smallest value that has meaning for this dataset
 	 */
-	public float getPrecision() {
-		return precision != null ? precision : 1.0f;
+	public double getPrecision() {
+		return precision != null ? precision : 1.0;
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class GriddedCoverage {
 	 * @param precision
 	 *            smallest value that has meaning for this dataset
 	 */
-	public void setPrecision(Float precision) {
+	public void setPrecision(Double precision) {
 		this.precision = precision;
 	}
 
@@ -243,7 +243,7 @@ public class GriddedCoverage {
 	 * 
 	 * @return value that indicates NULL
 	 */
-	public Float getDataNull() {
+	public Double getDataNull() {
 		return dataNull;
 	}
 
@@ -253,7 +253,7 @@ public class GriddedCoverage {
 	 * @param dataNull
 	 *            value that indicates NULL
 	 */
-	public void setDataNull(Float dataNull) {
+	public void setDataNull(Double dataNull) {
 		this.dataNull = dataNull;
 	}
 
@@ -262,7 +262,7 @@ public class GriddedCoverage {
 	 * 
 	 * @return value that indicates data is missing
 	 */
-	public Float getDataMissing() {
+	public Double getDataMissing() {
 		return dataMissing;
 	}
 
@@ -272,7 +272,7 @@ public class GriddedCoverage {
 	 * @param dataMissing
 	 *            value that indicates data is missing
 	 */
-	public void setDataMissing(Float dataMissing) {
+	public void setDataMissing(Double dataMissing) {
 		this.dataMissing = dataMissing;
 	}
 

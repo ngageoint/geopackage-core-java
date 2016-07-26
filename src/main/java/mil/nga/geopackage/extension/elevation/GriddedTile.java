@@ -92,37 +92,37 @@ public class GriddedTile {
 	 * Scale as a multiple relative to the unit of measure
 	 */
 	@DatabaseField(columnName = COLUMN_SCALE)
-	private Float scale;
+	private Double scale;
 
 	/**
 	 * The offset to the 0 value
 	 */
 	@DatabaseField(columnName = COLUMN_OFFSET)
-	private Float offset;
+	private Double offset;
 
 	/**
 	 * Minimum value of this tile
 	 */
 	@DatabaseField(columnName = COLUMN_MIN)
-	private Float min;
+	private Double min;
 
 	/**
 	 * Maximum value of this tile
 	 */
 	@DatabaseField(columnName = COLUMN_MAX)
-	private Float max;
+	private Double max;
 
 	/**
 	 * The arithmetic mean of values in this tile
 	 */
 	@DatabaseField(columnName = COLUMN_MEAN)
-	private Float mean;
+	private Double mean;
 
 	/**
 	 * The standard deviation of values in this tile
 	 */
 	@DatabaseField(columnName = COLUMN_STANDARD_DEVIATION)
-	private Float standardDeviation;
+	private Double standardDeviation;
 
 	/**
 	 * Default Constructor
@@ -197,8 +197,8 @@ public class GriddedTile {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public float getScale() {
-		return scale != null ? scale : 1.0f;
+	public double getScale() {
+		return scale != null ? scale : 1.0;
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class GriddedTile {
 	 * @param scale
 	 *            scale as a multiple relative to the unit of measure
 	 */
-	public void setScale(Float scale) {
+	public void setScale(Double scale) {
 		this.scale = scale;
 	}
 
@@ -216,8 +216,8 @@ public class GriddedTile {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public float getOffset() {
-		return offset != null ? offset : 0.0f;
+	public double getOffset() {
+		return offset != null ? offset : 0.0;
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class GriddedTile {
 	 * @param offset
 	 *            offset to the 0 value
 	 */
-	public void setOffset(Float offset) {
+	public void setOffset(Double offset) {
 		this.offset = offset;
 	}
 
@@ -235,7 +235,7 @@ public class GriddedTile {
 	 * 
 	 * @return minimum value of this tile
 	 */
-	public Float getMin() {
+	public Double getMin() {
 		return min;
 	}
 
@@ -245,7 +245,7 @@ public class GriddedTile {
 	 * @param min
 	 *            minimum value of this tile
 	 */
-	public void setMin(Float min) {
+	public void setMin(Double min) {
 		this.min = min;
 	}
 
@@ -254,7 +254,7 @@ public class GriddedTile {
 	 * 
 	 * @return maximum value of this tile
 	 */
-	public Float getMax() {
+	public Double getMax() {
 		return max;
 	}
 
@@ -264,7 +264,7 @@ public class GriddedTile {
 	 * @param max
 	 *            maximum value of this tile
 	 */
-	public void setMax(Float max) {
+	public void setMax(Double max) {
 		this.max = max;
 	}
 
@@ -273,7 +273,7 @@ public class GriddedTile {
 	 * 
 	 * @return arithmetic mean of values in this tile
 	 */
-	public Float getMean() {
+	public Double getMean() {
 		return mean;
 	}
 
@@ -283,7 +283,7 @@ public class GriddedTile {
 	 * @param mean
 	 *            arithmetic mean of values in this tile
 	 */
-	public void setMean(Float mean) {
+	public void setMean(Double mean) {
 		this.mean = mean;
 	}
 
@@ -292,7 +292,7 @@ public class GriddedTile {
 	 * 
 	 * @return standard deviation of values in this tile
 	 */
-	public Float getStandardDeviation() {
+	public Double getStandardDeviation() {
 		return standardDeviation;
 	}
 
@@ -302,7 +302,7 @@ public class GriddedTile {
 	 * @param standardDeviation
 	 *            standard deviation of values in this tile
 	 */
-	public void setStandardDeviation(Float standardDeviation) {
+	public void setStandardDeviation(Double standardDeviation) {
 		this.standardDeviation = standardDeviation;
 	}
 

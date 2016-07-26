@@ -340,14 +340,14 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            pixel value
 	 * @return elevation value
 	 */
-	public float getElevationValue(GriddedTile griddedTile, short pixelValue) {
+	public double getElevationValue(GriddedTile griddedTile, short pixelValue) {
 
 		GriddedCoverage coverage = null;
 		if (griddedCoverage != null && !griddedCoverage.isEmpty()) {
 			coverage = griddedCoverage.get(0);
 		}
 
-		float elevation = pixelValue;
+		double elevation = pixelValue;
 
 		if (griddedTile != null) {
 			elevation = pixelValue * griddedTile.getScale()
@@ -373,10 +373,10 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            y coordinate
 	 * @return elevation value
 	 */
-	public float getElevationValue(GriddedTile griddedTile,
+	public double getElevationValue(GriddedTile griddedTile,
 			BufferedImage image, int x, int y) {
 		short pixelValue = getPixelValue(image, x, y);
-		float elevation = getElevationValue(griddedTile, pixelValue);
+		double elevation = getElevationValue(griddedTile, pixelValue);
 		return elevation;
 	}
 
@@ -393,10 +393,10 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            y coordinate
 	 * @return elevation value
 	 */
-	public float getElevationValue(GriddedTile griddedTile,
+	public double getElevationValue(GriddedTile griddedTile,
 			WritableRaster raster, int x, int y) {
 		short pixelValue = getPixelValue(raster, x, y);
-		float elevation = getElevationValue(griddedTile, pixelValue);
+		double elevation = getElevationValue(griddedTile, pixelValue);
 		return elevation;
 	}
 
@@ -409,10 +409,10 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            tile image
 	 * @return elevation values
 	 */
-	public float[] getElevationValues(GriddedTile griddedTile,
+	public double[] getElevationValues(GriddedTile griddedTile,
 			BufferedImage image) {
 		short[] pixelValues = getPixelValues(image);
-		float[] elevations = getElevationValues(griddedTile, pixelValues);
+		double[] elevations = getElevationValues(griddedTile, pixelValues);
 		return elevations;
 	}
 
@@ -425,10 +425,10 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            raster image
 	 * @return elevation values
 	 */
-	public float[] getElevationValues(GriddedTile griddedTile,
+	public double[] getElevationValues(GriddedTile griddedTile,
 			WritableRaster raster) {
 		short[] pixelValues = getPixelValues(raster);
-		float[] elevations = getElevationValues(griddedTile, pixelValues);
+		double[] elevations = getElevationValues(griddedTile, pixelValues);
 		return elevations;
 	}
 
@@ -441,9 +441,9 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            pixel values
 	 * @return elevation values
 	 */
-	public float[] getElevationValues(GriddedTile griddedTile,
+	public double[] getElevationValues(GriddedTile griddedTile,
 			short[] pixelValues) {
-		float[] elevations = new float[pixelValues.length];
+		double[] elevations = new double[pixelValues.length];
 		for (int i = 0; i < pixelValues.length; i++) {
 			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
 		}
