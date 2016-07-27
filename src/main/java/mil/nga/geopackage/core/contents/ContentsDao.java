@@ -1,6 +1,7 @@
 package mil.nga.geopackage.core.contents;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -99,6 +100,54 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 			throws SQLException {
 		verifyCreate(contents);
 		return super.createOrUpdate(contents);
+	}
+
+	/**
+	 * Get table names by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return table names
+	 * @throws SQLException
+	 */
+	public List<String> getTables(ContentsDataType dataType)
+			throws SQLException {
+		List<Contents> contents = getContents(dataType);
+		List<String> tableNames = new ArrayList<String>();
+		for (Contents content : contents) {
+			tableNames.add(content.getTableName());
+		}
+		return tableNames;
+	}
+
+	/**
+	 * Get contents by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return list of contents
+	 * @throws SQLException
+	 */
+	public List<Contents> getContents(ContentsDataType dataType)
+			throws SQLException {
+		List<Contents> contents = queryForEq(Contents.COLUMN_DATA_TYPE,
+				dataType.getName());
+		return contents;
+	}
+
+	/**
+	 * Get table names
+	 *
+	 * @return table names
+	 * @throws SQLException
+	 */
+	public List<String> getTables() throws SQLException {
+		List<Contents> contents = queryForAll();
+		List<String> tableNames = new ArrayList<String>();
+		for (Contents content : contents) {
+			tableNames.add(content.getTableName());
+		}
+		return tableNames;
 	}
 
 	/**

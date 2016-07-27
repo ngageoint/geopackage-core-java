@@ -78,6 +78,11 @@ public class ElevationTilesCore extends BaseExtension {
 	private List<GriddedCoverage> griddedCoverage;
 
 	/**
+	 * First Gridded coverage
+	 */
+	private GriddedCoverage firstGriddedCoverage;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
@@ -181,6 +186,9 @@ public class ElevationTilesCore extends BaseExtension {
 		try {
 			if (griddedCoverageDao.isTableExists()) {
 				griddedCoverage = griddedCoverageDao.query(tileMatrixSet);
+				if (!griddedCoverage.isEmpty()) {
+					firstGriddedCoverage = griddedCoverage.get(0);
+				}
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -349,12 +357,15 @@ public class ElevationTilesCore extends BaseExtension {
 
 		double elevation = pixelValue;
 
-		if (griddedTile != null) {
-			elevation = pixelValue * griddedTile.getScale()
-					+ griddedTile.getOffset();
-		}
-		if (coverage != null) {
-			elevation = elevation * coverage.getScale() + coverage.getOffset();
+		if (!isDataMissingOrNull(elevation)) {
+			if (griddedTile != null) {
+				elevation = pixelValue * griddedTile.getScale()
+						+ griddedTile.getOffset();
+			}
+			if (coverage != null) {
+				elevation = elevation * coverage.getScale()
+						+ coverage.getOffset();
+			}
 		}
 
 		return elevation;
@@ -448,6 +459,73 @@ public class ElevationTilesCore extends BaseExtension {
 			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
 		}
 		return elevations;
+	}
+
+	/**
+	 * Get the data missing value
+	 * 
+	 * @return data missing value or null
+	 */
+	public Double getDataMissing() {
+
+		Double dataMissing = null;
+		if (firstGriddedCoverage != null) {
+			dataMissing = firstGriddedCoverage.getDataMissing();
+		}
+
+		return dataMissing;
+	}
+
+	/**
+	 * Check the value to see if it is the missing equivalent
+	 * 
+	 * @param value
+	 *            pixel value
+	 * @return true if equivalent to data missing
+	 */
+	public boolean isDataMissing(double value) {
+		Double dataMissing = getDataMissing();
+		boolean isDataMissing = dataMissing != null && dataMissing == value;
+		return isDataMissing;
+	}
+
+	/**
+	 * Get the data null value
+	 * 
+	 * @return data null value or null
+	 */
+	public Double getDataNull() {
+
+		Double dataNull = null;
+		if (firstGriddedCoverage != null) {
+			dataNull = firstGriddedCoverage.getDataNull();
+		}
+
+		return dataNull;
+	}
+
+	/**
+	 * Check the value to see if it is the null equivalent
+	 * 
+	 * @param value
+	 *            pixel value
+	 * @return true if equivalent to data null
+	 */
+	public boolean isDataNull(double value) {
+		Double dataNull = getDataNull();
+		boolean isDataNull = dataNull != null && dataNull == value;
+		return isDataNull;
+	}
+
+	/**
+	 * Check the value to see if it is the missing or null equivalent
+	 * 
+	 * @param value
+	 *            pixel value
+	 * @return true if equivalent data missing or data null
+	 */
+	public boolean isDataMissingOrNull(double value) {
+		return isDataMissing(value) && isDataNull(value);
 	}
 
 	/**
@@ -547,6 +625,17 @@ public class ElevationTilesCore extends BaseExtension {
 							+ srsId);
 		}
 		return srs;
+	}
+
+	/**
+	 * Get the elevation tile tables
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return table names
+	 */
+	public static List<String> getTables(GeoPackageCore geoPackage) {
+		return geoPackage.getTables(ContentsDataType.ELEVATION_TILES);
 	}
 
 }

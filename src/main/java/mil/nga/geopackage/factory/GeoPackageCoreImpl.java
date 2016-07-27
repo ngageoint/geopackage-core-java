@@ -160,19 +160,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getFeatureTables() {
-		GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
-		List<String> tableNames = null;
-		try {
-			if (geometryColumnsDao.isTableExists()) {
-				tableNames = geometryColumnsDao.getFeatureTables();
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve feature tables",
-					e);
-		}
-		if (tableNames == null) {
-			tableNames = new ArrayList<String>();
-		}
+		List<String> tableNames = getTables(ContentsDataType.FEATURES);
 		return tableNames;
 	}
 
@@ -181,17 +169,22 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getTileTables() {
-		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
-		List<String> tableNames = null;
+		List<String> tableNames = getTables(ContentsDataType.TILES);
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables(ContentsDataType type) {
+		ContentsDao contentDao = getContentsDao();
+		List<String> tableNames;
 		try {
-			if (tileMatrixSetDao.isTableExists()) {
-				tableNames = tileMatrixSetDao.getTileTables();
-			}
+			tableNames = contentDao.getTables(type);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve tile tables", e);
-		}
-		if (tableNames == null) {
-			tableNames = new ArrayList<String>();
+			throw new GeoPackageException("Failed to retrieve "
+					+ type.getName() + " tables", e);
 		}
 		return tableNames;
 	}
@@ -200,10 +193,25 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getTables() {
+	public List<String> getFeatureAndTileTables() {
 		List<String> tables = new ArrayList<String>();
 		tables.addAll(getFeatureTables());
 		tables.addAll(getTileTables());
+		return tables;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables() {
+		ContentsDao contentDao = getContentsDao();
+		List<String> tables;
+		try {
+			tables = contentDao.getTables();
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to retrieve tables", e);
+		}
 		return tables;
 	}
 
@@ -229,7 +237,25 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean isTableType(ContentsDataType type, String table) {
+		Set<String> tables = new HashSet<String>(getTables(type));
+		return tables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public boolean isFeatureOrTileTable(String table) {
+		Set<String> tables = new HashSet<String>(getFeatureAndTileTables());
+		return tables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTable(String table) {
 		Set<String> tables = new HashSet<String>(getTables());
 		return tables.contains(table);
 	}

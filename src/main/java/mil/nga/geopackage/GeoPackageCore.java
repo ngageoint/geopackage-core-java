@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.util.List;
 
 import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
@@ -74,21 +75,37 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Get the feature tables
 	 * 
-	 * @return
+	 * @return table names
 	 */
 	public List<String> getFeatureTables();
 
 	/**
 	 * Get the tile tables
 	 * 
-	 * @return
+	 * @return table names
 	 */
 	public List<String> getTileTables();
 
 	/**
+	 * Get the tables for the contents data type
+	 * 
+	 * @param type
+	 *            data type
+	 * @return table names
+	 */
+	public List<String> getTables(ContentsDataType type);
+
+	/**
 	 * Get the feature and tile tables
 	 * 
-	 * @return feature and tile table names
+	 * @return table names
+	 */
+	public List<String> getFeatureAndTileTables();
+
+	/**
+	 * Get all tables
+	 * 
+	 * @return table names
 	 * @since 1.1.7
 	 */
 	public List<String> getTables();
@@ -114,6 +131,17 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isTileTable(String table);
 
 	/**
+	 * Check if the table is the provided type
+	 * 
+	 * @param type
+	 *            data type
+	 * @param table
+	 *            table name
+	 * @return true if the type of table
+	 */
+	public boolean isTableType(ContentsDataType type, String table);
+
+	/**
 	 * Check if the table exists as a feature or tile table
 	 * 
 	 * @param table
@@ -122,6 +150,15 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.1.7
 	 */
 	public boolean isFeatureOrTileTable(String table);
+
+	/**
+	 * Check if the table exists as a user table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a user table
+	 */
+	public boolean isTable(String table);
 
 	/**
 	 * Get a Spatial Reference System DAO
