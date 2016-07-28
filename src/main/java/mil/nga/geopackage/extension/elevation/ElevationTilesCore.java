@@ -20,12 +20,17 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionConstants;
+import mil.nga.geopackage.projection.ProjectionFactory;
+import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
+
+import org.osgeo.proj4j.ProjCoordinate;
 
 /**
  * Tiled Gridded Elevation Core Data Extension
@@ -83,18 +88,66 @@ public class ElevationTilesCore extends BaseExtension {
 	private GriddedCoverage firstGriddedCoverage;
 
 	/**
+	 * Elevation results width
+	 */
+	protected Integer width;
+
+	/**
+	 * Elevation results height
+	 */
+	protected Integer height;
+
+	/**
+	 * Projection of the requests
+	 */
+	protected final Projection requestProjection;
+
+	/**
+	 * Projection of the elevations
+	 */
+	protected final Projection elevationProjection;
+
+	/**
+	 * Elevations bounding box
+	 */
+	protected final BoundingBox elevationBoundingBox;
+
+	/**
+	 * Flag indicating the elevation and request projections are the same
+	 */
+	protected final boolean sameProjection;
+
+	protected boolean zoomIn = true;
+
+	protected boolean zoomOut = true;
+
+	protected boolean zoomInBeforeOut = true;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
 	 * @param tileMatrixSet
 	 */
 	protected ElevationTilesCore(GeoPackageCore geoPackage,
-			TileMatrixSet tileMatrixSet) {
+			TileMatrixSet tileMatrixSet, Integer width, Integer height,
+			Projection requestProjection) {
 		super(geoPackage);
 		this.tileMatrixSet = tileMatrixSet;
 		griddedCoverageDao = geoPackage.getGriddedCoverageDao();
 		griddedTileDao = geoPackage.getGriddedTileDao();
 		queryGriddedCoverage();
+
+		this.width = width;
+		this.height = height;
+		this.requestProjection = requestProjection;
+		elevationProjection = ProjectionFactory.getProjection(tileMatrixSet
+				.getSrs());
+		elevationBoundingBox = tileMatrixSet.getBoundingBox();
+
+		// Check if the projections have the same units
+		sameProjection = (requestProjection.getUnit().name
+				.equals(elevationProjection.getUnit().name));
 	}
 
 	/**
@@ -122,6 +175,104 @@ public class ElevationTilesCore extends BaseExtension {
 	 */
 	public GriddedTileDao getGriddedTileDao() {
 		return griddedTileDao;
+	}
+
+	/**
+	 * Get the requested elevation width
+	 * 
+	 * @return width
+	 */
+	public Integer getWidth() {
+		return width;
+	}
+
+	/**
+	 * Set the requested elevation width
+	 * 
+	 * @param width
+	 *            requested elevation width
+	 */
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	/**
+	 * Get the requested elevation height
+	 * 
+	 * @return height
+	 */
+	public Integer getHeight() {
+		return height;
+	}
+
+	/**
+	 * Set the requested elevation height
+	 * 
+	 * @param height
+	 *            requested elevation height
+	 */
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	/**
+	 * Get the request projection
+	 * 
+	 * @return request projection
+	 */
+	public Projection getRequestProjection() {
+		return requestProjection;
+	}
+
+	/**
+	 * Get the elevation projection
+	 * 
+	 * @return elevation projection
+	 */
+	public Projection getElevationProjection() {
+		return elevationProjection;
+	}
+
+	/**
+	 * Get the elevation bounding box
+	 * 
+	 * @return elevation bounding box
+	 */
+	public BoundingBox getElevationBoundingBox() {
+		return elevationBoundingBox;
+	}
+
+	/**
+	 * Is the request and elevation projection the same
+	 * 
+	 * @return true if the same
+	 */
+	public boolean isSameProjection() {
+		return sameProjection;
+	}
+
+	public boolean isZoomIn() {
+		return zoomIn;
+	}
+
+	public void setZoomIn(boolean zoomIn) {
+		this.zoomIn = zoomIn;
+	}
+
+	public boolean isZoomOut() {
+		return zoomOut;
+	}
+
+	public void setZoomOut(boolean zoomOut) {
+		this.zoomOut = zoomOut;
+	}
+
+	public boolean isZoomInBeforeOut() {
+		return zoomInBeforeOut;
+	}
+
+	public void setZoomInBeforeOut(boolean zoomInBeforeOut) {
+		this.zoomInBeforeOut = zoomInBeforeOut;
 	}
 
 	/**
@@ -636,6 +787,83 @@ public class ElevationTilesCore extends BaseExtension {
 	 */
 	public static List<String> getTables(GeoPackageCore geoPackage) {
 		return geoPackage.getTables(ContentsDataType.ELEVATION_TILES);
+	}
+
+	/**
+	 * Reproject the elevations to the requested projection
+	 *
+	 * @param elevations
+	 *            elevations
+	 * @param requestedElevationsWidth
+	 *            requested elevations width
+	 * @param requestedElevationsHeight
+	 *            requested elevations height
+	 * @param requestBoundingBox
+	 *            request bounding box in the request projection
+	 * @param transformRequestToElevation
+	 *            transformation from request to elevations
+	 * @param elevationBoundingBox
+	 *            elevations bounding box
+	 * @return projected elevations
+	 */
+	protected Double[][] reprojectElevations(Double[][] elevations,
+			int requestedElevationsWidth, int requestedElevationsHeight,
+			BoundingBox requestBoundingBox,
+			ProjectionTransform transformRequestToElevation,
+			BoundingBox elevationBoundingBox) {
+
+		final double requestedWidthUnitsPerPixel = (requestBoundingBox
+				.getMaxLongitude() - requestBoundingBox.getMinLongitude())
+				/ requestedElevationsWidth;
+		final double requestedHeightUnitsPerPixel = (requestBoundingBox
+				.getMaxLatitude() - requestBoundingBox.getMinLatitude())
+				/ requestedElevationsHeight;
+
+		final double tilesDistanceWidth = elevationBoundingBox
+				.getMaxLongitude() - elevationBoundingBox.getMinLongitude();
+		final double tilesDistanceHeight = elevationBoundingBox
+				.getMaxLatitude() - elevationBoundingBox.getMinLatitude();
+
+		final int width = elevations[0].length;
+		final int height = elevations.length;
+
+		Double[][] projectedElevations = new Double[requestedElevationsHeight][requestedElevationsWidth];
+
+		// Retrieve each elevation in the unprojected elevations
+		for (int y = 0; y < requestedElevationsHeight; y++) {
+			for (int x = 0; x < requestedElevationsWidth; x++) {
+
+				double longitude = requestBoundingBox.getMinLongitude()
+						+ (x * requestedWidthUnitsPerPixel);
+				double latitude = requestBoundingBox.getMaxLatitude()
+						- (y * requestedHeightUnitsPerPixel);
+				ProjCoordinate fromCoord = new ProjCoordinate(longitude,
+						latitude);
+				ProjCoordinate toCoord = transformRequestToElevation
+						.transform(fromCoord);
+				double projectedLongitude = toCoord.x;
+				double projectedLatitude = toCoord.y;
+
+				int xPixel = (int) Math
+						.round(((projectedLongitude - elevationBoundingBox
+								.getMinLongitude()) / tilesDistanceWidth)
+								* width);
+				int yPixel = (int) Math
+						.round(((elevationBoundingBox.getMaxLatitude() - projectedLatitude) / tilesDistanceHeight)
+								* height);
+
+				xPixel = Math.max(0, xPixel);
+				xPixel = Math.min(width - 1, xPixel);
+
+				yPixel = Math.max(0, yPixel);
+				yPixel = Math.min(height - 1, yPixel);
+
+				Double elevation = elevations[yPixel][xPixel];
+				projectedElevations[y][x] = elevation;
+			}
+		}
+
+		return projectedElevations;
 	}
 
 }
