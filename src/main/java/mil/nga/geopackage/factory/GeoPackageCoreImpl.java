@@ -553,6 +553,19 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
+		return createTileTableWithMetadata(ContentsDataType.TILES, tableName,
+				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
+				tileMatrixSetSrsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+			String tableName, BoundingBox contentsBoundingBox,
+			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
+			long tileMatrixSetSrsId) {
 
 		TileMatrixSet tileMatrixSet = null;
 
@@ -573,7 +586,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(tableName);
-			contents.setDataType(ContentsDataType.TILES);
+			contents.setDataType(dataType);
 			contents.setIdentifier(tableName);
 			contents.setLastChange(new Date());
 			contents.setMinX(contentsBoundingBox.getMinLongitude());

@@ -594,7 +594,7 @@ public class SpatialReferenceSystemDao extends
 			case ProjectionConstants.EPSG_WEB_MERCATOR:
 				srs = createWebMercator();
 				break;
-			case ProjectionConstants.EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D:
+			case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D:
 				srs = createWgs84Geographical3D();
 				break;
 			default:

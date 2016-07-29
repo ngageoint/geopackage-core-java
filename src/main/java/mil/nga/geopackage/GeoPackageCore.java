@@ -389,15 +389,43 @@ public interface GeoPackageCore extends Closeable {
 	 * Create a new tile table and the GeoPackage metadata
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param contentsBoundingBox
+	 *            contents bounding box
 	 * @param contentsSrsId
+	 *            contents SRS id
 	 * @param tileMatrixSetBoundingBox
+	 *            tile matrix set bounding box
 	 * @param tileMatrixSetSrsId
+	 *            tile matrix set SRS id
 	 * @return tile matrix set
 	 */
 	public TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId);
+
+	/**
+	 * Create a new tile table of the specified type and the GeoPackage metadata
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param contentsBoundingBox
+	 *            contents bounding box
+	 * @param contentsSrsId
+	 *            contents SRS id
+	 * @param tileMatrixSetBoundingBox
+	 *            tile matrix set bounding box
+	 * @param tileMatrixSetSrsId
+	 *            tile matrix set SRS id
+	 * @return tile matrix set
+	 * @since 1.2.1
+	 */
+	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+			String tableName, BoundingBox contentsBoundingBox,
+			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
+			long tileMatrixSetSrsId);
 
 	/**
 	 * Get a Data Columns DAO

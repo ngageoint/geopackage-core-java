@@ -32,7 +32,7 @@ public class ProjectionConstants {
 	 * 
 	 * @since 1.2.1
 	 */
-	public static final int EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D = 4979;
+	public static final int EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D = 4979;
 
 	/**
 	 * Web Mercator Latitude Range (+ and -)

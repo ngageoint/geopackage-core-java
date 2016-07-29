@@ -87,19 +87,19 @@ public class GriddedCoverage {
 	 * Scale as a multiple relative to the unit of measure
 	 */
 	@DatabaseField(columnName = COLUMN_SCALE)
-	private Double scale;
+	private Double scale = 1.0;
 
 	/**
 	 * The offset to the 0 value
 	 */
 	@DatabaseField(columnName = COLUMN_OFFSET)
-	private Double offset;
+	private Double offset = 0.0;
 
 	/**
 	 * The smallest value that has meaning for this dataset
 	 */
 	@DatabaseField(columnName = COLUMN_PRECISION)
-	private Double precision;
+	private Double precision = 1.0;
 
 	/**
 	 * The value that indicates NULL

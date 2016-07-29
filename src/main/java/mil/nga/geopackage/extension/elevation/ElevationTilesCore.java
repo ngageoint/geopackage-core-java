@@ -6,7 +6,6 @@ import java.awt.image.DataBufferUShort;
 import java.awt.image.WritableRaster;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,22 +13,17 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
-import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
 
 import org.osgeo.proj4j.ProjCoordinate;
@@ -119,17 +113,30 @@ public class ElevationTilesCore extends BaseExtension {
 	 */
 	protected final boolean sameProjection;
 
+	/**
+	 * True if zooming in should be performed to find a tile matrix with
+	 * elevation values
+	 */
 	protected boolean zoomIn = true;
 
+	/**
+	 * True if zooming out should be performed to find a tile matrix with
+	 * elevation values
+	 */
 	protected boolean zoomOut = true;
 
+	/**
+	 * True of zoomin in before zooming out, false to zoom out first
+	 */
 	protected boolean zoomInBeforeOut = true;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 * @param tileMatrixSet
+	 *            tile matrix set
 	 */
 	protected ElevationTilesCore(GeoPackageCore geoPackage,
 			TileMatrixSet tileMatrixSet, Integer width, Integer height,
@@ -150,6 +157,27 @@ public class ElevationTilesCore extends BaseExtension {
 		// Check if the projections have the same units
 		sameProjection = (requestProjection.getUnit().name
 				.equals(elevationProjection.getUnit().name));
+	}
+
+	/**
+	 * Private constructor for creating extension rows when creating a new
+	 * elevation tile table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 */
+	private ElevationTilesCore(GeoPackageCore geoPackage,
+			TileMatrixSet tileMatrixSet) {
+		super(geoPackage);
+		this.tileMatrixSet = tileMatrixSet;
+		griddedCoverageDao = null;
+		griddedTileDao = null;
+		requestProjection = null;
+		elevationProjection = null;
+		elevationBoundingBox = null;
+		sameProjection = false;
 	}
 
 	/**
@@ -485,6 +513,9 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            tile image
 	 */
 	public void validateImageType(BufferedImage image) {
+		if (image == null) {
+			throw new GeoPackageException("The image is null");
+		}
 		if (image.getColorModel().getTransferType() != DataBuffer.TYPE_USHORT) {
 			throw new GeoPackageException(
 					"The elevation tile is expected to be a 16 bit unsigned short, actual: "
@@ -691,93 +722,19 @@ public class ElevationTilesCore extends BaseExtension {
 	 * @param tileMatrixSetBoundingBox
 	 * @param tileMatrixSetSrsId
 	 */
-	public static void createTileTableWithMetadata(GeoPackageCore geoPackage,
-			String tableName, BoundingBox contentsBoundingBox,
-			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
-			long tileMatrixSetSrsId) {
+	public static TileMatrixSet createTileTableWithMetadata(
+			GeoPackageCore geoPackage, String tableName,
+			BoundingBox contentsBoundingBox, long contentsSrsId,
+			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
 
-		// Get the SRS
-		SpatialReferenceSystemDao srsDao = geoPackage
-				.getSpatialReferenceSystemDao();
-		SpatialReferenceSystem contentsSrs;
-		try {
-			contentsSrs = srsDao
-					.getOrCreateFromEpsg(ProjectionConstants.EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D);
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to retrieve Spatial Reference System. EPSG: "
-							+ ProjectionConstants.EPSG_EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D,
-					e);
-		}
-		SpatialReferenceSystem tileMatrixSetSrs = getSrs(srsDao,
+		TileMatrixSet tileMatrixSet = geoPackage.createTileTableWithMetadata(
+				ContentsDataType.ELEVATION_TILES, tableName,
+				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
 				tileMatrixSetSrsId);
-
-		// Create the Tile Matrix Set and Tile Matrix tables
-		geoPackage.createTileMatrixSetTable();
-		geoPackage.createTileMatrixTable();
-
-		// Create the user tile table
-		List<TileColumn> columns = TileTable.createRequiredColumns();
-		TileTable table = new TileTable(tableName, columns);
-		geoPackage.createTileTable(table);
-
-		try {
-			// Create the contents
-			Contents contents = new Contents();
-			contents.setTableName(tableName);
-			contents.setDataType(ContentsDataType.ELEVATION_TILES);
-			contents.setIdentifier(tableName);
-			contents.setLastChange(new Date());
-			contents.setMinX(contentsBoundingBox.getMinLongitude());
-			contents.setMinY(contentsBoundingBox.getMinLatitude());
-			contents.setMaxX(contentsBoundingBox.getMaxLongitude());
-			contents.setMaxY(contentsBoundingBox.getMaxLatitude());
-			contents.setSrs(contentsSrs);
-			geoPackage.getContentsDao().create(contents);
-
-			// Create new matrix tile set
-			TileMatrixSet tileMatrixSet = new TileMatrixSet();
-			tileMatrixSet.setContents(contents);
-			tileMatrixSet.setSrs(tileMatrixSetSrs);
-			tileMatrixSet.setMinX(tileMatrixSetBoundingBox.getMinLongitude());
-			tileMatrixSet.setMinY(tileMatrixSetBoundingBox.getMinLatitude());
-			tileMatrixSet.setMaxX(tileMatrixSetBoundingBox.getMaxLongitude());
-			tileMatrixSet.setMaxY(tileMatrixSetBoundingBox.getMaxLatitude());
-			geoPackage.getTileMatrixSetDao().create(tileMatrixSet);
-
-		} catch (RuntimeException e) {
-			geoPackage.deleteTableQuietly(tableName);
-			throw e;
-		} catch (SQLException e) {
-			geoPackage.deleteTableQuietly(tableName);
-			throw new GeoPackageException(
-					"Failed to create table and metadata: " + tableName, e);
-		}
-	}
-
-	/**
-	 * Get the Spatial Reference System by id
-	 *
-	 * @param srsDao
-	 * @param srsId
-	 * @return
-	 */
-	private static SpatialReferenceSystem getSrs(
-			SpatialReferenceSystemDao srsDao, long srsId) {
-		SpatialReferenceSystem srs;
-		try {
-			srs = srsDao.queryForId(srsId);
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to retrieve Spatial Reference System. SRS ID: "
-							+ srsId, e);
-		}
-		if (srs == null) {
-			throw new GeoPackageException(
-					"Spatial Reference System could not be found. SRS ID: "
-							+ srsId);
-		}
-		return srs;
+		ElevationTilesCore elevationTiles = new ElevationTilesCore(geoPackage,
+				tileMatrixSet);
+		elevationTiles.getOrCreate();
+		return tileMatrixSet;
 	}
 
 	/**
@@ -869,8 +826,8 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Format the results from elevation tiles into a single double array of
-	 * elevation
+	 * Format the unbounded results from elevation tiles into a single double
+	 * array of elevation
 	 * 
 	 * @param tileMatrix
 	 *            tile matrix
