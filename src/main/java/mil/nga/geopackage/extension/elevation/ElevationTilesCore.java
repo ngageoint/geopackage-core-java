@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageConstants;
@@ -26,6 +27,7 @@ import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
@@ -864,6 +866,123 @@ public class ElevationTilesCore extends BaseExtension {
 		}
 
 		return projectedElevations;
+	}
+
+	/**
+	 * Format the results from elevation tiles into a single double array of
+	 * elevation
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @param rowsMap
+	 *            rows map
+	 * @param tileCount
+	 *            tile count
+	 * @param minRow
+	 *            min row
+	 * @param maxRow
+	 *            max row
+	 * @param minColumn
+	 *            min column
+	 * @param maxColumn
+	 *            max column
+	 * @return elevations
+	 */
+	protected Double[][] formatUnboundedResults(TileMatrix tileMatrix,
+			Map<Long, Map<Long, Double[][]>> rowsMap, int tileCount,
+			long minRow, long maxRow, long minColumn, long maxColumn) {
+
+		// Handle formatting the results
+		Double[][] elevations = null;
+		if (!rowsMap.isEmpty()) {
+
+			// If only one tile result, use the elevations as the result
+			if (tileCount == 1) {
+				elevations = rowsMap.get(minRow).get(minColumn);
+			} else {
+
+				// Else, combine all results into a single elevations result
+
+				// Get the top left and bottom right elevations
+				Double[][] topLeft = rowsMap.get(minRow).get(minColumn);
+				Double[][] bottomRight = rowsMap.get(maxRow).get(maxColumn);
+
+				// Determine the width and height of the top left elevation
+				// results
+				int firstWidth = topLeft[0].length;
+				int firstHeight = topLeft.length;
+
+				// Determine the final result width and height
+				int width = firstWidth;
+				int height = firstHeight;
+				if (minColumn < maxColumn) {
+					width += bottomRight[0].length;
+					long middleColumns = maxColumn - minColumn - 1;
+					if (middleColumns > 0) {
+						width += (middleColumns * tileMatrix.getTileWidth());
+					}
+				}
+				if (minRow < maxRow) {
+					height += bottomRight.length;
+					long middleRows = maxRow - minRow - 1;
+					if (middleRows > 0) {
+						height += (middleRows * tileMatrix.getTileHeight());
+					}
+				}
+
+				// Create the elevation result array
+				elevations = new Double[height][width];
+
+				// Copy the elevation values from each tile results into the
+				// final result arrays
+				for (Map.Entry<Long, Map<Long, Double[][]>> rows : rowsMap
+						.entrySet()) {
+
+					// Determine the starting base row for this tile
+					long row = rows.getKey();
+					int baseRow = 0;
+					if (minRow < row) {
+						baseRow = firstHeight
+								+ (int) ((row - minRow - 1) * tileMatrix
+										.getTileHeight());
+					}
+
+					// Get the row's columns map
+					Map<Long, Double[][]> columnsMap = rows.getValue();
+
+					for (Map.Entry<Long, Double[][]> columns : columnsMap
+							.entrySet()) {
+
+						// Determine the starting base column for this tile
+						long column = columns.getKey();
+						int baseColumn = 0;
+						if (minColumn < column) {
+							baseColumn = firstWidth
+									+ (int) ((column - minColumn - 1) * tileMatrix
+											.getTileWidth());
+						}
+
+						// Get the tiles elevation values
+						Double[][] values = columns.getValue();
+
+						// Copy the columns array at each local elevation row to
+						// the global row and column result location
+						for (int localRow = 0; localRow < values.length; localRow++) {
+
+							int globalRow = baseRow + localRow;
+
+							System.arraycopy(values[localRow], 0,
+									elevations[globalRow], baseColumn,
+									values[localRow].length);
+						}
+					}
+
+				}
+			}
+
+		}
+
+		return elevations;
 	}
 
 }
