@@ -19,6 +19,8 @@ public enum ContentsDataType {
 
 	/**
 	 * Tiled Gridded Elevation Data Extension
+	 * 
+	 * @since 1.2.1
 	 */
 	ELEVATION_TILES("2d-gridded-coverage");
 

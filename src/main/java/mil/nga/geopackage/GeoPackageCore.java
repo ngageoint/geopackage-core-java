@@ -92,6 +92,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param type
 	 *            data type
 	 * @return table names
+	 * @since 1.2.1
 	 */
 	public List<String> getTables(ContentsDataType type);
 
@@ -99,6 +100,7 @@ public interface GeoPackageCore extends Closeable {
 	 * Get the feature and tile tables
 	 * 
 	 * @return table names
+	 * @since 1.2.1
 	 */
 	public List<String> getFeatureAndTileTables();
 
@@ -138,6 +140,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 * @return true if the type of table
+	 * @since 1.2.1
 	 */
 	public boolean isTableType(ContentsDataType type, String table);
 
@@ -157,6 +160,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 * @return true if a user table
+	 * @since 1.2.1
 	 */
 	public boolean isTable(String table);
 

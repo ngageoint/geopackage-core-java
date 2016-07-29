@@ -32,6 +32,9 @@ public class PropertyConstants {
 	public static final String WEB_MERCATOR = SRS + PROPERTY_DIVIDER
 			+ "web_mercator";
 
+	/**
+	 * @since 1.2.1
+	 */
 	public static final String WGS_84_3D = SRS + PROPERTY_DIVIDER + "wgs84_3d";
 
 	public static final String SRS_NAME = "srs_name";

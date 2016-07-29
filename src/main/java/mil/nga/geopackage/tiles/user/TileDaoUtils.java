@@ -72,6 +72,7 @@ public class TileDaoUtils {
 	 * @param length
 	 *            in default units
 	 * @return tile matrix zoom level
+	 * @since 1.2.1
 	 */
 	public static Long getClosestZoomLevel(double[] widths, double[] heights,
 			List<TileMatrix> tileMatrices, double length) {

@@ -109,6 +109,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            data type
 	 * @return table names
 	 * @throws SQLException
+	 * @since 1.2.1
 	 */
 	public List<String> getTables(ContentsDataType dataType)
 			throws SQLException {
@@ -127,6 +128,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            data type
 	 * @return list of contents
 	 * @throws SQLException
+	 * @since 1.2.1
 	 */
 	public List<Contents> getContents(ContentsDataType dataType)
 			throws SQLException {
@@ -140,6 +142,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *
 	 * @return table names
 	 * @throws SQLException
+	 * @since 1.2.1
 	 */
 	public List<String> getTables() throws SQLException {
 		List<Contents> contents = queryForAll();

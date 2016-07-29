@@ -55,7 +55,7 @@ public class GriddedCoverage {
 	public static final String COLUMN_DATA_NULL = "data_null";
 
 	/**
-	 * dataMissing column
+	 * dataMissing column // TODO this might be removed from the spec
 	 */
 	public static final String COLUMN_DATA_MISSING = "data_missing";
 
