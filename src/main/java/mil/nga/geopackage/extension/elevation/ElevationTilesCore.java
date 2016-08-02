@@ -1,9 +1,5 @@
 package mil.nga.geopackage.extension.elevation;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferUShort;
-import java.awt.image.WritableRaster;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +122,7 @@ public class ElevationTilesCore extends BaseExtension {
 	protected boolean zoomOut = true;
 
 	/**
-	 * True of zoomin in before zooming out, false to zoom out first
+	 * True if zoom in in before zooming out, false to zoom out first
 	 */
 	protected boolean zoomInBeforeOut = true;
 
@@ -137,6 +133,12 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            GeoPackage
 	 * @param tileMatrixSet
 	 *            tile matrix set
+	 * @param width
+	 *            specified results width
+	 * @param height
+	 *            specified results height
+	 * @param requestProjection
+	 *            request projection
 	 */
 	protected ElevationTilesCore(GeoPackageCore geoPackage,
 			TileMatrixSet tileMatrixSet, Integer width, Integer height,
@@ -281,26 +283,62 @@ public class ElevationTilesCore extends BaseExtension {
 		return sameProjection;
 	}
 
+	/**
+	 * Is the zooming in (higher zoom level values) enabled to find matching
+	 * elevations
+	 * 
+	 * @return true if zoom in enabled
+	 */
 	public boolean isZoomIn() {
 		return zoomIn;
 	}
 
+	/**
+	 * Set the zoom in enabled state
+	 * 
+	 * @param zoomIn
+	 *            true to zoom in when finding elevations, false to disable
+	 */
 	public void setZoomIn(boolean zoomIn) {
 		this.zoomIn = zoomIn;
 	}
 
+	/**
+	 * Is the zooming out (lower zoom level values) enabled to find matching
+	 * elevations
+	 * 
+	 * @return true if zoom out enabled
+	 */
 	public boolean isZoomOut() {
 		return zoomOut;
 	}
 
+	/**
+	 * Set the zoom out enabled state
+	 * 
+	 * @param zoomOut
+	 *            true to zoom out when finding elevations, false to disable
+	 */
 	public void setZoomOut(boolean zoomOut) {
 		this.zoomOut = zoomOut;
 	}
 
+	/**
+	 * Is zooming in (when enabled) performed before zooming out (when enabled)
+	 * 
+	 * @return true to zoom in for results first, false to zoom out for results
+	 *         first
+	 */
 	public boolean isZoomInBeforeOut() {
 		return zoomInBeforeOut;
 	}
 
+	/**
+	 * Set the zoom order between in and out
+	 * 
+	 * @param zoomInBeforeOut
+	 *            true to zoom in for results first, false to zoom out first
+	 */
 	public void setZoomInBeforeOut(boolean zoomInBeforeOut) {
 		this.zoomInBeforeOut = zoomInBeforeOut;
 	}
@@ -337,8 +375,6 @@ public class ElevationTilesCore extends BaseExtension {
 	/**
 	 * Determine if the Tile Matrix Set has the extension
 	 * 
-	 * @param tableName
-	 *            table name
 	 * @return true if has extension
 	 */
 	public boolean has() {
@@ -423,132 +459,123 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Get the pixel value
-	 * 
-	 * @param image
-	 *            tile image
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @return pixel value
-	 */
-	public short getPixelValue(BufferedImage image, int x, int y) {
-		validateImageType(image);
-		WritableRaster raster = image.getRaster();
-		short pixelValue = getPixelValue(raster, x, y);
-		return pixelValue;
-	}
-
-	/**
-	 * Get the pixel value from the raster and the coordinate
-	 * 
-	 * @param raster
-	 *            image raster
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @return pixel value
-	 */
-	public short getPixelValue(WritableRaster raster, int x, int y) {
-		Object pixelData = raster.getDataElements(x, y, null);
-		short sdata[] = (short[]) pixelData;
-		if (sdata.length != 1) {
-			throw new UnsupportedOperationException(
-					"This method is not supported by this color model");
-		}
-		short pixelValue = sdata[0];
-
-		return pixelValue;
-	}
-
-	/**
-	 * Get the pixel values of the buffered image
-	 * 
-	 * @param image
-	 *            tile image
-	 * @return pixel values
-	 */
-	public short[] getPixelValues(BufferedImage image) {
-		validateImageType(image);
-		WritableRaster raster = image.getRaster();
-		short[] pixelValues = getPixelValues(raster);
-		return pixelValues;
-	}
-
-	/**
-	 * Get the pixel values of the raster
-	 * 
-	 * @param raster
-	 * @return pixel values
-	 */
-	public short[] getPixelValues(WritableRaster raster) {
-		DataBufferUShort buffer = (DataBufferUShort) raster.getDataBuffer();
-		short[] pixelValues = buffer.getData();
-		return pixelValues;
-	}
-
-	/**
-	 * Get the pixel value at the coordinate
+	 * Get the pixel value as an "unsigned short" at the coordinate from the
+	 * "unsigned short" pixel values
 	 * 
 	 * @param pixelValues
-	 *            pixel values
+	 *            "unsigned short" pixel values
 	 * @param width
 	 *            image width
 	 * @param x
 	 *            x coordinate
 	 * @param y
 	 *            y coordinate
-	 * @return pixel value
+	 * @return "unsigned short" pixel value
 	 */
 	public short getPixelValue(short[] pixelValues, int width, int x, int y) {
 		return pixelValues[(y * width) + x];
 	}
 
 	/**
-	 * Validate that the image type is an unsigned short
+	 * Get the pixel value as a 16 bit unsigned value as an integer
 	 * 
-	 * @param image
-	 *            tile image
+	 * @param pixelValues
+	 *            "unsigned short" pixel values
+	 * @param width
+	 *            image width
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @return unsigned int pixel value
 	 */
-	public void validateImageType(BufferedImage image) {
-		if (image == null) {
-			throw new GeoPackageException("The image is null");
-		}
-		if (image.getColorModel().getTransferType() != DataBuffer.TYPE_USHORT) {
-			throw new GeoPackageException(
-					"The elevation tile is expected to be a 16 bit unsigned short, actual: "
-							+ image.getColorModel().getTransferType());
-		}
+	public int getUnsignedPixelValue(short[] pixelValues, int width, int x,
+			int y) {
+		short pixelValue = getPixelValue(pixelValues, width, x, y);
+		int unsignedPixelValue = getUnsignedPixelValue(pixelValue);
+		return unsignedPixelValue;
 	}
 
 	/**
-	 * Get the elevation value for the pixel value
+	 * Get the unsigned pixel value. The value saved as an "unsigned short" in
+	 * the short is returned as an integer which stores the positive 16 bit
+	 * value
+	 * 
+	 * @param pixelValue
+	 *            "unsigned short" pixel value
+	 * @return unsigned 16 bit pixel value as an integer
+	 */
+	public int getUnsignedPixelValue(short pixelValue) {
+		return pixelValue & 0xffff;
+	}
+
+	/**
+	 * Get the "unsigned short" value from the unsigned 16 bit integer pixel
+	 * value
+	 * 
+	 * @param unsignedPixelValue
+	 *            unsigned 16 bit integer pixel value
+	 * @return "unsigned short" pixel value
+	 */
+	public short getPixelValue(int unsignedPixelValue) {
+		return (short) unsignedPixelValue;
+	}
+
+	/**
+	 * Get the unsigned pixel values. The values saved as "unsigned shorts" in
+	 * the short array is returned as an integer which stores the positive 16
+	 * bit value
+	 * 
+	 * @param pixelValues
+	 *            pixel values as "unsigned shorts"
+	 * @return unsigned 16 bit pixel values as an integer array
+	 */
+	public int[] getUnsignedPixelValues(short[] pixelValues) {
+		int[] unsignedValues = new int[pixelValues.length];
+		for (int i = 0; i < pixelValues.length; i++) {
+			unsignedValues[i] = getUnsignedPixelValue(pixelValues[i]);
+		}
+		return unsignedValues;
+	}
+
+	/**
+	 * Get the elevation value for the "unsigned short" pixel value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValue
-	 *            pixel value
+	 *            pixel value as an unsigned short
 	 * @return elevation value
 	 */
-	public double getElevationValue(GriddedTile griddedTile, short pixelValue) {
+	public Double getElevationValue(GriddedTile griddedTile, short pixelValue) {
+		int unsignedPixelValue = getUnsignedPixelValue(pixelValue);
+		Double elevation = getElevationValue(griddedTile, unsignedPixelValue);
+		return elevation;
+	}
 
-		GriddedCoverage coverage = null;
-		if (griddedCoverage != null && !griddedCoverage.isEmpty()) {
-			coverage = griddedCoverage.get(0);
-		}
+	/**
+	 * Get the elevation value for the unsigned short pixel value
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param unsignedPixelValue
+	 *            pixel value as an unsigned 16 bit integer
+	 * @return elevation value
+	 */
+	public Double getElevationValue(GriddedTile griddedTile,
+			int unsignedPixelValue) {
 
-		double elevation = pixelValue;
+		Double elevation = null;
+		if (!isDataMissingOrNull(unsignedPixelValue)) {
 
-		if (!isDataMissingOrNull(elevation)) {
+			elevation = new Double(unsignedPixelValue);
 			if (griddedTile != null) {
-				elevation = pixelValue * griddedTile.getScale()
+				elevation = elevation * griddedTile.getScale()
 						+ griddedTile.getOffset();
 			}
-			if (coverage != null) {
-				elevation = elevation * coverage.getScale()
-						+ coverage.getOffset();
+			if (firstGriddedCoverage != null) {
+				elevation = elevation * firstGriddedCoverage.getScale()
+						+ firstGriddedCoverage.getOffset();
 			}
 		}
 
@@ -556,89 +583,17 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Get the elevation value
-	 * 
-	 * @param griddedTile
-	 *            gridded tile
-	 * @param image
-	 *            tile image
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @return elevation value
-	 */
-	public double getElevationValue(GriddedTile griddedTile,
-			BufferedImage image, int x, int y) {
-		short pixelValue = getPixelValue(image, x, y);
-		double elevation = getElevationValue(griddedTile, pixelValue);
-		return elevation;
-	}
-
-	/**
-	 * Get the elevation value
-	 * 
-	 * @param griddedTile
-	 *            gridded tile
-	 * @param raster
-	 *            image raster
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @return elevation value
-	 */
-	public double getElevationValue(GriddedTile griddedTile,
-			WritableRaster raster, int x, int y) {
-		short pixelValue = getPixelValue(raster, x, y);
-		double elevation = getElevationValue(griddedTile, pixelValue);
-		return elevation;
-	}
-
-	/**
-	 * Get the elevation values
-	 * 
-	 * @param griddedTile
-	 *            gridded tile
-	 * @param image
-	 *            tile image
-	 * @return elevation values
-	 */
-	public double[] getElevationValues(GriddedTile griddedTile,
-			BufferedImage image) {
-		short[] pixelValues = getPixelValues(image);
-		double[] elevations = getElevationValues(griddedTile, pixelValues);
-		return elevations;
-	}
-
-	/**
-	 * Get the elevation values
-	 * 
-	 * @param griddedTile
-	 *            gridded tile
-	 * @param raster
-	 *            raster image
-	 * @return elevation values
-	 */
-	public double[] getElevationValues(GriddedTile griddedTile,
-			WritableRaster raster) {
-		short[] pixelValues = getPixelValues(raster);
-		double[] elevations = getElevationValues(griddedTile, pixelValues);
-		return elevations;
-	}
-
-	/**
-	 * Get the elevation values
+	 * Get the elevation values from the "unsigned short" pixel values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValues
-	 *            pixel values
+	 *            pixel values as "unsigned shorts"
 	 * @return elevation values
 	 */
-	public double[] getElevationValues(GriddedTile griddedTile,
+	public Double[] getElevationValues(GriddedTile griddedTile,
 			short[] pixelValues) {
-		double[] elevations = new double[pixelValues.length];
+		Double[] elevations = new Double[pixelValues.length];
 		for (int i = 0; i < pixelValues.length; i++) {
 			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
 		}
@@ -661,10 +616,10 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Check the value to see if it is the missing equivalent
+	 * Check the unsigned pixel value to see if it is the missing equivalent
 	 * 
 	 * @param value
-	 *            pixel value
+	 *            unsigned pixel value
 	 * @return true if equivalent to data missing
 	 */
 	public boolean isDataMissing(double value) {
@@ -689,10 +644,10 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Check the value to see if it is the null equivalent
+	 * Check the unsigned pixel value to see if it is the null equivalent
 	 * 
 	 * @param value
-	 *            pixel value
+	 *            unsigned pixel value
 	 * @return true if equivalent to data null
 	 */
 	public boolean isDataNull(double value) {
@@ -702,14 +657,15 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Check the value to see if it is the missing or null equivalent
+	 * Check the unsigned pixel value to see if it is the missing or null
+	 * equivalent
 	 * 
 	 * @param value
-	 *            pixel value
+	 *            unsigned pixel value
 	 * @return true if equivalent data missing or data null
 	 */
 	public boolean isDataMissingOrNull(double value) {
-		return isDataMissing(value) && isDataNull(value);
+		return isDataMissing(value) || isDataNull(value);
 	}
 
 	/**
@@ -940,6 +896,55 @@ public class ElevationTilesCore extends BaseExtension {
 		}
 
 		return elevations;
+	}
+
+	/**
+	 * Get the unsigned 16 bit integer pixel value of the elevation
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param elevation
+	 *            elevation value
+	 * @return 16 bit integer pixel value
+	 */
+	public int getUnsignedPixelValue(GriddedTile griddedTile, Double elevation) {
+
+		int unsignedPixelValue = 0;
+
+		if (elevation == null) {
+			if (firstGriddedCoverage != null) {
+				unsignedPixelValue = firstGriddedCoverage.getDataNull()
+						.intValue();
+			}
+		} else {
+			double value = elevation;
+			if (firstGriddedCoverage != null) {
+				value = (value - firstGriddedCoverage.getOffset())
+						/ firstGriddedCoverage.getScale();
+			}
+			if (griddedTile != null) {
+				value = (value - griddedTile.getOffset())
+						/ griddedTile.getScale();
+			}
+			unsignedPixelValue = (int) Math.round(value);
+		}
+
+		return unsignedPixelValue;
+	}
+
+	/**
+	 * Get the "unsigned short" pixel value of the elevation
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param elevation
+	 *            elevation value
+	 * @return "unsigned short" pixel value
+	 */
+	public short getPixelValue(GriddedTile griddedTile, Double elevation) {
+		int unsignedPixelValue = getUnsignedPixelValue(griddedTile, elevation);
+		short pixelValue = getPixelValue(unsignedPixelValue);
+		return pixelValue;
 	}
 
 }
