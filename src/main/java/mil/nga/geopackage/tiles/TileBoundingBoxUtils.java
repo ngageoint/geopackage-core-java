@@ -708,8 +708,7 @@ public class TileBoundingBoxUtils {
 
 		// Find the longitude range
 		double minLon = matrixMinX + (tileWidth * tileGrid.getMinX());
-		double maxLon = minLon
-				+ (tileWidth * (tileGrid.getMaxX() + 1 - tileGrid.getMinX()));
+		double maxLon = matrixMinX + (tileWidth * (tileGrid.getMaxX() + 1));
 
 		// Get the tile height
 		double matrixMinY = totalBox.getMinLatitude();
@@ -719,8 +718,7 @@ public class TileBoundingBoxUtils {
 
 		// Find the latitude range
 		double maxLat = matrixMaxY - (tileHeight * tileGrid.getMinY());
-		double minLat = maxLat
-				- (tileHeight * (tileGrid.getMaxY() + 1 - tileGrid.getMinY()));
+		double minLat = matrixMaxY - (tileHeight * (tileGrid.getMaxY() + 1));
 
 		BoundingBox boundingBox = new BoundingBox(minLon, maxLon, minLat,
 				maxLat);
