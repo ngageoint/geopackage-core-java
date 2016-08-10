@@ -1,5 +1,7 @@
 package mil.nga.geopackage.extension.elevation;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +127,11 @@ public class ElevationTilesCore extends BaseExtension {
 	 * True if zoom in in before zooming out, false to zoom out first
 	 */
 	protected boolean zoomInBeforeOut = true;
+
+	/**
+	 * Interpolation algorithm
+	 */
+	protected ElevationTilesAlgorithm algorithm = ElevationTilesAlgorithm.NEAREST_NEIGHBOR;
 
 	/**
 	 * Constructor
@@ -341,6 +348,28 @@ public class ElevationTilesCore extends BaseExtension {
 	 */
 	public void setZoomInBeforeOut(boolean zoomInBeforeOut) {
 		this.zoomInBeforeOut = zoomInBeforeOut;
+	}
+
+	/**
+	 * Get the interpolation algorithm
+	 * 
+	 * @return algorithm
+	 */
+	public ElevationTilesAlgorithm getAlgorithm() {
+		return algorithm;
+	}
+
+	/**
+	 * Set the interpolation algorithm
+	 * 
+	 * @param algorithm
+	 *            algorithm type
+	 */
+	public void setAlgorithm(ElevationTilesAlgorithm algorithm) {
+		if (algorithm == null) {
+			algorithm = ElevationTilesAlgorithm.NEAREST_NEIGHBOR;
+		}
+		this.algorithm = algorithm;
 	}
 
 	/**
@@ -945,6 +974,151 @@ public class ElevationTilesCore extends BaseExtension {
 		int unsignedPixelValue = getUnsignedPixelValue(griddedTile, elevation);
 		short pixelValue = getPixelValue(unsignedPixelValue);
 		return pixelValue;
+	}
+
+	/**
+	 * Determine the x source pixel location
+	 * 
+	 * @param x
+	 *            x pixel
+	 * @param destLeft
+	 *            destination left most pixel
+	 * @param srcLeft
+	 *            source left most pixel
+	 * @param widthRatio
+	 *            source over destination width radio
+	 * @return x source pixel
+	 */
+	protected float getXSource(int x, float destLeft, float srcLeft,
+			float widthRatio) {
+		float middleOfXDestPixel = (x - destLeft) + 0.5f;
+		float xSourcePixel = middleOfXDestPixel * widthRatio;
+		float xSource = srcLeft + xSourcePixel;
+		return xSource;
+	}
+
+	/**
+	 * Determine the y source pixel location
+	 * 
+	 * @param y
+	 *            y pixel
+	 * @param destTop
+	 *            destination top most pixel
+	 * @param srcTop
+	 *            source top most pixel
+	 * @param heightRatio
+	 *            source over destination height radio
+	 * @return y source pixel
+	 */
+	protected float getYSource(int y, float destTop, float srcTop,
+			float heightRatio) {
+		float middleOfYDestPixel = (y - destTop) + 0.5f;
+		float ySourcePixel = middleOfYDestPixel * heightRatio;
+		float ySource = srcTop + ySourcePixel;
+		return ySource;
+	}
+
+	/**
+	 * Determine the nearest neighbor of the value
+	 * 
+	 * @param value
+	 *            value
+	 * @return nearest neighbor pixel
+	 */
+	protected int getNearestNeighborXSource(float value) {
+		return BigDecimal.valueOf(value).setScale(1, RoundingMode.HALF_DOWN)
+				.intValue();
+	}
+
+	/**
+	 * Get the min and max of the source pixel
+	 * 
+	 * @param source
+	 *            source pixel
+	 * @return min and max pixels int[]{min, max}
+	 */
+	protected int[] getSourceMinAndMax(float source) {
+
+		int floor = (int) Math.floor(source);
+		int min = floor;
+		int max = floor;
+		float remainder = source - floor;
+		if (remainder < .5) {
+			min--;
+		} else if (remainder > .5) {
+			max++;
+		}
+
+		return new int[] { min, max };
+	}
+
+	/**
+	 * Get the Bilinear Interpolation elevation value
+	 * 
+	 * @param xSource
+	 *            s source pixel
+	 * @param ySource
+	 *            y source pixel
+	 * @param minX
+	 *            min x value
+	 * @param maxX
+	 *            max x value
+	 * @param minY
+	 *            min y value
+	 * @param maxY
+	 *            max y value
+	 * @param bottomLeft
+	 *            bottom left elevation
+	 * @param topLeft
+	 *            top left elevation
+	 * @param bottomRight
+	 *            bottom right elevation
+	 * @param topRight
+	 *            top right elevation
+	 * @return elevation
+	 */
+	protected Double getBilinearInterpolationElevation(float xSource,
+			float ySource, float minX, float maxX, float minY, float maxY,
+			Double bottomLeft, Double topLeft, Double bottomRight,
+			Double topRight) {
+
+		Double elevation = null;
+
+		if (bottomLeft != null && topLeft != null && bottomRight != null
+				&& topRight != null) {
+
+			float diffX = maxX - minX;
+
+			double topRow;
+			double bottomRow;
+			if (diffX == 0) {
+				topRow = topLeft;
+				bottomRow = bottomLeft;
+			} else {
+				float diffRight = maxX - xSource;
+				float diffLeft = xSource - minX;
+				topRow = ((diffRight / diffX) * topLeft)
+						+ ((diffLeft / diffX) * topRight);
+				bottomRow = ((diffRight / diffX) * bottomLeft)
+						+ ((diffLeft / diffX) * bottomRight);
+			}
+
+			float diffY = maxY - minY;
+
+			double result;
+			if (diffY == 0) {
+				result = topRow;
+			} else {
+				float diffBottom = maxY - ySource;
+				float diffTop = ySource - minY;
+				result = ((diffBottom / diffY) * topRow)
+						+ ((diffTop / diffY) * bottomRow);
+			}
+
+			elevation = result;
+		}
+
+		return elevation;
 	}
 
 }
