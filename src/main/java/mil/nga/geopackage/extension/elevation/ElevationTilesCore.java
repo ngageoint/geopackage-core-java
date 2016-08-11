@@ -1031,34 +1031,56 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Get the min and max of the source pixel
+	 * Get the min, max, and offset of the source pixel
 	 * 
 	 * @param source
 	 *            source pixel
-	 * @return min and max pixels int[]{min, max}
+	 * @return source pixel information
 	 */
-	protected int[] getSourceMinAndMax(float source) {
+	protected ElevationSourcePixel getSourceMinAndMax(float source) {
 
 		int floor = (int) Math.floor(source);
 		int min = floor;
 		int max = floor;
-		float remainder = source - floor;
-		if (remainder < .5) {
+		float offset = source - floor;
+		if (offset < .5) {
 			min--;
-		} else if (remainder > .5) {
+			offset += .5f;
+		} else if (offset > .5) {
 			max++;
+			offset -= .5f;
 		}
 
-		return new int[] { min, max };
+		return new ElevationSourcePixel(source, min, max, offset);
 	}
 
 	/**
 	 * Get the Bilinear Interpolation elevation value
 	 * 
-	 * @param xSource
-	 *            s source pixel
-	 * @param ySource
-	 *            y source pixel
+	 * @param sourcePixelX
+	 *            source pixel x
+	 * @param sourcePixelY
+	 *            source pixel y
+	 * @param values
+	 *            2 x 2 elevation values as [y][x]
+	 * @return elevation
+	 */
+	protected Double getBilinearInterpolationElevation(
+			ElevationSourcePixel sourcePixelX,
+			ElevationSourcePixel sourcePixelY, Double[][] values) {
+		return getBilinearInterpolationElevation(sourcePixelX.getOffset(),
+				sourcePixelY.getOffset(), sourcePixelX.getMin(),
+				sourcePixelX.getMax(), sourcePixelY.getMin(),
+				sourcePixelY.getMax(), values);
+	}
+
+	/**
+	 * Get the Bilinear Interpolation elevation value
+	 * 
+	 * @param offsetX
+	 *            x source pixel offset
+	 * @param offsetY
+	 *            y source pixel offset
 	 * @param minX
 	 *            min x value
 	 * @param maxX
@@ -1067,36 +1089,71 @@ public class ElevationTilesCore extends BaseExtension {
 	 *            min y value
 	 * @param maxY
 	 *            max y value
-	 * @param bottomLeft
-	 *            bottom left elevation
-	 * @param topLeft
-	 *            top left elevation
-	 * @param bottomRight
-	 *            bottom right elevation
-	 * @param topRight
-	 *            top right elevation
+	 * @param values
+	 *            2 x 2 elevation values as [y][x]
 	 * @return elevation
 	 */
-	protected Double getBilinearInterpolationElevation(float xSource,
-			float ySource, float minX, float maxX, float minY, float maxY,
-			Double bottomLeft, Double topLeft, Double bottomRight,
-			Double topRight) {
+	protected Double getBilinearInterpolationElevation(float offsetX,
+			float offsetY, float minX, float maxX, float minY, float maxY,
+			Double[][] values) {
 
 		Double elevation = null;
 
-		if (bottomLeft != null && topLeft != null && bottomRight != null
-				&& topRight != null) {
+		if (values != null) {
+			elevation = getBilinearInterpolationElevation(offsetX, offsetY,
+					minX, maxX, minY, maxY, values[0][0], values[0][1],
+					values[1][0], values[1][1]);
+		}
+
+		return elevation;
+	}
+
+	/**
+	 * Get the Bilinear Interpolation elevation value
+	 * 
+	 * @param offsetX
+	 *            x source pixel offset
+	 * @param offsetY
+	 *            y source pixel offset
+	 * @param minX
+	 *            min x value
+	 * @param maxX
+	 *            max x value
+	 * @param minY
+	 *            min y value
+	 * @param maxY
+	 *            max y value
+	 * @param topLeft
+	 *            top left elevation
+	 * @param topRight
+	 *            top right elevation
+	 * @param bottomLeft
+	 *            bottom left elevation
+	 * @param bottomRight
+	 *            bottom right elevation
+	 * @return elevation
+	 */
+	protected Double getBilinearInterpolationElevation(float offsetX,
+			float offsetY, float minX, float maxX, float minY, float maxY,
+			Double topLeft, Double topRight, Double bottomLeft,
+			Double bottomRight) {
+
+		Double elevation = null;
+
+		if (topLeft != null && (topRight != null || minX == maxX)
+				&& (bottomLeft != null || minY == maxY)
+				&& (bottomRight != null || (minX == maxX && minY == maxY))) {
 
 			float diffX = maxX - minX;
 
 			double topRow;
-			double bottomRow;
+			Double bottomRow;
 			if (diffX == 0) {
 				topRow = topLeft;
 				bottomRow = bottomLeft;
 			} else {
-				float diffRight = maxX - xSource;
-				float diffLeft = xSource - minX;
+				float diffLeft = offsetX;
+				float diffRight = diffX - offsetX;
 				topRow = ((diffRight / diffX) * topLeft)
 						+ ((diffLeft / diffX) * topRight);
 				bottomRow = ((diffRight / diffX) * bottomLeft)
@@ -1109,13 +1166,118 @@ public class ElevationTilesCore extends BaseExtension {
 			if (diffY == 0) {
 				result = topRow;
 			} else {
-				float diffBottom = maxY - ySource;
-				float diffTop = ySource - minY;
+				float diffTop = offsetY;
+				float diffBottom = diffY - offsetY;
 				result = ((diffBottom / diffY) * topRow)
 						+ ((diffTop / diffY) * bottomRow);
 			}
 
 			elevation = result;
+		}
+
+		return elevation;
+	}
+
+	/**
+	 * Get the bicubic interpolation elevation from the 4 x 4 elevation values
+	 * 
+	 * @param values
+	 *            elevation values
+	 * @param sourcePixelX
+	 *            source pixel x
+	 * @param sourcePixelY
+	 *            source pixel y
+	 * @return bicubic elevation
+	 */
+	protected Double getBicubicInterpolationElevation(Double[][] values,
+			ElevationSourcePixel sourcePixelX, ElevationSourcePixel sourcePixelY) {
+		return getBicubicInterpolationElevation(values,
+				sourcePixelX.getOffset(), sourcePixelY.getOffset());
+	}
+
+	/**
+	 * Get the bicubic interpolation elevation from the 4 x 4 elevation values
+	 * 
+	 * @param values
+	 *            elevation values
+	 * @param offsetX
+	 *            x source pixel offset
+	 * @param offsetY
+	 *            y source pixel offset
+	 * @return bicubic elevation
+	 */
+	protected Double getBicubicInterpolationElevation(Double[][] values,
+			float offsetX, float offsetY) {
+
+		Double elevation = null;
+
+		Double[] rowValues = new Double[4];
+
+		for (int y = 0; y < 4; y++) {
+			Double rowElevation = getCubicInterpolationElevation(values[y][0],
+					values[y][1], values[y][2], values[y][3], offsetX);
+			if (rowElevation == null) {
+				rowValues = null;
+				break;
+			}
+			rowValues[y] = rowElevation;
+		}
+
+		if (rowValues != null) {
+			elevation = getCubicInterpolationElevation(rowValues, offsetY);
+		}
+
+		return elevation;
+	}
+
+	/**
+	 * Interpolate 4 values using the offset between value1 and value2
+	 * 
+	 * @param values
+	 *            elevation values
+	 * @param offset
+	 *            offset between the middle two pixels
+	 * @return value elevation value
+	 */
+	protected Double getCubicInterpolationElevation(Double[] values,
+			double offset) {
+		Double elevation = null;
+		if (values != null) {
+			elevation = getCubicInterpolationElevation(values[0], values[1],
+					values[2], values[3], offset);
+		}
+		return elevation;
+	}
+
+	/**
+	 * Interpolate 4 values using the offset between value1 and value2
+	 * 
+	 * @param value0
+	 *            index 0 value
+	 * @param value1
+	 *            index 1 value
+	 * @param value2
+	 *            index 2 value
+	 * @param value3
+	 *            index 3 value
+	 * @param offset
+	 *            offset between the middle two pixels
+	 * @return value elevation value
+	 */
+	protected Double getCubicInterpolationElevation(Double value0,
+			Double value1, Double value2, Double value3, double offset) {
+
+		Double elevation = null;
+
+		if (value0 != null && value1 != null && value2 != null
+				&& value3 != null) {
+
+			double coefficient0 = 2 * value1;
+			double coefficient1 = value2 - value0;
+			double coefficient2 = 2 * value0 - 5 * value1 + 4 * value2 - value3;
+			double coefficient3 = -value0 + 3 * value1 - 3 * value2 + value3;
+			elevation = (coefficient3 * offset * offset * offset + coefficient2
+					* offset * offset + coefficient1 * offset + coefficient0) / 2;
 		}
 
 		return elevation;
