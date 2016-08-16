@@ -1080,6 +1080,20 @@ public class ElevationTilesCore extends BaseExtension {
 		// Add the farthest neighbor
 		results.add(new int[] { secondX, secondY });
 
+		// If right on the boundary between the forward and backwards pixel, add
+		// the backwards pixel options
+		if (xPixel.getOffset() == 0) {
+			results.add(new int[] { xPixel.getMin() - 1, yPixel.getMin() });
+			results.add(new int[] { xPixel.getMin() - 1, yPixel.getMax() });
+		}
+		if (yPixel.getOffset() == 0) {
+			results.add(new int[] { xPixel.getMin(), yPixel.getMin() - 1 });
+			results.add(new int[] { xPixel.getMax(), yPixel.getMin() - 1 });
+		}
+		if (xPixel.getOffset() == 0 && yPixel.getOffset() == 0) {
+			results.add(new int[] { xPixel.getMin() - 1, yPixel.getMin() - 1 });
+		}
+
 		return results;
 	}
 
