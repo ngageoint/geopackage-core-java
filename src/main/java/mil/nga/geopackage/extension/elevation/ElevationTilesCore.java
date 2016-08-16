@@ -1,7 +1,5 @@
 package mil.nga.geopackage.extension.elevation;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -1019,15 +1017,70 @@ public class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
-	 * Determine the nearest neighbor of the value
+	 * Determine the nearest neighbors of the source pixel, sorted by closest to
+	 * farthest neighbor
 	 * 
-	 * @param value
-	 *            value
-	 * @return nearest neighbor pixel
+	 * @param xSource
+	 *            x source pixel
+	 * @param ySource
+	 *            y source pixel
+	 * @return nearest neighbor pixels
 	 */
-	protected int getNearestNeighborXSource(float value) {
-		return BigDecimal.valueOf(value).setScale(1, RoundingMode.HALF_DOWN)
-				.intValue();
+	protected List<int[]> getNearestNeighbors(float xSource, float ySource) {
+
+		List<int[]> results = new ArrayList<int[]>();
+
+		// Get the elevation source pixels for x and y
+		ElevationSourcePixel xPixel = getSourceMinAndMax(xSource);
+		ElevationSourcePixel yPixel = getSourceMinAndMax(ySource);
+
+		// Determine which x pixel is the closest, the second closest, and the
+		// distance to the second pixel
+		int firstX;
+		int secondX;
+		float xDistance;
+		if (xPixel.getOffset() > .5) {
+			firstX = xPixel.getMax();
+			secondX = xPixel.getMin();
+			xDistance = 1.0f - xPixel.getOffset();
+		} else {
+			firstX = xPixel.getMin();
+			secondX = xPixel.getMax();
+			xDistance = xPixel.getOffset();
+		}
+
+		// Determine which y pixel is the closest, the second closest, and the
+		// distance to the second pixel
+		int firstY;
+		int secondY;
+		float yDistance;
+		if (yPixel.getOffset() > .5) {
+			firstY = yPixel.getMax();
+			secondY = yPixel.getMin();
+			yDistance = 1.0f - yPixel.getOffset();
+		} else {
+			firstY = yPixel.getMin();
+			secondY = yPixel.getMax();
+			yDistance = yPixel.getOffset();
+		}
+
+		// Add the closest neighbor
+		results.add(new int[] { firstX, firstY });
+
+		// Add the second and third neighbor based upon the x and y distances to
+		// second coordinates
+		if (xDistance <= yDistance) {
+			results.add(new int[] { secondX, firstY });
+			results.add(new int[] { firstX, secondY });
+		} else {
+			results.add(new int[] { firstX, secondY });
+			results.add(new int[] { secondX, firstY });
+		}
+
+		// Add the farthest neighbor
+		results.add(new int[] { secondX, secondY });
+
+		return results;
 	}
 
 	/**
@@ -1046,7 +1099,7 @@ public class ElevationTilesCore extends BaseExtension {
 		if (offset < .5) {
 			min--;
 			offset += .5f;
-		} else if (offset > .5) {
+		} else if (offset >= .5) {
 			max++;
 			offset -= .5f;
 		}
