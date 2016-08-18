@@ -1350,4 +1350,27 @@ public class ElevationTilesCore extends BaseExtension {
 		return elevation;
 	}
 
+	/**
+	 * Pad the bounding box with extra space for the overlapping pixels
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @param boundingBox
+	 *            bounding box
+	 * @param overlap
+	 *            overlapping pixels
+	 * @return padded bounding box
+	 */
+	protected BoundingBox padBoundingBox(TileMatrix tileMatrix,
+			BoundingBox boundingBox, int overlap) {
+		double lonPixelPadding = tileMatrix.getPixelXSize() * overlap;
+		double latPixelPadding = tileMatrix.getPixelYSize() * overlap;
+		BoundingBox paddedBoundingBox = new BoundingBox(
+				boundingBox.getMinLongitude() - lonPixelPadding,
+				boundingBox.getMaxLongitude() + lonPixelPadding,
+				boundingBox.getMinLatitude() - latPixelPadding,
+				boundingBox.getMaxLatitude() + latPixelPadding);
+		return paddedBoundingBox;
+	}
+
 }
