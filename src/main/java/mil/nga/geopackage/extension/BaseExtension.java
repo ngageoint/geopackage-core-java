@@ -60,14 +60,14 @@ public abstract class BaseExtension {
 	 *            table name
 	 * @param columnName
 	 *            column name
-	 * @param description
-	 *            extension description
+	 * @param definition
+	 *            extension definition
 	 * @param scopeType
 	 *            extension scope type
 	 * @return extension
 	 */
 	protected Extensions getOrCreate(String extensionName, String tableName,
-			String columnName, String description, ExtensionScopeType scopeType) {
+			String columnName, String definition, ExtensionScopeType scopeType) {
 
 		Extensions extension = get(extensionName, tableName, columnName);
 
@@ -81,7 +81,7 @@ public abstract class BaseExtension {
 				extension.setTableName(tableName);
 				extension.setColumnName(columnName);
 				extension.setExtensionName(extensionName);
-				extension.setDefinition(description);
+				extension.setDefinition(definition);
 				extension.setScope(scopeType);
 
 				extensionsDao.create(extension);
