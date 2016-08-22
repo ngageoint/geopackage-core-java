@@ -105,7 +105,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 
 		List<TColumn> columnList = new ArrayList<TColumn>();
 
-		TResult result = db.rawQuery("PRAGMA table_info(" + tableName + ")",
+		TResult result = db.rawQuery("PRAGMA table_info(\"" + tableName + "\")",
 				null);
 		try {
 			while (result.moveToNext()) {
