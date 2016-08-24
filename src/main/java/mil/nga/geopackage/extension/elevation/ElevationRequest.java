@@ -97,16 +97,7 @@ public class ElevationRequest {
 	public BoundingBox overlap(BoundingBox projectedElevation) {
 		BoundingBox overlap = null;
 		if (point) {
-			if (projectedBoundingBox.getMinLatitude() >= projectedElevation
-					.getMinLatitude()
-					&& projectedBoundingBox.getMaxLatitude() <= projectedElevation
-							.getMaxLatitude()
-					&& projectedBoundingBox.getMinLongitude() >= projectedElevation
-							.getMinLongitude()
-					&& projectedBoundingBox.getMaxLongitude() <= projectedElevation
-							.getMaxLongitude()) {
-				overlap = projectedBoundingBox;
-			}
+			overlap = projectedBoundingBox;
 		} else {
 			overlap = TileBoundingBoxUtils.overlap(projectedBoundingBox,
 					projectedElevation);
