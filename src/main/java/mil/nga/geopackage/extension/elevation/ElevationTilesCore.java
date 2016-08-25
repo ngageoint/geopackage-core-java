@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -15,6 +16,8 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.projection.ProjectionTransform;
+import mil.nga.geopackage.property.GeoPackageProperties;
+import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
@@ -28,6 +31,40 @@ import org.osgeo.proj4j.ProjCoordinate;
  * @since 1.2.1
  */
 public abstract class ElevationTilesCore extends BaseExtension {
+
+	/**
+	 * Extension author
+	 */
+	public static final String EXTENSION_AUTHOR = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR;
+
+	/**
+	 * Extension name without the author
+	 */
+	public static final String CORE_EXTENSION_NAME_NO_AUTHOR = "elevation_tiles";
+
+	/**
+	 * Extension, with author and name
+	 */
+	public static final String CORE_EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, CORE_EXTENSION_NAME_NO_AUTHOR);
+
+	/**
+	 * Extension Gridded Coverage definition URL
+	 */
+	public static final String EXTENSION_GRIDDED_COVERAGE_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS,
+					CORE_EXTENSION_NAME_NO_AUTHOR
+							+ PropertyConstants.PROPERTY_DIVIDER
+							+ GriddedCoverage.TABLE_NAME);
+
+	/**
+	 * Extension Gridded Tile definition URL
+	 */
+	public static final String EXTENSION_GRIDDED_TILE_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS,
+					CORE_EXTENSION_NAME_NO_AUTHOR
+							+ PropertyConstants.PROPERTY_DIVIDER
+							+ GriddedTile.TABLE_NAME);
 
 	/**
 	 * Extension, with author and name
@@ -380,11 +417,14 @@ public abstract class ElevationTilesCore extends BaseExtension {
 
 		List<Extensions> extensionList = new ArrayList<>();
 
-		Extensions coverage = getOrCreate(extensionName,
-				GriddedCoverage.TABLE_NAME, null, extensionDefinition,
+		Extensions coverage = getOrCreate(CORE_EXTENSION_NAME,
+				GriddedCoverage.TABLE_NAME, null,
+				EXTENSION_GRIDDED_COVERAGE_DEFINITION,
 				ExtensionScopeType.READ_WRITE);
-		Extensions tile = getOrCreate(extensionName, GriddedTile.TABLE_NAME,
-				null, extensionDefinition, ExtensionScopeType.READ_WRITE);
+		Extensions tile = getOrCreate(CORE_EXTENSION_NAME,
+				GriddedTile.TABLE_NAME, null,
+				EXTENSION_GRIDDED_TILE_DEFINITION,
+				ExtensionScopeType.READ_WRITE);
 		Extensions table = getOrCreate(extensionName,
 				tileMatrixSet.getTableName(), TileTable.COLUMN_TILE_DATA,
 				extensionDefinition, ExtensionScopeType.READ_WRITE);
