@@ -837,24 +837,24 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 		if (writable) {
 
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_insert");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getColumnName() + "_insert\"");
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update1");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getColumnName() + "_update1\"");
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update2");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getColumnName() + "_update2\"");
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update3");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getColumnName() + "_update3\"");
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update4");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
+					+ geometryColumns.getColumnName() + "_update4\"");
+			database.execSQL("DROP TRIGGER IF EXISTS \"rtree_"
 					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_delete");
+					+ geometryColumns.getColumnName() + "_delete\"");
 
 		}
 	}

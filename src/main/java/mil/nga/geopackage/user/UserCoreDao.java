@@ -428,7 +428,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return
 	 */
 	public String buildWhere(String field, Object value, String operation) {
-		return field + " " + (value != null ? operation + " ?" : "IS NULL");
+		return "\"" + field + "\" "
+				+ (value != null ? operation + " ?" : "IS NULL");
 	}
 
 	/**
@@ -447,12 +448,12 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 							"Field value is not a number and can not use a tolerance, Field: "
 									+ field + ", Value: " + value);
 				}
-				where = field + " >= ? AND " + field + " <= ?";
+				where = "\"" + field + "\" >= ? AND \"" + field + "\" <= ?";
 			} else {
 				where = buildWhere(field, value.getValue());
 			}
 		} else {
-			where = buildWhere(field, null);
+			where = buildWhere(field, null, "=");
 		}
 		return where;
 	}
