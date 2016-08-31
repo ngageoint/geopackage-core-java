@@ -6,7 +6,15 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.1 (TBD)
 
-* TBD
+* Elevation Extension support
+* Elevation Tiles table type (2d-gridded-coverage)
+* Contents Data Type (features, tiles, elevation) functionality
+* Built in support for WGS 84 Geographic 3d projection (EPSG:4979)
+* Table and column name SQL quotations to allow uncommon but valid names
+* Elevation query algorithms including Nearest Neighbor, Bilinear, and Bicubic
+* Elevation unbounded results elevation queries
+* Tile bounding box utility methods precision adjustments
+* Additional Tile Dao zoom level determinations, including the closest
 
 ## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 
