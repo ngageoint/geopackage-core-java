@@ -7,12 +7,12 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.features.columns.GeometryColumns;
+import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -117,7 +117,7 @@ public class Contents {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * %Y-%m-%dT%H:%M:%fZ format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_LAST_CHANGE, dataType = DataType.DATE_STRING, format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class)
 	private Date lastChange;
 
 	/**

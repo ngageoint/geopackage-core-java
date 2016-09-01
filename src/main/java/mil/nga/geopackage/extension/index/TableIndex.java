@@ -2,8 +2,9 @@ package mil.nga.geopackage.extension.index;
 
 import java.util.Date;
 
+import mil.nga.geopackage.persister.DatePersister;
+
 import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -41,7 +42,7 @@ public class TableIndex {
 	/**
 	 * Last indexed date
 	 */
-	@DatabaseField(columnName = COLUMN_LAST_INDEXED, dataType = DataType.DATE_STRING, format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+	@DatabaseField(columnName = COLUMN_LAST_INDEXED, persisterClass = DatePersister.class)
 	private Date lastIndexed;
 
 	/**

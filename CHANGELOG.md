@@ -6,6 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.1 (TBD)
 
+* Time zone fix on database persisted dates
 * Elevation Extension support
 * Elevation Tiles table type (2d-gridded-coverage)
 * Contents Data Type (features, tiles, elevation) functionality
