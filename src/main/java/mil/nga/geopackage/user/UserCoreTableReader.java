@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.CoreSQLUtils;
 
 /**
  * Reads the metadata from an existing user table
@@ -105,7 +106,8 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 
 		List<TColumn> columnList = new ArrayList<TColumn>();
 
-		TResult result = db.rawQuery("PRAGMA table_info(\"" + tableName + "\")",
+		TResult result = db.rawQuery(
+				"PRAGMA table_info(" + CoreSQLUtils.quoteWrap(tableName) + ")",
 				null);
 		try {
 			while (result.moveToNext()) {

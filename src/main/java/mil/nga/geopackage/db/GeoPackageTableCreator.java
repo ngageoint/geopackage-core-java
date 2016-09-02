@@ -252,7 +252,7 @@ public class GeoPackageTableCreator {
 
 		// Build the create table sql
 		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE \"").append(table.getTableName()).append("\" (");
+		sql.append("CREATE TABLE ").append(CoreSQLUtils.quoteWrap(table.getTableName())).append(" (");
 
 		// Add each column to the sql
 		List<? extends UserColumn> columns = table.getColumns();
@@ -261,7 +261,7 @@ public class GeoPackageTableCreator {
 			if (i > 0) {
 				sql.append(",");
 			}
-			sql.append("\n  \"").append(column.getName()).append("\" ")
+			sql.append("\n  ").append(CoreSQLUtils.quoteWrap(column.getName())).append(" ")
 					.append(column.getTypeName());
 			if (column.getMax() != null) {
 				sql.append("(").append(column.getMax()).append(")");
