@@ -1232,6 +1232,25 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	}
 
 	/**
+	 * Get the pixel value as a 16 bit unsigned value at the coordinate from the
+	 * 16 bit unsigned pixel values
+	 * 
+	 * @param unsignedPixelValues
+	 *            unsigned int pixel values
+	 * @param width
+	 *            image width
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @return 16 bit unsigned pixel value
+	 */
+	public int getUnsignedPixelValue(int[] unsignedPixelValues, int width,
+			int x, int y) {
+		return unsignedPixelValues[(y * width) + x];
+	}
+
+	/**
 	 * Get the unsigned pixel value. The value saved as an "unsigned short" in
 	 * the short is returned as an integer which stores the positive 16 bit
 	 * value
@@ -1331,6 +1350,25 @@ public abstract class ElevationTilesCore extends BaseExtension {
 		Double[] elevations = new Double[pixelValues.length];
 		for (int i = 0; i < pixelValues.length; i++) {
 			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
+		}
+		return elevations;
+	}
+
+	/**
+	 * Get the elevation values from the "unsigned short" pixel values
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param unsignedPixelValues
+	 *            pixel values as 16 bit integers
+	 * @return elevation values
+	 */
+	public Double[] getElevationValues(GriddedTile griddedTile,
+			int[] unsignedPixelValues) {
+		Double[] elevations = new Double[unsignedPixelValues.length];
+		for (int i = 0; i < unsignedPixelValues.length; i++) {
+			elevations[i] = getElevationValue(griddedTile,
+					unsignedPixelValues[i]);
 		}
 		return elevations;
 	}
