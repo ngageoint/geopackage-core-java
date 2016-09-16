@@ -6,9 +6,10 @@ public class TempTest {
 
 	public static void main(String[] args) throws Exception {
 
-		File file = new File("/Users/osbornb/Downloads/denver.tiff");
+		//File file = new File("/Users/osbornb/Downloads/denver.tiff");
 		//File file = new File("/Users/osbornb/Desktop/elevation.tiff");
-		FileDirectories fileDirectories = TiffReader.readTiff(file);
+		File file = new File("/Users/osbornb/Downloads/tiled.tiff");
+		FileDirectories fileDirectories = TiffReader.readTiff(file, true);
 		FileDirectory fileDirectory = fileDirectories.getFileDirectory();
 		Rasters rasters = fileDirectory.readRasters();
 		Rasters rasters2 = fileDirectory.readInterleavedRasters();

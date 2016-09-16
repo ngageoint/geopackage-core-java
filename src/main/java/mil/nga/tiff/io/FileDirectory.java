@@ -30,22 +30,27 @@ public class FileDirectory {
 	/**
 	 * Byte reader
 	 */
-	private ByteReader reader;
+	private final ByteReader reader;
 
 	/**
 	 * Tiled flag
 	 */
-	private boolean tiled;
+	private final boolean tiled;
 
 	/**
 	 * Planar configuration
 	 */
-	private int planarConfiguration;
+	private final int planarConfiguration;
 
 	/**
 	 * Compression decoder
 	 */
-	private CompressionDecoder decoder;
+	private final CompressionDecoder decoder;
+
+	/**
+	 * Cache
+	 */
+	private Map<Integer, byte[]> cache = null;
 
 	/**
 	 * Constructor
@@ -54,8 +59,25 @@ public class FileDirectory {
 	 *            file directory entries
 	 * @param reader
 	 *            TIFF file byte reader
+	 * @param cacheTiles
+	 *            true to cache tiles
 	 */
 	public FileDirectory(List<FileDirectoryEntry> entries, ByteReader reader) {
+		this(entries, reader, false);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param entries
+	 *            file directory entries
+	 * @param reader
+	 *            TIFF file byte reader
+	 * @param cacheData
+	 *            true to cache tiles and strips
+	 */
+	public FileDirectory(List<FileDirectoryEntry> entries, ByteReader reader,
+			boolean cacheData) {
 		// Set the entries and the field tag type mapping
 		this.entries = entries;
 		for (FileDirectoryEntry entry : entries) {
@@ -64,7 +86,8 @@ public class FileDirectory {
 
 		this.reader = reader;
 
-		// TODO cache tiles?
+		// Set the cache
+		setCache(cacheData);
 
 		// Determine if tiled
 		tiled = getStripOffsets() == null;
@@ -102,6 +125,50 @@ public class FileDirectory {
 			throw new TiffException("Unknown compression method identifier: "
 					+ compression);
 		}
+	}
+
+	/**
+	 * Set whether to cache tiles. Does nothing is already caching tiles, clears
+	 * the existing cache if set to false.
+	 * 
+	 * @param cacheData
+	 *            true to cache tiles and strips
+	 */
+	public void setCache(boolean cacheData) {
+		if (cacheData) {
+			if (cache == null) {
+				cache = new HashMap<>();
+			}
+		} else {
+			cache = null;
+		}
+	}
+
+	/**
+	 * Get the byte reader
+	 * 
+	 * @return byte reader
+	 */
+	public ByteReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * Is this a tiled image
+	 * 
+	 * @return true if tiled
+	 */
+	public boolean isTiled() {
+		return tiled;
+	}
+
+	/**
+	 * Get the compression decoder
+	 * 
+	 * @return compression decoder
+	 */
+	public CompressionDecoder getDecoder() {
+		return decoder;
 	}
 
 	/**
@@ -333,58 +400,158 @@ public class FileDirectory {
 		return getLongListEntryValue(FieldTagType.YResolution);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @return rasters
+	 */
 	public Rasters readRasters() {
 		ImageWindow window = new ImageWindow(this);
 		return readRasters(window);
 	}
 
+	/**
+	 * Read the rasters as interleaved
+	 * 
+	 * @return rasters
+	 */
 	public Rasters readInterleavedRasters() {
 		ImageWindow window = new ImageWindow(this);
 		return readInterleavedRasters(window);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param window
+	 *            image window
+	 * @return rasters
+	 */
 	public Rasters readRasters(ImageWindow window) {
 		return readRasters(window, null);
 	}
 
+	/**
+	 * Read the rasters as interleaved
+	 * 
+	 * @param window
+	 *            image window
+	 * @return rasters
+	 */
 	public Rasters readInterleavedRasters(ImageWindow window) {
 		return readInterleavedRasters(window, null);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param samples
+	 *            pixel samples to read
+	 * @return rasters
+	 */
 	public Rasters readRasters(int[] samples) {
 		ImageWindow window = new ImageWindow(this);
 		return readRasters(window, samples);
 	}
 
+	/**
+	 * Read the rasters as interleaved
+	 * 
+	 * @param samples
+	 *            pixel samples to read
+	 * @return rasters
+	 */
 	public Rasters readInterleavedRasters(int[] samples) {
 		ImageWindow window = new ImageWindow(this);
 		return readInterleavedRasters(window, samples);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param window
+	 *            image window
+	 * @param samples
+	 *            pixel samples to read
+	 * @return rasters
+	 */
 	public Rasters readRasters(ImageWindow window, int[] samples) {
 		return readRasters(window, samples, true, false);
 	}
 
+	/**
+	 * Read the rasters as interleaved
+	 * 
+	 * @param window
+	 *            image window
+	 * @param samples
+	 *            pixel samples to read
+	 * @return rasters
+	 */
 	public Rasters readInterleavedRasters(ImageWindow window, int[] samples) {
 		return readRasters(window, samples, false, true);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param sampleValues
+	 *            true to read results per sample
+	 * @param interleaveValues
+	 *            true to read results as interleaved
+	 * @return rasters
+	 */
 	public Rasters readRasters(boolean sampleValues, boolean interleaveValues) {
 		ImageWindow window = new ImageWindow(this);
 		return readRasters(window, sampleValues, interleaveValues);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param window
+	 *            image window
+	 * @param sampleValues
+	 *            true to read results per sample
+	 * @param interleaveValues
+	 *            true to read results as interleaved
+	 * @return rasters
+	 */
 	public Rasters readRasters(ImageWindow window, boolean sampleValues,
 			boolean interleaveValues) {
 		return readRasters(window, null, sampleValues, interleaveValues);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param samples
+	 *            pixel samples to read
+	 * @param sampleValues
+	 *            true to read results per sample
+	 * @param interleaveValues
+	 *            true to read results as interleaved
+	 * @return rasters
+	 */
 	public Rasters readRasters(int[] samples, boolean sampleValues,
 			boolean interleaveValues) {
 		ImageWindow window = new ImageWindow(this);
 		return readRasters(window, samples, sampleValues, interleaveValues);
 	}
 
+	/**
+	 * Read the rasters
+	 * 
+	 * @param window
+	 *            image window
+	 * @param samples
+	 *            pixel samples to read
+	 * @param sampleValues
+	 *            true to read results per sample
+	 * @param interleaveValues
+	 *            true to read results as interleaved
+	 * @return rasters
+	 */
 	public Rasters readRasters(ImageWindow window, int[] samples,
 			boolean sampleValues, boolean interleaveValues) {
 
@@ -444,6 +611,16 @@ public class FileDirectory {
 		return rasters;
 	}
 
+	/**
+	 * Read and populate the rasters
+	 * 
+	 * @param window
+	 *            image window
+	 * @param samples
+	 *            pixel samples to read
+	 * @param rasters
+	 *            rasters to populate
+	 */
 	private void readRaster(ImageWindow window, int[] samples, Rasters rasters) {
 
 		int tileWidth = getTileWidth().intValue();
@@ -462,14 +639,15 @@ public class FileDirectory {
 		int bytesPerPixel = getBytesPerPixel();
 
 		int[] srcSampleOffsets = new int[samples.length];
+		FieldType[] sampleFieldTypes = new FieldType[samples.length];
 		for (int i = 0; i < samples.length; i++) {
 			int sampleOffset = 0;
 			if (planarConfiguration == 1) {
 				sampleOffset = sum(getBitsPerSample(), 0, samples[i]) / 8;
 			}
 			srcSampleOffsets[i] = sampleOffset;
+			sampleFieldTypes[i] = getFieldTypeForSample(samples[i]);
 		}
-		// TODO readers
 
 		for (int yTile = minYTile; yTile < maxYTile; yTile++) {
 			for (int xTile = minXTile; xTile < maxXTile; xTile++) {
@@ -503,10 +681,10 @@ public class FileDirectory {
 							int valueOffset = pixelOffset
 									+ srcSampleOffsets[sampleIndex];
 							blockReader.setNextByte(valueOffset);
-							Number value = null; // TODO read based upon data
-													// type
-							// value = blockReader.readFloat();
-							value = blockReader.readUnsignedByte();
+
+							// Read the value
+							Number value = readValue(blockReader,
+									sampleFieldTypes[sampleIndex]);
 
 							if (rasters.hasInterleaveValues()) {
 								int windowCoordinate = (y + firstLine - window
@@ -535,7 +713,122 @@ public class FileDirectory {
 		}
 	}
 
+	/**
+	 * Read the value from the reader according to the field type
+	 * 
+	 * @param reader
+	 *            byte reader
+	 * @param fieldType
+	 *            field type
+	 * @return value
+	 */
+	private Number readValue(ByteReader reader, FieldType fieldType) {
+
+		Number value = null;
+
+		switch (fieldType) {
+		case BYTE:
+			value = reader.readUnsignedByte();
+			break;
+		case SHORT:
+			value = reader.readUnsignedShort();
+			break;
+		case LONG:
+			value = reader.readUnsignedInt();
+			break;
+		case SBYTE:
+			value = reader.readByte();
+			break;
+		case SSHORT:
+			value = reader.readShort();
+			break;
+		case SLONG:
+			value = reader.readInt();
+			break;
+		case FLOAT:
+			value = reader.readFloat();
+			break;
+		case DOUBLE:
+			value = reader.readDouble();
+			break;
+		default:
+			throw new TiffException("Unsupported raster field type: "
+					+ fieldType);
+		}
+
+		return value;
+	}
+
+	/**
+	 * Get the field type for the sample
+	 * 
+	 * @param sampleIndex
+	 *            sample index
+	 * @return field type
+	 */
+	private FieldType getFieldTypeForSample(int sampleIndex) {
+
+		FieldType fieldType = null;
+
+		List<Integer> sampleFormat = getSampleFormat();
+		int format = sampleFormat != null ? sampleFormat.get(sampleIndex) : 1;
+		int bitsPerSample = getBitsPerSample().get(sampleIndex);
+		switch (format) {
+		case 1: // unsigned integer data
+			switch (bitsPerSample) {
+			case 8:
+				fieldType = FieldType.BYTE;
+				break;
+			case 16:
+				fieldType = FieldType.SHORT;
+				break;
+			case 32:
+				fieldType = FieldType.LONG;
+				break;
+			}
+			break;
+		case 2: // twos complement signed integer data
+			switch (bitsPerSample) {
+			case 8:
+				fieldType = FieldType.SBYTE;
+				break;
+			case 16:
+				fieldType = FieldType.SSHORT;
+				break;
+			case 32:
+				fieldType = FieldType.SLONG;
+				break;
+			}
+			break;
+		case 3:
+			switch (bitsPerSample) {
+			case 32:
+				fieldType = FieldType.FLOAT;
+				break;
+			case 64:
+				fieldType = FieldType.DOUBLE;
+				break;
+			}
+			break;
+		}
+
+		return fieldType;
+	}
+
+	/**
+	 * Get the tile or strip for the sample coordinate
+	 * 
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param sample
+	 *            sample index
+	 * @return bytes
+	 */
 	private byte[] getTileOrStrip(int x, int y, int sample) {
+
+		byte[] tileOrStrip = null;
 
 		int numTilesPerRow = (int) Math.ceil(getImageWidth().doubleValue()
 				/ getTileWidth().doubleValue());
@@ -550,31 +843,50 @@ public class FileDirectory {
 					* numTilesPerRow + x;
 		}
 
-		// TODO pull tile from cache
-
-		int offset = 0;
-		int byteCount = 0;
-		if (tiled) {
-			offset = getTileOffsets().get(index).intValue();
-			byteCount = getTileByteCounts().get(index).intValue();
+		// Attempt to pull from the cache
+		if (cache != null && cache.containsKey(index)) {
+			tileOrStrip = cache.get(index);
 		} else {
-			offset = getStripOffsets().get(index).intValue();
-			byteCount = getStripByteCounts().get(index).intValue();
+
+			// Read and decode the block
+
+			int offset = 0;
+			int byteCount = 0;
+			if (tiled) {
+				offset = getTileOffsets().get(index).intValue();
+				byteCount = getTileByteCounts().get(index).intValue();
+			} else {
+				offset = getStripOffsets().get(index).intValue();
+				byteCount = getStripByteCounts().get(index).intValue();
+			}
+
+			reader.setNextByte(offset);
+			byte[] block = reader.readBytes(byteCount);
+			tileOrStrip = decoder.decodeBlock(block);
+
+			// Cache the data
+			if (cache != null) {
+				cache.put(index, tileOrStrip);
+			}
 		}
 
-		reader.setNextByte(offset);
-		byte[] block = reader.readBytes(byteCount);
-		byte[] decodedBlock = decoder.decodeBlock(block);
-
-		return decodedBlock;
+		return tileOrStrip;
 	}
 
-	private int getSampleByteSize(int i) {
+	/**
+	 * Get the sample byte size
+	 * 
+	 * @param sampleIndex
+	 *            sample index
+	 * @return byte size
+	 */
+	private int getSampleByteSize(int sampleIndex) {
 		List<Integer> bitsPerSample = getBitsPerSample();
-		if (i >= bitsPerSample.size()) {
-			throw new TiffException("Sample index " + i + " is out of range");
+		if (sampleIndex >= bitsPerSample.size()) {
+			throw new TiffException("Sample index " + sampleIndex
+					+ " is out of range");
 		}
-		int bits = bitsPerSample.get(i);
+		int bits = bitsPerSample.get(sampleIndex);
 		if ((bits % 8) != 0) {
 			throw new TiffException("Sample bit-width of " + bits
 					+ " is not supported");
