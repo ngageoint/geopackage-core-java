@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.tiff.io.compression.CompressionDecoder;
+import mil.nga.tiff.io.compression.DeflateDecoder;
+import mil.nga.tiff.io.compression.LZWDecoder;
+import mil.nga.tiff.io.compression.PackbitsDecoder;
 import mil.nga.tiff.io.compression.RawDecoder;
 import mil.nga.tiff.util.TiffException;
 
@@ -106,21 +109,31 @@ public class FileDirectory {
 			compression = 1;
 		}
 		switch (compression) {
-		case 1:
+		case 1: // No Compression
 			decoder = new RawDecoder();
 			break;
-		case 5: // LZW
-			throw new TiffException("LZW compression not supported: "
+		case 2: // CCITT Huffman
+			throw new TiffException("CCITT Huffman compression not supported: "
 					+ compression);
-		case 6: // JPEG
+		case 3: // T4-encoding
+			throw new TiffException("T4-encoding compression not supported: "
+					+ compression);
+		case 4: // T6-encoding
+			throw new TiffException("T6-encoding compression not supported: "
+					+ compression);
+		case 5: // LZW
+			decoder = new LZWDecoder();
+			break;
+		case 6: // JPEG (old)
+		case 7: // JPEG (new)
 			throw new TiffException("JPEG compression not supported: "
 					+ compression);
 		case 8: // Deflate
-			throw new TiffException("Deflate compression not supported: "
-					+ compression);
+			decoder = new DeflateDecoder();
+			break;
 		case 32773: // packbits
-			throw new TiffException("Packbits compression not supported: "
-					+ compression);
+			decoder = new PackbitsDecoder();
+			break;
 		default:
 			throw new TiffException("Unknown compression method identifier: "
 					+ compression);
