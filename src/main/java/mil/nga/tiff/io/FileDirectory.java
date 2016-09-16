@@ -677,8 +677,8 @@ public class FileDirectory {
 					}
 
 					byte[] block = getTileOrStrip(xTile, yTile, sample);
-					ByteReader blockReader = new ByteReader(block);
-					blockReader.setByteOrder(reader.getByteOrder());
+					ByteReader blockReader = new ByteReader(block,
+							reader.getByteOrder());
 
 					for (int y = Math.max(0, window.getMinY() - firstLine); y < Math
 							.min(tileHeight,
@@ -875,7 +875,7 @@ public class FileDirectory {
 
 			reader.setNextByte(offset);
 			byte[] block = reader.readBytes(byteCount);
-			tileOrStrip = decoder.decodeBlock(block);
+			tileOrStrip = decoder.decodeBlock(block, reader.getByteOrder());
 
 			// Cache the data
 			if (cache != null) {

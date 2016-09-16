@@ -26,7 +26,7 @@ public class ByteReader {
 	/**
 	 * Byte order
 	 */
-	private ByteOrder byteOrder = ByteOrder.BIG_ENDIAN;
+	private ByteOrder byteOrder = null;
 
 	/**
 	 * Constructor
@@ -35,7 +35,20 @@ public class ByteReader {
 	 *            bytes
 	 */
 	public ByteReader(byte[] bytes) {
+		this(bytes, ByteOrder.BIG_ENDIAN);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param bytes
+	 *            bytes
+	 * @param byteOrder
+	 *            byte order
+	 */
+	public ByteReader(byte[] bytes, ByteOrder byteOrder) {
 		this.bytes = bytes;
+		this.byteOrder = byteOrder;
 	}
 
 	/**
@@ -74,6 +87,26 @@ public class ByteReader {
 	 */
 	public void setByteOrder(ByteOrder byteOrder) {
 		this.byteOrder = byteOrder;
+	}
+
+	/**
+	 * Check if there is at least one more byte left to read
+	 * 
+	 * @return true more bytes left to read
+	 */
+	public boolean hasByte() {
+		return hasBytes(1);
+	}
+
+	/**
+	 * Check if there are the provided number of bytes left to read
+	 * 
+	 * @param count
+	 *            number of bytes
+	 * @return true if has at least the number of bytes left
+	 */
+	public boolean hasBytes(int count) {
+		return nextByte + count <= bytes.length;
 	}
 
 	/**

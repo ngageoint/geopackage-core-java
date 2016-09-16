@@ -6,9 +6,13 @@ public class TempTest {
 
 	public static void main(String[] args) throws Exception {
 
-		//File file = new File("/Users/osbornb/Downloads/denver.tiff");
-		//File file = new File("/Users/osbornb/Desktop/elevation.tiff");
-		File file = new File("/Users/osbornb/Downloads/tiled.tiff");
+		File file
+		// = new File("/Users/osbornb/Downloads/denver.tiff");
+		// = new File("/Users/osbornb/Desktop/elevation.tiff");
+		// = new File("/Users/osbornb/Downloads/tiled.tiff");
+		= new File(
+				"/Users/osbornb/Documents/geotiff.js-master/test/data/packbits.tiff");
+
 		FileDirectories fileDirectories = TiffReader.readTiff(file, true);
 		FileDirectory fileDirectory = fileDirectories.getFileDirectory();
 		Rasters rasters = fileDirectory.readRasters();
@@ -25,14 +29,15 @@ public class TempTest {
 			for (int x = 0; x < rasters.getWidth(); x++) {
 				Number[] pixel = rasters.getPixel(x, y);
 				Number[] pixel2 = rasters2.getPixel(x, y);
-				
+
 				ImageWindow window = new ImageWindow(x, y);
 				Rasters rasters3 = fileDirectory.readRasters(window);
 				Rasters rasters4 = fileDirectory.readInterleavedRasters(window);
-				if(rasters3.getNumPixels() != 1 || rasters4.getNumPixels() != 1){
+				if (rasters3.getNumPixels() != 1
+						|| rasters4.getNumPixels() != 1) {
 					System.out.println("Num pixels");
 				}
-				
+
 				for (int i = 0; i < rasters.getSamplesPerPixel(); i++) {
 					Number sample = rasters.getPixelSample(i, x, y);
 					Number sample2 = rasters2.getPixelSample(i, x, y);
@@ -45,18 +50,18 @@ public class TempTest {
 					if (pixel[i].intValue() != pixel2[i].intValue()) {
 						System.out.println("PIXEL SAMPLE VS INTERLEAVE");
 					}
-					
+
 					Number sample3 = rasters3.getPixelSample(i, 0, 0);
 					Number sample4 = rasters4.getPixelSample(i, 0, 0);
-					if (pixel[i].intValue() != sample3.intValue() || pixel[i].intValue() != sample4.intValue()) {
+					if (pixel[i].intValue() != sample3.intValue()
+							|| pixel[i].intValue() != sample4.intValue()) {
 						System.out.println("SINGLE PIXEL VALUE");
 					}
-					
+
 				}
 			}
 		}
 
 		System.out.println("DONE");
 	}
-
 }

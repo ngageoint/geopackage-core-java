@@ -1,5 +1,7 @@
 package mil.nga.tiff.io.compression;
 
+import java.nio.ByteOrder;
+
 import mil.nga.tiff.util.TiffException;
 
 /**
@@ -13,7 +15,7 @@ public class DeflateDecoder implements CompressionDecoder {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public byte[] decodeBlock(byte[] block) {
+	public byte[] decodeBlock(byte[] block, ByteOrder byteOrder) {
 		throw new TiffException("DeflateDecoder is not yet implemented");
 	}
 

@@ -20,12 +20,23 @@ public class ByteWriter {
 	/**
 	 * Byte order
 	 */
-	private ByteOrder byteOrder = ByteOrder.BIG_ENDIAN;
+	private ByteOrder byteOrder = null;
 
 	/**
 	 * Constructor
 	 */
 	public ByteWriter() {
+		this(ByteOrder.BIG_ENDIAN);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param byteOrder
+	 *            byte order
+	 */
+	public ByteWriter(ByteOrder byteOrder) {
+		this.byteOrder = byteOrder;
 	}
 
 	/**
