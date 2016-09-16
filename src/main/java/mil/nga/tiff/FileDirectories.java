@@ -1,4 +1,4 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 import java.util.ArrayList;
 import java.util.Collections;

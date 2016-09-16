@@ -1,22 +1,22 @@
-package mil.nga.tiff.io.compression;
+package mil.nga.tiff.compression;
 
 import java.nio.ByteOrder;
 
 import mil.nga.tiff.util.TiffException;
 
 /**
- * Deflate Compression Decoder
+ * LZW Compression Decoder
  * 
  * @author osbornb
  */
-public class DeflateDecoder implements CompressionDecoder {
+public class LZWDecoder implements CompressionDecoder {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public byte[] decodeBlock(byte[] block, ByteOrder byteOrder) {
-		throw new TiffException("DeflateDecoder is not yet implemented");
+		throw new TiffException("LZWDecoder is not yet implemented");
 	}
 
 }

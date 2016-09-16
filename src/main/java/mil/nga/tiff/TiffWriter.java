@@ -1,8 +1,9 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 import java.io.IOException;
 import java.nio.ByteOrder;
 
+import mil.nga.tiff.io.ByteWriter;
 import mil.nga.wkb.geom.CircularString;
 import mil.nga.wkb.geom.CompoundCurve;
 import mil.nga.wkb.geom.Curve;

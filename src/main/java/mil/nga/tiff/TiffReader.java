@@ -1,4 +1,4 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,8 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.tiff.util.IOUtils;
+import mil.nga.tiff.io.ByteReader;
+import mil.nga.tiff.io.IOUtils;
 import mil.nga.tiff.util.TiffConstants;
 import mil.nga.tiff.util.TiffException;
 

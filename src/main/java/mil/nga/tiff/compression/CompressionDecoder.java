@@ -1,4 +1,4 @@
-package mil.nga.tiff.io.compression;
+package mil.nga.tiff.compression;
 
 import java.nio.ByteOrder;
 

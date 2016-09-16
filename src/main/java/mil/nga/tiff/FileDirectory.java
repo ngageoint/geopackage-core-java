@@ -1,15 +1,16 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.tiff.io.compression.CompressionDecoder;
-import mil.nga.tiff.io.compression.DeflateDecoder;
-import mil.nga.tiff.io.compression.LZWDecoder;
-import mil.nga.tiff.io.compression.PackbitsDecoder;
-import mil.nga.tiff.io.compression.RawDecoder;
+import mil.nga.tiff.compression.CompressionDecoder;
+import mil.nga.tiff.compression.DeflateDecoder;
+import mil.nga.tiff.compression.LZWDecoder;
+import mil.nga.tiff.compression.PackbitsDecoder;
+import mil.nga.tiff.compression.RawDecoder;
+import mil.nga.tiff.io.ByteReader;
 import mil.nga.tiff.util.TiffException;
 
 /**

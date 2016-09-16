@@ -1,4 +1,4 @@
-package mil.nga.tiff.util;
+package mil.nga.tiff.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

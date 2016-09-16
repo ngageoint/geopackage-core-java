@@ -1,4 +1,4 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 /**
  * Coordinates of a window over a portion or the entire image coordinates

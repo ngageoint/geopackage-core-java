@@ -1,4 +1,4 @@
-package mil.nga.tiff.io;
+package mil.nga.tiff;
 
 /**
  * Field Types
