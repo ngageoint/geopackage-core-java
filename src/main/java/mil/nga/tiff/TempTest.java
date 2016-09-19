@@ -6,17 +6,56 @@ public class TempTest {
 
 	public static void main(String[] args) throws Exception {
 
-		File file
-		// = new File("/Users/osbornb/Downloads/denver.tiff");
-		// = new File("/Users/osbornb/Desktop/elevation.tiff");
-		// = new File("/Users/osbornb/Downloads/tiled.tiff");
-		= new File(
+		File denver = new File("/Users/osbornb/Downloads/denver.tiff");
+		File elevation = new File("/Users/osbornb/Desktop/elevation.tiff");
+		File tiled = new File("/Users/osbornb/Downloads/tiled.tiff");
+		File stripped = new File(
+				"/Users/osbornb/Documents/geotiff.js-master/test/data/stripped.tiff");
+		File packbits = new File(
 				"/Users/osbornb/Documents/geotiff.js-master/test/data/packbits.tiff");
+		File lzw = new File(
+				"/Users/osbornb/Documents/geotiff.js-master/test/data/lzw.tiff");
+
+		File file = lzw;
 
 		FileDirectories fileDirectories = TiffReader.readTiff(file, true);
 		FileDirectory fileDirectory = fileDirectories.getFileDirectory();
 		Rasters rasters = fileDirectory.readRasters();
 		Rasters rasters2 = fileDirectory.readInterleavedRasters();
+
+		File file2 = packbits;
+
+		FileDirectories fileDirectories2 = TiffReader.readTiff(file2, true);
+		FileDirectory fileDirectory2 = fileDirectories2.getFileDirectory();
+		Rasters rasters2_1 = fileDirectory.readRasters();
+		Rasters rasters2_2 = fileDirectory.readInterleavedRasters();
+
+		File file3 = stripped;
+
+		FileDirectories fileDirectories3 = TiffReader.readTiff(file3, true);
+		FileDirectory fileDirectory3 = fileDirectories3.getFileDirectory();
+		Rasters rasters3_1 = fileDirectory.readRasters();
+		Rasters rasters3_2 = fileDirectory.readInterleavedRasters();
+
+		for (int i = 0; i < rasters.getSampleValues().length; i++) {
+			for (int j = 0; j < rasters.getSampleValues()[i].length; j++) {
+				if (!rasters.getSampleValues()[i][j].equals(rasters2_1
+						.getSampleValues()[i][j])
+						|| !rasters.getSampleValues()[i][j].equals(rasters3_1
+								.getSampleValues()[i][j])) {
+					System.out.println("Compression values do not match");
+				}
+			}
+		}
+
+		for (int i = 0; i < rasters2.getInterleaveValues().length; i++) {
+			if (!rasters2.getInterleaveValues()[i].equals(rasters2_2
+					.getInterleaveValues()[i])
+					|| !rasters2.getInterleaveValues()[i].equals(rasters3_2
+							.getInterleaveValues()[i])) {
+				System.out.println("Compression values do not match");
+			}
+		}
 
 		if (rasters.getWidth() != fileDirectory.getImageWidth().intValue()) {
 			System.out.println("WIDTH");

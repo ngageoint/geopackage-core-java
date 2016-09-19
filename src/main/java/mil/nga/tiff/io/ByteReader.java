@@ -99,6 +99,17 @@ public class ByteReader {
 	}
 
 	/**
+	 * Check if there is at least one more byte left to read
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return true more bytes left to read
+	 */
+	public boolean hasByte(int offset) {
+		return hasBytes(offset, 1);
+	}
+
+	/**
 	 * Check if there are the provided number of bytes left to read
 	 * 
 	 * @param count
@@ -106,7 +117,20 @@ public class ByteReader {
 	 * @return true if has at least the number of bytes left
 	 */
 	public boolean hasBytes(int count) {
-		return nextByte + count <= bytes.length;
+		return hasBytes(nextByte, count);
+	}
+
+	/**
+	 * Check if there are the provided number of bytes left to read
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @param count
+	 *            number of bytes
+	 * @return true if has at least the number of bytes left
+	 */
+	public boolean hasBytes(int offset, int count) {
+		return offset + count <= bytes.length;
 	}
 
 	/**
@@ -118,12 +142,28 @@ public class ByteReader {
 	 * @throws UnsupportedEncodingException
 	 */
 	public String readString(int num) throws UnsupportedEncodingException {
-		verifyRemainingBytes(num);
-		String value = null;
-		if (num != 1 || bytes[nextByte] != 0) {
-			value = new String(bytes, nextByte, num, StandardCharsets.US_ASCII);
-		}
+		String value = readString(nextByte, num);
 		nextByte += num;
+		return value;
+	}
+
+	/**
+	 * Read a String from the provided number of bytes
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @param num
+	 *            number of bytes
+	 * @return String
+	 * @throws UnsupportedEncodingException
+	 */
+	public String readString(int offset, int num)
+			throws UnsupportedEncodingException {
+		verifyRemainingBytes(offset, num);
+		String value = null;
+		if (num != 1 || bytes[offset] != 0) {
+			value = new String(bytes, offset, num, StandardCharsets.US_ASCII);
+		}
 		return value;
 	}
 
@@ -133,9 +173,21 @@ public class ByteReader {
 	 * @return byte
 	 */
 	public byte readByte() {
-		verifyRemainingBytes(1);
-		byte value = bytes[nextByte];
+		byte value = readByte(nextByte);
 		nextByte++;
+		return value;
+	}
+
+	/**
+	 * Read a byte
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return byte
+	 */
+	public byte readByte(int offset) {
+		verifyRemainingBytes(offset, 1);
+		byte value = bytes[offset];
 		return value;
 	}
 
@@ -145,7 +197,20 @@ public class ByteReader {
 	 * @return unsigned byte as short
 	 */
 	public short readUnsignedByte() {
-		return ((short) (readByte() & 0xff));
+		short value = readUnsignedByte(nextByte);
+		nextByte++;
+		return value;
+	}
+
+	/**
+	 * Read an unsigned byte
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return unsigned byte as short
+	 */
+	public short readUnsignedByte(int offset) {
+		return ((short) (readByte(offset) & 0xff));
 	}
 
 	/**
@@ -156,9 +221,23 @@ public class ByteReader {
 	 * @return bytes
 	 */
 	public byte[] readBytes(int num) {
-		verifyRemainingBytes(num);
-		byte[] readBytes = Arrays.copyOfRange(bytes, nextByte, nextByte + num);
+		byte[] readBytes = readBytes(nextByte, num);
 		nextByte += num;
+		return readBytes;
+	}
+
+	/**
+	 * Read a number of bytes
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @param num
+	 *            number of bytes
+	 * @return bytes
+	 */
+	public byte[] readBytes(int offset, int num) {
+		verifyRemainingBytes(offset, num);
+		byte[] readBytes = Arrays.copyOfRange(bytes, offset, offset + num);
 		return readBytes;
 	}
 
@@ -168,10 +247,22 @@ public class ByteReader {
 	 * @return short
 	 */
 	public short readShort() {
-		verifyRemainingBytes(2);
-		short value = ByteBuffer.wrap(bytes, nextByte, 2).order(byteOrder)
-				.getShort();
+		short value = readShort(nextByte);
 		nextByte += 2;
+		return value;
+	}
+
+	/**
+	 * Read a short
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return short
+	 */
+	public short readShort(int offset) {
+		verifyRemainingBytes(offset, 2);
+		short value = ByteBuffer.wrap(bytes, offset, 2).order(byteOrder)
+				.getShort();
 		return value;
 	}
 
@@ -181,7 +272,20 @@ public class ByteReader {
 	 * @return unsigned short as int
 	 */
 	public int readUnsignedShort() {
-		return (readShort() & 0xffff);
+		int value = readUnsignedShort(nextByte);
+		nextByte += 2;
+		return value;
+	}
+
+	/**
+	 * Read an unsigned short
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return unsigned short as int
+	 */
+	public int readUnsignedShort(int offset) {
+		return (readShort(offset) & 0xffff);
 	}
 
 	/**
@@ -190,10 +294,21 @@ public class ByteReader {
 	 * @return integer
 	 */
 	public int readInt() {
-		verifyRemainingBytes(4);
-		int value = ByteBuffer.wrap(bytes, nextByte, 4).order(byteOrder)
-				.getInt();
+		int value = readInt(nextByte);
 		nextByte += 4;
+		return value;
+	}
+
+	/**
+	 * Read an integer
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return integer
+	 */
+	public int readInt(int offset) {
+		verifyRemainingBytes(offset, 4);
+		int value = ByteBuffer.wrap(bytes, offset, 4).order(byteOrder).getInt();
 		return value;
 	}
 
@@ -203,7 +318,20 @@ public class ByteReader {
 	 * @return unsigned int as long
 	 */
 	public long readUnsignedInt() {
-		return ((long) readInt() & 0xffffffffL);
+		long value = readUnsignedInt(nextByte);
+		nextByte += 4;
+		return value;
+	}
+
+	/**
+	 * Read an unsigned int
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return unsigned int as long
+	 */
+	public long readUnsignedInt(int offset) {
+		return ((long) readInt(offset) & 0xffffffffL);
 	}
 
 	/**
@@ -211,11 +339,23 @@ public class ByteReader {
 	 * 
 	 * @return float
 	 */
-	public double readFloat() {
-		verifyRemainingBytes(4);
-		float value = ByteBuffer.wrap(bytes, nextByte, 4).order(byteOrder)
-				.getFloat();
+	public float readFloat() {
+		float value = readFloat(nextByte);
 		nextByte += 4;
+		return value;
+	}
+
+	/**
+	 * Read a float
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return float
+	 */
+	public float readFloat(int offset) {
+		verifyRemainingBytes(offset, 4);
+		float value = ByteBuffer.wrap(bytes, offset, 4).order(byteOrder)
+				.getFloat();
 		return value;
 	}
 
@@ -225,26 +365,49 @@ public class ByteReader {
 	 * @return double
 	 */
 	public double readDouble() {
-		verifyRemainingBytes(8);
-		double value = ByteBuffer.wrap(bytes, nextByte, 8).order(byteOrder)
-				.getDouble();
+		double value = readDouble(nextByte);
 		nextByte += 8;
 		return value;
+	}
+
+	/**
+	 * Read a double
+	 * 
+	 * @param offset
+	 *            byte offset
+	 * @return double
+	 */
+	public double readDouble(int offset) {
+		verifyRemainingBytes(offset, 8);
+		double value = ByteBuffer.wrap(bytes, offset, 8).order(byteOrder)
+				.getDouble();
+		return value;
+	}
+
+	/**
+	 * Get the byte length
+	 * 
+	 * @return byte length
+	 */
+	public int byteLength() {
+		return bytes.length;
 	}
 
 	/**
 	 * Verify with the remaining bytes that there are enough remaining to read
 	 * the provided amount
 	 * 
+	 * @param offset
+	 *            byte offset
 	 * @param bytesToRead
 	 *            number of bytes to read
 	 */
-	private void verifyRemainingBytes(int bytesToRead) {
-		if (nextByte + bytesToRead > bytes.length) {
+	private void verifyRemainingBytes(int offset, int bytesToRead) {
+		if (offset + bytesToRead > bytes.length) {
 			throw new IllegalStateException(
 					"No more remaining bytes to read. Total Bytes: "
-							+ bytes.length + ", Bytes already read: "
-							+ nextByte + ", Attempted to read: " + bytesToRead);
+							+ bytes.length + ", Byte offset: " + offset
+							+ ", Attempted to read: " + bytesToRead);
 		}
 	}
 

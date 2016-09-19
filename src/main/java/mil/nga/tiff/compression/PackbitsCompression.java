@@ -4,13 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteOrder;
 
 import mil.nga.tiff.io.ByteReader;
+import mil.nga.tiff.util.TiffException;
 
 /**
- * Packbits Compression Decoder
+ * Packbits Compression
  * 
  * @author osbornb
  */
-public class PackbitsDecoder implements CompressionDecoder {
+public class PackbitsCompression implements CompressionDecoder,
+		CompressionEncoder {
 
 	/**
 	 * {@inheritDoc}
@@ -42,6 +44,14 @@ public class PackbitsDecoder implements CompressionDecoder {
 		byte[] decoded = decodedStream.toByteArray();
 
 		return decoded;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public byte[] encodeBlock(byte[] block, ByteOrder byteOrder) {
+		throw new TiffException("Packbits encoder is not yet implemented");
 	}
 
 }
