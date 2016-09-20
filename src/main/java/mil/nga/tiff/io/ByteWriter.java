@@ -50,6 +50,15 @@ public class ByteWriter {
 	}
 
 	/**
+	 * Get the byte array output stream
+	 * 
+	 * @return byte array output stream
+	 */
+	public ByteArrayOutputStream getOutputStream() {
+		return os;
+	}
+
+	/**
 	 * Get the byte order
 	 * 
 	 * @return byte order

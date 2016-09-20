@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import mil.nga.tiff.compression.CompressionDecoder;
 import mil.nga.tiff.compression.DeflateCompression;
@@ -11,6 +14,7 @@ import mil.nga.tiff.compression.LZWCompression;
 import mil.nga.tiff.compression.PackbitsCompression;
 import mil.nga.tiff.compression.RawCompression;
 import mil.nga.tiff.io.ByteReader;
+import mil.nga.tiff.util.TiffConstants;
 import mil.nga.tiff.util.TiffException;
 
 /**
@@ -24,7 +28,7 @@ public class FileDirectory {
 	/**
 	 * File directory entries in sorted tag id order
 	 */
-	private final List<FileDirectoryEntry> entries;
+	private final SortedSet<FileDirectoryEntry> entries;
 
 	/**
 	 * Mapping between tags and entries
@@ -34,22 +38,22 @@ public class FileDirectory {
 	/**
 	 * Byte reader
 	 */
-	private final ByteReader reader;
+	private ByteReader reader;
 
 	/**
 	 * Tiled flag
 	 */
-	private final boolean tiled;
+	private boolean tiled;
 
 	/**
 	 * Planar configuration
 	 */
-	private final int planarConfiguration;
+	private int planarConfiguration;
 
 	/**
 	 * Compression decoder
 	 */
-	private final CompressionDecoder decoder;
+	private CompressionDecoder decoder;
 
 	/**
 	 * Cache
@@ -57,7 +61,12 @@ public class FileDirectory {
 	private Map<Integer, byte[]> cache = null;
 
 	/**
-	 * Constructor
+	 * Rasters to write to the TIFF file
+	 */
+	private Rasters writeRasters = null;
+
+	/**
+	 * Constructor, for reading TIFF files
 	 * 
 	 * @param entries
 	 *            file directory entries
@@ -66,12 +75,13 @@ public class FileDirectory {
 	 * @param cacheTiles
 	 *            true to cache tiles
 	 */
-	public FileDirectory(List<FileDirectoryEntry> entries, ByteReader reader) {
+	public FileDirectory(SortedSet<FileDirectoryEntry> entries,
+			ByteReader reader) {
 		this(entries, reader, false);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor, for reading TIFF files
 	 * 
 	 * @param entries
 	 *            file directory entries
@@ -80,8 +90,8 @@ public class FileDirectory {
 	 * @param cacheData
 	 *            true to cache tiles and strips
 	 */
-	public FileDirectory(List<FileDirectoryEntry> entries, ByteReader reader,
-			boolean cacheData) {
+	public FileDirectory(SortedSet<FileDirectoryEntry> entries,
+			ByteReader reader, boolean cacheData) {
 		// Set the entries and the field tag type mapping
 		this.entries = entries;
 		for (FileDirectoryEntry entry : entries) {
@@ -98,8 +108,10 @@ public class FileDirectory {
 
 		// Determine and validate the planar configuration
 		Integer pc = getPlanarConfiguration();
-		planarConfiguration = pc != null ? pc : 1;
-		if (planarConfiguration != 1 && planarConfiguration != 2) {
+		planarConfiguration = pc != null ? pc
+				: TiffConstants.PLANAR_CONFIGURATION_CHUNKY;
+		if (planarConfiguration != TiffConstants.PLANAR_CONFIGURATION_CHUNKY
+				&& planarConfiguration != TiffConstants.PLANAR_CONFIGURATION_PLANAR) {
 			throw new TiffException("Invalid planar configuration: "
 					+ planarConfiguration);
 		}
@@ -107,38 +119,82 @@ public class FileDirectory {
 		// Determine the decoder based upon the compression
 		Integer compression = getCompression();
 		if (compression == null) {
-			compression = 1;
+			compression = TiffConstants.COMPRESSION_NO;
 		}
 		switch (compression) {
-		case 1: // No Compression
+		case TiffConstants.COMPRESSION_NO:
 			decoder = new RawCompression();
 			break;
-		case 2: // CCITT Huffman
+		case TiffConstants.COMPRESSION_CCITT_HUFFMAN:
 			throw new TiffException("CCITT Huffman compression not supported: "
 					+ compression);
-		case 3: // T4-encoding
+		case TiffConstants.COMPRESSION_T4:
 			throw new TiffException("T4-encoding compression not supported: "
 					+ compression);
-		case 4: // T6-encoding
+		case TiffConstants.COMPRESSION_T6:
 			throw new TiffException("T6-encoding compression not supported: "
 					+ compression);
-		case 5: // LZW
+		case TiffConstants.COMPRESSION_LZW:
 			decoder = new LZWCompression();
 			break;
-		case 6: // JPEG (old)
-		case 7: // JPEG (new)
+		case TiffConstants.COMPRESSION_JPEG_OLD:
+		case TiffConstants.COMPRESSION_JPEG_NEW:
 			throw new TiffException("JPEG compression not supported: "
 					+ compression);
-		case 8: // Deflate
+		case TiffConstants.COMPRESSION_DEFLATE:
 			decoder = new DeflateCompression();
 			break;
-		case 32773: // packbits
+		case TiffConstants.COMPRESSION_PACKBITS:
 			decoder = new PackbitsCompression();
 			break;
 		default:
 			throw new TiffException("Unknown compression method identifier: "
 					+ compression);
 		}
+	}
+
+	/**
+	 * Constructor, for writing TIFF files
+	 */
+	public FileDirectory() {
+		this(null);
+	}
+
+	/**
+	 * Constructor, for writing TIFF files
+	 * 
+	 * @param rasters
+	 *            image rasters to write
+	 */
+	public FileDirectory(Rasters rasters) {
+		this(new TreeSet<FileDirectoryEntry>(), rasters);
+	}
+
+	/**
+	 * Constructor, for writing TIFF files
+	 * 
+	 * @param entries
+	 *            file directory entries
+	 * @param rasters
+	 *            image rasters to write
+	 */
+	public FileDirectory(SortedSet<FileDirectoryEntry> entries, Rasters rasters) {
+		this.entries = entries;
+		for (FileDirectoryEntry entry : entries) {
+			fieldTagTypeMapping.put(entry.getFieldTag(), entry);
+		}
+		this.writeRasters = rasters;
+	}
+
+	/**
+	 * Add an entry
+	 * 
+	 * @param entry
+	 *            file directory entry
+	 */
+	public void addEntry(FileDirectoryEntry entry) {
+		entries.add(entry);
+		fieldTagTypeMapping.put(entry.getFieldTag(), entry);
 	}
 
 	/**
@@ -210,8 +266,8 @@ public class FileDirectory {
 	 * 
 	 * @return file directory entries
 	 */
-	public List<FileDirectoryEntry> getEntries() {
-		return Collections.unmodifiableList(entries);
+	public Set<FileDirectoryEntry> getEntries() {
+		return Collections.unmodifiableSet(entries);
 	}
 
 	/**
@@ -233,12 +289,52 @@ public class FileDirectory {
 	}
 
 	/**
+	 * Set the image width
+	 * 
+	 * @param width
+	 *            image width
+	 */
+	public void setImageWidth(int width) {
+		setUnsignedIntegerEntryValue(FieldTagType.ImageWidth, width);
+	}
+
+	/**
+	 * Set the image width
+	 * 
+	 * @param width
+	 *            image width
+	 */
+	public void setImageWidth(long width) {
+		setUnsignedLongEntryValue(FieldTagType.ImageWidth, width);
+	}
+
+	/**
 	 * Get the image height
 	 * 
 	 * @return image height
 	 */
 	public Number getImageHeight() {
 		return getNumberEntryValue(FieldTagType.ImageLength);
+	}
+
+	/**
+	 * Set the image height
+	 * 
+	 * @param height
+	 *            image height
+	 */
+	public void setImageHeight(int height) {
+		setUnsignedIntegerEntryValue(FieldTagType.ImageLength, height);
+	}
+
+	/**
+	 * Set the image height
+	 * 
+	 * @param height
+	 *            image height
+	 */
+	public void setImageHeight(long height) {
+		setUnsignedLongEntryValue(FieldTagType.ImageLength, height);
 	}
 
 	/**
@@ -412,6 +508,25 @@ public class FileDirectory {
 	 */
 	public List<Long> getYResolution() {
 		return getLongListEntryValue(FieldTagType.YResolution);
+	}
+
+	/**
+	 * Get the rasters for writing a TIFF file
+	 * 
+	 * @return rasters image rasters
+	 */
+	public Rasters getWriteRasters() {
+		return writeRasters;
+	}
+
+	/**
+	 * Set the rasters for writing a TIFF file
+	 * 
+	 * @param rasters
+	 *            image rasters
+	 */
+	public void setWriteRasters(Rasters rasters) {
+		writeRasters = rasters;
 	}
 
 	/**
@@ -656,7 +771,7 @@ public class FileDirectory {
 		FieldType[] sampleFieldTypes = new FieldType[samples.length];
 		for (int i = 0; i < samples.length; i++) {
 			int sampleOffset = 0;
-			if (planarConfiguration == 1) {
+			if (planarConfiguration == TiffConstants.PLANAR_CONFIGURATION_CHUNKY) {
 				sampleOffset = sum(getBitsPerSample(), 0, samples[i]) / 8;
 			}
 			srcSampleOffsets[i] = sampleOffset;
@@ -673,7 +788,7 @@ public class FileDirectory {
 
 				for (int sampleIndex = 0; sampleIndex < samples.length; sampleIndex++) {
 					int sample = samples[sampleIndex];
-					if (planarConfiguration == 2) {
+					if (planarConfiguration == TiffConstants.PLANAR_CONFIGURATION_PLANAR) {
 						bytesPerPixel = getSampleByteSize(sample);
 					}
 
@@ -785,10 +900,11 @@ public class FileDirectory {
 		FieldType fieldType = null;
 
 		List<Integer> sampleFormat = getSampleFormat();
-		int format = sampleFormat != null ? sampleFormat.get(sampleIndex) : 1;
+		int format = sampleFormat != null ? sampleFormat.get(sampleIndex)
+				: TiffConstants.SAMPLE_FORMAT_UNSIGNED_INT;
 		int bitsPerSample = getBitsPerSample().get(sampleIndex);
 		switch (format) {
-		case 1: // unsigned integer data
+		case TiffConstants.SAMPLE_FORMAT_UNSIGNED_INT:
 			switch (bitsPerSample) {
 			case 8:
 				fieldType = FieldType.BYTE;
@@ -801,7 +917,7 @@ public class FileDirectory {
 				break;
 			}
 			break;
-		case 2: // twos complement signed integer data
+		case TiffConstants.SAMPLE_FORMAT_SIGNED_INT:
 			switch (bitsPerSample) {
 			case 8:
 				fieldType = FieldType.SBYTE;
@@ -814,7 +930,7 @@ public class FileDirectory {
 				break;
 			}
 			break;
-		case 3:
+		case TiffConstants.SAMPLE_FORMAT_FLOAT:
 			switch (bitsPerSample) {
 			case 32:
 				fieldType = FieldType.FLOAT;
@@ -850,9 +966,9 @@ public class FileDirectory {
 				/ getTileHeight().doubleValue());
 
 		int index = 0;
-		if (planarConfiguration == 1) {
+		if (planarConfiguration == TiffConstants.PLANAR_CONFIGURATION_CHUNKY) {
 			index = y * numTilesPerRow + x;
-		} else if (planarConfiguration == 2) {
+		} else if (planarConfiguration == TiffConstants.PLANAR_CONFIGURATION_PLANAR) {
 			index = sample * numTilesPerRow * numTilesPerCol + y
 					* numTilesPerRow + x;
 		}
@@ -946,6 +1062,19 @@ public class FileDirectory {
 	}
 
 	/**
+	 * Set an unsigned integer entry value for the field tag type
+	 * 
+	 * @param fieldTagType
+	 *            field tag type
+	 * @param value
+	 *            unsigned integer value (16 bit)
+	 */
+	private void setUnsignedIntegerEntryValue(FieldTagType fieldTagType,
+			int value) {
+		setEntryValue(fieldTagType, FieldType.SHORT, 1, value);
+	}
+
+	/**
 	 * Get an number entry value
 	 * 
 	 * @param fieldTagType
@@ -954,6 +1083,18 @@ public class FileDirectory {
 	 */
 	private Number getNumberEntryValue(FieldTagType fieldTagType) {
 		return getEntryValue(fieldTagType);
+	}
+
+	/**
+	 * Set an unsigned long entry value for the field tag type
+	 * 
+	 * @param fieldTagType
+	 *            field tag type
+	 * @param value
+	 *            unsigned long value (32 bit)
+	 */
+	private void setUnsignedLongEntryValue(FieldTagType fieldTagType, long value) {
+		setEntryValue(fieldTagType, FieldType.LONG, 1, value);
 	}
 
 	/**
@@ -1020,6 +1161,25 @@ public class FileDirectory {
 			value = (T) entry.getValues();
 		}
 		return value;
+	}
+
+	/**
+	 * Create and set the entry value
+	 * 
+	 * @param fieldTagType
+	 *            field tag type
+	 * @param fieldType
+	 *            field type
+	 * @param typeCount
+	 *            type count
+	 * @param values
+	 *            entry values
+	 */
+	private void setEntryValue(FieldTagType fieldTagType, FieldType fieldType,
+			long typeCount, Object values) {
+		FileDirectoryEntry entry = new FileDirectoryEntry(fieldTagType,
+				fieldType, typeCount, values);
+		addEntry(entry);
 	}
 
 	/**

@@ -24,6 +24,26 @@ public class FileDirectories {
 	}
 
 	/**
+	 * Constructor
+	 * 
+	 * @param fileDirectory
+	 *            file directory
+	 */
+	public FileDirectories(FileDirectory fileDirectory) {
+		this.fileDirectories.add(fileDirectory);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param fileDirectories
+	 *            file directories
+	 */
+	public FileDirectories(List<FileDirectory> fileDirectories) {
+		this.fileDirectories.addAll(fileDirectories);
+	}
+
+	/**
 	 * Add a file directory
 	 * 
 	 * @param fileDirectory

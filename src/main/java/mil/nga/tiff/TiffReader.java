@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import mil.nga.tiff.io.ByteReader;
 import mil.nga.tiff.io.IOUtils;
@@ -189,7 +191,7 @@ public class TiffReader {
 			reader.setNextByte(byteOffset);
 
 			// Create the new directory
-			List<FileDirectoryEntry> entries = new ArrayList<>();
+			SortedSet<FileDirectoryEntry> entries = new TreeSet<>();
 
 			// Read the number of directory entries
 			int numDirectoryEntries = reader.readUnsignedShort();

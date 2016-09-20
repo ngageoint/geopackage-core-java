@@ -45,6 +45,40 @@ public class Rasters {
 	 *            samples per pixel
 	 * @param sampleValues
 	 *            empty sample values double array
+	 */
+	public Rasters(int width, int height, int samplesPerPixel,
+			Number[][] sampleValues) {
+		this(width, height, samplesPerPixel, sampleValues, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param width
+	 *            width of pixels
+	 * @param height
+	 *            height of pixels
+	 * @param samplesPerPixel
+	 *            samples per pixel
+	 * @param interleaveValues
+	 *            empty interleaved values array
+	 */
+	public Rasters(int width, int height, int samplesPerPixel,
+			Number[] interleaveValues) {
+		this(width, height, samplesPerPixel, null, interleaveValues);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param width
+	 *            width of pixels
+	 * @param height
+	 *            height of pixels
+	 * @param samplesPerPixel
+	 *            samples per pixel
+	 * @param sampleValues
+	 *            empty sample values double array
 	 * @param interleaveValues
 	 *            empty interleaved values array
 	 */
@@ -59,6 +93,21 @@ public class Rasters {
 		this.samplesPerPixel = samplesPerPixel;
 		this.sampleValues = sampleValues;
 		this.interleaveValues = interleaveValues;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param width
+	 *            width of pixels
+	 * @param height
+	 *            height of pixels
+	 * @param samplesPerPixel
+	 *            samples per pixel
+	 */
+	public Rasters(int width, int height, int samplesPerPixel) {
+		this(width, height, samplesPerPixel, new Number[samplesPerPixel][width
+				* height]);
 	}
 
 	/**
@@ -170,10 +219,7 @@ public class Rasters {
 	 */
 	public Number[] getPixel(int x, int y) {
 
-		if (x < 0 || x >= width || y < 0 || y > height) {
-			throw new TiffException("Pixel oustide of raster range. Width: "
-					+ width + ", Height: " + height + ", x: " + x + ", y: " + y);
-		}
+		validateCoordinates(x, y);
 
 		// Pixel with each sample value
 		Number[] pixel = new Number[samplesPerPixel];
@@ -195,6 +241,35 @@ public class Rasters {
 	}
 
 	/**
+	 * Set the pixel sample values
+	 * 
+	 * @param x
+	 *            x coordinate (>= 0 && < {@link #getWidth()})
+	 * @param y
+	 *            y coordinate (>= 0 && < {@link #getHeight()})
+	 * @param values
+	 *            pixel values
+	 */
+	public void setPixel(int x, int y, Number[] values) {
+
+		validateCoordinates(x, y);
+		validateSample(values.length + 1);
+
+		// Set the pixel values from each sample
+		if (sampleValues != null) {
+			int sampleIndex = getSampleIndex(x, y);
+			for (int i = 0; i < samplesPerPixel; i++) {
+				sampleValues[i][sampleIndex] = values[i];
+			}
+		} else {
+			int interleaveIndex = getInterleaveIndex(x, y);
+			for (int i = 0; i < samplesPerPixel; i++) {
+				interleaveValues[interleaveIndex++] = values[i];
+			}
+		}
+	}
+
+	/**
 	 * Get a pixel sample value
 	 * 
 	 * @param sample
@@ -207,14 +282,8 @@ public class Rasters {
 	 */
 	public Number getPixelSample(int sample, int x, int y) {
 
-		if (x < 0 || x >= width || y < 0 || y > height) {
-			throw new TiffException("Pixel oustide of raster range. Width: "
-					+ width + ", Height: " + height + ", x: " + x + ", y: " + y);
-		}
-		if (sample < 0 || sample >= samplesPerPixel) {
-			throw new TiffException("Pixel sample out of bounds. sample: "
-					+ sample + ", samples per pixel: " + samplesPerPixel);
-		}
+		validateCoordinates(x, y);
+		validateSample(sample);
 
 		// Pixel sample value
 		Number pixelSample = null;
@@ -232,6 +301,34 @@ public class Rasters {
 	}
 
 	/**
+	 * Set a pixel vample value
+	 * 
+	 * @param sample
+	 *            sample index (>= 0 && < {@link #samplesPerPixel})
+	 * @param x
+	 *            x coordinate (>= 0 && < {@link #getWidth()})
+	 * @param y
+	 *            y coordinate (>= 0 && < {@link #getHeight()})
+	 * @param value
+	 *            pixel value
+	 */
+	public void setPixelSample(int sample, int x, int y, Number value) {
+
+		validateCoordinates(x, y);
+		validateSample(sample);
+
+		// Set the pixel sample
+		if (sampleValues != null) {
+			int sampleIndex = getSampleIndex(x, y);
+			sampleValues[sample][sampleIndex] = value;
+		}
+		if (interleaveValues != null) {
+			int interleaveIndex = getInterleaveIndex(x, y);
+			interleaveValues[interleaveIndex + sample] = value;
+		}
+	}
+
+	/**
 	 * Get the first pixel sample value, useful for single sample pixels
 	 * (grayscale)
 	 * 
@@ -243,6 +340,21 @@ public class Rasters {
 	 */
 	public Number getFirstPixelSample(int x, int y) {
 		return getPixelSample(0, x, y);
+	}
+
+	/**
+	 * Set the first pixel sample value, useful for single sample pixels
+	 * (grayscale)
+	 * 
+	 * @param x
+	 *            x coordinate (>= 0 && < {@link #getWidth()})
+	 * @param y
+	 *            y coordinate (>= 0 && < {@link #getHeight()})
+	 * @param value
+	 *            pixel value
+	 */
+	public void setFirstPixelSample(int x, int y, Number value) {
+		setPixelSample(0, x, y, value);
 	}
 
 	/**
@@ -269,6 +381,34 @@ public class Rasters {
 	 */
 	public int getInterleaveIndex(int x, int y) {
 		return (y * width * samplesPerPixel) + (x * samplesPerPixel);
+	}
+
+	/**
+	 * Validate the coordinates range
+	 * 
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 */
+	private void validateCoordinates(int x, int y) {
+		if (x < 0 || x >= width || y < 0 || y > height) {
+			throw new TiffException("Pixel oustide of raster range. Width: "
+					+ width + ", Height: " + height + ", x: " + x + ", y: " + y);
+		}
+	}
+
+	/**
+	 * Validate the sample index
+	 * 
+	 * @param sample
+	 *            sample index
+	 */
+	private void validateSample(int sample) {
+		if (sample < 0 || sample >= samplesPerPixel) {
+			throw new TiffException("Pixel sample out of bounds. sample: "
+					+ sample + ", samples per pixel: " + samplesPerPixel);
+		}
 	}
 
 }
