@@ -100,11 +100,13 @@ public class ByteWriter {
 	 * 
 	 * @param value
 	 *            string value
+	 * @return bytes written
 	 * @throws IOException
 	 */
-	public void writeString(String value) throws IOException {
+	public int writeString(String value) throws IOException {
 		byte[] valueBytes = value.getBytes();
 		os.write(valueBytes);
+		return valueBytes.length;
 	}
 
 	/**
@@ -125,6 +127,17 @@ public class ByteWriter {
 	 */
 	public void writeUnsignedByte(short value) {
 		os.write((byte) (value & 0xff));
+	}
+
+	/**
+	 * Write the bytes
+	 * 
+	 * @param value
+	 *            bytes
+	 * @throws IOException
+	 */
+	public void writeBytes(byte[] value) throws IOException {
+		os.write(value);
 	}
 
 	/**

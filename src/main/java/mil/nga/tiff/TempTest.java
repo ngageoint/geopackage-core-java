@@ -2,6 +2,8 @@ package mil.nga.tiff;
 
 import java.io.File;
 
+import mil.nga.tiff.util.TiffConstants;
+
 public class TempTest {
 
 	public static void main(String[] args) throws Exception {
@@ -18,24 +20,24 @@ public class TempTest {
 
 		File file = lzw;
 
-		FileDirectories fileDirectories = TiffReader.readTiff(file, true);
-		FileDirectory fileDirectory = fileDirectories.getFileDirectory();
+		TIFFImage tiffImage = TiffReader.readTiff(file, false);
+		FileDirectory fileDirectory = tiffImage.getFileDirectory();
 		Rasters rasters = fileDirectory.readRasters();
 		Rasters rasters2 = fileDirectory.readInterleavedRasters();
 
 		File file2 = packbits;
 
-		FileDirectories fileDirectories2 = TiffReader.readTiff(file2, true);
-		FileDirectory fileDirectory2 = fileDirectories2.getFileDirectory();
-		Rasters rasters2_1 = fileDirectory.readRasters();
-		Rasters rasters2_2 = fileDirectory.readInterleavedRasters();
+		TIFFImage tiffImage2 = TiffReader.readTiff(file2, true);
+		FileDirectory fileDirectory2 = tiffImage2.getFileDirectory();
+		Rasters rasters2_1 = fileDirectory2.readRasters();
+		Rasters rasters2_2 = fileDirectory2.readInterleavedRasters();
 
 		File file3 = stripped;
 
-		FileDirectories fileDirectories3 = TiffReader.readTiff(file3, true);
-		FileDirectory fileDirectory3 = fileDirectories3.getFileDirectory();
-		Rasters rasters3_1 = fileDirectory.readRasters();
-		Rasters rasters3_2 = fileDirectory.readInterleavedRasters();
+		TIFFImage tiffImage3 = TiffReader.readTiff(file3, true);
+		FileDirectory fileDirectory3 = tiffImage3.getFileDirectory();
+		Rasters rasters3_1 = fileDirectory3.readRasters();
+		Rasters rasters3_2 = fileDirectory3.readInterleavedRasters();
 
 		for (int i = 0; i < rasters.getSampleValues().length; i++) {
 			for (int j = 0; j < rasters.getSampleValues()[i].length; j++) {
@@ -98,6 +100,31 @@ public class TempTest {
 					}
 
 				}
+			}
+		}
+
+		fileDirectory.setWriteRasters(rasters);
+		fileDirectory.setCompression(TiffConstants.COMPRESSION_NO);
+		byte[] tiffBytes = TiffWriter.writeTiffToBytes(tiffImage);
+
+		TIFFImage tiffImage4 = TiffReader.readTiff(tiffBytes, false);
+		FileDirectory fileDirectory4 = tiffImage4.getFileDirectory();
+		Rasters rasters4_1 = fileDirectory4.readRasters();
+		Rasters rasters4_2 = fileDirectory4.readInterleavedRasters();
+
+		for (int i = 0; i < rasters.getSampleValues().length; i++) {
+			for (int j = 0; j < rasters.getSampleValues()[i].length; j++) {
+				if (!rasters.getSampleValues()[i][j].equals(rasters4_1
+						.getSampleValues()[i][j])) {
+					System.out.println("Compression values do not match");
+				}
+			}
+		}
+
+		for (int i = 0; i < rasters2.getInterleaveValues().length; i++) {
+			if (!rasters2.getInterleaveValues()[i].equals(rasters4_2
+					.getInterleaveValues()[i])) {
+				System.out.println("Compression values do not match");
 			}
 		}
 

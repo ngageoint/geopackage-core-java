@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mil.nga.tiff.util.TiffConstants;
+
 /**
- * File Directories
+ * TIFF Image containing the File Directories
  * 
  * @author osbornb
  */
-public class FileDirectories {
+public class TIFFImage {
 
 	/**
 	 * File directories
@@ -19,27 +21,27 @@ public class FileDirectories {
 	/**
 	 * Constructor
 	 */
-	public FileDirectories() {
+	public TIFFImage() {
 
 	}
 
 	/**
-	 * Constructor
+	 * Constructor, single file directory
 	 * 
 	 * @param fileDirectory
 	 *            file directory
 	 */
-	public FileDirectories(FileDirectory fileDirectory) {
+	public TIFFImage(FileDirectory fileDirectory) {
 		this.fileDirectories.add(fileDirectory);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor, multiple file directories
 	 * 
 	 * @param fileDirectories
 	 *            file directories
 	 */
-	public FileDirectories(List<FileDirectory> fileDirectories) {
+	public TIFFImage(List<FileDirectory> fileDirectories) {
 		this.fileDirectories.addAll(fileDirectories);
 	}
 
@@ -80,6 +82,33 @@ public class FileDirectories {
 	 */
 	public FileDirectory getFileDirectory(int index) {
 		return fileDirectories.get(index);
+	}
+
+	/**
+	 * Size in bytes of the TIFF header and file directories with their entries
+	 * 
+	 * @return size in bytes
+	 */
+	public long sizeHeaderAndDirectories() {
+		long size = TiffConstants.HEADER_BYTES;
+		for (FileDirectory directory : fileDirectories) {
+			size += directory.size();
+		}
+		return size;
+	}
+
+	/**
+	 * Size in bytes of the TIFF header and file directories with their entries
+	 * and entry values
+	 * 
+	 * @return size in bytes
+	 */
+	public long sizeHeaderAndDirectoriesWithValues() {
+		long size = TiffConstants.HEADER_BYTES;
+		for (FileDirectory directory : fileDirectories) {
+			size += directory.sizeWithValues();
+		}
+		return size;
 	}
 
 }

@@ -1,5 +1,7 @@
 package mil.nga.tiff;
 
+import mil.nga.tiff.util.TiffConstants;
+
 /**
  * TIFF File Directory Entry
  * 
@@ -81,6 +83,31 @@ public class FileDirectoryEntry implements Comparable<FileDirectoryEntry> {
 	 */
 	public Object getValues() {
 		return values;
+	}
+
+	/**
+	 * Size in bytes of the image file directory entry and its values (not
+	 * contiguous bytes)
+	 * 
+	 * @return size in bytes
+	 */
+	public long sizeWithValues() {
+		long size = TiffConstants.IFD_ENTRY_BYTES + sizeOfValues();
+		return size;
+	}
+
+	/**
+	 * Size of the values not included in the directory entry bytes
+	 * 
+	 * @return size in bytes
+	 */
+	public long sizeOfValues() {
+		long size = 0;
+		long valueBytes = fieldType.getBytes() * typeCount;
+		if (valueBytes > 4) {
+			size = valueBytes;
+		}
+		return size;
 	}
 
 	/**

@@ -27,10 +27,10 @@ public class TiffReader {
 	 * 
 	 * @param reader
 	 *            byte reader
-	 * @return file directories
+	 * @return TIFF image
 	 * @throws IOException
 	 */
-	public static FileDirectories readTiff(File file) throws IOException {
+	public static TIFFImage readTiff(File file) throws IOException {
 		return readTiff(file, false);
 	}
 
@@ -41,14 +41,14 @@ public class TiffReader {
 	 *            byte reader
 	 * @param cache
 	 *            true to cache tiles and strips
-	 * @return file directories
+	 * @return TIFF image
 	 * @throws IOException
 	 */
-	public static FileDirectories readTiff(File file, boolean cache)
+	public static TIFFImage readTiff(File file, boolean cache)
 			throws IOException {
 		byte[] bytes = IOUtils.fileBytes(file);
-		FileDirectories fileDirectories = readTiff(bytes, cache);
-		return fileDirectories;
+		TIFFImage tiffImage = readTiff(bytes, cache);
+		return tiffImage;
 	}
 
 	/**
@@ -56,11 +56,10 @@ public class TiffReader {
 	 * 
 	 * @param reader
 	 *            byte reader
-	 * @return file directories
+	 * @return TIFF image
 	 * @throws IOException
 	 */
-	public static FileDirectories readTiff(InputStream stream)
-			throws IOException {
+	public static TIFFImage readTiff(InputStream stream) throws IOException {
 		return readTiff(stream, false);
 	}
 
@@ -71,14 +70,14 @@ public class TiffReader {
 	 *            byte reader
 	 * @param cache
 	 *            true to cache tiles and strips
-	 * @return file directories
+	 * @return TIFF image
 	 * @throws IOException
 	 */
-	public static FileDirectories readTiff(InputStream stream, boolean cache)
+	public static TIFFImage readTiff(InputStream stream, boolean cache)
 			throws IOException {
 		byte[] bytes = IOUtils.streamBytes(stream);
-		FileDirectories fileDirectories = readTiff(bytes, cache);
-		return fileDirectories;
+		TIFFImage tiffImage = readTiff(bytes, cache);
+		return tiffImage;
 	}
 
 	/**
@@ -86,9 +85,9 @@ public class TiffReader {
 	 * 
 	 * @param reader
 	 *            byte reader
-	 * @return file directories
+	 * @return TIFF image
 	 */
-	public static FileDirectories readTiff(byte[] bytes) {
+	public static TIFFImage readTiff(byte[] bytes) {
 		return readTiff(bytes, false);
 	}
 
@@ -99,12 +98,12 @@ public class TiffReader {
 	 *            byte reader
 	 * @param cache
 	 *            true to cache tiles and strips
-	 * @return file directories
+	 * @return TIFF image
 	 */
-	public static FileDirectories readTiff(byte[] bytes, boolean cache) {
+	public static TIFFImage readTiff(byte[] bytes, boolean cache) {
 		ByteReader reader = new ByteReader(bytes);
-		FileDirectories fileDirectories = readTiff(reader, cache);
-		return fileDirectories;
+		TIFFImage tiffImage = readTiff(reader, cache);
+		return tiffImage;
 	}
 
 	/**
@@ -112,9 +111,9 @@ public class TiffReader {
 	 * 
 	 * @param reader
 	 *            byte reader
-	 * @return file directories
+	 * @return TIFF image
 	 */
-	public static FileDirectories readTiff(ByteReader reader) {
+	public static TIFFImage readTiff(ByteReader reader) {
 		return readTiff(reader, false);
 	}
 
@@ -125,9 +124,9 @@ public class TiffReader {
 	 *            byte reader
 	 * @param cache
 	 *            true to cache tiles and strips
-	 * @return file directories
+	 * @return TIFF image
 	 */
-	public static FileDirectories readTiff(ByteReader reader, boolean cache) {
+	public static TIFFImage readTiff(ByteReader reader, boolean cache) {
 
 		// Read the 2 bytes of byte order
 		String byteOrderString = null;
@@ -160,15 +159,14 @@ public class TiffReader {
 		// Get the offset in bytes of the first image file directory (IFD)
 		int byteOffset = (int) reader.readUnsignedInt();
 
-		// Get the file directories
-		FileDirectories directories = parseFileDirectories(reader, byteOffset,
-				cache);
+		// Get the TIFF Image
+		TIFFImage tiffImage = parseTIFFImage(reader, byteOffset, cache);
 
-		return directories;
+		return tiffImage;
 	}
 
 	/**
-	 * Parse the file directories
+	 * Parse the TIFF Image with file directories
 	 * 
 	 * @param reader
 	 *            byte reader
@@ -176,12 +174,12 @@ public class TiffReader {
 	 *            byte offset
 	 * @param cache
 	 *            true to cache tiles and strips
-	 * @return file directories
+	 * @return TIFF image
 	 */
-	private static FileDirectories parseFileDirectories(ByteReader reader,
-			int byteOffset, boolean cache) {
+	private static TIFFImage parseTIFFImage(ByteReader reader, int byteOffset,
+			boolean cache) {
 
-		FileDirectories directories = new FileDirectories();
+		TIFFImage tiffImage = new TIFFImage();
 
 		// Continue until the byte offset no longer points to another file
 		// directory
@@ -225,13 +223,13 @@ public class TiffReader {
 			// Add the file directory
 			FileDirectory fileDirectory = new FileDirectory(entries, reader,
 					cache);
-			directories.add(fileDirectory);
+			tiffImage.add(fileDirectory);
 
 			// Read the next byte offset location
 			byteOffset = (int) reader.readUnsignedInt();
 		}
 
-		return directories;
+		return tiffImage;
 	}
 
 	/**

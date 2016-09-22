@@ -1,5 +1,7 @@
 package mil.nga.tiff;
 
+import java.util.List;
+
 import mil.nga.tiff.util.TiffException;
 
 /**
@@ -35,6 +37,11 @@ public class Rasters {
 	private final int samplesPerPixel;
 
 	/**
+	 * Bits per sample
+	 */
+	private final List<Integer> bitsPerSample;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param width
@@ -43,12 +50,14 @@ public class Rasters {
 	 *            height of pixels
 	 * @param samplesPerPixel
 	 *            samples per pixel
+	 * @param bitsPerSample
+	 *            bits per sample
 	 * @param sampleValues
 	 *            empty sample values double array
 	 */
 	public Rasters(int width, int height, int samplesPerPixel,
-			Number[][] sampleValues) {
-		this(width, height, samplesPerPixel, sampleValues, null);
+			List<Integer> bitsPerSample, Number[][] sampleValues) {
+		this(width, height, samplesPerPixel, bitsPerSample, sampleValues, null);
 	}
 
 	/**
@@ -60,30 +69,36 @@ public class Rasters {
 	 *            height of pixels
 	 * @param samplesPerPixel
 	 *            samples per pixel
+	 * @param bitsPerSample
+	 *            bits per sample
 	 * @param interleaveValues
 	 *            empty interleaved values array
 	 */
 	public Rasters(int width, int height, int samplesPerPixel,
+			List<Integer> bitsPerSample, Number[] interleaveValues) {
+		this(width, height, samplesPerPixel, bitsPerSample, null,
+				interleaveValues);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param width
+	 *            width of pixels
+	 * @param height
+	 *            height of pixels
+	 * @param samplesPerPixel
+	 *            samples per pixel
+	 * @param bitsPerSample
+	 *            bits per sample
+	 * @param sampleValues
+	 *            empty sample values double array
+	 * @param interleaveValues
+	 *            empty interleaved values array
+	 */
+	public Rasters(int width, int height, int samplesPerPixel,
+			List<Integer> bitsPerSample, Number[][] sampleValues,
 			Number[] interleaveValues) {
-		this(width, height, samplesPerPixel, null, interleaveValues);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param width
-	 *            width of pixels
-	 * @param height
-	 *            height of pixels
-	 * @param samplesPerPixel
-	 *            samples per pixel
-	 * @param sampleValues
-	 *            empty sample values double array
-	 * @param interleaveValues
-	 *            empty interleaved values array
-	 */
-	public Rasters(int width, int height, int samplesPerPixel,
-			Number[][] sampleValues, Number[] interleaveValues) {
 		if (sampleValues == null && interleaveValues == null) {
 			throw new TiffException(
 					"Results must be sample and/or interleave based");
@@ -91,8 +106,15 @@ public class Rasters {
 		this.width = width;
 		this.height = height;
 		this.samplesPerPixel = samplesPerPixel;
+		this.bitsPerSample = bitsPerSample;
 		this.sampleValues = sampleValues;
 		this.interleaveValues = interleaveValues;
+		for (int bits : bitsPerSample) {
+			if ((bits % 8) != 0) {
+				throw new TiffException("Sample bit-width of " + bits
+						+ " is not supported");
+			}
+		}
 	}
 
 	/**
@@ -104,10 +126,13 @@ public class Rasters {
 	 *            height of pixels
 	 * @param samplesPerPixel
 	 *            samples per pixel
+	 * @param bitsPerSample
+	 *            bits per sample
 	 */
-	public Rasters(int width, int height, int samplesPerPixel) {
-		this(width, height, samplesPerPixel, new Number[samplesPerPixel][width
-				* height]);
+	public Rasters(int width, int height, int samplesPerPixel,
+			List<Integer> bitsPerSample) {
+		this(width, height, samplesPerPixel, bitsPerSample,
+				new Number[samplesPerPixel][width * height]);
 	}
 
 	/**
@@ -188,6 +213,15 @@ public class Rasters {
 	 */
 	public int getSamplesPerPixel() {
 		return samplesPerPixel;
+	}
+
+	/**
+	 * Get the bits per sample
+	 * 
+	 * @return bits per sample
+	 */
+	public List<Integer> getBitsPerSample() {
+		return bitsPerSample;
 	}
 
 	/**
@@ -381,6 +415,39 @@ public class Rasters {
 	 */
 	public int getInterleaveIndex(int x, int y) {
 		return (y * width * samplesPerPixel) + (x * samplesPerPixel);
+	}
+
+	/**
+	 * Size in bytes of the image
+	 * 
+	 * @return bytes
+	 */
+	public int size() {
+		return getNumPixels() * sizePixel();
+	}
+
+	/**
+	 * Size in bytes of a pixel
+	 * 
+	 * @return bytes
+	 */
+	public int sizePixel() {
+		int size = 0;
+		for (int i = 0; i < samplesPerPixel; i++) {
+			size += sizeSample(i);
+		}
+		return size;
+	}
+
+	/**
+	 * Size in bytes of a sample
+	 * 
+	 * @param sample
+	 *            sample index
+	 * @return bytes
+	 */
+	public int sizeSample(int sample) {
+		return bitsPerSample.get(sample) / 8;
 	}
 
 	/**
