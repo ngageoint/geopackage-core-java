@@ -256,24 +256,34 @@ public class TiffWriter {
 		// Get the compression encoder
 		CompressionEncoder encoder = getEncoder(fileDirectory);
 
+		writeFillerBytes(writer, 1); // TODO temporary for align tiff file bytes
+
+		int stripsPerSample = fileDirectory.getStripOffsets().size();
+		if (fileDirectory.getPlanarConfiguration() == TiffConstants.PLANAR_CONFIGURATION_PLANAR) {
+			stripsPerSample = stripsPerSample / rasters.getSamplesPerPixel();
+		}
+
 		// Write each strip
 		for (int strip = 0; strip < fileDirectory.getStripOffsets().size(); strip++) {
 
+			int startingY;
 			Integer sample = null;
 			if (fileDirectory.getPlanarConfiguration() == TiffConstants.PLANAR_CONFIGURATION_PLANAR) {
-				sample = (int) (strip / Math.ceil(fileDirectory
-						.getImageHeight().doubleValue()
-						/ fileDirectory.getRowsPerStrip().doubleValue()));
+				sample = strip / stripsPerSample;
+				startingY = strip % stripsPerSample;
+			} else {
+				startingY = strip * fileDirectory.getRowsPerStrip().intValue();
 			}
 
 			// Write the block of bytes
 			ByteWriter blockWriter = new ByteWriter(writer.getByteOrder());
 			int bytesWritten = 0;
-			for (int y = 0; y < fileDirectory.getRowsPerStrip().intValue(); y++) {
+
+			int endingY = startingY
+					+ fileDirectory.getRowsPerStrip().intValue();
+			for (int y = startingY; y < endingY; y++) {
 				for (int x = 0; x < fileDirectory.getImageWidth().intValue(); x++) {
 
-					// TODO wrong x and y values
-					
 					if (sample != null) {
 						Number value = rasters.getPixelSample(sample, x, y);
 						FieldType fieldType = sampleFieldTypes[sample];

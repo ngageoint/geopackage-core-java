@@ -18,7 +18,7 @@ public class TempTest {
 		File lzw = new File(
 				"/Users/osbornb/Documents/geotiff.js-master/test/data/lzw.tiff");
 
-		File file = lzw;
+		File file = stripped;
 
 		TIFFImage tiffImage = TiffReader.readTiff(file, false);
 		FileDirectory fileDirectory = tiffImage.getFileDirectory();
@@ -32,7 +32,7 @@ public class TempTest {
 		Rasters rasters2_1 = fileDirectory2.readRasters();
 		Rasters rasters2_2 = fileDirectory2.readInterleavedRasters();
 
-		File file3 = stripped;
+		File file3 = lzw;
 
 		TIFFImage tiffImage3 = TiffReader.readTiff(file3, true);
 		FileDirectory fileDirectory3 = tiffImage3.getFileDirectory();
@@ -112,10 +112,22 @@ public class TempTest {
 		Rasters rasters4_1 = fileDirectory4.readRasters();
 		Rasters rasters4_2 = fileDirectory4.readInterleavedRasters();
 
+		fileDirectory.setWriteRasters(rasters);
+		fileDirectory
+				.setPlanarConfiguration(TiffConstants.PLANAR_CONFIGURATION_PLANAR);
+		byte[] tiffBytes2 = TiffWriter.writeTiffToBytes(tiffImage);
+
+		TIFFImage tiffImage5 = TiffReader.readTiff(tiffBytes2, false);
+		FileDirectory fileDirectory5 = tiffImage5.getFileDirectory();
+		Rasters rasters5_1 = fileDirectory5.readRasters();
+		Rasters rasters5_2 = fileDirectory5.readInterleavedRasters();
+
 		for (int i = 0; i < rasters.getSampleValues().length; i++) {
 			for (int j = 0; j < rasters.getSampleValues()[i].length; j++) {
 				if (!rasters.getSampleValues()[i][j].equals(rasters4_1
-						.getSampleValues()[i][j])) {
+						.getSampleValues()[i][j])
+						|| !rasters.getSampleValues()[i][j].equals(rasters5_1
+								.getSampleValues()[i][j])) {
 					System.out.println("Compression values do not match");
 				}
 			}
@@ -123,7 +135,9 @@ public class TempTest {
 
 		for (int i = 0; i < rasters2.getInterleaveValues().length; i++) {
 			if (!rasters2.getInterleaveValues()[i].equals(rasters4_2
-					.getInterleaveValues()[i])) {
+					.getInterleaveValues()[i])
+					|| !rasters2.getInterleaveValues()[i].equals(rasters5_2
+							.getInterleaveValues()[i])) {
 				System.out.println("Compression values do not match");
 			}
 		}
