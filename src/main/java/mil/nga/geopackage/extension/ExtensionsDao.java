@@ -77,7 +77,8 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Delete by extension name
 	 * 
 	 * @param extensionName
-	 * @return
+	 *            extension name
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByExtension(String extensionName) throws SQLException {
@@ -94,8 +95,10 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Delete by extension name and table name
 	 * 
 	 * @param extensionName
+	 *            extension name
 	 * @param tableName
-	 * @return
+	 *            table name
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByExtension(String extensionName, String tableName)
@@ -114,9 +117,12 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Delete by extension name, table name, and column name
 	 * 
 	 * @param extensionName
+	 *            extension name
 	 * @param tableName
+	 *            table name
 	 * @param columnName
-	 * @return
+	 *            column name
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByExtension(String extensionName, String tableName,
@@ -136,6 +142,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Delete by table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @return rows deleted
 	 * @since 1.1.8
 	 */
@@ -163,12 +170,13 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 
 		return deleted;
 	}
-	
+
 	/**
 	 * Query by extension name
 	 * 
 	 * @param extensionName
-	 * @return
+	 *            extension name
+	 * @return extensions
 	 * @throws SQLException
 	 */
 	public List<Extensions> queryByExtension(String extensionName)
@@ -187,8 +195,10 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Query by extension name and table name
 	 * 
 	 * @param extensionName
+	 *            extension name
 	 * @param tableName
-	 * @return
+	 *            table name
+	 * @return extensions
 	 * @throws SQLException
 	 */
 	public List<Extensions> queryByExtension(String extensionName,
@@ -207,9 +217,12 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Query by extension name, table name, and column name
 	 * 
 	 * @param extensionName
+	 *            extension name
 	 * @param tableName
+	 *            table name
 	 * @param columnName
-	 * @return
+	 *            column name
+	 * @return extensions
 	 * @throws SQLException
 	 */
 	public Extensions queryByExtension(String extensionName, String tableName,
@@ -240,11 +253,17 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Set the unique column criteria in the where clause
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param extensionName
+	 *            extension name
 	 * @param queryTableName
+	 *            query table name
 	 * @param tableName
+	 *            table name
 	 * @param queryColumnName
+	 *            query column name
 	 * @param columnName
+	 *            column name
 	 * @throws SQLException
 	 */
 	private void setUniqueWhere(Where<Extensions, Void> where,

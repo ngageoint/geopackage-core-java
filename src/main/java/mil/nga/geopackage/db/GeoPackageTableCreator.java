@@ -33,6 +33,7 @@ public class GeoPackageTableCreator {
 	 * Constructor
 	 * 
 	 * @param db
+	 *            db connection
 	 */
 	public GeoPackageTableCreator(GeoPackageCoreConnection db) {
 		this.db = db;
@@ -41,7 +42,7 @@ public class GeoPackageTableCreator {
 	/**
 	 * Create Spatial Reference System table and views
 	 * 
-	 * @return
+	 * @return executed statements
 	 */
 	public int createSpatialReferenceSystem() {
 		return createTable(GeoPackageProperties.getProperty(
@@ -51,7 +52,7 @@ public class GeoPackageTableCreator {
 	/**
 	 * Create Contents table
 	 * 
-	 * @return
+	 * @return executed statements
 	 */
 	public int createContents() {
 		return createTable(GeoPackageProperties.getProperty(
@@ -197,7 +198,8 @@ public class GeoPackageTableCreator {
 	 * Create a table using the table script
 	 * 
 	 * @param tableScript
-	 * @return
+	 *            table script
+	 * @return executed statements
 	 */
 	private int createTable(String tableScript) {
 		InputStream scriptStream = getClass().getResourceAsStream(
@@ -213,6 +215,7 @@ public class GeoPackageTableCreator {
 	 * Run the script input stream
 	 * 
 	 * @param stream
+	 *            input stream
 	 * @return executed statements
 	 */
 	private int runScript(final InputStream stream) {
@@ -238,7 +241,7 @@ public class GeoPackageTableCreator {
 	 * Create the user defined table
 	 * 
 	 * @param table
-	 * @param <TColumn>
+	 *            user table
 	 */
 	public <TColumn extends UserColumn> void createTable(
 			UserTable<TColumn> table) {
@@ -252,7 +255,9 @@ public class GeoPackageTableCreator {
 
 		// Build the create table sql
 		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE ").append(CoreSQLUtils.quoteWrap(table.getTableName())).append(" (");
+		sql.append("CREATE TABLE ")
+				.append(CoreSQLUtils.quoteWrap(table.getTableName()))
+				.append(" (");
 
 		// Add each column to the sql
 		List<? extends UserColumn> columns = table.getColumns();
@@ -261,8 +266,8 @@ public class GeoPackageTableCreator {
 			if (i > 0) {
 				sql.append(",");
 			}
-			sql.append("\n  ").append(CoreSQLUtils.quoteWrap(column.getName())).append(" ")
-					.append(column.getTypeName());
+			sql.append("\n  ").append(CoreSQLUtils.quoteWrap(column.getName()))
+					.append(" ").append(column.getTypeName());
 			if (column.getMax() != null) {
 				sql.append("(").append(column.getMax()).append(")");
 			}
@@ -328,6 +333,7 @@ public class GeoPackageTableCreator {
 	 * Drop the table if it exists
 	 * 
 	 * @param table
+	 *            table name
 	 * @since 1.1.5
 	 */
 	public void dropTable(String table) {

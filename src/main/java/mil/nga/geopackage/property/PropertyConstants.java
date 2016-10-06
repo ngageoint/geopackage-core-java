@@ -50,9 +50,9 @@ public class PropertyConstants {
 	public static final String DESCRIPTION = "description";
 
 	/**
-	 * @since 1.1.8
+	 * @since 1.2.1
 	 */
-	public static final String DEFINITION_12_163 = "definition_12_163";
+	public static final String DEFINITION_12_063 = "definition_12_063";
 
 	public static final String SQL = "sql";
 

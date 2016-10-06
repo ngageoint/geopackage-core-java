@@ -15,7 +15,8 @@ public class TileColumn extends UserColumn {
 	 * Create an id column
 	 * 
 	 * @param index
-	 * @return
+	 *            index
+	 * @return tile column
 	 */
 	public static TileColumn createIdColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_ID,
@@ -26,7 +27,8 @@ public class TileColumn extends UserColumn {
 	 * Create a zoom level column
 	 * 
 	 * @param index
-	 * @return
+	 *            index
+	 * @return tile column
 	 */
 	public static TileColumn createZoomLevelColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_ZOOM_LEVEL,
@@ -37,7 +39,8 @@ public class TileColumn extends UserColumn {
 	 * Create a tile column column
 	 * 
 	 * @param index
-	 * @return
+	 *            index
+	 * @return tile column
 	 */
 	public static TileColumn createTileColumnColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_COLUMN,
@@ -48,7 +51,8 @@ public class TileColumn extends UserColumn {
 	 * Create a tile row column
 	 * 
 	 * @param index
-	 * @return
+	 *            index
+	 * @return tile column
 	 */
 	public static TileColumn createTileRowColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_ROW,
@@ -59,7 +63,8 @@ public class TileColumn extends UserColumn {
 	 * Create a tile data column
 	 * 
 	 * @param index
-	 * @return
+	 *            index
+	 * @return tile column
 	 */
 	public static TileColumn createTileDataColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_DATA,
@@ -70,11 +75,16 @@ public class TileColumn extends UserColumn {
 	 * Create a new column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param type
+	 *            type
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
-	 * @return
+	 *            default value
+	 * @return tile column
 	 */
 	public static TileColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -85,12 +95,18 @@ public class TileColumn extends UserColumn {
 	 * Create a new column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param type
+	 *            type
 	 * @param max
+	 *            max value
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
-	 * @return
+	 *            default value
+	 * @return tile column
 	 */
 	public static TileColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max, boolean notNull,
@@ -103,12 +119,19 @@ public class TileColumn extends UserColumn {
 	 * Constructor
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param dataType
+	 *            data type
 	 * @param max
+	 *            max value
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
+	 *            default value
 	 * @param primaryKey
+	 *            primary key
 	 */
 	TileColumn(int index, String name, GeoPackageDataType dataType, Long max,
 			boolean notNull, Object defaultValue, boolean primaryKey) {

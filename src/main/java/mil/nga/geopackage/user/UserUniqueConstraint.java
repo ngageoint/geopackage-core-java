@@ -29,7 +29,8 @@ public class UserUniqueConstraint<TColumn extends UserColumn> {
 	 * 
 	 * @param columns
 	 */
-	public UserUniqueConstraint(@SuppressWarnings("unchecked") TColumn... columns) {
+	public UserUniqueConstraint(
+			@SuppressWarnings("unchecked") TColumn... columns) {
 		for (TColumn column : columns) {
 			add(column);
 		}
@@ -47,7 +48,7 @@ public class UserUniqueConstraint<TColumn extends UserColumn> {
 	/**
 	 * Get the columns
 	 * 
-	 * @return
+	 * @return columns
 	 */
 	public List<TColumn> getColumns() {
 		return columns;

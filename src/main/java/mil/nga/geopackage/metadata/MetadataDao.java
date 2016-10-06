@@ -40,7 +40,8 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Delete the Metadata, cascading
 	 * 
 	 * @param metadata
-	 * @return
+	 *            metadata
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Metadata metadata) throws SQLException {
@@ -63,7 +64,8 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Delete the collection of Metadata, cascading
 	 * 
 	 * @param metadataCollection
-	 * @return
+	 *            metadata collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Collection<Metadata> metadataCollection)
@@ -81,7 +83,8 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Delete the Metadata matching the prepared query, cascading
 	 * 
 	 * @param preparedDelete
-	 * @return
+	 *            prepared delete query
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<Metadata> preparedDelete)
@@ -98,7 +101,8 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Delete a Metadata by id, cascading
 	 * 
 	 * @param id
-	 * @return
+	 *            id
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByIdCascade(Long id) throws SQLException {
@@ -116,7 +120,8 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Delete the Metadata with the provided ids, cascading
 	 * 
 	 * @param idCollection
-	 * @return
+	 *            id collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteIdsCascade(Collection<Long> idCollection)
@@ -133,7 +138,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	/**
 	 * Get or create a Metadata Reference DAO
 	 * 
-	 * @return
+	 * @return metadata reference dao
 	 * @throws SQLException
 	 */
 	private MetadataReferenceDao getMetadataReferenceDao() throws SQLException {

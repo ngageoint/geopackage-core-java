@@ -188,6 +188,7 @@ public class GeometryIndexDao extends
 	 * Query by table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @return geometry indices
 	 */
 	public List<GeometryIndex> queryForTableName(String tableName) {
@@ -206,9 +207,12 @@ public class GeometryIndexDao extends
 	 * Populate a new geometry index from an envelope
 	 *
 	 * @param tableIndex
+	 *            table index
 	 * @param geomId
+	 *            geometry id
 	 * @param envelope
-	 * @return
+	 *            geometry envelope
+	 * @return geometry index
 	 */
 	public GeometryIndex populate(TableIndex tableIndex, long geomId,
 			GeometryEnvelope envelope) {

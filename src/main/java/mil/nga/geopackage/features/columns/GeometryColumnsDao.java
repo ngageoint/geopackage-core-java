@@ -39,7 +39,7 @@ public class GeometryColumnsDao extends
 	/**
 	 * Get all the feature table names
 	 * 
-	 * @return
+	 * @return feature tables
 	 * @throws SQLException
 	 */
 	public List<String> getFeatureTables() throws SQLException {
@@ -200,7 +200,7 @@ public class GeometryColumnsDao extends
 	 * Query for the table name
 	 * 
 	 * @param tableName
-	 * @return
+	 * @return geometry columns
 	 * @throws SQLException
 	 */
 	public GeometryColumns queryForTableName(String tableName)

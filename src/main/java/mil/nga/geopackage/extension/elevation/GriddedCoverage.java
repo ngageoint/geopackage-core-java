@@ -55,11 +55,6 @@ public class GriddedCoverage {
 	public static final String COLUMN_DATA_NULL = "data_null";
 
 	/**
-	 * dataMissing column // TODO this might be removed from the spec
-	 */
-	public static final String COLUMN_DATA_MISSING = "data_missing";
-
-	/**
 	 * Auto increment primary key
 	 */
 	@DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
@@ -106,12 +101,6 @@ public class GriddedCoverage {
 	 */
 	@DatabaseField(columnName = COLUMN_DATA_NULL)
 	private Double dataNull;
-
-	/**
-	 * The value that indicates data is missing
-	 */
-	@DatabaseField(columnName = COLUMN_DATA_MISSING)
-	private Double dataMissing;
 
 	/**
 	 * Default Constructor
@@ -255,25 +244,6 @@ public class GriddedCoverage {
 	 */
 	public void setDataNull(Double dataNull) {
 		this.dataNull = dataNull;
-	}
-
-	/**
-	 * Get the value that indicates data is missing
-	 * 
-	 * @return value that indicates data is missing
-	 */
-	public Double getDataMissing() {
-		return dataMissing;
-	}
-
-	/**
-	 * Set the value that indicates data is missing
-	 * 
-	 * @param dataMissing
-	 *            value that indicates data is missing
-	 */
-	public void setDataMissing(Double dataMissing) {
-		this.dataMissing = dataMissing;
 	}
 
 }

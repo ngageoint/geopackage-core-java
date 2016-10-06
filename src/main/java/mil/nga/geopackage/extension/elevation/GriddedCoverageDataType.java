@@ -35,7 +35,7 @@ public enum GriddedCoverageDataType {
 	/**
 	 * Get the name
 	 * 
-	 * @return
+	 * @return name
 	 */
 	public String getName() {
 		return name;
@@ -45,7 +45,8 @@ public enum GriddedCoverageDataType {
 	 * Get the Data Type from the name
 	 * 
 	 * @param name
-	 * @return
+	 *            name
+	 * @return data type
 	 */
 	public static GriddedCoverageDataType fromName(String name) {
 		GriddedCoverageDataType dataType = null;

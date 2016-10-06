@@ -52,7 +52,8 @@ public class ProjectionTransform {
 	 * Transform the projected coordinate
 	 * 
 	 * @param from
-	 * @return
+	 *            from coordinate
+	 * @return to coordinate
 	 */
 	public ProjCoordinate transform(ProjCoordinate from) {
 		ProjCoordinate to = new ProjCoordinate();
@@ -97,7 +98,8 @@ public class ProjectionTransform {
 	 * Transform the bounding box
 	 * 
 	 * @param boundingBox
-	 * @return
+	 *            bounding box
+	 * @return bounding box
 	 */
 	public BoundingBox transform(BoundingBox boundingBox) {
 
@@ -130,7 +132,10 @@ public class ProjectionTransform {
 	 * Transform a x and y location
 	 * 
 	 * @param x
-	 * @return
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @return transformed coordinates as [x, y]
 	 */
 	public double[] transform(double x, double y) {
 		ProjCoordinate fromCoord = new ProjCoordinate(x, y);
@@ -141,7 +146,7 @@ public class ProjectionTransform {
 	/**
 	 * Get the from projection in the transform
 	 * 
-	 * @return
+	 * @return from projection
 	 */
 	public Projection getFromProjection() {
 		return fromProjection;
@@ -150,7 +155,7 @@ public class ProjectionTransform {
 	/**
 	 * Get the to projection in the transform
 	 * 
-	 * @return
+	 * @return to projection
 	 */
 	public Projection getToProjection() {
 		return toProjection;
@@ -159,7 +164,7 @@ public class ProjectionTransform {
 	/**
 	 * Get the transform
 	 * 
-	 * @return
+	 * @return transform
 	 */
 	public CoordinateTransform getTransform() {
 		return transform;

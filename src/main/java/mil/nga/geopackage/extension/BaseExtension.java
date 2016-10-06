@@ -134,7 +134,7 @@ public abstract class BaseExtension {
 	 *            table name
 	 * @param columnName
 	 *            column name
-	 * @return
+	 * @return true if has extension
 	 */
 	protected boolean has(String extensionName, String tableName,
 			String columnName) {

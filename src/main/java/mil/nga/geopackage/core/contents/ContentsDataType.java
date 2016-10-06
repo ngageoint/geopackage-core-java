@@ -18,6 +18,13 @@ public enum ContentsDataType {
 	TILES("tiles"),
 
 	/**
+	 * Attributes
+	 * 
+	 * @since 1.2.1
+	 */
+	ATTRIBUTES("attributes"), // TODO implement attributes tables
+
+	/**
 	 * Tiled Gridded Elevation Data Extension
 	 * 
 	 * @since 1.2.1
@@ -41,7 +48,7 @@ public enum ContentsDataType {
 	/**
 	 * Get the name
 	 * 
-	 * @return
+	 * @return name
 	 */
 	public String getName() {
 		return name;
@@ -51,7 +58,8 @@ public enum ContentsDataType {
 	 * Get the Data Type from the name
 	 * 
 	 * @param name
-	 * @return
+	 *            name
+	 * @return contents data type
 	 */
 	public static ContentsDataType fromName(String name) {
 		ContentsDataType dataType = null;

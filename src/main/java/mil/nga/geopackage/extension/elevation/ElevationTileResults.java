@@ -89,7 +89,7 @@ public class ElevationTileResults {
 	 *            row index
 	 * @param column
 	 *            column index
-	 * @return
+	 * @return elevation
 	 */
 	public Double getElevation(int row, int column) {
 		return elevations[row][column];

@@ -1,7 +1,5 @@
 package mil.nga.geopackage.user;
 
-import java.awt.Cursor;
-
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
@@ -59,7 +57,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the column count
 	 * 
-	 * @return
+	 * @return column count
 	 */
 	public int columnCount() {
 		return table.columnCount();
@@ -68,7 +66,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the column names
 	 * 
-	 * @return
+	 * @return column names
 	 */
 	public String[] getColumnNames() {
 		return table.getColumnNames();
@@ -78,7 +76,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column name at the index
 	 * 
 	 * @param index
-	 * @return
+	 * @return column name
 	 */
 	public String getColumnName(int index) {
 		return table.getColumnName(index);
@@ -88,7 +86,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the index of the column name
 	 * 
 	 * @param columnName
-	 * @return
+	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
 		return table.getColumnIndex(columnName);
@@ -98,7 +96,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the value at the index
 	 * 
 	 * @param index
-	 * @return
+	 * @return value
 	 */
 	public Object getValue(int index) {
 		return values[index];
@@ -108,7 +106,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the value of the column name
 	 * 
 	 * @param columnName
-	 * @return
+	 * @return value
 	 */
 	public Object getValue(String columnName) {
 		return values[table.getColumnIndex(columnName)];
@@ -117,21 +115,16 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the row values
 	 * 
-	 * @return
+	 * @return values
 	 */
 	public Object[] getValues() {
 		return values;
 	}
 
 	/**
-	 * Get the Cursor column data types
+	 * Get the row column data types
 	 * 
-	 * @return
-	 * @see Cursor#FIELD_TYPE_STRING
-	 * @see Cursor#FIELD_TYPE_INTEGER
-	 * @see Cursor#FIELD_TYPE_FLOAT
-	 * @see Cursor#FIELD_TYPE_BLOB
-	 * @see Cursor#FIELD_TYPE_NULL
+	 * @return row column types
 	 */
 	public int[] getRowColumnTypes() {
 		return columnTypes;
@@ -141,12 +134,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the Cursor column data type at the index
 	 * 
 	 * @param index
-	 * @return
-	 * @see Cursor#FIELD_TYPE_STRING
-	 * @see Cursor#FIELD_TYPE_INTEGER
-	 * @see Cursor#FIELD_TYPE_FLOAT
-	 * @see Cursor#FIELD_TYPE_BLOB
-	 * @see Cursor#FIELD_TYPE_NULL
+	 * @return row column type
 	 */
 	public int getRowColumnType(int index) {
 		return columnTypes[index];
@@ -156,12 +144,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the Cursor column data type of the column name
 	 * 
 	 * @param columnName
-	 * @return
-	 * @see Cursor#FIELD_TYPE_STRING
-	 * @see Cursor#FIELD_TYPE_INTEGER
-	 * @see Cursor#FIELD_TYPE_FLOAT
-	 * @see Cursor#FIELD_TYPE_BLOB
-	 * @see Cursor#FIELD_TYPE_NULL
+	 * @return row column type
 	 */
 	public int getRowColumnType(String columnName) {
 		return columnTypes[table.getColumnIndex(columnName)];
@@ -170,7 +153,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the table
 	 * 
-	 * @return
+	 * @return table
 	 */
 	public TTable getTable() {
 		return table;
@@ -180,7 +163,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column at the index
 	 * 
 	 * @param index
-	 * @return
+	 * @return column
 	 */
 	public TColumn getColumn(int index) {
 		return table.getColumn(index);
@@ -190,7 +173,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column of the column name
 	 * 
 	 * @param columnName
-	 * @return
+	 * @return column
 	 */
 	public TColumn getColumn(String columnName) {
 		return table.getColumn(columnName);
@@ -199,7 +182,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the id value, which is the value of the primary key
 	 * 
-	 * @return
+	 * @return id
 	 */
 	public long getId() {
 		long id;
@@ -225,7 +208,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the primary key column index
 	 * 
-	 * @return
+	 * @return primary key column index
 	 */
 	public int getPkColumnIndex() {
 		return table.getPkColumnIndex();
@@ -234,7 +217,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the primary key column
 	 * 
-	 * @return
+	 * @return primary key column
 	 */
 	public TColumn getPkColumn() {
 		return table.getPkColumn();

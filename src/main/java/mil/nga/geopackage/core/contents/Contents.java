@@ -298,7 +298,7 @@ public class Contents {
 	/**
 	 * Get the Geometry Columns, should only return one or no value
 	 * 
-	 * @return
+	 * @return geometry columns
 	 */
 	public GeometryColumns getGeometryColumns() {
 		GeometryColumns result = null;
@@ -328,7 +328,7 @@ public class Contents {
 	/**
 	 * Get the Tile Matrix Set, should only return one or no value
 	 * 
-	 * @return
+	 * @return tile matrix set
 	 */
 	public TileMatrixSet getTileMatrixSet() {
 		TileMatrixSet result = null;
@@ -358,7 +358,7 @@ public class Contents {
 	/**
 	 * Get the Tile Matrix collection
 	 * 
-	 * @return
+	 * @return tile matrices
 	 */
 	public ForeignCollection<TileMatrix> getTileMatrix() {
 		return tileMatrix;
@@ -367,7 +367,7 @@ public class Contents {
 	/**
 	 * Get a bounding box
 	 * 
-	 * @return
+	 * @return bounding box
 	 */
 	public BoundingBox getBoundingBox() {
 		BoundingBox boundingBox = new BoundingBox(getMinX(), getMaxX(),
@@ -379,6 +379,7 @@ public class Contents {
 	 * Set a bounding box
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 */
 	public void setBoundingBox(BoundingBox boundingBox) {
 		setMinX(boundingBox.getMinLongitude());

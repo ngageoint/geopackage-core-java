@@ -25,8 +25,10 @@ public class TileBoundingBoxUtils {
 	 * Get the overlapping bounding box between the two bounding boxes
 	 *
 	 * @param boundingBox
+	 *            bounding box 1
 	 * @param boundingBox2
-	 * @return
+	 *            bounding box 2
+	 * @return bounding box
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
@@ -54,8 +56,10 @@ public class TileBoundingBoxUtils {
 	 * Get the union bounding box combining the two bounding boxes
 	 *
 	 * @param boundingBox
+	 *            bounding box 1
 	 * @param boundingBox2
-	 * @return
+	 *            bounding box 2
+	 * @return bounding box
 	 */
 	public static BoundingBox union(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
@@ -83,9 +87,12 @@ public class TileBoundingBoxUtils {
 	 * Get the X pixel for where the longitude fits into the bounding box
 	 *
 	 * @param width
+	 *            width
 	 * @param boundingBox
+	 *            bounding box
 	 * @param longitude
-	 * @return
+	 *            longitude
+	 * @return x pixel
 	 */
 	public static float getXPixel(long width, BoundingBox boundingBox,
 			double longitude) {
@@ -103,9 +110,12 @@ public class TileBoundingBoxUtils {
 	 * Get the longitude from the pixel location, bounding box, and image width
 	 * 
 	 * @param width
+	 *            width
 	 * @param boundingBox
+	 *            bounding box
 	 * @param pixel
-	 * @return
+	 *            pixel
+	 * @return longitude
 	 */
 	public static double getLongitudeFromPixel(long width,
 			BoundingBox boundingBox, float pixel) {
@@ -123,9 +133,12 @@ public class TileBoundingBoxUtils {
 	 * Get the Y pixel for where the latitude fits into the bounding box
 	 *
 	 * @param height
+	 *            height
 	 * @param boundingBox
-	 * @param tileRowBoundingBox
-	 * @return
+	 *            bounding box
+	 * @param latitude
+	 *            latitude
+	 * @return y pixel
 	 */
 	public static float getYPixel(long height, BoundingBox boundingBox,
 			double latitude) {
@@ -143,9 +156,12 @@ public class TileBoundingBoxUtils {
 	 * Get the latitude from the pixel location, bounding box, and image height
 	 * 
 	 * @param height
+	 *            height
 	 * @param boundingBox
+	 *            bounding box
 	 * @param pixel
-	 * @return
+	 *            pixel
+	 * @return latitude
 	 */
 	public static double getLatitudeFromPixel(long height,
 			BoundingBox boundingBox, float pixel) {
@@ -164,9 +180,12 @@ public class TileBoundingBoxUtils {
 	 * zoom level
 	 *
 	 * @param x
+	 *            x coordinate
 	 * @param y
+	 *            y coordinate
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getBoundingBox(int x, int y, int zoom) {
 
@@ -190,9 +209,12 @@ public class TileBoundingBoxUtils {
 	 * coordinates and zoom level
 	 *
 	 * @param x
+	 *            x coordinate
 	 * @param y
+	 *            y coordinate
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(long x, long y, int zoom) {
 
@@ -217,10 +239,11 @@ public class TileBoundingBoxUtils {
 	 * Get the Web Mercator tile bounding box from the Google Maps API tile grid
 	 * and zoom level
 	 *
-	 * @param x
-	 * @param y
+	 * @param tileGrid
+	 *            tile grid
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(TileGrid tileGrid,
 			int zoom) {
@@ -247,10 +270,14 @@ public class TileBoundingBoxUtils {
 	 * coordinates and zoom level
 	 *
 	 * @param projectionEpsg
+	 *            projection epsg
 	 * @param x
+	 *            x coordinate
 	 * @param y
+	 *            y coordinate
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
 			int x, int y, int zoom) {
@@ -271,10 +298,14 @@ public class TileBoundingBoxUtils {
 	 * coordinates and zoom level
 	 *
 	 * @param projection
+	 *            projection
 	 * @param x
+	 *            x coordinate
 	 * @param y
+	 *            y coordinate
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Projection projection,
 			long x, long y, int zoom) {
@@ -295,9 +326,12 @@ public class TileBoundingBoxUtils {
 	 * tileGrid and zoom level
 	 *
 	 * @param projectionEpsg
+	 *            projection epsg
 	 * @param tileGrid
+	 *            tile grid
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
 			TileGrid tileGrid, int zoom) {
@@ -318,9 +352,12 @@ public class TileBoundingBoxUtils {
 	 * and zoom level
 	 *
 	 * @param projection
+	 *            projection
 	 * @param tileGrid
+	 *            tile grid
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Projection projection,
 			TileGrid tileGrid, int zoom) {
@@ -340,7 +377,9 @@ public class TileBoundingBoxUtils {
 	 * Get the tile grid for the location specified as WGS84
 	 * 
 	 * @param point
+	 *            point
 	 * @param zoom
+	 *            zoom level
 	 * @return tile grid
 	 * @since 1.1.0
 	 */
@@ -354,8 +393,11 @@ public class TileBoundingBoxUtils {
 	 * Get the tile grid for the location specified as the projection
 	 * 
 	 * @param point
+	 *            point
 	 * @param zoom
+	 *            zoom level
 	 * @param projection
+	 *            projection
 	 * @return tile grid
 	 * @since 1.1.0
 	 */
@@ -374,8 +416,10 @@ public class TileBoundingBoxUtils {
 	 * Get the tile grid that includes the entire tile bounding box
 	 *
 	 * @param webMercatorBoundingBox
+	 *            web mercator bounding box
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return tile grid
 	 */
 	public static TileGrid getTileGrid(BoundingBox webMercatorBoundingBox,
 			int zoom) {
@@ -404,6 +448,8 @@ public class TileBoundingBoxUtils {
 	 * Convert the bounding box coordinates to a new web mercator bounding box
 	 *
 	 * @param boundingBox
+	 *            bounding box
+	 * @return bounding box
 	 */
 	public static BoundingBox toWebMercator(BoundingBox boundingBox) {
 
@@ -434,7 +480,8 @@ public class TileBoundingBoxUtils {
 	 * Get the tile size in meters
 	 *
 	 * @param tilesPerSide
-	 * @return
+	 *            tiles per side
+	 * @return tile size
 	 */
 	public static double tileSize(int tilesPerSide) {
 		return (2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
@@ -460,7 +507,8 @@ public class TileBoundingBoxUtils {
 	 * Get the tile width in degrees
 	 *
 	 * @param tilesPerSide
-	 * @return
+	 *            tiles per side
+	 * @return tile width degrees
 	 */
 	public static double tileWidthDegrees(int tilesPerSide) {
 		return 360.0 / tilesPerSide;
@@ -470,7 +518,8 @@ public class TileBoundingBoxUtils {
 	 * Get the tile height in degrees
 	 *
 	 * @param tilesPerSide
-	 * @return
+	 *            tiles per side
+	 * @return tile height degrees
 	 */
 	public static double tileHeightDegrees(int tilesPerSide) {
 		return 180.0 / tilesPerSide;
@@ -480,7 +529,8 @@ public class TileBoundingBoxUtils {
 	 * Get the tiles per side, width and height, at the zoom level
 	 *
 	 * @param zoom
-	 * @return
+	 *            zoom level
+	 * @return tiles per side
 	 */
 	public static int tilesPerSide(int zoom) {
 		return (int) Math.pow(2, zoom);
@@ -490,8 +540,10 @@ public class TileBoundingBoxUtils {
 	 * Get the standard y tile location as TMS or a TMS y location as standard
 	 * 
 	 * @param zoom
+	 *            zoom level
 	 * @param y
-	 * @return
+	 *            y coordinate
+	 * @return opposite tile format y
 	 */
 	public static int getYAsOppositeTileFormat(int zoom, int y) {
 		int tilesPerSide = tilesPerSide(zoom);
@@ -503,7 +555,8 @@ public class TileBoundingBoxUtils {
 	 * Get the zoom level from the tiles per side
 	 *
 	 * @param tilesPerSide
-	 * @return
+	 *            tiles per side
+	 * @return zoom level
 	 */
 	public static int zoomFromTilesPerSide(int tilesPerSide) {
 		return (int) (Math.log(tilesPerSide) / Math.log(2));
@@ -513,10 +566,14 @@ public class TileBoundingBoxUtils {
 	 * Get the tile grid
 	 *
 	 * @param totalBox
+	 *            total bounding box
 	 * @param matrixWidth
+	 *            matrix width
 	 * @param matrixHeight
+	 *            matrix height
 	 * @param boundingBox
-	 * @return
+	 *            bounding box
+	 * @return tile grid
 	 */
 	public static TileGrid getTileGrid(BoundingBox totalBox, long matrixWidth,
 			long matrixHeight, BoundingBox boundingBox) {
@@ -558,7 +615,9 @@ public class TileBoundingBoxUtils {
 	 * Get the tile column of the longitude in constant units
 	 *
 	 * @param totalBox
+	 *            total bounding box
 	 * @param matrixWidth
+	 *            matrix width
 	 * @param longitude
 	 *            in constant units
 	 * @return tile column if in the range, -1 if before,
@@ -589,7 +648,9 @@ public class TileBoundingBoxUtils {
 	 * Get the tile row of the latitude in constant units
 	 *
 	 * @param totalBox
+	 *            total bounding box
 	 * @param matrixHeight
+	 *            matrix height
 	 * @param latitude
 	 *            in constant units
 	 * @return tile row if in the range, -1 if before,
@@ -643,9 +704,9 @@ public class TileBoundingBoxUtils {
 	 *
 	 * @param totalBox
 	 *            total bounding box
-	 * @param matrixWidth
+	 * @param tileMatrixWidth
 	 *            matrix width
-	 * @param matrixHeight
+	 * @param tileMatrixHeight
 	 *            matrix height
 	 * @param tileColumn
 	 *            tile column
@@ -731,6 +792,7 @@ public class TileBoundingBoxUtils {
 	 * complete world
 	 *
 	 * @param webMercatorBoundingBox
+	 *            web mercator bounding box
 	 * @return zoom level
 	 */
 	public static int getZoomLevel(BoundingBox webMercatorBoundingBox) {
@@ -755,9 +817,12 @@ public class TileBoundingBoxUtils {
 	 * width
 	 * 
 	 * @param webMercatorBoundingBox
+	 *            web mercator bounding box
 	 * @param matrixWidth
+	 *            matrix width
 	 * @param tileWidth
-	 * @return
+	 *            tile width
+	 * @return pixel x size
 	 */
 	public static double getPixelXSize(BoundingBox webMercatorBoundingBox,
 			long matrixWidth, int tileWidth) {
@@ -771,9 +836,12 @@ public class TileBoundingBoxUtils {
 	 * height
 	 * 
 	 * @param webMercatorBoundingBox
+	 *            web mercator bounding box
 	 * @param matrixHeight
+	 *            matrix height
 	 * @param tileHeight
-	 * @return
+	 *            tile height
+	 * @return pixel y size
 	 */
 	public static double getPixelYSize(BoundingBox webMercatorBoundingBox,
 			long matrixHeight, int tileHeight) {
@@ -806,7 +874,7 @@ public class TileBoundingBoxUtils {
 	/**
 	 * Get the tile grid that includes the entire tile bounding box
 	 *
-	 * @param wgs84BoundingBox
+	 * @param boundingBox
 	 *            wgs84 bounding box
 	 * @param zoom
 	 *            zoom level

@@ -73,7 +73,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * 
 	 * @param tableName
 	 * @param columnList
-	 * @return
+	 * @return table
 	 */
 	protected abstract TTable createTable(String tableName,
 			List<TColumn> columnList);
@@ -89,7 +89,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * @param notNull
 	 * @param defaultValueIndex
 	 * @param primaryKey
-	 * @return
+	 * @return column
 	 */
 	protected abstract TColumn createColumn(TResult result, int index,
 			String name, String type, Long max, boolean notNull,
@@ -99,7 +99,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * Read the table
 	 * 
 	 * @param db
-	 * @return
+	 * @return table
 	 */
 	public TTable readTable(
 			UserCoreConnection<TColumn, TTable, TRow, TResult> db) {

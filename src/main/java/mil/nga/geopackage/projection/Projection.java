@@ -30,7 +30,9 @@ public class Projection {
 	 * Constructor
 	 * 
 	 * @param epsg
+	 *            epsg
 	 * @param crs
+	 *            crs
 	 */
 	Projection(long epsg, CoordinateReferenceSystem crs) {
 		this.epsg = epsg;
@@ -40,7 +42,7 @@ public class Projection {
 	/**
 	 * Get the EPSG code
 	 * 
-	 * @return
+	 * @return epsg
 	 */
 	public long getEpsg() {
 		return epsg;
@@ -49,7 +51,7 @@ public class Projection {
 	/**
 	 * Get the Coordinate Reference System
 	 * 
-	 * @return
+	 * @return Coordinate Reference System
 	 */
 	public CoordinateReferenceSystem getCrs() {
 		return crs;
@@ -60,7 +62,8 @@ public class Projection {
 	 * of execution should have it's own transformation.
 	 * 
 	 * @param epsg
-	 * @return
+	 *            epsg
+	 * @return transform
 	 */
 	public ProjectionTransform getTransformation(long epsg) {
 		Projection projectionTo = ProjectionFactory.getProjection(epsg);
@@ -86,7 +89,8 @@ public class Projection {
 	 * Each thread of execution should have it's own transformation.
 	 * 
 	 * @param projection
-	 * @return
+	 *            projection
+	 * @return transform
 	 */
 	public ProjectionTransform getTransformation(Projection projection) {
 		return new ProjectionTransform(this, projection);
@@ -96,7 +100,8 @@ public class Projection {
 	 * Convert the value to meters
 	 * 
 	 * @param value
-	 * @return
+	 *            value
+	 * @return meters
 	 */
 	public double toMeters(double value) {
 		return value / crs.getProjection().getFromMetres();
@@ -112,7 +117,8 @@ public class Projection {
 		Unit unit = null;
 		try {
 			// The unit is currently not publicly available, use reflection
-			Field f = org.osgeo.proj4j.proj.Projection.class.getDeclaredField("unit");
+			Field f = org.osgeo.proj4j.proj.Projection.class
+					.getDeclaredField("unit");
 			f.setAccessible(true);
 			unit = (Unit) f.get(crs.getProjection());
 			if (unit == null) {

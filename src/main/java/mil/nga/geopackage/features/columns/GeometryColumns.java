@@ -123,7 +123,7 @@ public class GeometryColumns {
 	/**
 	 * Get the id
 	 * 
-	 * @return
+	 * @return table column key
 	 */
 	public TableColumnKey getId() {
 		return new TableColumnKey(tableName, columnName);

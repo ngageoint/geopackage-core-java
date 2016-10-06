@@ -33,7 +33,7 @@ public interface GeoPackageProgress {
 	 * Should the progress so far be deleted when cancelled ({@link #isActive()}
 	 * becomes false)
 	 * 
-	 * @return
+	 * @return true to cleanup progress
 	 */
 	public boolean cleanupOnCancel();
 

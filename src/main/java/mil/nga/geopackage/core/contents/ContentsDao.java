@@ -157,7 +157,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents, cascading
 	 * 
 	 * @param contents
-	 * @return
+	 *            contents
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Contents contents) throws SQLException {
@@ -202,8 +203,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents, cascading optionally including the user table
 	 * 
 	 * @param contents
+	 *            contents
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Contents contents, boolean userTable)
@@ -221,7 +224,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the collection of Contents, cascading
 	 * 
 	 * @param contentsCollection
-	 * @return
+	 *            contents collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Collection<Contents> contentsCollection)
@@ -234,8 +238,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * user table
 	 * 
 	 * @param contentsCollection
+	 *            contents collection
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Collection<Contents> contentsCollection,
@@ -253,7 +259,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents matching the prepared query, cascading
 	 * 
 	 * @param preparedDelete
-	 * @return
+	 *            prepared delete query
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<Contents> preparedDelete)
@@ -266,8 +273,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * including the user table
 	 * 
 	 * @param preparedDelete
+	 *            prepared delete query
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<Contents> preparedDelete,
@@ -284,7 +293,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete a Contents by id, cascading
 	 * 
 	 * @param id
-	 * @return
+	 *            id
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByIdCascade(String id) throws SQLException {
@@ -295,8 +305,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete a Contents by id, cascading optionally including the user table
 	 * 
 	 * @param id
+	 *            id
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByIdCascade(String id, boolean userTable)
@@ -317,7 +329,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents with the provided ids, cascading
 	 * 
 	 * @param idCollection
-	 * @return
+	 *            id collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteIdsCascade(Collection<String> idCollection)
@@ -330,8 +343,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * the user table
 	 * 
 	 * @param idCollection
+	 *            id collection
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteIdsCascade(Collection<String> idCollection,
@@ -349,6 +364,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the table
 	 * 
 	 * @param table
+	 *            table name
 	 */
 	public void deleteTable(String table) {
 		try {
@@ -362,6 +378,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Verify the tables are in the expected state for the Contents create
 	 * 
 	 * @param contents
+	 *            contents
 	 * @throws SQLException
 	 */
 	private void verifyCreate(Contents contents) throws SQLException {
@@ -436,7 +453,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Get or create a Geometry Columns DAO
 	 * 
-	 * @return
+	 * @return geometry columns dao
 	 * @throws SQLException
 	 */
 	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
@@ -450,7 +467,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Get or create a Tile Matrix Set DAO
 	 * 
-	 * @return
+	 * @return tile matrix set dao
 	 * @throws SQLException
 	 */
 	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
@@ -464,7 +481,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Get or create a Tile Matrix DAO
 	 * 
-	 * @return
+	 * @return tile matrix dao
 	 * @throws SQLException
 	 */
 	private TileMatrixDao getTileMatrixDao() throws SQLException {

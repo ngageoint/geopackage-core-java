@@ -113,7 +113,7 @@ public enum GeoPackageDataType {
 	/**
 	 * Get the Java class type
 	 * 
-	 * @return
+	 * @return class type
 	 */
 	public Class<?> getClassType() {
 		return classType;
@@ -123,7 +123,8 @@ public enum GeoPackageDataType {
 	 * Get the Data Type from the name, ignoring case
 	 * 
 	 * @param name
-	 * @return
+	 *            name
+	 * @return data type
 	 */
 	public static GeoPackageDataType fromName(String name) {
 		return valueOf(name.toUpperCase(Locale.US));

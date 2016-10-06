@@ -18,7 +18,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * 
 	 * @param columnTypes
 	 * @param values
-	 * @return
+	 * @return row
 	 */
 	public TRow getRow(int[] columnTypes, Object[] values);
 
@@ -26,7 +26,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Get the value for the column
 	 * 
 	 * @param column
-	 * @return
+	 * @return value
 	 */
 	public Object getValue(TColumn column);
 
@@ -35,42 +35,42 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 *
 	 * @param index
 	 * @param dataType
-	 * @return
+	 * @return value
 	 */
 	public Object getValue(int index, GeoPackageDataType dataType);
 
 	/**
 	 * Get the table
 	 * 
-	 * @return
+	 * @return table
 	 */
 	public TTable getTable();
 
 	/**
 	 * Get the row at the current cursor position
 	 * 
-	 * @return
+	 * @return row
 	 */
 	public TRow getRow();
 
 	/**
 	 * Get the count of results
 	 * 
-	 * @return
+	 * @return count
 	 */
 	public int getCount();
 
 	/**
 	 * Move the cursor to the next row.
 	 * 
-	 * @return
+	 * @return true if another row
 	 */
 	public boolean moveToNext();
 
 	/**
 	 * Move the cursor to the first row.
 	 * 
-	 * @return
+	 * @return true if moved to first
 	 */
 	public boolean moveToFirst();
 
@@ -78,13 +78,14 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Move the cursor to an absolute position
 	 * 
 	 * @param position
+	 * @return true if moved to position
 	 */
 	public boolean moveToPosition(int position);
 
 	/**
 	 * Returns data type of the given column's value
 	 * 
-	 * @return
+	 * @return type
 	 */
 	public int getType(int columnIndex);
 
@@ -93,7 +94,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * column doesn't exist.
 	 * 
 	 * @param columnName
-	 * @return
+	 * @return column index
 	 */
 	public int getColumnIndex(String columnName);
 
@@ -101,7 +102,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as a String.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return string value
 	 */
 	public String getString(int columnIndex);
 
@@ -109,7 +110,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as an long.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return long value
 	 */
 	public long getLong(int columnIndex);
 
@@ -117,7 +118,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as an int.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return int value
 	 */
 	public int getInt(int columnIndex);
 
@@ -125,7 +126,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as an short.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return short value
 	 */
 	public short getShort(int columnIndex);
 
@@ -133,7 +134,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as an double.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return double value
 	 */
 	public double getDouble(int columnIndex);
 
@@ -141,7 +142,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as an float.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return float value
 	 */
 	public float getFloat(int columnIndex);
 
@@ -149,14 +150,14 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Returns the value of the requested column as a byte array.
 	 * 
 	 * @param columnIndex
-	 * @return
+	 * @return bytes value
 	 */
 	public byte[] getBlob(int columnIndex);
 
 	/**
 	 * Was the last value retrieved null
 	 * 
-	 * @return
+	 * @return true if was null
 	 */
 	public boolean wasNull();
 

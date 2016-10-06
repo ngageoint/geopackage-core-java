@@ -18,7 +18,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	/**
 	 * Get a connection source
 	 * 
-	 * @return
+	 * @return connection source
 	 */
 	public abstract ConnectionSource getConnectionSource();
 
@@ -86,7 +86,8 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Check if the table exists
 	 * 
 	 * @param tableName
-	 * @return
+	 *            table name
+	 * @return true if exists
 	 */
 	public boolean tableExists(String tableName) {
 		return count("sqlite_master", "tbl_name = ?",

@@ -137,7 +137,7 @@ public class TileMatrix {
 	/**
 	 * Get the tile matrix id
 	 * 
-	 * @return
+	 * @return tile matrix key
 	 */
 	public TileMatrixKey getId() {
 		return new TileMatrixKey(tableName, zoomLevel);

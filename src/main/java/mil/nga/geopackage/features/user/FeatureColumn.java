@@ -21,8 +21,10 @@ public class FeatureColumn extends UserColumn {
 	 * Create a new primary key column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
-	 * @return
+	 *            name
+	 * @return feature column
 	 */
 	public static FeatureColumn createPrimaryKeyColumn(int index, String name) {
 		return new FeatureColumn(index, name, GeoPackageDataType.INTEGER, null,
@@ -33,11 +35,16 @@ public class FeatureColumn extends UserColumn {
 	 * Create a new geometry column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param type
+	 *            geometry type
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
-	 * @return
+	 *            default value
+	 * @return feature column
 	 */
 	public static FeatureColumn createGeometryColumn(int index, String name,
 			GeometryType type, boolean notNull, Object defaultValue) {
@@ -54,11 +61,16 @@ public class FeatureColumn extends UserColumn {
 	 * Create a new column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param type
+	 *            data type
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
-	 * @return
+	 *            default value
+	 * @return feature column
 	 */
 	public static FeatureColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -69,12 +81,18 @@ public class FeatureColumn extends UserColumn {
 	 * Create a new column
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param type
+	 *            data type
 	 * @param max
+	 *            max value
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
-	 * @return
+	 *            default value
+	 * @return feature column
 	 */
 	public static FeatureColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max, boolean notNull,
@@ -87,13 +105,21 @@ public class FeatureColumn extends UserColumn {
 	 * Constructor
 	 * 
 	 * @param index
+	 *            index
 	 * @param name
+	 *            name
 	 * @param dataType
+	 *            data type
 	 * @param max
+	 *            max value
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValue
+	 *            default value
 	 * @param primaryKey
+	 *            primary key flag
 	 * @param geometryType
+	 *            geometry type
 	 */
 	FeatureColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
@@ -109,7 +135,7 @@ public class FeatureColumn extends UserColumn {
 	/**
 	 * Determine if this column is a geometry
 	 * 
-	 * @return
+	 * @return true if a geometry column
 	 */
 	public boolean isGeometry() {
 		return geometryType != null;
@@ -118,7 +144,7 @@ public class FeatureColumn extends UserColumn {
 	/**
 	 * When a geometry column, gets the geometry type
 	 * 
-	 * @return
+	 * @return geometry type
 	 */
 	public GeometryType getGeometryType() {
 		return geometryType;
@@ -128,8 +154,6 @@ public class FeatureColumn extends UserColumn {
 	 * {@inheritDoc}
 	 * 
 	 * Either the geometry or data type
-	 * 
-	 * @return
 	 */
 	@Override
 	public String getTypeName() {

@@ -100,11 +100,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * Constructor
 	 *
 	 * @param name
+	 *            name
 	 * @param path
+	 *            path
 	 * @param database
-	 * @param connectionSource
+	 *            database
 	 * @param tableCreator
+	 *            table creator
 	 * @param writable
+	 *            true if writable
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
 			GeoPackageCoreConnection database,

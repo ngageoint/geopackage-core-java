@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.elevation;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
@@ -9,6 +8,8 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 /**
@@ -36,9 +37,9 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, Long> {
 	 * 
 	 * @param tileMatrixSet
 	 *            tile matrix set
-	 * @return gridded coverage list
+	 * @return gridded coverage
 	 */
-	public List<GriddedCoverage> query(TileMatrixSet tileMatrixSet) {
+	public GriddedCoverage query(TileMatrixSet tileMatrixSet) {
 		return query(tileMatrixSet.getTableName());
 	}
 
@@ -47,19 +48,22 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, Long> {
 	 * 
 	 * @param tileMatrixSetName
 	 *            tile matrix set name
-	 * @return gridded coverage list
+	 * @return gridded coverage
 	 */
-	public List<GriddedCoverage> query(String tileMatrixSetName) {
-		List<GriddedCoverage> results = null;
+	public GriddedCoverage query(String tileMatrixSetName) {
+		GriddedCoverage griddedCoverage = null;
 		try {
-			results = queryForEq(GriddedCoverage.COLUMN_TILE_MATRIX_SET_NAME,
+			QueryBuilder<GriddedCoverage, Long> qb = queryBuilder();
+			qb.where().eq(GriddedCoverage.COLUMN_TILE_MATRIX_SET_NAME,
 					tileMatrixSetName);
+			PreparedQuery<GriddedCoverage> query = qb.prepare();
+			griddedCoverage = queryForFirst(query);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
-					"Failed to query for Gridded Coverage objects by Tile Matrix Set Name: "
+					"Failed to query for Gridded Coverage by Tile Matrix Set Name: "
 							+ tileMatrixSetName, e);
 		}
-		return results;
+		return griddedCoverage;
 	}
 
 	/**

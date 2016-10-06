@@ -6,16 +6,19 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.1 (TBD)
 
+* GeoPackage spec version 1.2 changes and updates
 * Time zone fix on database persisted dates
 * Elevation Extension support
 * Elevation Tiles table type (2d-gridded-coverage)
-* Contents Data Type (features, tiles, elevation) functionality
+* Contents Data Type (features, tiles, attributes, elevation) functionality
 * Built in support for WGS 84 Geographic 3d projection (EPSG:4979)
 * Table and column name SQL quotations to allow uncommon but valid names
 * Elevation query algorithms including Nearest Neighbor, Bilinear, and Bicubic
 * Elevation unbounded results elevation queries
 * Tile bounding box utility methods precision adjustments
 * Additional Tile Dao zoom level determinations, including the closest
+* Spatial Reference System definition_12_163 column changed to definition_12_063
+* Deprecated the User Geometry Types Extension per spec removal
 
 ## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 

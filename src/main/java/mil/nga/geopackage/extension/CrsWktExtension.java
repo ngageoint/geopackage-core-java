@@ -111,7 +111,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Get the extension definition
 	 * 
-	 * @return
+	 * @return definition
 	 */
 	public String getDefinition(long srsId) {
 		String definition = connection.querySingleStringResult("SELECT "
@@ -132,24 +132,24 @@ public class CrsWktExtension extends BaseExtension {
 		updateDefinition(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.WGS_84, PropertyConstants.SRS_ID),
 				GeoPackageProperties.getProperty(PropertyConstants.WGS_84,
-						PropertyConstants.DEFINITION_12_163));
+						PropertyConstants.DEFINITION_12_063));
 		updateDefinition(
 				GeoPackageProperties.getIntegerProperty(
 						PropertyConstants.UNDEFINED_CARTESIAN,
 						PropertyConstants.SRS_ID),
 				GeoPackageProperties.getProperty(
 						PropertyConstants.UNDEFINED_CARTESIAN,
-						PropertyConstants.DEFINITION_12_163));
+						PropertyConstants.DEFINITION_12_063));
 		updateDefinition(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.UNDEFINED_GEOGRAPHIC,
 				PropertyConstants.SRS_ID), GeoPackageProperties.getProperty(
 				PropertyConstants.UNDEFINED_GEOGRAPHIC,
-				PropertyConstants.DEFINITION_12_163));
+				PropertyConstants.DEFINITION_12_063));
 		updateDefinition(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_ID),
 				GeoPackageProperties.getProperty(
 						PropertyConstants.WEB_MERCATOR,
-						PropertyConstants.DEFINITION_12_163));
+						PropertyConstants.DEFINITION_12_063));
 	}
 
 	/**

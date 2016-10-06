@@ -43,6 +43,7 @@ public enum ReferenceScopeType {
 	 * Constructor
 	 * 
 	 * @param value
+	 *            value
 	 */
 	private ReferenceScopeType(String value) {
 		this.value = value;
@@ -51,7 +52,7 @@ public enum ReferenceScopeType {
 	/**
 	 * Get the value
 	 * 
-	 * @return
+	 * @return value
 	 */
 	public String getValue() {
 		return value;
@@ -61,7 +62,8 @@ public enum ReferenceScopeType {
 	 * Get the type from the value
 	 * 
 	 * @param value
-	 * @return
+	 *            value
+	 * @return reference scope type
 	 */
 	public static ReferenceScopeType fromValue(String value) {
 		value = value.replace("/", "_");
