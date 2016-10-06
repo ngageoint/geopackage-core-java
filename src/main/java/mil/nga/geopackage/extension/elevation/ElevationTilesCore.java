@@ -36,6 +36,16 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	public static final String EXTENSION_AUTHOR = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR;
 
 	/**
+	 * PNG Extension name without the author
+	 */
+	public static final String PNG_EXTENSION_NAME_NO_AUTHOR = "elevation_tiles_png";
+
+	/**
+	 * TIFF Extension name without the author
+	 */
+	public static final String TIFF_EXTENSION_NAME_NO_AUTHOR = "elevation_tiles_tiff";
+
+	/**
 	 * Extension, with author and name
 	 */
 	public final String extensionName;
