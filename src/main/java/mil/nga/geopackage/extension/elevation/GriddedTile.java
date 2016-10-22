@@ -197,7 +197,16 @@ public class GriddedTile {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public double getScale() {
+	public Double getScale() {
+		return scale;
+	}
+
+	/**
+	 * Get the scale or default value
+	 * 
+	 * @return scale as a multiple relative to the unit of measure
+	 */
+	public double getScaleOrDefault() {
 		return scale != null ? scale : 1.0;
 	}
 
@@ -216,7 +225,16 @@ public class GriddedTile {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public double getOffset() {
+	public Double getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Get the offset or default value
+	 * 
+	 * @return offset to the 0 value
+	 */
+	public double getOffsetOrDefault() {
 		return offset != null ? offset : 0.0;
 	}
 

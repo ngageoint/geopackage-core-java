@@ -16,6 +16,8 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.projection.ProjectionTransform;
+import mil.nga.geopackage.property.GeoPackageProperties;
+import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
@@ -36,24 +38,21 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	public static final String EXTENSION_AUTHOR = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR;
 
 	/**
-	 * PNG Extension name without the author
+	 * Extension name without the author
 	 */
-	public static final String PNG_EXTENSION_NAME_NO_AUTHOR = "elevation_tiles_png";
-
-	/**
-	 * TIFF Extension name without the author
-	 */
-	public static final String TIFF_EXTENSION_NAME_NO_AUTHOR = "elevation_tiles_tiff";
+	public static final String EXTENSION_NAME_NO_AUTHOR = "elevation_tiles";
 
 	/**
 	 * Extension, with author and name
 	 */
-	public final String extensionName;
+	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
+			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
-	public final String extensionDefinition;
+	public static final String EXTENSION_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Tile Matrix Set
@@ -132,10 +131,6 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param extensionName
-	 *            extension name
-	 * @param extensionDefinition
-	 *            extension definition
 	 * @param tileMatrixSet
 	 *            tile matrix set
 	 * @param width
@@ -146,13 +141,9 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	 *            request projection
 	 */
 	protected ElevationTilesCore(GeoPackageCore geoPackage,
-			String extensionName, String extensionDefinition,
 			TileMatrixSet tileMatrixSet, Integer width, Integer height,
 			Projection requestProjection) {
 		super(geoPackage);
-
-		this.extensionName = extensionName;
-		this.extensionDefinition = extensionDefinition;
 
 		this.tileMatrixSet = tileMatrixSet;
 		griddedCoverageDao = geoPackage.getGriddedCoverageDao();
@@ -181,18 +172,12 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param extensionName
-	 *            extension name
-	 * @param extensionDefinition
-	 *            extension definition
 	 * @param tileMatrixSet
 	 *            tile matrix set
 	 */
 	protected ElevationTilesCore(GeoPackageCore geoPackage,
-			String extensionName, String extensionDefinition,
 			TileMatrixSet tileMatrixSet) {
-		this(geoPackage, extensionName, extensionDefinition, tileMatrixSet,
-				null, null, null);
+		this(geoPackage, tileMatrixSet, null, null, null);
 	}
 
 	/**
@@ -391,14 +376,14 @@ public abstract class ElevationTilesCore extends BaseExtension {
 
 		List<Extensions> extensionList = new ArrayList<>();
 
-		Extensions coverage = getOrCreate(extensionName,
-				GriddedCoverage.TABLE_NAME, null, extensionDefinition,
+		Extensions coverage = getOrCreate(EXTENSION_NAME,
+				GriddedCoverage.TABLE_NAME, null, EXTENSION_DEFINITION,
 				ExtensionScopeType.READ_WRITE);
-		Extensions tile = getOrCreate(extensionName, GriddedTile.TABLE_NAME,
-				null, extensionDefinition, ExtensionScopeType.READ_WRITE);
-		Extensions table = getOrCreate(extensionName,
+		Extensions tile = getOrCreate(EXTENSION_NAME, GriddedTile.TABLE_NAME,
+				null, EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+		Extensions table = getOrCreate(EXTENSION_NAME,
 				tileMatrixSet.getTableName(), TileTable.COLUMN_TILE_DATA,
-				extensionDefinition, ExtensionScopeType.READ_WRITE);
+				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
 
 		extensionList.add(coverage);
 		extensionList.add(tile);
@@ -414,7 +399,7 @@ public abstract class ElevationTilesCore extends BaseExtension {
 	 */
 	public boolean has() {
 
-		boolean exists = has(extensionName, tileMatrixSet.getTableName(),
+		boolean exists = has(EXTENSION_NAME, tileMatrixSet.getTableName(),
 				TileTable.COLUMN_TILE_DATA);
 
 		return exists;
@@ -1250,16 +1235,46 @@ public abstract class ElevationTilesCore extends BaseExtension {
 
 		Double elevation = null;
 		if (!isDataNull(unsignedPixelValue)) {
+			elevation = pixelValueToElevation(griddedTile, new Double(
+					unsignedPixelValue));
+		}
 
-			elevation = new Double(unsignedPixelValue);
+		return elevation;
+	}
+
+	/**
+	 * Convert integer coverage typed pixel value to an elevation value through
+	 * scales and offsets
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param pixelValue
+	 *            pixel value
+	 * @return elevation
+	 */
+	private Double pixelValueToElevation(GriddedTile griddedTile,
+			Double pixelValue) {
+
+		Double elevation = pixelValue;
+
+		if (griddedCoverage != null
+				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
+
 			if (griddedTile != null) {
-				elevation = elevation * griddedTile.getScale()
-						+ griddedTile.getOffset();
+				if (griddedTile.getScale() != null) {
+					elevation *= griddedTile.getScale();
+				}
+				if (griddedTile.getOffset() != null) {
+					elevation += griddedTile.getOffset();
+				}
 			}
-			if (griddedCoverage != null) {
-				elevation = elevation * griddedCoverage.getScale()
-						+ griddedCoverage.getOffset();
+			if (griddedCoverage.getScale() != null) {
+				elevation *= griddedCoverage.getScale();
 			}
+			if (griddedCoverage.getOffset() != null) {
+				elevation += griddedCoverage.getOffset();
+			}
+
 		}
 
 		return elevation;
@@ -1342,19 +1357,49 @@ public abstract class ElevationTilesCore extends BaseExtension {
 				unsignedPixelValue = griddedCoverage.getDataNull().intValue();
 			}
 		} else {
-			double value = elevation;
-			if (griddedCoverage != null) {
-				value = (value - griddedCoverage.getOffset())
-						/ griddedCoverage.getScale();
-			}
-			if (griddedTile != null) {
-				value = (value - griddedTile.getOffset())
-						/ griddedTile.getScale();
-			}
+			double value = elevationToPixelValue(griddedTile, elevation);
 			unsignedPixelValue = (int) Math.round(value);
 		}
 
 		return unsignedPixelValue;
+	}
+
+	/**
+	 * Convert integer coverage typed elevation value to a pixel value through
+	 * offsets and scales
+	 * 
+	 * @param griddedTile
+	 *            gridded tile
+	 * @param elevation
+	 *            elevation value
+	 * @return pixel value
+	 */
+	private double elevationToPixelValue(GriddedTile griddedTile,
+			double elevation) {
+
+		double pixelValue = elevation;
+
+		if (griddedCoverage != null
+				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
+
+			if (griddedCoverage.getOffset() != null) {
+				pixelValue -= griddedCoverage.getOffset();
+			}
+			if (griddedCoverage.getScale() != null) {
+				pixelValue /= griddedCoverage.getScale();
+			}
+			if (griddedTile != null) {
+				if (griddedTile.getOffset() != null) {
+					pixelValue -= griddedTile.getOffset();
+				}
+				if (griddedTile.getScale() != null) {
+					pixelValue /= griddedTile.getScale();
+				}
+			}
+
+		}
+
+		return pixelValue;
 	}
 
 	/**
@@ -1402,16 +1447,8 @@ public abstract class ElevationTilesCore extends BaseExtension {
 
 		Double elevation = null;
 		if (!isDataNull(pixelValue)) {
-
-			elevation = new Double(pixelValue);
-			if (griddedTile != null) {
-				elevation = elevation * griddedTile.getScale()
-						+ griddedTile.getOffset();
-			}
-			if (griddedCoverage != null) {
-				elevation = elevation * griddedCoverage.getScale()
-						+ griddedCoverage.getOffset();
-			}
+			elevation = pixelValueToElevation(griddedTile, new Double(
+					pixelValue));
 		}
 
 		return elevation;
@@ -1452,15 +1489,7 @@ public abstract class ElevationTilesCore extends BaseExtension {
 				value = griddedCoverage.getDataNull();
 			}
 		} else {
-			value = elevation;
-			if (griddedCoverage != null) {
-				value = (value - griddedCoverage.getOffset())
-						/ griddedCoverage.getScale();
-			}
-			if (griddedTile != null) {
-				value = (value - griddedTile.getOffset())
-						/ griddedTile.getScale();
-			}
+			value = elevationToPixelValue(griddedTile, elevation);
 		}
 
 		float pixelValue = (float) value;
