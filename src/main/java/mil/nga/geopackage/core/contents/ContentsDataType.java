@@ -22,7 +22,7 @@ public enum ContentsDataType {
 	 * 
 	 * @since 1.2.1
 	 */
-	ATTRIBUTES("attributes"), // TODO implement attributes tables
+	ATTRIBUTES("attributes"),
 
 	/**
 	 * Tiled Gridded Elevation Data Extension

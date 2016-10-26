@@ -10,6 +10,8 @@ import java.util.Set;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -175,6 +177,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public List<String> getTileTables() {
 		List<String> tableNames = getTables(ContentsDataType.TILES);
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getAttributesTables() {
+		List<String> tableNames = getTables(ContentsDataType.ATTRIBUTES);
 		return tableNames;
 	}
 
@@ -1067,6 +1078,80 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ " table exists and create it", e);
 		}
 		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createAttributesTable(AttributesTable table) {
+		verifyWritable();
+
+		tableCreator.createTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns) {
+		return createAttributesTable(tableName, null, additionalColumns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns) {
+
+		if (idColumnName == null) {
+			idColumnName = "id";
+		}
+
+		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
+		columns.add(AttributesColumn.createPrimaryKeyColumn(0, idColumnName));
+
+		if (additionalColumns != null) {
+			columns.addAll(additionalColumns);
+		}
+
+		return createAttributesTable(tableName, columns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns) {
+
+		// Create the user attributes table
+		AttributesTable table = new AttributesTable(tableName, columns);
+		createAttributesTable(table);
+
+		try {
+			// Create the contents
+			Contents contents = new Contents();
+			contents.setTableName(tableName);
+			contents.setDataType(ContentsDataType.ATTRIBUTES);
+			contents.setIdentifier(tableName);
+			contents.setLastChange(new Date());
+			getContentsDao().create(contents);
+
+			table.setContents(contents);
+
+		} catch (RuntimeException e) {
+			deleteTableQuietly(tableName);
+			throw e;
+		} catch (SQLException e) {
+			deleteTableQuietly(tableName);
+			throw new GeoPackageException(
+					"Failed to create table and metadata: " + tableName, e);
+		}
+
+		return table;
 	}
 
 }

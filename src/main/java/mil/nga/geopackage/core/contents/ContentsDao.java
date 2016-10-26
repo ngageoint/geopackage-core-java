@@ -408,6 +408,9 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				verifyTiles(dataType);
 				break;
 
+			case ATTRIBUTES:
+				break;
+
 			default:
 				throw new GeoPackageException("Unsupported data type: "
 						+ dataType);

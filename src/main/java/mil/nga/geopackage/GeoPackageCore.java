@@ -3,6 +3,8 @@ package mil.nga.geopackage;
 import java.io.Closeable;
 import java.util.List;
 
+import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
@@ -85,6 +87,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table names
 	 */
 	public List<String> getTileTables();
+
+	/**
+	 * Get the attributes tables
+	 * 
+	 * @return table name
+	 * @since 1.2.1
+	 */
+	public List<String> getAttributesTables();
 
 	/**
 	 * Get the tables for the contents data type
@@ -630,5 +640,67 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.1.5
 	 */
 	public boolean createFeatureTileLinkTable();
+
+	/**
+	 * Create a new attributes table
+	 * 
+	 * @param table
+	 *            attributes table
+	 * @since 1.2.1
+	 */
+	public void createAttributesTable(AttributesTable table);
+
+	/**
+	 * Create a new attributes table.
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes table.
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes table.
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns);
 
 }
