@@ -108,7 +108,7 @@ public class DataColumns {
 	private String title;
 
 	/**
-	 * A human-readable description for the table_name content
+	 * A human-readable description for the column_name content
 	 */
 	@DatabaseField(columnName = COLUMN_DESCRIPTION)
 	private String description;
@@ -136,7 +136,7 @@ public class DataColumns {
 	/**
 	 * Get the id
 	 * 
-	 * @return
+	 * @return table column key
 	 */
 	public TableColumnKey getId() {
 		return new TableColumnKey(tableName, columnName);

@@ -21,7 +21,9 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columns
+	 *            feature columns
 	 */
 	public FeatureTable(String tableName, List<FeatureColumn> columns) {
 		super(tableName, columns);
@@ -47,7 +49,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	/**
 	 * Get the geometry column index
 	 * 
-	 * @return
+	 * @return geometry column index
 	 */
 	public int getGeometryColumnIndex() {
 		return geometryIndex;
@@ -56,7 +58,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	/**
 	 * Get the geometry feature column
 	 * 
-	 * @return
+	 * @return geometry feature column
 	 */
 	public FeatureColumn getGeometryColumn() {
 		return getColumn(geometryIndex);

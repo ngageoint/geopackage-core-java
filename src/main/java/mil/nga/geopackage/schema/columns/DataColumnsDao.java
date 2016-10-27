@@ -177,7 +177,8 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 	 * Query by the constraint name
 	 * 
 	 * @param constraintName
-	 * @return
+	 *            constraint name
+	 * @return data columns
 	 * @throws SQLException
 	 */
 	public List<DataColumns> queryByConstraintName(String constraintName)

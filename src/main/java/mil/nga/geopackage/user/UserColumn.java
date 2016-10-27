@@ -69,26 +69,56 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		validateMax();
 	}
 
+	/**
+	 * Get the index
+	 * 
+	 * @return index
+	 */
 	public int getIndex() {
 		return index;
 	}
 
+	/**
+	 * Get the name
+	 * 
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Get the max
+	 * 
+	 * @return max
+	 */
 	public Long getMax() {
 		return max;
 	}
 
+	/**
+	 * Get the is not null flag
+	 * 
+	 * @return not null flag
+	 */
 	public boolean isNotNull() {
 		return notNull;
 	}
 
+	/**
+	 * Get the default value
+	 * 
+	 * @return default value
+	 */
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
 
+	/**
+	 * Get the primary key flag
+	 * 
+	 * @return primary key flag
+	 */
 	public boolean isPrimaryKey() {
 		return primaryKey;
 	}
@@ -96,7 +126,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * When not a geometry column, gets the data type
 	 * 
-	 * @return
+	 * @return data type
 	 */
 	public GeoPackageDataType getDataType() {
 		return dataType;
@@ -105,7 +135,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Get the database type name
 	 * 
-	 * @return
+	 * @return type name
 	 */
 	public String getTypeName() {
 		String type = null;

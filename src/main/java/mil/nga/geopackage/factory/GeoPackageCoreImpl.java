@@ -10,6 +10,8 @@ import java.util.Set;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -19,6 +21,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSql;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.CrsWktExtension;
@@ -27,6 +30,10 @@ import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
+import mil.nga.geopackage.extension.elevation.GriddedCoverage;
+import mil.nga.geopackage.extension.elevation.GriddedCoverageDao;
+import mil.nga.geopackage.extension.elevation.GriddedTile;
+import mil.nga.geopackage.extension.elevation.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
@@ -95,11 +102,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * Constructor
 	 *
 	 * @param name
+	 *            name
 	 * @param path
+	 *            path
 	 * @param database
-	 * @param connectionSource
+	 *            database
 	 * @param tableCreator
+	 *            table creator
 	 * @param writable
+	 *            true if writable
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
 			GeoPackageCoreConnection database,
@@ -156,19 +167,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getFeatureTables() {
-		GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
-		List<String> tableNames = null;
-		try {
-			if (geometryColumnsDao.isTableExists()) {
-				tableNames = geometryColumnsDao.getFeatureTables();
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve feature tables",
-					e);
-		}
-		if (tableNames == null) {
-			tableNames = new ArrayList<String>();
-		}
+		List<String> tableNames = getTables(ContentsDataType.FEATURES);
 		return tableNames;
 	}
 
@@ -177,17 +176,31 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getTileTables() {
-		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
-		List<String> tableNames = null;
+		List<String> tableNames = getTables(ContentsDataType.TILES);
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getAttributesTables() {
+		List<String> tableNames = getTables(ContentsDataType.ATTRIBUTES);
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables(ContentsDataType type) {
+		ContentsDao contentDao = getContentsDao();
+		List<String> tableNames;
 		try {
-			if (tileMatrixSetDao.isTableExists()) {
-				tableNames = tileMatrixSetDao.getTileTables();
-			}
+			tableNames = contentDao.getTables(type);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve tile tables", e);
-		}
-		if (tableNames == null) {
-			tableNames = new ArrayList<String>();
+			throw new GeoPackageException("Failed to retrieve "
+					+ type.getName() + " tables", e);
 		}
 		return tableNames;
 	}
@@ -196,10 +209,25 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getTables() {
+	public List<String> getFeatureAndTileTables() {
 		List<String> tables = new ArrayList<String>();
 		tables.addAll(getFeatureTables());
 		tables.addAll(getTileTables());
+		return tables;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables() {
+		ContentsDao contentDao = getContentsDao();
+		List<String> tables;
+		try {
+			tables = contentDao.getTables();
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to retrieve tables", e);
+		}
 		return tables;
 	}
 
@@ -225,7 +253,25 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean isTableType(ContentsDataType type, String table) {
+		Set<String> tables = new HashSet<String>(getTables(type));
+		return tables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public boolean isFeatureOrTileTable(String table) {
+		Set<String> tables = new HashSet<String>(getFeatureAndTileTables());
+		return tables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTable(String table) {
 		Set<String> tables = new HashSet<String>(getTables());
 		return tables.contains(table);
 	}
@@ -523,6 +569,19 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
+		return createTileTableWithMetadata(ContentsDataType.TILES, tableName,
+				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
+				tileMatrixSetSrsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+			String tableName, BoundingBox contentsBoundingBox,
+			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
+			long tileMatrixSetSrsId) {
 
 		TileMatrixSet tileMatrixSet = null;
 
@@ -543,7 +602,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(tableName);
-			contents.setDataType(ContentsDataType.TILES);
+			contents.setDataType(dataType);
 			contents.setIdentifier(tableName);
 			contents.setLastChange(new Date());
 			contents.setMinX(contentsBoundingBox.getMinLongitude());
@@ -794,24 +853,30 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 		if (writable) {
 
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_insert");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update1");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update2");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update3");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_update4");
-			database.execSQL("DROP TRIGGER IF EXISTS rtree_"
-					+ geometryColumns.getTableName() + "_"
-					+ geometryColumns.getColumnName() + "_delete");
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_insert"));
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_update1"));
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_update2"));
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_update3"));
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_update4"));
+			database.execSQL("DROP TRIGGER IF EXISTS "
+					+ CoreSQLUtils.quoteWrap("rtree_"
+							+ geometryColumns.getTableName() + "_"
+							+ geometryColumns.getColumnName() + "_delete"));
 
 		}
 	}
@@ -868,6 +933,64 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public void dropTable(String table) {
 		tableCreator.dropTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GriddedCoverageDao getGriddedCoverageDao() {
+		return createDao(GriddedCoverage.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createGriddedCoverageTable() {
+		verifyWritable();
+
+		boolean created = false;
+		GriddedCoverageDao dao = getGriddedCoverageDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createGriddedCoverage() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GriddedCoverage.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GriddedTileDao getGriddedTileDao() {
+		return createDao(GriddedTile.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createGriddedTileTable() {
+		verifyWritable();
+
+		boolean created = false;
+		GriddedTileDao dao = getGriddedTileDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createGriddedTile() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GriddedTile.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
 	}
 
 	/**
@@ -955,6 +1078,80 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ " table exists and create it", e);
 		}
 		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createAttributesTable(AttributesTable table) {
+		verifyWritable();
+
+		tableCreator.createTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns) {
+		return createAttributesTable(tableName, null, additionalColumns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns) {
+
+		if (idColumnName == null) {
+			idColumnName = "id";
+		}
+
+		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
+		columns.add(AttributesColumn.createPrimaryKeyColumn(0, idColumnName));
+
+		if (additionalColumns != null) {
+			columns.addAll(additionalColumns);
+		}
+
+		return createAttributesTable(tableName, columns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns) {
+
+		// Create the user attributes table
+		AttributesTable table = new AttributesTable(tableName, columns);
+		createAttributesTable(table);
+
+		try {
+			// Create the contents
+			Contents contents = new Contents();
+			contents.setTableName(tableName);
+			contents.setDataType(ContentsDataType.ATTRIBUTES);
+			contents.setIdentifier(tableName);
+			contents.setLastChange(new Date());
+			getContentsDao().create(contents);
+
+			table.setContents(contents);
+
+		} catch (RuntimeException e) {
+			deleteTableQuietly(tableName);
+			throw e;
+		} catch (SQLException e) {
+			deleteTableQuietly(tableName);
+			throw new GeoPackageException(
+					"Failed to create table and metadata: " + tableName, e);
+		}
+
+		return table;
 	}
 
 }

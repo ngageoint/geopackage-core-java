@@ -1,6 +1,7 @@
 package mil.nga.geopackage.core.contents;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -102,10 +103,62 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	}
 
 	/**
+	 * Get table names by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return table names
+	 * @throws SQLException
+	 * @since 1.2.1
+	 */
+	public List<String> getTables(ContentsDataType dataType)
+			throws SQLException {
+		List<Contents> contents = getContents(dataType);
+		List<String> tableNames = new ArrayList<String>();
+		for (Contents content : contents) {
+			tableNames.add(content.getTableName());
+		}
+		return tableNames;
+	}
+
+	/**
+	 * Get contents by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return list of contents
+	 * @throws SQLException
+	 * @since 1.2.1
+	 */
+	public List<Contents> getContents(ContentsDataType dataType)
+			throws SQLException {
+		List<Contents> contents = queryForEq(Contents.COLUMN_DATA_TYPE,
+				dataType.getName());
+		return contents;
+	}
+
+	/**
+	 * Get table names
+	 *
+	 * @return table names
+	 * @throws SQLException
+	 * @since 1.2.1
+	 */
+	public List<String> getTables() throws SQLException {
+		List<Contents> contents = queryForAll();
+		List<String> tableNames = new ArrayList<String>();
+		for (Contents content : contents) {
+			tableNames.add(content.getTableName());
+		}
+		return tableNames;
+	}
+
+	/**
 	 * Delete the Contents, cascading
 	 * 
 	 * @param contents
-	 * @return
+	 *            contents
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Contents contents) throws SQLException {
@@ -150,8 +203,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents, cascading optionally including the user table
 	 * 
 	 * @param contents
+	 *            contents
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Contents contents, boolean userTable)
@@ -169,7 +224,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the collection of Contents, cascading
 	 * 
 	 * @param contentsCollection
-	 * @return
+	 *            contents collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Collection<Contents> contentsCollection)
@@ -182,8 +238,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * user table
 	 * 
 	 * @param contentsCollection
+	 *            contents collection
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(Collection<Contents> contentsCollection,
@@ -201,7 +259,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents matching the prepared query, cascading
 	 * 
 	 * @param preparedDelete
-	 * @return
+	 *            prepared delete query
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<Contents> preparedDelete)
@@ -214,8 +273,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * including the user table
 	 * 
 	 * @param preparedDelete
+	 *            prepared delete query
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<Contents> preparedDelete,
@@ -232,7 +293,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete a Contents by id, cascading
 	 * 
 	 * @param id
-	 * @return
+	 *            id
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByIdCascade(String id) throws SQLException {
@@ -243,8 +305,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete a Contents by id, cascading optionally including the user table
 	 * 
 	 * @param id
+	 *            id
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByIdCascade(String id, boolean userTable)
@@ -265,7 +329,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the Contents with the provided ids, cascading
 	 * 
 	 * @param idCollection
-	 * @return
+	 *            id collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteIdsCascade(Collection<String> idCollection)
@@ -278,8 +343,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * the user table
 	 * 
 	 * @param idCollection
+	 *            id collection
 	 * @param userTable
-	 * @return
+	 *            true if a user table
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteIdsCascade(Collection<String> idCollection,
@@ -297,6 +364,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Delete the table
 	 * 
 	 * @param table
+	 *            table name
 	 */
 	public void deleteTable(String table) {
 		try {
@@ -310,6 +378,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 * Verify the tables are in the expected state for the Contents create
 	 * 
 	 * @param contents
+	 *            contents
 	 * @throws SQLException
 	 */
 	private void verifyCreate(Contents contents) throws SQLException {
@@ -332,28 +401,14 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				break;
 
 			case TILES:
-				// Tiles require Tile Matrix Set table (Spec Requirement 37)
-				TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
-				if (!tileMatrixSetDao.isTableExists()) {
-					throw new GeoPackageException(
-							"A data type of "
-									+ dataType.getName()
-									+ " requires the "
-									+ TileMatrixSet.class.getSimpleName()
-									+ " table to first be created using the GeoPackage.");
-				}
+				verifyTiles(dataType);
+				break;
 
-				// Tiles require Tile Matrix table (Spec Requirement 41)
-				TileMatrixDao tileMatrixDao = getTileMatrixDao();
-				if (!tileMatrixDao.isTableExists()) {
-					throw new GeoPackageException(
-							"A data type of "
-									+ dataType.getName()
-									+ " requires the "
-									+ TileMatrix.class.getSimpleName()
-									+ " table to first be created using the GeoPackage.");
-				}
+			case ELEVATION_TILES:
+				verifyTiles(dataType);
+				break;
 
+			case ATTRIBUTES:
 				break;
 
 			default:
@@ -372,9 +427,36 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	}
 
 	/**
+	 * Verify the required tile tables exist
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @throws SQLException
+	 */
+	private void verifyTiles(ContentsDataType dataType) throws SQLException {
+		// Tiles require Tile Matrix Set table (Spec Requirement 37)
+		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
+		if (!tileMatrixSetDao.isTableExists()) {
+			throw new GeoPackageException("A data type of "
+					+ dataType.getName() + " requires the "
+					+ TileMatrixSet.class.getSimpleName()
+					+ " table to first be created using the GeoPackage.");
+		}
+
+		// Tiles require Tile Matrix table (Spec Requirement 41)
+		TileMatrixDao tileMatrixDao = getTileMatrixDao();
+		if (!tileMatrixDao.isTableExists()) {
+			throw new GeoPackageException("A data type of "
+					+ dataType.getName() + " requires the "
+					+ TileMatrix.class.getSimpleName()
+					+ " table to first be created using the GeoPackage.");
+		}
+	}
+
+	/**
 	 * Get or create a Geometry Columns DAO
 	 * 
-	 * @return
+	 * @return geometry columns dao
 	 * @throws SQLException
 	 */
 	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
@@ -388,7 +470,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Get or create a Tile Matrix Set DAO
 	 * 
-	 * @return
+	 * @return tile matrix set dao
 	 * @throws SQLException
 	 */
 	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
@@ -402,7 +484,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	/**
 	 * Get or create a Tile Matrix DAO
 	 * 
-	 * @return
+	 * @return tile matrix dao
 	 * @throws SQLException
 	 */
 	private TileMatrixDao getTileMatrixDao() throws SQLException {

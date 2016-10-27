@@ -145,7 +145,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Write the geometry to bytes
 	 * 
-	 * @return
+	 * @return bytes
 	 * @throws IOException
 	 */
 	public byte[] toBytes() throws IOException {
@@ -190,6 +190,7 @@ public class GeoPackageGeometryData {
 	 * Read the flags from the flag byte and return the envelope indicator
 	 * 
 	 * @param flags
+	 *            flags byte
 	 * @return envelope indicator
 	 */
 	private int readFlags(byte flags) {
@@ -265,8 +266,10 @@ public class GeoPackageGeometryData {
 	 * Read the envelope based upon the indicator value
 	 * 
 	 * @param envelopeIndicator
+	 *            envelope indicator
 	 * @param reader
-	 * @return
+	 *            byte reader
+	 * @return geometry envelope
 	 */
 	private GeometryEnvelope readEnvelope(int envelopeIndicator,
 			ByteReader reader) {
@@ -328,6 +331,7 @@ public class GeoPackageGeometryData {
 	 * Write the envelope bytes
 	 * 
 	 * @param writer
+	 *            byte writer
 	 * @throws IOException
 	 */
 	private void writeEnvelope(ByteWriter writer) throws IOException {
@@ -354,46 +358,106 @@ public class GeoPackageGeometryData {
 		}
 	}
 
+	/**
+	 * Is the geometry extended
+	 * 
+	 * @return true if extended
+	 */
 	public boolean isExtended() {
 		return extended;
 	}
 
+	/**
+	 * Is the geometry empty
+	 * 
+	 * @return true if empty
+	 */
 	public boolean isEmpty() {
 		return empty;
 	}
 
+	/**
+	 * Get the byte order
+	 * 
+	 * @return byte order
+	 */
 	public ByteOrder getByteOrder() {
 		return byteOrder;
 	}
 
+	/**
+	 * Get the srs id
+	 * 
+	 * @return srs id
+	 */
 	public int getSrsId() {
 		return srsId;
 	}
 
+	/**
+	 * Get the geometry envelope
+	 * 
+	 * @return geometry envelope
+	 */
 	public GeometryEnvelope getEnvelope() {
 		return envelope;
 	}
 
+	/**
+	 * Get the geometry
+	 * 
+	 * @return geometry
+	 */
 	public Geometry getGeometry() {
 		return geometry;
 	}
 
+	/**
+	 * Set the extended flag
+	 * 
+	 * @param extended
+	 *            extended value
+	 */
 	public void setExtended(boolean extended) {
 		this.extended = extended;
 	}
 
+	/**
+	 * Set the empty flag
+	 * 
+	 * @param empty
+	 *            empty value
+	 */
 	public void setEmpty(boolean empty) {
 		this.empty = empty;
 	}
 
+	/**
+	 * Set the byte order
+	 * 
+	 * @param byteOrder
+	 *            byte order
+	 */
 	public void setByteOrder(ByteOrder byteOrder) {
 		this.byteOrder = byteOrder;
 	}
 
+	/**
+	 * Set the srs id
+	 * 
+	 * @param srsId
+	 *            srs id
+	 */
 	public void setSrsId(int srsId) {
 		this.srsId = srsId;
 	}
 
+	/**
+	 * Set the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 */
 	public void setEnvelope(GeometryEnvelope envelope) {
 		this.envelope = envelope;
 	}
@@ -417,7 +481,7 @@ public class GeoPackageGeometryData {
 	 * Get the bytes of the entire GeoPackage geometry including GeoPackage
 	 * header and WKB bytes
 	 * 
-	 * @return
+	 * @return bytes
 	 */
 	public byte[] getBytes() {
 		return bytes;
@@ -426,7 +490,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Get the GeoPackage header bytes
 	 * 
-	 * @return
+	 * @return header bytes
 	 */
 	public byte[] getHeaderBytes() {
 		byte[] headerBytes = new byte[wkbGeometryIndex];
@@ -437,7 +501,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Get the GeoPackage header bytes already ordered in a Byte Buffer
 	 * 
-	 * @return
+	 * @return byte buffer
 	 */
 	public ByteBuffer getHeaderByteBuffer() {
 		return ByteBuffer.wrap(bytes, 0, wkbGeometryIndex).order(byteOrder);
@@ -446,7 +510,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Get the Well-Known Binary Geometry bytes
 	 * 
-	 * @return
+	 * @return bytes
 	 */
 	public byte[] getWkbBytes() {
 		int wkbByteCount = bytes.length - wkbGeometryIndex;
@@ -458,7 +522,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Get the Well-Known Binary Geometry bytes already ordered in a Byte Buffer
 	 * 
-	 * @return
+	 * @return byte buffer
 	 */
 	public ByteBuffer getWkbByteBuffer() {
 		return ByteBuffer.wrap(bytes, wkbGeometryIndex,
@@ -468,7 +532,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Return the byte index where the Well-Known Binary bytes start
 	 * 
-	 * @return
+	 * @return index
 	 */
 	public int getWkbGeometryIndex() {
 		return wkbGeometryIndex;
@@ -479,7 +543,7 @@ public class GeoPackageGeometryData {
 	 * 
 	 * 1 for xy, 2 for xyz, 3 for xym, 4 for xyzm (null would be 0)
 	 * 
-	 * @return
+	 * @return indicator
 	 */
 	public static int getIndicator(GeometryEnvelope envelope) {
 		int indicator = 1;

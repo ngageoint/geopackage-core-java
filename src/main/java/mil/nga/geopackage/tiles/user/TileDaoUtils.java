@@ -56,61 +56,175 @@ public class TileDaoUtils {
 	 */
 	public static Long getZoomLevel(double[] widths, double[] heights,
 			List<TileMatrix> tileMatrices, double length) {
+		return getZoomLevel(widths, heights, tileMatrices, length, true);
+	}
+
+	/**
+	 * Get the zoom level for the provided width and height in the default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param width
+	 *            in default units
+	 * @param height
+	 *            in default units
+	 * @return tile matrix zoom level
+	 * @since 1.2.1
+	 */
+	public static Long getZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double width, double height) {
+		return getZoomLevel(widths, heights, tileMatrices, width, height, true);
+	}
+
+	/**
+	 * Get the closest zoom level for the provided width and height in the
+	 * default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param length
+	 *            in default units
+	 * @return tile matrix zoom level
+	 * @since 1.2.1
+	 */
+	public static Long getClosestZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double length) {
+		return getZoomLevel(widths, heights, tileMatrices, length, false);
+	}
+
+	/**
+	 * Get the closest zoom level for the provided width and height in the
+	 * default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param width
+	 *            in default units
+	 * @param height
+	 *            in default units
+	 * @return tile matrix zoom level
+	 * @since 1.2.1
+	 */
+	public static Long getClosestZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double width, double height) {
+		return getZoomLevel(widths, heights, tileMatrices, width, height, false);
+	}
+
+	/**
+	 * Get the zoom level for the provided width and height in the default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param length
+	 *            in default units
+	 * @param lengthChecks
+	 *            perform length checks for values too far away from the zoom
+	 *            level
+	 * @return tile matrix zoom level
+	 */
+	private static Long getZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double length, boolean lengthChecks) {
+		return getZoomLevel(widths, heights, tileMatrices, length, length,
+				lengthChecks);
+	}
+
+	/**
+	 * Get the zoom level for the provided width and height in the default units
+	 * 
+	 * @param widths
+	 *            sorted widths
+	 * @param heights
+	 *            sorted heights
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @param width
+	 *            width in default units
+	 * @param height
+	 *            height in default units
+	 * @param lengthChecks
+	 *            perform length checks for values too far away from the zoom
+	 *            level
+	 * @return tile matrix zoom level
+	 * @since 1.2.1
+	 */
+	private static Long getZoomLevel(double[] widths, double[] heights,
+			List<TileMatrix> tileMatrices, double width, double height,
+			boolean lengthChecks) {
 
 		Long zoomLevel = null;
 
 		// Find where the width and height fit in
-		int widthIndex = Arrays.binarySearch(widths, length);
+		int widthIndex = Arrays.binarySearch(widths, width);
 		if (widthIndex < 0) {
 			widthIndex = (widthIndex + 1) * -1;
 		}
-		int heightIndex = Arrays.binarySearch(heights, length);
+		int heightIndex = Arrays.binarySearch(heights, height);
 		if (heightIndex < 0) {
 			heightIndex = (heightIndex + 1) * -1;
 		}
 
 		// Find the closest width or verify it isn't too small or large
 		if (widthIndex == 0) {
-			if (length < getMinLength(widths)) {
+			if (lengthChecks && width < getMinLength(widths)) {
 				widthIndex = -1;
 			}
 		} else if (widthIndex == widths.length) {
-			if (length >= getMaxLength(widths)) {
+			if (lengthChecks && width >= getMaxLength(widths)) {
 				widthIndex = -1;
 			} else {
 				widthIndex = widthIndex - 1;
 			}
-		} else if (length - widths[widthIndex - 1] < widths[widthIndex]
-				- length) {
+		} else if (width - widths[widthIndex - 1] < widths[widthIndex] - width) {
 			widthIndex--;
 		}
 
 		// Find the closest height or verify it isn't too small or large
 		if (heightIndex == 0) {
-			if (length < getMinLength(heights)) {
+			if (lengthChecks && height < getMinLength(heights)) {
 				heightIndex = -1;
 			}
 		} else if (heightIndex == heights.length) {
-			if (length >= getMaxLength(heights)) {
+			if (lengthChecks && height >= getMaxLength(heights)) {
 				heightIndex = -1;
 			} else {
 				heightIndex = heightIndex - 1;
 			}
-		} else if (length - heights[heightIndex - 1] < heights[heightIndex]
-				- length) {
+		} else if (height - heights[heightIndex - 1] < heights[heightIndex]
+				- height) {
 			heightIndex--;
 		}
 
-		if (widthIndex >= 0 && heightIndex >= 0) {
+		if (widthIndex >= 0 || heightIndex >= 0) {
 
 			// Use one zoom size smaller if possible
-			int index = Math.min(widthIndex, heightIndex);
-			if (index >= 0) {
-
-				TileMatrix tileMatrix = tileMatrices.get(tileMatrices.size()
-						- index - 1);
-				zoomLevel = tileMatrix.getZoomLevel();
+			int index;
+			if (widthIndex < 0) {
+				index = heightIndex;
+			} else if (heightIndex < 0) {
+				index = widthIndex;
+			} else {
+				index = Math.min(widthIndex, heightIndex);
 			}
+
+			TileMatrix tileMatrix = tileMatrices.get(tileMatrices.size()
+					- index - 1);
+			zoomLevel = tileMatrix.getZoomLevel();
 		}
 
 		return zoomLevel;

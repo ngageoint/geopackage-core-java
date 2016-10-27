@@ -33,7 +33,8 @@ public class ProjectionRetriever {
 	 * Get the proj4 projection string for the EPSG code
 	 * 
 	 * @param epsg
-	 * @return
+	 *            epsg
+	 * @return projection
 	 */
 	public static synchronized String getProjection(long epsg) {
 		if (mProperties == null) {

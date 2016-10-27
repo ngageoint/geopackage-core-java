@@ -19,7 +19,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * 
 	 * @param sql
 	 * @param selectionArgs
-	 * @return
+	 * @return result
 	 */
 	public abstract TResult rawQuery(String sql, String[] selectionArgs);
 
@@ -34,7 +34,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param groupBy
 	 * @param having
 	 * @param orderBy
-	 * @return
+	 * @return result
 	 */
 	public abstract TResult query(String table, String[] columns,
 			String selection, String[] selectionArgs, String groupBy,
@@ -52,7 +52,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param having
 	 * @param orderBy
 	 * @param limit
-	 * @return
+	 * @return result
 	 */
 	public abstract TResult query(String table, String[] columns,
 			String selection, String[] selectionArgs, String groupBy,

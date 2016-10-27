@@ -1,0 +1,11 @@
+CREATE TABLE 'gpkg_2d_gridded_coverage_ancillary' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tile_matrix_set_name TEXT NOT NULL UNIQUE,
+  datatype TEXT NOT NULL DEFAULT 'integer',
+  scale REAL DEFAULT 1.0,
+  offset REAL DEFAULT 0.0,
+  precision REAL DEFAULT 1.0,
+  data_null REAL,
+  CONSTRAINT fk_g2dgtct_name FOREIGN KEY('tile_matrix_set_name') REFERENCES gpkg_tile_matrix_set ( table_name )
+  CHECK (datatype in ('integer','float'))
+ );

@@ -109,7 +109,8 @@ public enum MetadataScopeType {
 	 * Get the metadata scope from the name
 	 * 
 	 * @param name
-	 * @return
+	 *            name
+	 * @return scope type
 	 */
 	public static MetadataScopeType fromName(String name) {
 

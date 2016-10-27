@@ -99,7 +99,7 @@ public class SpatialReferenceSystem {
 	/**
 	 * Well-known Text [34] Representation of the Spatial Reference System
 	 */
-	private String definition_12_163;
+	private String definition_12_063;
 
 	/**
 	 * Contents
@@ -183,17 +183,17 @@ public class SpatialReferenceSystem {
 	}
 
 	/**
-	 * @since 1.1.8
+	 * @since 1.2.1
 	 */
-	public String getDefinition_12_163() {
-		return definition_12_163;
+	public String getDefinition_12_063() {
+		return definition_12_063;
 	}
 
 	/**
-	 * @since 1.1.8
+	 * @since 1.2.1
 	 */
-	public void setDefinition_12_163(String definition_12_163) {
-		this.definition_12_163 = definition_12_163;
+	public void setDefinition_12_063(String definition_12_063) {
+		this.definition_12_063 = definition_12_063;
 	}
 
 	public ForeignCollection<Contents> getContents() {

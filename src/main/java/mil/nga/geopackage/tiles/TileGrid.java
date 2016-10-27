@@ -31,11 +31,13 @@ public class TileGrid {
 	 * Constructor
 	 * 
 	 * @param minX
+	 *            min x
 	 * @param maxX
+	 *            max x
 	 * @param minY
+	 *            min y
 	 * @param maxY
-	 * @param width
-	 * @param height
+	 *            max y
 	 */
 	public TileGrid(long minX, long maxX, long minY, long maxY) {
 		this.minX = minX;
@@ -44,34 +46,78 @@ public class TileGrid {
 		this.maxY = maxY;
 	}
 
+	/**
+	 * Get the min x
+	 * 
+	 * @return min x
+	 */
 	public long getMinX() {
 		return minX;
 	}
 
+	/**
+	 * Set the min x
+	 * 
+	 * @param minX
+	 *            min x
+	 */
 	public void setMinX(long minX) {
 		this.minX = minX;
 	}
 
+	/**
+	 * Get the max x
+	 * 
+	 * @return max x
+	 */
 	public long getMaxX() {
 		return maxX;
 	}
 
+	/**
+	 * Set the max x
+	 * 
+	 * @param maxX
+	 *            max x
+	 */
 	public void setMaxX(long maxX) {
 		this.maxX = maxX;
 	}
 
+	/**
+	 * Get the min y
+	 * 
+	 * @return min y
+	 */
 	public long getMinY() {
 		return minY;
 	}
 
+	/**
+	 * Set the min y
+	 * 
+	 * @param minY
+	 *            min y
+	 */
 	public void setMinY(long minY) {
 		this.minY = minY;
 	}
 
+	/**
+	 * Get the max y
+	 * 
+	 * @return max y
+	 */
 	public long getMaxY() {
 		return maxY;
 	}
 
+	/**
+	 * Set the max y
+	 * 
+	 * @param maxY
+	 *            max y
+	 */
 	public void setMaxY(long maxY) {
 		this.maxY = maxY;
 	}
@@ -79,7 +125,7 @@ public class TileGrid {
 	/**
 	 * Get the count of tiles in the grid
 	 * 
-	 * @return
+	 * @return count
 	 */
 	public long count() {
 		return ((maxX + 1) - minX) * ((maxY + 1) - minY);

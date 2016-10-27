@@ -7,12 +7,12 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.features.columns.GeometryColumns;
+import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -117,7 +117,7 @@ public class Contents {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * %Y-%m-%dT%H:%M:%fZ format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_LAST_CHANGE, dataType = DataType.DATE_STRING, format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class)
 	private Date lastChange;
 
 	/**
@@ -205,6 +205,27 @@ public class Contents {
 		this.dataType = dataType.getName();
 	}
 
+	/**
+	 * Get the data type string value
+	 * 
+	 * @return data type
+	 * @since 1.2.1
+	 */
+	public String getDataTypeString() {
+		return dataType;
+	}
+
+	/**
+	 * Set the data type string value
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @since 1.2.1
+	 */
+	public void setDataTypeString(String dataType) {
+		this.dataType = dataType;
+	}
+
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -277,7 +298,7 @@ public class Contents {
 	/**
 	 * Get the Geometry Columns, should only return one or no value
 	 * 
-	 * @return
+	 * @return geometry columns
 	 */
 	public GeometryColumns getGeometryColumns() {
 		GeometryColumns result = null;
@@ -307,7 +328,7 @@ public class Contents {
 	/**
 	 * Get the Tile Matrix Set, should only return one or no value
 	 * 
-	 * @return
+	 * @return tile matrix set
 	 */
 	public TileMatrixSet getTileMatrixSet() {
 		TileMatrixSet result = null;
@@ -337,7 +358,7 @@ public class Contents {
 	/**
 	 * Get the Tile Matrix collection
 	 * 
-	 * @return
+	 * @return tile matrices
 	 */
 	public ForeignCollection<TileMatrix> getTileMatrix() {
 		return tileMatrix;
@@ -346,7 +367,7 @@ public class Contents {
 	/**
 	 * Get a bounding box
 	 * 
-	 * @return
+	 * @return bounding box
 	 */
 	public BoundingBox getBoundingBox() {
 		BoundingBox boundingBox = new BoundingBox(getMinX(), getMaxX(),
@@ -358,6 +379,7 @@ public class Contents {
 	 * Set a bounding box
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 */
 	public void setBoundingBox(BoundingBox boundingBox) {
 		setMinX(boundingBox.getMinLongitude());

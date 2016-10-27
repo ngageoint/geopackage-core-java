@@ -36,7 +36,7 @@ public enum ExtensionScopeType {
 	/**
 	 * Get the value
 	 * 
-	 * @return
+	 * @return value
 	 */
 	public String getValue() {
 		return value;
@@ -46,7 +46,8 @@ public enum ExtensionScopeType {
 	 * Get the type from the value
 	 * 
 	 * @param value
-	 * @return
+	 *            value
+	 * @return scope type
 	 */
 	public static ExtensionScopeType fromValue(String value) {
 		value = value.replace("-", "_");

@@ -18,7 +18,9 @@ public class TileMatrixSetDao extends BaseDaoImpl<TileMatrixSet, String> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
 	 */
 	public TileMatrixSetDao(ConnectionSource connectionSource,
@@ -29,7 +31,7 @@ public class TileMatrixSetDao extends BaseDaoImpl<TileMatrixSet, String> {
 	/**
 	 * Get all the tile table names
 	 * 
-	 * @return
+	 * @return tile tables
 	 * @throws SQLException
 	 */
 	public List<String> getTileTables() throws SQLException {

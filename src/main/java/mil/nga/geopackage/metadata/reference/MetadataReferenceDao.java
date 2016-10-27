@@ -81,7 +81,8 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Delete metadata references with foreign keys to the metadata file id
 	 * 
 	 * @param fileId
-	 * @return
+	 *            file id
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteByMetadata(long fileId) throws SQLException {
@@ -99,7 +100,8 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * keys to the metadata parent id
 	 * 
 	 * @param parentId
-	 * @return
+	 *            parent id
+	 * @return updated count
 	 * @throws SQLException
 	 */
 	public int removeMetadataParent(long parentId) throws SQLException {
@@ -119,8 +121,10 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Query by the metadata ids
 	 * 
 	 * @param fileId
+	 *            file id
 	 * @param parentId
-	 * @return
+	 *            parent id
+	 * @return metadata references
 	 * @throws SQLException
 	 */
 	public List<MetadataReference> queryByMetadata(long fileId, Long parentId)
@@ -137,7 +141,8 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Query by the metadata ids
 	 * 
 	 * @param fileId
-	 * @return
+	 *            file id
+	 * @return metadata references
 	 * @throws SQLException
 	 */
 	public List<MetadataReference> queryByMetadata(long fileId)
@@ -154,7 +159,8 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Query by the metadata parent ids
 	 * 
 	 * @param parentId
-	 * @return
+	 *            parent id
+	 * @return metadata references
 	 * @throws SQLException
 	 */
 	public List<MetadataReference> queryByMetadataParent(long parentId)
@@ -171,8 +177,11 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Set the foreign key column criteria in the where clause
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param fileId
+	 *            file id
 	 * @param parentId
+	 *            parent id
 	 * @throws SQLException
 	 */
 	private void setFkWhere(Where<MetadataReference, Void> where, long fileId,

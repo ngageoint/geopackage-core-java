@@ -41,7 +41,7 @@ public class UserCoreResultUtils {
 	 * @param result
 	 * @param index
 	 * @param dataType
-	 * @return
+	 * @return value
 	 */
 	public static Object getValue(UserCoreResult<?, ?, ?> result, int index,
 			GeoPackageDataType dataType) {
@@ -80,7 +80,7 @@ public class UserCoreResultUtils {
 	 *
 	 * @param index
 	 * @param dataType
-	 * @return
+	 * @return integer value
 	 */
 	public static Object getIntegerValue(UserCoreResult<?, ?, ?> result,
 			int index, GeoPackageDataType dataType) {
@@ -110,8 +110,8 @@ public class UserCoreResultUtils {
 			throw new GeoPackageException("Data Type " + dataType
 					+ " is not an integer type");
 		}
-		
-		if(result.wasNull()){
+
+		if (result.wasNull()) {
 			value = null;
 		}
 
@@ -123,7 +123,7 @@ public class UserCoreResultUtils {
 	 *
 	 * @param index
 	 * @param dataType
-	 * @return
+	 * @return float value
 	 */
 	public static Object getFloatValue(UserCoreResult<?, ?, ?> result,
 			int index, GeoPackageDataType dataType) {
@@ -145,8 +145,8 @@ public class UserCoreResultUtils {
 			throw new GeoPackageException("Data Type " + dataType
 					+ " is not a float type");
 		}
-		
-		if(result.wasNull()){
+
+		if (result.wasNull()) {
 			value = null;
 		}
 

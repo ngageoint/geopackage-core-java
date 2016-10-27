@@ -15,7 +15,21 @@ public enum ContentsDataType {
 	/**
 	 * Tiles
 	 */
-	TILES("tiles");
+	TILES("tiles"),
+
+	/**
+	 * Attributes
+	 * 
+	 * @since 1.2.1
+	 */
+	ATTRIBUTES("attributes"),
+
+	/**
+	 * Tiled Gridded Elevation Data Extension
+	 * 
+	 * @since 1.2.1
+	 */
+	ELEVATION_TILES("2d-gridded-coverage");
 
 	/**
 	 * Data type name
@@ -34,7 +48,7 @@ public enum ContentsDataType {
 	/**
 	 * Get the name
 	 * 
-	 * @return
+	 * @return name
 	 */
 	public String getName() {
 		return name;
@@ -44,7 +58,8 @@ public enum ContentsDataType {
 	 * Get the Data Type from the name
 	 * 
 	 * @param name
-	 * @return
+	 *            name
+	 * @return contents data type
 	 */
 	public static ContentsDataType fromName(String name) {
 		ContentsDataType dataType = null;

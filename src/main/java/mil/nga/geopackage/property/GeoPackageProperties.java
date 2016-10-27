@@ -28,7 +28,8 @@ public class GeoPackageProperties {
 	 * Get a required property by key
 	 * 
 	 * @param key
-	 * @return
+	 *            key
+	 * @return value
 	 */
 	public static String getProperty(String key) {
 		return getProperty(key, true);
@@ -38,8 +39,10 @@ public class GeoPackageProperties {
 	 * Get a property by key
 	 * 
 	 * @param key
+	 *            key
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return value
 	 */
 	public static synchronized String getProperty(String key, boolean required) {
 		if (mProperties == null) {
@@ -56,8 +59,10 @@ public class GeoPackageProperties {
 	 * Get a required property by base property and property name
 	 * 
 	 * @param base
+	 *            base property
 	 * @param property
-	 * @return
+	 *            property
+	 * @return value
 	 */
 	public static String getProperty(String base, String property) {
 		return getProperty(base, property, true);
@@ -67,9 +72,12 @@ public class GeoPackageProperties {
 	 * Get a property by base property and property name
 	 * 
 	 * @param base
+	 *            base property
 	 * @param property
+	 *            property
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return value
 	 */
 	public static synchronized String getProperty(String base, String property,
 			boolean required) {
@@ -81,7 +89,8 @@ public class GeoPackageProperties {
 	 * Get a required integer property by key
 	 * 
 	 * @param key
-	 * @return
+	 *            key
+	 * @return integer value
 	 */
 	public static int getIntegerProperty(String key) {
 		return getIntegerProperty(key, true);
@@ -91,8 +100,10 @@ public class GeoPackageProperties {
 	 * Get an integer property by key
 	 * 
 	 * @param key
+	 *            key
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return integer value
 	 */
 	public static Integer getIntegerProperty(String key, boolean required) {
 		Integer value = null;
@@ -107,8 +118,10 @@ public class GeoPackageProperties {
 	 * Get a required integer property by base property and property name
 	 * 
 	 * @param base
+	 *            base property
 	 * @param property
-	 * @return
+	 *            property
+	 * @return integer value
 	 */
 	public static int getIntegerProperty(String base, String property) {
 		return getIntegerProperty(base, property, true);
@@ -118,9 +131,12 @@ public class GeoPackageProperties {
 	 * Get an integer property by base property and property name
 	 * 
 	 * @param base
+	 *            base property
 	 * @param property
+	 *            property
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return integer value
 	 */
 	public static Integer getIntegerProperty(String base, String property,
 			boolean required) {
@@ -132,7 +148,8 @@ public class GeoPackageProperties {
 	 * Get a required float by key
 	 * 
 	 * @param key
-	 * @return
+	 *            key
+	 * @return float value
 	 */
 	public static float getFloatProperty(String key) {
 		return getFloatProperty(key, true);
@@ -142,8 +159,10 @@ public class GeoPackageProperties {
 	 * Get a float by key
 	 * 
 	 * @param key
+	 *            key
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return float value
 	 */
 	public static Float getFloatProperty(String key, boolean required) {
 		Float value = null;
@@ -158,7 +177,8 @@ public class GeoPackageProperties {
 	 * Get a required boolean by key
 	 * 
 	 * @param key
-	 * @return
+	 *            key
+	 * @return boolean value
 	 */
 	public static boolean getBooleanProperty(String key) {
 		return getBooleanProperty(key, true);
@@ -168,8 +188,10 @@ public class GeoPackageProperties {
 	 * Get a boolean by key
 	 * 
 	 * @param key
+	 *            key
 	 * @param required
-	 * @return
+	 *            true if required
+	 * @return boolean value
 	 */
 	public static Boolean getBooleanProperty(String key, boolean required) {
 		Boolean value = null;
@@ -183,7 +205,7 @@ public class GeoPackageProperties {
 	/**
 	 * Initialize the configuration properties
 	 * 
-	 * @return
+	 * @return properties
 	 */
 	private static Properties initializeConfigurationProperties() {
 		Properties properties = new Properties();

@@ -94,10 +94,21 @@ public class Extensions {
 
 	}
 
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
 	public String getTableName() {
 		return tableName;
 	}
 
+	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 		if (tableName == null) {
@@ -105,18 +116,40 @@ public class Extensions {
 		}
 	}
 
+	/**
+	 * Get the column name
+	 * 
+	 * @return column name
+	 */
 	public String getColumnName() {
 		return columnName;
 	}
 
+	/**
+	 * Set the column name
+	 * 
+	 * @param columnName
+	 *            column name
+	 */
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
 
+	/**
+	 * Get the extension name
+	 * 
+	 * @return extension name
+	 */
 	public String getExtensionName() {
 		return extensionName;
 	}
 
+	/**
+	 * Set the extension name
+	 * 
+	 * @param extensionName
+	 *            extension name
+	 */
 	public void setExtensionName(String extensionName) {
 		this.extensionName = extensionName;
 	}
@@ -134,7 +167,7 @@ public class Extensions {
 	/**
 	 * Get the author from the beginning of the extension name
 	 * 
-	 * @return
+	 * @return author
 	 */
 	public String getAuthor() {
 		return getAuthor(extensionName);
@@ -143,24 +176,46 @@ public class Extensions {
 	/**
 	 * Get the extension name with the author prefix removed
 	 * 
-	 * @return
+	 * @return extension name without the author
 	 */
 	public String getExtensionNameNoAuthor() {
 		return getExtensionNameNoAuthor(extensionName);
 	}
 
+	/**
+	 * Get the definition
+	 * 
+	 * @return definition
+	 */
 	public String getDefinition() {
 		return definition;
 	}
 
+	/**
+	 * Set the definition
+	 * 
+	 * @param definition
+	 *            definition
+	 */
 	public void setDefinition(String definition) {
 		this.definition = definition;
 	}
 
+	/**
+	 * Get the extension scope type
+	 * 
+	 * @return extension scope type
+	 */
 	public ExtensionScopeType getScope() {
 		return ExtensionScopeType.fromValue(scope);
 	}
 
+	/**
+	 * Set the extension scope type
+	 * 
+	 * @param scope
+	 *            extension scope type
+	 */
 	public void setScope(ExtensionScopeType scope) {
 		this.scope = scope.getValue();
 	}
@@ -169,7 +224,9 @@ public class Extensions {
 	 * Build the extension name by combining the required parts
 	 * 
 	 * @param author
+	 *            extension author
 	 * @param extensionName
+	 *            extension name
 	 * @return extension name
 	 * @since 1.1.0
 	 */
@@ -180,7 +237,9 @@ public class Extensions {
 	/**
 	 * Get the author from the beginning of the extension name
 	 * 
-	 * @return author
+	 * @param extensionName
+	 *            extension name
+	 * @return author extension author
 	 * @since 1.1.0
 	 */
 	public static String getAuthor(String extensionName) {
@@ -195,6 +254,8 @@ public class Extensions {
 	/**
 	 * Get the extension name with the author prefix removed
 	 * 
+	 * @param extensionName
+	 *            extension name
 	 * @return extension name, no author
 	 * @since 1.1.0
 	 */

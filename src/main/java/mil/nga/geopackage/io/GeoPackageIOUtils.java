@@ -20,7 +20,8 @@ public class GeoPackageIOUtils {
 	 * Get the file extension
 	 * 
 	 * @param file
-	 * @return
+	 *            file
+	 * @return extension
 	 */
 	public static String getFileExtension(File file) {
 
@@ -39,7 +40,8 @@ public class GeoPackageIOUtils {
 	 * Get the file name with the extension removed
 	 * 
 	 * @param file
-	 * @return
+	 *            file
+	 * @return file name
 	 */
 	public static String getFileNameWithoutExtension(File file) {
 
@@ -172,7 +174,8 @@ public class GeoPackageIOUtils {
 	 * Format the bytes into readable text
 	 * 
 	 * @param bytes
-	 * @return
+	 *            bytes
+	 * @return bytes text
 	 */
 	public static String formatBytes(long bytes) {
 

@@ -126,7 +126,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the zoom level column index
 	 * 
-	 * @return
+	 * @return zoom level index
 	 */
 	public int getZoomLevelColumnIndex() {
 		return zoomLevelIndex;
@@ -135,7 +135,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the zoom level column
 	 * 
-	 * @return
+	 * @return tile column
 	 */
 	public TileColumn getZoomLevelColumn() {
 		return getColumn(zoomLevelIndex);
@@ -144,7 +144,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile column column index
 	 * 
-	 * @return
+	 * @return tile column index
 	 */
 	public int getTileColumnColumnIndex() {
 		return tileColumnIndex;
@@ -153,7 +153,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile column column
 	 * 
-	 * @return
+	 * @return tile column
 	 */
 	public TileColumn getTileColumnColumn() {
 		return getColumn(tileColumnIndex);
@@ -162,7 +162,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile row column index
 	 * 
-	 * @return
+	 * @return tile row index
 	 */
 	public int getTileRowColumnIndex() {
 		return tileRowIndex;
@@ -171,7 +171,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile row column
 	 * 
-	 * @return
+	 * @return tile column
 	 */
 	public TileColumn getTileRowColumn() {
 		return getColumn(tileRowIndex);
@@ -180,7 +180,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile data column index
 	 * 
-	 * @return
+	 * @return tile data index
 	 */
 	public int getTileDataColumnIndex() {
 		return tileDataIndex;
@@ -189,7 +189,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Get the tile data column
 	 * 
-	 * @return
+	 * @return tile column
 	 */
 	public TileColumn getTileDataColumn() {
 		return getColumn(tileDataIndex);
@@ -198,7 +198,7 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Create the required table columns, starting at index 0
 	 * 
-	 * @return
+	 * @return tile columns
 	 */
 	public static List<TileColumn> createRequiredColumns() {
 		return createRequiredColumns(0);
@@ -208,7 +208,8 @@ public class TileTable extends UserTable<TileColumn> {
 	 * Create the required table columns, starting at the provided index
 	 * 
 	 * @param startingIndex
-	 * @return
+	 *            starting index
+	 * @return tile columns
 	 */
 	public static List<TileColumn> createRequiredColumns(int startingIndex) {
 

@@ -50,7 +50,7 @@ public class GeoPackageValidate {
 	 * Check the GeoPackage for the minimum required tables
 	 * 
 	 * @param geoPackage
-	 * @return
+	 * @return true if has minimum tables
 	 */
 	public static boolean hasMinimumTables(GeoPackageCore geoPackage) {
 		boolean hasMinimum;

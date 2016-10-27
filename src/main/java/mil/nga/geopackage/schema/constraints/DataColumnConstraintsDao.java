@@ -35,7 +35,9 @@ public class DataColumnConstraintsDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
 	 */
 	public DataColumnConstraintsDao(ConnectionSource connectionSource,
@@ -47,7 +49,8 @@ public class DataColumnConstraintsDao extends
 	 * Delete the Data Columns Constraints, cascading
 	 * 
 	 * @param constraints
-	 * @return
+	 *            data column constraints
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(DataColumnConstraints constraints)
@@ -95,7 +98,8 @@ public class DataColumnConstraintsDao extends
 	 * Delete the collection of Data Column Constraints, cascading
 	 * 
 	 * @param constraintsCollection
-	 * @return
+	 *            constraints collection
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(
@@ -114,7 +118,8 @@ public class DataColumnConstraintsDao extends
 	 * Delete the Data Column Constraints matching the prepared query, cascading
 	 * 
 	 * @param preparedDelete
-	 * @return
+	 *            prepared delete query
+	 * @return deleted count
 	 * @throws SQLException
 	 */
 	public int deleteCascade(PreparedQuery<DataColumnConstraints> preparedDelete)
@@ -130,7 +135,7 @@ public class DataColumnConstraintsDao extends
 	/**
 	 * Get or create a Data Columns DAO
 	 * 
-	 * @return
+	 * @return data columns dao
 	 * @throws SQLException
 	 */
 	private DataColumnsDao getDataColumnsDao() throws SQLException {
@@ -196,7 +201,8 @@ public class DataColumnConstraintsDao extends
 	 * Query by the constraint name
 	 * 
 	 * @param constraintName
-	 * @return
+	 *            constraint name
+	 * @return data column constraints
 	 * @throws SQLException
 	 */
 	public List<DataColumnConstraints> queryByConstraintName(
@@ -209,9 +215,12 @@ public class DataColumnConstraintsDao extends
 	 * Query by the unique column values
 	 * 
 	 * @param constraintName
+	 *            constraint name
 	 * @param constraintType
+	 *            constraint type
 	 * @param value
-	 * @return
+	 *            value
+	 * @return data column constraints
 	 * @throws SQLException
 	 */
 	public DataColumnConstraints queryByUnique(String constraintName,
@@ -243,9 +252,13 @@ public class DataColumnConstraintsDao extends
 	 * Set the unique column criteria in the where clause
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param constraintName
+	 *            constraint name
 	 * @param constraintType
+	 *            constraint type
 	 * @param value
+	 *            value
 	 * @throws SQLException
 	 */
 	private void setUniqueWhere(Where<DataColumnConstraints, Void> where,

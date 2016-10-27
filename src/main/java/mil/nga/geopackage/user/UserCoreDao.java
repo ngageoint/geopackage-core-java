@@ -71,7 +71,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get a new empty row
 	 * 
-	 * @return
+	 * @return row
 	 */
 	public abstract TRow newRow();
 
@@ -86,7 +86,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the database
 	 * 
-	 * @return
+	 * @return database
 	 */
 	public String getDatabase() {
 		return database;
@@ -95,7 +95,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the database connection
 	 * 
-	 * @return
+	 * @return database connection
 	 */
 	public GeoPackageCoreConnection getDb() {
 		return db;
@@ -104,7 +104,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the user database connection
 	 * 
-	 * @return
+	 * @return user database connection
 	 */
 	public UserCoreConnection<TColumn, TTable, TRow, TResult> getUserDb() {
 		return userDb;
@@ -113,7 +113,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the table name
 	 * 
-	 * @return
+	 * @return table name
 	 */
 	public String getTableName() {
 		return table.getTableName();
@@ -122,7 +122,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the table
 	 * 
-	 * @return
+	 * @return table
 	 */
 	public TTable getTable() {
 		return table;
@@ -131,7 +131,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the projection
 	 *
-	 * @return
+	 * @return projection
 	 */
 	public Projection getProjection() {
 		return projection;
@@ -147,7 +147,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Query for all rows
 	 * 
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForAll() {
 		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
@@ -159,7 +159,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param fieldName
 	 * @param value
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value) {
 		return queryForEq(fieldName, value, null, null, null);
@@ -173,7 +173,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param groupBy
 	 * @param having
 	 * @param orderBy
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
@@ -188,7 +188,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param fieldName
 	 * @param value
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, ColumnValue value) {
 		String where = buildWhere(fieldName, value);
@@ -201,7 +201,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param fieldValues
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForFieldValues(Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
@@ -214,7 +214,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param fieldValues
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForValueFieldValues(Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
@@ -227,7 +227,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param id
-	 * @return
+	 * @return result
 	 */
 	public TResult queryForId(long id) {
 		String where = getPkWhere(id);
@@ -240,7 +240,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param id
-	 * @return
+	 * @return row
 	 */
 	public TRow queryForIdRow(long id) {
 		TRow row = null;
@@ -257,7 +257,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param where
 	 * @param whereArgs
-	 * @return
+	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs) {
 		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
@@ -272,7 +272,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param groupBy
 	 * @param having
 	 * @param orderBy
-	 * @return
+	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy) {
@@ -289,7 +289,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param having
 	 * @param orderBy
 	 * @param limit
-	 * @return
+	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy, String limit) {
@@ -330,7 +330,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param whereClause
 	 * @param whereArgs
-	 * @return
+	 * @return deleted count
 	 */
 	public int delete(String whereClause, String[] whereArgs) {
 		return db.delete(getTableName(), whereClause, whereArgs);
@@ -358,7 +358,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the primary key where clause
 	 * 
 	 * @param id
-	 * @return
+	 * @return primary key where clause
 	 */
 	protected String getPkWhere(long id) {
 		return buildWhere(table.getPkColumn().getName(), id);
@@ -367,7 +367,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the primary key where args
 	 * 
-	 * @return
+	 * @return primary key where args
 	 */
 	protected String[] getPkWhereArgs(long id) {
 		return buildWhereArgs(id);
@@ -377,7 +377,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement from the fields
 	 * 
 	 * @param fields
-	 * @return
+	 * @return where clause
 	 */
 	public String buildWhere(Set<Map.Entry<String, Object>> fields) {
 		StringBuilder selection = new StringBuilder();
@@ -394,7 +394,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement from the fields
 	 * 
 	 * @param fields
-	 * @return
+	 * @return where clause
 	 */
 	public String buildValueWhere(Set<Map.Entry<String, ColumnValue>> fields) {
 		StringBuilder selection = new StringBuilder();
@@ -412,7 +412,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param field
 	 * @param value
-	 * @return
+	 * @return where clause
 	 */
 	public String buildWhere(String field, Object value) {
 		return buildWhere(field, value, "=");
@@ -425,10 +425,11 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param field
 	 * @param value
 	 * @param operation
-	 * @return
+	 * @return where clause
 	 */
 	public String buildWhere(String field, Object value, String operation) {
-		return field + " " + (value != null ? operation + " ?" : "IS NULL");
+		return "\"" + field + "\" "
+				+ (value != null ? operation + " ?" : "IS NULL");
 	}
 
 	/**
@@ -436,7 +437,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param field
 	 * @param value
-	 * @return
+	 * @return where clause
 	 */
 	public String buildWhere(String field, ColumnValue value) {
 		String where;
@@ -447,12 +448,12 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 							"Field value is not a number and can not use a tolerance, Field: "
 									+ field + ", Value: " + value);
 				}
-				where = field + " >= ? AND " + field + " <= ?";
+				where = "\"" + field + "\" >= ? AND \"" + field + "\" <= ?";
 			} else {
 				where = buildWhere(field, value.getValue());
 			}
 		} else {
-			where = buildWhere(field, null);
+			where = buildWhere(field, null, "=");
 		}
 		return where;
 	}
@@ -461,7 +462,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
-	 * @return
+	 * @return where args
 	 */
 	public String[] buildWhereArgs(Collection<Object> values) {
 		List<String> selectionArgs = new ArrayList<String>();
@@ -478,7 +479,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
-	 * @return
+	 * @return where args
 	 */
 	public String[] buildWhereArgs(Object[] values) {
 		List<String> selectionArgs = new ArrayList<String>();
@@ -495,7 +496,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
-	 * @return
+	 * @return where args
 	 */
 	public String[] buildValueWhereArgs(Collection<ColumnValue> values) {
 		List<String> selectionArgs = new ArrayList<String>();
@@ -518,7 +519,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the value
 	 * 
 	 * @param value
-	 * @return
+	 * @return where args
 	 */
 	public String[] buildWhereArgs(Object value) {
 		String[] args = null;
@@ -532,7 +533,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the value
 	 * 
 	 * @param value
-	 * @return
+	 * @return where args
 	 */
 	public String[] buildWhereArgs(ColumnValue value) {
 		String[] args = null;
@@ -549,7 +550,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the total count
 	 * 
-	 * @return
+	 * @return count
 	 */
 	public int count() {
 		return count(null, null);
@@ -617,7 +618,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the value tolerance range min and max values
 	 * 
 	 * @param value
-	 * @return
+	 * @return tolerance range
 	 */
 	private String[] getValueToleranceRange(ColumnValue value) {
 		double doubleValue = ((Number) value.getValue()).doubleValue();

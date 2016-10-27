@@ -14,13 +14,15 @@ public class GeoPackageConstants {
 
 	/**
 	 * Extension to GeoPackage extension files
+	 * 
+	 * @deprecated in GeoPackage version 1.2
 	 */
 	public static final String GEOPACKAGE_EXTENDED_EXTENSION = "gpkx";
 
 	/**
 	 * GeoPackage application id
 	 */
-	public static final String APPLICATION_ID = "GP11";
+	public static final String APPLICATION_ID = "GP12";
 
 	/**
 	 * Expected magic number
@@ -46,5 +48,5 @@ public class GeoPackageConstants {
 	 * Geometry extension prefix
 	 */
 	public static final String GEOMETRY_EXTENSION_PREFIX = "geom";
-	
+
 }

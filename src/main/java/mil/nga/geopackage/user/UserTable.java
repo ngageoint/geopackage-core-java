@@ -114,7 +114,6 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Check for duplicate column names
 	 * 
-	 * @param tableName
 	 * @param index
 	 * @param previousIndex
 	 * @param column
@@ -149,7 +148,6 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Check for missing columns
 	 * 
-	 * @param tableName
 	 * @param index
 	 * @param column
 	 */
@@ -164,7 +162,8 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the column index of the column name
 	 * 
 	 * @param columnName
-	 * @return
+	 *            column name
+	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
 		Integer index = nameToIndex.get(columnName);
@@ -178,7 +177,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the array of column names
 	 * 
-	 * @return
+	 * @return column names
 	 */
 	public String[] getColumnNames() {
 		return columnNames;
@@ -188,7 +187,8 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the column name at the index
 	 * 
 	 * @param index
-	 * @return
+	 *            column index
+	 * @return column name
 	 */
 	public String getColumnName(int index) {
 		return columnNames[index];
@@ -197,7 +197,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the list of columns
 	 * 
-	 * @return
+	 * @return columns
 	 */
 	public List<TColumn> getColumns() {
 		return columns;
@@ -207,7 +207,8 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the column at the index
 	 * 
 	 * @param index
-	 * @return
+	 *            column index
+	 * @return column
 	 */
 	public TColumn getColumn(int index) {
 		return columns.get(index);
@@ -217,7 +218,8 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the column of the column name
 	 * 
 	 * @param columnName
-	 * @return
+	 *            column name
+	 * @return column
 	 */
 	public TColumn getColumn(String columnName) {
 		return getColumn(getColumnIndex(columnName));
@@ -226,7 +228,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the column count
 	 * 
-	 * @return
+	 * @return column count
 	 */
 	public int columnCount() {
 		return columns.size();
@@ -235,7 +237,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the table name
 	 * 
-	 * @return
+	 * @return table name
 	 */
 	public String getTableName() {
 		return tableName;
@@ -244,7 +246,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the primary key column index
 	 * 
-	 * @return
+	 * @return primary key column index
 	 */
 	public int getPkColumnIndex() {
 		return pkIndex;
@@ -253,7 +255,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the primary key column
 	 * 
-	 * @return
+	 * @return primary key column
 	 */
 	public TColumn getPkColumn() {
 		return columns.get(pkIndex);
@@ -263,6 +265,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Add unique constraint
 	 * 
 	 * @param uniqueConstraint
+	 *            unique constraint
 	 */
 	public void addUniqueConstraint(
 			UserUniqueConstraint<TColumn> uniqueConstraint) {
@@ -272,7 +275,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Get the unique constraints
 	 * 
-	 * @return
+	 * @return unique constraints
 	 */
 	public List<UserUniqueConstraint<TColumn>> getUniqueConstraints() {
 		return uniqueConstraints;
