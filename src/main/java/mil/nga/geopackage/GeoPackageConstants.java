@@ -22,7 +22,14 @@ public class GeoPackageConstants {
 	/**
 	 * GeoPackage application id
 	 */
-	public static final String APPLICATION_ID = "GP12";
+	public static final String APPLICATION_ID = "GPKG";
+
+	/**
+	 * GeoPackage user version
+	 * 
+	 * @since 1.2.1
+	 */
+	public static final int USER_VERSION = 10200;
 
 	/**
 	 * Expected magic number
