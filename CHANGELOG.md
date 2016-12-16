@@ -21,6 +21,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Spatial Reference System definition_12_163 column changed to definition_12_063
 * Deprecated the User Geometry Types Extension per spec removal
 * Deprecated gpkx file extension for extended GeoPackages per spec removal
+* GeoPackage application id and user version
 
 ## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 

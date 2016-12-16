@@ -166,6 +166,46 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String getApplicationId() {
+		return database.getApplicationId();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getUserVersion() {
+		return database.getUserVersion();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getUserVersionMajor() {
+		return getUserVersion() / 10000;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getUserVersionMinor() {
+		return (getUserVersion() % 10000) / 100;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getUserVersionPatch() {
+		return getUserVersion() % 100;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public List<String> getFeatureTables() {
 		List<String> tableNames = getTables(ContentsDataType.FEATURES);
 		return tableNames;

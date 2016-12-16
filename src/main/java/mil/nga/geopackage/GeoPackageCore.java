@@ -75,6 +75,46 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isWritable();
 
 	/**
+	 * Get the application id
+	 *
+	 * @return application id
+	 * @since 1.2.1
+	 */
+	public String getApplicationId();
+
+	/**
+	 * Get the user version
+	 *
+	 * @return user version
+	 * @since 1.2.1
+	 */
+	public int getUserVersion();
+
+	/**
+	 * Get the major user version
+	 *
+	 * @return major user version
+	 * @since 1.2.1
+	 */
+	public int getUserVersionMajor();
+
+	/**
+	 * Get the minor user version
+	 *
+	 * @return minor user version
+	 * @since 1.2.1
+	 */
+	public int getUserVersionMinor();
+
+	/**
+	 * Get the patch user version
+	 *
+	 * @return patch user version
+	 * @since 1.2.1
+	 */
+	public int getUserVersionPatch();
+
+	/**
 	 * Get the feature tables
 	 * 
 	 * @return table names
