@@ -1,6 +1,6 @@
 package mil.nga.geopackage.core.contents;
 
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.Date;
 
 import mil.nga.geopackage.BoundingBox;
@@ -316,7 +316,7 @@ public class Contents {
 			} finally {
 				try {
 					iterator.close();
-				} catch (SQLException e) {
+				} catch (IOException e) {
 					throw new GeoPackageException(
 							"Failed to close the Geometry Columns iterator", e);
 				}
@@ -346,7 +346,7 @@ public class Contents {
 			} finally {
 				try {
 					iterator.close();
-				} catch (SQLException e) {
+				} catch (IOException e) {
 					throw new GeoPackageException(
 							"Failed to close the Tile Matrix Set iterator", e);
 				}
