@@ -23,9 +23,13 @@ View the latest [Javadoc](http://ngageoint.github.io/geopackage-core-java/docs/a
 
 The [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK is an Android GeoPackage implementation.
 
+#### GeoPackage Android Map ####
+
+The [GeoPackage Android Map](https://github.com/ngageoint/geopackage-android-map) SDK adds Android Map implementations to [GeoPackage Android](https://github.com/ngageoint/geopackage-android).
+
 #### GeoPackage SDK Sample ####
 
-The [GeoPackage MapCache](https://github.com/ngageoint/geopackage-mapcache-android) app provides an Android example of using the [GeoPackage Android](https://github.com/ngageoint/geopackage-android) SDK.
+The [GeoPackage MapCache](https://github.com/ngageoint/geopackage-mapcache-android) app provides an Android example of using the [GeoPackage Android Map](https://github.com/ngageoint/geopackage-android-map) SDK.
 
 #### GeoPackage Java ####
 
