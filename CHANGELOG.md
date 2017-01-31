@@ -22,6 +22,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Deprecated the User Geometry Types Extension per spec removal
 * Deprecated gpkx file extension for extended GeoPackages per spec removal
 * GeoPackage application id and user version
+* OrmLite Core version updated to 5.0
 
 ## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 
