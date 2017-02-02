@@ -1,8 +1,10 @@
 mil.nga.geopackage
+mil.nga.geopackage.attributes
 mil.nga.geopackage.core.contents
 mil.nga.geopackage.core.srs
 mil.nga.geopackage.db
 mil.nga.geopackage.extension
+mil.nga.geopackage.extension.elevation
 mil.nga.geopackage.extension.index
 mil.nga.geopackage.extension.link
 mil.nga.geopackage.factory
@@ -12,6 +14,7 @@ mil.nga.geopackage.geom
 mil.nga.geopackage.io
 mil.nga.geopackage.metadata
 mil.nga.geopackage.metadata.reference
+mil.nga.geopackage.persister
 mil.nga.geopackage.projection
 mil.nga.geopackage.property
 mil.nga.geopackage.schema
