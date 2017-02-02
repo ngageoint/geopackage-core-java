@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.2.1 (TBD)
+## [1.2.1] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.1) (02-02-2017)
 
 * GeoPackage spec version 1.2 changes and updates
 * Time zone fix on database persisted dates
