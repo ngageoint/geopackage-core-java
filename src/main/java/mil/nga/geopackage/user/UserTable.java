@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -19,6 +21,12 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * @author osbornb
  */
 public abstract class UserTable<TColumn extends UserColumn> {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger.getLogger(UserTable.class
+			.getName());
 
 	/**
 	 * Table name
@@ -92,12 +100,15 @@ public abstract class UserTable<TColumn extends UserColumn> {
 			nameToIndex.put(column.getName(), index);
 		}
 
-		if (pk == null) {
-			throw new GeoPackageException(
+		if (pk != null) {
+			pkIndex = pk;
+		} else {
+			// Permit views without primary keys
+			log.log(Level.WARNING,
 					"No primary key column was found for table '" + tableName
 							+ "'");
+			pkIndex = -1;
 		}
-		pkIndex = pk;
 
 		// Verify the columns have ordered indices without gaps
 		for (int i = 0; i < columns.size(); i++) {
@@ -258,7 +269,11 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return primary key column
 	 */
 	public TColumn getPkColumn() {
-		return columns.get(pkIndex);
+		TColumn column = null;
+		if (pkIndex >= 0) {
+			column = columns.get(pkIndex);
+		}
+		return column;
 	}
 
 	/**
