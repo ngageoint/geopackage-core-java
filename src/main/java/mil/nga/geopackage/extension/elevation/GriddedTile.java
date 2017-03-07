@@ -91,14 +91,14 @@ public class GriddedTile {
 	/**
 	 * Scale as a multiple relative to the unit of measure
 	 */
-	@DatabaseField(columnName = COLUMN_SCALE)
-	private Double scale;
+	@DatabaseField(columnName = COLUMN_SCALE, canBeNull = false)
+	private double scale;
 
 	/**
 	 * The offset to the 0 value
 	 */
-	@DatabaseField(columnName = COLUMN_OFFSET)
-	private Double offset;
+	@DatabaseField(columnName = COLUMN_OFFSET, canBeNull = false)
+	private double offset;
 
 	/**
 	 * Minimum value of this tile
@@ -197,17 +197,8 @@ public class GriddedTile {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public Double getScale() {
+	public double getScale() {
 		return scale;
-	}
-
-	/**
-	 * Get the scale or default value
-	 * 
-	 * @return scale as a multiple relative to the unit of measure
-	 */
-	public double getScaleOrDefault() {
-		return scale != null ? scale : 1.0;
 	}
 
 	/**
@@ -216,7 +207,7 @@ public class GriddedTile {
 	 * @param scale
 	 *            scale as a multiple relative to the unit of measure
 	 */
-	public void setScale(Double scale) {
+	public void setScale(double scale) {
 		this.scale = scale;
 	}
 
@@ -225,17 +216,8 @@ public class GriddedTile {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public Double getOffset() {
+	public double getOffset() {
 		return offset;
-	}
-
-	/**
-	 * Get the offset or default value
-	 * 
-	 * @return offset to the 0 value
-	 */
-	public double getOffsetOrDefault() {
-		return offset != null ? offset : 0.0;
 	}
 
 	/**
@@ -244,7 +226,7 @@ public class GriddedTile {
 	 * @param offset
 	 *            offset to the 0 value
 	 */
-	public void setOffset(Double offset) {
+	public void setOffset(double offset) {
 		this.offset = offset;
 	}
 
