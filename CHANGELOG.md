@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * Allow user tables (feature, tile, attributes) without primary keys to support table views
 * Support EPSG 900913 (GOOGLE)
+* Elevation Extension scale and offset columns changed to be non nullable
 
 ## [1.2.1] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.1) (02-02-2017)
 
