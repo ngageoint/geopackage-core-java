@@ -92,13 +92,13 @@ public class GriddedTile {
 	 * Scale as a multiple relative to the unit of measure
 	 */
 	@DatabaseField(columnName = COLUMN_SCALE, canBeNull = false)
-	private double scale;
+	private double scale = 1.0;
 
 	/**
 	 * The offset to the 0 value
 	 */
 	@DatabaseField(columnName = COLUMN_OFFSET, canBeNull = false)
-	private double offset;
+	private double offset = 0.0;
 
 	/**
 	 * Minimum value of this tile
