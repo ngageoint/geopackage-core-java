@@ -92,7 +92,7 @@ public class MetadataReference {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * '%Y-%m-%dT%H:%M:%fZ' format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_TIMESTAMP, persisterClass = DatePersister.class, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_TIMESTAMP, persisterClass = DatePersister.class, canBeNull = false, defaultValue = DatePersister.DATE_FORMAT)
 	private Date timestamp;
 
 	/**

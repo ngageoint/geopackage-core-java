@@ -2,7 +2,6 @@ package mil.nga.geopackage.factory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -508,7 +507,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(geometryColumns.getTableName());
 			contents.setDataType(ContentsDataType.FEATURES);
 			contents.setIdentifier(geometryColumns.getTableName());
-			contents.setLastChange(new Date());
+			// contents.setLastChange(new Date());
 			contents.setMinX(boundingBox.getMinLongitude());
 			contents.setMinY(boundingBox.getMinLatitude());
 			contents.setMaxX(boundingBox.getMaxLongitude());
@@ -644,7 +643,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(tableName);
 			contents.setDataType(dataType);
 			contents.setIdentifier(tableName);
-			contents.setLastChange(new Date());
+			// contents.setLastChange(new Date());
 			contents.setMinX(contentsBoundingBox.getMinLongitude());
 			contents.setMinY(contentsBoundingBox.getMinLatitude());
 			contents.setMaxX(contentsBoundingBox.getMaxLongitude());
@@ -1177,7 +1176,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(tableName);
 			contents.setDataType(ContentsDataType.ATTRIBUTES);
 			contents.setIdentifier(tableName);
-			contents.setLastChange(new Date());
+			// contents.setLastChange(new Date());
 			getContentsDao().create(contents);
 
 			table.setContents(contents);
