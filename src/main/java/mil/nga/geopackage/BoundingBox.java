@@ -1,5 +1,6 @@
 package mil.nga.geopackage;
 
+import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.wkb.geom.GeometryEnvelope;
 
 /**
@@ -33,7 +34,10 @@ public class BoundingBox {
 	 * Constructor
 	 */
 	public BoundingBox() {
-		this(-180.0, 180.0, -90.0, 90.0);
+		this(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+				ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+				-ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT,
+				ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT);
 	}
 
 	/**
