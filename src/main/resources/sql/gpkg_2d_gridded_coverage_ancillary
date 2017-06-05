@@ -1,5 +1,5 @@
 CREATE TABLE 'gpkg_2d_gridded_coverage_ancillary' (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   tile_matrix_set_name TEXT NOT NULL UNIQUE,
   datatype TEXT NOT NULL DEFAULT 'integer',
   scale REAL NOT NULL DEFAULT 1.0,
