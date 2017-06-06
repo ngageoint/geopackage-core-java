@@ -8,7 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * Allow user tables (feature, tile, attributes) without primary keys to support table views
 * Support EPSG 900913 (GOOGLE)
-* Elevation Extension scale and offset columns changed to be non nullable
+* Elevation Extension scale, offset, and id columns changed to be non nullable
 * Default dates for Contents last change and Metadata Reference timestamp
 * wkb version update to 1.0.3
 
