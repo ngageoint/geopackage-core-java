@@ -6,9 +6,13 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.2 (TBD)
 
-* TBD
+* Allow user tables (feature, tile, attributes) without primary keys to support table views
+* Support EPSG 900913 (GOOGLE)
+* Elevation Extension scale, offset, and id columns changed to be non nullable
+* Default dates for Contents last change and Metadata Reference timestamp
+* wkb version update to 1.0.3
 
-## [1.2.1] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.1) (02-02-2017)
+## [1.2.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.1) (02-02-2017)
 
 * GeoPackage spec version 1.2 changes and updates
 * Time zone fix on database persisted dates
@@ -28,7 +32,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * GeoPackage application id and user version
 * OrmLite Core version updated to 5.0
 
-## [1.2.0] (https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
+## [1.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.0) (06-22-2016)
 
 * Spatial Reference System DAO create from EPSG code in addition to SRS id
 * Projection unit retrieval

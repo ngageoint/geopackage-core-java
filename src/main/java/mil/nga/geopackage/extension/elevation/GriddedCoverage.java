@@ -81,14 +81,14 @@ public class GriddedCoverage {
 	/**
 	 * Scale as a multiple relative to the unit of measure
 	 */
-	@DatabaseField(columnName = COLUMN_SCALE)
-	private Double scale = 1.0;
+	@DatabaseField(columnName = COLUMN_SCALE, canBeNull = false)
+	private double scale = 1.0;
 
 	/**
 	 * The offset to the 0 value
 	 */
-	@DatabaseField(columnName = COLUMN_OFFSET)
-	private Double offset = 0.0;
+	@DatabaseField(columnName = COLUMN_OFFSET, canBeNull = false)
+	private double offset = 0.0;
 
 	/**
 	 * The smallest value that has meaning for this dataset
@@ -175,17 +175,8 @@ public class GriddedCoverage {
 	 * 
 	 * @return scale as a multiple relative to the unit of measure
 	 */
-	public Double getScale() {
+	public double getScale() {
 		return scale;
-	}
-
-	/**
-	 * Get the scale or default value
-	 * 
-	 * @return scale as a multiple relative to the unit of measure
-	 */
-	public double getScaleOrDefault() {
-		return scale != null ? scale : 1.0;
 	}
 
 	/**
@@ -194,7 +185,7 @@ public class GriddedCoverage {
 	 * @param scale
 	 *            scale as a multiple relative to the unit of measure
 	 */
-	public void setScale(Double scale) {
+	public void setScale(double scale) {
 		this.scale = scale;
 	}
 
@@ -203,17 +194,8 @@ public class GriddedCoverage {
 	 * 
 	 * @return offset to the 0 value
 	 */
-	public Double getOffset() {
+	public double getOffset() {
 		return offset;
-	}
-
-	/**
-	 * Get the offset or default value
-	 * 
-	 * @return offset to the 0 value
-	 */
-	public double getOffsetOrDefault() {
-		return offset != null ? offset : 0.0;
 	}
 
 	/**
@@ -222,7 +204,7 @@ public class GriddedCoverage {
 	 * @param offset
 	 *            offset to the 0 value
 	 */
-	public void setOffset(Double offset) {
+	public void setOffset(double offset) {
 		this.offset = offset;
 	}
 

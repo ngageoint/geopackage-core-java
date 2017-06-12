@@ -64,6 +64,18 @@ public class DatePersister extends StringType {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Object parseDefaultString(FieldType fieldType, String defaultStr) {
+		Object defaultValue = null;
+		if (DATE_FORMAT.equals(defaultStr)) {
+			defaultValue = javaToSqlArg(null, new Date());
+		}
+		return defaultValue;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Object javaToSqlArg(FieldType fieldType, Object javaObject) {
 		Object stringDate = null;
 		if (javaObject != null && javaObject instanceof Date) {

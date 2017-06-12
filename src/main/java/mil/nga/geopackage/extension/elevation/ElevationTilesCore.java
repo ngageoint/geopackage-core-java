@@ -1304,19 +1304,11 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
 
 			if (griddedTile != null) {
-				if (griddedTile.getScale() != null) {
-					elevation *= griddedTile.getScale();
-				}
-				if (griddedTile.getOffset() != null) {
-					elevation += griddedTile.getOffset();
-				}
+				elevation *= griddedTile.getScale();
+				elevation += griddedTile.getOffset();
 			}
-			if (griddedCoverage.getScale() != null) {
-				elevation *= griddedCoverage.getScale();
-			}
-			if (griddedCoverage.getOffset() != null) {
-				elevation += griddedCoverage.getOffset();
-			}
+			elevation *= griddedCoverage.getScale();
+			elevation += griddedCoverage.getOffset();
 
 		}
 
@@ -1425,19 +1417,11 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		if (griddedCoverage != null
 				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
 
-			if (griddedCoverage.getOffset() != null) {
-				pixelValue -= griddedCoverage.getOffset();
-			}
-			if (griddedCoverage.getScale() != null) {
-				pixelValue /= griddedCoverage.getScale();
-			}
+			pixelValue -= griddedCoverage.getOffset();
+			pixelValue /= griddedCoverage.getScale();
 			if (griddedTile != null) {
-				if (griddedTile.getOffset() != null) {
-					pixelValue -= griddedTile.getOffset();
-				}
-				if (griddedTile.getScale() != null) {
-					pixelValue /= griddedTile.getScale();
-				}
+				pixelValue -= griddedTile.getOffset();
+				pixelValue /= griddedTile.getScale();
 			}
 
 		}
