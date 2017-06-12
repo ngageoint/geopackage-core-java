@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.2.2 (TBD)
+## [1.2.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.2.2) (06-12-2017)
 
 * Allow user tables (feature, tile, attributes) without primary keys to support table views
 * Support EPSG 900913 (GOOGLE)
