@@ -126,6 +126,23 @@ public class SpatialReferenceSystem {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param srs
+	 *            srs to copy
+	 * @since 1.2.3
+	 */
+	public SpatialReferenceSystem(SpatialReferenceSystem srs) {
+		srsName = srs.srsName;
+		srsId = srs.srsId;
+		organization = srs.organization;
+		organizationCoordsysId = srs.organizationCoordsysId;
+		definition = srs.definition;
+		description = srs.description;
+		definition_12_063 = srs.definition_12_063;
+	}
+
 	public long getId() {
 		return srsId;
 	}

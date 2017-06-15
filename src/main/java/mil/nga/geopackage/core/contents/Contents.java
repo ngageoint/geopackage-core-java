@@ -181,6 +181,27 @@ public class Contents {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param contents
+	 *            contents to copy
+	 * @since 1.2.3
+	 */
+	public Contents(Contents contents) {
+		tableName = contents.tableName;
+		dataType = contents.dataType;
+		identifier = contents.identifier;
+		description = contents.description;
+		lastChange = new Date(contents.lastChange.getTime());
+		minX = contents.minX;
+		maxX = contents.maxX;
+		minY = contents.minY;
+		maxY = contents.maxY;
+		srs = contents.srs;
+		srsId = contents.srsId;
+	}
+
 	public String getId() {
 		return tableName;
 	}
