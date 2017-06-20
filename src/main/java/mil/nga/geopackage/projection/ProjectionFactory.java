@@ -38,45 +38,97 @@ public class ProjectionFactory {
 	 * Get the projection for the EPSG code
 	 * 
 	 * @param epsg
+	 *            EPSG code
 	 * @return projection
 	 */
 	public static Projection getProjection(long epsg) {
+		String[] params = null;
+		Projection projection = getProjection(epsg, params);
+		return projection;
+	}
+
+	/**
+	 * Get the projection for the EPSG code and custom parameter string
+	 * 
+	 * @param epsg
+	 *            EPSG code
+	 * @param paramStr
+	 *            proj4 string
+	 * @return projection
+	 * @since 1.2.3
+	 */
+	public static Projection getProjection(long epsg, String paramStr) {
+		String[] params = null;
+		if (paramStr != null && !paramStr.isEmpty()) {
+			params = paramStr.split("\\s+");
+		}
+		Projection projection = getProjection(epsg, params);
+		return projection;
+	}
+
+	/**
+	 * Get the projection for the EPSG code and custom parameter array
+	 * 
+	 * @param epsg
+	 *            EPSG code
+	 * @param params
+	 *            proj4 params array
+	 * @return projection
+	 * @since 1.2.3
+	 */
+	public static Projection getProjection(long epsg, String[] params) {
 		Projection projection = projections.get(epsg);
 		if (projection == null) {
 
 			CoordinateReferenceSystem crs = null;
-
-			// Get the projection parameters from the properties
 			String parameters = null;
-			if (epsg == -1 || epsg == 0) {
-				parameters = ProjectionRetriever
-						.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
-			} else {
-				parameters = ProjectionRetriever.getProjection(epsg);
-			}
+			String epsgName = null;
 
-			// Try to create the projection from the parameters
-			if (parameters != null) {
+			// Try to create the projection from the provided params
+			if (params != null && params.length > 0) {
 				try {
 					crs = csFactory.createFromParameters(String.valueOf(epsg),
-							parameters);
+							params);
 				} catch (Exception e) {
 					logger.log(Level.WARNING,
 							"Failed to create projection for epsg " + epsg
-									+ " from parameters: " + parameters, e);
+									+ " from custom provided parameters: "
+									+ params, e);
 				}
 			}
 
-			// If failed try to create the projection from the EPSG name
-			String epsgName = null;
 			if (crs == null) {
-				epsgName = "EPSG:" + epsg;
-				try {
-					crs = csFactory.createFromName(epsgName);
-				} catch (Exception e) {
-					logger.log(Level.WARNING,
-							"Failed to create projection from name: "
-									+ epsgName, e);
+
+				// Get the projection parameters from the properties
+				if (epsg == -1 || epsg == 0) {
+					parameters = ProjectionRetriever
+							.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+				} else {
+					parameters = ProjectionRetriever.getProjection(epsg);
+				}
+
+				// Try to create the projection from the parameters
+				if (parameters != null) {
+					try {
+						crs = csFactory.createFromParameters(
+								String.valueOf(epsg), parameters);
+					} catch (Exception e) {
+						logger.log(Level.WARNING,
+								"Failed to create projection for epsg " + epsg
+										+ " from parameters: " + parameters, e);
+					}
+				}
+
+				// If failed try to create the projection from the EPSG name
+				if (crs == null) {
+					epsgName = "EPSG:" + epsg;
+					try {
+						crs = csFactory.createFromName(epsgName);
+					} catch (Exception e) {
+						logger.log(Level.WARNING,
+								"Failed to create projection from name: "
+										+ epsgName, e);
+					}
 				}
 			}
 
@@ -84,8 +136,9 @@ public class ProjectionFactory {
 			if (crs == null) {
 				throw new GeoPackageException(
 						"Failed to create projection for EPSG " + epsg
-								+ ". Parameters: " + parameters + ". Name: "
-								+ epsgName);
+								+ ". Property params: " + parameters
+								+ ". EPSG Name: " + epsgName
+								+ ". Custom params: " + params);
 			}
 
 			projection = new Projection(epsg, crs);
@@ -106,7 +159,15 @@ public class ProjectionFactory {
 	public static Projection getProjection(SpatialReferenceSystem srs) {
 
 		long epsg = srs.getOrganizationCoordsysId();
-		Projection projection = getProjection(epsg);
+		String definition = srs.getDefinition_12_063();
+		if (definition == null) {
+			definition = srs.getDefinition();
+		}
+
+		String paramStr = null;
+		// TODO parse WKT definition into proj4 parameters
+
+		Projection projection = getProjection(epsg, paramStr);
 
 		return projection;
 	}
