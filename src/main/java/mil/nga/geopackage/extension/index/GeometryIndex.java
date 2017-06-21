@@ -141,6 +141,27 @@ public class GeometryIndex {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param geometryIndex
+	 *            geometry index to copy
+	 * @since 1.2.3
+	 */
+	public GeometryIndex(GeometryIndex geometryIndex) {
+		tableIndex = geometryIndex.tableIndex;
+		tableName = geometryIndex.tableName;
+		geomId = geometryIndex.geomId;
+		minX = geometryIndex.minX;
+		maxX = geometryIndex.maxX;
+		minY = geometryIndex.minY;
+		maxY = geometryIndex.maxY;
+		minZ = geometryIndex.minZ;
+		maxZ = geometryIndex.maxZ;
+		minM = geometryIndex.minM;
+		maxM = geometryIndex.maxM;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return geometry index key

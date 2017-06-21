@@ -80,6 +80,21 @@ public class Metadata {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param meta
+	 *            metadata to copy
+	 * @since 1.2.3
+	 */
+	public Metadata(Metadata meta) {
+		id = meta.id;
+		scope = meta.scope;
+		standardUri = meta.standardUri;
+		mimeType = meta.mimeType;
+		metadata = meta.metadata;
+	}
+
 	public long getId() {
 		return id;
 	}

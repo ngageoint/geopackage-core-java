@@ -110,6 +110,24 @@ public class GriddedCoverage {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param griddedCoverage
+	 *            gridded coverage to copy
+	 * @since 1.2.3
+	 */
+	public GriddedCoverage(GriddedCoverage griddedCoverage) {
+		id = griddedCoverage.id;
+		tileMatrixSet = griddedCoverage.tileMatrixSet;
+		tileMatrixSetName = griddedCoverage.tileMatrixSetName;
+		datatype = griddedCoverage.datatype;
+		scale = griddedCoverage.scale;
+		offset = griddedCoverage.offset;
+		precision = griddedCoverage.precision;
+		dataNull = griddedCoverage.dataNull;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return id

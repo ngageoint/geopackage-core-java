@@ -134,6 +134,24 @@ public class DataColumns {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param dataColumns
+	 *            data columns to copy
+	 * @since 1.2.3
+	 */
+	public DataColumns(DataColumns dataColumns) {
+		contents = dataColumns.contents;
+		tableName = dataColumns.tableName;
+		columnName = dataColumns.columnName;
+		name = dataColumns.name;
+		title = dataColumns.title;
+		description = dataColumns.description;
+		mimeType = dataColumns.mimeType;
+		constraintName = dataColumns.constraintName;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return table column key

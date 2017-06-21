@@ -47,6 +47,18 @@ public class FeatureTileLink {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param featureTileLink
+	 *            feature tile link to copy
+	 * @since 1.2.3
+	 */
+	public FeatureTileLink(FeatureTileLink featureTileLink) {
+		featureTableName = featureTileLink.featureTableName;
+		tileTableName = featureTileLink.tileTableName;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return feature tile link key

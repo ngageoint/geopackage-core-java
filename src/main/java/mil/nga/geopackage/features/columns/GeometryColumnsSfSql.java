@@ -110,6 +110,23 @@ public class GeometryColumnsSfSql {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param geometryColumns
+	 *            geometry columns to copy
+	 * @since 1.2.3
+	 */
+	public GeometryColumnsSfSql(GeometryColumnsSfSql geometryColumns) {
+		contents = geometryColumns.contents;
+		fTableName = geometryColumns.fTableName;
+		fGeometryColumn = geometryColumns.fGeometryColumn;
+		geometryType = geometryColumns.geometryType;
+		coordDimension = geometryColumns.coordDimension;
+		srs = geometryColumns.srs;
+		srid = geometryColumns.srid;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return table column key

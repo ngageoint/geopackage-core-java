@@ -72,6 +72,20 @@ public class SpatialReferenceSystemSfSql {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param srs
+	 *            srs to copy
+	 * @since 1.2.3
+	 */
+	public SpatialReferenceSystemSfSql(SpatialReferenceSystemSfSql srs) {
+		srid = srs.srid;
+		authName = srs.authName;
+		authSrid = srs.authSrid;
+		srtext = srs.srtext;
+	}
+
 	public int getId() {
 		return srid;
 	}

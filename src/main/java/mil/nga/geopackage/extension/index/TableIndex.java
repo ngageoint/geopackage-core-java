@@ -59,6 +59,18 @@ public class TableIndex {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param tableIndex
+	 *            table index to copy
+	 * @since 1.2.3
+	 */
+	public TableIndex(TableIndex tableIndex) {
+		tableName = tableIndex.tableName;
+		lastIndexed = new Date(tableIndex.lastIndexed.getTime());
+	}
+
+	/**
 	 * Get the table name
 	 * 
 	 * @return table name

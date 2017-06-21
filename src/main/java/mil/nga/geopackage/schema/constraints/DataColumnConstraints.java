@@ -123,6 +123,24 @@ public class DataColumnConstraints {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param dataColumnConstraints
+	 *            data column constraints to copy
+	 * @since 1.2.3
+	 */
+	public DataColumnConstraints(DataColumnConstraints dataColumnConstraints) {
+		constraintName = dataColumnConstraints.constraintName;
+		constraintType = dataColumnConstraints.constraintType;
+		value = dataColumnConstraints.value;
+		min = dataColumnConstraints.min;
+		minIsInclusive = dataColumnConstraints.minIsInclusive;
+		max = dataColumnConstraints.max;
+		maxIsInclusive = dataColumnConstraints.maxIsInclusive;
+		description = dataColumnConstraints.description;
+	}
+
 	public String getConstraintName() {
 		return constraintName;
 	}

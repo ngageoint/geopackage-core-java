@@ -129,6 +129,25 @@ public class MetadataReference {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param metadataReference
+	 *            metadata reference to copy
+	 * @since 1.2.3
+	 */
+	public MetadataReference(MetadataReference metadataReference) {
+		referenceScope = metadataReference.referenceScope;
+		tableName = metadataReference.tableName;
+		columnName = metadataReference.columnName;
+		rowIdValue = metadataReference.rowIdValue;
+		timestamp = new Date(metadataReference.timestamp.getTime());
+		metadata = metadataReference.metadata;
+		fileId = metadataReference.fileId;
+		parentMetadata = metadataReference.parentMetadata;
+		parentId = metadataReference.parentId;
+	}
+
 	public ReferenceScopeType getReferenceScope() {
 		return ReferenceScopeType.fromValue(referenceScope);
 	}

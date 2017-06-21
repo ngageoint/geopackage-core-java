@@ -135,6 +135,25 @@ public class TileMatrix {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix to copy
+	 * @since 1.2.3
+	 */
+	public TileMatrix(TileMatrix tileMatrix) {
+		contents = tileMatrix.contents;
+		tableName = tileMatrix.tableName;
+		zoomLevel = tileMatrix.zoomLevel;
+		matrixWidth = tileMatrix.matrixWidth;
+		matrixHeight = tileMatrix.matrixHeight;
+		tileWidth = tileMatrix.tileWidth;
+		tileHeight = tileMatrix.tileHeight;
+		pixelXSize = tileMatrix.pixelXSize;
+		pixelYSize = tileMatrix.pixelYSize;
+	}
+
+	/**
 	 * Get the tile matrix id
 	 * 
 	 * @return tile matrix key

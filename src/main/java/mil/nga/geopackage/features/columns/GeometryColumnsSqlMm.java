@@ -115,6 +115,23 @@ public class GeometryColumnsSqlMm {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param geometryColumns
+	 *            geometry columns to copy
+	 * @since 1.2.3
+	 */
+	public GeometryColumnsSqlMm(GeometryColumnsSqlMm geometryColumns) {
+		contents = geometryColumns.contents;
+		tableName = geometryColumns.tableName;
+		columnName = geometryColumns.columnName;
+		geometryTypeName = geometryColumns.geometryTypeName;
+		srs = geometryColumns.srs;
+		srsId = geometryColumns.srsId;
+		srsName = geometryColumns.srsName;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return table column key

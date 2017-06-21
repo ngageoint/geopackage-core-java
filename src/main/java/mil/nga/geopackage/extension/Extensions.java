@@ -95,6 +95,21 @@ public class Extensions {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param extensions
+	 *            extensions to copy
+	 * @since 1.2.3
+	 */
+	public Extensions(Extensions extensions) {
+		tableName = extensions.tableName;
+		columnName = extensions.columnName;
+		extensionName = extensions.extensionName;
+		definition = extensions.definition;
+		scope = extensions.scope;
+	}
+
+	/**
 	 * Get the table name
 	 * 
 	 * @return table name
