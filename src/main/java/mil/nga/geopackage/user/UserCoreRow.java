@@ -55,6 +55,20 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param userCoreRow
+	 *            user core row to copy
+	 */
+	protected UserCoreRow(UserCoreRow<TColumn, TTable> userCoreRow) {
+		this.table = userCoreRow.table;
+		this.columnTypes = userCoreRow.columnTypes;
+		this.values = new Object[userCoreRow.values.length];
+		System.arraycopy(userCoreRow.values, 0, this.values, 0,
+				userCoreRow.values.length);
+	}
+
+	/**
 	 * Get the column count
 	 * 
 	 * @return column count
