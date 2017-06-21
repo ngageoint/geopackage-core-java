@@ -1,5 +1,7 @@
 package mil.nga.geopackage.user;
 
+import java.util.Arrays;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
@@ -64,8 +66,46 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		this.table = userCoreRow.table;
 		this.columnTypes = userCoreRow.columnTypes;
 		this.values = new Object[userCoreRow.values.length];
-		System.arraycopy(userCoreRow.values, 0, this.values, 0,
-				userCoreRow.values.length);
+		for (int i = 0; i < this.values.length; i++) {
+			Object value = userCoreRow.values[i];
+			if (value != null) {
+				TColumn column = userCoreRow.getColumn(i);
+				this.values[i] = copyValue(column, value);
+			}
+		}
+	}
+
+	/**
+	 * Copy the value of the data type
+	 * 
+	 * @param column
+	 *            table column
+	 * @param value
+	 *            value
+	 * @return copy value
+	 */
+	protected Object copyValue(TColumn column, Object value) {
+
+		Object copyValue = value;
+
+		switch (column.getDataType()) {
+
+		case BLOB:
+			if (value instanceof byte[]) {
+				byte[] bytes = (byte[]) value;
+				copyValue = Arrays.copyOf(bytes, bytes.length);
+			} else {
+				throw new GeoPackageException(
+						"Unsupported copy value type. column: "
+								+ column.getName() + ", value type: "
+								+ value.getClass().getName());
+			}
+			break;
+		default:
+
+		}
+
+		return copyValue;
 	}
 
 	/**
