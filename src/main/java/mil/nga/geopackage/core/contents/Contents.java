@@ -6,6 +6,7 @@ import java.util.Date;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
@@ -117,7 +118,7 @@ public class Contents {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * %Y-%m-%dT%H:%M:%fZ format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class, defaultValue = DatePersister.DATE_FORMAT)
+	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class, defaultValue = DateConverter.DATETIME_FORMAT)
 	private Date lastChange;
 
 	/**

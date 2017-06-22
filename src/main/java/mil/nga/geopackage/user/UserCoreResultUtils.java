@@ -1,6 +1,7 @@
 package mil.nga.geopackage.user;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
 /**
@@ -61,7 +62,15 @@ public class UserCoreResultUtils {
 			break;
 
 		case FIELD_TYPE_STRING:
-			value = result.getString(index);
+			String stringValue = result.getString(index);
+
+			if (dataType == GeoPackageDataType.DATE
+					|| dataType == GeoPackageDataType.DATETIME) {
+				DateConverter converter = DateConverter.converter(dataType);
+				value = converter.dateValue(stringValue);
+			} else {
+				value = stringValue;
+			}
 			break;
 
 		case FIELD_TYPE_BLOB:

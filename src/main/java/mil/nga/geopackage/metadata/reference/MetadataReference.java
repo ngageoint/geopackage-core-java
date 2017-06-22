@@ -3,6 +3,7 @@ package mil.nga.geopackage.metadata.reference;
 import java.util.Date;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.metadata.Metadata;
 import mil.nga.geopackage.persister.DatePersister;
 
@@ -92,7 +93,7 @@ public class MetadataReference {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * '%Y-%m-%dT%H:%M:%fZ' format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_TIMESTAMP, persisterClass = DatePersister.class, canBeNull = false, defaultValue = DatePersister.DATE_FORMAT)
+	@DatabaseField(columnName = COLUMN_TIMESTAMP, persisterClass = DatePersister.class, canBeNull = false, defaultValue = DateConverter.DATETIME_FORMAT)
 	private Date timestamp;
 
 	/**
