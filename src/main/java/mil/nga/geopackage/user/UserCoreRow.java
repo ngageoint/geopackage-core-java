@@ -1,6 +1,7 @@
 package mil.nga.geopackage.user;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -98,7 +99,21 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 				throw new GeoPackageException(
 						"Unsupported copy value type. column: "
 								+ column.getName() + ", value type: "
-								+ value.getClass().getName());
+								+ value.getClass().getName() + ", data type: "
+								+ column.getDataType());
+			}
+			break;
+		case DATE:
+		case DATETIME:
+			if (value instanceof Date) {
+				Date date = (Date) value;
+				copyValue = new Date(date.getTime());
+			} else if (!(value instanceof String)) {
+				throw new GeoPackageException(
+						"Unsupported copy value type. column: "
+								+ column.getName() + ", value type: "
+								+ value.getClass().getName() + ", data type: "
+								+ column.getDataType());
 			}
 			break;
 		default:
