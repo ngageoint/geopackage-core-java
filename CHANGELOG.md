@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.2.3 (TBD)
 
-* Copy constructors for base, extension, and user table (features, tiles, attributes) objects or rows
+* Copy constructors for base, extension, and user table (features, tiles, attributes) row objects
 * ProjectionFactory support for custom projection parameters
 * Improved date column support for user tables (features, tiles, attributes)
 
