@@ -30,17 +30,36 @@ public class ProjectionRetriever {
 	private static Properties mProperties;
 
 	/**
-	 * Get the proj4 projection string for the EPSG code
+	 * Get the proj4 projection string for the coordinate code
 	 * 
-	 * @param epsg
-	 *            epsg
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
 	 * @return projection
 	 */
-	public static synchronized String getProjection(long epsg) {
+	public static String getProjection(String authority, long code) {
+		return getProjection(authority, String.valueOf(code));
+	}
+
+	/**
+	 * Get the proj4 projection string for the coordinate code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @return projection
+	 */
+	public static synchronized String getProjection(String authority,
+			String code) {
+
+		// TODO support multiple authorities
+
 		if (mProperties == null) {
 			mProperties = initializeConfigurationProperties();
 		}
-		return mProperties.getProperty(String.valueOf(epsg));
+		return mProperties.getProperty(code);
 	}
 
 	/**

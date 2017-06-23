@@ -8,6 +8,20 @@ package mil.nga.geopackage.projection;
 public class ProjectionConstants {
 
 	/**
+	 * EPSG authority name
+	 * 
+	 * @since 1.2.3
+	 */
+	public static final String AUTHORITY_EPSG = "EPSG";
+
+	/**
+	 * No authority name
+	 * 
+	 * @since 1.2.3
+	 */
+	public static final String AUTHORITY_NONE = "NONE";
+
+	/**
 	 * Undefined Cartesian
 	 */
 	public static final int UNDEFINED_CARTESIAN = -1;

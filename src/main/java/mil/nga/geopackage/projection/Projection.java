@@ -17,9 +17,14 @@ import org.osgeo.proj4j.units.Units;
 public class Projection {
 
 	/**
-	 * EPSG code
+	 * Projection authority
 	 */
-	private final long epsg;
+	private final String authority;
+
+	/**
+	 * Coordinate code
+	 */
+	private final String code;
 
 	/**
 	 * Coordinate Reference System
@@ -29,13 +34,33 @@ public class Projection {
 	/**
 	 * Constructor
 	 * 
-	 * @param epsg
-	 *            epsg
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
 	 * @param crs
 	 *            crs
+	 * @since 1.2.3
 	 */
-	Projection(long epsg, CoordinateReferenceSystem crs) {
-		this.epsg = epsg;
+	public Projection(String authority, long code, CoordinateReferenceSystem crs) {
+		this(authority, String.valueOf(code), crs);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @param crs
+	 *            crs
+	 * @since 1.2.3
+	 */
+	public Projection(String authority, String code,
+			CoordinateReferenceSystem crs) {
+		this.authority = authority;
+		this.code = code;
 		this.crs = crs;
 	}
 
@@ -43,9 +68,30 @@ public class Projection {
 	 * Get the EPSG code
 	 * 
 	 * @return epsg
+	 * @deprecated use {@link #getCode()} // TODO delete after replacing calls
 	 */
 	public long getEpsg() {
-		return epsg;
+		return Long.parseLong(code);
+	}
+
+	/**
+	 * Get the coordinate authority
+	 * 
+	 * @return authority
+	 * @since 1.2.3
+	 */
+	public String getAuthority() {
+		return authority;
+	}
+
+	/**
+	 * Get the coordinate code
+	 * 
+	 * @return code
+	 * @since 1.2.3
+	 */
+	public String getCode() {
+		return code;
 	}
 
 	/**
@@ -126,7 +172,8 @@ public class Projection {
 			}
 		} catch (Exception e) {
 			throw new GeoPackageException(
-					"Failed to get projection unit for epsg: " + epsg, e);
+					"Failed to get projection unit for authority: " + authority
+							+ ", code: " + code, e);
 		}
 		return unit;
 	}
