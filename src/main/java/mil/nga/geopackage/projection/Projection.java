@@ -59,19 +59,14 @@ public class Projection {
 	 */
 	public Projection(String authority, String code,
 			CoordinateReferenceSystem crs) {
+		if (authority == null || code == null || crs == null) {
+			throw new IllegalArgumentException(
+					"All projection arguments are required. authority: "
+							+ authority + ", code: " + code + ", crs: " + crs);
+		}
 		this.authority = authority;
 		this.code = code;
 		this.crs = crs;
-	}
-
-	/**
-	 * Get the EPSG code
-	 * 
-	 * @return epsg
-	 * @deprecated use {@link #getCode()} // TODO delete after replacing calls
-	 */
-	public long getEpsg() {
-		return Long.parseLong(code);
 	}
 
 	/**
@@ -176,6 +171,67 @@ public class Projection {
 							+ ", code: " + code, e);
 		}
 		return unit;
+	}
+
+	/**
+	 * Check if this projection is equal to the authority and code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @return true if equal
+	 * @since 1.2.3
+	 */
+	public boolean equals(String authority, long code) {
+		return equals(authority, String.valueOf(code));
+	}
+
+	/**
+	 * Check if this projection is equal to the authority and code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @return true if equal
+	 * @since 1.2.3
+	 */
+	public boolean equals(String authority, String code) {
+		return this.authority.equals(authority) && this.code.equals(code);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @since 1.2.3
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + authority.hashCode();
+		result = prime * result + code.hashCode();
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Based upon {@link #getAuthority()} and {@link #getCode()}
+	 * 
+	 * @since 1.2.3
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Projection other = (Projection) obj;
+		return equals(other.authority, other.code);
 	}
 
 }
