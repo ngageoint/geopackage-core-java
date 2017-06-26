@@ -163,7 +163,7 @@ public class ProjectionRetriever {
 	 * @since 1.2.3
 	 */
 	public static void clear(String authority, String code) {
-		Properties properties = getProjections(authority.toLowerCase());
+		Properties properties = getProjections(authority);
 		if (properties != null) {
 			properties.remove(code);
 		}
@@ -172,9 +172,6 @@ public class ProjectionRetriever {
 	/**
 	 * Load the projection properties from the authority configuration
 	 * properties file.
-	 * 
-	 * File Name Format: {@value #PROJECTIONS_PROPERTY_FILE_PREFIX}
-	 * .lower_case_authority.{@value #PROJECTIONS_PROPERTY_FILE_SUFFIX}
 	 * 
 	 * @param authority
 	 *            coordinate authority key
@@ -191,14 +188,17 @@ public class ProjectionRetriever {
 	/**
 	 * Get the property file name for the authority
 	 * 
+	 * Resulting File Name Format: {@value #PROJECTIONS_PROPERTY_FILE_PREFIX}
+	 * .lower_case_authority.{@value #PROJECTIONS_PROPERTY_FILE_SUFFIX}
+	 * 
 	 * @param authority
 	 *            coordinate authority
 	 * @return property file name
 	 * @since 1.2.3
 	 */
 	public static String propertyFileName(String authority) {
-		return PROJECTIONS_PROPERTY_FILE_PREFIX + "." + authority + "."
-				+ PROJECTIONS_PROPERTY_FILE_SUFFIX;
+		return PROJECTIONS_PROPERTY_FILE_PREFIX + "." + authority.toLowerCase()
+				+ "." + PROJECTIONS_PROPERTY_FILE_SUFFIX;
 	}
 
 	/**
