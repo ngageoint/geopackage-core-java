@@ -34,20 +34,6 @@ public class ProjectionFactory {
 	 * Mapping of EPSG projection codes to projections
 	 */
 	private static Map<String, AuthorityProjections> authorities = new HashMap<>();
-	static {
-		AuthorityProjections none = new AuthorityProjections(
-				ProjectionConstants.AUTHORITY_NONE);
-		String parameters = ProjectionRetriever.getProjection(
-				ProjectionConstants.AUTHORITY_EPSG,
-				ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
-		CoordinateReferenceSystem crs = csFactory.createFromParameters(
-				none.getAuthority(), parameters);
-		none.addProjection(new Projection(none.getAuthority(),
-				ProjectionConstants.UNDEFINED_CARTESIAN, crs));
-		none.addProjection(new Projection(none.getAuthority(),
-				ProjectionConstants.UNDEFINED_GEOGRAPHIC, crs));
-		authorities.put(none.getAuthority(), none);
-	}
 
 	/**
 	 * Get the projection for the EPSG code
@@ -202,7 +188,7 @@ public class ProjectionFactory {
 			String[] params, String definition) {
 
 		// Get or create the authority
-		AuthorityProjections authorityProjections = getAuthorityProjections(authority);
+		AuthorityProjections authorityProjections = getProjections(authority);
 
 		// Check if the projection already exists
 		Projection projection = authorityProjections.getProjection(code);
@@ -249,8 +235,9 @@ public class ProjectionFactory {
 	 * @param authority
 	 *            coordinate authority
 	 * @return authority projections
+	 * @since 1.2.3
 	 */
-	private static AuthorityProjections getAuthorityProjections(String authority) {
+	public static AuthorityProjections getProjections(String authority) {
 		AuthorityProjections authorityProjections = authorities.get(authority
 				.toUpperCase());
 		if (authorityProjections == null) {
@@ -258,6 +245,52 @@ public class ProjectionFactory {
 			authorities.put(authority.toUpperCase(), authorityProjections);
 		}
 		return authorityProjections;
+	}
+
+	/**
+	 * Clear all authority projections
+	 * 
+	 * @since 1.2.3
+	 */
+	public static void clear() {
+		authorities.clear();
+	}
+
+	/**
+	 * Clear the authority projections
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @since 1.2.3
+	 */
+	public static void clear(String authority) {
+		getProjections(authority).clear();
+	}
+
+	/**
+	 * Clear the authority projection code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @since 1.2.3
+	 */
+	public static void clear(String authority, long code) {
+		getProjections(authority).clear(code);
+	}
+
+	/**
+	 * Clear the authority projection code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @since 1.2.3
+	 */
+	public static void clear(String authority, String code) {
+		getProjections(authority).clear(code);
 	}
 
 	/**

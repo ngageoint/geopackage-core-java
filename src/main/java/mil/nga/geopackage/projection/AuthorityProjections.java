@@ -61,4 +61,31 @@ public class AuthorityProjections {
 		projections.put(projection.getCode(), projection);
 	}
 
+	/**
+	 * Clear all projections for the authority
+	 */
+	public void clear() {
+		projections.clear();
+	}
+
+	/**
+	 * Clear the projection with the code
+	 * 
+	 * @param code
+	 *            coordinate code
+	 */
+	public void clear(long code) {
+		projections.remove(String.valueOf(code));
+	}
+
+	/**
+	 * Clear the projection with the code
+	 * 
+	 * @param code
+	 *            coordinate code
+	 */
+	public void clear(String code) {
+		projections.remove(code);
+	}
+
 }
