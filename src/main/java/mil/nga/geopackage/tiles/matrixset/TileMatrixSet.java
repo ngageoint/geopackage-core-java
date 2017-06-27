@@ -114,6 +114,24 @@ public class TileMatrixSet {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set to copy
+	 * @since 1.3.0
+	 */
+	public TileMatrixSet(TileMatrixSet tileMatrixSet) {
+		contents = tileMatrixSet.contents;
+		tableName = tileMatrixSet.tableName;
+		srs = tileMatrixSet.srs;
+		srsId = tileMatrixSet.srsId;
+		minX = tileMatrixSet.minX;
+		minY = tileMatrixSet.minY;
+		maxX = tileMatrixSet.maxX;
+		maxY = tileMatrixSet.maxY;
+	}
+
 	public String getId() {
 		return tableName;
 	}

@@ -1,5 +1,6 @@
 package mil.nga.geopackage.projection;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,74 +26,435 @@ public class ProjectionFactory {
 			.getLogger(ProjectionFactory.class.getName());
 
 	/**
-	 * Mapping of EPSG projection codes to projections
-	 */
-	private static Map<Long, Projection> projections = new HashMap<Long, Projection>();
-
-	/**
 	 * CRS Factory
 	 */
 	private static final CRSFactory csFactory = new CRSFactory();
 
 	/**
+	 * Mapping of authorities to projections
+	 */
+	private static Map<String, AuthorityProjections> authorities = new HashMap<>();
+
+	/**
 	 * Get the projection for the EPSG code
 	 * 
 	 * @param epsg
+	 *            EPSG coordinate code
 	 * @return projection
 	 */
 	public static Projection getProjection(long epsg) {
-		Projection projection = projections.get(epsg);
+		return getProjection(ProjectionConstants.AUTHORITY_EPSG,
+				String.valueOf(epsg));
+	}
+
+	/**
+	 * Get the projection for authority and code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, long code) {
+		return getProjection(authority, String.valueOf(code));
+	}
+
+	/**
+	 * Get the projection for authority and code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, String code) {
+		return getProjection(authority, code, null, null);
+	}
+
+	/**
+	 * Get the projection for authority, code, and parameter string
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param paramStr
+	 *            proj4 string
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, long code,
+			String paramStr) {
+		return getProjection(authority, String.valueOf(code), paramStr);
+	}
+
+	/**
+	 * Get the projection for authority, code, and parameter string
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param paramStr
+	 *            proj4 string
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, String code,
+			String paramStr) {
+		String[] params = null;
+		if (paramStr != null && !paramStr.isEmpty()) {
+			params = paramStr.split("\\s+");
+		}
+		Projection projection = getProjection(authority, code, params);
+		return projection;
+	}
+
+	/**
+	 * Get the projection for authority, code, and parameters
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param params
+	 *            proj4 params array
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, long code,
+			String[] params) {
+		return getProjection(authority, String.valueOf(code), params);
+	}
+
+	/**
+	 * Get the projection for authority, code, and parameters
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param params
+	 *            proj4 params array
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, String code,
+			String[] params) {
+		return getProjection(authority, code, params, null);
+	}
+
+	/**
+	 * Get the projection for the authority, code, definition, and custom
+	 * parameter array
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param params
+	 *            proj4 params array
+	 * @param definition
+	 *            definition
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, long code,
+			String[] params, String definition) {
+		return getProjection(authority, String.valueOf(code), params,
+				definition);
+	}
+
+	/**
+	 * Get the projection for the authority, code, definition, and custom
+	 * parameter array
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            authority coordinate code
+	 * @param params
+	 *            proj4 params array
+	 * @param definition
+	 *            definition
+	 * @return projection
+	 * @since 1.3.0
+	 */
+	public static Projection getProjection(String authority, String code,
+			String[] params, String definition) {
+
+		// Get or create the authority
+		AuthorityProjections authorityProjections = getProjections(authority);
+
+		// Check if the projection already exists
+		Projection projection = authorityProjections.getProjection(code);
+
 		if (projection == null) {
 
-			CoordinateReferenceSystem crs = null;
+			// Try to get or create the projection from a definition
+			projection = fromDefinition(authorityProjections, code, definition);
 
-			// Get the projection parameters from the properties
-			String parameters = null;
-			if (epsg == -1 || epsg == 0) {
-				parameters = ProjectionRetriever
-						.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
-			} else {
-				parameters = ProjectionRetriever.getProjection(epsg);
+			if (projection == null) {
+
+				// Try to create the projection from the provided params
+				projection = fromParams(authorityProjections, code, params);
+
+				if (projection == null) {
+
+					// Try to create the projection from properties
+					projection = fromProperties(authorityProjections, code);
+
+					if (projection == null) {
+
+						// Try to create the projection from the authority name
+						projection = fromName(authorityProjections, code);
+
+						if (projection == null) {
+							throw new GeoPackageException(
+									"Failed to create projection for authority: "
+											+ authority + ", code: " + code
+											+ ", definition: " + definition
+											+ ", params: "
+											+ Arrays.toString(params));
+						}
+					}
+				}
 			}
+		}
+
+		return projection;
+	}
+
+	/**
+	 * Get or create projections for the authority
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @return authority projections
+	 * @since 1.3.0
+	 */
+	public static AuthorityProjections getProjections(String authority) {
+		AuthorityProjections authorityProjections = authorities.get(authority
+				.toUpperCase());
+		if (authorityProjections == null) {
+			authorityProjections = new AuthorityProjections(authority);
+			authorities.put(authority.toUpperCase(), authorityProjections);
+		}
+		return authorityProjections;
+	}
+
+	/**
+	 * Clear all authority projections
+	 * 
+	 * @since 1.3.0
+	 */
+	public static void clear() {
+		authorities.clear();
+	}
+
+	/**
+	 * Clear the authority projections
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @since 1.3.0
+	 */
+	public static void clear(String authority) {
+		getProjections(authority).clear();
+	}
+
+	/**
+	 * Clear the authority projection code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @since 1.3.0
+	 */
+	public static void clear(String authority, long code) {
+		getProjections(authority).clear(code);
+	}
+
+	/**
+	 * Clear the authority projection code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @since 1.3.0
+	 */
+	public static void clear(String authority, String code) {
+		getProjections(authority).clear(code);
+	}
+
+	/**
+	 * Create a projection from the WKT definition
+	 * 
+	 * @param authorityProjections
+	 *            authority projections
+	 * @param code
+	 *            coordinate code
+	 * @param definition
+	 *            WKT coordinate definition
+	 * @return projection
+	 */
+	private static Projection fromDefinition(
+			AuthorityProjections authorityProjections, String code,
+			String definition) {
+
+		Projection projection = null;
+
+		if (definition != null && !definition.isEmpty()) {
+
+			String parametersString = "";
+			// TODO parse WKT definition into proj4 parameters
 
 			// Try to create the projection from the parameters
-			if (parameters != null) {
+			if (parametersString != null && !parametersString.isEmpty()) {
 				try {
-					crs = csFactory.createFromParameters(String.valueOf(epsg),
-							parameters);
+					CoordinateReferenceSystem crs = csFactory
+							.createFromParameters(
+									coordinateName(
+											authorityProjections.getAuthority(),
+											code), parametersString);
+					projection = new Projection(
+							authorityProjections.getAuthority(), code, crs);
+					authorityProjections.addProjection(projection);
 				} catch (Exception e) {
 					logger.log(Level.WARNING,
-							"Failed to create projection for epsg " + epsg
-									+ " from parameters: " + parameters, e);
+							"Failed to create projection for authority: "
+									+ authorityProjections.getAuthority()
+									+ ", code: " + code + ", definition: "
+									+ definition + ", parameters: "
+									+ parametersString, e);
 				}
 			}
 
-			// If failed try to create the projection from the EPSG name
-			String epsgName = null;
-			if (crs == null) {
-				epsgName = "EPSG:" + epsg;
-				try {
-					crs = csFactory.createFromName(epsgName);
-				} catch (Exception e) {
-					logger.log(Level.WARNING,
-							"Failed to create projection from name: "
-									+ epsgName, e);
-				}
-			}
-
-			// Throw an error if projection could not be supported
-			if (crs == null) {
-				throw new GeoPackageException(
-						"Failed to create projection for EPSG " + epsg
-								+ ". Parameters: " + parameters + ". Name: "
-								+ epsgName);
-			}
-
-			projection = new Projection(epsg, crs);
-
-			projections.put(epsg, projection);
 		}
+
 		return projection;
+	}
+
+	/**
+	 * Create a projection from the proj4 parameters
+	 * 
+	 * @param authorityProjections
+	 *            authority projections
+	 * @param code
+	 *            coordinate code
+	 * @param params
+	 *            proj4 parameters
+	 * @return projection
+	 */
+	private static Projection fromParams(
+			AuthorityProjections authorityProjections, String code,
+			String[] params) {
+
+		Projection projection = null;
+
+		if (params != null && params.length > 0) {
+			try {
+				CoordinateReferenceSystem crs = csFactory.createFromParameters(
+						coordinateName(authorityProjections.getAuthority(),
+								code), params);
+				projection = new Projection(
+						authorityProjections.getAuthority(), code, crs);
+				authorityProjections.addProjection(projection);
+			} catch (Exception e) {
+				logger.log(
+						Level.WARNING,
+						"Failed to create projection for authority: "
+								+ authorityProjections.getAuthority()
+								+ ", code: " + code + ", parameters: "
+								+ Arrays.toString(params), e);
+			}
+		}
+
+		return projection;
+	}
+
+	/**
+	 * Create a projection from configured coordinate properties
+	 * 
+	 * @param authorityProjections
+	 *            authority projections
+	 * @param code
+	 *            coordinate code
+	 * @return projection
+	 */
+	private static Projection fromProperties(
+			AuthorityProjections authorityProjections, String code) {
+
+		Projection projection = null;
+
+		String parameters = ProjectionRetriever.getProjection(
+				authorityProjections.getAuthority(), code);
+
+		if (parameters != null && !parameters.isEmpty()) {
+			try {
+				CoordinateReferenceSystem crs = csFactory.createFromParameters(
+						coordinateName(authorityProjections.getAuthority(),
+								code), parameters);
+				projection = new Projection(
+						authorityProjections.getAuthority(), code, crs);
+				authorityProjections.addProjection(projection);
+			} catch (Exception e) {
+				logger.log(Level.WARNING,
+						"Failed to create projection for authority: "
+								+ authorityProjections.getAuthority()
+								+ ", code: " + code + ", parameters: "
+								+ parameters, e);
+			}
+		}
+
+		return projection;
+	}
+
+	/**
+	 * Create a projection from the coordinate authority and code name
+	 * 
+	 * @param authorityProjections
+	 *            authority projections
+	 * @param code
+	 *            coordinate code
+	 * @return projection
+	 */
+	private static Projection fromName(
+			AuthorityProjections authorityProjections, String code) {
+
+		Projection projection = null;
+
+		String name = coordinateName(authorityProjections.getAuthority(), code);
+		try {
+			CoordinateReferenceSystem crs = csFactory.createFromName(name);
+			projection = new Projection(authorityProjections.getAuthority(),
+					code, crs);
+			authorityProjections.addProjection(projection);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to create projection from name: "
+					+ name, e);
+		}
+
+		return projection;
+	}
+
+	/**
+	 * Build a coordinate name from teh authority and code
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @return name
+	 */
+	private static String coordinateName(String authority, String code) {
+		return authority.toUpperCase() + ":" + code;
 	}
 
 	/**
@@ -105,8 +467,14 @@ public class ProjectionFactory {
 	 */
 	public static Projection getProjection(SpatialReferenceSystem srs) {
 
-		long epsg = srs.getOrganizationCoordsysId();
-		Projection projection = getProjection(epsg);
+		String authority = srs.getOrganization();
+		long code = srs.getOrganizationCoordsysId();
+		String definition = srs.getDefinition_12_063();
+		if (definition == null) {
+			definition = srs.getDefinition();
+		}
+
+		Projection projection = getProjection(authority, code, null, definition);
 
 		return projection;
 	}

@@ -1,11 +1,9 @@
 package mil.nga.geopackage.persister;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import mil.nga.geopackage.db.DateConverter;
 
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.field.SqlType;
@@ -20,29 +18,15 @@ import com.j256.ormlite.field.types.StringType;
 public class DatePersister extends StringType {
 
 	/**
-	 * Date format
-	 */
-	public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-	/**
-	 * Logger
-	 */
-	private static final Logger logger = Logger.getLogger(DatePersister.class
-			.getName());
-
-	/**
 	 * Persister singleton
 	 */
 	private static final DatePersister singleTon = new DatePersister();
 
 	/**
-	 * Simple date format
+	 * Date Converter
 	 */
-	private static final SimpleDateFormat sdf = new SimpleDateFormat(
-			DATE_FORMAT);
-	static {
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-	}
+	private static final DateConverter dateConverter = DateConverter
+			.dateTimeConverter();
 
 	/**
 	 * Constructor
@@ -66,7 +50,7 @@ public class DatePersister extends StringType {
 	@Override
 	public Object parseDefaultString(FieldType fieldType, String defaultStr) {
 		Object defaultValue = null;
-		if (DATE_FORMAT.equals(defaultStr)) {
+		if (DateConverter.DATETIME_FORMAT.equals(defaultStr)) {
 			defaultValue = javaToSqlArg(null, new Date());
 		}
 		return defaultValue;
@@ -79,7 +63,7 @@ public class DatePersister extends StringType {
 	public Object javaToSqlArg(FieldType fieldType, Object javaObject) {
 		Object stringDate = null;
 		if (javaObject != null && javaObject instanceof Date) {
-			stringDate = sdf.format((Date) javaObject);
+			stringDate = dateConverter.stringValue((Date) javaObject);
 		}
 		return stringDate;
 	}
@@ -88,14 +72,15 @@ public class DatePersister extends StringType {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object sqlArgToJava(FieldType fieldType, Object sqlArg, int columnPos) {
+	public Object sqlArgToJava(FieldType fieldType, Object sqlArg, int columnPos)
+			throws SQLException {
 		Object javaDate = null;
 		if (sqlArg != null && sqlArg instanceof String) {
 			try {
-				javaDate = sdf.parse((String) sqlArg);
-			} catch (ParseException e) {
-				logger.log(Level.SEVERE, "Failed to parse date string: "
-						+ sqlArg + ", expected format: " + DATE_FORMAT, e);
+				javaDate = dateConverter.dateValue((String) sqlArg);
+			} catch (Exception e) {
+				throw new SQLException(
+						"Failed to parse date string: " + sqlArg, e);
 			}
 		}
 		return javaDate;

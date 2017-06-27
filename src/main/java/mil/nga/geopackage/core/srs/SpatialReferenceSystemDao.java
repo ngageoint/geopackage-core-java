@@ -21,6 +21,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 /**
@@ -507,22 +508,6 @@ public class SpatialReferenceSystemDao extends
 	}
 
 	/**
-	 * Get or Create the Spatial Reference System for the provided id
-	 * 
-	 * @param srsId
-	 *            srs id
-	 * @return srs
-	 */
-	public SpatialReferenceSystem getOrCreate(long srsId) throws SQLException {
-
-		SpatialReferenceSystem srs = queryForId(srsId);
-
-		srs = createIfNeeded(srs, srsId);
-
-		return srs;
-	}
-
-	/**
 	 * Get or Create the Spatial Reference System for the provided epsg
 	 * 
 	 * @param epsg
@@ -533,10 +518,28 @@ public class SpatialReferenceSystemDao extends
 	 */
 	public SpatialReferenceSystem getOrCreateFromEpsg(long epsg)
 			throws SQLException {
+		return getOrCreateCode(ProjectionConstants.AUTHORITY_EPSG, epsg);
+	}
 
-		SpatialReferenceSystem srs = queryForOrganizationCoordsysId(epsg);
+	/**
+	 * Get or Create the Spatial Reference System for the provided organization
+	 * and id
+	 * 
+	 * @param organization
+	 *            organization
+	 * @param coordsysId
+	 *            coordsys id
+	 * @return srs
+	 * @throws SQLException
+	 * @since 1.3.0
+	 */
+	public SpatialReferenceSystem getOrCreateCode(String organization,
+			long coordsysId) throws SQLException {
 
-		srs = createIfNeeded(srs, epsg);
+		SpatialReferenceSystem srs = queryForOrganizationCoordsysId(
+				organization, coordsysId);
+
+		srs = createIfNeeded(srs, organization, coordsysId);
 
 		return srs;
 	}
@@ -544,22 +547,34 @@ public class SpatialReferenceSystemDao extends
 	/**
 	 * Query for the organization coordsys id
 	 * 
+	 * @param organization
+	 *            organization
 	 * @param organizationCoordsysId
+	 *            organization coordsys id
 	 * @return srs
 	 * @throws SQLException
-	 * @since 1.2.0
+	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystem queryForOrganizationCoordsysId(
-			long organizationCoordsysId) throws SQLException {
+			String organization, long organizationCoordsysId)
+			throws SQLException {
 		SpatialReferenceSystem srs = null;
-		List<SpatialReferenceSystem> results = queryForEq(
-				SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
+
+		QueryBuilder<SpatialReferenceSystem, Long> qb = queryBuilder();
+		qb.where().like(SpatialReferenceSystem.COLUMN_ORGANIZATION,
+				organization);
+		qb.where().eq(SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
 				organizationCoordsysId);
+		PreparedQuery<SpatialReferenceSystem> preparedQuery = qb.prepare();
+
+		List<SpatialReferenceSystem> results = query(preparedQuery);
+
 		if (!results.isEmpty()) {
 			if (results.size() > 1) {
 				throw new SQLException("More than one "
 						+ SpatialReferenceSystem.class.getSimpleName()
-						+ " returned for Organization Coordsys Id: "
+						+ " returned for Organization: " + organization
+						+ ", Organization Coordsys Id: "
 						+ organizationCoordsysId);
 			}
 			srs = results.get(0);
@@ -572,35 +587,54 @@ public class SpatialReferenceSystemDao extends
 	 * 
 	 * @param srs
 	 *            srs if exists or null
+	 * @param organization
+	 *            organization
 	 * @param id
-	 *            srs or epsg id
+	 *            coordinate id
 	 * @return srs
 	 * @throws SQLException
 	 */
 	private SpatialReferenceSystem createIfNeeded(SpatialReferenceSystem srs,
-			long id) throws SQLException {
+			String organization, long id) throws SQLException {
 
 		if (srs == null) {
-			switch ((int) id) {
-			case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM:
-				srs = createWgs84();
-				break;
-			case ProjectionConstants.UNDEFINED_CARTESIAN:
-				srs = createUndefinedCartesian();
-				break;
-			case ProjectionConstants.UNDEFINED_GEOGRAPHIC:
-				srs = createUndefinedGeographic();
-				break;
-			case ProjectionConstants.EPSG_WEB_MERCATOR:
-				srs = createWebMercator();
-				break;
-			case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D:
-				srs = createWgs84Geographical3D();
-				break;
-			default:
+
+			if (organization
+					.equalsIgnoreCase(ProjectionConstants.AUTHORITY_EPSG)) {
+
+				switch ((int) id) {
+				case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM:
+					srs = createWgs84();
+					break;
+				case ProjectionConstants.EPSG_WEB_MERCATOR:
+					srs = createWebMercator();
+					break;
+				case ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM_GEOGRAPHICAL_3D:
+					srs = createWgs84Geographical3D();
+					break;
+				default:
+					throw new GeoPackageException(
+							"Spatial Reference System not supported for metadata creation. Organization: "
+									+ organization + ", id: " + id);
+				}
+			} else if (organization
+					.equalsIgnoreCase(ProjectionConstants.AUTHORITY_NONE)) {
+				switch ((int) id) {
+				case ProjectionConstants.UNDEFINED_CARTESIAN:
+					srs = createUndefinedCartesian();
+					break;
+				case ProjectionConstants.UNDEFINED_GEOGRAPHIC:
+					srs = createUndefinedGeographic();
+					break;
+				default:
+					throw new GeoPackageException(
+							"Spatial Reference System not supported for metadata creation. Organization: "
+									+ organization + ", id: " + id);
+				}
+			} else {
 				throw new GeoPackageException(
-						"Spatial Reference System not supported for metadata creation: "
-								+ id);
+						"Spatial Reference System not supported for metadata creation. Organization: "
+								+ organization + ", id: " + id);
 			}
 		} else {
 			setDefinition_12_063(srs);

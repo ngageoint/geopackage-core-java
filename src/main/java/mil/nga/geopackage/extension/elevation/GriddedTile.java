@@ -132,6 +132,26 @@ public class GriddedTile {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param griddedTile
+	 *            gridded tile to copy
+	 * @since 1.3.0
+	 */
+	public GriddedTile(GriddedTile griddedTile) {
+		id = griddedTile.id;
+		contents = griddedTile.contents;
+		tableName = griddedTile.tableName;
+		tableId = griddedTile.tableId;
+		scale = griddedTile.scale;
+		offset = griddedTile.offset;
+		min = griddedTile.min;
+		max = griddedTile.max;
+		mean = griddedTile.mean;
+		standardDeviation = griddedTile.standardDeviation;
+	}
+
+	/**
 	 * Get the id
 	 * 
 	 * @return id

@@ -6,6 +6,7 @@ import java.util.Date;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
@@ -117,7 +118,7 @@ public class Contents {
 	 * timestamp value in ISO 8601 format as defined by the strftime function
 	 * %Y-%m-%dT%H:%M:%fZ format string applied to the current time
 	 */
-	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class, defaultValue = DatePersister.DATE_FORMAT)
+	@DatabaseField(columnName = COLUMN_LAST_CHANGE, persisterClass = DatePersister.class, defaultValue = DateConverter.DATETIME_FORMAT)
 	private Date lastChange;
 
 	/**
@@ -179,6 +180,27 @@ public class Contents {
 	 */
 	public Contents() {
 
+	}
+
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param contents
+	 *            contents to copy
+	 * @since 1.3.0
+	 */
+	public Contents(Contents contents) {
+		tableName = contents.tableName;
+		dataType = contents.dataType;
+		identifier = contents.identifier;
+		description = contents.description;
+		lastChange = new Date(contents.lastChange.getTime());
+		minX = contents.minX;
+		maxX = contents.maxX;
+		minY = contents.minY;
+		maxY = contents.maxY;
+		srs = contents.srs;
+		srsId = contents.srsId;
 	}
 
 	public String getId() {

@@ -281,12 +281,35 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
 			int x, int y, int zoom) {
+		return getProjectedBoundingBox(ProjectionConstants.AUTHORITY_EPSG,
+				projectionEpsg, x, y, zoom);
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the Google Maps API tile
+	 * coordinates and zoom level
+	 *
+	 * @param authority
+	 *            projection authority
+	 * @param code
+	 *            projection code
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 1.3.0
+	 */
+	public static BoundingBox getProjectedBoundingBox(String authority,
+			Long code, int x, int y, int zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
-		if (projectionEpsg != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(projectionEpsg);
+		if (code != null) {
+			ProjectionTransform transform = webMercator.getTransformation(
+					authority, code);
 			boundingBox = transform.transform(boundingBox);
 		}
 
@@ -335,12 +358,33 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
 			TileGrid tileGrid, int zoom) {
+		return getProjectedBoundingBox(ProjectionConstants.AUTHORITY_EPSG,
+				projectionEpsg, tileGrid, zoom);
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the Google Maps API tile
+	 * tileGrid and zoom level
+	 *
+	 * @param authority
+	 *            projection authority
+	 * @param code
+	 *            projection code
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 1.3.0
+	 */
+	public static BoundingBox getProjectedBoundingBox(String authority,
+			Long code, TileGrid tileGrid, int zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
-		if (projectionEpsg != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(projectionEpsg);
+		if (code != null) {
+			ProjectionTransform transform = webMercator.getTransformation(
+					authority, code);
 			boundingBox = transform.transform(boundingBox);
 		}
 

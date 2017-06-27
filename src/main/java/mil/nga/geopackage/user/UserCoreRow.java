@@ -1,5 +1,8 @@
 package mil.nga.geopackage.user;
 
+import java.util.Arrays;
+import java.util.Date;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
@@ -52,6 +55,72 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		// (Cursor.FIELD_TYPE_NULL)
 		this.columnTypes = new int[table.columnCount()];
 		this.values = new Object[table.columnCount()];
+	}
+
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param userCoreRow
+	 *            user core row to copy
+	 */
+	protected UserCoreRow(UserCoreRow<TColumn, TTable> userCoreRow) {
+		this.table = userCoreRow.table;
+		this.columnTypes = userCoreRow.columnTypes;
+		this.values = new Object[userCoreRow.values.length];
+		for (int i = 0; i < this.values.length; i++) {
+			Object value = userCoreRow.values[i];
+			if (value != null) {
+				TColumn column = userCoreRow.getColumn(i);
+				this.values[i] = copyValue(column, value);
+			}
+		}
+	}
+
+	/**
+	 * Copy the value of the data type
+	 * 
+	 * @param column
+	 *            table column
+	 * @param value
+	 *            value
+	 * @return copy value
+	 */
+	protected Object copyValue(TColumn column, Object value) {
+
+		Object copyValue = value;
+
+		switch (column.getDataType()) {
+
+		case BLOB:
+			if (value instanceof byte[]) {
+				byte[] bytes = (byte[]) value;
+				copyValue = Arrays.copyOf(bytes, bytes.length);
+			} else {
+				throw new GeoPackageException(
+						"Unsupported copy value type. column: "
+								+ column.getName() + ", value type: "
+								+ value.getClass().getName() + ", data type: "
+								+ column.getDataType());
+			}
+			break;
+		case DATE:
+		case DATETIME:
+			if (value instanceof Date) {
+				Date date = (Date) value;
+				copyValue = new Date(date.getTime());
+			} else if (!(value instanceof String)) {
+				throw new GeoPackageException(
+						"Unsupported copy value type. column: "
+								+ column.getName() + ", value type: "
+								+ value.getClass().getName() + ", data type: "
+								+ column.getDataType());
+			}
+			break;
+		default:
+
+		}
+
+		return copyValue;
 	}
 
 	/**

@@ -94,6 +94,22 @@ public class SpatialReferenceSystemSqlMm {
 
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param srs
+	 *            srs to copy
+	 * @since 1.3.0
+	 */
+	public SpatialReferenceSystemSqlMm(SpatialReferenceSystemSqlMm srs) {
+		srsName = srs.srsName;
+		srsId = srs.srsId;
+		organization = srs.organization;
+		organizationCoordsysId = srs.organizationCoordsysId;
+		definition = srs.definition;
+		description = srs.description;
+	}
+
 	public int getId() {
 		return srsId;
 	}
