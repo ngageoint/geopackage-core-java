@@ -31,7 +31,7 @@ public class ProjectionFactory {
 	private static final CRSFactory csFactory = new CRSFactory();
 
 	/**
-	 * Mapping of EPSG projection codes to projections
+	 * Mapping of authorities to projections
 	 */
 	private static Map<String, AuthorityProjections> authorities = new HashMap<>();
 

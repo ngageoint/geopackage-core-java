@@ -10,7 +10,7 @@ import org.osgeo.proj4j.units.Unit;
 import org.osgeo.proj4j.units.Units;
 
 /**
- * Single EPSG Projection
+ * Single Projection for an authority and code
  * 
  * @author osbornb
  */
@@ -107,7 +107,24 @@ public class Projection {
 	 * @return transform
 	 */
 	public ProjectionTransform getTransformation(long epsg) {
-		Projection projectionTo = ProjectionFactory.getProjection(epsg);
+		return getTransformation(ProjectionConstants.AUTHORITY_EPSG, epsg);
+	}
+
+	/**
+	 * Get the transformation from this Projection to the authority and
+	 * coordinate code. Each thread of execution should have it's own
+	 * transformation.
+	 * 
+	 * @param authority
+	 *            coordinate authority
+	 * @param code
+	 *            coordinate code
+	 * @return transform
+	 * @since 1.2.3
+	 */
+	public ProjectionTransform getTransformation(String authority, long code) {
+		Projection projectionTo = ProjectionFactory.getProjection(authority,
+				code);
 		return getTransformation(projectionTo);
 	}
 

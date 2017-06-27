@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Retrieves the proj4 projection parameter string for an EPSG code
+ * Retrieves the proj4 projection parameter string for an authority and coordinate code
  * 
  * @author osbornb
  */
