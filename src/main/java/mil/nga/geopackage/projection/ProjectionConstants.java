@@ -10,14 +10,14 @@ public class ProjectionConstants {
 	/**
 	 * EPSG authority name
 	 * 
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static final String AUTHORITY_EPSG = "EPSG";
 
 	/**
 	 * No authority name
 	 * 
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static final String AUTHORITY_NONE = "NONE";
 

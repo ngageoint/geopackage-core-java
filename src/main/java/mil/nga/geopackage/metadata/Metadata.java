@@ -85,7 +85,7 @@ public class Metadata {
 	 * 
 	 * @param meta
 	 *            metadata to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public Metadata(Metadata meta) {
 		id = meta.id;

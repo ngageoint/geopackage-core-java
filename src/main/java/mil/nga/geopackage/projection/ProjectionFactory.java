@@ -55,7 +55,7 @@ public class ProjectionFactory {
 	 * @param code
 	 *            authority coordinate code
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, long code) {
 		return getProjection(authority, String.valueOf(code));
@@ -69,7 +69,7 @@ public class ProjectionFactory {
 	 * @param code
 	 *            authority coordinate code
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, String code) {
 		return getProjection(authority, code, null, null);
@@ -85,7 +85,7 @@ public class ProjectionFactory {
 	 * @param paramStr
 	 *            proj4 string
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, long code,
 			String paramStr) {
@@ -102,7 +102,7 @@ public class ProjectionFactory {
 	 * @param paramStr
 	 *            proj4 string
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, String code,
 			String paramStr) {
@@ -124,7 +124,7 @@ public class ProjectionFactory {
 	 * @param params
 	 *            proj4 params array
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, long code,
 			String[] params) {
@@ -141,7 +141,7 @@ public class ProjectionFactory {
 	 * @param params
 	 *            proj4 params array
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, String code,
 			String[] params) {
@@ -161,7 +161,7 @@ public class ProjectionFactory {
 	 * @param definition
 	 *            definition
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, long code,
 			String[] params, String definition) {
@@ -182,7 +182,7 @@ public class ProjectionFactory {
 	 * @param definition
 	 *            definition
 	 * @return projection
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static Projection getProjection(String authority, String code,
 			String[] params, String definition) {
@@ -235,7 +235,7 @@ public class ProjectionFactory {
 	 * @param authority
 	 *            coordinate authority
 	 * @return authority projections
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static AuthorityProjections getProjections(String authority) {
 		AuthorityProjections authorityProjections = authorities.get(authority
@@ -250,7 +250,7 @@ public class ProjectionFactory {
 	/**
 	 * Clear all authority projections
 	 * 
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static void clear() {
 		authorities.clear();
@@ -261,7 +261,7 @@ public class ProjectionFactory {
 	 * 
 	 * @param authority
 	 *            coordinate authority
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static void clear(String authority) {
 		getProjections(authority).clear();
@@ -274,7 +274,7 @@ public class ProjectionFactory {
 	 *            coordinate authority
 	 * @param code
 	 *            coordinate code
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static void clear(String authority, long code) {
 		getProjections(authority).clear(code);
@@ -287,7 +287,7 @@ public class ProjectionFactory {
 	 *            coordinate authority
 	 * @param code
 	 *            coordinate code
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static void clear(String authority, String code) {
 		getProjections(authority).clear(code);

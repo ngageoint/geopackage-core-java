@@ -135,7 +135,7 @@ public class MetadataReference {
 	 * 
 	 * @param metadataReference
 	 *            metadata reference to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public MetadataReference(MetadataReference metadataReference) {
 		referenceScope = metadataReference.referenceScope;

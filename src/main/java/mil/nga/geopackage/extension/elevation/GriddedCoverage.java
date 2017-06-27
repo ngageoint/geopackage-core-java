@@ -114,7 +114,7 @@ public class GriddedCoverage {
 	 * 
 	 * @param griddedCoverage
 	 *            gridded coverage to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public GriddedCoverage(GriddedCoverage griddedCoverage) {
 		id = griddedCoverage.id;

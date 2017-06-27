@@ -145,7 +145,7 @@ public class GeometryIndex {
 	 * 
 	 * @param geometryIndex
 	 *            geometry index to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public GeometryIndex(GeometryIndex geometryIndex) {
 		tableIndex = geometryIndex.tableIndex;

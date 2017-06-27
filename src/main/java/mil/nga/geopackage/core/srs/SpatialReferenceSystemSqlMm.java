@@ -99,7 +99,7 @@ public class SpatialReferenceSystemSqlMm {
 	 * 
 	 * @param srs
 	 *            srs to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystemSqlMm(SpatialReferenceSystemSqlMm srs) {
 		srsName = srs.srsName;

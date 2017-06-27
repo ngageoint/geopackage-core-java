@@ -119,7 +119,7 @@ public class TileMatrixSet {
 	 * 
 	 * @param tileMatrixSet
 	 *            tile matrix set to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public TileMatrixSet(TileMatrixSet tileMatrixSet) {
 		contents = tileMatrixSet.contents;

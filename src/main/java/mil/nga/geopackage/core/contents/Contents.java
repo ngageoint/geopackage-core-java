@@ -187,7 +187,7 @@ public class Contents {
 	 * 
 	 * @param contents
 	 *            contents to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public Contents(Contents contents) {
 		tableName = contents.tableName;

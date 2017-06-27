@@ -531,7 +531,7 @@ public class SpatialReferenceSystemDao extends
 	 *            coordsys id
 	 * @return srs
 	 * @throws SQLException
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystem getOrCreateCode(String organization,
 			long coordsysId) throws SQLException {
@@ -553,7 +553,7 @@ public class SpatialReferenceSystemDao extends
 	 *            organization coordsys id
 	 * @return srs
 	 * @throws SQLException
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystem queryForOrganizationCoordsysId(
 			String organization, long organizationCoordsysId)

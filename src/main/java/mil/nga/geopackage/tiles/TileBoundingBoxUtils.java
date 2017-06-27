@@ -300,7 +300,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return bounding box
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static BoundingBox getProjectedBoundingBox(String authority,
 			Long code, int x, int y, int zoom) {
@@ -375,7 +375,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return bounding box
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public static BoundingBox getProjectedBoundingBox(String authority,
 			Long code, TileGrid tileGrid, int zoom) {

@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.2.3 (TBD)
+## [1.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.3.0) (06-27-2017)
 
 * Copy constructors for base, extension, and user table (features, tiles, attributes) row objects
 * ProjectionFactory support for custom projection parameters

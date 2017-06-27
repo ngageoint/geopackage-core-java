@@ -40,7 +40,7 @@ public class Projection {
 	 *            coordinate code
 	 * @param crs
 	 *            crs
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public Projection(String authority, long code, CoordinateReferenceSystem crs) {
 		this(authority, String.valueOf(code), crs);
@@ -55,7 +55,7 @@ public class Projection {
 	 *            coordinate code
 	 * @param crs
 	 *            crs
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public Projection(String authority, String code,
 			CoordinateReferenceSystem crs) {
@@ -73,7 +73,7 @@ public class Projection {
 	 * Get the coordinate authority
 	 * 
 	 * @return authority
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public String getAuthority() {
 		return authority;
@@ -83,7 +83,7 @@ public class Projection {
 	 * Get the coordinate code
 	 * 
 	 * @return code
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public String getCode() {
 		return code;
@@ -120,7 +120,7 @@ public class Projection {
 	 * @param code
 	 *            coordinate code
 	 * @return transform
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public ProjectionTransform getTransformation(String authority, long code) {
 		Projection projectionTo = ProjectionFactory.getProjection(authority,
@@ -198,7 +198,7 @@ public class Projection {
 	 * @param code
 	 *            coordinate code
 	 * @return true if equal
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public boolean equals(String authority, long code) {
 		return equals(authority, String.valueOf(code));
@@ -212,7 +212,7 @@ public class Projection {
 	 * @param code
 	 *            coordinate code
 	 * @return true if equal
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public boolean equals(String authority, String code) {
 		return this.authority.equals(authority) && this.code.equals(code);
@@ -221,7 +221,7 @@ public class Projection {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	@Override
 	public int hashCode() {
@@ -237,7 +237,7 @@ public class Projection {
 	 * 
 	 * Based upon {@link #getAuthority()} and {@link #getCode()}
 	 * 
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	@Override
 	public boolean equals(Object obj) {

@@ -119,7 +119,7 @@ public class GeometryColumnsSqlMm {
 	 * 
 	 * @param geometryColumns
 	 *            geometry columns to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public GeometryColumnsSqlMm(GeometryColumnsSqlMm geometryColumns) {
 		contents = geometryColumns.contents;

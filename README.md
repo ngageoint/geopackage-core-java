@@ -37,12 +37,12 @@ The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a
 
 ### Installation ###
 
-Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|1.2.2|jar) (JAR, POM, Source, Javadoc)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|1.3.0|jar) (JAR, POM, Source, Javadoc)
 
     <dependency>
         <groupId>mil.nga.geopackage</groupId>
         <artifactId>geopackage-core</artifactId>
-        <version>1.2.2</version>
+        <version>1.3.0</version>
     </dependency>
 
 ### Build ###
@@ -56,4 +56,3 @@ Build this repository using Eclipse and/or Maven:
 * [WKB](https://github.com/ngageoint/geopackage-wkb-java) (The MIT License (MIT)) - GeoPackage Well Known Binary Lib
 * [OrmLite](http://ormlite.com/) (Open Source License) - Object Relational Mapping (ORM) Library
 * [Proj4J](http://trac.osgeo.org/proj4j/) (Apache License, Version 2.0) - Projection Library
-

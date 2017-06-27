@@ -13,7 +13,7 @@ import mil.nga.geopackage.GeoPackageException;
  * Date converter between database date formats and date objects
  * 
  * @author osbornb
- * @since 1.2.3
+ * @since 1.3.0
  */
 public class DateConverter {
 

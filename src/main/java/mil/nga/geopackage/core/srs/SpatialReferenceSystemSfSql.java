@@ -77,7 +77,7 @@ public class SpatialReferenceSystemSfSql {
 	 * 
 	 * @param srs
 	 *            srs to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystemSfSql(SpatialReferenceSystemSfSql srs) {
 		srid = srs.srid;

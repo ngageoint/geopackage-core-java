@@ -63,7 +63,7 @@ public class TableIndex {
 	 * 
 	 * @param tableIndex
 	 *            table index to copy
-	 * @since 1.2.3
+	 * @since 1.3.0
 	 */
 	public TableIndex(TableIndex tableIndex) {
 		tableName = tableIndex.tableName;

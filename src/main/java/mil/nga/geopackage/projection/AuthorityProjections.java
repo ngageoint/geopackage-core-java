@@ -7,7 +7,7 @@ import java.util.Map;
  * Collection of projections for a single coordinate authority
  * 
  * @author osbornb
- * @since 1.2.3
+ * @since 1.3.0
  */
 public class AuthorityProjections {
 
