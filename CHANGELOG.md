@@ -7,6 +7,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 1.3.1 (TBD)
 
 * Improved handling of unknown Contents bounding boxes
+* User table zoom level bounding of degree unit projections
+* Tile Bounding Box Utils method to bound degree unit bounding box with web mercator limits
 
 ## [1.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.3.0) (06-27-2017)
 
