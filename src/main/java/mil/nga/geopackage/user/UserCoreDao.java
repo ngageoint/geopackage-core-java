@@ -14,6 +14,8 @@ import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 
+import org.osgeo.proj4j.units.DegreeUnit;
+
 /**
  * Abstract User DAO for reading user tables
  * 
@@ -607,10 +609,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		int zoomLevel = 0;
 		BoundingBox boundingBox = getBoundingBox();
 		if (boundingBox != null) {
-			if (projection.equals(ProjectionConstants.AUTHORITY_EPSG,
-					ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM)) {
+			if (projection.getUnit() instanceof DegreeUnit) {
 				boundingBox = TileBoundingBoxUtils
-						.boundWgs84BoundingBoxWithWebMercatorLimits(boundingBox);
+						.boundDegreesBoundingBoxWithWebMercatorLimits(boundingBox);
 			}
 			ProjectionTransform webMercatorTransform = projection
 					.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
