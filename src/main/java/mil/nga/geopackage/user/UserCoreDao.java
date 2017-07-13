@@ -14,6 +14,8 @@ import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 
+import org.osgeo.proj4j.units.DegreeUnit;
+
 /**
  * Abstract User DAO for reading user tables
  * 
@@ -604,13 +606,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			throw new GeoPackageException(
 					"No projection was set which is required to determine the zoom level");
 		}
+		int zoomLevel = 0;
 		BoundingBox boundingBox = getBoundingBox();
-		ProjectionTransform webMercatorTransform = projection
-				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
-		BoundingBox webMercatorBoundingBox = webMercatorTransform
-				.transform(boundingBox);
-		int zoomLevel = TileBoundingBoxUtils
-				.getZoomLevel(webMercatorBoundingBox);
+		if (boundingBox != null) {
+			if (projection.getUnit() instanceof DegreeUnit) {
+				boundingBox = TileBoundingBoxUtils
+						.boundDegreesBoundingBoxWithWebMercatorLimits(boundingBox);
+			}
+			ProjectionTransform webMercatorTransform = projection
+					.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+			BoundingBox webMercatorBoundingBox = webMercatorTransform
+					.transform(boundingBox);
+			zoomLevel = TileBoundingBoxUtils
+					.getZoomLevel(webMercatorBoundingBox);
+		}
 		return zoomLevel;
 	}
 

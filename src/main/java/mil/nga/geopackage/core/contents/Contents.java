@@ -392,8 +392,11 @@ public class Contents {
 	 * @return bounding box
 	 */
 	public BoundingBox getBoundingBox() {
-		BoundingBox boundingBox = new BoundingBox(getMinX(), getMaxX(),
-				getMinY(), getMaxY());
+		BoundingBox boundingBox = null;
+		if (minX != null && maxX != null && minY != null && maxY != null) {
+			boundingBox = new BoundingBox(getMinX(), getMaxX(), getMinY(),
+					getMaxY());
+		}
 		return boundingBox;
 	}
 

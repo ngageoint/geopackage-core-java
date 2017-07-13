@@ -905,6 +905,20 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox boundWgs84BoundingBoxWithWebMercatorLimits(
 			BoundingBox boundingBox) {
+		return boundDegreesBoundingBoxWithWebMercatorLimits(boundingBox);
+	}
+
+	/**
+	 * Bound the upper and lower bounds of the degrees bounding box with web
+	 * mercator limits
+	 * 
+	 * @param boundingBox
+	 *            degrees bounding box
+	 * @return bounding box
+	 * @since 1.3.1
+	 */
+	public static BoundingBox boundDegreesBoundingBoxWithWebMercatorLimits(
+			BoundingBox boundingBox) {
 		BoundingBox bounded = new BoundingBox(boundingBox);
 		if (bounded.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
 			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
