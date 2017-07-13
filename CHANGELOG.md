@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.3.1 (TBD)
+## [1.3.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.3.1) (07-13-2017)
 
 * Improved handling of unknown Contents bounding boxes
 * User table zoom level bounding of degree unit projections
