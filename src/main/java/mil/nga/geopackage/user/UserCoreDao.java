@@ -2,6 +2,7 @@ package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -154,6 +155,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForAll() {
 		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
 				null, null, null, null, null);
+	}
+
+	/**
+	 * Query for all rows with "columns as" values for corresponding column
+	 * indices. Non null values in the array will be used as "as" values for the
+	 * corresponding column.
+	 * 
+	 * @param columnsAs
+	 *            columns as values
+	 * @return result
+	 * @since 1.3.2
+	 */
+	public TResult queryForAll(String[] columnsAs) {
+		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+				columnsAs, null, null, null, null, null);
 	}
 
 	/**
@@ -621,6 +637,149 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 					.getZoomLevel(webMercatorBoundingBox);
 		}
 		return zoomLevel;
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as null
+	 * 
+	 * @param columns
+	 *            columns to include as null
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAsNull(List<TColumn> columns) {
+		return buildColumnsAs(columns, "null");
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as the specified value
+	 * 
+	 * @param columns
+	 *            columns to include as value
+	 * @param value
+	 *            "columns as" value for specified columns
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAs(List<TColumn> columns, String value) {
+
+		String[] columnsArray = buildColumnsArray(columns);
+
+		return buildColumnsAs(columnsArray, value);
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as null
+	 * 
+	 * @param columns
+	 *            columns to include as null
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAsNull(String[] columns) {
+		return buildColumnsAs(columns, "null");
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as the specified value
+	 * 
+	 * @param columns
+	 *            columns to include as value
+	 * @param value
+	 *            "columns as" value for specified columns
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAs(String[] columns, String value) {
+
+		String[] values = new String[columns.length];
+		for (int i = 0; i < columns.length; i++) {
+			values[i] = value;
+		}
+
+		return buildColumnsAs(columns, values);
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as the specified values
+	 * 
+	 * @param columns
+	 *            columns to include as value
+	 * @param values
+	 *            "columns as" values for specified columns
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAs(List<TColumn> columns, String[] values) {
+
+		String[] columnsArray = buildColumnsArray(columns);
+
+		return buildColumnsAs(columnsArray, values);
+	}
+
+	/**
+	 * Build "columns as" values for the table columns with the specified
+	 * columns as the specified values
+	 * 
+	 * @param columns
+	 *            columns to include as value
+	 * @param values
+	 *            "columns as" values for specified columns
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAs(String[] columns, String[] values) {
+
+		Map<String, String> columnsMap = new HashMap<>();
+		for (int i = 0; i < columns.length; i++) {
+			String column = columns[i];
+			String value = values[i];
+			columnsMap.put(column, value);
+		}
+
+		return buildColumnsAs(columnsMap);
+	}
+
+	/**
+	 * Build "columns as" values for the table column to value mapping
+	 * 
+	 * @param columns
+	 *            mapping between columns and values
+	 * @return "columns as" values
+	 * @since 1.3.2
+	 */
+	public String[] buildColumnsAs(Map<String, String> columns) {
+
+		String[] columnNames = table.getColumnNames();
+		String[] columnsAs = new String[columnNames.length];
+
+		for (int i = 0; i < columnNames.length; i++) {
+			String column = columnNames[i];
+			columnsAs[i] = columns.get(column);
+		}
+
+		return columnsAs;
+	}
+
+	/**
+	 * Build a columns name array from the list of columns
+	 * 
+	 * @param columns
+	 *            column list
+	 * @return column names array
+	 */
+	private String[] buildColumnsArray(List<TColumn> columns) {
+		String[] columnsArray = new String[columns.size()];
+		for (int i = 0; i < columns.size(); i++) {
+			TColumn column = columns.get(i);
+			columnsArray[i] = column.getName();
+		}
+		return columnsArray;
 	}
 
 	/**

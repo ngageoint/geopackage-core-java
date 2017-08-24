@@ -296,4 +296,22 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		return uniqueConstraints;
 	}
 
+	/**
+	 * Get the columns with the provided data type
+	 * 
+	 * @param type
+	 *            data type
+	 * @return columns
+	 * @since 1.3.2
+	 */
+	public List<TColumn> columnsOfType(GeoPackageDataType type) {
+		List<TColumn> columnsOfType = new ArrayList<>();
+		for (TColumn column : columns) {
+			if (column.getDataType() == type) {
+				columnsOfType.add(column);
+			}
+		}
+		return columnsOfType;
+	}
+
 }

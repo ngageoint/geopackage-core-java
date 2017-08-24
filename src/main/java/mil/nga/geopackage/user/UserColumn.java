@@ -41,7 +41,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	private final boolean primaryKey;
 
 	/**
-	 * Data type if not a geometry column
+	 * Data type
 	 */
 	private final GeoPackageDataType dataType;
 
