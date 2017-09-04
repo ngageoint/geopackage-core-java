@@ -87,6 +87,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public abstract BoundingBox getBoundingBox();
 
 	/**
+	 * Prepare the result before returning
+	 * 
+	 * @param result
+	 *            result
+	 * @return prepared result
+	 * @since 1.3.2
+	 */
+	protected abstract TResult prepareResult(TResult result);
+
+	/**
 	 * Get the database
 	 * 
 	 * @return database
@@ -153,8 +163,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForAll() {
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				null, null, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -168,8 +180,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 1.3.2
 	 */
 	public TResult queryForAll(String[] columnsAs) {
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				columnsAs, null, null, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -197,8 +211,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String having, String orderBy) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, groupBy, having, orderBy);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -211,8 +227,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForEq(String fieldName, ColumnValue value) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -224,8 +242,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForFieldValues(Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -237,8 +257,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForValueFieldValues(Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
 		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -250,8 +272,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForId(long id) {
 		String where = getPkWhere(id);
 		String[] whereArgs = getPkWhereArgs(id);
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -278,8 +302,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs) {
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -294,8 +320,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy) {
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, groupBy, having, orderBy);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
@@ -311,8 +339,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy, String limit) {
-		return (TResult) userDb.query(getTableName(), table.getColumnNames(),
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, groupBy, having, orderBy, limit);
+		prepareResult(result);
+		return result;
 	}
 
 	/**
