@@ -63,7 +63,8 @@ public class UserRowSync<TColumn extends UserColumn, TTable extends UserTable<TC
 	 * 
 	 * @param id
 	 *            user row id
-	 * @return row
+	 * @return row if retrieved from a previous request, null if calling thread
+	 *         should read row and set using {@link #setRow(long, UserCoreRow)}
 	 */
 	public TRow getRowOrLock(long id) {
 
