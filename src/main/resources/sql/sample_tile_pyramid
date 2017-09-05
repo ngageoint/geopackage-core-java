@@ -1,0 +1,8 @@
+CREATE TABLE sample_tile_pyramid (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  zoom_level INTEGER NOT NULL,
+  tile_column INTEGER NOT NULL,
+  tile_row INTEGER NOT NULL,
+  tile_data BLOB NOT NULL,
+  UNIQUE (zoom_level, tile_column, tile_row)
+);

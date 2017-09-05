@@ -1,0 +1,8 @@
+CREATE TABLE sample_feature_table (
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  geometry GEOMETRY,
+  text_attribute TEXT,
+  real_attribute REAL,
+  boolean_attribute BOOLEAN,
+  raster_or_photo BLOB
+);
