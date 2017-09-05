@@ -1,7 +1,7 @@
 CREATE TABLE gpkg_data_columns (
   table_name TEXT NOT NULL,
   column_name TEXT NOT NULL,
-  name TEXT,
+  name TEXT UNIQUE,
   title TEXT,
   description TEXT,
   mime_type TEXT,
