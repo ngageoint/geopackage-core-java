@@ -104,7 +104,10 @@ public class DateConverter {
 	public String stringValue(Date date) {
 		String value = null;
 		if (date != null) {
-			value = formatters.get(0).format(date);
+			SimpleDateFormat sdf = formatters.get(0);
+			synchronized (sdf) {
+				value = sdf.format(date);
+			}
 		}
 		return value;
 	}
@@ -124,7 +127,9 @@ public class DateConverter {
 			ParseException exception = null;
 			for (SimpleDateFormat sdf : formatters) {
 				try {
-					value = sdf.parse(date);
+					synchronized (sdf) {
+						value = sdf.parse(date);
+					}
 					break;
 				} catch (ParseException e) {
 					if (exception == null) {
