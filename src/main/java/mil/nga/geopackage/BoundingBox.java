@@ -67,6 +67,18 @@ public class BoundingBox {
 				boundingBox.getMinLatitude(), boundingBox.getMaxLatitude());
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @since 1.3.2
+	 */
+	public BoundingBox(GeometryEnvelope envelope) {
+		this(envelope.getMinX(), envelope.getMaxX(), envelope.getMinY(),
+				envelope.getMaxY());
+	}
+
 	public double getMinLongitude() {
 		return minLongitude;
 	}
@@ -112,6 +124,65 @@ public class BoundingBox {
 		envelope.setMinY(minLatitude);
 		envelope.setMaxY(maxLatitude);
 		return envelope;
+	}
+
+	/**
+	 * If the bounding box spans the Anti-Meridian, attempt to get a
+	 * complementary bounding box using the max longitude of the unit projection
+	 *
+	 * @param maxProjectionLongitude
+	 *            max longitude of the world for the current bounding box units
+	 *
+	 * @return complementary bounding box or nil if none
+	 * @since 1.3.2
+	 */
+	public BoundingBox complementary(double maxProjectionLongitude) {
+
+		BoundingBox complementary = null;
+
+		Double adjust = null;
+
+		if (this.maxLongitude > maxProjectionLongitude) {
+			if (this.minLongitude >= -maxProjectionLongitude) {
+				adjust = -2 * maxProjectionLongitude;
+			}
+		} else if (this.minLongitude < -maxProjectionLongitude) {
+			if (this.maxLongitude <= maxProjectionLongitude) {
+				adjust = 2 * maxProjectionLongitude;
+			}
+		}
+
+		if (adjust != null) {
+			complementary = new BoundingBox(this);
+			complementary.setMinLongitude(complementary.getMinLongitude()
+					+ adjust);
+			complementary.setMaxLongitude(complementary.getMaxLongitude()
+					+ adjust);
+		}
+
+		return complementary;
+	}
+
+	/**
+	 * If the bounding box spans the Anti-Meridian, attempt to get a
+	 * complementary WGS84 bounding box
+	 *
+	 * @return complementary bounding box or nil if none
+	 * @since 1.3.2
+	 */
+	public BoundingBox complementaryWgs84() {
+		return complementary(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+	}
+
+	/**
+	 * If the bounding box spans the Anti-Meridian, attempt to get a
+	 * complementary Web Mercator bounding box
+	 *
+	 * @return complementary bounding box or nil if none
+	 * @since 1.3.2
+	 */
+	public BoundingBox complementaryWebMercator() {
+		return complementary(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
 	}
 
 	/**
