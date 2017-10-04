@@ -32,6 +32,25 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
+		return overlap(boundingBox, boundingBox2, false);
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param allowEmpty
+	 *            allow empty latitude and/or longitude ranges when determining
+	 *            overlap
+	 *
+	 * @return bounding box
+	 * @since 1.3.2
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, boolean allowEmpty) {
 
 		double minLongitude = Math.max(boundingBox.getMinLongitude(),
 				boundingBox2.getMinLongitude());
@@ -44,12 +63,118 @@ public class TileBoundingBoxUtils {
 
 		BoundingBox overlap = null;
 
-		if (minLongitude < maxLongitude && minLatitude < maxLatitude) {
+		if ((minLongitude < maxLongitude && minLatitude < maxLatitude)
+				|| (allowEmpty && minLongitude <= maxLongitude && minLatitude <= maxLatitude)) {
 			overlap = new BoundingBox(minLongitude, maxLongitude, minLatitude,
 					maxLatitude);
 		}
 
 		return overlap;
+
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes adjusting
+	 * the second box to an Anti-Meridian complementary version based upon the
+	 * max longitude
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 *
+	 * @return bounding box
+	 * @since 1.3.2
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, double maxLongitude) {
+		return overlap(boundingBox, boundingBox2, maxLongitude, false);
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes adjusting
+	 * the second box to an Anti-Meridian complementary version based upon the
+	 * max longitude
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 * @param allowEmpty
+	 *            allow empty latitude and/or longitude ranges when determining
+	 *            overlap
+	 *
+	 * @return bounding box
+	 * @since 1.3.2
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, double maxLongitude, boolean allowEmpty) {
+
+		BoundingBox bbox2 = boundingBox2;
+
+		double adjustment = 0.0;
+
+		if (maxLongitude > 0) {
+			if (boundingBox.getMinLongitude() > boundingBox2.getMaxLongitude()) {
+				adjustment = maxLongitude * 2.0;
+			} else if (boundingBox.getMaxLongitude() < boundingBox2
+					.getMinLongitude()) {
+				adjustment = maxLongitude * -2.0;
+			}
+		}
+
+		if (adjustment != 0.0) {
+			bbox2 = new BoundingBox(boundingBox2);
+			bbox2.setMinLongitude(bbox2.getMinLongitude() + adjustment);
+			bbox2.setMaxLongitude(bbox2.getMaxLongitude() + adjustment);
+		}
+
+		return overlap(boundingBox, bbox2, allowEmpty);
+	}
+
+	/**
+	 * Determine if the point is within the bounding box
+	 *
+	 * @param point
+	 *            bounding box
+	 * @param boundingBox
+	 *            bounding box
+	 *
+	 * @return true if within the bounding box
+	 * @since 1.3.2
+	 */
+	public static boolean isPointInBoundingBox(Point point,
+			BoundingBox boundingBox) {
+		BoundingBox pointBoundingbox = new BoundingBox(point.getX(),
+				point.getX(), point.getY(), point.getY());
+		BoundingBox overlap = overlap(boundingBox, pointBoundingbox, true);
+		return overlap != null;
+	}
+
+	/**
+	 * Determine if the point is within the bounding box
+	 *
+	 * @param point
+	 *            bounding box
+	 * @param boundingBox
+	 *            bounding box
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 *
+	 * @return true if within the bounding box
+	 * @since 1.3.2
+	 */
+	public static boolean isPointInBoundingBox(Point point,
+			BoundingBox boundingBox, double maxLongitude) {
+		BoundingBox pointBoundingbox = new BoundingBox(point.getX(),
+				point.getX(), point.getY(), point.getY());
+		BoundingBox overlap = overlap(boundingBox, pointBoundingbox,
+				maxLongitude, true);
+		return overlap != null;
 	}
 
 	/**
@@ -218,8 +343,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(long x, long y, int zoom) {
 
-		int tilesPerSide = tilesPerSide(zoom);
-		double tileSize = tileSize(tilesPerSide);
+		double tileSize = tileSizeWithZoom(zoom);
 
 		double minLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
 				+ (x * tileSize);
@@ -248,8 +372,7 @@ public class TileBoundingBoxUtils {
 	public static BoundingBox getWebMercatorBoundingBox(TileGrid tileGrid,
 			int zoom) {
 
-		int tilesPerSide = tilesPerSide(zoom);
-		double tileSize = tileSize(tilesPerSide);
+		double tileSize = tileSizeWithZoom(zoom);
 
 		double minLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
 				+ (tileGrid.getMinX() * tileSize);
@@ -578,6 +701,56 @@ public class TileBoundingBoxUtils {
 	 */
 	public static int tilesPerSide(int zoom) {
 		return (int) Math.pow(2, zoom);
+	}
+
+	/**
+	 * Get the tile size in meters at the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 *
+	 * @return tile size in meters
+	 * @since 1.3.2
+	 */
+	public static double tileSizeWithZoom(int zoom) {
+		int tilesPerSide = tilesPerSide(zoom);
+		double tileSize = tileSize(tilesPerSide);
+		return tileSize;
+	}
+
+	/**
+	 * Get the tolerance distance in meters for the zoom level and pixels length
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @param pixels
+	 *            pixel length
+	 *
+	 * @return tolerance distance in meters
+	 * @since 1.3.2
+	 */
+	public static double toleranceDistance(int zoom, int pixels) {
+		double tileSize = tileSizeWithZoom(zoom);
+		double tolerance = tileSize / pixels;
+		return tolerance;
+	}
+
+	/**
+	 * Get the tolerance distance in meters for the zoom level and pixels length
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @param pixelWidth
+	 *            pixel width
+	 * @param pixelHeight
+	 *            pixel height
+	 *
+	 * @return tolerance distance in meters
+	 * @since 1.3.2
+	 */
+	public static double toleranceDistance(int zoom, int pixelWidth,
+			int pixelHeight) {
+		return toleranceDistance(zoom, Math.max(pixelWidth, pixelHeight));
 	}
 
 	/**
