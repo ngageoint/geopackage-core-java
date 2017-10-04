@@ -1,5 +1,8 @@
 package mil.nga.geopackage.projection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.wkb.geom.Geometry;
 import mil.nga.wkb.geom.Point;
@@ -73,6 +76,28 @@ public class ProjectionTransform {
 		GeometryProjectionTransform geometryTransform = new GeometryProjectionTransform(
 				this);
 		Point to = geometryTransform.transform(from);
+
+		return to;
+	}
+
+	/**
+	 * Transform a list of points
+	 * 
+	 * @param from
+	 *            points to transform
+	 * @return transformed points
+	 * @since 1.3.2
+	 */
+	public List<Point> transform(List<Point> from) {
+
+		List<Point> to = new ArrayList<>();
+
+		GeometryProjectionTransform geometryTransform = new GeometryProjectionTransform(
+				this);
+		for (Point fromPoint : from) {
+			Point toPoint = geometryTransform.transform(fromPoint);
+			to.add(toPoint);
+		}
 
 		return to;
 	}
