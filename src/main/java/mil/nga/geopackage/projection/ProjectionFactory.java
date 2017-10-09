@@ -445,7 +445,7 @@ public class ProjectionFactory {
 	}
 
 	/**
-	 * Build a coordinate name from teh authority and code
+	 * Build a coordinate name from the authority and code
 	 * 
 	 * @param authority
 	 *            coordinate authority
