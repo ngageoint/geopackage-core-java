@@ -186,6 +186,101 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Bound the bounding box longitudes within the min and max possible
+	 * projection values. This may result in a max longitude numerically lower
+	 * than the min longitude.
+	 * 
+	 * @param maxProjectionLongitude
+	 *            max longitude of the world for the current bounding box units
+	 * @return bounded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox boundCoordinates(double maxProjectionLongitude) {
+
+		BoundingBox bounded = new BoundingBox(this);
+
+		double minLongitude = (getMinLongitude() + maxProjectionLongitude)
+				% (2 * maxProjectionLongitude) - maxProjectionLongitude;
+		double maxLongitude = (getMaxLongitude() + maxProjectionLongitude)
+				% (2 * maxProjectionLongitude) - maxProjectionLongitude;
+
+		bounded.setMinLongitude(minLongitude);
+		bounded.setMaxLongitude(maxLongitude);
+
+		return bounded;
+	}
+
+	/**
+	 * Bound the bounding box coordinates within WGS84 range values
+	 * 
+	 * @return bounded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox boundWgs84Coordinates() {
+		return boundCoordinates(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+	}
+
+	/**
+	 * Bound the bounding box coordinates within Web Mercator range values
+	 * 
+	 * @return bounded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox boundWebMercatorCoordinates() {
+		return boundCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
+	 * Expand the bounding box max longitude above the max possible projection
+	 * value if needed to create a bounding box where the max longitude is
+	 * numerically larger than the min longitude.
+	 * 
+	 * @param maxProjectionLongitude
+	 *            max longitude of the world for the current bounding box units
+	 * @return expanded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox expandCoordinates(double maxProjectionLongitude) {
+
+		BoundingBox expanded = new BoundingBox(this);
+
+		double minLongitude = getMinLongitude();
+		double maxLongitude = getMaxLongitude();
+
+		if (minLongitude > maxLongitude) {
+			int worldWraps = 1 + (int) ((minLongitude - maxLongitude) / (2 * maxProjectionLongitude));
+			maxLongitude += (worldWraps * 2 * maxProjectionLongitude);
+			expanded.setMaxLongitude(maxLongitude);
+		}
+
+		return expanded;
+	}
+
+	/**
+	 * Expand the bounding box max longitude above the max WGS84 projection
+	 * value if needed to create a bounding box where the max longitude is
+	 * numerically larger than the min longitude.
+	 * 
+	 * @return expanded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox expandWgs84Coordinates() {
+		return expandCoordinates(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+	}
+
+	/**
+	 * Expand the bounding box max longitude above the max Web Mercator
+	 * projection value if needed to create a bounding box where the max
+	 * longitude is numerically larger than the min longitude.
+	 * 
+	 * @return expanded bounding box
+	 * @since 1.3.2
+	 */
+	public BoundingBox expandWebMercatorCoordinates() {
+		return expandCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
