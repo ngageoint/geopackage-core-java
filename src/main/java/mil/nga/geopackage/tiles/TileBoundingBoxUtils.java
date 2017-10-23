@@ -47,7 +47,7 @@ public class TileBoundingBoxUtils {
 	 *            overlap
 	 *
 	 * @return bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2, boolean allowEmpty) {
@@ -86,7 +86,7 @@ public class TileBoundingBoxUtils {
 	 *            max longitude of the world for the current bounding box units
 	 *
 	 * @return bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2, double maxLongitude) {
@@ -109,7 +109,7 @@ public class TileBoundingBoxUtils {
 	 *            overlap
 	 *
 	 * @return bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2, double maxLongitude, boolean allowEmpty) {
@@ -145,7 +145,7 @@ public class TileBoundingBoxUtils {
 	 *            bounding box
 	 *
 	 * @return true if within the bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static boolean isPointInBoundingBox(Point point,
 			BoundingBox boundingBox) {
@@ -166,7 +166,7 @@ public class TileBoundingBoxUtils {
 	 *            max longitude of the world for the current bounding box units
 	 *
 	 * @return true if within the bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static boolean isPointInBoundingBox(Point point,
 			BoundingBox boundingBox, double maxLongitude) {
@@ -710,7 +710,7 @@ public class TileBoundingBoxUtils {
 	 *            zoom level
 	 *
 	 * @return tile size in meters
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static double tileSizeWithZoom(int zoom) {
 		int tilesPerSide = tilesPerSide(zoom);
@@ -727,7 +727,7 @@ public class TileBoundingBoxUtils {
 	 *            pixel length
 	 *
 	 * @return tolerance distance in meters
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static double toleranceDistance(int zoom, int pixels) {
 		double tileSize = tileSizeWithZoom(zoom);
@@ -746,7 +746,7 @@ public class TileBoundingBoxUtils {
 	 *            pixel height
 	 *
 	 * @return tolerance distance in meters
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static double toleranceDistance(int zoom, int pixelWidth,
 			int pixelHeight) {

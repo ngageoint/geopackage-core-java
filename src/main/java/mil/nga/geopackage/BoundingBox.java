@@ -72,7 +72,7 @@ public class BoundingBox {
 	 * 
 	 * @param envelope
 	 *            geometry envelope
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox(GeometryEnvelope envelope) {
 		this(envelope.getMinX(), envelope.getMaxX(), envelope.getMinY(),
@@ -134,7 +134,7 @@ public class BoundingBox {
 	 *            max longitude of the world for the current bounding box units
 	 *
 	 * @return complementary bounding box or nil if none
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox complementary(double maxProjectionLongitude) {
 
@@ -168,7 +168,7 @@ public class BoundingBox {
 	 * complementary WGS84 bounding box
 	 *
 	 * @return complementary bounding box or nil if none
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox complementaryWgs84() {
 		return complementary(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
@@ -179,7 +179,7 @@ public class BoundingBox {
 	 * complementary Web Mercator bounding box
 	 *
 	 * @return complementary bounding box or nil if none
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox complementaryWebMercator() {
 		return complementary(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
@@ -193,7 +193,7 @@ public class BoundingBox {
 	 * @param maxProjectionLongitude
 	 *            max longitude of the world for the current bounding box units
 	 * @return bounded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox boundCoordinates(double maxProjectionLongitude) {
 
@@ -214,7 +214,7 @@ public class BoundingBox {
 	 * Bound the bounding box coordinates within WGS84 range values
 	 * 
 	 * @return bounded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox boundWgs84Coordinates() {
 		return boundCoordinates(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
@@ -224,7 +224,7 @@ public class BoundingBox {
 	 * Bound the bounding box coordinates within Web Mercator range values
 	 * 
 	 * @return bounded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox boundWebMercatorCoordinates() {
 		return boundCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
@@ -238,7 +238,7 @@ public class BoundingBox {
 	 * @param maxProjectionLongitude
 	 *            max longitude of the world for the current bounding box units
 	 * @return expanded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox expandCoordinates(double maxProjectionLongitude) {
 
@@ -262,7 +262,7 @@ public class BoundingBox {
 	 * numerically larger than the min longitude.
 	 * 
 	 * @return expanded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox expandWgs84Coordinates() {
 		return expandCoordinates(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
@@ -274,7 +274,7 @@ public class BoundingBox {
 	 * longitude is numerically larger than the min longitude.
 	 * 
 	 * @return expanded bounding box
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public BoundingBox expandWebMercatorCoordinates() {
 		return expandCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);

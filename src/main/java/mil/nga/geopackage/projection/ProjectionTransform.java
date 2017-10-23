@@ -86,7 +86,7 @@ public class ProjectionTransform {
 	 * @param from
 	 *            points to transform
 	 * @return transformed points
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public List<Point> transform(List<Point> from) {
 

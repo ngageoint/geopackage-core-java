@@ -4,9 +4,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.3.2 (TBD)
+## 1.4.0 (TBD)
 
-* TBD
+* Bounding Box envelope constructor
+* Bounding Box projection based complementary, bounding, and expansion methods
+* Query support for "columns as"
+* Date Converter thread safety fix when using multiple DAOs
+* Projection transformations for lists of points
+* Bounding box utility improvements for overlap and point in box testing
+* Tolerance distance utility methods for geometry proximity testing
+* User Core methods for preparing results, checking for an id, and retrieving result positions & columns of a type
+* User Row Sync implementation to support sharing user row query results
+* Minor SQL changes and file renames to match spec changes
+* wkb version update to 1.0.4
+* maven-gpg-plugin version 1.6
 
 ## [1.3.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.3.1) (07-13-2017)
 

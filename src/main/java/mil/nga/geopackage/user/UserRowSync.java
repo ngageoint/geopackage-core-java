@@ -17,7 +17,7 @@ import mil.nga.geopackage.GeoPackageException;
  * @param <TRow>
  * 
  * @author osbornb
- * @since 1.3.2
+ * @since 1.4.0
  */
 public class UserRowSync<TColumn extends UserColumn, TTable extends UserTable<TColumn>, TRow extends UserCoreRow<TColumn, TTable>> {
 

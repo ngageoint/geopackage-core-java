@@ -55,7 +55,7 @@ public class CoreSQLUtils {
 	 * @param columnsAs
 	 *            columns as values
 	 * @return columns with as values
-	 * @since 1.3.2
+	 * @since 1.4.0
 	 */
 	public static String[] buildColumnsAs(String[] columns, String[] columnsAs) {
 		String[] columnsWithAs = null;
