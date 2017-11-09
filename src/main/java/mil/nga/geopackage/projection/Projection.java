@@ -1,11 +1,10 @@
 package mil.nga.geopackage.projection;
 
-import java.lang.reflect.Field;
-
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 
 import org.osgeo.proj4j.CoordinateReferenceSystem;
+import org.osgeo.proj4j.parser.Proj4Keyword;
+import org.osgeo.proj4j.proj.LongLatProjection;
 import org.osgeo.proj4j.units.Unit;
 import org.osgeo.proj4j.units.Units;
 
@@ -30,6 +29,11 @@ public class Projection {
 	 * Coordinate Reference System
 	 */
 	private final CoordinateReferenceSystem crs;
+
+	/**
+	 * Projection unit
+	 */
+	private Unit unit;
 
 	/**
 	 * Constructor
@@ -172,21 +176,36 @@ public class Projection {
 	 * @since 1.2.0
 	 */
 	public Unit getUnit() {
-		Unit unit = null;
-		try {
-			// The unit is currently not publicly available, use reflection
-			Field f = org.osgeo.proj4j.proj.Projection.class
-					.getDeclaredField("unit");
-			f.setAccessible(true);
-			unit = (Unit) f.get(crs.getProjection());
-			if (unit == null) {
-				unit = Units.METRES;
+
+		if (unit == null) {
+
+			// The unit is currently not publicly available, check the
+			// projection instance and units param
+
+			if (crs.getProjection() instanceof LongLatProjection) {
+				unit = Units.DEGREES;
+			} else {
+
+				String unitParam = null;
+
+				for (String param : crs.getParameters()) {
+					if (param.startsWith("+" + Proj4Keyword.units)) {
+						int index = param.indexOf('=');
+						if (index != -1) {
+							unitParam = param.substring(index + 1);
+							break;
+						}
+					}
+				}
+
+				if (unitParam != null) {
+					unit = Units.findUnits(unitParam);
+				} else {
+					unit = Units.METRES;
+				}
 			}
-		} catch (Exception e) {
-			throw new GeoPackageException(
-					"Failed to get projection unit for authority: " + authority
-							+ ", code: " + code, e);
 		}
+
 		return unit;
 	}
 

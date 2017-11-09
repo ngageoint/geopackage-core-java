@@ -16,6 +16,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * User Core methods for preparing results, checking for an id, and retrieving result positions & columns of a type
 * User Row Sync implementation to support sharing user row query results
 * Minor SQL changes and file renames to match spec changes
+* Retrieve a projection unit without reflection
 * wkb version update to 1.0.4
 * maven-gpg-plugin version 1.6
 
