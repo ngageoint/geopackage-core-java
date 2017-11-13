@@ -8,6 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * WARNING - BoundingBox.java coordinate constructor arguments order changed to (min lon, min lat, max lon, max lat)
   Pre-existing calls to BoundingBox coordinate constructor should swap the min lat and max lon values
+* WARNING - TileGrid.java constructor arguments order changed to (minX, minY, maxX, maxY)
+  Pre-existing calls to TileGrid constructor should swap the minY and maxX values
 * Bounding Box envelope constructor
 * Bounding Box projection based complementary, bounding, and expansion methods
 * Query support for "columns as"

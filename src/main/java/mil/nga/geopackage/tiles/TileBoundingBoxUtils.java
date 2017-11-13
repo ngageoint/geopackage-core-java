@@ -606,7 +606,7 @@ public class TileBoundingBoxUtils {
 		int maxY = (int) (tempMaxY - ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxY = Math.min(maxY, tilesPerSide - 1);
 
-		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
+		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
 
 		return grid;
 	}
@@ -823,7 +823,7 @@ public class TileBoundingBoxUtils {
 			}
 		}
 
-		TileGrid tileGrid = new TileGrid(minColumn, maxColumn, minRow, maxRow);
+		TileGrid tileGrid = new TileGrid(minColumn, minRow, maxColumn, maxRow);
 
 		return tileGrid;
 	}
@@ -935,7 +935,7 @@ public class TileBoundingBoxUtils {
 	public static BoundingBox getBoundingBox(BoundingBox totalBox,
 			long tileMatrixWidth, long tileMatrixHeight, long tileColumn,
 			long tileRow) {
-		TileGrid tileGrid = new TileGrid(tileColumn, tileColumn, tileRow,
+		TileGrid tileGrid = new TileGrid(tileColumn, tileRow, tileColumn,
 				tileRow);
 		return getBoundingBox(totalBox, tileMatrixWidth, tileMatrixHeight,
 				tileGrid);
@@ -1139,7 +1139,7 @@ public class TileBoundingBoxUtils {
 		}
 		maxY = Math.min(maxY, tilesPerLat - 1);
 
-		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
+		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
 
 		return grid;
 	}

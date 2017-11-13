@@ -32,17 +32,17 @@ public class TileGrid {
 	 * 
 	 * @param minX
 	 *            min x
-	 * @param maxX
-	 *            max x
 	 * @param minY
 	 *            min y
+	 * @param maxX
+	 *            max x
 	 * @param maxY
 	 *            max y
 	 */
-	public TileGrid(long minX, long maxX, long minY, long maxY) {
+	public TileGrid(long minX, long minY, long maxX, long maxY) {
 		this.minX = minX;
-		this.maxX = maxX;
 		this.minY = minY;
+		this.maxX = maxX;
 		this.maxY = maxY;
 	}
 
