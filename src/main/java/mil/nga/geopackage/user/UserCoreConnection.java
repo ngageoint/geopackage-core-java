@@ -68,7 +68,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public abstract TResult query(String table, String[] columns,
 			String[] columnsAs, String selection, String[] selectionArgs,
@@ -123,7 +123,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param limit
 	 *            query limit
 	 * @return result
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public abstract TResult query(String table, String[] columns,
 			String[] columnsAs, String selection, String[] selectionArgs,

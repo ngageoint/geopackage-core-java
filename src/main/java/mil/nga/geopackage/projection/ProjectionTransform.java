@@ -86,7 +86,7 @@ public class ProjectionTransform {
 	 * @param from
 	 *            points to transform
 	 * @return transformed points
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public List<Point> transform(List<Point> from) {
 
@@ -147,7 +147,7 @@ public class ProjectionTransform {
 		double minY = Math.min(projectedLowerLeft.y, projectedLowerRight.y);
 		double maxY = Math.max(projectedUpperLeft.y, projectedUpperRight.y);
 
-		BoundingBox projectedBoundingBox = new BoundingBox(minX, maxX, minY,
+		BoundingBox projectedBoundingBox = new BoundingBox(minX, minY, maxX,
 				maxY);
 
 		return projectedBoundingBox;

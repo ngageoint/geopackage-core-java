@@ -45,7 +45,7 @@ public class ElevationRequest {
 	 *            longitude coordinate
 	 */
 	public ElevationRequest(double latitude, double longitude) {
-		this(new BoundingBox(longitude, longitude, latitude, latitude));
+		this(new BoundingBox(longitude, latitude, longitude, latitude));
 		point = true;
 	}
 

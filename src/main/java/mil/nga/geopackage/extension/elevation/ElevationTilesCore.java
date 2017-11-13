@@ -1144,8 +1144,8 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		double latPixelPadding = tileMatrix.getPixelYSize() * overlap;
 		BoundingBox paddedBoundingBox = new BoundingBox(
 				boundingBox.getMinLongitude() - lonPixelPadding,
-				boundingBox.getMaxLongitude() + lonPixelPadding,
 				boundingBox.getMinLatitude() - latPixelPadding,
+				boundingBox.getMaxLongitude() + lonPixelPadding,
 				boundingBox.getMaxLatitude() + latPixelPadding);
 		return paddedBoundingBox;
 	}

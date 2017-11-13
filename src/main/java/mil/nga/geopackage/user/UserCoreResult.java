@@ -71,7 +71,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Get the current position
 	 * 
 	 * @return position
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public int getPosition();
 

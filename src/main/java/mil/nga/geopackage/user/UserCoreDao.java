@@ -92,7 +92,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param result
 	 *            result
 	 * @return prepared result
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	protected abstract TResult prepareResult(TResult result);
 
@@ -177,7 +177,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columnsAs
 	 *            columns as values
 	 * @return result
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public TResult queryForAll(String[] columnsAs) {
 		TResult result = userDb.query(getTableName(), table.getColumnNames(),
@@ -676,7 +676,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columns
 	 *            columns to include as null
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAsNull(List<TColumn> columns) {
 		return buildColumnsAs(columns, "null");
@@ -691,7 +691,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            "columns as" value for specified columns
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAs(List<TColumn> columns, String value) {
 
@@ -707,7 +707,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columns
 	 *            columns to include as null
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAsNull(String[] columns) {
 		return buildColumnsAs(columns, "null");
@@ -722,7 +722,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            "columns as" value for specified columns
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAs(String[] columns, String value) {
 
@@ -743,7 +743,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param values
 	 *            "columns as" values for specified columns
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAs(List<TColumn> columns, String[] values) {
 
@@ -761,7 +761,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param values
 	 *            "columns as" values for specified columns
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAs(String[] columns, String[] values) {
 
@@ -781,7 +781,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columns
 	 *            mapping between columns and values
 	 * @return "columns as" values
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public String[] buildColumnsAs(Map<String, String> columns) {
 

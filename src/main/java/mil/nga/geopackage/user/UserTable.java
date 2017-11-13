@@ -302,7 +302,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param type
 	 *            data type
 	 * @return columns
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public List<TColumn> columnsOfType(GeoPackageDataType type) {
 		List<TColumn> columnsOfType = new ArrayList<>();

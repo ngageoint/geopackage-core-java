@@ -278,7 +278,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Check if the row has an id value
 	 * 
 	 * @return true if has an id
-	 * @since 1.4.0
+	 * @since 2.0.0
 	 */
 	public boolean hasId() {
 		Object objectValue = getValue(getPkColumnIndex());
