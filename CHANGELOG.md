@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 2.0.1 (TBD)
+
+* TBD
+
 ## [2.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.0) (11-20-2017)
 
 * WARNING - BoundingBox.java coordinate constructor arguments order changed to (min lon, min lat, max lon, max lat)
