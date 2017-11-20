@@ -53,8 +53,8 @@ public class FeatureColumn extends UserColumn {
 					"Geometry Type is required to create geometry column: "
 							+ name);
 		}
-		return new FeatureColumn(index, name, null, null, notNull,
-				defaultValue, false, type);
+		return new FeatureColumn(index, name, GeoPackageDataType.BLOB, null,
+				notNull, defaultValue, false, type);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class FeatureColumn extends UserColumn {
 			GeometryType geometryType) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 		this.geometryType = geometryType;
-		if (geometryType == null && dataType == null) {
+		if (dataType == null) {
 			throw new GeoPackageException(
 					"Data Type is required to create column: " + name);
 		}

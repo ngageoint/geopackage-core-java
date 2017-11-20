@@ -32,6 +32,25 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
+		return overlap(boundingBox, boundingBox2, false);
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param allowEmpty
+	 *            allow empty latitude and/or longitude ranges when determining
+	 *            overlap
+	 *
+	 * @return bounding box
+	 * @since 2.0.0
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, boolean allowEmpty) {
 
 		double minLongitude = Math.max(boundingBox.getMinLongitude(),
 				boundingBox2.getMinLongitude());
@@ -44,12 +63,118 @@ public class TileBoundingBoxUtils {
 
 		BoundingBox overlap = null;
 
-		if (minLongitude < maxLongitude && minLatitude < maxLatitude) {
-			overlap = new BoundingBox(minLongitude, maxLongitude, minLatitude,
+		if ((minLongitude < maxLongitude && minLatitude < maxLatitude)
+				|| (allowEmpty && minLongitude <= maxLongitude && minLatitude <= maxLatitude)) {
+			overlap = new BoundingBox(minLongitude, minLatitude, maxLongitude,
 					maxLatitude);
 		}
 
 		return overlap;
+
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes adjusting
+	 * the second box to an Anti-Meridian complementary version based upon the
+	 * max longitude
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 *
+	 * @return bounding box
+	 * @since 2.0.0
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, double maxLongitude) {
+		return overlap(boundingBox, boundingBox2, maxLongitude, false);
+	}
+
+	/**
+	 * Get the overlapping bounding box between the two bounding boxes adjusting
+	 * the second box to an Anti-Meridian complementary version based upon the
+	 * max longitude
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param boundingBox2
+	 *            bounding box 2
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 * @param allowEmpty
+	 *            allow empty latitude and/or longitude ranges when determining
+	 *            overlap
+	 *
+	 * @return bounding box
+	 * @since 2.0.0
+	 */
+	public static BoundingBox overlap(BoundingBox boundingBox,
+			BoundingBox boundingBox2, double maxLongitude, boolean allowEmpty) {
+
+		BoundingBox bbox2 = boundingBox2;
+
+		double adjustment = 0.0;
+
+		if (maxLongitude > 0) {
+			if (boundingBox.getMinLongitude() > boundingBox2.getMaxLongitude()) {
+				adjustment = maxLongitude * 2.0;
+			} else if (boundingBox.getMaxLongitude() < boundingBox2
+					.getMinLongitude()) {
+				adjustment = maxLongitude * -2.0;
+			}
+		}
+
+		if (adjustment != 0.0) {
+			bbox2 = new BoundingBox(boundingBox2);
+			bbox2.setMinLongitude(bbox2.getMinLongitude() + adjustment);
+			bbox2.setMaxLongitude(bbox2.getMaxLongitude() + adjustment);
+		}
+
+		return overlap(boundingBox, bbox2, allowEmpty);
+	}
+
+	/**
+	 * Determine if the point is within the bounding box
+	 *
+	 * @param point
+	 *            bounding box
+	 * @param boundingBox
+	 *            bounding box
+	 *
+	 * @return true if within the bounding box
+	 * @since 2.0.0
+	 */
+	public static boolean isPointInBoundingBox(Point point,
+			BoundingBox boundingBox) {
+		BoundingBox pointBoundingbox = new BoundingBox(point.getX(),
+				point.getY(), point.getX(), point.getY());
+		BoundingBox overlap = overlap(boundingBox, pointBoundingbox, true);
+		return overlap != null;
+	}
+
+	/**
+	 * Determine if the point is within the bounding box
+	 *
+	 * @param point
+	 *            bounding box
+	 * @param boundingBox
+	 *            bounding box
+	 * @param maxLongitude
+	 *            max longitude of the world for the current bounding box units
+	 *
+	 * @return true if within the bounding box
+	 * @since 2.0.0
+	 */
+	public static boolean isPointInBoundingBox(Point point,
+			BoundingBox boundingBox, double maxLongitude) {
+		BoundingBox pointBoundingbox = new BoundingBox(point.getX(),
+				point.getY(), point.getX(), point.getY());
+		BoundingBox overlap = overlap(boundingBox, pointBoundingbox,
+				maxLongitude, true);
+		return overlap != null;
 	}
 
 	/**
@@ -76,7 +201,7 @@ public class TileBoundingBoxUtils {
 		BoundingBox union = null;
 
 		if (minLongitude < maxLongitude && minLatitude < maxLatitude) {
-			union = new BoundingBox(minLongitude, maxLongitude, minLatitude,
+			union = new BoundingBox(minLongitude, minLatitude, maxLongitude,
 					maxLatitude);
 		}
 
@@ -199,7 +324,7 @@ public class TileBoundingBoxUtils {
 		double maxLat = 90.0 - (y * tileHeightDegrees);
 		double minLat = maxLat - tileHeightDegrees;
 
-		BoundingBox box = new BoundingBox(minLon, maxLon, minLat, maxLat);
+		BoundingBox box = new BoundingBox(minLon, minLat, maxLon, maxLat);
 
 		return box;
 	}
@@ -218,8 +343,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(long x, long y, int zoom) {
 
-		int tilesPerSide = tilesPerSide(zoom);
-		double tileSize = tileSize(tilesPerSide);
+		double tileSize = tileSizeWithZoom(zoom);
 
 		double minLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
 				+ (x * tileSize);
@@ -230,7 +354,7 @@ public class TileBoundingBoxUtils {
 		double maxLat = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH
 				- (y * tileSize);
 
-		BoundingBox box = new BoundingBox(minLon, maxLon, minLat, maxLat);
+		BoundingBox box = new BoundingBox(minLon, minLat, maxLon, maxLat);
 
 		return box;
 	}
@@ -248,8 +372,7 @@ public class TileBoundingBoxUtils {
 	public static BoundingBox getWebMercatorBoundingBox(TileGrid tileGrid,
 			int zoom) {
 
-		int tilesPerSide = tilesPerSide(zoom);
-		double tileSize = tileSize(tilesPerSide);
+		double tileSize = tileSizeWithZoom(zoom);
 
 		double minLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
 				+ (tileGrid.getMinX() * tileSize);
@@ -260,7 +383,7 @@ public class TileBoundingBoxUtils {
 		double maxLat = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH
 				- (tileGrid.getMinY() * tileSize);
 
-		BoundingBox box = new BoundingBox(minLon, maxLon, minLat, maxLat);
+		BoundingBox box = new BoundingBox(minLon, minLat, maxLon, maxLat);
 
 		return box;
 	}
@@ -451,7 +574,7 @@ public class TileBoundingBoxUtils {
 				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
 		Point webMercatorPoint = toWebMercator.transform(point);
 		BoundingBox boundingBox = new BoundingBox(webMercatorPoint.getX(),
-				webMercatorPoint.getX(), webMercatorPoint.getY(),
+				webMercatorPoint.getY(), webMercatorPoint.getX(),
 				webMercatorPoint.getY());
 		return getTileGrid(boundingBox, zoom);
 	}
@@ -483,7 +606,7 @@ public class TileBoundingBoxUtils {
 		int maxY = (int) (tempMaxY - ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxY = Math.min(maxY, tilesPerSide - 1);
 
-		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
+		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
 
 		return grid;
 	}
@@ -514,7 +637,7 @@ public class TileBoundingBoxUtils {
 		upperRightPoint = toWebMercator.transform(upperRightPoint);
 
 		BoundingBox mercatorBox = new BoundingBox(lowerLeftPoint.getX(),
-				upperRightPoint.getX(), lowerLeftPoint.getY(),
+				lowerLeftPoint.getY(), upperRightPoint.getX(),
 				upperRightPoint.getY());
 
 		return mercatorBox;
@@ -578,6 +701,56 @@ public class TileBoundingBoxUtils {
 	 */
 	public static int tilesPerSide(int zoom) {
 		return (int) Math.pow(2, zoom);
+	}
+
+	/**
+	 * Get the tile size in meters at the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 *
+	 * @return tile size in meters
+	 * @since 2.0.0
+	 */
+	public static double tileSizeWithZoom(int zoom) {
+		int tilesPerSide = tilesPerSide(zoom);
+		double tileSize = tileSize(tilesPerSide);
+		return tileSize;
+	}
+
+	/**
+	 * Get the tolerance distance in meters for the zoom level and pixels length
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @param pixels
+	 *            pixel length
+	 *
+	 * @return tolerance distance in meters
+	 * @since 2.0.0
+	 */
+	public static double toleranceDistance(int zoom, int pixels) {
+		double tileSize = tileSizeWithZoom(zoom);
+		double tolerance = tileSize / pixels;
+		return tolerance;
+	}
+
+	/**
+	 * Get the tolerance distance in meters for the zoom level and pixels length
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @param pixelWidth
+	 *            pixel width
+	 * @param pixelHeight
+	 *            pixel height
+	 *
+	 * @return tolerance distance in meters
+	 * @since 2.0.0
+	 */
+	public static double toleranceDistance(int zoom, int pixelWidth,
+			int pixelHeight) {
+		return toleranceDistance(zoom, Math.max(pixelWidth, pixelHeight));
 	}
 
 	/**
@@ -650,7 +823,7 @@ public class TileBoundingBoxUtils {
 			}
 		}
 
-		TileGrid tileGrid = new TileGrid(minColumn, maxColumn, minRow, maxRow);
+		TileGrid tileGrid = new TileGrid(minColumn, minRow, maxColumn, maxRow);
 
 		return tileGrid;
 	}
@@ -762,7 +935,7 @@ public class TileBoundingBoxUtils {
 	public static BoundingBox getBoundingBox(BoundingBox totalBox,
 			long tileMatrixWidth, long tileMatrixHeight, long tileColumn,
 			long tileRow) {
-		TileGrid tileGrid = new TileGrid(tileColumn, tileColumn, tileRow,
+		TileGrid tileGrid = new TileGrid(tileColumn, tileRow, tileColumn,
 				tileRow);
 		return getBoundingBox(totalBox, tileMatrixWidth, tileMatrixHeight,
 				tileGrid);
@@ -825,7 +998,7 @@ public class TileBoundingBoxUtils {
 		double maxLat = matrixMaxY - (tileHeight * tileGrid.getMinY());
 		double minLat = matrixMaxY - (tileHeight * (tileGrid.getMaxY() + 1));
 
-		BoundingBox boundingBox = new BoundingBox(minLon, maxLon, minLat,
+		BoundingBox boundingBox = new BoundingBox(minLon, minLat, maxLon,
 				maxLat);
 
 		return boundingBox;
@@ -966,7 +1139,7 @@ public class TileBoundingBoxUtils {
 		}
 		maxY = Math.min(maxY, tilesPerLat - 1);
 
-		TileGrid grid = new TileGrid(minX, maxX, minY, maxY);
+		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
 
 		return grid;
 	}
@@ -999,7 +1172,7 @@ public class TileBoundingBoxUtils {
 		double maxLat = ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT
 				- (tileGrid.getMinY() * tileSizeLat);
 
-		BoundingBox box = new BoundingBox(minLon, maxLon, minLat, maxLat);
+		BoundingBox box = new BoundingBox(minLon, minLat, maxLon, maxLat);
 
 		return box;
 	}

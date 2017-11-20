@@ -68,6 +68,14 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	public boolean moveToNext();
 
 	/**
+	 * Get the current position
+	 * 
+	 * @return position
+	 * @since 2.0.0
+	 */
+	public int getPosition();
+
+	/**
 	 * Move the cursor to the first row.
 	 * 
 	 * @return true if moved to first

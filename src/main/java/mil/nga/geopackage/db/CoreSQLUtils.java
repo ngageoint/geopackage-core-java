@@ -41,4 +41,41 @@ public class CoreSQLUtils {
 		return quoteNames;
 	}
 
+	/**
+	 * Build the "columns as" query values for the provided columns and "columns
+	 * as" values for use in select statements. The columns as size should equal
+	 * the number of columns and only provide values at the indices for desired
+	 * columns.
+	 * 
+	 * Example: columns = [column1, column2], columnsAs = [null, value] creates
+	 * [column1, value as column2]
+	 * 
+	 * @param columns
+	 *            columns array
+	 * @param columnsAs
+	 *            columns as values
+	 * @return columns with as values
+	 * @since 2.0.0
+	 */
+	public static String[] buildColumnsAs(String[] columns, String[] columnsAs) {
+		String[] columnsWithAs = null;
+		if (columnsAs != null) {
+			columnsWithAs = new String[columns.length];
+			for (int i = 0; i < columns.length; i++) {
+				String column = columns[i];
+				String columnsAsValue = columnsAs[i];
+				String columnWithAs = null;
+				if (columnsAsValue != null) {
+					columnWithAs = columnsAsValue + " AS " + column;
+				} else {
+					columnWithAs = column;
+				}
+				columnsWithAs[i] = columnWithAs;
+			}
+		} else {
+			columnsWithAs = columns;
+		}
+		return columnsWithAs;
+	}
+
 }

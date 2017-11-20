@@ -4,9 +4,25 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.3.2 (TBD)
+## [2.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.0) (11-20-2017)
 
-* TBD
+* WARNING - BoundingBox.java coordinate constructor arguments order changed to (min lon, min lat, max lon, max lat)
+  Pre-existing calls to BoundingBox coordinate constructor should swap the min lat and max lon values
+* WARNING - TileGrid.java constructor arguments order changed to (minX, minY, maxX, maxY)
+  Pre-existing calls to TileGrid constructor should swap the minY and maxX values
+* Bounding Box envelope constructor
+* Bounding Box projection based complementary, bounding, and expansion methods
+* Query support for "columns as"
+* Date Converter thread safety fix when using multiple DAOs
+* Projection transformations for lists of points
+* Bounding box utility improvements for overlap and point in box testing
+* Tolerance distance utility methods for geometry proximity testing
+* User Core methods for preparing results, checking for an id, and retrieving result positions & columns of a type
+* User Row Sync implementation to support sharing user row query results
+* Minor SQL changes and file renames to match spec changes
+* Retrieve a projection unit without reflection
+* wkb version update to 1.0.4
+* maven-gpg-plugin version 1.6
 
 ## [1.3.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/1.3.1) (07-13-2017)
 

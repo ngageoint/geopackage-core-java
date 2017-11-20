@@ -219,8 +219,8 @@ public class TileMatrixSet {
 	 * @return bounding box
 	 */
 	public BoundingBox getBoundingBox() {
-		BoundingBox boundingBox = new BoundingBox(getMinX(), getMaxX(),
-				getMinY(), getMaxY());
+		BoundingBox boundingBox = new BoundingBox(getMinX(), getMinY(),
+				getMaxX(), getMaxY());
 		return boundingBox;
 	}
 
