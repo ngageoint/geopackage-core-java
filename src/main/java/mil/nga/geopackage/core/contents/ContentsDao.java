@@ -404,7 +404,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				verifyTiles(dataType);
 				break;
 
-			case ELEVATION_TILES:
+			case GRIDDED_COVERAGE:
 				verifyTiles(dataType);
 				break;
 

@@ -41,7 +41,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	/**
 	 * Extension name without the author
 	 */
-	public static final String EXTENSION_NAME_NO_AUTHOR = "elevation_tiles";
+	public static final String EXTENSION_NAME_NO_AUTHOR = "2d_gridded_coverage";
 
 	/**
 	 * Extension, with author and name
@@ -554,7 +554,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @return table names
 	 */
 	public static List<String> getTables(GeoPackageCore geoPackage) {
-		return geoPackage.getTables(ContentsDataType.ELEVATION_TILES);
+		return geoPackage.getTables(ContentsDataType.GRIDDED_COVERAGE);
 	}
 
 	/**
@@ -1368,7 +1368,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
 
 		TileMatrixSet tileMatrixSet = geoPackage.createTileTableWithMetadata(
-				ContentsDataType.ELEVATION_TILES, tableName,
+				ContentsDataType.GRIDDED_COVERAGE, tableName,
 				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
 				tileMatrixSetSrsId);
 		return tileMatrixSet;

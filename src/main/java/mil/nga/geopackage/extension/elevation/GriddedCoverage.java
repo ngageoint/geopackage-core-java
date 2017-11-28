@@ -55,6 +55,34 @@ public class GriddedCoverage {
 	public static final String COLUMN_DATA_NULL = "data_null";
 
 	/**
+	 * gridCellEncoding column
+	 * 
+	 * @since 2.0.1
+	 */
+	public static final String COLUMN_GRID_CELL_ENCODING = "grid_cell_encoding";
+
+	/**
+	 * uom column
+	 * 
+	 * @since 2.0.1
+	 */
+	public static final String COLUMN_UOM = "uom";
+
+	/**
+	 * fieldName column
+	 * 
+	 * @since 2.0.1
+	 */
+	public static final String COLUMN_FIELD_NAME = "field_name";
+
+	/**
+	 * quantityDefinition column
+	 * 
+	 * @since 2.0.1
+	 */
+	public static final String COLUMN_QUANTITY_DEFINITION = "quantity_definition";
+
+	/**
 	 * Auto increment primary key
 	 */
 	@DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
@@ -103,6 +131,30 @@ public class GriddedCoverage {
 	private Double dataNull;
 
 	/**
+	 * Specifies how a value is assigned to a grid cell (pixel)
+	 */
+	@DatabaseField(columnName = COLUMN_GRID_CELL_ENCODING)
+	private String gridCellEncoding;
+
+	/**
+	 * Units of Measure for values in the grid coverage
+	 */
+	@DatabaseField(columnName = COLUMN_UOM)
+	private String uom;
+
+	/**
+	 * Type of Gridded Coverage Data (default is Height)
+	 */
+	@DatabaseField(columnName = COLUMN_FIELD_NAME)
+	private String fieldName;
+
+	/**
+	 * Description of the values contained in the Gridded Coverage
+	 */
+	@DatabaseField(columnName = COLUMN_QUANTITY_DEFINITION)
+	private String quantityDefinition;
+
+	/**
 	 * Default Constructor
 	 */
 	public GriddedCoverage() {
@@ -125,6 +177,10 @@ public class GriddedCoverage {
 		offset = griddedCoverage.offset;
 		precision = griddedCoverage.precision;
 		dataNull = griddedCoverage.dataNull;
+		gridCellEncoding = griddedCoverage.gridCellEncoding;
+		uom = griddedCoverage.uom;
+		fieldName = griddedCoverage.fieldName;
+		quantityDefinition = griddedCoverage.quantityDefinition;
 	}
 
 	/**
@@ -262,6 +318,111 @@ public class GriddedCoverage {
 	 */
 	public void setDataNull(Double dataNull) {
 		this.dataNull = dataNull;
+	}
+
+	/**
+	 * Get the grid cell encoding type
+	 * 
+	 * @return grid cell encoding type
+	 * @since 2.0.1
+	 */
+	public GriddedCoverageEncodingType getGridCellEncodingType() {
+		return GriddedCoverageEncodingType.fromName(gridCellEncoding);
+	}
+
+	/**
+	 * Set the grid cell encoding type
+	 * 
+	 * @param encodingtype
+	 *            grid cell encoding type
+	 * @since 2.0.1
+	 */
+	public void setGridCellEncodingType(GriddedCoverageEncodingType encodingtype) {
+		setGridCellEncoding(encodingtype.getName());
+	}
+
+	/**
+	 * Get the grid cell encoding
+	 * 
+	 * @return grid cell encoding
+	 * @since 2.0.1
+	 */
+	public String getGridCellEncoding() {
+		return gridCellEncoding;
+	}
+
+	/**
+	 * Set the grid cell encoding
+	 * 
+	 * @param gridCellEncoding
+	 *            grid cell encoding
+	 * @since 2.0.1
+	 */
+	public void setGridCellEncoding(String gridCellEncoding) {
+		this.gridCellEncoding = gridCellEncoding;
+	}
+
+	/**
+	 * Get the units of measure
+	 * 
+	 * @return units of measure
+	 * @since 2.0.1
+	 */
+	public String getUom() {
+		return uom;
+	}
+
+	/**
+	 * Set the units of measure
+	 * 
+	 * @param uom
+	 *            units of measure
+	 * @since 2.0.1
+	 */
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
+
+	/**
+	 * Get the field name
+	 * 
+	 * @return field name
+	 * @since 2.0.1
+	 */
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	/**
+	 * Set the field name
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @since 2.0.1
+	 */
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
+	/**
+	 * Get the quantity definition
+	 * 
+	 * @return quantity definition
+	 * @since 2.0.1
+	 */
+	public String getQuantityDefinition() {
+		return quantityDefinition;
+	}
+
+	/**
+	 * Set the quantity definition
+	 * 
+	 * @param quantityDefinition
+	 *            quantity definition
+	 * @since 2.0.1
+	 */
+	public void setQuantityDefinition(String quantityDefinition) {
+		this.quantityDefinition = quantityDefinition;
 	}
 
 }
