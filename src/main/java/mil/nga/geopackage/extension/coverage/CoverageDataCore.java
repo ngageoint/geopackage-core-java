@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,13 +25,13 @@ import mil.nga.geopackage.tiles.user.TileTable;
 import org.osgeo.proj4j.ProjCoordinate;
 
 /**
- * Tiled Gridded Elevation Core Data Extension
+ * Tiled Gridded Coverage Core Data Extension
  * 
  * @author osbornb
- * @since 1.2.1
+ * @since 2.0.1
  */
-public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
-		BaseExtension {
+public abstract class CoverageDataCore<TImage extends CoverageDataImage>
+		extends BaseExtension {
 
 	/**
 	 * Extension author
@@ -76,12 +76,12 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	private GriddedCoverage griddedCoverage;
 
 	/**
-	 * Elevation results width
+	 * Coverage data results width
 	 */
 	protected Integer width;
 
 	/**
-	 * Elevation results height
+	 * Coverage data results height
 	 */
 	protected Integer height;
 
@@ -91,29 +91,29 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	protected final Projection requestProjection;
 
 	/**
-	 * Projection of the elevations
+	 * Projection of the coverage data
 	 */
-	protected final Projection elevationProjection;
+	protected final Projection coverageProjection;
 
 	/**
-	 * Elevations bounding box
+	 * Coverage data bounding box
 	 */
-	protected final BoundingBox elevationBoundingBox;
+	protected final BoundingBox coverageBoundingBox;
 
 	/**
-	 * Flag indicating the elevation and request projections are the same
+	 * Flag indicating the coverage data and request projections are the same
 	 */
 	protected final boolean sameProjection;
 
 	/**
 	 * True if zooming in should be performed to find a tile matrix with
-	 * elevation values
+	 * coverage data values
 	 */
 	protected boolean zoomIn = true;
 
 	/**
 	 * True if zooming out should be performed to find a tile matrix with
-	 * elevation values
+	 * coverage data values
 	 */
 	protected boolean zoomOut = true;
 
@@ -125,7 +125,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	/**
 	 * Interpolation algorithm
 	 */
-	protected ElevationTilesAlgorithm algorithm = ElevationTilesAlgorithm.NEAREST_NEIGHBOR;
+	protected CoverageDataAlgorithm algorithm = CoverageDataAlgorithm.NEAREST_NEIGHBOR;
 
 	/**
 	 * Constructor
@@ -141,7 +141,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param requestProjection
 	 *            request projection
 	 */
-	protected ElevationTilesCore(GeoPackageCore geoPackage,
+	protected CoverageDataCore(GeoPackageCore geoPackage,
 			TileMatrixSet tileMatrixSet, Integer width, Integer height,
 			Projection requestProjection) {
 		super(geoPackage);
@@ -154,21 +154,21 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		this.width = width;
 		this.height = height;
 		this.requestProjection = requestProjection;
-		elevationProjection = ProjectionFactory.getProjection(tileMatrixSet
+		coverageProjection = ProjectionFactory.getProjection(tileMatrixSet
 				.getSrs());
-		elevationBoundingBox = tileMatrixSet.getBoundingBox();
+		coverageBoundingBox = tileMatrixSet.getBoundingBox();
 
 		// Check if the projections have the same units
 		if (requestProjection != null) {
 			sameProjection = (requestProjection.getUnit().name
-					.equals(elevationProjection.getUnit().name));
+					.equals(coverageProjection.getUnit().name));
 		} else {
 			sameProjection = true;
 		}
 	}
 
 	/**
-	 * Constructor for creating extension rows when creating a new elevation
+	 * Constructor for creating extension rows when creating a new coverage data
 	 * tile table
 	 * 
 	 * @param geoPackage
@@ -176,52 +176,53 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param tileMatrixSet
 	 *            tile matrix set
 	 */
-	protected ElevationTilesCore(GeoPackageCore geoPackage,
+	protected CoverageDataCore(GeoPackageCore geoPackage,
 			TileMatrixSet tileMatrixSet) {
 		this(geoPackage, tileMatrixSet, null, null, null);
 	}
 
 	/**
-	 * Get the elevation value from the image at the coordinate
+	 * Get the coverage data value from the image at the coordinate
 	 *
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param image
-	 *            elevation image
+	 *            coverage data image
 	 * @param x
 	 *            x coordinate
 	 * @param y
 	 *            y coordinate
-	 * @return elevation
+	 * @return coverage data value
 	 */
-	public abstract Double getElevationValue(GriddedTile griddedTile,
-			TImage image, int x, int y);
+	public abstract Double getValue(GriddedTile griddedTile, TImage image,
+			int x, int y);
 
 	/**
-	 * Get the requested elevation values with the requested width and height
+	 * Get the requested coverage data values with the requested width and
+	 * height
 	 * 
 	 * @param request
-	 *            elevation request
+	 *            coverage data request
 	 * @param width
-	 *            elevation request width
+	 *            coverage data request width
 	 * @param height
-	 *            elevation request height
-	 * @return elevation results
+	 *            coverage data request height
+	 * @return coverage data results
 	 */
-	public abstract ElevationTileResults getElevations(
-			ElevationRequest request, Integer width, Integer height);
+	public abstract CoverageDataResults getValues(CoverageDataRequest request,
+			Integer width, Integer height);
 
 	/**
-	 * Get the requested unbounded elevation values. Unbounded results retrieves
-	 * and returns each elevation pixel. The results size equals the width and
-	 * height of all matching pixels.
+	 * Get the requested unbounded coverage data values. Unbounded results
+	 * retrieves and returns each coverage data pixel. The results size equals
+	 * the width and height of all matching pixels.
 	 * 
 	 * @param request
-	 *            elevation request
-	 * @return elevation results
+	 *            coverage data request
+	 * @return coverage data results
 	 */
-	public abstract ElevationTileResults getElevationsUnbounded(
-			ElevationRequest request);
+	public abstract CoverageDataResults getValuesUnbounded(
+			CoverageDataRequest request);
 
 	/**
 	 * Get the Tile Matrix Set
@@ -251,7 +252,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the requested elevation width
+	 * Get the requested coverage data width
 	 * 
 	 * @return width
 	 */
@@ -260,17 +261,17 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Set the requested elevation width
+	 * Set the requested coverage data width
 	 * 
 	 * @param width
-	 *            requested elevation width
+	 *            requested coverage data width
 	 */
 	public void setWidth(Integer width) {
 		this.width = width;
 	}
 
 	/**
-	 * Get the requested elevation height
+	 * Get the requested coverage data height
 	 * 
 	 * @return height
 	 */
@@ -279,10 +280,10 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Set the requested elevation height
+	 * Set the requested coverage data height
 	 * 
 	 * @param height
-	 *            requested elevation height
+	 *            requested coverage data height
 	 */
 	public void setHeight(Integer height) {
 		this.height = height;
@@ -298,25 +299,25 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the elevation projection
+	 * Get the coverage data projection
 	 * 
-	 * @return elevation projection
+	 * @return coverage data projection
 	 */
-	public Projection getElevationProjection() {
-		return elevationProjection;
+	public Projection getCoverageProjection() {
+		return coverageProjection;
 	}
 
 	/**
-	 * Get the elevation bounding box
+	 * Get the coverage data bounding box
 	 * 
-	 * @return elevation bounding box
+	 * @return coverage data bounding box
 	 */
-	public BoundingBox getElevationBoundingBox() {
-		return elevationBoundingBox;
+	public BoundingBox getCoverageBoundingBox() {
+		return coverageBoundingBox;
 	}
 
 	/**
-	 * Is the request and elevation projection the same
+	 * Is the request and coverage data projection the same
 	 * 
 	 * @return true if the same
 	 */
@@ -326,7 +327,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 
 	/**
 	 * Is the zooming in (higher zoom level values) enabled to find matching
-	 * elevations
+	 * coverage data
 	 * 
 	 * @return true if zoom in enabled
 	 */
@@ -338,7 +339,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * Set the zoom in enabled state
 	 * 
 	 * @param zoomIn
-	 *            true to zoom in when finding elevations, false to disable
+	 *            true to zoom in when finding coverage data, false to disable
 	 */
 	public void setZoomIn(boolean zoomIn) {
 		this.zoomIn = zoomIn;
@@ -346,7 +347,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 
 	/**
 	 * Is the zooming out (lower zoom level values) enabled to find matching
-	 * elevations
+	 * coverage data
 	 * 
 	 * @return true if zoom out enabled
 	 */
@@ -358,7 +359,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * Set the zoom out enabled state
 	 * 
 	 * @param zoomOut
-	 *            true to zoom out when finding elevations, false to disable
+	 *            true to zoom out when finding coverage data, false to disable
 	 */
 	public void setZoomOut(boolean zoomOut) {
 		this.zoomOut = zoomOut;
@@ -389,7 +390,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * 
 	 * @return algorithm
 	 */
-	public ElevationTilesAlgorithm getAlgorithm() {
+	public CoverageDataAlgorithm getAlgorithm() {
 		return algorithm;
 	}
 
@@ -399,9 +400,9 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param algorithm
 	 *            algorithm type
 	 */
-	public void setAlgorithm(ElevationTilesAlgorithm algorithm) {
+	public void setAlgorithm(CoverageDataAlgorithm algorithm) {
 		if (algorithm == null) {
-			algorithm = ElevationTilesAlgorithm.NEAREST_NEIGHBOR;
+			algorithm = CoverageDataAlgorithm.NEAREST_NEIGHBOR;
 		}
 		this.algorithm = algorithm;
 	}
@@ -547,7 +548,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the elevation tile tables
+	 * Get the coverage data tile tables
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
@@ -558,48 +559,48 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Reproject the elevations to the requested projection
+	 * Reproject the coverage data to the requested projection
 	 *
-	 * @param elevations
-	 *            elevations
-	 * @param requestedElevationsWidth
-	 *            requested elevations width
-	 * @param requestedElevationsHeight
-	 *            requested elevations height
+	 * @param values
+	 *            coverage data values
+	 * @param requestedCoverageWidth
+	 *            requested coverage data width
+	 * @param requestedCoverageHeight
+	 *            requested coverage data height
 	 * @param requestBoundingBox
 	 *            request bounding box in the request projection
-	 * @param transformRequestToElevation
-	 *            transformation from request to elevations
-	 * @param elevationBoundingBox
-	 *            elevations bounding box
-	 * @return projected elevations
+	 * @param transformRequestToCoverage
+	 *            transformation from request to coverage data
+	 * @param coverageBoundingBox
+	 *            coverage data bounding box
+	 * @return projected coverage data
 	 */
-	protected Double[][] reprojectElevations(Double[][] elevations,
-			int requestedElevationsWidth, int requestedElevationsHeight,
+	protected Double[][] reprojectCoverageData(Double[][] values,
+			int requestedCoverageWidth, int requestedCoverageHeight,
 			BoundingBox requestBoundingBox,
-			ProjectionTransform transformRequestToElevation,
-			BoundingBox elevationBoundingBox) {
+			ProjectionTransform transformRequestToCoverage,
+			BoundingBox coverageBoundingBox) {
 
 		final double requestedWidthUnitsPerPixel = (requestBoundingBox
 				.getMaxLongitude() - requestBoundingBox.getMinLongitude())
-				/ requestedElevationsWidth;
+				/ requestedCoverageWidth;
 		final double requestedHeightUnitsPerPixel = (requestBoundingBox
 				.getMaxLatitude() - requestBoundingBox.getMinLatitude())
-				/ requestedElevationsHeight;
+				/ requestedCoverageHeight;
 
-		final double tilesDistanceWidth = elevationBoundingBox
-				.getMaxLongitude() - elevationBoundingBox.getMinLongitude();
-		final double tilesDistanceHeight = elevationBoundingBox
-				.getMaxLatitude() - elevationBoundingBox.getMinLatitude();
+		final double tilesDistanceWidth = coverageBoundingBox.getMaxLongitude()
+				- coverageBoundingBox.getMinLongitude();
+		final double tilesDistanceHeight = coverageBoundingBox.getMaxLatitude()
+				- coverageBoundingBox.getMinLatitude();
 
-		final int width = elevations[0].length;
-		final int height = elevations.length;
+		final int width = values[0].length;
+		final int height = values.length;
 
-		Double[][] projectedElevations = new Double[requestedElevationsHeight][requestedElevationsWidth];
+		Double[][] projectedValues = new Double[requestedCoverageHeight][requestedCoverageWidth];
 
-		// Retrieve each elevation in the unprojected elevations
-		for (int y = 0; y < requestedElevationsHeight; y++) {
-			for (int x = 0; x < requestedElevationsWidth; x++) {
+		// Retrieve each coverage data value in the unprojected coverage data
+		for (int y = 0; y < requestedCoverageHeight; y++) {
+			for (int x = 0; x < requestedCoverageWidth; x++) {
 
 				double longitude = requestBoundingBox.getMinLongitude()
 						+ (x * requestedWidthUnitsPerPixel);
@@ -607,17 +608,17 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 						- (y * requestedHeightUnitsPerPixel);
 				ProjCoordinate fromCoord = new ProjCoordinate(longitude,
 						latitude);
-				ProjCoordinate toCoord = transformRequestToElevation
+				ProjCoordinate toCoord = transformRequestToCoverage
 						.transform(fromCoord);
 				double projectedLongitude = toCoord.x;
 				double projectedLatitude = toCoord.y;
 
 				int xPixel = (int) Math
-						.round(((projectedLongitude - elevationBoundingBox
+						.round(((projectedLongitude - coverageBoundingBox
 								.getMinLongitude()) / tilesDistanceWidth)
 								* width);
 				int yPixel = (int) Math
-						.round(((elevationBoundingBox.getMaxLatitude() - projectedLatitude) / tilesDistanceHeight)
+						.round(((coverageBoundingBox.getMaxLatitude() - projectedLatitude) / tilesDistanceHeight)
 								* height);
 
 				xPixel = Math.max(0, xPixel);
@@ -626,17 +627,17 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 				yPixel = Math.max(0, yPixel);
 				yPixel = Math.min(height - 1, yPixel);
 
-				Double elevation = elevations[yPixel][xPixel];
-				projectedElevations[y][x] = elevation;
+				Double coverageData = values[yPixel][xPixel];
+				projectedValues[y][x] = coverageData;
 			}
 		}
 
-		return projectedElevations;
+		return projectedValues;
 	}
 
 	/**
-	 * Format the unbounded results from elevation tiles into a single double
-	 * array of elevation
+	 * Format the unbounded results from coverage data tiles into a single
+	 * double array of coverage data
 	 * 
 	 * @param tileMatrix
 	 *            tile matrix
@@ -652,28 +653,28 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            min column
 	 * @param maxColumn
 	 *            max column
-	 * @return elevations
+	 * @return coverage data
 	 */
 	protected Double[][] formatUnboundedResults(TileMatrix tileMatrix,
 			Map<Long, Map<Long, Double[][]>> rowsMap, int tileCount,
 			long minRow, long maxRow, long minColumn, long maxColumn) {
 
 		// Handle formatting the results
-		Double[][] elevations = null;
+		Double[][] values = null;
 		if (!rowsMap.isEmpty()) {
 
-			// If only one tile result, use the elevations as the result
+			// If only one tile result, use the coverage data as the result
 			if (tileCount == 1) {
-				elevations = rowsMap.get(minRow).get(minColumn);
+				values = rowsMap.get(minRow).get(minColumn);
 			} else {
 
-				// Else, combine all results into a single elevations result
+				// Else, combine all results into a single coverage data result
 
-				// Get the top left and bottom right elevations
+				// Get the top left and bottom right coverage data values
 				Double[][] topLeft = rowsMap.get(minRow).get(minColumn);
 				Double[][] bottomRight = rowsMap.get(maxRow).get(maxColumn);
 
-				// Determine the width and height of the top left elevation
+				// Determine the width and height of the top left coverage data
 				// results
 				int firstWidth = topLeft[0].length;
 				int firstHeight = topLeft.length;
@@ -696,10 +697,10 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 					}
 				}
 
-				// Create the elevation result array
-				elevations = new Double[height][width];
+				// Create the coverage data result array
+				values = new Double[height][width];
 
-				// Copy the elevation values from each tile results into the
+				// Copy the coverage data values from each tile results into the
 				// final result arrays
 				for (Map.Entry<Long, Map<Long, Double[][]>> rows : rowsMap
 						.entrySet()) {
@@ -728,18 +729,18 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 											.getTileWidth());
 						}
 
-						// Get the tiles elevation values
-						Double[][] values = columns.getValue();
+						// Get the tiles coverage data values
+						Double[][] localValues = columns.getValue();
 
-						// Copy the columns array at each local elevation row to
-						// the global row and column result location
-						for (int localRow = 0; localRow < values.length; localRow++) {
+						// Copy the columns array at each local coverage data
+						// row to the global row and column result location
+						for (int localRow = 0; localRow < localValues.length; localRow++) {
 
 							int globalRow = baseRow + localRow;
 
-							System.arraycopy(values[localRow], 0,
-									elevations[globalRow], baseColumn,
-									values[localRow].length);
+							System.arraycopy(localValues[localRow], 0,
+									values[globalRow], baseColumn,
+									localValues[localRow].length);
 						}
 					}
 
@@ -748,7 +749,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 
 		}
 
-		return elevations;
+		return values;
 	}
 
 	/**
@@ -807,9 +808,9 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 
 		List<int[]> results = new ArrayList<int[]>();
 
-		// Get the elevation source pixels for x and y
-		ElevationSourcePixel xPixel = getSourceMinAndMax(xSource);
-		ElevationSourcePixel yPixel = getSourceMinAndMax(ySource);
+		// Get the coverage data source pixels for x and y
+		CoverageDataSourcePixel xPixel = getSourceMinAndMax(xSource);
+		CoverageDataSourcePixel yPixel = getSourceMinAndMax(ySource);
 
 		// Determine which x pixel is the closest, the second closest, and the
 		// distance to the second pixel
@@ -881,7 +882,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            source pixel
 	 * @return source pixel information
 	 */
-	protected ElevationSourcePixel getSourceMinAndMax(float source) {
+	protected CoverageDataSourcePixel getSourceMinAndMax(float source) {
 
 		int floor = (int) Math.floor(source);
 		int min = floor;
@@ -895,31 +896,31 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 			offset -= .5f;
 		}
 
-		return new ElevationSourcePixel(source, min, max, offset);
+		return new CoverageDataSourcePixel(source, min, max, offset);
 	}
 
 	/**
-	 * Get the Bilinear Interpolation elevation value
+	 * Get the Bilinear Interpolation coverage data value
 	 * 
 	 * @param sourcePixelX
 	 *            source pixel x
 	 * @param sourcePixelY
 	 *            source pixel y
 	 * @param values
-	 *            2 x 2 elevation values as [y][x]
-	 * @return elevation
+	 *            2 x 2 coverage data values as [y][x]
+	 * @return coverage data value
 	 */
-	protected Double getBilinearInterpolationElevation(
-			ElevationSourcePixel sourcePixelX,
-			ElevationSourcePixel sourcePixelY, Double[][] values) {
-		return getBilinearInterpolationElevation(sourcePixelX.getOffset(),
+	protected Double getBilinearInterpolationValue(
+			CoverageDataSourcePixel sourcePixelX,
+			CoverageDataSourcePixel sourcePixelY, Double[][] values) {
+		return getBilinearInterpolationValue(sourcePixelX.getOffset(),
 				sourcePixelY.getOffset(), sourcePixelX.getMin(),
 				sourcePixelX.getMax(), sourcePixelY.getMin(),
 				sourcePixelY.getMax(), values);
 	}
 
 	/**
-	 * Get the Bilinear Interpolation elevation value
+	 * Get the Bilinear Interpolation coverage data value
 	 * 
 	 * @param offsetX
 	 *            x source pixel offset
@@ -934,26 +935,26 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param maxY
 	 *            max y value
 	 * @param values
-	 *            2 x 2 elevation values as [y][x]
-	 * @return elevation
+	 *            2 x 2 coverage data values as [y][x]
+	 * @return coverage data value
 	 */
-	protected Double getBilinearInterpolationElevation(float offsetX,
+	protected Double getBilinearInterpolationValue(float offsetX,
 			float offsetY, float minX, float maxX, float minY, float maxY,
 			Double[][] values) {
 
-		Double elevation = null;
+		Double value = null;
 
 		if (values != null) {
-			elevation = getBilinearInterpolationElevation(offsetX, offsetY,
-					minX, maxX, minY, maxY, values[0][0], values[0][1],
-					values[1][0], values[1][1]);
+			value = getBilinearInterpolationValue(offsetX, offsetY, minX, maxX,
+					minY, maxY, values[0][0], values[0][1], values[1][0],
+					values[1][1]);
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the Bilinear Interpolation elevation value
+	 * Get the Bilinear Interpolation coverage data value
 	 * 
 	 * @param offsetX
 	 *            x source pixel offset
@@ -968,21 +969,21 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param maxY
 	 *            max y value
 	 * @param topLeft
-	 *            top left elevation
+	 *            top left coverage value
 	 * @param topRight
-	 *            top right elevation
+	 *            top right coverage value
 	 * @param bottomLeft
-	 *            bottom left elevation
+	 *            bottom left coverage value
 	 * @param bottomRight
-	 *            bottom right elevation
-	 * @return elevation
+	 *            bottom right coverage value
+	 * @return coverage data value
 	 */
-	protected Double getBilinearInterpolationElevation(float offsetX,
+	protected Double getBilinearInterpolationValue(float offsetX,
 			float offsetY, float minX, float maxX, float minY, float maxY,
 			Double topLeft, Double topRight, Double bottomLeft,
 			Double bottomRight) {
 
-		Double elevation = null;
+		Double value = null;
 
 		if (topLeft != null && (topRight != null || minX == maxX)
 				&& (bottomLeft != null || minY == maxY)
@@ -1016,81 +1017,83 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 						+ ((diffTop / diffY) * bottomRow);
 			}
 
-			elevation = result;
+			value = result;
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the bicubic interpolation elevation from the 4 x 4 elevation values
+	 * Get the bicubic interpolation coverage data value from the 4 x 4 coverage
+	 * data values
 	 * 
 	 * @param values
-	 *            elevation values
+	 *            coverage data values
 	 * @param sourcePixelX
 	 *            source pixel x
 	 * @param sourcePixelY
 	 *            source pixel y
-	 * @return bicubic elevation
+	 * @return bicubic coverage data value
 	 */
-	protected Double getBicubicInterpolationElevation(Double[][] values,
-			ElevationSourcePixel sourcePixelX, ElevationSourcePixel sourcePixelY) {
-		return getBicubicInterpolationElevation(values,
-				sourcePixelX.getOffset(), sourcePixelY.getOffset());
+	protected Double getBicubicInterpolationValue(Double[][] values,
+			CoverageDataSourcePixel sourcePixelX,
+			CoverageDataSourcePixel sourcePixelY) {
+		return getBicubicInterpolationValue(values, sourcePixelX.getOffset(),
+				sourcePixelY.getOffset());
 	}
 
 	/**
-	 * Get the bicubic interpolation elevation from the 4 x 4 elevation values
+	 * Get the bicubic interpolation coverage data value from the 4 x 4 coverage
+	 * data values
 	 * 
 	 * @param values
-	 *            elevation values
+	 *            coverage data values
 	 * @param offsetX
 	 *            x source pixel offset
 	 * @param offsetY
 	 *            y source pixel offset
-	 * @return bicubic elevation
+	 * @return bicubic coverage data value
 	 */
-	protected Double getBicubicInterpolationElevation(Double[][] values,
+	protected Double getBicubicInterpolationValue(Double[][] values,
 			float offsetX, float offsetY) {
 
-		Double elevation = null;
+		Double value = null;
 
 		Double[] rowValues = new Double[4];
 
 		for (int y = 0; y < 4; y++) {
-			Double rowElevation = getCubicInterpolationElevation(values[y][0],
+			Double rowValue = getCubicInterpolationValue(values[y][0],
 					values[y][1], values[y][2], values[y][3], offsetX);
-			if (rowElevation == null) {
+			if (rowValue == null) {
 				rowValues = null;
 				break;
 			}
-			rowValues[y] = rowElevation;
+			rowValues[y] = rowValue;
 		}
 
 		if (rowValues != null) {
-			elevation = getCubicInterpolationElevation(rowValues, offsetY);
+			value = getCubicInterpolationValue(rowValues, offsetY);
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
 	 * Interpolate 4 values using the offset between value1 and value2
 	 * 
 	 * @param values
-	 *            elevation values
+	 *            coverage data values
 	 * @param offset
 	 *            offset between the middle two pixels
-	 * @return value elevation value
+	 * @return value coverage data value
 	 */
-	protected Double getCubicInterpolationElevation(Double[] values,
-			double offset) {
-		Double elevation = null;
+	protected Double getCubicInterpolationValue(Double[] values, double offset) {
+		Double value = null;
 		if (values != null) {
-			elevation = getCubicInterpolationElevation(values[0], values[1],
-					values[2], values[3], offset);
+			value = getCubicInterpolationValue(values[0], values[1], values[2],
+					values[3], offset);
 		}
-		return elevation;
+		return value;
 	}
 
 	/**
@@ -1106,12 +1109,12 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            index 3 value
 	 * @param offset
 	 *            offset between the middle two pixels
-	 * @return value elevation value
+	 * @return value coverage data value
 	 */
-	protected Double getCubicInterpolationElevation(Double value0,
-			Double value1, Double value2, Double value3, double offset) {
+	protected Double getCubicInterpolationValue(Double value0, Double value1,
+			Double value2, Double value3, double offset) {
 
-		Double elevation = null;
+		Double value = null;
 
 		if (value0 != null && value1 != null && value2 != null
 				&& value3 != null) {
@@ -1120,11 +1123,11 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 			double coefficient1 = value2 - value0;
 			double coefficient2 = 2 * value0 - 5 * value1 + 4 * value2 - value3;
 			double coefficient3 = -value0 + 3 * value1 - 3 * value2 + value3;
-			elevation = (coefficient3 * offset * offset * offset + coefficient2
+			value = (coefficient3 * offset * offset * offset + coefficient2
 					* offset * offset + coefficient1 * offset + coefficient0) / 2;
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
@@ -1250,110 +1253,105 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the elevation value for the "unsigned short" pixel value
+	 * Get the coverage data value for the "unsigned short" pixel value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValue
 	 *            pixel value as an unsigned short
-	 * @return elevation value
+	 * @return coverage data value
 	 */
-	public Double getElevationValue(GriddedTile griddedTile, short pixelValue) {
+	public Double getValue(GriddedTile griddedTile, short pixelValue) {
 		int unsignedPixelValue = getUnsignedPixelValue(pixelValue);
-		Double elevation = getElevationValue(griddedTile, unsignedPixelValue);
-		return elevation;
+		Double value = getValue(griddedTile, unsignedPixelValue);
+		return value;
 	}
 
 	/**
-	 * Get the elevation value for the unsigned short pixel value
+	 * Get the coverage data value for the unsigned short pixel value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param unsignedPixelValue
 	 *            pixel value as an unsigned 16 bit integer
-	 * @return elevation value
+	 * @return coverage data value
 	 */
-	public Double getElevationValue(GriddedTile griddedTile,
-			int unsignedPixelValue) {
+	public Double getValue(GriddedTile griddedTile, int unsignedPixelValue) {
 
-		Double elevation = null;
+		Double value = null;
 		if (!isDataNull(unsignedPixelValue)) {
-			elevation = pixelValueToElevation(griddedTile, new Double(
+			value = pixelValueToValue(griddedTile, new Double(
 					unsignedPixelValue));
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Convert integer coverage typed pixel value to an elevation value through
-	 * scales and offsets
+	 * Convert integer coverage typed pixel value to a coverage data value
+	 * through scales and offsets
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValue
 	 *            pixel value
-	 * @return elevation
+	 * @return coverage data value
 	 */
-	private Double pixelValueToElevation(GriddedTile griddedTile,
-			Double pixelValue) {
+	private Double pixelValueToValue(GriddedTile griddedTile, Double pixelValue) {
 
-		Double elevation = pixelValue;
+		Double value = pixelValue;
 
 		if (griddedCoverage != null
 				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
 
 			if (griddedTile != null) {
-				elevation *= griddedTile.getScale();
-				elevation += griddedTile.getOffset();
+				value *= griddedTile.getScale();
+				value += griddedTile.getOffset();
 			}
-			elevation *= griddedCoverage.getScale();
-			elevation += griddedCoverage.getOffset();
+			value *= griddedCoverage.getScale();
+			value += griddedCoverage.getOffset();
 
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the elevation values from the "unsigned short" pixel values
+	 * Get the coverage data values from the "unsigned short" pixel values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValues
 	 *            pixel values as "unsigned shorts"
-	 * @return elevation values
+	 * @return coverage data values
 	 */
-	public Double[] getElevationValues(GriddedTile griddedTile,
-			short[] pixelValues) {
-		Double[] elevations = new Double[pixelValues.length];
+	public Double[] getValues(GriddedTile griddedTile, short[] pixelValues) {
+		Double[] values = new Double[pixelValues.length];
 		for (int i = 0; i < pixelValues.length; i++) {
-			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
+			values[i] = getValue(griddedTile, pixelValues[i]);
 		}
-		return elevations;
+		return values;
 	}
 
 	/**
-	 * Get the elevation values from the "unsigned short" pixel values
+	 * Get the coverage data values from the "unsigned short" pixel values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param unsignedPixelValues
 	 *            pixel values as 16 bit integers
-	 * @return elevation values
+	 * @return coverage data values
 	 */
-	public Double[] getElevationValues(GriddedTile griddedTile,
-			int[] unsignedPixelValues) {
-		Double[] elevations = new Double[unsignedPixelValues.length];
+	public Double[] getValues(GriddedTile griddedTile, int[] unsignedPixelValues) {
+		Double[] values = new Double[unsignedPixelValues.length];
 		for (int i = 0; i < unsignedPixelValues.length; i++) {
-			elevations[i] = getElevationValue(griddedTile,
-					unsignedPixelValues[i]);
+			values[i] = getValue(griddedTile, unsignedPixelValues[i]);
 		}
-		return elevations;
+		return values;
 	}
 
 	/**
-	 * Create the elevation tile table with metadata
+	 * Create the coverage data tile table with metadata
 	 * 
 	 * @param geoPackage
 	 * @param tableName
@@ -1375,44 +1373,43 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the unsigned 16 bit integer pixel value of the elevation
+	 * Get the unsigned 16 bit integer pixel value of the coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
-	 * @param elevation
-	 *            elevation value
+	 * @param value
+	 *            coverage data value
 	 * @return 16 bit integer pixel value
 	 */
-	public int getUnsignedPixelValue(GriddedTile griddedTile, Double elevation) {
+	public int getUnsignedPixelValue(GriddedTile griddedTile, Double value) {
 
 		int unsignedPixelValue = 0;
 
-		if (elevation == null) {
+		if (value == null) {
 			if (griddedCoverage != null) {
 				unsignedPixelValue = griddedCoverage.getDataNull().intValue();
 			}
 		} else {
-			double value = elevationToPixelValue(griddedTile, elevation);
-			unsignedPixelValue = (int) Math.round(value);
+			double pixelValue = valueToPixelValue(griddedTile, value);
+			unsignedPixelValue = (int) Math.round(pixelValue);
 		}
 
 		return unsignedPixelValue;
 	}
 
 	/**
-	 * Convert integer coverage typed elevation value to a pixel value through
-	 * offsets and scales
+	 * Convert integer coverage typed coverage data value to a pixel value
+	 * through offsets and scales
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
-	 * @param elevation
-	 *            elevation value
+	 * @param value
+	 *            coverage data value
 	 * @return pixel value
 	 */
-	private double elevationToPixelValue(GriddedTile griddedTile,
-			double elevation) {
+	private double valueToPixelValue(GriddedTile griddedTile, double value) {
 
-		double pixelValue = elevation;
+		double pixelValue = value;
 
 		if (griddedCoverage != null
 				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
@@ -1430,16 +1427,16 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the "unsigned short" pixel value of the elevation
+	 * Get the "unsigned short" pixel value of the coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
-	 * @param elevation
-	 *            elevation value
+	 * @param value
+	 *            coverage data value
 	 * @return "unsigned short" pixel value
 	 */
-	public short getPixelValue(GriddedTile griddedTile, Double elevation) {
-		int unsignedPixelValue = getUnsignedPixelValue(griddedTile, elevation);
+	public short getPixelValue(GriddedTile griddedTile, Double value) {
+		int unsignedPixelValue = getUnsignedPixelValue(griddedTile, value);
 		short pixelValue = getPixelValue(unsignedPixelValue);
 		return pixelValue;
 	}
@@ -1462,148 +1459,149 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the elevation value for the pixel value
+	 * Get the coverage data value for the pixel value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValue
 	 *            pixel value
-	 * @return elevation value
+	 * @return coverage data value
 	 */
-	public Double getElevationValue(GriddedTile griddedTile, float pixelValue) {
+	public Double getValue(GriddedTile griddedTile, float pixelValue) {
 
-		Double elevation = null;
+		Double value = null;
 		if (!isDataNull(pixelValue)) {
-			elevation = pixelValueToElevation(griddedTile, new Double(
-					pixelValue));
+			value = pixelValueToValue(griddedTile, new Double(pixelValue));
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the elevation values from the pixel values
+	 * Get the coverage data values from the pixel values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
 	 * @param pixelValues
 	 *            pixel values
-	 * @return elevation values
+	 * @return coverage data values
 	 */
-	public Double[] getElevationValues(GriddedTile griddedTile,
-			float[] pixelValues) {
-		Double[] elevations = new Double[pixelValues.length];
+	public Double[] getValues(GriddedTile griddedTile, float[] pixelValues) {
+		Double[] values = new Double[pixelValues.length];
 		for (int i = 0; i < pixelValues.length; i++) {
-			elevations[i] = getElevationValue(griddedTile, pixelValues[i]);
+			values[i] = getValue(griddedTile, pixelValues[i]);
 		}
-		return elevations;
+		return values;
 	}
 
 	/**
-	 * Get the pixel value of the elevation
+	 * Get the pixel value of the coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
-	 * @param elevation
-	 *            elevation value
+	 * @param value
+	 *            coverage data value
 	 * @return pixel value
 	 */
-	public float getFloatPixelValue(GriddedTile griddedTile, Double elevation) {
+	public float getFloatPixelValue(GriddedTile griddedTile, Double value) {
 
-		double value = 0;
-		if (elevation == null) {
+		double pixel = 0;
+		if (value == null) {
 			if (griddedCoverage != null) {
-				value = griddedCoverage.getDataNull();
+				pixel = griddedCoverage.getDataNull();
 			}
 		} else {
-			value = elevationToPixelValue(griddedTile, elevation);
+			pixel = valueToPixelValue(griddedTile, value);
 		}
 
-		float pixelValue = (float) value;
+		float pixelValue = (float) pixel;
 
 		return pixelValue;
 	}
 
 	/**
-	 * Get the elevation at the coordinate
+	 * Get the coverage data value at the coordinate
 	 * 
 	 * @param latitude
 	 *            latitude
 	 * @param longitude
 	 *            longitude
-	 * @return elevation value
+	 * @return coverage data value
 	 */
-	public Double getElevation(double latitude, double longitude) {
-		ElevationRequest request = new ElevationRequest(latitude, longitude);
-		ElevationTileResults elevations = getElevations(request, 1, 1);
-		Double elevation = null;
-		if (elevations != null) {
-			elevation = elevations.getElevations()[0][0];
+	public Double getValue(double latitude, double longitude) {
+		CoverageDataRequest request = new CoverageDataRequest(latitude,
+				longitude);
+		CoverageDataResults values = getValues(request, 1, 1);
+		Double value = null;
+		if (values != null) {
+			value = values.getValues()[0][0];
 		}
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the elevation values within the bounding box
+	 * Get the coverage data values within the bounding box
 	 * 
 	 * @param requestBoundingBox
 	 *            request bounding box
-	 * @return elevation results
+	 * @return coverage data results
 	 */
-	public ElevationTileResults getElevations(BoundingBox requestBoundingBox) {
-		ElevationRequest request = new ElevationRequest(requestBoundingBox);
-		ElevationTileResults elevations = getElevations(request);
-		return elevations;
+	public CoverageDataResults getValues(BoundingBox requestBoundingBox) {
+		CoverageDataRequest request = new CoverageDataRequest(
+				requestBoundingBox);
+		CoverageDataResults values = getValues(request);
+		return values;
 	}
 
 	/**
-	 * Get the elevation values within the bounding box with the requested width
-	 * and height result size
+	 * Get the coverage data values within the bounding box with the requested
+	 * width and height result size
 	 * 
 	 * @param requestBoundingBox
 	 *            request bounding box
 	 * @param width
-	 *            elevation request width
+	 *            coverage data request width
 	 * @param height
-	 *            elevation request height
-	 * @return elevation results
+	 *            coverage data request height
+	 * @return coverage data results
 	 */
-	public ElevationTileResults getElevations(BoundingBox requestBoundingBox,
+	public CoverageDataResults getValues(BoundingBox requestBoundingBox,
 			Integer width, Integer height) {
-		ElevationRequest request = new ElevationRequest(requestBoundingBox);
-		ElevationTileResults elevations = getElevations(request, width, height);
-		return elevations;
+		CoverageDataRequest request = new CoverageDataRequest(
+				requestBoundingBox);
+		CoverageDataResults values = getValues(request, width, height);
+		return values;
 	}
 
 	/**
-	 * Get the requested elevation values
+	 * Get the requested coverage data values
 	 * 
 	 * @param request
-	 *            elevation request
-	 * @return elevation results
+	 *            coverage data request
+	 * @return coverage data results
 	 */
-	public ElevationTileResults getElevations(ElevationRequest request) {
-		ElevationTileResults elevations = getElevations(request, width, height);
-		return elevations;
+	public CoverageDataResults getValues(CoverageDataRequest request) {
+		CoverageDataResults values = getValues(request, width, height);
+		return values;
 	}
 
 	/**
-	 * Get the unbounded elevation values within the bounding box. Unbounded
-	 * results retrieves and returns each elevation pixel. The results size
+	 * Get the unbounded coverage data values within the bounding box. Unbounded
+	 * results retrieves and returns each coverage data pixel. The results size
 	 * equals the width and height of all matching pixels.
 	 * 
 	 * @param requestBoundingBox
 	 *            request bounding box
-	 * @return elevation results
+	 * @return coverage data results
 	 */
-	public ElevationTileResults getElevationsUnbounded(
-			BoundingBox requestBoundingBox) {
-		ElevationRequest request = new ElevationRequest(requestBoundingBox);
-		return getElevationsUnbounded(request);
+	public CoverageDataResults getValuesUnbounded(BoundingBox requestBoundingBox) {
+		CoverageDataRequest request = new CoverageDataRequest(
+				requestBoundingBox);
+		return getValuesUnbounded(request);
 	}
 
 	/**
-	 * Get the bilinear interpolation elevation
+	 * Get the bilinear interpolation coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1631,9 +1629,9 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            source top most pixel
 	 * @param srcLeft
 	 *            source left most pixel
-	 * @return bilinear elevation
+	 * @return bilinear coverage data value
 	 */
-	protected Double getBilinearInterpolationElevation(GriddedTile griddedTile,
+	protected Double getBilinearInterpolationValue(GriddedTile griddedTile,
 			TImage image, Double[][] leftLastColumns, Double[][] topLeftRows,
 			Double[][] topRows, int y, int x, float widthRatio,
 			float heightRatio, float destTop, float destLeft, float srcTop,
@@ -1643,25 +1641,25 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		float xSource = getXSource(x, destLeft, srcLeft, widthRatio);
 		float ySource = getYSource(y, destTop, srcTop, heightRatio);
 
-		ElevationSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
-		ElevationSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
+		CoverageDataSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
+		CoverageDataSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
 
 		Double[][] values = new Double[2][2];
-		populateElevationValues(griddedTile, image, leftLastColumns,
-				topLeftRows, topRows, sourcePixelX, sourcePixelY, values);
+		populateValues(griddedTile, image, leftLastColumns, topLeftRows,
+				topRows, sourcePixelX, sourcePixelY, values);
 
-		Double elevation = null;
+		Double value = null;
 
 		if (values != null) {
-			elevation = getBilinearInterpolationElevation(sourcePixelX,
-					sourcePixelY, values);
+			value = getBilinearInterpolationValue(sourcePixelX, sourcePixelY,
+					values);
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the bicubic interpolation elevation
+	 * Get the bicubic interpolation coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1689,9 +1687,9 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            source top most pixel
 	 * @param srcLeft
 	 *            source left most pixel
-	 * @return bicubic elevation
+	 * @return bicubic coverage data value
 	 */
-	protected Double getBicubicInterpolationElevation(GriddedTile griddedTile,
+	protected Double getBicubicInterpolationValue(GriddedTile griddedTile,
 			TImage image, Double[][] leftLastColumns, Double[][] topLeftRows,
 			Double[][] topRows, int y, int x, float widthRatio,
 			float heightRatio, float destTop, float destLeft, float srcTop,
@@ -1701,30 +1699,30 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		float xSource = getXSource(x, destLeft, srcLeft, widthRatio);
 		float ySource = getYSource(y, destTop, srcTop, heightRatio);
 
-		ElevationSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
+		CoverageDataSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
 		sourcePixelX.setMin(sourcePixelX.getMin() - 1);
 		sourcePixelX.setMax(sourcePixelX.getMax() + 1);
 
-		ElevationSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
+		CoverageDataSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
 		sourcePixelY.setMin(sourcePixelY.getMin() - 1);
 		sourcePixelY.setMax(sourcePixelY.getMax() + 1);
 
 		Double[][] values = new Double[4][4];
-		populateElevationValues(griddedTile, image, leftLastColumns,
-				topLeftRows, topRows, sourcePixelX, sourcePixelY, values);
+		populateValues(griddedTile, image, leftLastColumns, topLeftRows,
+				topRows, sourcePixelX, sourcePixelY, values);
 
-		Double elevation = null;
+		Double value = null;
 
 		if (values != null) {
-			elevation = getBicubicInterpolationElevation(values, sourcePixelX,
+			value = getBicubicInterpolationValue(values, sourcePixelX,
 					sourcePixelY);
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Populate the elevation values
+	 * Populate the coverage data values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1743,18 +1741,18 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param values
 	 *            values to populate
 	 */
-	private void populateElevationValues(GriddedTile griddedTile, TImage image,
+	private void populateValues(GriddedTile griddedTile, TImage image,
 			Double[][] leftLastColumns, Double[][] topLeftRows,
-			Double[][] topRows, ElevationSourcePixel pixelX,
-			ElevationSourcePixel pixelY, Double[][] values) {
+			Double[][] topRows, CoverageDataSourcePixel pixelX,
+			CoverageDataSourcePixel pixelY, Double[][] values) {
 
-		populateElevationValues(griddedTile, image, leftLastColumns,
-				topLeftRows, topRows, pixelX.getMin(), pixelX.getMax(),
-				pixelY.getMin(), pixelY.getMax(), values);
+		populateValues(griddedTile, image, leftLastColumns, topLeftRows,
+				topRows, pixelX.getMin(), pixelX.getMax(), pixelY.getMin(),
+				pixelY.getMax(), values);
 	}
 
 	/**
-	 * Populate the elevation values
+	 * Populate the coverage data values
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1777,14 +1775,14 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 * @param values
 	 *            values to populate
 	 */
-	private void populateElevationValues(GriddedTile griddedTile, TImage image,
+	private void populateValues(GriddedTile griddedTile, TImage image,
 			Double[][] leftLastColumns, Double[][] topLeftRows,
 			Double[][] topRows, int minX, int maxX, int minY, int maxY,
 			Double[][] values) {
 
 		for (int yLocation = maxY; values != null && yLocation >= minY; yLocation--) {
 			for (int xLocation = maxX; xLocation >= minX; xLocation--) {
-				Double value = getElevationValueOverBorders(griddedTile, image,
+				Double value = getValueOverBorders(griddedTile, image,
 						leftLastColumns, topLeftRows, topRows, xLocation,
 						yLocation);
 				if (value == null) {
@@ -1798,7 +1796,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	}
 
 	/**
-	 * Get the nearest neighbor elevation
+	 * Get the nearest neighbor coverage data value
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1826,9 +1824,9 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            source top most pixel
 	 * @param srcLeft
 	 *            source left most pixel
-	 * @return nearest neighbor elevation
+	 * @return nearest neighbor coverage data value
 	 */
-	protected Double getNearestNeighborElevation(GriddedTile griddedTile,
+	protected Double getNearestNeighborValue(GriddedTile griddedTile,
 			TImage image, Double[][] leftLastColumns, Double[][] topLeftRows,
 			Double[][] topRows, int y, int x, float widthRatio,
 			float heightRatio, float destTop, float destLeft, float srcTop,
@@ -1841,25 +1839,27 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		// Get the closest nearest neighbors
 		List<int[]> nearestNeighbors = getNearestNeighbors(xSource, ySource);
 
-		// Get the elevation value from the source pixel nearest neighbors until
+		// Get the coverage data value from the source pixel nearest neighbors
+		// until
 		// one is found
-		Double elevation = null;
+		Double value = null;
 		for (int[] nearestNeighbor : nearestNeighbors) {
-			elevation = getElevationValueOverBorders(griddedTile, image,
-					leftLastColumns, topLeftRows, topRows, nearestNeighbor[0],
+			value = getValueOverBorders(griddedTile, image, leftLastColumns,
+					topLeftRows, topRows, nearestNeighbor[0],
 					nearestNeighbor[1]);
-			if (elevation != null) {
+			if (value != null) {
 				break;
 			}
 		}
 
-		return elevation;
+		return value;
 	}
 
 	/**
-	 * Get the elevation value from the coordinate location. If the coordinate
-	 * crosses the left, top, or top left tile, attempts to get the elevation
-	 * from previously processed border elevations.
+	 * Get the coverage data value from the coordinate location. If the
+	 * coordinate crosses the left, top, or top left tile, attempts to get the
+	 * coverage data value from previously processed border coverage data
+	 * values.
 	 * 
 	 * @param griddedTile
 	 *            gridded tile
@@ -1875,12 +1875,12 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 	 *            x coordinate
 	 * @param y
 	 *            y coordinate
-	 * @return elevation value
+	 * @return coverage data value
 	 */
-	private Double getElevationValueOverBorders(GriddedTile griddedTile,
-			TImage image, Double[][] leftLastColumns, Double[][] topLeftRows,
+	private Double getValueOverBorders(GriddedTile griddedTile, TImage image,
+			Double[][] leftLastColumns, Double[][] topLeftRows,
 			Double[][] topRows, int x, int y) {
-		Double elevation = null;
+		Double value = null;
 
 		// Only handle locations in the current tile, to the left, top left, or
 		// top tiles. Tiles are processed sorted by rows and columns, so values
@@ -1889,37 +1889,38 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 		if (x < image.getWidth() && y < image.getHeight()) {
 
 			if (x >= 0 && y >= 0) {
-				elevation = getElevationValue(griddedTile, image, x, y);
+				value = getValue(griddedTile, image, x, y);
 			} else if (x < 0 && y < 0) {
-				// Try to get the elevation from the top left tile values
+				// Try to get the coverage data value from the top left tile
+				// values
 				if (topLeftRows != null) {
 					int row = (-1 * y) - 1;
 					if (row < topLeftRows.length) {
 						int column = x + topLeftRows[row].length;
 						if (column >= 0) {
-							elevation = topLeftRows[row][column];
+							value = topLeftRows[row][column];
 						}
 					}
 				}
 			} else if (x < 0) {
-				// Try to get the elevation from the left tile values
+				// Try to get the coverage data value from the left tile values
 				if (leftLastColumns != null) {
 					int column = (-1 * x) - 1;
 					if (column < leftLastColumns.length) {
 						int row = y;
 						if (row < leftLastColumns[column].length) {
-							elevation = leftLastColumns[column][row];
+							value = leftLastColumns[column][row];
 						}
 					}
 				}
 			} else {
-				// Try to get the elevation from the top tile values
+				// Try to get the coverage data value from the top tile values
 				if (topRows != null) {
 					int row = (-1 * y) - 1;
 					if (row < topRows.length) {
 						int column = x;
 						if (column < topRows[row].length) {
-							elevation = topRows[row][column];
+							value = topRows[row][column];
 						}
 					}
 				}
@@ -1927,7 +1928,7 @@ public abstract class ElevationTilesCore<TImage extends ElevationImage> extends
 
 		}
 
-		return elevation;
+		return value;
 	}
 
 }

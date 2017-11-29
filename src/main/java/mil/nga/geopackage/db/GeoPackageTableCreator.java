@@ -140,7 +140,7 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create the Tile Gridded Elevation Coverage extension table
+	 * Create the Tiled Gridded Coverage Data Coverage extension table
 	 * 
 	 * @return executed statements
 	 * @since 1.2.1
@@ -151,7 +151,7 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create the Tile Gridded Elevation Tile extension table
+	 * Create the Tiled Gridded Coverage Data Tile extension table
 	 * 
 	 * @return executed statements
 	 * @since 1.2.1

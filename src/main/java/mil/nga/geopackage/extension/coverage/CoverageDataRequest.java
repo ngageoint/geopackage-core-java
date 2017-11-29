@@ -1,15 +1,16 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 
 /**
- * Elevation request to retrieve elevation values for a point or bounding box
+ * Coverage Data request to retrieve coverage data values for a point or
+ * bounding box
  * 
  * @author osbornb
- * @since 1.2.1
+ * @since 2.0.1
  */
-public class ElevationRequest {
+public class CoverageDataRequest {
 
 	/**
 	 * Bounding box
@@ -22,7 +23,7 @@ public class ElevationRequest {
 	private boolean point;
 
 	/**
-	 * Bounding box projected to the elevation tiles projection
+	 * Bounding box projected to the coverage data projection
 	 */
 	private BoundingBox projectedBoundingBox;
 
@@ -32,7 +33,7 @@ public class ElevationRequest {
 	 * @param boundingBox
 	 *            bounding box
 	 */
-	public ElevationRequest(BoundingBox boundingBox) {
+	public CoverageDataRequest(BoundingBox boundingBox) {
 		this.boundingBox = boundingBox;
 	}
 
@@ -44,7 +45,7 @@ public class ElevationRequest {
 	 * @param longitude
 	 *            longitude coordinate
 	 */
-	public ElevationRequest(double latitude, double longitude) {
+	public CoverageDataRequest(double latitude, double longitude) {
 		this(new BoundingBox(longitude, latitude, longitude, latitude));
 		point = true;
 	}
@@ -88,19 +89,19 @@ public class ElevationRequest {
 
 	/**
 	 * Get the bounding box overlap between the projected bounding box and the
-	 * elevation bounding box
+	 * coverage data bounding box
 	 * 
-	 * @param projectedElevation
-	 *            projected elevation
+	 * @param projectedCoverage
+	 *            projected coverage
 	 * @return overlap bounding box
 	 */
-	public BoundingBox overlap(BoundingBox projectedElevation) {
+	public BoundingBox overlap(BoundingBox projectedCoverage) {
 		BoundingBox overlap = null;
 		if (point) {
 			overlap = projectedBoundingBox;
 		} else {
 			overlap = TileBoundingBoxUtils.overlap(projectedBoundingBox,
-					projectedElevation);
+					projectedCoverage);
 		}
 		return overlap;
 	}

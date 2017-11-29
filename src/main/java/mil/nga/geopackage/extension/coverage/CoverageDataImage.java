@@ -1,12 +1,12 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 /**
- * Elevation image interface
+ * Coverage Data image interface
  *
  * @author osbornb
- * @since 1.2.1
+ * @since 2.0.1
  */
-public interface ElevationImage {
+public interface CoverageDataImage {
 
 	/**
 	 * Get the width

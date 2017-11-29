@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
@@ -103,25 +103,25 @@ public class GriddedCoverage {
 	/**
 	 * 'integer' or 'float'
 	 */
-	@DatabaseField(columnName = COLUMN_DATATYPE, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_DATATYPE, canBeNull = false, defaultValue = "integer")
 	private String datatype;
 
 	/**
 	 * Scale as a multiple relative to the unit of measure
 	 */
-	@DatabaseField(columnName = COLUMN_SCALE, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_SCALE, canBeNull = false, defaultValue = "1.0")
 	private double scale = 1.0;
 
 	/**
 	 * The offset to the 0 value
 	 */
-	@DatabaseField(columnName = COLUMN_OFFSET, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_OFFSET, canBeNull = false, defaultValue = "0.0")
 	private double offset = 0.0;
 
 	/**
 	 * The smallest value that has meaning for this dataset
 	 */
-	@DatabaseField(columnName = COLUMN_PRECISION)
+	@DatabaseField(columnName = COLUMN_PRECISION, defaultValue = "1.0")
 	private Double precision = 1.0;
 
 	/**
@@ -133,7 +133,7 @@ public class GriddedCoverage {
 	/**
 	 * Specifies how a value is assigned to a grid cell (pixel)
 	 */
-	@DatabaseField(columnName = COLUMN_GRID_CELL_ENCODING)
+	@DatabaseField(columnName = COLUMN_GRID_CELL_ENCODING, defaultValue = "grid-value-is-center")
 	private String gridCellEncoding;
 
 	/**
@@ -145,13 +145,13 @@ public class GriddedCoverage {
 	/**
 	 * Type of Gridded Coverage Data (default is Height)
 	 */
-	@DatabaseField(columnName = COLUMN_FIELD_NAME)
+	@DatabaseField(columnName = COLUMN_FIELD_NAME, defaultValue = "Height")
 	private String fieldName;
 
 	/**
 	 * Description of the values contained in the Gridded Coverage
 	 */
-	@DatabaseField(columnName = COLUMN_QUANTITY_DEFINITION)
+	@DatabaseField(columnName = COLUMN_QUANTITY_DEFINITION, defaultValue = "Height")
 	private String quantityDefinition;
 
 	/**
