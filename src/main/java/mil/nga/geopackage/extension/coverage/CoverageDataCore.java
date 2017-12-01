@@ -128,6 +128,11 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	protected CoverageDataAlgorithm algorithm = CoverageDataAlgorithm.NEAREST_NEIGHBOR;
 
 	/**
+	 * Value pixel encoding type
+	 */
+	protected GriddedCoverageEncodingType encoding = GriddedCoverageEncodingType.CENTER;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
@@ -405,6 +410,30 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			algorithm = CoverageDataAlgorithm.NEAREST_NEIGHBOR;
 		}
 		this.algorithm = algorithm;
+	}
+
+	/**
+	 * Get the value pixel encoding type
+	 * 
+	 * @return encoding type
+	 * @since 2.0.1
+	 */
+	public GriddedCoverageEncodingType getEncoding() {
+		return encoding;
+	}
+
+	/**
+	 * Set the value pixel encoding type
+	 * 
+	 * @param encoding
+	 *            encoding type
+	 * @since 2.0.1
+	 */
+	public void setEncoding(GriddedCoverageEncodingType encoding) {
+		if (encoding == null) {
+			encoding = GriddedCoverageEncodingType.CENTER;
+		}
+		this.encoding = encoding;
 	}
 
 	/**
@@ -762,15 +791,16 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 * @param srcLeft
 	 *            source left most pixel
 	 * @param widthRatio
-	 *            source over destination width radio
+	 *            source over destination width ratio
 	 * @return x source pixel
 	 */
 	protected float getXSource(int x, float destLeft, float srcLeft,
 			float widthRatio) {
-		float middleOfXDestPixel = (x - destLeft) + 0.5f;
-		float xSourcePixel = middleOfXDestPixel * widthRatio;
-		float xSource = srcLeft + xSourcePixel;
-		return xSource;
+
+		float dest = getXEncodedLocation(x, encoding);
+		float source = getSource(dest, destLeft, srcLeft, widthRatio);
+
+		return source;
 	}
 
 	/**
@@ -783,15 +813,97 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 * @param srcTop
 	 *            source top most pixel
 	 * @param heightRatio
-	 *            source over destination height radio
+	 *            source over destination height ratio
 	 * @return y source pixel
 	 */
 	protected float getYSource(int y, float destTop, float srcTop,
 			float heightRatio) {
-		float middleOfYDestPixel = (y - destTop) + 0.5f;
-		float ySourcePixel = middleOfYDestPixel * heightRatio;
-		float ySource = srcTop + ySourcePixel;
+
+		float dest = getYEncodedLocation(y, encoding);
+		float source = getSource(dest, destTop, srcTop, heightRatio);
+
+		return source;
+	}
+
+	/**
+	 * Determine the source pixel location
+	 * 
+	 * @param dest
+	 *            destination pixel location
+	 * @param destMin
+	 *            destination minimum most pixel
+	 * @param srcMin
+	 *            source minimum most pixel
+	 * @param ratio
+	 *            source over destination length ratio
+	 * @return source pixel
+	 */
+	private float getSource(float dest, float destMin, float srcMin, float ratio) {
+
+		float destDistance = dest - destMin;
+		float srcDistance = destDistance * ratio;
+		float ySource = srcMin + srcDistance;
+
 		return ySource;
+	}
+
+	/**
+	 * Get the X encoded location from the base provided x
+	 * 
+	 * @param x
+	 *            x location
+	 * @param encodingType
+	 *            pixel encoding type
+	 * @return encoded x location
+	 */
+	private float getXEncodedLocation(float x,
+			GriddedCoverageEncodingType encodingType) {
+
+		float xLocation = x;
+
+		switch (encodingType) {
+		case CENTER:
+		case AREA:
+			xLocation += 0.5f;
+			break;
+		case CORNER:
+			break;
+		default:
+			throw new GeoPackageException("Unsupported Encoding Type: "
+					+ encodingType);
+		}
+
+		return xLocation;
+	}
+
+	/**
+	 * Get the Y encoded location from the base provided y
+	 * 
+	 * @param y
+	 *            y location
+	 * @param encodingType
+	 *            pixel encoding type
+	 * @return encoded y location
+	 */
+	private float getYEncodedLocation(float y,
+			GriddedCoverageEncodingType encodingType) {
+
+		float yLocation = y;
+
+		switch (encodingType) {
+		case CENTER:
+		case AREA:
+			yLocation += 0.5f;
+			break;
+		case CORNER:
+			yLocation += 1.0f;
+			break;
+		default:
+			throw new GeoPackageException("Unsupported Encoding Type: "
+					+ encodingType);
+		}
+
+		return yLocation;
 	}
 
 	/**
@@ -809,8 +921,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		List<int[]> results = new ArrayList<int[]>();
 
 		// Get the coverage data source pixels for x and y
-		CoverageDataSourcePixel xPixel = getSourceMinAndMax(xSource);
-		CoverageDataSourcePixel yPixel = getSourceMinAndMax(ySource);
+		CoverageDataSourcePixel xPixel = getXSourceMinAndMax(xSource);
+		CoverageDataSourcePixel yPixel = getYSourceMinAndMax(ySource);
 
 		// Determine which x pixel is the closest, the second closest, and the
 		// distance to the second pixel
@@ -876,24 +988,64 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	}
 
 	/**
+	 * Get the min, max, and offset of the source X pixel
+	 * 
+	 * @param source
+	 *            source x pixel
+	 * @return source x pixel information
+	 */
+	protected CoverageDataSourcePixel getXSourceMinAndMax(float source) {
+
+		int floor = (int) Math.floor(source);
+		float valueLocation = getXEncodedLocation(floor,
+				griddedCoverage.getGridCellEncodingType());
+
+		CoverageDataSourcePixel pixel = getSourceMinAndMax(source, floor,
+				valueLocation);
+		return pixel;
+	}
+
+	/**
+	 * Get the min, max, and offset of the source Y pixel
+	 * 
+	 * @param source
+	 *            source y pixel
+	 * @return source y pixel information
+	 */
+	protected CoverageDataSourcePixel getYSourceMinAndMax(float source) {
+
+		int floor = (int) Math.floor(source);
+		float valueLocation = getYEncodedLocation(floor,
+				griddedCoverage.getGridCellEncodingType());
+
+		CoverageDataSourcePixel pixel = getSourceMinAndMax(source, floor,
+				valueLocation);
+		return pixel;
+	}
+
+	/**
 	 * Get the min, max, and offset of the source pixel
 	 * 
 	 * @param source
 	 *            source pixel
+	 * @param sourceFloor
+	 *            source floor value
+	 * @param valueLocation
+	 *            value location
 	 * @return source pixel information
 	 */
-	protected CoverageDataSourcePixel getSourceMinAndMax(float source) {
+	private CoverageDataSourcePixel getSourceMinAndMax(float source,
+			int sourceFloor, float valueLocation) {
 
-		int floor = (int) Math.floor(source);
-		int min = floor;
-		int max = floor;
-		float offset = source - floor;
-		if (offset < .5) {
+		int min = sourceFloor;
+		int max = sourceFloor;
+		float offset;
+		if (source < valueLocation) {
 			min--;
-			offset += .5f;
-		} else if (offset >= .5) {
+			offset = 1.0f - (valueLocation - source);
+		} else {
 			max++;
-			offset -= .5f;
+			offset = source - valueLocation;
 		}
 
 		return new CoverageDataSourcePixel(source, min, max, offset);
@@ -1641,8 +1793,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		float xSource = getXSource(x, destLeft, srcLeft, widthRatio);
 		float ySource = getYSource(y, destTop, srcTop, heightRatio);
 
-		CoverageDataSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
-		CoverageDataSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
+		CoverageDataSourcePixel sourcePixelX = getXSourceMinAndMax(xSource);
+		CoverageDataSourcePixel sourcePixelY = getYSourceMinAndMax(ySource);
 
 		Double[][] values = new Double[2][2];
 		populateValues(griddedTile, image, leftLastColumns, topLeftRows,
@@ -1699,11 +1851,11 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		float xSource = getXSource(x, destLeft, srcLeft, widthRatio);
 		float ySource = getYSource(y, destTop, srcTop, heightRatio);
 
-		CoverageDataSourcePixel sourcePixelX = getSourceMinAndMax(xSource);
+		CoverageDataSourcePixel sourcePixelX = getXSourceMinAndMax(xSource);
 		sourcePixelX.setMin(sourcePixelX.getMin() - 1);
 		sourcePixelX.setMax(sourcePixelX.getMax() + 1);
 
-		CoverageDataSourcePixel sourcePixelY = getSourceMinAndMax(ySource);
+		CoverageDataSourcePixel sourcePixelY = getYSourceMinAndMax(ySource);
 		sourcePixelY.setMin(sourcePixelY.getMin() - 1);
 		sourcePixelY.setMax(sourcePixelY.getMax() + 1);
 
@@ -1840,8 +1992,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		List<int[]> nearestNeighbors = getNearestNeighbors(xSource, ySource);
 
 		// Get the coverage data value from the source pixel nearest neighbors
-		// until
-		// one is found
+		// until one is found
 		Double value = null;
 		for (int[] nearestNeighbor : nearestNeighbors) {
 			value = getValueOverBorders(griddedTile, image, leftLastColumns,
