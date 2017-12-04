@@ -488,7 +488,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	}
 
 	/**
-	 * Query and updated the gridded coverage
+	 * Query and update the gridded coverage
 	 * 
 	 * @return gridded coverage
 	 */
