@@ -68,7 +68,7 @@ public class WebPExtension extends BaseExtension {
 	public boolean has(String tableName) {
 
 		boolean exists = has(EXTENSION_NAME, tableName,
-				TileTable.COLUMN_TILE_ROW);
+				TileTable.COLUMN_TILE_DATA);
 
 		return exists;
 	}

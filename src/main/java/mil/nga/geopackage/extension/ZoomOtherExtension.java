@@ -52,7 +52,7 @@ public class ZoomOtherExtension extends BaseExtension {
 	public Extensions getOrCreate(String tableName) {
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, tableName,
-				TileTable.COLUMN_TILE_ROW, DEFINITION,
+				TileTable.COLUMN_TILE_DATA, DEFINITION,
 				ExtensionScopeType.READ_WRITE);
 
 		return extension;
@@ -68,7 +68,7 @@ public class ZoomOtherExtension extends BaseExtension {
 	public boolean has(String tableName) {
 
 		boolean exists = has(EXTENSION_NAME, tableName,
-				TileTable.COLUMN_TILE_ROW);
+				TileTable.COLUMN_TILE_DATA);
 
 		return exists;
 	}
