@@ -52,7 +52,7 @@ public class WebPExtension extends BaseExtension {
 	public Extensions getOrCreate(String tableName) {
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, tableName,
-				TileTable.COLUMN_TILE_ROW, DEFINITION,
+				TileTable.COLUMN_TILE_DATA, DEFINITION,
 				ExtensionScopeType.READ_WRITE);
 
 		return extension;
