@@ -1,12 +1,14 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.io.ResourceIOUtils;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
@@ -48,17 +50,66 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public static final String IS_EMPTY_FUNCTION = "ST_IsEmpty";
 
+	// TODO javadoc
+	
+	public static final String CREATE_PROPERTY = "create";
+
+	public static final String LOAD_PROPERTY = "load";
+
+	public static final String DROP_PROPERTY = "drop";
+
+	public static final String TRIGGER_INSERT_NAME = "insert";
+
+	public static final String TRIGGER_UPDATE1_NAME = "update1";
+
+	public static final String TRIGGER_UPDATE2_NAME = "update2";
+
+	public static final String TRIGGER_UPDATE3_NAME = "update3";
+
+	public static final String TRIGGER_UPDATE4_NAME = "update4";
+
+	public static final String TRIGGER_DELETE_NAME = "delete";
+
+	public static final String TRIGGER_DROP_PROPERTY = "drop";
+
 	/**
 	 * Extension name
 	 */
 	public static final String EXTENSION_NAME = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR
 			+ Extensions.EXTENSION_NAME_DIVIDER + NAME;
 
+	private static final String EXTENSION_PROPERTY = PropertyConstants.EXTENSIONS
+			+ PropertyConstants.PROPERTY_DIVIDER + NAME;
+
 	/**
 	 * Extension definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS, NAME);
+	public static final String DEFINITION = GeoPackageProperties
+			.getProperty(EXTENSION_PROPERTY);
+
+	private static final String SQL_PROPERTY = EXTENSION_PROPERTY
+			+ PropertyConstants.PROPERTY_DIVIDER + PropertyConstants.SQL;
+
+	private static final String SUBSTITUTE_PROPERTY = SQL_PROPERTY
+			+ PropertyConstants.PROPERTY_DIVIDER + "substitute";
+
+	private static final String TRIGGER_PROPERTY = SQL_PROPERTY
+			+ PropertyConstants.PROPERTY_DIVIDER + "trigger";
+
+	public static final String TABLE_SUBSTITUTE = GeoPackageProperties
+			.getProperty(SUBSTITUTE_PROPERTY, "table");
+
+	public static final String GEOMETRY_COLUMN_SUBSTITUTE = GeoPackageProperties
+			.getProperty(SUBSTITUTE_PROPERTY, "geometry_column");
+
+	public static final String PK_COLUMN_SUBSTITUTE = GeoPackageProperties
+			.getProperty(SUBSTITUTE_PROPERTY, "pk_column");
+
+	public static final String TRIGGER_SUBSTITUTE = GeoPackageProperties
+			.getProperty(SUBSTITUTE_PROPERTY, "trigger");
+
+	public static final String SQL_DIRECTORY = GeoPackageProperties
+			.getProperty(SQL_PROPERTY, "directory");
 
 	/**
 	 * Connection
@@ -245,11 +296,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void createRTreeIndex(String tableName, String geometryColumnName) {
 
-		String sql = "CREATE VIRTUAL TABLE rtree_<t>_<c> USING rtree(id, minx, maxx, miny, maxy)";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
+				CREATE_PROPERTY);
+		executeSQL(sqlName, tableName, geometryColumnName);
 	}
 
 	/**
@@ -314,13 +363,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void loadRTreeIndex(String tableName, String geometryColumnName,
 			String idColumnName) {
 
-		String sql = "INSERT OR REPLACE INTO rtree_<t>_<c>"
-				+ " SELECT <i>, st_minx(<c>), st_maxx(<c>), st_miny(<c>), st_maxy(<c>) FROM <t>;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
+				LOAD_PROPERTY);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -375,16 +420,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createInsertTrigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_insert AFTER INSERT ON <t>"
-				+ " WHEN (new.<c> NOT NULL AND NOT ST_IsEmpty(NEW.<c>))"
-				+ " BEGIN" + " INSERT OR REPLACE INTO rtree_<t>_<c> VALUES ("
-				+ " NEW.<i>," + " ST_MinX(NEW.<c>), ST_MaxX(NEW.<c>),"
-				+ " ST_MinY(NEW.<c>), ST_MaxY(NEW.<c>)" + " );" + " END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_INSERT_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -406,19 +444,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createUpdate1Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_update1 AFTER UPDATE OF <c> ON <t>"
-				+ " WHEN OLD.<i> = NEW.<i> AND"
-				+ " (NEW.<c> NOTNULL AND NOT ST_IsEmpty(NEW.<c>))"
-				+ " BEGIN"
-				+ " INSERT OR REPLACE INTO rtree_<t>_<c> VALUES ("
-				+ " NEW.<i>,"
-				+ " ST_MinX(NEW.<c>), ST_MaxX(NEW.<c>),"
-				+ " ST_MinY(NEW.<c>), ST_MaxY(NEW.<c>)" + " );" + " END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE1_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -438,16 +466,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createUpdate2Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_update2 AFTER UPDATE OF <c> ON <t>"
-				+ " WHEN OLD.<i> = NEW.<i> AND"
-				+ " (NEW.<c> ISNULL OR ST_IsEmpty(NEW.<c>))"
-				+ " BEGIN"
-				+ " DELETE FROM rtree_<t>_<c> WHERE id = OLD.<i>;" + "END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE2_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -467,20 +488,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createUpdate3Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_update3 AFTER UPDATE OF <c> ON <t>"
-				+ " WHEN OLD.<i> != NEW.<i> AND"
-				+ " (NEW.<c> NOTNULL AND NOT ST_IsEmpty(NEW.<c>))"
-				+ " BEGIN"
-				+ " DELETE FROM rtree_<t>_<c> WHERE id = OLD.<i>;"
-				+ " INSERT OR REPLACE INTO rtree_<t>_<c> VALUES ("
-				+ " NEW.<i>,"
-				+ " ST_MinX(NEW.<c>), ST_MaxX(NEW.<c>),"
-				+ " ST_MinY(NEW.<c>), ST_MaxY(NEW.<c>)" + " );" + " END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE3_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -500,16 +510,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createUpdate4Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_update4 AFTER UPDATE ON <t>"
-				+ " WHEN OLD.<i> != NEW.<i> AND"
-				+ " (NEW.<c> ISNULL OR ST_IsEmpty(NEW.<c>))" + " BEGIN"
-				+ " DELETE FROM rtree_<t>_<c> WHERE id IN (OLD.<i>, NEW.<i>);"
-				+ " END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE4_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -529,14 +532,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createDeleteTrigger(String tableName,
 			String geometryColumnName, String idColumnName) {
 
-		String sql = "CREATE TRIGGER rtree_<t>_<c>_delete AFTER DELETE ON <t>"
-				+ " WHEN old.<c> NOT NULL" + " BEGIN"
-				+ " DELETE FROM rtree_<t>_<c> WHERE id = OLD.<i>;" + " END;";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName,
-				idColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_DELETE_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
 	}
 
 	/**
@@ -623,11 +621,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void dropRTreeIndex(String tableName, String geometryColumnName) {
 
-		String sql = "DROP TABLE rtree_<t>_<c>";
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
+				DROP_PROPERTY);
+		executeSQL(sqlName, tableName, geometryColumnName);
 	}
 
 	/**
@@ -699,7 +695,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropInsertTrigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "insert");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_INSERT_NAME);
 	}
 
 	/**
@@ -711,7 +707,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropUpdate1Trigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "update1");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE1_NAME);
 	}
 
 	/**
@@ -723,7 +719,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropUpdate2Trigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "update2");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE2_NAME);
 	}
 
 	/**
@@ -735,7 +731,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropUpdate3Trigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "update3");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE3_NAME);
 	}
 
 	/**
@@ -747,7 +743,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropUpdate4Trigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "update4");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE4_NAME);
 	}
 
 	/**
@@ -759,7 +755,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 */
 	public void dropDeleteTrigger(String tableName, String geometryColumnName) {
-		dropTrigger(tableName, geometryColumnName, "delete");
+		dropTrigger(tableName, geometryColumnName, TRIGGER_DELETE_NAME);
 	}
 
 	/**
@@ -769,34 +765,38 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param geometryColumnName
 	 * @param triggerName
 	 */
-	private void dropTrigger(String tableName, String geometryColumnName,
+	public void dropTrigger(String tableName, String geometryColumnName,
 			String triggerName) {
 
-		String sql = "DROP TRIGGER IF EXISTS rtree_<t>_<c>_" + triggerName;
-
-		sql = substituteSqlArguments(sql, tableName, geometryColumnName);
-
-		connection.execSQL(sql);
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_DROP_PROPERTY);
+		executeSQL(sqlName, tableName, geometryColumnName, null, triggerName);
 	}
 
-	/**
-	 * Replace the SQL arguments for the table and geometry column
-	 * 
-	 * @param sql
-	 *            sql to substitute
-	 * @param tableName
-	 *            table name
-	 * @param geometryColumnName
-	 *            geometry column name
-	 * @return substituted sql
-	 */
-	private String substituteSqlArguments(String sql, String tableName,
+	private void executeSQL(String sqlName, String tableName,
 			String geometryColumnName) {
-		return substituteSqlArguments(sql, tableName, geometryColumnName, null);
+		executeSQL(sqlName, tableName, geometryColumnName, null);
+	}
+
+	private void executeSQL(String sqlName, String tableName,
+			String geometryColumnName, String idColumn) {
+		executeSQL(sqlName, tableName, geometryColumnName, idColumn, null);
+	}
+
+	private void executeSQL(String sqlName, String tableName,
+			String geometryColumnName, String idColumn, String triggerName) {
+		List<String> statements = ResourceIOUtils.parseSQLStatements(
+				SQL_DIRECTORY, sqlName);
+		for (String statement : statements) {
+			String sql = substituteSqlArguments(statement, tableName,
+					geometryColumnName, idColumn, triggerName);
+			connection.execSQL(sql);
+		}
 	}
 
 	/**
-	 * Replace the SQL arguments for the table, geometry column, and id column
+	 * Replace the SQL arguments for the table, geometry column, id column, and
+	 * trigger name
 	 * 
 	 * @param sql
 	 *            sql to substitute
@@ -806,17 +806,24 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 * @param idColumnName
 	 *            id column name
+	 * @param triggerName
+	 *            trigger name
 	 * @return substituted sql
 	 */
 	private String substituteSqlArguments(String sql, String tableName,
-			String geometryColumnName, String idColumnName) {
+			String geometryColumnName, String idColumnName, String triggerName) {
 		String substituted = sql;
-		substituted = substituted.replaceAll("<t>", tableName);
-		substituted = substituted.replaceAll("<c>", geometryColumnName);
+		substituted = substituted.replaceAll(TABLE_SUBSTITUTE, tableName);
+		substituted = substituted.replaceAll(GEOMETRY_COLUMN_SUBSTITUTE,
+				geometryColumnName);
 		if (idColumnName != null) {
-			substituted = substituted.replaceAll("<i>", idColumnName);
+			substituted = substituted.replaceAll(PK_COLUMN_SUBSTITUTE,
+					idColumnName);
+		}
+		if (triggerName != null) {
+			substituted = substituted.replaceAll(TRIGGER_SUBSTITUTE,
+					triggerName);
 		}
 		return substituted;
 	}
-
 }
