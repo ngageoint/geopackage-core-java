@@ -50,26 +50,54 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public static final String IS_EMPTY_FUNCTION = "ST_IsEmpty";
 
-	// TODO javadoc
-	
+	/**
+	 * Create SQL property
+	 */
 	public static final String CREATE_PROPERTY = "create";
 
+	/**
+	 * Load SQL property
+	 */
 	public static final String LOAD_PROPERTY = "load";
 
+	/**
+	 * Drop SQL property
+	 */
 	public static final String DROP_PROPERTY = "drop";
 
+	/**
+	 * Trigger Insert name
+	 */
 	public static final String TRIGGER_INSERT_NAME = "insert";
 
+	/**
+	 * Trigger update 1 name
+	 */
 	public static final String TRIGGER_UPDATE1_NAME = "update1";
 
+	/**
+	 * Trigger update 2 name
+	 */
 	public static final String TRIGGER_UPDATE2_NAME = "update2";
 
+	/**
+	 * Trigger update 3 name
+	 */
 	public static final String TRIGGER_UPDATE3_NAME = "update3";
 
+	/**
+	 * Trigger update 4 name
+	 */
 	public static final String TRIGGER_UPDATE4_NAME = "update4";
 
+	/**
+	 * Trigger delete name
+	 */
 	public static final String TRIGGER_DELETE_NAME = "delete";
 
+	/**
+	 * Trigger drop name
+	 */
 	public static final String TRIGGER_DROP_PROPERTY = "drop";
 
 	/**
@@ -78,6 +106,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public static final String EXTENSION_NAME = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR
 			+ Extensions.EXTENSION_NAME_DIVIDER + NAME;
 
+	/**
+	 * Base extension property
+	 */
 	private static final String EXTENSION_PROPERTY = PropertyConstants.EXTENSIONS
 			+ PropertyConstants.PROPERTY_DIVIDER + NAME;
 
@@ -87,27 +118,51 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public static final String DEFINITION = GeoPackageProperties
 			.getProperty(EXTENSION_PROPERTY);
 
+	/**
+	 * SQL base property
+	 */
 	private static final String SQL_PROPERTY = EXTENSION_PROPERTY
 			+ PropertyConstants.PROPERTY_DIVIDER + PropertyConstants.SQL;
 
+	/**
+	 * SQL substitute base property
+	 */
 	private static final String SUBSTITUTE_PROPERTY = SQL_PROPERTY
 			+ PropertyConstants.PROPERTY_DIVIDER + "substitute";
 
+	/**
+	 * SQL trigger base property
+	 */
 	private static final String TRIGGER_PROPERTY = SQL_PROPERTY
 			+ PropertyConstants.PROPERTY_DIVIDER + "trigger";
 
+	/**
+	 * Table substitute value
+	 */
 	public static final String TABLE_SUBSTITUTE = GeoPackageProperties
 			.getProperty(SUBSTITUTE_PROPERTY, "table");
 
+	/**
+	 * Geometry Column substitute value
+	 */
 	public static final String GEOMETRY_COLUMN_SUBSTITUTE = GeoPackageProperties
 			.getProperty(SUBSTITUTE_PROPERTY, "geometry_column");
 
+	/**
+	 * Primary Key Column substitute value
+	 */
 	public static final String PK_COLUMN_SUBSTITUTE = GeoPackageProperties
 			.getProperty(SUBSTITUTE_PROPERTY, "pk_column");
 
+	/**
+	 * Trigger substitute value
+	 */
 	public static final String TRIGGER_SUBSTITUTE = GeoPackageProperties
 			.getProperty(SUBSTITUTE_PROPERTY, "trigger");
 
+	/**
+	 * SQL resource directory
+	 */
 	public static final String SQL_DIRECTORY = GeoPackageProperties
 			.getProperty(SQL_PROPERTY, "directory");
 
@@ -453,7 +508,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Create update 2 trigger
 	 * 
 	 * <pre>
-	 * 
+	 * Conditions: Update of geometry column to empty geometry
+	 *             No row ID change
+	 * Actions   : Remove record from rtree
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -475,7 +532,11 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Create update 3 trigger
 	 * 
 	 * <pre>
-	 * 
+	 * Conditions: Update of any column
+	 *             Row ID change
+	 *             Non-empty geometry
+	 * Actions   : Remove record from rtree for old <i>
+	 *             Insert record into rtree for new <i>
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -497,7 +558,10 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Create update 4 trigger
 	 * 
 	 * <pre>
-	 * 
+	 * Conditions: Update of any column
+	 *             Row ID change
+	 *             Empty geometry
+	 * Actions   : Remove record from rtree for old and new <i>
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -519,7 +583,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Create delete trigger
 	 * 
 	 * <pre>
-	 * 
+	 * Conditions: Row deleted
+	 * Actions   : Remove record from rtree for old <i>
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -773,25 +838,67 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		executeSQL(sqlName, tableName, geometryColumnName, null, triggerName);
 	}
 
+	/**
+	 * Execute the SQL for the SQL file name while substituting values for the
+	 * table and geometry column
+	 * 
+	 * @param sqlName
+	 *            sql file name
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 */
 	private void executeSQL(String sqlName, String tableName,
 			String geometryColumnName) {
 		executeSQL(sqlName, tableName, geometryColumnName, null);
 	}
 
+	/**
+	 * Execute the SQL for the SQL file name while substituting values for the
+	 * table, geometry column, and id column
+	 * 
+	 * @param sqlName
+	 *            sql file name
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @param idColumnName
+	 *            id column name
+	 */
 	private void executeSQL(String sqlName, String tableName,
-			String geometryColumnName, String idColumn) {
-		executeSQL(sqlName, tableName, geometryColumnName, idColumn, null);
+			String geometryColumnName, String idColumnName) {
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName, null);
 	}
 
+	/**
+	 * Execute the SQL for the SQL file name while substituting values for the
+	 * table, geometry column, id column, and trigger name
+	 * 
+	 * @param sqlName
+	 *            sql file name
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @param idColumnName
+	 *            id column name
+	 * @param triggerName
+	 *            trigger name
+	 */
 	private void executeSQL(String sqlName, String tableName,
-			String geometryColumnName, String idColumn, String triggerName) {
+			String geometryColumnName, String idColumnName, String triggerName) {
+
 		List<String> statements = ResourceIOUtils.parseSQLStatements(
 				SQL_DIRECTORY, sqlName);
+
 		for (String statement : statements) {
 			String sql = substituteSqlArguments(statement, tableName,
-					geometryColumnName, idColumn, triggerName);
+					geometryColumnName, idColumnName, triggerName);
 			connection.execSQL(sql);
 		}
+
 	}
 
 	/**
@@ -812,18 +919,24 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	private String substituteSqlArguments(String sql, String tableName,
 			String geometryColumnName, String idColumnName, String triggerName) {
+
 		String substituted = sql;
+
 		substituted = substituted.replaceAll(TABLE_SUBSTITUTE, tableName);
 		substituted = substituted.replaceAll(GEOMETRY_COLUMN_SUBSTITUTE,
 				geometryColumnName);
+
 		if (idColumnName != null) {
 			substituted = substituted.replaceAll(PK_COLUMN_SUBSTITUTE,
 					idColumnName);
 		}
+
 		if (triggerName != null) {
 			substituted = substituted.replaceAll(TRIGGER_SUBSTITUTE,
 					triggerName);
 		}
+
 		return substituted;
 	}
+
 }
