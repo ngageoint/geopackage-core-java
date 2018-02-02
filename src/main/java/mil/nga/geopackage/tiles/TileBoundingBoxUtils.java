@@ -1231,4 +1231,137 @@ public class TileBoundingBoxUtils {
 				/ tilesPerLon;
 	}
 
+	/**
+	 * Get the tile grid starting from the tile grid and current zoom to the new
+	 * zoom level
+	 * 
+	 * @param tileGrid
+	 *            current tile grid
+	 * @param fromZoom
+	 *            current zoom level
+	 * @param toZoom
+	 *            new zoom level
+	 * @return tile grid at new zoom level
+	 * @since 2.0.1
+	 */
+	public static TileGrid tileGridZoom(TileGrid tileGrid, int fromZoom,
+			int toZoom) {
+
+		TileGrid newTileGrid = null;
+
+		int zoomChange = toZoom - fromZoom;
+		if (zoomChange > 0) {
+			newTileGrid = tileGridZoomIncrease(tileGrid, zoomChange);
+		} else if (zoomChange < 0) {
+			zoomChange = Math.abs(zoomChange);
+			newTileGrid = tileGridZoomDecrease(tileGrid, zoomChange);
+		} else {
+			newTileGrid = tileGrid;
+		}
+
+		return newTileGrid;
+	}
+
+	/**
+	 * Get the tile grid starting from the tile grid and zooming in / increasing
+	 * the number of levels
+	 * 
+	 * @param tileGrid
+	 *            current tile grid
+	 * @param zoomLevels
+	 *            number of zoom levels to increase by
+	 * @return tile grid at new zoom level
+	 * @since 2.0.1
+	 */
+	public static TileGrid tileGridZoomIncrease(TileGrid tileGrid,
+			int zoomLevels) {
+		long minX = tileGridMinZoomIncrease(tileGrid.getMinX(), zoomLevels);
+		long maxX = tileGridMaxZoomIncrease(tileGrid.getMaxX(), zoomLevels);
+		long minY = tileGridMinZoomIncrease(tileGrid.getMinY(), zoomLevels);
+		long maxY = tileGridMaxZoomIncrease(tileGrid.getMaxY(), zoomLevels);
+		TileGrid newTileGrid = new TileGrid(minX, minY, maxX, maxY);
+		return newTileGrid;
+	}
+
+	/**
+	 * Get the tile grid starting from the tile grid and zooming out /
+	 * decreasing the number of levels
+	 * 
+	 * @param tileGrid
+	 *            current tile grid
+	 * @param zoomLevels
+	 *            number of zoom levels to decrease by
+	 * @return tile grid at new zoom level
+	 * @since 2.0.1
+	 */
+	public static TileGrid tileGridZoomDecrease(TileGrid tileGrid,
+			int zoomLevels) {
+		long minX = tileGridMinZoomDecrease(tileGrid.getMinX(), zoomLevels);
+		long maxX = tileGridMaxZoomDecrease(tileGrid.getMaxX(), zoomLevels);
+		long minY = tileGridMinZoomDecrease(tileGrid.getMinY(), zoomLevels);
+		long maxY = tileGridMaxZoomDecrease(tileGrid.getMaxY(), zoomLevels);
+		TileGrid newTileGrid = new TileGrid(minX, minY, maxX, maxY);
+		return newTileGrid;
+	}
+
+	/**
+	 * Get the new tile grid min value starting from the tile grid min and
+	 * zooming in / increasing the number of levels
+	 * 
+	 * @param min
+	 *            tile grid min value
+	 * @param zoomLevels
+	 *            number of zoom levels to increase by
+	 * @return tile grid min value at new zoom level
+	 * @since 2.0.1
+	 */
+	public static long tileGridMinZoomIncrease(long min, int zoomLevels) {
+		return min * (long) Math.pow(2, zoomLevels);
+	}
+
+	/**
+	 * Get the new tile grid max value starting from the tile grid max and
+	 * zooming in / increasing the number of levels
+	 * 
+	 * @param max
+	 *            tile grid max value
+	 * @param zoomLevels
+	 *            number of zoom levels to increase by
+	 * @return tile grid max value at new zoom level
+	 * @since 2.0.1
+	 */
+	public static long tileGridMaxZoomIncrease(long max, int zoomLevels) {
+		return (max + 1) * (long) Math.pow(2, zoomLevels) - 1;
+	}
+
+	/**
+	 * Get the new tile grid min value starting from the tile grid min and
+	 * zooming out / decreasing the number of levels
+	 * 
+	 * @param min
+	 *            tile grid min value
+	 * @param zoomLevels
+	 *            number of zoom levels to decrease by
+	 * @return tile grid min value at new zoom level
+	 * @since 2.0.1
+	 */
+	public static long tileGridMinZoomDecrease(long min, int zoomLevels) {
+		return (long) Math.floor(min / Math.pow(2, zoomLevels));
+	}
+
+	/**
+	 * Get the new tile grid max value starting from the tile grid max and
+	 * zooming out / decreasing the number of levels
+	 * 
+	 * @param max
+	 *            tile grid max value
+	 * @param zoomLevels
+	 *            number of zoom levels to decrease by
+	 * @return tile grid max value at new zoom level
+	 * @since 2.0.1
+	 */
+	public static long tileGridMaxZoomDecrease(long max, int zoomLevels) {
+		return (long) Math.ceil((max + 1) / Math.pow(2, zoomLevels) - 1);
+	}
+
 }
