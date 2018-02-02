@@ -1016,10 +1016,20 @@ public class TileBoundingBoxUtils {
 
 		double worldLength = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH * 2;
 
-		int widthTiles = (int) (worldLength / (webMercatorBoundingBox
-				.getMaxLongitude() - webMercatorBoundingBox.getMinLongitude()));
-		int heightTiles = (int) (worldLength / (webMercatorBoundingBox
-				.getMaxLatitude() - webMercatorBoundingBox.getMinLatitude()));
+		double longitudeDistance = webMercatorBoundingBox.getMaxLongitude()
+				- webMercatorBoundingBox.getMinLongitude();
+		double latitudeDistance = webMercatorBoundingBox.getMaxLatitude()
+				- webMercatorBoundingBox.getMinLatitude();
+
+		if (longitudeDistance <= 0) {
+			longitudeDistance = Double.MIN_VALUE;
+		}
+		if (latitudeDistance <= 0) {
+			latitudeDistance = Double.MIN_VALUE;
+		}
+
+		int widthTiles = (int) (worldLength / longitudeDistance);
+		int heightTiles = (int) (worldLength / latitudeDistance);
 
 		int tilesPerSide = Math.min(widthTiles, heightTiles);
 		tilesPerSide = Math.max(tilesPerSide, 1);
