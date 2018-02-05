@@ -18,7 +18,11 @@ public class CoreSQLUtils {
 	public static String quoteWrap(String name) {
 		String quoteName = null;
 		if (name != null) {
-			quoteName = "\"" + name + "\"";
+			if (name.startsWith("\"") && name.endsWith("\"")) {
+				quoteName = name;
+			} else {
+				quoteName = "\"" + name + "\"";
+			}
 		}
 		return quoteName;
 	}

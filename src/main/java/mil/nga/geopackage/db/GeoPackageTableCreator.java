@@ -313,7 +313,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.1.5
 	 */
 	public void dropTable(String table) {
-		db.execSQL("DROP TABLE IF EXISTS " + table);
+		db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(table));
 	}
 
 }
