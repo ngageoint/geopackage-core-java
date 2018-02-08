@@ -1,2 +1,2 @@
 INSERT OR REPLACE INTO "rtree_<t>_<c>"
-  SELECT "<i>", st_minx("<c>"), st_maxx("<c>"), st_miny("<c>"), st_maxy("<c>") FROM "<t>";
+  SELECT "<i>", ST_MinX("<c>"), ST_MaxX("<c>"), ST_MinY("<c>"), ST_MaxY("<c>") FROM "<t>";
