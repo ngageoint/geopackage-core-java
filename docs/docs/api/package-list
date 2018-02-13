@@ -4,7 +4,7 @@ mil.nga.geopackage.core.contents
 mil.nga.geopackage.core.srs
 mil.nga.geopackage.db
 mil.nga.geopackage.extension
-mil.nga.geopackage.extension.elevation
+mil.nga.geopackage.extension.coverage
 mil.nga.geopackage.extension.index
 mil.nga.geopackage.extension.link
 mil.nga.geopackage.factory
