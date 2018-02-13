@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -214,7 +215,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		int count = deleteCascade(contents);
 
 		if (userTable) {
-			db.execSQL("DROP TABLE IF EXISTS " + contents.getTableName());
+			db.execSQL("DROP TABLE IF EXISTS "
+					+ CoreSQLUtils.quoteWrap(contents.getTableName()));
 		}
 
 		return count;
@@ -319,7 +321,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 			if (contents != null) {
 				count = deleteCascade(contents, userTable);
 			} else if (userTable) {
-				db.execSQL("DROP TABLE IF EXISTS " + id);
+				db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(id));
 			}
 		}
 		return count;
@@ -404,7 +406,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				verifyTiles(dataType);
 				break;
 
-			case ELEVATION_TILES:
+			case GRIDDED_COVERAGE:
 				verifyTiles(dataType);
 				break;
 

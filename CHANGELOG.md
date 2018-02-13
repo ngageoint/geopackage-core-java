@@ -4,9 +4,17 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 2.0.1 (TBD)
+## [2.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.1) (02-13-2018)
 
-* TBD
+* Coverage Data extension (previously Elevation Extension)
+* WebP extension column name fix
+* Zoom Other extension column name fix
+* RTree Index Extension core support
+* Extended Geometry bit encoding fix, set only for non standard geometries
+* Tile Grid zoom increase and decrease utilities
+* Zoom level determination fix for bounds resulting in a single point
+* Quote wrapping improvements and additional wrapping of names in SQL operations
+* wkb version update to 1.0.5
 
 ## [2.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.0) (11-20-2017)
 

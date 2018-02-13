@@ -101,6 +101,18 @@ public class GeometryExtensions extends BaseExtension {
 	}
 
 	/**
+	 * Determine if the geometry type is non standard
+	 * 
+	 * @param geometryType
+	 *            geometry type
+	 * @return true if non standard
+	 * @since 2.0.1
+	 */
+	public static boolean isNonStandard(GeometryType geometryType) {
+		return geometryType.getCode() > GeometryType.SURFACE.getCode();
+	}
+
+	/**
 	 * Determine if the geometry type is a GeoPackage extension
 	 * 
 	 * @param geometryType

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionConstants;
@@ -154,7 +155,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Drop the user table
 	 */
 	public void dropTable() {
-		db.execSQL("DROP TABLE IF EXISTS " + getTableName());
+		db.execSQL("DROP TABLE IF EXISTS "
+				+ CoreSQLUtils.quoteWrap(getTableName()));
 	}
 
 	/**
@@ -476,7 +478,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return where clause
 	 */
 	public String buildWhere(String field, Object value, String operation) {
-		return "\"" + field + "\" "
+		return CoreSQLUtils.quoteWrap(field) + " "
 				+ (value != null ? operation + " ?" : "IS NULL");
 	}
 
@@ -496,7 +498,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 							"Field value is not a number and can not use a tolerance, Field: "
 									+ field + ", Value: " + value);
 				}
-				where = "\"" + field + "\" >= ? AND \"" + field + "\" <= ?";
+				String quotedField = CoreSQLUtils.quoteWrap(field);
+				where = quotedField + " >= ? AND " + quotedField + " <= ?";
 			} else {
 				where = buildWhere(field, value.getValue());
 			}

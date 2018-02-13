@@ -1,0 +1,6 @@
+CREATE TRIGGER "rtree_<t>_<c>_update4" AFTER UPDATE ON "<t>"
+  WHEN OLD."<i>" != NEW."<i>" AND
+       (NEW."<c>" ISNULL OR ST_IsEmpty(NEW."<c>"))
+BEGIN
+  DELETE FROM "rtree_<t>_<c>" WHERE id IN (OLD."<i>", NEW."<i>");
+END;

@@ -52,7 +52,7 @@ public class Metadata {
 	 * Case sensitive name of the data scope to which this metadata applies; see
 	 * Metadata Scopes below
 	 */
-	@DatabaseField(columnName = COLUMN_SCOPE, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_SCOPE, canBeNull = false, defaultValue = "dataset")
 	private String scope;
 
 	/**
@@ -64,13 +64,13 @@ public class Metadata {
 	/**
 	 * MIME encoding of metadata
 	 */
-	@DatabaseField(columnName = COLUMN_MIME_TYPE, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_MIME_TYPE, canBeNull = false, defaultValue = "text/xml")
 	private String mimeType;
 
 	/**
 	 * metadata
 	 */
-	@DatabaseField(columnName = COLUMN_METADATA, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_METADATA, canBeNull = false, defaultValue = "")
 	private String metadata;
 
 	/**

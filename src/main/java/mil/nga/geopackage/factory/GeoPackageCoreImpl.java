@@ -20,7 +20,6 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSql;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
-import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.CrsWktExtension;
@@ -29,10 +28,10 @@ import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
-import mil.nga.geopackage.extension.elevation.GriddedCoverage;
-import mil.nga.geopackage.extension.elevation.GriddedCoverageDao;
-import mil.nga.geopackage.extension.elevation.GriddedTile;
-import mil.nga.geopackage.extension.elevation.GriddedTileDao;
+import mil.nga.geopackage.extension.coverage.GriddedCoverage;
+import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
+import mil.nga.geopackage.extension.coverage.GriddedTile;
+import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
@@ -95,7 +94,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	/**
 	 * Writable GeoPackage flag
 	 */
-	private final boolean writable;
+	protected final boolean writable;
 
 	/**
 	 * Constructor
@@ -876,47 +875,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			deleteTable(tableName);
 		} catch (Exception e) {
 			// eat
-		}
-	}
-
-	/**
-	 * GeoPackages created with SQLite version 4.2.0+ with GeoPackage support
-	 * can contain triggers and functions that are not supported in previous
-	 * versions. In order to edit tables, these triggers need to be dropped. It
-	 * might be possible to define the missing functions as an alternative. In
-	 * Android, this would require SQLite C through NDK.
-	 * 
-	 * @param geometryColumns
-	 */
-	protected void dropSQLiteTriggers(GeometryColumns geometryColumns) {
-
-		if (writable) {
-
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_insert"));
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_update1"));
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_update2"));
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_update3"));
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_update4"));
-			database.execSQL("DROP TRIGGER IF EXISTS "
-					+ CoreSQLUtils.quoteWrap("rtree_"
-							+ geometryColumns.getTableName() + "_"
-							+ geometryColumns.getColumnName() + "_delete"));
-
 		}
 	}
 

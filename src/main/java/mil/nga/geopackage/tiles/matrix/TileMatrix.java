@@ -182,13 +182,13 @@ public class TileMatrix {
 			// Verify the Contents have a tiles data type (Spec Requirement 42)
 			ContentsDataType dataType = contents.getDataType();
 			if (dataType == null
-					|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.ELEVATION_TILES)) {
+					|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.GRIDDED_COVERAGE)) {
 				throw new GeoPackageException("The "
 						+ Contents.class.getSimpleName() + " of a "
 						+ TileMatrix.class.getSimpleName()
 						+ " must have a data type of "
 						+ ContentsDataType.TILES.getName() + " or "
-						+ ContentsDataType.ELEVATION_TILES.getName());
+						+ ContentsDataType.GRIDDED_COVERAGE.getName());
 			}
 			tableName = contents.getId();
 		} else {

@@ -25,11 +25,11 @@ public enum ContentsDataType {
 	ATTRIBUTES("attributes"),
 
 	/**
-	 * Tiled Gridded Elevation Data Extension
+	 * Tiled Gridded Coverage Data Extension
 	 * 
-	 * @since 1.2.1
+	 * @since 2.0.1
 	 */
-	ELEVATION_TILES("2d-gridded-coverage");
+	GRIDDED_COVERAGE("2d-gridded-coverage");
 
 	/**
 	 * Data type name

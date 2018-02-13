@@ -1,12 +1,13 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 /**
- * Contains values relevant to a source pixel location when finding an elevation
+ * Contains values relevant to a source pixel location when finding a coverage
+ * data value
  * 
  * @author osbornb
- * @since 1.2.1
+ * @since 2.0.1
  */
-public class ElevationSourcePixel {
+public class CoverageDataSourcePixel {
 
 	/**
 	 * Pixel value of where the pixel fits into the source
@@ -40,7 +41,7 @@ public class ElevationSourcePixel {
 	 * @param offset
 	 *            pixel offset
 	 */
-	public ElevationSourcePixel(float pixel, int min, int max, float offset) {
+	public CoverageDataSourcePixel(float pixel, int min, int max, float offset) {
 		this.pixel = pixel;
 		this.min = min;
 		this.max = max;

@@ -467,12 +467,13 @@ public class GeoPackageGeometryData {
 	 * the extended flag
 	 * 
 	 * @param geometry
+	 *            geometry
 	 */
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 		empty = geometry == null;
 		if (geometry != null) {
-			extended = GeometryExtensions.isExtension(geometry
+			extended = GeometryExtensions.isNonStandard(geometry
 					.getGeometryType());
 		}
 	}

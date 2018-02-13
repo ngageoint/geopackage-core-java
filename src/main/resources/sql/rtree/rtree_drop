@@ -1,0 +1,1 @@
+DROP TABLE "rtree_<t>_<c>"

@@ -1,14 +1,12 @@
 package mil.nga.geopackage.db;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
+import mil.nga.geopackage.io.ResourceIOUtils;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.UserColumn;
@@ -140,7 +138,7 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create the Tile Gridded Elevation Coverage extension table
+	 * Create the Tiled Gridded Coverage Data Coverage extension table
 	 * 
 	 * @return executed statements
 	 * @since 1.2.1
@@ -151,7 +149,7 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create the Tile Gridded Elevation Tile extension table
+	 * Create the Tiled Gridded Coverage Data Tile extension table
 	 * 
 	 * @return executed statements
 	 * @since 1.2.1
@@ -202,39 +200,17 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	private int createTable(String tableScript) {
-		InputStream scriptStream = getClass().getResourceAsStream(
-				"/"
-						+ GeoPackageProperties.getProperty(
-								PropertyConstants.SQL, "directory") + "/"
-						+ tableScript);
-		int statements = runScript(scriptStream);
-		return statements;
-	}
 
-	/**
-	 * Run the script input stream
-	 * 
-	 * @param stream
-	 *            input stream
-	 * @return executed statements
-	 */
-	private int runScript(final InputStream stream) {
-		int count = 0;
+		String path = GeoPackageProperties.getProperty(PropertyConstants.SQL,
+				"directory");
+		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
+				tableScript);
 
-		// Use multiple newlines as the delimiter
-		Scanner s = new Scanner(stream);
-		try {
-			s.useDelimiter(Pattern.compile("\\n\\s*\\n"));
-			// Execute each statement
-			while (s.hasNext()) {
-				String statement = s.next().trim();
-				db.execSQL(statement);
-				count++;
-			}
-		} finally {
-			s.close();
+		for (String statement : statements) {
+			db.execSQL(statement);
 		}
-		return count;
+
+		return statements.size();
 	}
 
 	/**
@@ -337,7 +313,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.1.5
 	 */
 	public void dropTable(String table) {
-		db.execSQL("DROP TABLE IF EXISTS " + table);
+		db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(table));
 	}
 
 }

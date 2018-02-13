@@ -1,12 +1,12 @@
-package mil.nga.geopackage.extension.elevation;
+package mil.nga.geopackage.extension.coverage;
 
 /**
- * Elevation Tiles Algorithm interpolation enumeration types
+ * Tile Gridded Coverage Data Algorithm interpolation enumeration types
  * 
  * @author osbornb
- * @since 1.2.1
+ * @since 2.0.1
  */
-public enum ElevationTilesAlgorithm {
+public enum CoverageDataAlgorithm {
 
 	/**
 	 * Selects the value of the nearest point and does not consider the values

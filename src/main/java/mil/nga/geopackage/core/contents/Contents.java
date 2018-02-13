@@ -111,7 +111,7 @@ public class Contents {
 	/**
 	 * A human-readable description for the table_name content
 	 */
-	@DatabaseField(columnName = COLUMN_DESCRIPTION)
+	@DatabaseField(columnName = COLUMN_DESCRIPTION, defaultValue = "")
 	private String description;
 
 	/**

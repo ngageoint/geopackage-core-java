@@ -1,0 +1,9 @@
+CREATE TRIGGER "rtree_<t>_<c>_insert" AFTER INSERT ON "<t>"
+  WHEN (new."<c>" NOT NULL AND NOT ST_IsEmpty(NEW."<c>"))
+BEGIN
+  INSERT OR REPLACE INTO "rtree_<t>_<c>" VALUES (
+    NEW."<i>",
+    ST_MinX(NEW."<c>"), ST_MaxX(NEW."<c>"),
+    ST_MinY(NEW."<c>"), ST_MaxY(NEW."<c>")
+  );
+END;

@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS "rtree_<t>_<c>_<n>"

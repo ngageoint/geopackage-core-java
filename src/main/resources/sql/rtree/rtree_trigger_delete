@@ -1,0 +1,5 @@
+CREATE TRIGGER "rtree_<t>_<c>_delete" AFTER DELETE ON "<t>"
+  WHEN old."<c>" NOT NULL
+BEGIN
+  DELETE FROM "rtree_<t>_<c>" WHERE id = OLD."<i>";
+END;
