@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 2.0.1 (TBD)
+## [2.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.1) (02-13-2018)
 
 * Coverage Data extension (previously Elevation Extension)
 * WebP extension column name fix
