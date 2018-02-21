@@ -195,4 +195,14 @@ public class ProjectionTransform {
 		return transform;
 	}
 
+	/**
+	 * Is the from and to projection the same?
+	 * 
+	 * @return true if the same projection
+	 * @since 2.0.2
+	 */
+	public boolean isSameProjection() {
+		return fromProjection.equals(toProjection);
+	}
+
 }
