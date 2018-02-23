@@ -1,6 +1,7 @@
 package mil.nga.geopackage.io;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Input / Output utility methods
@@ -15,6 +18,12 @@ import java.text.DecimalFormat;
  * @author osbornb
  */
 public class GeoPackageIOUtils {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(GeoPackageIOUtils.class.getName());
 
 	/**
 	 * Get the file extension
@@ -155,19 +164,23 @@ public class GeoPackageIOUtils {
 	public static void copyStream(InputStream copyFrom, OutputStream copyTo,
 			GeoPackageProgress progress) throws IOException {
 
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((progress == null || progress.isActive())
-				&& (length = copyFrom.read(buffer)) > 0) {
-			copyTo.write(buffer, 0, length);
-			if (progress != null) {
-				progress.addProgress(length);
+		try {
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((progress == null || progress.isActive())
+					&& (length = copyFrom.read(buffer)) > 0) {
+				copyTo.write(buffer, 0, length);
+				if (progress != null) {
+					progress.addProgress(length);
+				}
 			}
+
+			copyTo.flush();
+		} finally {
+			closeQuietly(copyTo);
+			closeQuietly(copyFrom);
 		}
 
-		copyTo.flush();
-		copyTo.close();
-		copyFrom.close();
 	}
 
 	/**
@@ -204,6 +217,21 @@ public class GeoPackageIOUtils {
 
 		DecimalFormat df = new DecimalFormat("#.##");
 		return df.format(value) + " " + unit;
+	}
+
+	/**
+	 * Close the closeable quietly
+	 * 
+	 * @param closeable
+	 *            closeable (stream, etc)
+	 * @since 2.0.2
+	 */
+	public static void closeQuietly(Closeable closeable) {
+		try {
+			closeable.close();
+		} catch (IOException e) {
+			logger.log(Level.WARNING, "Failed to close closeable", e);
+		}
 	}
 
 }
