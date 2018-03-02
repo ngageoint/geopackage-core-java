@@ -6,7 +6,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 2.0.2 (TBD)
 
-* TBD
+* Projection Transform "is same projection" method
+* Tile DAO zoom level improvements and approximate zoom level determinations
+* IO Utils close quietly method and stream closing
 
 ## [2.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.1) (02-13-2018)
 
