@@ -1,0 +1,8 @@
+CREATE TABLE nga_tile_scaling (
+  table_name TEXT PRIMARY KEY NOT NULL,
+  scaling_type TEXT NOT NULL,
+  zoom_in INTEGER,
+  zoom_out INTEGER,
+  CONSTRAINT fk_nts_gtms_tn FOREIGN KEY('table_name') REFERENCES gpkg_tile_matrix_set('table_name')
+  CHECK (scaling_type in ('in','out','in_out','out_in','closest_in_out','closest_out_in'))
+);

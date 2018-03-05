@@ -6,6 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 2.0.2 (TBD)
 
+* Tile Scaling extension for scaling missing tiles from nearby zoom levels
 * Projection Transform "is same projection" method
 * Tile DAO zoom level improvements and approximate zoom level determinations
 * IO Utils close quietly method and stream closing
