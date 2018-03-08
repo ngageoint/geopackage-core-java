@@ -146,6 +146,7 @@ public class TileTableScaling extends BaseExtension {
 		boolean exists = false;
 		try {
 			exists = has(EXTENSION_NAME, tableName, null)
+					&& tileScalingDao.isTableExists()
 					&& tileScalingDao.idExists(tableName);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -251,6 +252,8 @@ public class TileTableScaling extends BaseExtension {
 		try {
 			if (tileScalingDao.isTableExists()) {
 				deleted = tileScalingDao.deleteById(tableName) > 0;
+			}
+			if (extensionsDao.isTableExists()) {
 				deleted = extensionsDao.deleteByExtension(EXTENSION_NAME,
 						tableName) > 0 || deleted;
 			}
