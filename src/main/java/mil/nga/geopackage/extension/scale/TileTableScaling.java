@@ -218,11 +218,6 @@ public class TileTableScaling extends BaseExtension {
 		try {
 			if (!tileScalingDao.isTableExists()) {
 				geoPackage.createTileScalingTable();
-			} else {
-				TileScaling existing = tileScalingDao.queryForId(tableName);
-				if (existing != null) {
-					tileScaling.setTileMatrixSet(existing.getTileMatrixSet());
-				}
 			}
 
 			CreateOrUpdateStatus status = tileScalingDao

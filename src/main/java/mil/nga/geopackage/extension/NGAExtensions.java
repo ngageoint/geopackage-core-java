@@ -71,6 +71,7 @@ public class NGAExtensions {
 
 		deleteGeometryIndexExtension(geoPackage, ignoreErrors);
 		deleteFeatureTileLinkExtension(geoPackage, ignoreErrors);
+		deleteTileScalingExtension(geoPackage, ignoreErrors);
 
 		// Delete future extension tables here
 	}

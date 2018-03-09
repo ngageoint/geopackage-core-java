@@ -41,12 +41,6 @@ public class TileScaling {
 	public static final String COLUMN_ZOOM_OUT = "zoom_out";
 
 	/**
-	 * Foreign key to TileMatrixSet by table name
-	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false, foreign = true, foreignAutoRefresh = true)
-	private TileMatrixSet tileMatrixSet;
-
-	/**
 	 * Foreign key to table_name in gpkg_tile_matrix_set
 	 */
 	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false)
@@ -140,20 +134,10 @@ public class TileScaling {
 	 *            tile scaling to copy
 	 */
 	public TileScaling(TileScaling tileScaling) {
-		tileMatrixSet = tileScaling.tileMatrixSet;
 		tableName = tileScaling.tableName;
 		scalingType = tileScaling.scalingType;
 		zoomIn = tileScaling.zoomIn;
 		zoomOut = tileScaling.zoomOut;
-	}
-
-	/**
-	 * Get the tile matrix set
-	 * 
-	 * @return tile matrix set
-	 */
-	public TileMatrixSet getTileMatrixSet() {
-		return tileMatrixSet;
 	}
 
 	/**
@@ -163,7 +147,6 @@ public class TileScaling {
 	 *            tile matrix set
 	 */
 	public void setTileMatrixSet(TileMatrixSet tileMatrixSet) {
-		this.tileMatrixSet = tileMatrixSet;
 		setTableName(tileMatrixSet != null ? tileMatrixSet.getTableName()
 				: null);
 	}
