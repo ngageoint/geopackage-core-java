@@ -322,7 +322,7 @@ public class TileDaoUtils {
 		Long heightZoomLevel = getApproximateZoomLevel(heights, tileMatrices,
 				height);
 
-		long expectedZoomLevel;
+		Long expectedZoomLevel;
 		if (widthZoomLevel == null) {
 			expectedZoomLevel = heightZoomLevel;
 		} else if (heightZoomLevel == null) {
