@@ -38,6 +38,8 @@ import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.scale.TileScaling;
+import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
@@ -1149,6 +1151,35 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		return table;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileScalingDao getTileScalingDao() {
+		return createDao(TileScaling.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createTileScalingTable() {
+		verifyWritable();
+
+		boolean created = false;
+		TileScalingDao dao = getTileScalingDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createTileScaling() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ TileScaling.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
 	}
 
 }

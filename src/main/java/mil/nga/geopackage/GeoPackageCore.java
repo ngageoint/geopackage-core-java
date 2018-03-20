@@ -17,6 +17,7 @@ import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -742,5 +743,21 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns);
+
+	/**
+	 * Get a Tile Scaling DAO
+	 * 
+	 * @return tile scaling dao
+	 * @since 2.0.2
+	 */
+	public TileScalingDao getTileScalingDao();
+
+	/**
+	 * Create the Tile Scaling Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 2.0.2
+	 */
+	public boolean createTileScalingTable();
 
 }

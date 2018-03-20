@@ -193,6 +193,17 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create Tile Scaling table
+	 * 
+	 * @return executed statements
+	 * @since 2.0.2
+	 */
+	public int createTileScaling() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "tile_scaling"));
+	}
+	
+	/**
 	 * Create a table using the table script
 	 * 
 	 * @param tableScript

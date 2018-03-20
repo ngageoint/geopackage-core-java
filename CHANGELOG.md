@@ -4,9 +4,13 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 2.0.2 (TBD)
+## [2.0.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.2) (03-20-2018)
 
-* TBD
+* Tile Scaling extension for scaling missing tiles from nearby zoom levels
+* Projection Transform "is same projection" method
+* Tile DAO zoom level improvements and approximate zoom level determinations
+* IO Utils close quietly method and stream closing
+* RTree Trigger Update 3 spec fix
 
 ## [2.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.1) (02-13-2018)
 
