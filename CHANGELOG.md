@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Projection Transform "is same projection" method
 * Tile DAO zoom level improvements and approximate zoom level determinations
 * IO Utils close quietly method and stream closing
+* RTree Trigger Update 3 spec fix
 
 ## [2.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/2.0.1) (02-13-2018)
 
