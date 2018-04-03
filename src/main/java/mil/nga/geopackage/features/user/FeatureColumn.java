@@ -3,7 +3,7 @@ package mil.nga.geopackage.features.user;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.user.UserColumn;
-import mil.nga.wkb.geom.GeometryType;
+import mil.nga.sf.GeometryType;
 
 /**
  * Feature column

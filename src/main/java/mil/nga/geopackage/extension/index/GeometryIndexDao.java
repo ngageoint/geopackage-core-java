@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.wkb.geom.GeometryEnvelope;
+import mil.nga.sf.GeometryEnvelope;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;

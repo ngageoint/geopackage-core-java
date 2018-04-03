@@ -5,7 +5,8 @@ import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.schema.TableColumnKey;
-import mil.nga.wkb.geom.GeometryType;
+import mil.nga.sf.GeometryType;
+import mil.nga.sf.wkb.GeometryCodes;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -179,11 +180,11 @@ public class GeometryColumnsSfSql {
 	}
 
 	public GeometryType getGeometryType() {
-		return GeometryType.fromCode(geometryType);
+		return GeometryCodes.getGeometryType(geometryType);
 	}
 
 	public void setGeometryType(GeometryType geometryType) {
-		this.geometryType = geometryType.getCode();
+		this.geometryType = GeometryCodes.getCode(geometryType);
 	}
 
 	public int getGeometryTypeCode() {

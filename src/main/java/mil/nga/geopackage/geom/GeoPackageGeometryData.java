@@ -8,12 +8,12 @@ import java.nio.ByteOrder;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.GeometryExtensions;
-import mil.nga.wkb.geom.Geometry;
-import mil.nga.wkb.geom.GeometryEnvelope;
-import mil.nga.wkb.io.ByteReader;
-import mil.nga.wkb.io.ByteWriter;
-import mil.nga.wkb.io.WkbGeometryReader;
-import mil.nga.wkb.io.WkbGeometryWriter;
+import mil.nga.sf.Geometry;
+import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.util.ByteReader;
+import mil.nga.sf.util.ByteWriter;
+import mil.nga.sf.wkb.GeometryReader;
+import mil.nga.sf.wkb.GeometryWriter;
 
 /**
  * GeoPackage Geometry Data
@@ -137,7 +137,7 @@ public class GeoPackageGeometryData {
 
 		// Read the Well-Known Binary Geometry if not marked as empty
 		if (!empty) {
-			geometry = WkbGeometryReader.readGeometry(reader);
+			geometry = GeometryReader.readGeometry(reader);
 		}
 
 	}
@@ -174,7 +174,7 @@ public class GeoPackageGeometryData {
 
 		// Write the Well-Known Binary Geometry if not marked as empty
 		if (!empty) {
-			WkbGeometryWriter.writeGeometry(writer, geometry);
+			GeometryWriter.writeGeometry(writer, geometry);
 		}
 
 		// Get the bytes

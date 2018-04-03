@@ -3,7 +3,7 @@ package mil.nga.geopackage.features.user;
 import java.util.List;
 
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.wkb.geom.GeometryType;
+import mil.nga.sf.GeometryType;
 
 /**
  * Represents a user feature table

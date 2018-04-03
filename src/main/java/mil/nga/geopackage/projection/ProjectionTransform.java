@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.BoundingBox;
-import mil.nga.wkb.geom.Geometry;
-import mil.nga.wkb.geom.Point;
+import mil.nga.sf.Geometry;
+import mil.nga.sf.Point;
 
 import org.osgeo.proj4j.CoordinateTransform;
 import org.osgeo.proj4j.CoordinateTransformFactory;

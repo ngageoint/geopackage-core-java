@@ -5,7 +5,8 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.wkb.geom.GeometryType;
+import mil.nga.sf.GeometryType;
+import mil.nga.sf.wkb.GeometryCodes;
 
 /**
  * Geometry Extensions utility methods and constants
@@ -96,8 +97,8 @@ public class GeometryExtensions extends BaseExtension {
 	 * @return true if extension
 	 */
 	public static boolean isExtension(GeometryType geometryType) {
-		return geometryType.getCode() > GeometryType.GEOMETRYCOLLECTION
-				.getCode();
+		return GeometryCodes.getCode(geometryType) > GeometryCodes
+				.getCode(GeometryType.GEOMETRYCOLLECTION);
 	}
 
 	/**
@@ -109,7 +110,8 @@ public class GeometryExtensions extends BaseExtension {
 	 * @since 2.0.1
 	 */
 	public static boolean isNonStandard(GeometryType geometryType) {
-		return geometryType.getCode() > GeometryType.SURFACE.getCode();
+		return GeometryCodes.getCode(geometryType) > GeometryCodes
+				.getCode(GeometryType.SURFACE);
 	}
 
 	/**
@@ -120,8 +122,10 @@ public class GeometryExtensions extends BaseExtension {
 	 * @return true if a GeoPackage extension, false if user-defined
 	 */
 	public static boolean isGeoPackageExtension(GeometryType geometryType) {
-		return geometryType.getCode() >= GeometryType.CIRCULARSTRING.getCode()
-				&& geometryType.getCode() <= GeometryType.SURFACE.getCode();
+		return GeometryCodes.getCode(geometryType) >= GeometryCodes
+				.getCode(GeometryType.CIRCULARSTRING)
+				&& GeometryCodes.getCode(geometryType) <= GeometryCodes
+						.getCode(GeometryType.SURFACE);
 	}
 
 	/**

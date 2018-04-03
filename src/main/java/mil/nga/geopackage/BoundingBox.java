@@ -1,7 +1,7 @@
 package mil.nga.geopackage;
 
 import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.wkb.geom.GeometryEnvelope;
+import mil.nga.sf.GeometryEnvelope;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees

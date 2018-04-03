@@ -6,7 +6,7 @@ import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
-import mil.nga.wkb.geom.Point;
+import mil.nga.sf.Point;
 
 /**
  * Tile Bounding Box utility methods
