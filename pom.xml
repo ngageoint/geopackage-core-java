@@ -86,7 +86,8 @@
 				<version>2.9.1</version>
 				<configuration>
 					<links>
-						<link>http://ngageoint.github.io/geopackage-wkb-java/docs/api/</link>
+						<link>http://ngageoint.github.io/simple-features-wkb-java/docs/api/</link>
+						<link>http://ngageoint.github.io/simple-features-java/docs/api/</link>
 						<link>http://ormlite.com/javadoc/ormlite-core/</link>
 					</links>
 				</configuration>
