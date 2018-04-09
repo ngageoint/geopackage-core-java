@@ -13,14 +13,13 @@ import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionFactory;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import org.osgeo.proj4j.ProjCoordinate;
 
@@ -159,8 +158,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		this.width = width;
 		this.height = height;
 		this.requestProjection = requestProjection;
-		coverageProjection = ProjectionFactory.getProjection(tileMatrixSet
-				.getSrs());
+		coverageProjection = tileMatrixSet.getSrs().getProjection();
 		coverageBoundingBox = tileMatrixSet.getBoundingBox();
 
 		// Check if the projections have the same units

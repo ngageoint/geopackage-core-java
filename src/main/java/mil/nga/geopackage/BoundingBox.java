@@ -1,7 +1,8 @@
 package mil.nga.geopackage;
 
-import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionTransform;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -283,6 +284,21 @@ public class BoundingBox {
 	 */
 	public BoundingBox expandWebMercatorCoordinates() {
 		return expandCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
+	 * Transform the bounding box using the provided projection transform
+	 * 
+	 * @param transform
+	 *            projection transform
+	 * @return transformed bounding box
+	 * @since 3.0.0
+	 */
+	public BoundingBox transform(ProjectionTransform transform) {
+		GeometryEnvelope envelope = buildEnvelope();
+		GeometryEnvelope transformedEnvelope = transform.transform(envelope);
+		BoundingBox transformed = new BoundingBox(transformedEnvelope);
+		return transformed;
 	}
 
 	/**

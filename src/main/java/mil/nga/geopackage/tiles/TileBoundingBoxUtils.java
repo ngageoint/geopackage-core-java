@@ -1,12 +1,12 @@
 package mil.nga.geopackage.tiles;
 
 import mil.nga.geopackage.BoundingBox;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.geopackage.projection.ProjectionFactory;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.sf.Point;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
+import mil.nga.sf.proj.ProjectionTransform;
 
 /**
  * Tile Bounding Box utility methods
@@ -433,7 +433,7 @@ public class TileBoundingBoxUtils {
 		if (code != null) {
 			ProjectionTransform transform = webMercator.getTransformation(
 					authority, code);
-			boundingBox = transform.transform(boundingBox);
+			boundingBox = boundingBox.transform(transform);
 		}
 
 		return boundingBox;
@@ -461,7 +461,7 @@ public class TileBoundingBoxUtils {
 		if (projection != null) {
 			ProjectionTransform transform = webMercator
 					.getTransformation(projection);
-			boundingBox = transform.transform(boundingBox);
+			boundingBox = boundingBox.transform(transform);
 		}
 
 		return boundingBox;
@@ -508,7 +508,7 @@ public class TileBoundingBoxUtils {
 		if (code != null) {
 			ProjectionTransform transform = webMercator.getTransformation(
 					authority, code);
-			boundingBox = transform.transform(boundingBox);
+			boundingBox = boundingBox.transform(transform);
 		}
 
 		return boundingBox;
@@ -534,7 +534,7 @@ public class TileBoundingBoxUtils {
 		if (projection != null) {
 			ProjectionTransform transform = webMercator
 					.getTransformation(projection);
-			boundingBox = transform.transform(boundingBox);
+			boundingBox = boundingBox.transform(transform);
 		}
 
 		return boundingBox;

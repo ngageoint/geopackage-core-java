@@ -11,10 +11,10 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import org.osgeo.proj4j.units.DegreeUnit;
 
@@ -664,8 +664,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			}
 			ProjectionTransform webMercatorTransform = projection
 					.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
-			BoundingBox webMercatorBoundingBox = webMercatorTransform
-					.transform(boundingBox);
+			BoundingBox webMercatorBoundingBox = boundingBox
+					.transform(webMercatorTransform);
 			zoomLevel = TileBoundingBoxUtils
 					.getZoomLevel(webMercatorBoundingBox);
 		}

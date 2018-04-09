@@ -3,6 +3,9 @@ package mil.nga.geopackage.core.srs;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionFactory;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -223,6 +226,41 @@ public class SpatialReferenceSystem {
 
 	public ForeignCollection<TileMatrixSet> getTileMatrixSet() {
 		return tileMatrixSet;
+	}
+
+	/**
+	 * Get the projection for the Spatial Reference System
+	 * 
+	 * @return projection
+	 * @since 3.0.0
+	 */
+	public Projection getProjection() {
+
+		String authority = getOrganization();
+		long code = getOrganizationCoordsysId();
+		String definition = getDefinition_12_063();
+		if (definition == null) {
+			definition = getDefinition();
+		}
+
+		Projection projection = ProjectionFactory.getProjection(authority,
+				code, null, definition);
+
+		return projection;
+	}
+
+	/**
+	 * Get the projection transform from the provided projection to the Spatial
+	 * Reference System projection
+	 * 
+	 * @param projection
+	 *            from projection
+	 * @return projection transform
+	 * @since 3.0.0
+	 */
+	public ProjectionTransform getTransformation(Projection projection) {
+		Projection projectionTo = getProjection();
+		return projection.getTransformation(projectionTo);
 	}
 
 }
