@@ -54,5 +54,5 @@ Build this repository using Eclipse and/or Maven:
 ### Remote Dependencies ###
 
 * [Simple Features WKB](https://github.com/ngageoint/simple-features-wkb-java) (The MIT License (MIT)) - Simple Features Well Known Binary Lib
+* [Simple Features Projection](https://github.com/ngageoint/simple-features-proj-java) (The MIT License (MIT)) - Simple Features Projection Lib
 * [OrmLite](http://ormlite.com/) (Open Source License) - Object Relational Mapping (ORM) Library
-* [Proj4J](http://trac.osgeo.org/proj4j/) (Apache License, Version 2.0) - Projection Library
