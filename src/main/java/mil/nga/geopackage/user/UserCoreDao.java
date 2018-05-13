@@ -360,9 +360,14 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param row
 	 * @return number of rows affected, should be 0 or 1
+	 * unless the table has duplicate rows in it
 	 */
 	public int delete(TRow row) {
-		return deleteById(row.getId());
+		if (row.hasId()){ 
+			return deleteById(row.getId());
+		} else {
+			return delete(buildValueWhere(row.getAsMap()), buildWhereArgs(row.getValues()));
+		}
 	}
 
 	/**
