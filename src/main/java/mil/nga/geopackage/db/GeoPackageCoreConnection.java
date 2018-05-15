@@ -3,6 +3,9 @@ package mil.nga.geopackage.db;
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
@@ -225,4 +228,50 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 		return userVersion;
 	}
 
+	/**
+	 * Get the primary key of a table
+	 * @param tableName
+	 * @return the column name
+	 */
+	public String getPrimaryKeyColumnName(String tableName){
+		String result = null;
+		String sql = "PRAGMA table_info(" + CoreSQLUtils.quoteWrap(tableName) + ")";
+		ResultSet resultSet = query(sql, null);
+		try {
+			while (resultSet.next()) {
+				if (resultSet.getInt("pk") == 1) {
+					result = resultSet.getString("name");
+					break;
+				}
+			}
+			resultSet.close();
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to query for the "
+					+ " primary key for table " + tableName, e);
+		}
+		if (result == null) {
+			throw new GeoPackageException("Found no "
+					+ " primary key for table " + tableName);
+		}
+		return result;
+	}
+
+	/**
+	 * Query for results
+	 * 
+	 * @param sql
+	 * @param selectionArgs
+	 * @return result set
+	 */
+	abstract public ResultSet query(String sql,
+			String[] selectionArgs);
+	
+	/**
+	 * Insert a row into the database
+	 * 
+	 * @param tableName
+	 * @param values
+	 * @return the rowid of the inserted row
+	 */
+	abstract public long insert(String tableName, Map<String, Object>values);
 }
