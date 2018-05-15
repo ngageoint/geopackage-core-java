@@ -1,8 +1,11 @@
 package mil.nga.geopackage.extension;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -212,6 +215,74 @@ public class RelatedTablesExtension extends BaseExtension {
 				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_RELATED_ID) + " = ?";
 		String[] whereArgs = {Long.toString(row.getBaseId()), Long.toString(row.getRelatedId())};
 		long result = geoPackage.getDatabase().delete(extendedRelation.getMappingTableName(), whereClause, whereArgs);
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param extendedRelation
+	 * @param baseId
+	 * @return an array of IDs representing the matching related IDs
+	 */
+	public long[] getMappingsForBase(ExtendedRelation extendedRelation, long baseId){
+		Collection<Long> relatedIds = new HashSet<Long>();
+		
+		String sql = "select " 
+				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_RELATED_ID) 
+				+ " from " 
+				+ CoreSQLUtils.quoteWrap(extendedRelation.getMappingTableName()) 
+				+ " where " 
+				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_BASE_ID) 
+				+ " = ?";
+				
+		ResultSet resultSet = geoPackage.getDatabase().query(sql, new String[]{Long.toString(baseId)});
+		try {
+			while(resultSet.next()){
+				relatedIds.add(Long.valueOf(resultSet.getLong(extendedRelation.getMappingTable().getRelatedIdIndex())));
+			}
+			resultSet.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		long[] result = new long[relatedIds.size()];
+		Iterator<Long> iter = relatedIds.iterator();
+		int inx = 0;
+		while(iter.hasNext()){
+			result[inx++] = iter.next().longValue();
+		}
+		return result;
+	}
+
+	public long[] getMappingsForRelated(ExtendedRelation extendedRelation, long relatedId) {
+		Collection<Long> baseIds = new HashSet<Long>();
+		
+		String sql = "select " 
+				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_BASE_ID) 
+				+ " from " 
+				+ CoreSQLUtils.quoteWrap(extendedRelation.getMappingTableName()) 
+				+ " where " 
+				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_RELATED_ID) 
+				+ " = ?";
+				
+		ResultSet resultSet = geoPackage.getDatabase().query(sql, new String[]{Long.toString(relatedId)});
+		try {
+			while(resultSet.next()){
+				baseIds.add(Long.valueOf(resultSet.getLong(extendedRelation.getMappingTable().getRelatedIdIndex())));
+			}
+			resultSet.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		long[] result = new long[baseIds.size()];
+		Iterator<Long> iter = baseIds.iterator();
+		int inx = 0;
+		while(iter.hasNext()){
+			result[inx++] = iter.next().longValue();
+		}
 		return result;
 	}
 }
