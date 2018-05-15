@@ -2,19 +2,12 @@ package mil.nga.geopackage.extension.related_tables;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import mil.nga.geopackage.schema.TableColumnKey;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.stmt.DeleteBuilder;
-import com.j256.ormlite.stmt.PreparedDelete;
-import com.j256.ormlite.stmt.PreparedUpdate;
-import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.schema.TableColumnKey;
 
 /**
  * Geometry Columns Data Access Object
@@ -22,7 +15,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  */
 public class ExtendedRelationsDao extends
-		BaseDaoImpl<ExtendedRelations, TableColumnKey> {
+		BaseDaoImpl<ExtendedRelation, TableColumnKey> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -32,7 +25,7 @@ public class ExtendedRelationsDao extends
 	 * @throws SQLException
 	 */
 	public ExtendedRelationsDao(ConnectionSource connectionSource,
-			Class<ExtendedRelations> dataClass) throws SQLException {
+			Class<ExtendedRelation> dataClass) throws SQLException {
 		super(connectionSource, dataClass);
 	}
 
@@ -46,8 +39,8 @@ public class ExtendedRelationsDao extends
 
 		List<String> baseTables = new ArrayList<String>();
 
-		List<ExtendedRelations> extendedRelations = queryForAll();
-		for (ExtendedRelations extendedRelation : extendedRelations) {
+		List<ExtendedRelation> extendedRelations = queryForAll();
+		for (ExtendedRelation extendedRelation : extendedRelations) {
 			baseTables.add(extendedRelation.getBaseTableName());
 		}
 

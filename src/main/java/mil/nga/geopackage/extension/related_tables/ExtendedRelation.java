@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author jyutzler
  */
 @DatabaseTable(tableName = "gpkgext_relations", daoClass = ExtendedRelationsDao.class)
-public class ExtendedRelations {
+public class ExtendedRelation {
 
 	/**
 	 * Table name
@@ -97,7 +97,7 @@ public class ExtendedRelations {
 	/**
 	 * Default Constructor
 	 */
-	public ExtendedRelations() {
+	public ExtendedRelation() {
 
 	}
 
