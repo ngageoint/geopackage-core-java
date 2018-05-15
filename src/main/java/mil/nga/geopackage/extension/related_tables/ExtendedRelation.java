@@ -13,6 +13,11 @@ import com.j256.ormlite.table.DatabaseTable;
 public class ExtendedRelation {
 
 	/**
+	 * 
+	 */
+	private UserMappingTable mappingTable;
+
+	/**
 	 * Table name
 	 */
 	public static final String TABLE_NAME = "gpkgext_relations";
@@ -157,4 +162,10 @@ public class ExtendedRelation {
 		this.mappingTableName = mappingTableName;
 	}
 
+	public UserMappingTable getMappingTable() {
+		if (mappingTable == null){
+			mappingTable = new UserMappingTable(mappingTableName);
+		}
+		return mappingTable;
+	}
 }
