@@ -16,7 +16,6 @@ mil.nga.geopackage.io
 mil.nga.geopackage.metadata
 mil.nga.geopackage.metadata.reference
 mil.nga.geopackage.persister
-mil.nga.geopackage.projection
 mil.nga.geopackage.property
 mil.nga.geopackage.schema
 mil.nga.geopackage.schema.columns
