@@ -7,7 +7,7 @@ import mil.nga.geopackage.user.UserColumn;
 /**
  * User Mapping column
  * 
- * @author yutzlejp
+ * @author jyutzler
  */
 public class UserMappingColumn extends UserColumn {
 
@@ -105,5 +105,4 @@ public class UserMappingColumn extends UserColumn {
 					"Data Type is required to create column: " + name);
 		}
 	}
-
 }

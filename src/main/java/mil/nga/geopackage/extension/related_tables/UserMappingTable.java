@@ -7,9 +7,9 @@ import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.user.UserTable;
 
 /**
- * Represents a user tile table
+ * Represents a user mapping table
  * 
- * @author yutzlejp
+ * @author jyutzler
  */
 public class UserMappingTable extends UserTable<UserMappingColumn> {
 
@@ -42,12 +42,13 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public UserMappingTable(String tableName) {
 		this(tableName, createRequiredColumns());
 	}
-		/**
-		 * Constructor
-		 * 
-		 * @param tableName
-		 * @param columns
-		 */
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableName
+	 * @param columns
+	 */
 	public UserMappingTable(String tableName, List<UserMappingColumn> columns) {
 		super(tableName, columns);
 
@@ -80,9 +81,19 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 		baseIdIndex = baseId;
 
 	}
+	/**
+	 * Getter
+	 * 
+	 * @return baseIdIndex
+	 */
 	public int getBaseIdIndex() {
 		return baseIdIndex;
 	}
+	/**
+	 * Getter
+	 * 
+	 * @return relatedIdIndex
+	 */
 	public int getRelatedIdIndex() {
 		return relatedIdIndex;
 	}

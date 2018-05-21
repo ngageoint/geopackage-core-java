@@ -1,9 +1,9 @@
 package mil.nga.geopackage.extension.related_tables;
 
 /**
- * Tile Row containing the values from a single cursor row
+ * User Mapping Row containing the values from a single cursor row
  * 
- * @author yutzlejp
+ * @author jyutzler
  */
 public class UserMappingRow {
 

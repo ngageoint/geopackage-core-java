@@ -24,7 +24,6 @@ import mil.nga.geopackage.property.PropertyConstants;
  * Related Tables extension
  * 
  * @author jyutzler
- * @since 1.1.8
  */
 public class RelatedTablesExtension extends BaseExtension {
 
@@ -242,8 +241,9 @@ public class RelatedTablesExtension extends BaseExtension {
 			}
 			resultSet.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new GeoPackageException("Failed to get mappings for relationship '"
+					+ extendedRelation.getMappingTableName() + "' between " + extendedRelation.getBaseTableName() 
+					+ " and " + extendedRelation.getRelatedTableName(), e);
 		}
 		
 		long[] result = new long[relatedIds.size()];
@@ -273,8 +273,9 @@ public class RelatedTablesExtension extends BaseExtension {
 			}
 			resultSet.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new GeoPackageException("Failed to get reverse mappings for relationship '"
+					+ extendedRelation.getMappingTableName() + "' between " + extendedRelation.getBaseTableName() 
+					+ " and " + extendedRelation.getRelatedTableName(), e);
 		}
 		
 		long[] result = new long[baseIds.size()];
