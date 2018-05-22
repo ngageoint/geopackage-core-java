@@ -160,6 +160,17 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create the Extended Relations table
+	 * 
+	 * @return executed statements
+	 * @since 1.2.1
+	 */
+	public int createExtendedRelations() {
+		return createTable(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "extended_relations"));
+	}
+	
+	/**
 	 * Create Table Index table
 	 * 
 	 * @return executed statements

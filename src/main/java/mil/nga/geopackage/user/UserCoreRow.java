@@ -1,7 +1,11 @@
 package mil.nga.geopackage.user;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -132,6 +136,19 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		return table.columnCount();
 	}
 
+	/**
+	 * Get a Map
+	 * 
+	 * @return a map
+	 */
+	public Set<Map.Entry<String, ColumnValue>> getAsMap() {
+		Set<Map.Entry<String, ColumnValue>> result = new HashSet<Map.Entry<String, ColumnValue>>();
+		for (int inx = 0; inx < columnCount(); inx++) {
+			result.add(new AbstractMap.SimpleEntry<String, ColumnValue>(getColumnName(inx), new ColumnValue(getValue(inx))));
+		}
+
+		return result;
+	}
 	/**
 	 * Get the column names
 	 * 
@@ -275,12 +292,25 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Check if the row has an id column
+	 * 
+	 * @return true if has an id column
+	 * @since 2.0.1
+	 */
+	public boolean hasIdColumn() {
+		return getPkColumnIndex() >= 0;
+	}
+
+	/**
 	 * Check if the row has an id value
 	 * 
 	 * @return true if has an id
 	 * @since 2.0.0
 	 */
 	public boolean hasId() {
+		if (!hasIdColumn()) {
+			return false;
+		}
 		Object objectValue = getValue(getPkColumnIndex());
 		return objectValue != null && objectValue instanceof Number;
 	}
@@ -335,7 +365,10 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @param id
 	 */
 	void setId(long id) {
-		values[getPkColumnIndex()] = id;
+		int index = getPkColumnIndex();
+		if (index > 0) {
+			values[index] = id;
+		}
 	}
 
 	/**

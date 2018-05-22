@@ -31,11 +31,6 @@ import org.osgeo.proj4j.units.DegreeUnit;
 public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends UserTable<TColumn>, TRow extends UserCoreRow<TColumn, TTable>, TResult extends UserCoreResult<TColumn, TTable, TRow>> {
 
 	/**
-	 * Database
-	 */
-	private final String database;
-
-	/**
 	 * Database connection
 	 */
 	private final GeoPackageCoreConnection db;
@@ -63,10 +58,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param userDb
 	 * @param table
 	 */
-	protected UserCoreDao(String database, GeoPackageCoreConnection db,
+	protected UserCoreDao(GeoPackageCoreConnection db,
 			UserCoreConnection<TColumn, TTable, TRow, TResult> userDb,
 			TTable table) {
-		this.database = database;
 		this.db = db;
 		this.userDb = userDb;
 		this.table = table;
@@ -96,15 +90,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 2.0.0
 	 */
 	protected abstract TResult prepareResult(TResult result);
-
-	/**
-	 * Get the database
-	 * 
-	 * @return database
-	 */
-	public String getDatabase() {
-		return database;
-	}
 
 	/**
 	 * Get the database connection
@@ -360,9 +345,14 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param row
 	 * @return number of rows affected, should be 0 or 1
+	 * unless the table has duplicate rows in it
 	 */
 	public int delete(TRow row) {
-		return deleteById(row.getId());
+		if (row.hasId()){ 
+			return deleteById(row.getId());
+		} else {
+			return delete(buildValueWhere(row.getAsMap()), buildWhereArgs(row.getValues()));
+		}
 	}
 
 	/**
