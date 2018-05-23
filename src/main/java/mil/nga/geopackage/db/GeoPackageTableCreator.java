@@ -163,13 +163,13 @@ public class GeoPackageTableCreator {
 	 * Create the Extended Relations table
 	 * 
 	 * @return executed statements
-	 * @since 1.2.1
+	 * @since 3.0.1
 	 */
 	public int createExtendedRelations() {
 		return createTable(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "extended_relations"));
 	}
-	
+
 	/**
 	 * Create Table Index table
 	 * 
@@ -213,7 +213,7 @@ public class GeoPackageTableCreator {
 		return createTable(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "tile_scaling"));
 	}
-	
+
 	/**
 	 * Create a table using the table script
 	 * 
