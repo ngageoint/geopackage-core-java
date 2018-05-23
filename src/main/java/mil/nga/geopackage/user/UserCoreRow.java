@@ -140,15 +140,18 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get a Map
 	 * 
 	 * @return a map
+	 * @since 3.0.1
 	 */
 	public Set<Map.Entry<String, ColumnValue>> getAsMap() {
-		Set<Map.Entry<String, ColumnValue>> result = new HashSet<Map.Entry<String, ColumnValue>>();
+		Set<Map.Entry<String, ColumnValue>> result = new HashSet<>();
 		for (int inx = 0; inx < columnCount(); inx++) {
-			result.add(new AbstractMap.SimpleEntry<String, ColumnValue>(getColumnName(inx), new ColumnValue(getValue(inx))));
+			result.add(new AbstractMap.SimpleEntry<String, ColumnValue>(
+					getColumnName(inx), new ColumnValue(getValue(inx))));
 		}
 
 		return result;
 	}
+
 	/**
 	 * Get the column names
 	 * 
@@ -295,7 +298,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Check if the row has an id column
 	 * 
 	 * @return true if has an id column
-	 * @since 2.0.1
+	 * @since 3.0.1
 	 */
 	public boolean hasIdColumn() {
 		return getPkColumnIndex() >= 0;
@@ -308,11 +311,12 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @since 2.0.0
 	 */
 	public boolean hasId() {
-		if (!hasIdColumn()) {
-			return false;
+		boolean hasId = false;
+		if (hasIdColumn()) {
+			Object objectValue = getValue(getPkColumnIndex());
+			hasId = objectValue != null && objectValue instanceof Number;
 		}
-		Object objectValue = getValue(getPkColumnIndex());
-		return objectValue != null && objectValue instanceof Number;
+		return hasId;
 	}
 
 	/**
@@ -366,7 +370,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 */
 	void setId(long id) {
 		int index = getPkColumnIndex();
-		if (index > 0) {
+		if (index >= 0) {
 			values[index] = id;
 		}
 	}
