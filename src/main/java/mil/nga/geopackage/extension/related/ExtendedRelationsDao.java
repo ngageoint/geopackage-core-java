@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related_tables;
+package mil.nga.geopackage.extension.related;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

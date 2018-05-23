@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related_tables;
+package mil.nga.geopackage.extension.related;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,6 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 * Constructor
 	 * 
 	 * @param tableName
-	 * @param columns
 	 */
 	public UserMappingTable(String tableName) {
 		this(tableName, createRequiredColumns());

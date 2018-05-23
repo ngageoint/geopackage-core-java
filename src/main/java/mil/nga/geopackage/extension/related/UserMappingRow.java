@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related_tables;
+package mil.nga.geopackage.extension.related;
 
 /**
  * User Mapping Row containing the values from a single cursor row
@@ -50,7 +50,7 @@ public class UserMappingRow {
 	/**
 	 * Set the base ID
 	 * 
-	 * @param baseId
+	 * @param relatedId
 	 */
 	public void setRelatedId(long relatedId){
 		this.relatedId = relatedId;

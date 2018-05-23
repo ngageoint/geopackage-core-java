@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related_tables;
+package mil.nga.geopackage.extension.related;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -14,8 +14,8 @@ public class UserMappingColumn extends UserColumn {
 	/**
 	 * Create a base id column
 	 * 
-	 * @param index
-	 *            index
+	 * @param baseId
+	 *            base id
 	 * @return tile column
 	 */
 	public static UserMappingColumn createBaseIdColumn(int baseId) {
@@ -26,8 +26,8 @@ public class UserMappingColumn extends UserColumn {
 	/**
 	 * Create a zoom level column
 	 * 
-	 * @param index
-	 *            index
+	 * @param relatedId
+	 *            related id
 	 * @return tile column
 	 */
 	public static UserMappingColumn createRelatedIdColumn(int relatedId) {
