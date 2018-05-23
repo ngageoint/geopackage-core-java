@@ -38,6 +38,8 @@ import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.related.ExtendedRelation;
+import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -1177,6 +1179,35 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
 					+ TileScaling.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedRelationsDao getExtendedRelationsDao() {
+		return createDao(ExtendedRelation.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean createExtendedRelationsTable() {
+		verifyWritable();
+
+		boolean created = false;
+		ExtendedRelationsDao dao = getExtendedRelationsDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = tableCreator.createExtendedRelations() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ ExtendedRelation.class.getSimpleName()
 					+ " table exists and create it", e);
 		}
 		return created;

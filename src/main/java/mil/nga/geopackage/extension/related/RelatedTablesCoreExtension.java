@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
@@ -24,35 +25,35 @@ import mil.nga.geopackage.property.PropertyConstants;
 public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 	/**
-	 * Name
+	 * Extension author
 	 */
-	public static final String NAME = "related_tables";
+	public static final String EXTENSION_AUTHOR = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR;
 
 	/**
-	 * ExtendedRelations Dao
+	 * Extension name without the author
 	 */
-	private ExtendedRelationsDao extendedRelationsDao = geoPackage
-			.createDao(ExtendedRelation.class);
+	public static final String EXTENSION_NAME_NO_AUTHOR = "related_tables";
 
 	/**
-	 * Extension name
+	 * Extension, with author and name
+	 * 
+	 * TODO Remove the commented sections when extension is adopted
 	 */
 	public static final String EXTENSION_NAME = /*
-												 * GeoPackageConstants.
-												 * GEO_PACKAGE_EXTENSION_AUTHOR
-												 * +
-												 * Extensions.EXTENSION_NAME_DIVIDER
-												 * +
-												 */NAME; // Remove the comment
-															// when the
-															// extension is
-															// adopted
+												 * Extensions.buildExtensionName(
+												 * EXTENSION_AUTHOR,
+												 */EXTENSION_NAME_NO_AUTHOR/* ) */;
 
 	/**
 	 * Extension definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS, NAME);
+	public static final String EXTENSION_DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+
+	/**
+	 * Extended Relations DAO
+	 */
+	private final ExtendedRelationsDao extendedRelationsDao;
 
 	/**
 	 * Constructor
@@ -63,6 +64,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	protected RelatedTablesCoreExtension(GeoPackageCore geoPackage) {
 		super(geoPackage);
+		extendedRelationsDao = geoPackage.getExtendedRelationsDao();
 	}
 
 	/**
@@ -72,20 +74,13 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public Extensions getOrCreate() {
 
-		Extensions extension = getOrCreate(EXTENSION_NAME, "gpkgext_relations",
-				null, DEFINITION, ExtensionScopeType.READ_WRITE);
+		// Create table
+		geoPackage.createExtendedRelationsTable();
 
-		try {
-			if (!extendedRelationsDao.isTableExists()) {
-				GeoPackageTableCreator tableCreator = new GeoPackageTableCreator(
-						geoPackage.getDatabase());
-				tableCreator.createExtendedRelations();
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to create '" + EXTENSION_NAME
-					+ "' extension for GeoPackage: " + geoPackage.getName()
-					+ ", Table Name: " + extendedRelationsDao.getTableName(), e);
-		}
+		Extensions extension = getOrCreate(EXTENSION_NAME,
+				ExtendedRelation.TABLE_NAME, null, EXTENSION_DEFINITION,
+				ExtensionScopeType.READ_WRITE);
+
 		return extension;
 	}
 
@@ -95,10 +90,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has() {
-
-		boolean exists = has(EXTENSION_NAME, null, null);
-
-		return exists;
+		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null);
 	}
 
 	/**

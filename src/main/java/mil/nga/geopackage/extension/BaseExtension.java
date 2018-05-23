@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
@@ -112,24 +111,10 @@ public abstract class BaseExtension {
 			String columnName) {
 
 		Extensions extension = null;
-		
 		try {
 			if (extensionsDao.isTableExists()) {
-				if (tableName == null) {
-					List<Extensions> extensions = extensionsDao.queryByExtension(extensionName);
-					if (extensions != null && (extensions.size() > 0)){
-						extension = extensions.get(0);
-					}
-				} else if (columnName == null) {
-					List<Extensions> extensions = extensionsDao.queryByExtension(extensionName,
-							tableName);
-					if (extensions != null && (extensions.size() > 0)){
-						extension = extensions.get(0);
-					}
-				} else {
-					extension = extensionsDao.queryByExtension(extensionName,
-							tableName, columnName);
-				}
+				extension = extensionsDao.queryByExtension(extensionName,
+						tableName, columnName);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to query for '"

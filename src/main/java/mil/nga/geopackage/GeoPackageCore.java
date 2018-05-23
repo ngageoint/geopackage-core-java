@@ -17,6 +17,7 @@ import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -759,5 +760,21 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 2.0.2
 	 */
 	public boolean createTileScalingTable();
+
+	/**
+	 * Get a Extended Relations DAO
+	 * 
+	 * @return extended relations dao
+	 * @since 3.0.1
+	 */
+	public ExtendedRelationsDao getExtendedRelationsDao();
+
+	/**
+	 * Create the Extended Relations Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 3.0.1
+	 */
+	public boolean createExtendedRelationsTable();
 
 }
