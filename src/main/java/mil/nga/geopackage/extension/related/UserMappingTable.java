@@ -49,7 +49,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 * @param columns
 	 */
 	public UserMappingTable(String tableName, List<UserMappingColumn> columns) {
-		super(tableName, columns);
+		super(tableName, columns, false);
 
 		Integer baseId = null;
 		Integer relatedId = null;

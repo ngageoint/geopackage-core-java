@@ -65,6 +65,18 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param columns
 	 */
 	protected UserTable(String tableName, List<TColumn> columns) {
+		this(tableName, columns, true);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableName
+	 * @param columns
+	 * @param pkExpected
+	 */
+	protected UserTable(String tableName, List<TColumn> columns,
+			boolean pkExpected) {
 		this.tableName = tableName;
 		this.columns = columns;
 
@@ -103,10 +115,12 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		if (pk != null) {
 			pkIndex = pk;
 		} else {
-			// Permit views without primary keys
-			log.log(Level.WARNING,
-					"No primary key column was found for table '" + tableName
-							+ "'");
+			if (pkExpected) {
+				// Permit views without primary keys
+				log.log(Level.WARNING,
+						"No primary key column was found for table '"
+								+ tableName + "'");
+			}
 			pkIndex = -1;
 		}
 
