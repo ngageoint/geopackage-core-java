@@ -9,7 +9,6 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
@@ -189,42 +188,6 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			throw new GeoPackageException("Failed to remove extension '"
 					+ EXTENSION_NAME + EXTENSION_NAME, e);
 		}
-	}
-
-	/**
-	 * 
-	 * @param extendedRelation
-	 * @param row
-	 * @return The number of rows added, presumably 1
-	 */
-	public long addMapping(ExtendedRelation extendedRelation, UserMappingRow row) {
-
-		Map<String, Object> values = new HashMap<String, Object>();
-		values.put(UserMappingTable.COLUMN_BASE_ID, row.getBaseId());
-		values.put(UserMappingTable.COLUMN_RELATED_ID, row.getRelatedId());
-		return geoPackage.getDatabase().insert(
-				extendedRelation.getMappingTableName(), values);
-	}
-
-	/**
-	 * 
-	 * @param extendedRelation
-	 * @param row
-	 * @return the number of rows removed
-	 */
-	public long removeMapping(ExtendedRelation extendedRelation,
-			UserMappingRow row) {
-
-		String whereClause = CoreSQLUtils
-				.quoteWrap(UserMappingTable.COLUMN_BASE_ID)
-				+ " = ? and "
-				+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_RELATED_ID)
-				+ " = ?";
-		String[] whereArgs = { Long.toString(row.getBaseId()),
-				Long.toString(row.getRelatedId()) };
-		long result = geoPackage.getDatabase().delete(
-				extendedRelation.getMappingTableName(), whereClause, whereArgs);
-		return result;
 	}
 
 }
