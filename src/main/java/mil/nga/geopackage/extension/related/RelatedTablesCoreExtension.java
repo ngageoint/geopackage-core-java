@@ -159,18 +159,51 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param baseTableName
 	 * @param relatedTableName
 	 * @param mappingTableName
-	 * @param relationshipName
+	 * @param relationType
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, String mappingTableName,
-			String relationshipName) {
+			RelationType relationType) {
+		return addRelationship(baseTableName, relatedTableName,
+				mappingTableName, relationType.getName());
+	}
+
+	/**
+	 * Adds a relationship between the base and related tables
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param mappingTableName
+	 * @param relationAuthor
+	 * @param relationName
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			String relatedTableName, String mappingTableName,
+			String relationAuthor, String relationName) {
+		return addRelationship(baseTableName, relatedTableName,
+				mappingTableName, getRelationName(relationAuthor, relationName));
+	}
+
+	/**
+	 * Adds a relationship between the base and related tables
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param mappingTableName
+	 * @param relationshipName
+	 * @return The relationship that was added
+	 */
+	private ExtendedRelation addRelationship(String baseTableName,
+			String relatedTableName, String mappingTableName,
+			String relationName) {
 
 		UserMappingTable userMappingTable = UserMappingTable
 				.create(mappingTableName);
 
 		ExtendedRelation extendedRelation = addRelationship(baseTableName,
-				relatedTableName, userMappingTable, relationshipName);
+				relatedTableName, userMappingTable, relationName);
 
 		return extendedRelation;
 	}
@@ -181,12 +214,45 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param baseTableName
 	 * @param relatedTableName
 	 * @param userMappingTable
-	 * @param relationshipName
+	 * @param relationType
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, UserMappingTable userMappingTable,
-			String relationshipName) {
+			RelationType relationType) {
+		return addRelationship(baseTableName, relatedTableName,
+				userMappingTable, relationType.getName());
+	}
+
+	/**
+	 * Adds a relationship between the base and related tables
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param userMappingTable
+	 * @param relationAuthor
+	 * @param relationName
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			String relatedTableName, UserMappingTable userMappingTable,
+			String relationAuthor, String relationName) {
+		return addRelationship(baseTableName, relatedTableName,
+				userMappingTable, getRelationName(relationAuthor, relationName));
+	}
+
+	/**
+	 * Adds a relationship between the base and related tables
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param userMappingTable
+	 * @param relationName
+	 * @return The relationship that was added
+	 */
+	private ExtendedRelation addRelationship(String baseTableName,
+			String relatedTableName, UserMappingTable userMappingTable,
+			String relationName) {
 
 		getOrCreate(userMappingTable.getTableName());
 		geoPackage.createUserTable(userMappingTable);
@@ -200,12 +266,12 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		extendedRelation
 				.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
 		extendedRelation.setMappingTableName(userMappingTable.getTableName());
-		extendedRelation.setRelationName(relationshipName);
+		extendedRelation.setRelationName(relationName);
 		try {
 			extendedRelationsDao.create(extendedRelation);
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to add relationship '"
-					+ relationshipName + "' between " + baseTableName + " and "
+					+ relationName + "' between " + baseTableName + " and "
 					+ relatedTableName, e);
 		}
 		return extendedRelation;
@@ -216,16 +282,54 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param baseTableName
 	 * @param relatedTableName
-	 * @param relationshipName
+	 * @param relationType
 	 */
 	public void removeRelationship(String baseTableName,
-			String relatedTableName, String relationshipName) {
+			String relatedTableName, RelationType relationType) {
+		removeRelationship(baseTableName, relatedTableName,
+				relationType.getName());
+	}
+
+	/**
+	 * Remove a specific relationship from the GeoPackage
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param relationAuthor
+	 * @param relationName
+	 */
+	public void removeRelationship(String baseTableName,
+			String relatedTableName, String relationAuthor, String relationName) {
+		removeRelationship(baseTableName, relatedTableName,
+				getRelationName(relationAuthor, relationName));
+	}
+
+	/**
+	 * Remove a specific relationship from the GeoPackage
+	 * 
+	 * @param extendedRelation
+	 *            extended relation
+	 */
+	public void removeRelationship(ExtendedRelation extendedRelation) {
+		removeRelationship(extendedRelation.getBaseTableName(),
+				extendedRelation.getRelatedTableName(),
+				extendedRelation.getRelationName());
+	}
+
+	/**
+	 * Remove a specific relationship from the GeoPackage
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param relationName
+	 */
+	private void removeRelationship(String baseTableName,
+			String relatedTableName, String relationName) {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put(ExtendedRelation.COLUMN_BASE_TABLE_NAME, baseTableName);
 		fieldValues.put(ExtendedRelation.COLUMN_RELATED_TABLE_NAME,
 				relatedTableName);
-		fieldValues
-				.put(ExtendedRelation.COLUMN_RELATION_NAME, relationshipName);
+		fieldValues.put(ExtendedRelation.COLUMN_RELATION_NAME, relationName);
 		try {
 			List<ExtendedRelation> extendedRelations = extendedRelationsDao
 					.queryForFieldValues(fieldValues);
@@ -239,7 +343,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			extendedRelationsDao.delete(extendedRelations);
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to remove relationship '"
-					+ relationshipName + "' between " + baseTableName + " and "
+					+ relationName + "' between " + baseTableName + " and "
 					+ relatedTableName, e);
 		}
 
@@ -268,6 +372,19 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 					"Failed to delete Related Tables extension and table. GeoPackage: "
 							+ geoPackage.getName(), e);
 		}
+	}
+
+	/**
+	 * Get the custom relation name with author
+	 * 
+	 * @param author
+	 *            relation author
+	 * @param name
+	 *            base relation name
+	 * @return custom relation name
+	 */
+	public String getRelationName(String author, String name) {
+		return "x-" + author + "_" + name;
 	}
 
 }
