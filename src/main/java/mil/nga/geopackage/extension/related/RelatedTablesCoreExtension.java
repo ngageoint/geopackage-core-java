@@ -129,11 +129,9 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		// Add a row to gpkgext_relations
 		ExtendedRelation extendedRelation = new ExtendedRelation();
 		extendedRelation.setBaseTableName(baseTableName);
-		extendedRelation.setBasePrimaryColumn(geoPackage.getDatabase()
-				.getPrimaryKeyColumnName(baseTableName));
+		extendedRelation.setBasePrimaryColumn(getPrimaryKeyColumnName(baseTableName));
 		extendedRelation.setRelatedTableName(relatedTableName);
-		extendedRelation.setRelatedPrimaryColumn(geoPackage.getDatabase()
-				.getPrimaryKeyColumnName(relatedTableName));
+		extendedRelation.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
 		extendedRelation.setMappingTableName(mappingTableName);
 		extendedRelation.setRelationName(relationshipName);
 		try {
@@ -146,6 +144,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		return extendedRelation;
 	}
 
+	/**
+	 * Get the primary key of a table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return the column name
+	 */
+	public abstract String getPrimaryKeyColumnName(String tableName);
+	
 	/**
 	 * Remove a specific relationship from the GeoPackage
 	 * 

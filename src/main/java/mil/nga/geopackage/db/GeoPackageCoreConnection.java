@@ -225,14 +225,4 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 		return userVersion;
 	}
 
-	/**
-	 * Get the primary key of a table
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @return the column name
-	 * @since 3.0.1
-	 */
-	public abstract String getPrimaryKeyColumnName(String tableName);
-
 }

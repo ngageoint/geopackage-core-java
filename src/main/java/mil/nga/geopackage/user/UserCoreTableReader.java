@@ -27,32 +27,32 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	/**
 	 * Index column
 	 */
-	private static final String CID = "cid";
+	public static final String CID = "cid";
 
 	/**
 	 * Name column
 	 */
-	private static final String NAME = "name";
+	public static final String NAME = "name";
 
 	/**
 	 * Type column
 	 */
-	private static final String TYPE = "type";
+	public static final String TYPE = "type";
 
 	/**
 	 * Not null column
 	 */
-	private static final String NOT_NULL = "notnull";
+	public static final String NOT_NULL = "notnull";
 
 	/**
 	 * Primary key column
 	 */
-	private static final String PK = "pk";
+	public static final String PK = "pk";
 
 	/**
 	 * Default value column
 	 */
-	private static final String DFLT_VALUE = "dflt_value";
+	public static final String DFLT_VALUE = "dflt_value";
 
 	/**
 	 * Table name
