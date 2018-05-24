@@ -21,6 +21,7 @@ import com.j256.ormlite.table.TableUtils;
  * Related Tables core extension
  * 
  * @author jyutzler
+ * @since 3.0.1
  */
 public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
@@ -139,8 +140,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, String mappingTableName,
 			String relationshipName) {
 
-		UserMappingTable userMappingTable = new UserMappingTable(
-				mappingTableName);
+		UserMappingTable userMappingTable = UserMappingTable
+				.create(mappingTableName);
 
 		ExtendedRelation extendedRelation = addRelationship(baseTableName,
 				relatedTableName, userMappingTable, relationshipName);

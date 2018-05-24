@@ -10,6 +10,7 @@ import mil.nga.geopackage.user.UserTable;
  * Represents a user mapping table
  * 
  * @author jyutzler
+ * @since 3.0.1
  */
 public class UserMappingTable extends UserTable<UserMappingColumn> {
 
@@ -32,15 +33,6 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 * Related ID column index
 	 */
 	private final int relatedIdIndex;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param tableName
-	 */
-	public UserMappingTable(String tableName) {
-		this(tableName, createRequiredColumns());
-	}
 
 	/**
 	 * Constructor
@@ -80,6 +72,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 		baseIdIndex = baseId;
 
 	}
+
 	/**
 	 * Getter
 	 * 
@@ -88,6 +81,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public int getBaseIdIndex() {
 		return baseIdIndex;
 	}
+
 	/**
 	 * Getter
 	 * 
@@ -96,6 +90,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public int getRelatedIdIndex() {
 		return relatedIdIndex;
 	}
+
 	/**
 	 * Get the base ID column
 	 * 
@@ -104,6 +99,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public UserMappingColumn getBaseIdColumn() {
 		return getColumn(baseIdIndex);
 	}
+
 	/**
 	 * Get the related ID column
 	 * 
@@ -112,6 +108,41 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public UserMappingColumn getRelatedIdColumn() {
 		return getColumn(relatedIdIndex);
 	}
+
+	/**
+	 * Create a user mapping table with the minimum required columns
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return user mapping table
+	 */
+	public static UserMappingTable create(String tableName) {
+		return create(tableName, null);
+	}
+
+	/**
+	 * Create a user mapping table with the minimum required columns followed by
+	 * the additional columns
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional columns
+	 * @return user mapping table
+	 */
+	public static UserMappingTable create(String tableName,
+			List<UserMappingColumn> additionalColumns) {
+
+		List<UserMappingColumn> columns = new ArrayList<>();
+		columns.addAll(createRequiredColumns());
+
+		if (additionalColumns != null) {
+			columns.addAll(additionalColumns);
+		}
+
+		return new UserMappingTable(tableName, columns);
+	}
+
 	/**
 	 * Create the required table columns, starting at index 0
 	 * 
@@ -128,12 +159,25 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 *            starting index
 	 * @return tile columns
 	 */
-	public static List<UserMappingColumn> createRequiredColumns(int startingIndex) {
+	public static List<UserMappingColumn> createRequiredColumns(
+			int startingIndex) {
 
 		List<UserMappingColumn> columns = new ArrayList<UserMappingColumn>();
-		columns.add(UserMappingColumn.createColumn(startingIndex++, COLUMN_BASE_ID, GeoPackageDataType.INTEGER, false, null));
-		columns.add(UserMappingColumn.createColumn(startingIndex++, COLUMN_RELATED_ID, GeoPackageDataType.INTEGER, false, null));
+		columns.add(UserMappingColumn.createColumn(startingIndex++,
+				COLUMN_BASE_ID, GeoPackageDataType.INTEGER, false, null));
+		columns.add(UserMappingColumn.createColumn(startingIndex++,
+				COLUMN_RELATED_ID, GeoPackageDataType.INTEGER, false, null));
 
 		return columns;
 	}
+
+	/**
+	 * Get the number of required columns
+	 * 
+	 * @return required columns count
+	 */
+	public static int numRequiredColumns() {
+		return createRequiredColumns().size();
+	}
+
 }

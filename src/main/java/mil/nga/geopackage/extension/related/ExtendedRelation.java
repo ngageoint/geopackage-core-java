@@ -4,18 +4,14 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Describes the relationships between a base table, a related data table,
- * and a mapping table
+ * Describes the relationships between a base table, a related data table, and a
+ * mapping table
  * 
  * @author jyutzler
+ * @since 3.0.1
  */
 @DatabaseTable(tableName = "gpkgext_relations", daoClass = ExtendedRelationsDao.class)
 public class ExtendedRelation {
-
-	/**
-	 * A mapping table
-	 */
-	private UserMappingTable mappingTable;
 
 	/**
 	 * Table name
@@ -232,15 +228,4 @@ public class ExtendedRelation {
 		this.mappingTableName = mappingTableName;
 	}
 
-	/**
-	 * Getter
-	 * 
-	 * @return a user mapping table object
-	 */	
-	public UserMappingTable getMappingTable() {
-		if (mappingTable == null){
-			mappingTable = new UserMappingTable(mappingTableName);
-		}
-		return mappingTable;
-	}
 }

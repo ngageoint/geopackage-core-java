@@ -13,6 +13,7 @@ import mil.nga.geopackage.schema.TableColumnKey;
  * Extended Relations Data Access Object
  * 
  * @author jyutzler
+ * @since 3.0.1
  */
 public class ExtendedRelationsDao extends
 		BaseDaoImpl<ExtendedRelation, TableColumnKey> {

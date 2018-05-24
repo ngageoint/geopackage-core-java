@@ -8,6 +8,7 @@ import mil.nga.geopackage.user.UserColumn;
  * User Mapping column
  * 
  * @author jyutzler
+ * @since 3.0.1
  */
 public class UserMappingColumn extends UserColumn {
 
@@ -31,8 +32,9 @@ public class UserMappingColumn extends UserColumn {
 	 * @return tile column
 	 */
 	public static UserMappingColumn createRelatedIdColumn(int relatedId) {
-		return new UserMappingColumn(relatedId, UserMappingTable.COLUMN_RELATED_ID,
-				GeoPackageDataType.INTEGER, null, true, 0, false);
+		return new UserMappingColumn(relatedId,
+				UserMappingTable.COLUMN_RELATED_ID, GeoPackageDataType.INTEGER,
+				null, true, 0, false);
 	}
 
 	/**
@@ -75,8 +77,8 @@ public class UserMappingColumn extends UserColumn {
 	public static UserMappingColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max, boolean notNull,
 			Object defaultValue) {
-		return new UserMappingColumn(index, name, type, max, notNull, defaultValue,
-				false);
+		return new UserMappingColumn(index, name, type, max, notNull,
+				defaultValue, false);
 	}
 
 	/**
@@ -97,12 +99,31 @@ public class UserMappingColumn extends UserColumn {
 	 * @param primaryKey
 	 *            primary key
 	 */
-	UserMappingColumn(int index, String name, GeoPackageDataType dataType, Long max,
-			boolean notNull, Object defaultValue, boolean primaryKey) {
+	UserMappingColumn(int index, String name, GeoPackageDataType dataType,
+			Long max, boolean notNull, Object defaultValue, boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 		if (dataType == null) {
 			throw new GeoPackageException(
 					"Data Type is required to create column: " + name);
 		}
 	}
+
+	/**
+	 * Determine if this column is the base id
+	 * 
+	 * @return true if base id
+	 */
+	public boolean isBaseId() {
+		return UserMappingTable.COLUMN_BASE_ID.equals(getName());
+	}
+
+	/**
+	 * Determine if this column is the related id
+	 * 
+	 * @return true if related id
+	 */
+	public boolean isRelatedId() {
+		return UserMappingTable.COLUMN_RELATED_ID.equals(getName());
+	}
+
 }
