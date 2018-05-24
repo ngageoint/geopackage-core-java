@@ -56,7 +56,7 @@ public class ExtendedRelation {
 	/**
 	 * Extended Relations primary key
 	 */
-	@DatabaseField(columnName = COLUMN_ID, id = true, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
 	private long id;
 
 	/**
@@ -68,7 +68,7 @@ public class ExtendedRelation {
 	/**
 	 * Name of the primary key column in base_table_name
 	 */
-	@DatabaseField(columnName = COLUMN_BASE_PRIMARY_COLUMN, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_BASE_PRIMARY_COLUMN, canBeNull = false, defaultValue = "id")
 	private String basePrimaryColumn;
 
 	/**
@@ -80,7 +80,7 @@ public class ExtendedRelation {
 	/**
 	 * Name of the primary key column in related_table_name
 	 */
-	@DatabaseField(columnName = COLUMN_RELATED_PRIMARY_COLUMN, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_RELATED_PRIMARY_COLUMN, canBeNull = false, defaultValue = "id")
 	private String relatedPrimaryColumn;
 
 	/**
@@ -92,7 +92,7 @@ public class ExtendedRelation {
 	/**
 	 * Name of a mapping table
 	 */
-	@DatabaseField(columnName = COLUMN_MAPPING_TABLE_NAME, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_MAPPING_TABLE_NAME, canBeNull = false, unique = true)
 	private String mappingTableName;
 
 	/**
