@@ -15,6 +15,8 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
+import com.j256.ormlite.table.TableUtils;
+
 /**
  * Related Tables core extension
  * 
@@ -92,6 +94,23 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get the primary key of a table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return the column name
+	 */
+	public abstract String getPrimaryKeyColumnName(String tableName);
+
+	/**
+	 * Drop the mapping table of the extended relation
+	 * 
+	 * @param extendedRelation
+	 *            extended relation
+	 */
+	public abstract void dropMappingTable(ExtendedRelation extendedRelation);
+
+	/**
 	 * Returns the relationships defined through this extension
 	 * 
 	 * @return a collection of ExtendedRelation objects
@@ -119,17 +138,40 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, String mappingTableName,
 			String relationshipName) {
-		// Create the user mapping table
-		UserMappingTable umt = new UserMappingTable(mappingTableName);
-		geoPackage.createUserTable(umt);
+
+		UserMappingTable userMappingTable = new UserMappingTable(
+				mappingTableName);
+
+		ExtendedRelation extendedRelation = addRelationship(baseTableName,
+				relatedTableName, userMappingTable, relationshipName);
+
+		return extendedRelation;
+	}
+
+	/**
+	 * Adds a relationship between the base and related tables
+	 * 
+	 * @param baseTableName
+	 * @param relatedTableName
+	 * @param userMappingTable
+	 * @param relationshipName
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			String relatedTableName, UserMappingTable userMappingTable,
+			String relationshipName) {
+
+		geoPackage.createUserTable(userMappingTable);
 
 		// Add a row to gpkgext_relations
 		ExtendedRelation extendedRelation = new ExtendedRelation();
 		extendedRelation.setBaseTableName(baseTableName);
-		extendedRelation.setBasePrimaryColumn(getPrimaryKeyColumnName(baseTableName));
+		extendedRelation
+				.setBasePrimaryColumn(getPrimaryKeyColumnName(baseTableName));
 		extendedRelation.setRelatedTableName(relatedTableName);
-		extendedRelation.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
-		extendedRelation.setMappingTableName(mappingTableName);
+		extendedRelation
+				.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
+		extendedRelation.setMappingTableName(userMappingTable.getTableName());
 		extendedRelation.setRelationName(relationshipName);
 		try {
 			extendedRelationsDao.create(extendedRelation);
@@ -141,15 +183,6 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		return extendedRelation;
 	}
 
-	/**
-	 * Get the primary key of a table
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @return the column name
-	 */
-	public abstract String getPrimaryKeyColumnName(String tableName);
-	
 	/**
 	 * Remove a specific relationship from the GeoPackage
 	 * 
@@ -165,14 +198,13 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				relatedTableName);
 		fieldValues
 				.put(ExtendedRelation.COLUMN_RELATION_NAME, relationshipName);
-		List<ExtendedRelation> extendedRelations;
 		try {
-			extendedRelations = extendedRelationsDao
+			List<ExtendedRelation> extendedRelations = extendedRelationsDao
 					.queryForFieldValues(fieldValues);
-			extendedRelationsDao.delete(extendedRelations);
 			for (ExtendedRelation extendedRelation : extendedRelations) {
-				geoPackage.dropTable(extendedRelation.getMappingTableName());
+				dropMappingTable(extendedRelation);
 			}
+			extendedRelationsDao.delete(extendedRelations);
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to remove relationship '"
 					+ relationshipName + "' between " + baseTableName + " and "
@@ -185,12 +217,24 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Remove all trace of the extension
 	 */
 	public void removeExtension() {
-		geoPackage.dropTable(ExtendedRelation.TABLE_NAME);
+		ExtendedRelationsDao extendedRelationsDao = geoPackage
+				.getExtendedRelationsDao();
 		try {
-			extensionsDao.deleteByExtension(EXTENSION_NAME);
+			if (extendedRelationsDao.isTableExists()) {
+				List<ExtendedRelation> extendedRelations = extendedRelationsDao
+						.queryForAll();
+				for (ExtendedRelation extendedRelation : extendedRelations) {
+					dropMappingTable(extendedRelation);
+				}
+				TableUtils.dropTable(extendedRelationsDao, false);
+			}
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(EXTENSION_NAME);
+			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to remove extension '"
-					+ EXTENSION_NAME + EXTENSION_NAME, e);
+			throw new GeoPackageException(
+					"Failed to delete Related Tables extension and table. GeoPackage: "
+							+ geoPackage.getName(), e);
 		}
 	}
 
