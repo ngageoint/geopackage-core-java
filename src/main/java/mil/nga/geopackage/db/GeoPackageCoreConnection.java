@@ -3,7 +3,6 @@ package mil.nga.geopackage.db;
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
@@ -235,17 +234,5 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @since 3.0.1
 	 */
 	public abstract String getPrimaryKeyColumnName(String tableName);
-
-	/**
-	 * Insert a row into the database
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param values
-	 *            map of columns and values
-	 * @return the row id of the inserted row
-	 * @since 3.0.1
-	 */
-	public abstract long insert(String tableName, Map<String, Object> values);
 
 }
