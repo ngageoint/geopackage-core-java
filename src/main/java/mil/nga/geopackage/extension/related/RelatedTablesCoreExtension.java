@@ -9,7 +9,6 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -122,9 +121,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relationshipName) {
 		// Create the user mapping table
 		UserMappingTable umt = new UserMappingTable(mappingTableName);
-		GeoPackageTableCreator tableCreator = new GeoPackageTableCreator(
-				geoPackage.getDatabase());
-		tableCreator.createTable(umt);
+		geoPackage.createUserTable(umt);
 
 		// Add a row to gpkgext_relations
 		ExtendedRelation extendedRelation = new ExtendedRelation();

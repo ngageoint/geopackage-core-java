@@ -33,6 +33,8 @@ import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 
@@ -776,5 +778,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public boolean createExtendedRelationsTable();
+
+	/**
+	 * Create a new user table
+	 * 
+	 * @param table
+	 *            user table
+	 * @since 3.0.1
+	 */
+	public void createUserTable(UserTable<? extends UserColumn> table);
 
 }

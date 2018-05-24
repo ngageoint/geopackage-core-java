@@ -64,6 +64,8 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
@@ -420,9 +422,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void createFeatureTable(FeatureTable table) {
-		verifyWritable();
-
-		tableCreator.createTable(table);
+		createUserTable(table);
 	}
 
 	/**
@@ -599,9 +599,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void createTileTable(TileTable table) {
-		verifyWritable();
-
-		tableCreator.createTable(table);
+		createUserTable(table);
 	}
 
 	/**
@@ -1086,9 +1084,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void createAttributesTable(AttributesTable table) {
-		verifyWritable();
-
-		tableCreator.createTable(table);
+		createUserTable(table);
 	}
 
 	/**
@@ -1211,6 +1207,16 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ " table exists and create it", e);
 		}
 		return created;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createUserTable(UserTable<? extends UserColumn> table) {
+		verifyWritable();
+
+		tableCreator.createTable(table);
 	}
 
 }
