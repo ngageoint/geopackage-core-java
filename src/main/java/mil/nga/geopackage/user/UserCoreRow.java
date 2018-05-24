@@ -3,7 +3,7 @@ package mil.nga.geopackage.user;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -143,7 +143,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.0.1
 	 */
 	public Set<Map.Entry<String, ColumnValue>> getAsMap() {
-		Set<Map.Entry<String, ColumnValue>> result = new HashSet<>();
+		Set<Map.Entry<String, ColumnValue>> result = new LinkedHashSet<>();
 		for (int inx = 0; inx < columnCount(); inx++) {
 			result.add(new AbstractMap.SimpleEntry<String, ColumnValue>(
 					getColumnName(inx), new ColumnValue(getValue(inx))));
