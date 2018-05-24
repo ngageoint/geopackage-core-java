@@ -86,12 +86,38 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get or create the mapping table extension
+	 * 
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return extension
+	 */
+	public Extensions getOrCreate(String mappingTable) {
+
+		Extensions extension = getOrCreate(EXTENSION_NAME, mappingTable, null,
+				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+
+		return extension;
+	}
+
+	/**
 	 * Determine if the GeoPackage has the extension
 	 * 
 	 * @return true if has extension
 	 */
 	public boolean has() {
 		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null);
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension for the mapping table
+	 * 
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return true if has extension
+	 */
+	public boolean has(String mappingTable) {
+		return has() && has(EXTENSION_NAME, mappingTable, null);
 	}
 
 	/**
@@ -162,6 +188,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, UserMappingTable userMappingTable,
 			String relationshipName) {
 
+		getOrCreate(userMappingTable.getTableName());
 		geoPackage.createUserTable(userMappingTable);
 
 		// Add a row to gpkgext_relations
@@ -204,6 +231,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 					.queryForFieldValues(fieldValues);
 			for (ExtendedRelation extendedRelation : extendedRelations) {
 				dropMappingTable(extendedRelation);
+				if (extensionsDao.isTableExists()) {
+					extensionsDao.deleteByExtension(EXTENSION_NAME,
+							extendedRelation.getMappingTableName());
+				}
 			}
 			extendedRelationsDao.delete(extendedRelations);
 		} catch (SQLException e) {
