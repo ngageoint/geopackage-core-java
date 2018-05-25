@@ -1,41 +1,16 @@
-package mil.nga.geopackage.extension.related;
+package mil.nga.geopackage.user.custom;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.user.UserColumn;
 
 /**
- * User Mapping column
+ * User Custom column
  * 
- * @author jyutzler
+ * @author osbornb
  * @since 3.0.1
  */
-public class UserMappingColumn extends UserColumn {
-
-	/**
-	 * Create a base id column
-	 * 
-	 * @param baseId
-	 *            base id
-	 * @return tile column
-	 */
-	public static UserMappingColumn createBaseIdColumn(int baseId) {
-		return new UserMappingColumn(baseId, UserMappingTable.COLUMN_BASE_ID,
-				GeoPackageDataType.INTEGER, null, false, null, true);
-	}
-
-	/**
-	 * Create a zoom level column
-	 * 
-	 * @param relatedId
-	 *            related id
-	 * @return tile column
-	 */
-	public static UserMappingColumn createRelatedIdColumn(int relatedId) {
-		return new UserMappingColumn(relatedId,
-				UserMappingTable.COLUMN_RELATED_ID, GeoPackageDataType.INTEGER,
-				null, true, 0, false);
-	}
+public class UserCustomColumn extends UserColumn {
 
 	/**
 	 * Create a new column
@@ -52,7 +27,7 @@ public class UserMappingColumn extends UserColumn {
 	 *            default value
 	 * @return tile column
 	 */
-	public static UserMappingColumn createColumn(int index, String name,
+	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
 		return createColumn(index, name, type, null, notNull, defaultValue);
 	}
@@ -74,10 +49,10 @@ public class UserMappingColumn extends UserColumn {
 	 *            default value
 	 * @return tile column
 	 */
-	public static UserMappingColumn createColumn(int index, String name,
+	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max, boolean notNull,
 			Object defaultValue) {
-		return new UserMappingColumn(index, name, type, max, notNull,
+		return new UserCustomColumn(index, name, type, max, notNull,
 				defaultValue, false);
 	}
 
@@ -99,31 +74,13 @@ public class UserMappingColumn extends UserColumn {
 	 * @param primaryKey
 	 *            primary key
 	 */
-	UserMappingColumn(int index, String name, GeoPackageDataType dataType,
+	UserCustomColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 		if (dataType == null) {
 			throw new GeoPackageException(
 					"Data Type is required to create column: " + name);
 		}
-	}
-
-	/**
-	 * Determine if this column is the base id
-	 * 
-	 * @return true if base id
-	 */
-	public boolean isBaseId() {
-		return UserMappingTable.COLUMN_BASE_ID.equals(getName());
-	}
-
-	/**
-	 * Determine if this column is the related id
-	 * 
-	 * @return true if related id
-	 */
-	public boolean isRelatedId() {
-		return UserMappingTable.COLUMN_RELATED_ID.equals(getName());
 	}
 
 }

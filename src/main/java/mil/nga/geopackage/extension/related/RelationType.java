@@ -1,7 +1,7 @@
 package mil.nga.geopackage.extension.related;
 
 /**
- * Spec suppoerted User-Defined Related Data Tables
+ * Spec supported User-Defined Related Data Tables
  * 
  * @author osbornb
  * @since 3.0.1

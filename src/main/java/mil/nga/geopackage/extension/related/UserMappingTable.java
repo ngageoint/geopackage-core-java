@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.db.GeoPackageDataType;
-import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.custom.UserCustomColumn;
+import mil.nga.geopackage.user.custom.UserCustomTable;
 
 /**
- * Represents a user mapping table
+ * Contains user mapping table factory and utility methods
  * 
  * @author jyutzler
  * @since 3.0.1
  */
-public class UserMappingTable extends UserTable<UserMappingColumn> {
+public class UserMappingTable {
 
 	/**
 	 * Base ID column name
@@ -25,98 +26,13 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	public static final String COLUMN_RELATED_ID = "related_id";
 
 	/**
-	 * Base ID column index
-	 */
-	private final int baseIdIndex;
-
-	/**
-	 * Related ID column index
-	 */
-	private final int relatedIdIndex;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param tableName
-	 * @param columns
-	 */
-	public UserMappingTable(String tableName, List<UserMappingColumn> columns) {
-		super(tableName, columns, false);
-
-		Integer baseId = null;
-		Integer relatedId = null;
-
-		// Find the required columns
-		for (UserMappingColumn column : columns) {
-
-			String columnName = column.getName();
-			int columnIndex = column.getIndex();
-
-			if (columnName.equals(COLUMN_BASE_ID)) {
-				duplicateCheck(columnIndex, baseId, COLUMN_BASE_ID);
-				typeCheck(GeoPackageDataType.INTEGER, column);
-				baseId = columnIndex;
-			} else if (columnName.equals(COLUMN_RELATED_ID)) {
-				duplicateCheck(columnIndex, relatedId, COLUMN_RELATED_ID);
-				typeCheck(GeoPackageDataType.INTEGER, column);
-				relatedId = columnIndex;
-			}
-
-		}
-
-		// Verify the required columns were found
-		missingCheck(relatedId, COLUMN_RELATED_ID);
-		relatedIdIndex = relatedId;
-
-		missingCheck(baseId, COLUMN_BASE_ID);
-		baseIdIndex = baseId;
-
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return baseIdIndex
-	 */
-	public int getBaseIdIndex() {
-		return baseIdIndex;
-	}
-
-	/**
-	 * Getter
-	 * 
-	 * @return relatedIdIndex
-	 */
-	public int getRelatedIdIndex() {
-		return relatedIdIndex;
-	}
-
-	/**
-	 * Get the base ID column
-	 * 
-	 * @return tile column
-	 */
-	public UserMappingColumn getBaseIdColumn() {
-		return getColumn(baseIdIndex);
-	}
-
-	/**
-	 * Get the related ID column
-	 * 
-	 * @return tile column
-	 */
-	public UserMappingColumn getRelatedIdColumn() {
-		return getColumn(relatedIdIndex);
-	}
-
-	/**
 	 * Create a user mapping table with the minimum required columns
 	 * 
 	 * @param tableName
 	 *            table name
 	 * @return user mapping table
 	 */
-	public static UserMappingTable create(String tableName) {
+	public static UserCustomTable create(String tableName) {
 		return create(tableName, null);
 	}
 
@@ -130,17 +46,17 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 *            additional columns
 	 * @return user mapping table
 	 */
-	public static UserMappingTable create(String tableName,
-			List<UserMappingColumn> additionalColumns) {
+	public static UserCustomTable create(String tableName,
+			List<UserCustomColumn> additionalColumns) {
 
-		List<UserMappingColumn> columns = new ArrayList<>();
+		List<UserCustomColumn> columns = new ArrayList<>();
 		columns.addAll(createRequiredColumns());
 
 		if (additionalColumns != null) {
 			columns.addAll(additionalColumns);
 		}
 
-		return new UserMappingTable(tableName, columns);
+		return new UserCustomTable(tableName, columns, requiredColumns());
 	}
 
 	/**
@@ -148,7 +64,7 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 * 
 	 * @return tile columns
 	 */
-	public static List<UserMappingColumn> createRequiredColumns() {
+	public static List<UserCustomColumn> createRequiredColumns() {
 		return createRequiredColumns(0);
 	}
 
@@ -159,16 +75,37 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 *            starting index
 	 * @return tile columns
 	 */
-	public static List<UserMappingColumn> createRequiredColumns(
-			int startingIndex) {
+	public static List<UserCustomColumn> createRequiredColumns(int startingIndex) {
 
-		List<UserMappingColumn> columns = new ArrayList<UserMappingColumn>();
-		columns.add(UserMappingColumn.createColumn(startingIndex++,
-				COLUMN_BASE_ID, GeoPackageDataType.INTEGER, false, null));
-		columns.add(UserMappingColumn.createColumn(startingIndex++,
-				COLUMN_RELATED_ID, GeoPackageDataType.INTEGER, false, null));
+		List<UserCustomColumn> columns = new ArrayList<>();
+		columns.add(createBaseIdColumn(startingIndex++));
+		columns.add(createRelatedIdColumn(startingIndex++));
 
 		return columns;
+	}
+
+	/**
+	 * Create a base id column
+	 * 
+	 * @param index
+	 *            column index
+	 * @return base id column
+	 */
+	public static UserCustomColumn createBaseIdColumn(int index) {
+		return UserCustomColumn.createColumn(index, COLUMN_BASE_ID,
+				GeoPackageDataType.INTEGER, false, null);
+	}
+
+	/**
+	 * Create a related id column
+	 * 
+	 * @param index
+	 *            column index
+	 * @return related id column
+	 */
+	public static UserCustomColumn createRelatedIdColumn(int index) {
+		return UserCustomColumn.createColumn(index, COLUMN_RELATED_ID,
+				GeoPackageDataType.INTEGER, false, null);
 	}
 
 	/**
@@ -177,7 +114,41 @@ public class UserMappingTable extends UserTable<UserMappingColumn> {
 	 * @return required columns count
 	 */
 	public static int numRequiredColumns() {
-		return createRequiredColumns().size();
+		return requiredColumns().size();
+	}
+
+	/**
+	 * Get the required columns
+	 * 
+	 * @return required columns
+	 */
+	public static List<String> requiredColumns() {
+		List<String> requiredColumns = new ArrayList<>();
+		requiredColumns.add(COLUMN_BASE_ID);
+		requiredColumns.add(COLUMN_RELATED_ID);
+		return requiredColumns;
+	}
+
+	/**
+	 * Check if the column is the base id
+	 * 
+	 * @param column
+	 *            user custom column
+	 * @return true if base id column
+	 */
+	public static boolean isBaseId(UserCustomColumn column) {
+		return column.getName().equals(COLUMN_BASE_ID);
+	}
+
+	/**
+	 * Check if the column is the related id
+	 * 
+	 * @param column
+	 *            user custom column
+	 * @return true if related id column
+	 */
+	public static boolean isRelatedId(UserCustomColumn column) {
+		return column.getName().equals(COLUMN_RELATED_ID);
 	}
 
 }
