@@ -4,10 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.schema.TableColumnKey;
+
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
-
-import mil.nga.geopackage.schema.TableColumnKey;
 
 /**
  * Extended Relations Data Access Object
@@ -22,7 +22,9 @@ public class ExtendedRelationsDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
 	 */
 	public ExtendedRelationsDao(ConnectionSource connectionSource,

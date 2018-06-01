@@ -9,12 +9,12 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.geopackage.user.custom.UserCustomTable;
 
 import com.j256.ormlite.table.TableUtils;
 
@@ -200,7 +200,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, String mappingTableName,
 			String relationName) {
 
-		UserCustomTable userMappingTable = UserMappingTable
+		UserMappingTable userMappingTable = UserMappingTable
 				.create(mappingTableName);
 
 		ExtendedRelation extendedRelation = addRelationship(baseTableName,
@@ -214,15 +214,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param baseTableName
 	 * @param relatedTableName
-	 * @param userCustomTable
+	 * @param userMappingTable
 	 * @param relationType
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
-			String relatedTableName, UserCustomTable userCustomTable,
+			String relatedTableName, UserMappingTable userMappingTable,
 			RelationType relationType) {
 		return addRelationship(baseTableName, relatedTableName,
-				userCustomTable, relationType.getName());
+				userMappingTable, relationType.getName());
 	}
 
 	/**
@@ -230,16 +230,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param baseTableName
 	 * @param relatedTableName
-	 * @param userCustomTable
+	 * @param userMappingTable
 	 * @param relationAuthor
 	 * @param relationName
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
-			String relatedTableName, UserCustomTable userCustomTable,
+			String relatedTableName, UserMappingTable userMappingTable,
 			String relationAuthor, String relationName) {
 		return addRelationship(baseTableName, relatedTableName,
-				userCustomTable, getRelationName(relationAuthor, relationName));
+				userMappingTable, getRelationName(relationAuthor, relationName));
 	}
 
 	/**
@@ -247,16 +247,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param baseTableName
 	 * @param relatedTableName
-	 * @param userCustomTable
+	 * @param userMappingTable
 	 * @param relationName
 	 * @return The relationship that was added
 	 */
 	private ExtendedRelation addRelationship(String baseTableName,
-			String relatedTableName, UserCustomTable userCustomTable,
+			String relatedTableName, UserMappingTable userMappingTable,
 			String relationName) {
 
-		getOrCreate(userCustomTable.getTableName());
-		geoPackage.createUserTable(userCustomTable);
+		getOrCreate(userMappingTable.getTableName());
+		geoPackage.createUserTable(userMappingTable);
 
 		// Add a row to gpkgext_relations
 		ExtendedRelation extendedRelation = new ExtendedRelation();
@@ -266,7 +266,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		extendedRelation.setRelatedTableName(relatedTableName);
 		extendedRelation
 				.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
-		extendedRelation.setMappingTableName(userCustomTable.getTableName());
+		extendedRelation.setMappingTableName(userMappingTable.getTableName());
 		extendedRelation.setRelationName(relationName);
 		try {
 			extendedRelationsDao.create(extendedRelation);
@@ -386,6 +386,38 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public String getRelationName(String author, String name) {
 		return "x-" + author + "_" + name;
+	}
+
+	/**
+	 * Create a user related table
+	 * 
+	 * @param userRelatedTable
+	 *            user related table
+	 */
+	public void createUserRelatedTable(UserRelatedTable userRelatedTable) {
+
+		geoPackage.createUserTable(userRelatedTable);
+
+		try {
+			// Create the contents
+			Contents contents = new Contents();
+			contents.setTableName(userRelatedTable.getTableName());
+			contents.setDataTypeString(userRelatedTable.getRelationName());
+			contents.setIdentifier(userRelatedTable.getTableName());
+			geoPackage.getContentsDao().create(contents);
+
+			userRelatedTable.setContents(contents);
+
+		} catch (RuntimeException e) {
+			geoPackage.deleteTableQuietly(userRelatedTable.getTableName());
+			throw e;
+		} catch (SQLException e) {
+			geoPackage.deleteTableQuietly(userRelatedTable.getTableName());
+			throw new GeoPackageException(
+					"Failed to create table and metadata: "
+							+ userRelatedTable.getTableName(), e);
+		}
+
 	}
 
 }

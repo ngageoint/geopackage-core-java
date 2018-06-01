@@ -88,6 +88,18 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Determine if this column is named the provided name
+	 * 
+	 * @param name
+	 *            column name
+	 * @return true if named the provided name
+	 * @since 3.0.1
+	 */
+	public boolean isNamed(String name) {
+		return name.equals(name);
+	}
+
+	/**
 	 * Get the max
 	 * 
 	 * @return max

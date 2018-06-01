@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -21,12 +19,6 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * @author osbornb
  */
 public abstract class UserTable<TColumn extends UserColumn> {
-
-	/**
-	 * Logger
-	 */
-	private static final Logger log = Logger.getLogger(UserTable.class
-			.getName());
 
 	/**
 	 * Table name
@@ -46,7 +38,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Mapping between column names and their index
 	 */
-	private final Map<String, Integer> nameToIndex = new HashMap<String, Integer>();
+	private final Map<String, Integer> nameToIndex;
 
 	/**
 	 * Primary key column index
@@ -56,27 +48,19 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Unique constraints
 	 */
-	private final List<UserUniqueConstraint<TColumn>> uniqueConstraints = new ArrayList<UserUniqueConstraint<TColumn>>();
+	private final List<UserUniqueConstraint<TColumn>> uniqueConstraints;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columns
+	 *            list of columns
 	 */
 	protected UserTable(String tableName, List<TColumn> columns) {
-		this(tableName, columns, true);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param tableName
-	 * @param columns
-	 * @param pkExpected
-	 */
-	protected UserTable(String tableName, List<TColumn> columns,
-			boolean pkExpected) {
+		nameToIndex = new HashMap<String, Integer>();
+		uniqueConstraints = new ArrayList<UserUniqueConstraint<TColumn>>();
 		this.tableName = tableName;
 		this.columns = columns;
 
@@ -115,12 +99,6 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		if (pk != null) {
 			pkIndex = pk;
 		} else {
-			if (pkExpected) {
-				// Permit views without primary keys
-				log.log(Level.WARNING,
-						"No primary key column was found for table '"
-								+ tableName + "'");
-			}
 			pkIndex = -1;
 		}
 
@@ -134,6 +112,21 @@ public abstract class UserTable<TColumn extends UserColumn> {
 
 		// Sort the columns by index
 		Collections.sort(columns);
+	}
+
+	/**
+	 * Constructor, re-uses existing memory structures, not a copy
+	 * 
+	 * @param userTable
+	 *            user table
+	 */
+	protected UserTable(UserTable<TColumn> userTable) {
+		this.tableName = userTable.tableName;
+		this.columnNames = userTable.columnNames;
+		this.columns = userTable.columns;
+		this.nameToIndex = userTable.nameToIndex;
+		this.pkIndex = userTable.pkIndex;
+		this.uniqueConstraints = userTable.uniqueConstraints;
 	}
 
 	/**
@@ -157,7 +150,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Check for the expected data type
 	 * 
 	 * @param expected
+	 *            expected data type
 	 * @param column
+	 *            user column
 	 */
 	protected void typeCheck(GeoPackageDataType expected, TColumn column) {
 
@@ -174,7 +169,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Check for missing columns
 	 * 
 	 * @param index
+	 *            column index
 	 * @param column
+	 *            user column
 	 */
 	protected void missingCheck(Integer index, String column) {
 		if (index == null) {
@@ -269,6 +266,16 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Check if the table has a primary key column
+	 * 
+	 * @return true if has a primary key
+	 * @since 3.0.1
+	 */
+	public boolean hasPkColumn() {
+		return pkIndex >= 0;
+	}
+
+	/**
 	 * Get the primary key column index
 	 * 
 	 * @return primary key column index
@@ -284,7 +291,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	public TColumn getPkColumn() {
 		TColumn column = null;
-		if (pkIndex >= 0) {
+		if (hasPkColumn()) {
 			column = columns.get(pkIndex);
 		}
 		return column;

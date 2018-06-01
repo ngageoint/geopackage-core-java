@@ -41,7 +41,7 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 	 */
 	public UserCustomTable(String tableName, List<UserCustomColumn> columns,
 			Collection<String> requiredColumns) {
-		super(tableName, columns, false);
+		super(tableName, columns);
 
 		if (requiredColumns != null && !requiredColumns.isEmpty()) {
 
@@ -67,6 +67,16 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 			}
 		}
 
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param userCustomTable
+	 *            user custom table
+	 */
+	public UserCustomTable(UserCustomTable userCustomTable) {
+		super(userCustomTable);
 	}
 
 }

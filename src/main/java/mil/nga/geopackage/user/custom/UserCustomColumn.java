@@ -13,6 +13,20 @@ import mil.nga.geopackage.user.UserColumn;
 public class UserCustomColumn extends UserColumn {
 
 	/**
+	 * Create a new primary key column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @return user custom column
+	 */
+	public static UserCustomColumn createPrimaryKeyColumn(int index, String name) {
+		return new UserCustomColumn(index, name, GeoPackageDataType.INTEGER,
+				null, true, null, true);
+	}
+
+	/**
 	 * Create a new column
 	 * 
 	 * @param index
@@ -25,7 +39,7 @@ public class UserCustomColumn extends UserColumn {
 	 *            not null flag
 	 * @param defaultValue
 	 *            default value
-	 * @return tile column
+	 * @return user custom column
 	 */
 	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -47,7 +61,7 @@ public class UserCustomColumn extends UserColumn {
 	 *            not null flag
 	 * @param defaultValue
 	 *            default value
-	 * @return tile column
+	 * @return user custom column
 	 */
 	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max, boolean notNull,

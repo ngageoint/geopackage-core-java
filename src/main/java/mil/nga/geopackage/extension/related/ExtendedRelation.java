@@ -103,6 +103,22 @@ public class ExtendedRelation {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param extendedRelation
+	 *            extended relation to copy
+	 */
+	public ExtendedRelation(ExtendedRelation extendedRelation) {
+		id = extendedRelation.id;
+		baseTableName = extendedRelation.baseTableName;
+		basePrimaryColumn = extendedRelation.basePrimaryColumn;
+		relatedTableName = extendedRelation.relatedTableName;
+		relatedPrimaryColumn = extendedRelation.relatedPrimaryColumn;
+		relationName = extendedRelation.relationName;
+		mappingTableName = extendedRelation.mappingTableName;
+	}
+
+	/**
 	 * Getter
 	 * 
 	 * @return the id
@@ -118,6 +134,13 @@ public class ExtendedRelation {
 	 */
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	/**
+	 * Reset the id so the row can be inserted as new
+	 */
+	public void resetId() {
+		id = 0;
 	}
 
 	/**
