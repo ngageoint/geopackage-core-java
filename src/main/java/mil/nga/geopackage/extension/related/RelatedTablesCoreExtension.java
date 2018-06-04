@@ -1,7 +1,7 @@
 package mil.nga.geopackage.extension.related;
 
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,11 +70,20 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get the extended relations DAO
+	 * 
+	 * @return extended relations DAO
+	 */
+	public ExtendedRelationsDao getExtendedRelationsDao() {
+		return extendedRelationsDao;
+	}
+
+	/**
 	 * Get or create the extension
 	 * 
 	 * @return extension
 	 */
-	public Extensions getOrCreate() {
+	private Extensions getOrCreate() {
 
 		// Create table
 		geoPackage.createExtendedRelationsTable();
@@ -87,13 +96,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Get or create the mapping table extension
+	 * Get or create the extension
 	 * 
 	 * @param mappingTable
 	 *            mapping table name
 	 * @return extension
 	 */
-	public Extensions getOrCreate(String mappingTable) {
+	private Extensions getOrCreate(String mappingTable) {
+
+		getOrCreate();
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, mappingTable, null,
 				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
@@ -141,12 +152,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	/**
 	 * Returns the relationships defined through this extension
 	 * 
-	 * @return a collection of ExtendedRelation objects
+	 * @return a list of ExtendedRelation objects
 	 */
-	public Collection<ExtendedRelation> getRelationships() {
-		Collection<ExtendedRelation> result = null;
+	public List<ExtendedRelation> getRelationships() {
+		List<ExtendedRelation> result = null;
 		try {
-			result = extendedRelationsDao.queryForAll();
+			if (extendedRelationsDao.isTableExists()) {
+				result = extendedRelationsDao.queryForAll();
+			} else {
+				result = new ArrayList<>();
+			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to query for relationships "
 					+ "in " + EXTENSION_NAME, e);
@@ -155,12 +170,17 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related tables, creating a
+	 * simple mapping table
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param mappingTableName
+	 *            mapping table name
 	 * @param relationType
+	 *            relation type
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
@@ -174,10 +194,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Adds a relationship between the base and related tables
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param mappingTableName
+	 *            mapping table name
 	 * @param relationAuthor
+	 *            relation author
 	 * @param relationName
+	 *            relation name
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
@@ -191,12 +216,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Adds a relationship between the base and related tables
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param mappingTableName
-	 * @param relationshipName
+	 *            mapping table name
+	 * @param relationName
+	 *            relation name
 	 * @return The relationship that was added
 	 */
-	private ExtendedRelation addRelationship(String baseTableName,
+	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, String mappingTableName,
 			String relationName) {
 
@@ -213,9 +242,13 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Adds a relationship between the base and related tables
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param userMappingTable
+	 *            user mapping table
 	 * @param relationType
+	 *            relation type
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
@@ -229,10 +262,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Adds a relationship between the base and related tables
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param userMappingTable
+	 *            user mapping table
 	 * @param relationAuthor
+	 *            relation author
 	 * @param relationName
+	 *            relation name
 	 * @return The relationship that was added
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
@@ -246,12 +284,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Adds a relationship between the base and related tables
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param userMappingTable
+	 *            user mapping table
 	 * @param relationName
+	 *            relation name
 	 * @return The relationship that was added
 	 */
-	private ExtendedRelation addRelationship(String baseTableName,
+	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, UserMappingTable userMappingTable,
 			String relationName) {
 
@@ -279,11 +321,88 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Create the related table, content row, and add a relationship between the
+	 * base and related table
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation createRelationship(String baseTableName,
+			UserRelatedTable relatedTable, String mappingTableName) {
+
+		UserMappingTable userMappingTable = UserMappingTable
+				.create(mappingTableName);
+
+		return createRelationship(baseTableName, relatedTable, userMappingTable);
+	}
+
+	/**
+	 * Create the related table, content row, and add a relationship between the
+	 * base and related table
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation createRelationship(String baseTableName,
+			UserRelatedTable relatedTable, UserMappingTable userMappingTable) {
+
+		createRelatedTable(relatedTable);
+
+		return addRelationship(baseTableName, relatedTable.getTableName(),
+				userMappingTable, relatedTable.getRelationName());
+	}
+
+	/**
+	 * Create a user related table
+	 * 
+	 * @param relatedTable
+	 *            user related table
+	 */
+	public void createRelatedTable(UserRelatedTable relatedTable) {
+
+		geoPackage.createUserTable(relatedTable);
+
+		try {
+			// Create the contents
+			Contents contents = new Contents();
+			contents.setTableName(relatedTable.getTableName());
+			contents.setDataTypeString(relatedTable.getRelationName());
+			contents.setIdentifier(relatedTable.getTableName());
+			geoPackage.getContentsDao().create(contents);
+
+			relatedTable.setContents(contents);
+
+		} catch (RuntimeException e) {
+			geoPackage.deleteTableQuietly(relatedTable.getTableName());
+			throw e;
+		} catch (SQLException e) {
+			geoPackage.deleteTableQuietly(relatedTable.getTableName());
+			throw new GeoPackageException(
+					"Failed to create table and metadata: "
+							+ relatedTable.getTableName(), e);
+		}
+
+	}
+
+	/**
 	 * Remove a specific relationship from the GeoPackage
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param relationType
+	 *            relation type
 	 */
 	public void removeRelationship(String baseTableName,
 			String relatedTableName, RelationType relationType) {
@@ -295,9 +414,13 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Remove a specific relationship from the GeoPackage
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param relationAuthor
+	 *            relation author
 	 * @param relationName
+	 *            relation name
 	 */
 	public void removeRelationship(String baseTableName,
 			String relatedTableName, String relationAuthor, String relationName) {
@@ -321,27 +444,35 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Remove a specific relationship from the GeoPackage
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 * @param relatedTableName
+	 *            related table name
 	 * @param relationName
+	 *            relation name
 	 */
-	private void removeRelationship(String baseTableName,
+	public void removeRelationship(String baseTableName,
 			String relatedTableName, String relationName) {
-		Map<String, Object> fieldValues = new HashMap<String, Object>();
-		fieldValues.put(ExtendedRelation.COLUMN_BASE_TABLE_NAME, baseTableName);
-		fieldValues.put(ExtendedRelation.COLUMN_RELATED_TABLE_NAME,
-				relatedTableName);
-		fieldValues.put(ExtendedRelation.COLUMN_RELATION_NAME, relationName);
+
 		try {
-			List<ExtendedRelation> extendedRelations = extendedRelationsDao
-					.queryForFieldValues(fieldValues);
-			for (ExtendedRelation extendedRelation : extendedRelations) {
-				dropMappingTable(extendedRelation);
-				if (extensionsDao.isTableExists()) {
-					extensionsDao.deleteByExtension(EXTENSION_NAME,
-							extendedRelation.getMappingTableName());
+			if (extendedRelationsDao.isTableExists()) {
+				Map<String, Object> fieldValues = new HashMap<String, Object>();
+				fieldValues.put(ExtendedRelation.COLUMN_BASE_TABLE_NAME,
+						baseTableName);
+				fieldValues.put(ExtendedRelation.COLUMN_RELATED_TABLE_NAME,
+						relatedTableName);
+				fieldValues.put(ExtendedRelation.COLUMN_RELATION_NAME,
+						relationName);
+				List<ExtendedRelation> extendedRelations = extendedRelationsDao
+						.queryForFieldValues(fieldValues);
+				for (ExtendedRelation extendedRelation : extendedRelations) {
+					dropMappingTable(extendedRelation);
+					if (extensionsDao.isTableExists()) {
+						extensionsDao.deleteByExtension(EXTENSION_NAME,
+								extendedRelation.getMappingTableName());
+					}
 				}
+				extendedRelationsDao.delete(extendedRelations);
 			}
-			extendedRelationsDao.delete(extendedRelations);
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to remove relationship '"
 					+ relationName + "' between " + baseTableName + " and "
@@ -386,38 +517,6 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public String getRelationName(String author, String name) {
 		return "x-" + author + "_" + name;
-	}
-
-	/**
-	 * Create a user related table
-	 * 
-	 * @param userRelatedTable
-	 *            user related table
-	 */
-	public void createUserRelatedTable(UserRelatedTable userRelatedTable) {
-
-		geoPackage.createUserTable(userRelatedTable);
-
-		try {
-			// Create the contents
-			Contents contents = new Contents();
-			contents.setTableName(userRelatedTable.getTableName());
-			contents.setDataTypeString(userRelatedTable.getRelationName());
-			contents.setIdentifier(userRelatedTable.getTableName());
-			geoPackage.getContentsDao().create(contents);
-
-			userRelatedTable.setContents(contents);
-
-		} catch (RuntimeException e) {
-			geoPackage.deleteTableQuietly(userRelatedTable.getTableName());
-			throw e;
-		} catch (SQLException e) {
-			geoPackage.deleteTableQuietly(userRelatedTable.getTableName());
-			throw new GeoPackageException(
-					"Failed to create table and metadata: "
-							+ userRelatedTable.getTableName(), e);
-		}
-
 	}
 
 }
