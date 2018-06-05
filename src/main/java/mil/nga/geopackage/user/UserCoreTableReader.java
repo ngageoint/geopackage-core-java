@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
+import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.sf.GeometryType;
 
 /**
  * Reads the metadata from an existing user table
@@ -63,6 +65,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 */
 	protected UserCoreTableReader(String tableName) {
 		this.tableName = tableName;
@@ -72,7 +75,9 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * Create the table
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columnList
+	 *            column list
 	 * @return table
 	 */
 	protected abstract TTable createTable(String tableName,
@@ -82,13 +87,21 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * Create the column
 	 * 
 	 * @param result
+	 *            result
 	 * @param index
+	 *            column index
 	 * @param name
+	 *            column name
 	 * @param type
+	 *            data type
 	 * @param max
+	 *            max value
 	 * @param notNull
+	 *            not null flag
 	 * @param defaultValueIndex
+	 *            default value index
 	 * @param primaryKey
+	 *            primary key flag
 	 * @return column
 	 */
 	protected abstract TColumn createColumn(TResult result, int index,
@@ -99,6 +112,7 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 	 * Read the table
 	 * 
 	 * @param db
+	 *            user connection
 	 * @return table
 	 */
 	public TTable readTable(
@@ -153,6 +167,36 @@ public abstract class UserCoreTableReader<TColumn extends UserColumn, TTable ext
 		}
 
 		return createTable(tableName, columnList);
+	}
+
+	/**
+	 * Get the data type of the string type.
+	 * 
+	 * Geometries are converted to blobs
+	 * 
+	 * @param type
+	 *            data type string
+	 * @return data type
+	 * @since 3.0.1
+	 */
+	public GeoPackageDataType getDataType(String type) {
+
+		GeoPackageDataType dataType = null;
+
+		try {
+			dataType = GeoPackageDataType.fromName(type);
+		} catch (IllegalArgumentException dataTypeException) {
+			try {
+				// Check if a geometry and convert to a blob
+				GeometryType.fromName(type);
+				dataType = GeoPackageDataType.BLOB;
+			} catch (IllegalArgumentException geometryException) {
+				throw new GeoPackageException("Unsupported column data type "
+						+ type, dataTypeException);
+			}
+		}
+
+		return dataType;
 	}
 
 }
