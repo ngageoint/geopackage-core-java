@@ -10,6 +10,7 @@ import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -142,12 +143,28 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public abstract String getPrimaryKeyColumnName(String tableName);
 
 	/**
-	 * Drop the mapping table of the extended relation
+	 * Set the contents in the user related table
 	 * 
-	 * @param extendedRelation
-	 *            extended relation
+	 * @param table
+	 *            user related table
 	 */
-	public abstract void dropMappingTable(ExtendedRelation extendedRelation);
+	protected void setContents(UserRelatedTable table) {
+		ContentsDao dao = geoPackage.getContentsDao();
+		Contents contents = null;
+		try {
+			contents = dao.queryForId(table.getTableName());
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to retrieve "
+					+ Contents.class.getSimpleName() + " for table name: "
+					+ table.getTableName(), e);
+		}
+		if (contents == null) {
+			throw new GeoPackageException(
+					"No Contents Table exists for table name: "
+							+ table.getTableName());
+		}
+		table.setContents(contents);
+	}
 
 	/**
 	 * Returns the relationships defined through this extension
@@ -378,7 +395,9 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			contents.setTableName(relatedTable.getTableName());
 			contents.setDataTypeString(relatedTable.getRelationName());
 			contents.setIdentifier(relatedTable.getTableName());
-			geoPackage.getContentsDao().create(contents);
+			ContentsDao contentsDao = geoPackage.getContentsDao();
+			contentsDao.create(contents);
+			contentsDao.refresh(contents);
 
 			relatedTable.setContents(contents);
 
@@ -465,11 +484,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				List<ExtendedRelation> extendedRelations = extendedRelationsDao
 						.queryForFieldValues(fieldValues);
 				for (ExtendedRelation extendedRelation : extendedRelations) {
-					dropMappingTable(extendedRelation);
-					if (extensionsDao.isTableExists()) {
-						extensionsDao.deleteByExtension(EXTENSION_NAME,
-								extendedRelation.getMappingTableName());
-					}
+					geoPackage.deleteTable(extendedRelation
+							.getMappingTableName());
 				}
 				extendedRelationsDao.delete(extendedRelations);
 			}
@@ -492,7 +508,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				List<ExtendedRelation> extendedRelations = extendedRelationsDao
 						.queryForAll();
 				for (ExtendedRelation extendedRelation : extendedRelations) {
-					dropMappingTable(extendedRelation);
+					geoPackage.deleteTable(extendedRelation
+							.getMappingTableName());
 				}
 				TableUtils.dropTable(extendedRelationsDao, false);
 			}
