@@ -167,36 +167,65 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 
 		if (contents != null) {
 
-			// Delete Geometry Columns
-			GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
-			if (geometryColumnsDao.isTableExists()) {
-				GeometryColumns geometryColumns = contents.getGeometryColumns();
-				if (geometryColumns != null) {
-					geometryColumnsDao.delete(geometryColumns);
-				}
-			}
+			ContentsDataType dataType = contents.getDataType();
 
-			// Delete Tile Matrix collection
-			TileMatrixDao tileMatrixDao = getTileMatrixDao();
-			if (tileMatrixDao.isTableExists()) {
-				ForeignCollection<TileMatrix> tileMatrixCollection = contents
-						.getTileMatrix();
-				if (!tileMatrixCollection.isEmpty()) {
-					tileMatrixDao.delete(tileMatrixCollection);
-				}
-			}
+			if (dataType != null) {
 
-			// Delete Tile Matrix Set
-			TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
-			if (tileMatrixSetDao.isTableExists()) {
-				TileMatrixSet tileMatrixSet = contents.getTileMatrixSet();
-				if (tileMatrixSet != null) {
-					tileMatrixSetDao.delete(tileMatrixSet);
+				switch (dataType) {
+				case FEATURES:
+
+					// Delete Geometry Columns
+					GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
+					if (geometryColumnsDao.isTableExists()) {
+						GeometryColumns geometryColumns = contents
+								.getGeometryColumns();
+						if (geometryColumns != null) {
+							geometryColumnsDao.delete(geometryColumns);
+						}
+					}
+
+					break;
+
+				case TILES:
+				case GRIDDED_COVERAGE:
+
+					// Delete Tile Matrix collection
+					TileMatrixDao tileMatrixDao = getTileMatrixDao();
+					if (tileMatrixDao.isTableExists()) {
+						ForeignCollection<TileMatrix> tileMatrixCollection = contents
+								.getTileMatrix();
+						if (!tileMatrixCollection.isEmpty()) {
+							tileMatrixDao.delete(tileMatrixCollection);
+						}
+					}
+
+					// Delete Tile Matrix Set
+					TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
+					if (tileMatrixSetDao.isTableExists()) {
+						TileMatrixSet tileMatrixSet = contents
+								.getTileMatrixSet();
+						if (tileMatrixSet != null) {
+							tileMatrixSetDao.delete(tileMatrixSet);
+						}
+					}
+
+					break;
+
+				case ATTRIBUTES:
+
+					dropTable(contents.getTableName());
+
+					break;
+
 				}
+
+			} else {
+				dropTable(contents.getTableName());
 			}
 
 			count = delete(contents);
 		}
+
 		return count;
 	}
 
@@ -215,8 +244,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		int count = deleteCascade(contents);
 
 		if (userTable) {
-			db.execSQL("DROP TABLE IF EXISTS "
-					+ CoreSQLUtils.quoteWrap(contents.getTableName()));
+			dropTable(contents.getTableName());
 		}
 
 		return count;
@@ -321,7 +349,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 			if (contents != null) {
 				count = deleteCascade(contents, userTable);
 			} else if (userTable) {
-				db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(id));
+				dropTable(id);
 			}
 		}
 		return count;
@@ -374,6 +402,16 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to delete table: " + table, e);
 		}
+	}
+
+	/**
+	 * Drop the table
+	 * 
+	 * @param table
+	 *            table name
+	 */
+	private void dropTable(String table) {
+		db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(table));
 	}
 
 	/**
