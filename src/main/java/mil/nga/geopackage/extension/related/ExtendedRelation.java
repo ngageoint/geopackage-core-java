@@ -225,6 +225,15 @@ public class ExtendedRelation {
 	}
 
 	/**
+	 * Get the relation type for pre-known types
+	 * 
+	 * @return relation type or null
+	 */
+	public RelationType getRelationType() {
+		return RelationType.fromName(getRelationName());
+	}
+
+	/**
 	 * Setter
 	 * 
 	 * @param relationName
