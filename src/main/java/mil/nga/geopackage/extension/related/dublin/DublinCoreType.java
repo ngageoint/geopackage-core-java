@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related;
+package mil.nga.geopackage.extension.related.dublin;
 
 /**
  * Dublin Core Metadata Initiative term types

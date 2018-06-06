@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension.related;
+package mil.nga.geopackage.extension.related.dublin;
 
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserCoreRow;
