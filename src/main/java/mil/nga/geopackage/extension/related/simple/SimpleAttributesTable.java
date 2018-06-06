@@ -218,7 +218,6 @@ public class SimpleAttributesTable extends UserRelatedTable {
 			case TEXT:
 			case INTEGER:
 			case REAL:
-
 				break;
 			default:
 				throw new GeoPackageException(
