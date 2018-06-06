@@ -269,6 +269,18 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Check if the row has the column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return true if has the column
+	 * @since 3.0.1
+	 */
+	public boolean hasColumn(String columnName) {
+		return table.hasColumn(columnName);
+	}
+
+	/**
 	 * Get the id value, which is the value of the primary key
 	 * 
 	 * @return id

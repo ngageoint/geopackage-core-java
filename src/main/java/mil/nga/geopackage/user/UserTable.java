@@ -248,6 +248,18 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Check if the table has the column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return true if has the column
+	 * @since 3.0.1
+	 */
+	public boolean hasColumn(String columnName) {
+		return nameToIndex.containsKey(columnName);
+	}
+
+	/**
 	 * Get the column count
 	 * 
 	 * @return column count
