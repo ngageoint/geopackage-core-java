@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.extension.related.RelationType;
 import mil.nga.geopackage.extension.related.UserRelatedTable;
+import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 
@@ -214,12 +216,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 		}
 
 		for (UserCustomColumn column : columns) {
-			switch (column.getDataType()) {
-			case TEXT:
-			case INTEGER:
-			case REAL:
-				break;
-			default:
+			if (!isSimple(column)) {
 				throw new GeoPackageException(
 						"Simple Attributes Tables only support simple data types. Column: "
 								+ column.getName() + ", Non Simple Data Type: "
@@ -244,6 +241,40 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 */
 	public UserCustomColumn getIdColumn() {
 		return getPkColumn();
+	}
+
+	/**
+	 * Determine if the column is a simple type: TEXT, INTEGER, or REAL
+	 * 
+	 * @param column
+	 *            user column
+	 * @return true if a simple column
+	 */
+	public static boolean isSimple(UserColumn column) {
+		return isSimple(column.getDataType());
+	}
+
+	/**
+	 * Determine if the data type is a simple type: TEXT, INTEGER, or REAL
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return true if a simple column
+	 */
+	public static boolean isSimple(GeoPackageDataType dataType) {
+
+		boolean simple = false;
+
+		switch (dataType) {
+		case TEXT:
+		case INTEGER:
+		case REAL:
+			simple = true;
+			break;
+		default:
+		}
+
+		return simple;
 	}
 
 }
