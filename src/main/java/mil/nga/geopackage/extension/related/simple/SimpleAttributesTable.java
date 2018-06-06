@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.related.RelationType;
 import mil.nga.geopackage.extension.related.UserRelatedTable;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
@@ -58,7 +59,9 @@ public class SimpleAttributesTable extends UserRelatedTable {
 		List<UserCustomColumn> tableColumns = new ArrayList<>();
 		tableColumns.addAll(createRequiredColumns(idColumnName));
 
-		tableColumns.addAll(columns);
+		if (columns != null) {
+			tableColumns.addAll(columns);
+		}
 
 		return new SimpleAttributesTable(tableName, tableColumns,
 				requiredColumns(idColumnName));
@@ -183,6 +186,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	private SimpleAttributesTable(String tableName,
 			List<UserCustomColumn> columns, Collection<String> requiredColumns) {
 		super(tableName, RELATION_TYPE.getName(), columns, requiredColumns);
+		validateColumns();
 	}
 
 	/**
@@ -193,6 +197,36 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 */
 	SimpleAttributesTable(UserCustomTable table) {
 		super(RELATION_TYPE.getName(), table);
+		validateColumns();
+	}
+
+	/**
+	 * Validate that Simple Attributes columns to verify at least one non id
+	 * column exists and that all columns are simple data types
+	 */
+	private void validateColumns() {
+
+		List<UserCustomColumn> columns = getColumns();
+		if (columns.size() < 2) {
+			throw new GeoPackageException(
+					"Simple Attributes Tables require at least one non id column. Columns: "
+							+ columns.size());
+		}
+
+		for (UserCustomColumn column : columns) {
+			switch (column.getDataType()) {
+			case TEXT:
+			case INTEGER:
+			case REAL:
+
+				break;
+			default:
+				throw new GeoPackageException(
+						"Simple Attributes Tables only support simple data types. Column: "
+								+ column.getName() + ", Non Simple Data Type: "
+								+ column.getDataType().name());
+			}
+		}
 	}
 
 	/**
