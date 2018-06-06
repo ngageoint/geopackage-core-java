@@ -1,27 +1,26 @@
-package mil.nga.geopackage.extension.related.media;
+package mil.nga.geopackage.extension.related.simple;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.extension.related.RelationType;
 import mil.nga.geopackage.extension.related.UserRelatedTable;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 
 /**
- * Media Requirements Class User-Defined Related Data Table
+ * Simple Attributes Requirements Class User-Defined Related Data Table
  * 
  * @author osbornb
  * @since 3.0.1
  */
-public class MediaTable extends UserRelatedTable {
+public class SimpleAttributesTable extends UserRelatedTable {
 
 	/**
-	 * User-Defined Media Table relation name
+	 * User-Defined Simple Attributes Table relation name
 	 */
-	public static final RelationType RELATION_TYPE = RelationType.MEDIA;
+	public static final RelationType RELATION_TYPE = RelationType.SIMPLE_ATTRIBUTES;
 
 	/**
 	 * Autoincrement primary key, optional name
@@ -29,77 +28,40 @@ public class MediaTable extends UserRelatedTable {
 	public static final String COLUMN_ID = "id";
 
 	/**
-	 * Multimedia content column name
-	 */
-	public static final String COLUMN_DATA = "data";
-
-	/**
-	 * Mime-type of data column name
-	 */
-	public static final String COLUMN_CONTENT_TYPE = "content_type";
-
-	/**
-	 * Create a media table with the minimum required columns
+	 * Create a simple attributes table with the columns
 	 * 
 	 * @param tableName
 	 *            table name
-	 * @return media table
+	 * @param columns
+	 *            columns
+	 * @return simple attributes table
 	 */
-	public static MediaTable create(String tableName) {
-		return create(tableName, null, null);
+	public static SimpleAttributesTable create(String tableName,
+			List<UserCustomColumn> columns) {
+		return create(tableName, null, columns);
 	}
 
 	/**
-	 * Create a media table with the minimum required columns followed by the
-	 * additional columns
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param additionalColumns
-	 *            additional columns
-	 * @return media table
-	 */
-	public static MediaTable create(String tableName,
-			List<UserCustomColumn> additionalColumns) {
-		return create(tableName, null, additionalColumns);
-	}
-
-	/**
-	 * Create a media table with the id column and minimum required columns
+	 * Create a simple attributes table with the id column and columns
 	 * 
 	 * @param tableName
 	 *            table name
 	 * @param idColumnName
 	 *            id column name
-	 * @return media table
+	 * @param columns
+	 *            columns
+	 * @return simple attributes table
 	 */
-	public static MediaTable create(String tableName, String idColumnName) {
-		return create(tableName, idColumnName, null);
-	}
+	public static SimpleAttributesTable create(String tableName,
+			String idColumnName, List<UserCustomColumn> columns) {
 
-	/**
-	 * Create a media table with the id column and minimum required columns
-	 * followed by the additional columns
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param idColumnName
-	 *            id column name
-	 * @param additionalColumns
-	 *            additional columns
-	 * @return media table
-	 */
-	public static MediaTable create(String tableName, String idColumnName,
-			List<UserCustomColumn> additionalColumns) {
+		List<UserCustomColumn> tableColumns = new ArrayList<>();
+		tableColumns.addAll(createRequiredColumns(idColumnName));
 
-		List<UserCustomColumn> columns = new ArrayList<>();
-		columns.addAll(createRequiredColumns(idColumnName));
+		tableColumns.addAll(columns);
 
-		if (additionalColumns != null) {
-			columns.addAll(additionalColumns);
-		}
-
-		return new MediaTable(tableName, columns, requiredColumns(idColumnName));
+		return new SimpleAttributesTable(tableName, tableColumns,
+				requiredColumns(idColumnName));
 	}
 
 	/**
@@ -154,8 +116,6 @@ public class MediaTable extends UserRelatedTable {
 
 		List<UserCustomColumn> columns = new ArrayList<>();
 		columns.add(createIdColumn(startingIndex++, idColumnName));
-		columns.add(createDataColumn(startingIndex++));
-		columns.add(createContentTypeColumn(startingIndex++));
 
 		return columns;
 	}
@@ -171,30 +131,6 @@ public class MediaTable extends UserRelatedTable {
 	 */
 	public static UserCustomColumn createIdColumn(int index, String idColumnName) {
 		return UserCustomColumn.createPrimaryKeyColumn(index, idColumnName);
-	}
-
-	/**
-	 * Create a data column
-	 * 
-	 * @param index
-	 *            column index
-	 * @return data column
-	 */
-	public static UserCustomColumn createDataColumn(int index) {
-		return UserCustomColumn.createColumn(index, COLUMN_DATA,
-				GeoPackageDataType.BLOB, true, null);
-	}
-
-	/**
-	 * Create a content type column
-	 * 
-	 * @param index
-	 *            column index
-	 * @return content type column
-	 */
-	public static UserCustomColumn createContentTypeColumn(int index) {
-		return UserCustomColumn.createColumn(index, COLUMN_CONTENT_TYPE,
-				GeoPackageDataType.TEXT, true, null);
 	}
 
 	/**
@@ -231,8 +167,6 @@ public class MediaTable extends UserRelatedTable {
 
 		List<String> requiredColumns = new ArrayList<>();
 		requiredColumns.add(idColumnName);
-		requiredColumns.add(COLUMN_DATA);
-		requiredColumns.add(COLUMN_CONTENT_TYPE);
 		return requiredColumns;
 	}
 
@@ -246,8 +180,8 @@ public class MediaTable extends UserRelatedTable {
 	 * @param requiredColumns
 	 *            list of required columns
 	 */
-	private MediaTable(String tableName, List<UserCustomColumn> columns,
-			Collection<String> requiredColumns) {
+	private SimpleAttributesTable(String tableName,
+			List<UserCustomColumn> columns, Collection<String> requiredColumns) {
 		super(tableName, RELATION_TYPE.getName(), columns, requiredColumns);
 	}
 
@@ -257,7 +191,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param table
 	 *            user custom table
 	 */
-	MediaTable(UserCustomTable table) {
+	SimpleAttributesTable(UserCustomTable table) {
 		super(RELATION_TYPE.getName(), table);
 	}
 
@@ -277,42 +211,6 @@ public class MediaTable extends UserRelatedTable {
 	 */
 	public UserCustomColumn getIdColumn() {
 		return getPkColumn();
-	}
-
-	/**
-	 * Get the data column index
-	 * 
-	 * @return data column index
-	 */
-	public int getDataColumnIndex() {
-		return getColumnIndex(COLUMN_DATA);
-	}
-
-	/**
-	 * Get the data column
-	 * 
-	 * @return data column
-	 */
-	public UserCustomColumn getDataColumn() {
-		return getColumn(COLUMN_DATA);
-	}
-
-	/**
-	 * Get the content type column index
-	 * 
-	 * @return content type column index
-	 */
-	public int getContentTypeColumnIndex() {
-		return getColumnIndex(COLUMN_CONTENT_TYPE);
-	}
-
-	/**
-	 * Get the content type column
-	 * 
-	 * @return content type column
-	 */
-	public UserCustomColumn getContentTypeColumn() {
-		return getColumn(COLUMN_CONTENT_TYPE);
 	}
 
 }
