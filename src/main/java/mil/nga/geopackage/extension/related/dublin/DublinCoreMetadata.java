@@ -110,4 +110,22 @@ public class DublinCoreMetadata {
 		return value;
 	}
 
+	/**
+	 * Set the value in the row for the Dublin Core Type term
+	 * 
+	 * @param row
+	 *            user row
+	 * @param type
+	 *            Dublin Core Type
+	 * @param value
+	 *            value
+	 */
+	public static void setValue(UserCoreRow<?, ?> row, DublinCoreType type,
+			Object value) {
+
+		UserColumn column = getColumn(row, type);
+
+		row.setValue(column.getIndex(), value);
+	}
+
 }
