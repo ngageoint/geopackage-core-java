@@ -187,8 +187,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables, creating a
-	 * simple mapping table
+	 * Adds a relationship between the base and related table. Creates a default
+	 * user mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -208,7 +208,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related table. Creates a default
+	 * user mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -230,7 +231,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related table. Creates a default
+	 * user mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -256,7 +258,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related table. Creates the user
+	 * mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -276,7 +279,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related table. Creates the user
+	 * mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -298,7 +302,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Adds a relationship between the base and related tables
+	 * Adds a relationship between the base and related table. Creates the user
+	 * mapping table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -314,8 +319,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, UserMappingTable userMappingTable,
 			String relationName) {
 
-		getOrCreate(userMappingTable.getTableName());
-		geoPackage.createUserTable(userMappingTable);
+		// Create the user mapping table if needed
+		createUserMappingTable(userMappingTable);
 
 		// Add a row to gpkgext_relations
 		ExtendedRelation extendedRelation = new ExtendedRelation();
@@ -338,8 +343,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Create the related table, content row, and add a relationship between the
-	 * base and related table
+	 * Adds a relationship between the base and user related table. Creates a
+	 * default user mapping table and the related table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -349,18 +354,18 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            user mapping table name
 	 * @return The relationship that was added
 	 */
-	public ExtendedRelation createRelationship(String baseTableName,
+	public ExtendedRelation addRelationship(String baseTableName,
 			UserRelatedTable relatedTable, String mappingTableName) {
 
 		UserMappingTable userMappingTable = UserMappingTable
 				.create(mappingTableName);
 
-		return createRelationship(baseTableName, relatedTable, userMappingTable);
+		return addRelationship(baseTableName, relatedTable, userMappingTable);
 	}
 
 	/**
-	 * Create the related table, content row, and add a relationship between the
-	 * base and related table
+	 * Adds a relationship between the base and user related table. Creates the
+	 * user mapping table and related table if needed.
 	 * 
 	 * @param baseTableName
 	 *            base table name
@@ -370,9 +375,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            user mapping table
 	 * @return The relationship that was added
 	 */
-	public ExtendedRelation createRelationship(String baseTableName,
+	public ExtendedRelation addRelationship(String baseTableName,
 			UserRelatedTable relatedTable, UserMappingTable userMappingTable) {
 
+		// Create the related table if needed
 		createRelatedTable(relatedTable);
 
 		return addRelationship(baseTableName, relatedTable.getTableName(),
@@ -380,37 +386,92 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Create a user related table
+	 * Create a default user mapping table and extension row if either does not
+	 * exist. When not created, there is no guarantee that an existing table has
+	 * the same schema as the provided tabled.
+	 * 
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return true if table was created, false if the table already existed
+	 */
+	public boolean createUserMappingTable(String mappingTableName) {
+
+		UserMappingTable userMappingTable = UserMappingTable
+				.create(mappingTableName);
+
+		return createUserMappingTable(userMappingTable);
+	}
+
+	/**
+	 * Create a user mapping table and extension row if either does not exist.
+	 * When not created, there is no guarantee that an existing table has the
+	 * same schema as the provided tabled.
+	 * 
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return true if table was created, false if the table already existed
+	 */
+	public boolean createUserMappingTable(UserMappingTable userMappingTable) {
+
+		boolean created = false;
+
+		String userMappingTableName = userMappingTable.getTableName();
+		getOrCreate(userMappingTableName);
+
+		if (!geoPackage.isTable(userMappingTableName)) {
+
+			geoPackage.createUserTable(userMappingTable);
+
+			created = true;
+		}
+
+		return created;
+	}
+
+	/**
+	 * Create a user related table if it does not exist. When not created, there
+	 * is no guarantee that an existing table has the same schema as the
+	 * provided tabled.
 	 * 
 	 * @param relatedTable
 	 *            user related table
+	 * @return true if created, false if the table already existed
 	 */
-	public void createRelatedTable(UserRelatedTable relatedTable) {
+	public boolean createRelatedTable(UserRelatedTable relatedTable) {
 
-		geoPackage.createUserTable(relatedTable);
+		boolean created = false;
 
-		try {
-			// Create the contents
-			Contents contents = new Contents();
-			contents.setTableName(relatedTable.getTableName());
-			contents.setDataTypeString(relatedTable.getRelationName());
-			contents.setIdentifier(relatedTable.getTableName());
-			ContentsDao contentsDao = geoPackage.getContentsDao();
-			contentsDao.create(contents);
-			contentsDao.refresh(contents);
+		String relatedTableName = relatedTable.getTableName();
+		if (!geoPackage.isTable(relatedTableName)) {
 
-			relatedTable.setContents(contents);
+			geoPackage.createUserTable(relatedTable);
 
-		} catch (RuntimeException e) {
-			geoPackage.deleteTableQuietly(relatedTable.getTableName());
-			throw e;
-		} catch (SQLException e) {
-			geoPackage.deleteTableQuietly(relatedTable.getTableName());
-			throw new GeoPackageException(
-					"Failed to create table and metadata: "
-							+ relatedTable.getTableName(), e);
+			try {
+				// Create the contents
+				Contents contents = new Contents();
+				contents.setTableName(relatedTableName);
+				contents.setDataTypeString(relatedTable.getRelationName());
+				contents.setIdentifier(relatedTableName);
+				ContentsDao contentsDao = geoPackage.getContentsDao();
+				contentsDao.create(contents);
+				contentsDao.refresh(contents);
+
+				relatedTable.setContents(contents);
+
+			} catch (RuntimeException e) {
+				geoPackage.deleteTableQuietly(relatedTableName);
+				throw e;
+			} catch (SQLException e) {
+				geoPackage.deleteTableQuietly(relatedTableName);
+				throw new GeoPackageException(
+						"Failed to create table and metadata: "
+								+ relatedTableName, e);
+			}
+
+			created = true;
 		}
 
+		return created;
 	}
 
 	/**
