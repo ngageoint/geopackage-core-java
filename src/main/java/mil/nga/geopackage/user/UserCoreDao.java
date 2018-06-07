@@ -223,11 +223,73 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param fieldName
+	 *            field name
 	 * @param value
+	 *            column value
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, ColumnValue value) {
 		String where = buildWhere(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
+				where, whereArgs, null, null, null);
+		prepareResult(result);
+		return result;
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.0.1
+	 */
+
+	public TResult queryForLike(String fieldName, Object value) {
+		return queryForLike(fieldName, value, null, null, null);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return result
+	 * @since 3.0.1
+	 */
+	public TResult queryForLike(String fieldName, Object value, String groupBy,
+			String having, String orderBy) {
+		String where = buildWhereLike(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		TResult result = userDb.query(getTableName(), table.getColumnNames(),
+				where, whereArgs, groupBy, having, orderBy);
+		prepareResult(result);
+		return result;
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.0.1
+	 */
+	public TResult queryForLike(String fieldName, ColumnValue value) {
+		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
 		TResult result = userDb.query(getTableName(), table.getColumnNames(),
 				where, whereArgs, null, null, null);
@@ -469,11 +531,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement for a single field
 	 * 
 	 * @param field
+	 *            field name
 	 * @param value
+	 *            field value
 	 * @return where clause
 	 */
 	public String buildWhere(String field, Object value) {
 		return buildWhere(field, value, "=");
+	}
+
+	/**
+	 * Build where (or selection) LIKE statement for a single field
+	 * 
+	 * @param field
+	 *            field name
+	 * @param value
+	 *            field value
+	 * @return where clause
+	 * @since 3.0.1
+	 */
+	public String buildWhereLike(String field, Object value) {
+		return buildWhere(field, value, "LIKE");
 	}
 
 	/**
@@ -494,7 +572,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement for a single field
 	 * 
 	 * @param field
+	 *            field name
 	 * @param value
+	 *            column value
 	 * @return where clause
 	 */
 	public String buildWhere(String field, ColumnValue value) {
@@ -512,7 +592,33 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				where = buildWhere(field, value.getValue());
 			}
 		} else {
-			where = buildWhere(field, null, "=");
+			where = buildWhere(field, null, null);
+		}
+		return where;
+	}
+
+	/**
+	 * Build where (or selection) LIKE statement for a single field
+	 * 
+	 * @param field
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return where clause
+	 * @since 3.0.1
+	 */
+	public String buildWhereLike(String field, ColumnValue value) {
+		String where;
+		if (value != null) {
+			if (value.getTolerance() != null) {
+				throw new GeoPackageException(
+						"Field value tolerance not supported for LIKE query, Field: "
+								+ field + ", Value: " + ", Tolerance: "
+								+ value.getTolerance());
+			}
+			where = buildWhereLike(field, value.getValue());
+		} else {
+			where = buildWhere(field, null, null);
 		}
 		return where;
 	}
