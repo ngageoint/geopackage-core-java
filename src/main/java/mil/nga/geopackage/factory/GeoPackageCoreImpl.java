@@ -238,13 +238,21 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getTables(ContentsDataType type) {
+		return getTables(type.getName());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables(String type) {
 		ContentsDao contentDao = getContentsDao();
 		List<String> tableNames;
 		try {
 			tableNames = contentDao.getTables(type);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve "
-					+ type.getName() + " tables", e);
+			throw new GeoPackageException("Failed to retrieve " + type
+					+ " tables", e);
 		}
 		return tableNames;
 	}
@@ -298,8 +306,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTableType(ContentsDataType type, String table) {
-		Set<String> tables = new HashSet<String>(getTables(type));
-		return tables.contains(table);
+		return isTableType(type.getName(), table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTableType(String type, String table) {
+		return type.equals(getTableType(table));
 	}
 
 	/**
@@ -318,6 +333,35 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public boolean isTable(String table) {
 		Set<String> tables = new HashSet<String>(getTables());
 		return tables.contains(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Contents getTableContents(String table) {
+		ContentsDao contentDao = getContentsDao();
+		Contents contents = null;
+		try {
+			contents = contentDao.queryForId(table);
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to retrieve table contents: "
+					+ table, e);
+		}
+		return contents;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getTableType(String table) {
+		String tableType = null;
+		Contents contents = getTableContents(table);
+		if (contents != null) {
+			tableType = contents.getDataTypeString();
+		}
+		return tableType;
 	}
 
 	/**

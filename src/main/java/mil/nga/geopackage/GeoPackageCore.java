@@ -5,6 +5,7 @@ import java.util.List;
 
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
+import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
@@ -151,6 +152,16 @@ public interface GeoPackageCore extends Closeable {
 	public List<String> getTables(ContentsDataType type);
 
 	/**
+	 * Get the tables for the contents data type
+	 * 
+	 * @param type
+	 *            data type
+	 * @return table names
+	 * @since 3.0.1
+	 */
+	public List<String> getTables(String type);
+
+	/**
 	 * Get the feature and tile tables
 	 * 
 	 * @return table names
@@ -199,6 +210,18 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isTableType(ContentsDataType type, String table);
 
 	/**
+	 * Check if the table is the provided type
+	 * 
+	 * @param type
+	 *            data type
+	 * @param table
+	 *            table name
+	 * @return true if the type of table
+	 * @since 3.0.1
+	 */
+	public boolean isTableType(String type, String table);
+
+	/**
 	 * Check if the table exists as a feature or tile table
 	 * 
 	 * @param table
@@ -217,6 +240,26 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.2.1
 	 */
 	public boolean isTable(String table);
+
+	/**
+	 * Get the contents of the user table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return contents
+	 * @since 3.0.1
+	 */
+	public Contents getTableContents(String table);
+
+	/**
+	 * Get the contents data type of the user table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return table type
+	 * @since 3.0.1
+	 */
+	public String getTableType(String table);
 
 	/**
 	 * Get a Spatial Reference System DAO

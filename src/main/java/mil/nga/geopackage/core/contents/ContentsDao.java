@@ -114,6 +114,19 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 */
 	public List<String> getTables(ContentsDataType dataType)
 			throws SQLException {
+		return getTables(dataType.getName());
+	}
+
+	/**
+	 * Get table names by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return table names
+	 * @throws SQLException
+	 * @since 3.0.1
+	 */
+	public List<String> getTables(String dataType) throws SQLException {
 		List<Contents> contents = getContents(dataType);
 		List<String> tableNames = new ArrayList<String>();
 		for (Contents content : contents) {
@@ -133,8 +146,21 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 */
 	public List<Contents> getContents(ContentsDataType dataType)
 			throws SQLException {
+		return getContents(dataType.getName());
+	}
+
+	/**
+	 * Get contents by data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return list of contents
+	 * @throws SQLException
+	 * @since 3.0.1
+	 */
+	public List<Contents> getContents(String dataType) throws SQLException {
 		List<Contents> contents = queryForEq(Contents.COLUMN_DATA_TYPE,
-				dataType.getName());
+				dataType);
 		return contents;
 	}
 
