@@ -227,7 +227,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, String mappingTableName,
 			String relationAuthor, String relationName) {
 		return addRelationship(baseTableName, relatedTableName,
-				mappingTableName, getRelationName(relationAuthor, relationName));
+				mappingTableName,
+				buildRelationName(relationAuthor, relationName));
 	}
 
 	/**
@@ -298,7 +299,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, UserMappingTable userMappingTable,
 			String relationAuthor, String relationName) {
 		return addRelationship(baseTableName, relatedTableName,
-				userMappingTable, getRelationName(relationAuthor, relationName));
+				userMappingTable,
+				buildRelationName(relationAuthor, relationName));
 	}
 
 	/**
@@ -318,6 +320,9 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public ExtendedRelation addRelationship(String baseTableName,
 			String relatedTableName, UserMappingTable userMappingTable,
 			String relationName) {
+
+		// Validate the relation
+		validateRelationship(baseTableName, relatedTableName, relationName);
 
 		// Create the user mapping table if needed
 		createUserMappingTable(userMappingTable);
@@ -383,6 +388,95 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		return addRelationship(baseTableName, relatedTable.getTableName(),
 				userMappingTable, relatedTable.getRelationName());
+	}
+
+	/**
+	 * Validate that the relation name is valid between the base and related
+	 * table
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTableName
+	 *            related table name
+	 * @param relationName
+	 *            relation name
+	 */
+	private void validateRelationship(String baseTableName,
+			String relatedTableName, String relationName) {
+
+		// Verify the base and related tables exist
+		if (!geoPackage.isTable(baseTableName)) {
+			throw new GeoPackageException(
+					"Base Relationship table does not exist: " + baseTableName
+							+ ", Relation: " + relationName);
+		}
+		if (!geoPackage.isTable(relatedTableName)) {
+			throw new GeoPackageException(
+					"Related Relationship table does not exist: "
+							+ relatedTableName + ", Relation: " + relationName);
+		}
+
+		// Verify spec defined relation types
+		RelationType relationType = RelationType.fromName(relationName);
+		if (relationType != null) {
+			validateRelationship(baseTableName, relatedTableName, relationType);
+		}
+
+	}
+
+	/**
+	 * Determine if the relation type is valid between the base and related
+	 * table
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTableName
+	 *            related table name
+	 * @param relationType
+	 *            relation type
+	 */
+	private void validateRelationship(String baseTableName,
+			String relatedTableName, RelationType relationType) {
+
+		if (relationType != null) {
+
+			switch (relationType) {
+			case FEATURES:
+				if (!geoPackage.isFeatureTable(baseTableName)) {
+					throw new GeoPackageException(
+							"The base table must be a feature table. Relation: "
+									+ relationType.getName() + ", Base Table: "
+									+ baseTableName + ", Type: "
+									+ geoPackage.getTableType(baseTableName));
+				}
+				if (!geoPackage.isFeatureTable(relatedTableName)) {
+					throw new GeoPackageException(
+							"The related table must be a feature table. Relation: "
+									+ relationType.getName()
+									+ ", Related Table: " + relatedTableName
+									+ ", Type: "
+									+ geoPackage.getTableType(relatedTableName));
+				}
+				break;
+			case SIMPLE_ATTRIBUTES:
+			case MEDIA:
+				if (!geoPackage.isTableType(relationType.getName(),
+						relatedTableName)) {
+					throw new GeoPackageException(
+							"The related table must be a "
+									+ relationType.getName()
+									+ " table. Related Table: " + baseTableName
+									+ ", Type: "
+									+ geoPackage.getTableType(relatedTableName));
+				}
+				break;
+			default:
+				throw new GeoPackageException("Unsupported relation type: "
+						+ relationType);
+			}
+
+		}
+
 	}
 
 	/**
@@ -505,7 +599,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public void removeRelationship(String baseTableName,
 			String relatedTableName, String relationAuthor, String relationName) {
 		removeRelationship(baseTableName, relatedTableName,
-				getRelationName(relationAuthor, relationName));
+				buildRelationName(relationAuthor, relationName));
 	}
 
 	/**
@@ -585,7 +679,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
-	 * Get the custom relation name with author
+	 * Build the custom relation name with author
 	 * 
 	 * @param author
 	 *            relation author
@@ -593,7 +687,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            base relation name
 	 * @return custom relation name
 	 */
-	public String getRelationName(String author, String name) {
+	public String buildRelationName(String author, String name) {
 		return "x-" + author + "_" + name;
 	}
 
