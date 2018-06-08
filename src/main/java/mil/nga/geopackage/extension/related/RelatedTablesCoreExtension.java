@@ -14,6 +14,8 @@ import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.related.media.MediaTable;
+import mil.nga.geopackage.extension.related.simple.SimpleAttributesTable;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
@@ -388,6 +390,119 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		return addRelationship(baseTableName, relatedTable.getTableName(),
 				userMappingTable, relatedTable.getRelationName());
+	}
+
+	/**
+	 * Adds a features relationship between the base feature and related feature
+	 * table. Creates a default user mapping table if needed.
+	 * 
+	 * @param baseFeaturesTableName
+	 *            base features table name
+	 * @param relatedFeaturesTableName
+	 *            related features table name
+	 * @param mappingTableName
+	 *            mapping table name
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addFeaturesRelationship(
+			String baseFeaturesTableName, String relatedFeaturesTableName,
+			String mappingTableName) {
+		return addRelationship(baseFeaturesTableName, relatedFeaturesTableName,
+				mappingTableName, RelationType.FEATURES);
+	}
+
+	/**
+	 * Adds a features relationship between the base feature and related feature
+	 * table. Creates the user mapping table if needed.
+	 * 
+	 * @param baseFeaturesTableName
+	 *            base features table name
+	 * @param relatedFeaturesTableName
+	 *            related features table name
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addFeaturesRelationship(
+			String baseFeaturesTableName, String relatedFeaturesTableName,
+			UserMappingTable userMappingTable) {
+		return addRelationship(baseFeaturesTableName, relatedFeaturesTableName,
+				userMappingTable, RelationType.FEATURES);
+	}
+
+	/**
+	 * Adds a media relationship between the base table and user media related
+	 * table. Creates a default user mapping table and the media table if
+	 * needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param mediaTable
+	 *            user media table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addMediaRelationship(String baseTableName,
+			MediaTable mediaTable, String mappingTableName) {
+		return addRelationship(baseTableName, mediaTable, mappingTableName);
+	}
+
+	/**
+	 * Adds a media relationship between the base table and user media related
+	 * table. Creates the user mapping table and media table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param mediaTable
+	 *            user media table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addMediaRelationship(String baseTableName,
+			MediaTable mediaTable, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, mediaTable, userMappingTable);
+	}
+
+	/**
+	 * Adds a simple attributes relationship between the base table and user
+	 * simple attributes related table. Creates a default user mapping table and
+	 * the simple attributes table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param simpleAttributesTable
+	 *            user simple attributes table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addSimpleAttributesRelationship(
+			String baseTableName, SimpleAttributesTable simpleAttributesTable,
+			String mappingTableName) {
+		return addRelationship(baseTableName, simpleAttributesTable,
+				mappingTableName);
+	}
+
+	/**
+	 * Adds a simple attributes relationship between the base table and user
+	 * simple attributes related table. Creates the user mapping table and
+	 * simple attributes table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param simpleAttributesTable
+	 *            user simple attributes table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 */
+	public ExtendedRelation addSimpleAttributesRelationship(
+			String baseTableName, SimpleAttributesTable simpleAttributesTable,
+			UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, simpleAttributesTable,
+				userMappingTable);
 	}
 
 	/**
