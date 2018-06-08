@@ -244,14 +244,15 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	}
 
 	/**
-	 * Determine if the column is a simple type: TEXT, INTEGER, or REAL
+	 * Determine if the column is a non nullable simple type: TEXT, INTEGER, or
+	 * REAL
 	 * 
 	 * @param column
 	 *            user column
 	 * @return true if a simple column
 	 */
 	public static boolean isSimple(UserColumn column) {
-		return isSimple(column.getDataType());
+		return column.isNotNull() && isSimple(column.getDataType());
 	}
 
 	/**
