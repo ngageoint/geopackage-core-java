@@ -580,7 +580,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 					throw new GeoPackageException(
 							"The related table must be a "
 									+ relationType.getName()
-									+ " table. Related Table: " + baseTableName
+									+ " table. Related Table: " + relatedTableName
 									+ ", Type: "
 									+ geoPackage.getTableType(relatedTableName));
 				}

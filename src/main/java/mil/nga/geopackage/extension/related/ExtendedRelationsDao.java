@@ -58,7 +58,7 @@ public class ExtendedRelationsDao extends
 	 * @return related table names
 	 * @throws SQLException
 	 */
-	public List<String> getTables() throws SQLException {
+	public List<String> getRelatedTables() throws SQLException {
 
 		List<String> relatedTables = new ArrayList<String>();
 
