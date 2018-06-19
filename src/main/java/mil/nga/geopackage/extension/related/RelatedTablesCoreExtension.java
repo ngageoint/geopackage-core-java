@@ -580,8 +580,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 					throw new GeoPackageException(
 							"The related table must be a "
 									+ relationType.getName()
-									+ " table. Related Table: " + relatedTableName
-									+ ", Type: "
+									+ " table. Related Table: "
+									+ relatedTableName + ", Type: "
 									+ geoPackage.getTableType(relatedTableName));
 				}
 				break;
@@ -771,8 +771,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * Remove all trace of the extension
 	 */
 	public void removeExtension() {
-		ExtendedRelationsDao extendedRelationsDao = geoPackage
-				.getExtendedRelationsDao();
+
 		try {
 			if (extendedRelationsDao.isTableExists()) {
 				List<ExtendedRelation> extendedRelations = extendedRelationsDao
