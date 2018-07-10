@@ -22,6 +22,7 @@ public class ColumnValue {
 	 * Constructor
 	 * 
 	 * @param value
+	 *            value
 	 */
 	public ColumnValue(Object value) {
 		this(value, null);
@@ -31,7 +32,9 @@ public class ColumnValue {
 	 * Constructor
 	 * 
 	 * @param value
+	 *            value
 	 * @param tolerance
+	 *            tolerance
 	 */
 	public ColumnValue(Object value, Double tolerance) {
 		this.value = value;

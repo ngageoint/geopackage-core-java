@@ -22,9 +22,13 @@ import org.osgeo.proj4j.units.DegreeUnit;
  * Abstract User DAO for reading user tables
  * 
  * @param <TColumn>
+ *            column type
  * @param <TTable>
+ *            table type
  * @param <TRow>
+ *            row type
  * @param <TResult>
+ *            result type
  * 
  * @author osbornb
  */
@@ -59,9 +63,13 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Constructor
 	 * 
 	 * @param database
+	 *            database name
 	 * @param db
+	 *            GeoPackage connection
 	 * @param userDb
+	 *            user connection
 	 * @param table
+	 *            table
 	 */
 	protected UserCoreDao(String database, GeoPackageCoreConnection db,
 			UserCoreConnection<TColumn, TTable, TRow, TResult> userDb,
@@ -192,7 +200,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param fieldName
+	 *            field name
 	 * @param value
+	 *            value
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value) {
@@ -203,10 +213,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param fieldName
+	 *            field name
 	 * @param value
+	 *            value
 	 * @param groupBy
+	 *            group by
 	 * @param having
+	 *            having
 	 * @param orderBy
+	 *            order by
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value, String groupBy,
@@ -301,6 +316,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param fieldValues
+	 *            field values
 	 * @return result
 	 */
 	public TResult queryForFieldValues(Map<String, Object> fieldValues) {
@@ -316,6 +332,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param fieldValues
+	 *            field values
 	 * @return result
 	 */
 	public TResult queryForValueFieldValues(Map<String, ColumnValue> fieldValues) {
@@ -331,6 +348,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param id
+	 *            id
 	 * @return result
 	 */
 	public TResult queryForId(long id) {
@@ -346,6 +364,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param id
+	 *            id
 	 * @return row
 	 */
 	public TRow queryForIdRow(long id) {
@@ -362,7 +381,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param whereArgs
+	 *            where arguments
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs) {
@@ -376,10 +397,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param whereArgs
+	 *            where arguments
 	 * @param groupBy
+	 *            group by
 	 * @param having
+	 *            having
 	 * @param orderBy
+	 *            order by
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
@@ -394,11 +420,17 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param whereArgs
+	 *            where arguments
 	 * @param groupBy
+	 *            group by
 	 * @param having
+	 *            having
 	 * @param orderBy
+	 *            order by
 	 * @param limit
+	 *            limit
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
@@ -413,6 +445,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Update the row
 	 * 
 	 * @param row
+	 *            row
 	 * @return number of rows affected, should be 0 or 1
 	 */
 	public abstract int update(TRow row);
@@ -421,6 +454,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Delete the row
 	 * 
 	 * @param row
+	 *            row
 	 * @return number of rows affected, should be 0 or 1 unless the table has
 	 *         duplicate rows in it
 	 */
@@ -439,6 +473,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Delete a row by id
 	 * 
 	 * @param id
+	 *            id
 	 * @return number of rows affected, should be 0 or 1
 	 */
 	public int deleteById(long id) {
@@ -449,7 +484,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Delete rows matching the where clause
 	 * 
 	 * @param whereClause
+	 *            where clause
 	 * @param whereArgs
+	 *            where arguments
 	 * @return deleted count
 	 */
 	public int delete(String whereClause, String[] whereArgs) {
@@ -460,6 +497,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Creates a new row, same as calling {@link #insert(UserCoreRow)}
 	 * 
 	 * @param row
+	 *            row
 	 * @return row id
 	 */
 	public long create(TRow row) {
@@ -470,6 +508,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Inserts a new row
 	 * 
 	 * @param row
+	 *            row
 	 * @return row id
 	 */
 	public abstract long insert(TRow row);
@@ -478,6 +517,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the primary key where clause
 	 * 
 	 * @param id
+	 *            id
 	 * @return primary key where clause
 	 */
 	protected String getPkWhere(long id) {
@@ -487,6 +527,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the primary key where args
 	 * 
+	 * @param id
+	 *            id
 	 * @return primary key where args
 	 */
 	protected String[] getPkWhereArgs(long id) {
@@ -497,6 +539,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement from the fields
 	 * 
 	 * @param fields
+	 *            fields
 	 * @return where clause
 	 */
 	public String buildWhere(Set<Map.Entry<String, Object>> fields) {
@@ -514,6 +557,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) statement from the fields
 	 * 
 	 * @param fields
+	 *            fields
 	 * @return where clause
 	 */
 	public String buildValueWhere(Set<Map.Entry<String, ColumnValue>> fields) {
@@ -559,8 +603,11 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * provided operation
 	 * 
 	 * @param field
+	 *            field
 	 * @param value
+	 *            value
 	 * @param operation
+	 *            operation
 	 * @return where clause
 	 */
 	public String buildWhere(String field, Object value, String operation) {
@@ -627,6 +674,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
+	 *            values
 	 * @return where args
 	 */
 	public String[] buildWhereArgs(Collection<Object> values) {
@@ -644,6 +692,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
+	 *            values
 	 * @return where args
 	 */
 	public String[] buildWhereArgs(Object[] values) {
@@ -661,6 +710,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the values
 	 * 
 	 * @param values
+	 *            values
 	 * @return where args
 	 */
 	public String[] buildValueWhereArgs(Collection<ColumnValue> values) {
@@ -684,6 +734,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the value
 	 * 
 	 * @param value
+	 *            value
 	 * @return where args
 	 */
 	public String[] buildWhereArgs(Object value) {
@@ -698,6 +749,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Build where (or selection) args for the value
 	 * 
 	 * @param value
+	 *            value
 	 * @return where args
 	 */
 	public String[] buildWhereArgs(ColumnValue value) {
@@ -725,7 +777,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the count
 	 * 
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            where arguments
 	 * @return count
 	 */
 	public int count(String where, String[] args) {
@@ -736,8 +790,11 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the min result of the column
 	 * 
 	 * @param column
+	 *            column name
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            where arugments
 	 * @return min or null
 	 */
 	public Integer min(String column, String where, String[] args) {
@@ -748,8 +805,11 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the max result of the column
 	 * 
 	 * @param column
+	 *            column name
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            where arguments
 	 * @return max or null
 	 */
 	public Integer max(String column, String where, String[] args) {

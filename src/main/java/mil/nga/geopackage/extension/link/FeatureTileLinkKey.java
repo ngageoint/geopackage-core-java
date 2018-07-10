@@ -22,7 +22,9 @@ public class FeatureTileLinkKey {
 	 * Constructor
 	 * 
 	 * @param featureTableName
+	 *            feature table name
 	 * @param tileTableName
+	 *            tile table name
 	 */
 	public FeatureTileLinkKey(String featureTableName, String tileTableName) {
 		this.featureTableName = featureTableName;
@@ -42,6 +44,7 @@ public class FeatureTileLinkKey {
 	 * Set the feature table name
 	 * 
 	 * @param featureTableName
+	 *            feature table name
 	 */
 	public void setFeatureTableName(String featureTableName) {
 		this.featureTableName = featureTableName;
@@ -60,6 +63,7 @@ public class FeatureTileLinkKey {
 	 * Set the tile table name
 	 * 
 	 * @param tileTableName
+	 *            tile table name
 	 */
 	public void setTileTableName(String tileTableName) {
 		this.tileTableName = tileTableName;

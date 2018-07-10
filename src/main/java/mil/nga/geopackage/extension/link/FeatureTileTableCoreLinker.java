@@ -52,6 +52,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Constructor
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 */
 	protected FeatureTileTableCoreLinker(GeoPackageCore geoPackage) {
 		super(geoPackage);
@@ -80,7 +81,9 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Link a feature and tile table together. Does nothing if already linked.
 	 * 
 	 * @param featureTable
+	 *            feature table
 	 * @param tileTable
+	 *            tile table
 	 */
 	public void link(String featureTable, String tileTable) {
 
@@ -111,7 +114,9 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Determine if the feature table is linked to the tile table
 	 * 
 	 * @param featureTable
+	 *            feature table
 	 * @param tileTable
+	 *            tile table
 	 * @return true if linked
 	 */
 	public boolean isLinked(String featureTable, String tileTable) {
@@ -123,7 +128,9 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Get the feature and tile table link if it exists
 	 * 
 	 * @param featureTable
+	 *            feature table
 	 * @param tileTable
+	 *            tile table
 	 * @return link or null
 	 */
 	public FeatureTileLink getLink(String featureTable, String tileTable) {
@@ -150,6 +157,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Query for feature tile links by feature table
 	 * 
 	 * @param featureTable
+	 *            feature table
 	 * @return links
 	 */
 	public List<FeatureTileLink> queryForFeatureTable(String featureTable) {
@@ -169,6 +177,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Query for feature tile links by tile table
 	 * 
 	 * @param tileTable
+	 *            tile table
 	 * @return links
 	 */
 	public List<FeatureTileLink> queryForTileTable(String tileTable) {
@@ -188,7 +197,9 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Delete the feature tile table link
 	 * 
 	 * @param featureTable
+	 *            feature table
 	 * @param tileTable
+	 *            tile table
 	 * @return true if deleted
 	 */
 	public boolean deleteLink(String featureTable, String tileTable) {
@@ -215,6 +226,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Delete the feature tile table links for the feature or tile table
 	 * 
 	 * @param table
+	 *            table name
 	 * @return links deleted
 	 */
 	public int deleteLinks(String table) {
@@ -241,8 +253,8 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 */
 	private Extensions getOrCreateExtension() {
 
-		Extensions extension = getOrCreate(EXTENSION_NAME, null,
-				null, EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
+				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
 
 		return extension;
 	}

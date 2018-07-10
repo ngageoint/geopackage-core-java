@@ -22,6 +22,7 @@ public class TileMatrixSetDao extends BaseDaoImpl<TileMatrixSet, String> {
 	 * @param dataClass
 	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public TileMatrixSetDao(ConnectionSource connectionSource,
 			Class<TileMatrixSet> dataClass) throws SQLException {
@@ -33,6 +34,7 @@ public class TileMatrixSetDao extends BaseDaoImpl<TileMatrixSet, String> {
 	 * 
 	 * @return tile tables
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<String> getTileTables() throws SQLException {
 

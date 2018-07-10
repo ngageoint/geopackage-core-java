@@ -67,6 +67,7 @@ public class GeoPackageGeometryData {
 	 * Constructor
 	 * 
 	 * @param srsId
+	 *            srs id
 	 */
 	public GeoPackageGeometryData(long srsId) {
 		// SRS ID in the database is a long (db INTEGER) but the wkb srs id is
@@ -78,6 +79,7 @@ public class GeoPackageGeometryData {
 	 * Constructor
 	 * 
 	 * @param bytes
+	 *            geometry bytes
 	 */
 	public GeoPackageGeometryData(byte[] bytes) {
 		fromBytes(bytes);
@@ -87,6 +89,7 @@ public class GeoPackageGeometryData {
 	 * Populate the geometry data from the bytes
 	 * 
 	 * @param bytes
+	 *            geometry bytes
 	 */
 	public void fromBytes(byte[] bytes) {
 		this.bytes = bytes;
@@ -147,6 +150,7 @@ public class GeoPackageGeometryData {
 	 * 
 	 * @return bytes
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public byte[] toBytes() throws IOException {
 
@@ -543,6 +547,9 @@ public class GeoPackageGeometryData {
 	 * Get the envelope flag indicator
 	 * 
 	 * 1 for xy, 2 for xyz, 3 for xym, 4 for xyzm (null would be 0)
+	 * 
+	 * @param envelope
+	 *            geometry envelope
 	 * 
 	 * @return indicator
 	 */

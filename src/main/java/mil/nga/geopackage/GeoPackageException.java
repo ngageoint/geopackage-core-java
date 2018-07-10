@@ -23,6 +23,7 @@ public class GeoPackageException extends RuntimeException {
 	 * Constructor
 	 * 
 	 * @param message
+	 *            exception message
 	 */
 	public GeoPackageException(String message) {
 		super(message);
@@ -32,7 +33,9 @@ public class GeoPackageException extends RuntimeException {
 	 * Constructor
 	 * 
 	 * @param message
+	 *            exception message
 	 * @param throwable
+	 *            cause
 	 */
 	public GeoPackageException(String message, Throwable throwable) {
 		super(message, throwable);
@@ -42,6 +45,7 @@ public class GeoPackageException extends RuntimeException {
 	 * Constructor
 	 * 
 	 * @param throwable
+	 *            cause
 	 */
 	public GeoPackageException(Throwable throwable) {
 		super(throwable);

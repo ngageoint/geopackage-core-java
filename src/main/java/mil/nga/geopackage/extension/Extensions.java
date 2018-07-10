@@ -173,7 +173,9 @@ public class Extensions {
 	 * Set the extension name by combining the required parts
 	 * 
 	 * @param author
+	 *            author
 	 * @param extensionName
+	 *            extension name
 	 */
 	public void setExtensionName(String author, String extensionName) {
 		setExtensionName(buildExtensionName(author, extensionName));

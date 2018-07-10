@@ -24,8 +24,11 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, Long> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public GriddedCoverageDao(ConnectionSource connectionSource,
 			Class<GriddedCoverage> dataClass) throws SQLException {

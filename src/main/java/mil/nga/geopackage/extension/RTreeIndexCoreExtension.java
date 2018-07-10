@@ -535,8 +535,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Conditions: Update of any column
 	 *             Row ID change
 	 *             Non-empty geometry
-	 * Actions   : Remove record from rtree for old <i>
-	 *             Insert record into rtree for new <i>
+	 * Actions   : Remove record from rtree for old {@literal <i>}
+	 *             Insert record into rtree for new {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -561,7 +561,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Conditions: Update of any column
 	 *             Row ID change
 	 *             Empty geometry
-	 * Actions   : Remove record from rtree for old and new <i>
+	 * Actions   : Remove record from rtree for old and new {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -584,7 +584,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * 
 	 * <pre>
 	 * Conditions: Row deleted
-	 * Actions   : Remove record from rtree for old <i>
+	 * Actions   : Remove record from rtree for old {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -827,8 +827,11 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Drop the trigger for the table, geometry column, and trigger name
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param geometryColumnName
+	 *            geometry column name
 	 * @param triggerName
+	 *            trigger name
 	 */
 	public void dropTrigger(String tableName, String geometryColumnName,
 			String triggerName) {

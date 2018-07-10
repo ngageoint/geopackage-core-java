@@ -27,8 +27,11 @@ public class GeometryColumnsSfSqlDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public GeometryColumnsSfSqlDao(ConnectionSource connectionSource,
 			Class<GeometryColumnsSfSql> dataClass) throws SQLException {

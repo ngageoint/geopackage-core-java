@@ -28,6 +28,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Execute the sql
 	 * 
 	 * @param sql
+	 *            sql statement
 	 */
 	public abstract void execSQL(String sql);
 
@@ -35,8 +36,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Convenience method for deleting rows in the database.
 	 * 
 	 * @param table
+	 *            table name
 	 * @param whereClause
+	 *            where clause
 	 * @param whereArgs
+	 *            where arguments
 	 * @return rows deleted
 	 */
 	public abstract int delete(String table, String whereClause,
@@ -46,8 +50,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Get a count of results
 	 * 
 	 * @param table
+	 *            table name
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            arguments
 	 * @return count
 	 */
 	public abstract int count(String table, String where, String[] args);
@@ -56,9 +63,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Get the min result of the column
 	 * 
 	 * @param table
+	 *            table name
 	 * @param column
+	 *            column name
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            where arguments
 	 * @return min or null
 	 * @since 1.1.1
 	 */
@@ -69,9 +80,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Get the max result of the column
 	 * 
 	 * @param table
+	 *            table name
 	 * @param column
+	 *            column name
 	 * @param where
+	 *            where clause
 	 * @param args
+	 *            where arguments
 	 * @return max or null
 	 * @since 1.1.1
 	 */
@@ -112,8 +127,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * Add a new column to the table
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columnName
+	 *            column name
 	 * @param columnDef
+	 *            column definition
 	 * @since 1.1.8
 	 */
 	public void addColumn(String tableName, String columnName, String columnDef) {

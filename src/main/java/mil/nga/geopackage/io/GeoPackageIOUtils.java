@@ -68,8 +68,11 @@ public class GeoPackageIOUtils {
 	 * Copy a file to a file location
 	 * 
 	 * @param copyFrom
+	 *            from file
 	 * @param copyTo
+	 *            to file
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static void copyFile(File copyFrom, File copyTo) throws IOException {
 
@@ -83,8 +86,11 @@ public class GeoPackageIOUtils {
 	 * Copy an input stream to a file location
 	 * 
 	 * @param copyFrom
+	 *            from file
 	 * @param copyTo
+	 *            to file
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static void copyStream(InputStream copyFrom, File copyTo)
 			throws IOException {
@@ -95,9 +101,13 @@ public class GeoPackageIOUtils {
 	 * Copy an input stream to a file location
 	 * 
 	 * @param copyFrom
+	 *            from file
 	 * @param copyTo
+	 *            to file
 	 * @param progress
+	 *            progress tracker
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static void copyStream(InputStream copyFrom, File copyTo,
 			GeoPackageProgress progress) throws IOException {
@@ -117,7 +127,10 @@ public class GeoPackageIOUtils {
 	 * Get the file bytes
 	 * 
 	 * @param file
+	 *            input file
+	 * @return file bytes
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static byte[] fileBytes(File file) throws IOException {
 
@@ -130,7 +143,10 @@ public class GeoPackageIOUtils {
 	 * Get the stream bytes
 	 * 
 	 * @param stream
+	 *            input stream
+	 * @return stream bytes
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static byte[] streamBytes(InputStream stream) throws IOException {
 
@@ -145,8 +161,11 @@ public class GeoPackageIOUtils {
 	 * Copy an input stream to an output stream
 	 * 
 	 * @param copyFrom
+	 *            from stream
 	 * @param copyTo
+	 *            to stream
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static void copyStream(InputStream copyFrom, OutputStream copyTo)
 			throws IOException {
@@ -157,9 +176,13 @@ public class GeoPackageIOUtils {
 	 * Copy an input stream to an output stream
 	 * 
 	 * @param copyFrom
+	 *            from stream
 	 * @param copyTo
+	 *            to stream
 	 * @param progress
+	 *            progress tracker
 	 * @throws IOException
+	 *             upon failure
 	 */
 	public static void copyStream(InputStream copyFrom, OutputStream copyTo,
 			GeoPackageProgress progress) throws IOException {

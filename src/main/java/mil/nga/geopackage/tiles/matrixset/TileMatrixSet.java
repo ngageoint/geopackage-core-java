@@ -228,6 +228,7 @@ public class TileMatrixSet {
 	 * Set a bounding box
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 */
 	public void setBoundingBox(BoundingBox boundingBox) {
 		setMinX(boundingBox.getMinLongitude());

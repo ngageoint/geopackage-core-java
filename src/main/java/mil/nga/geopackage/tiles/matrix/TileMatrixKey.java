@@ -21,7 +21,9 @@ public class TileMatrixKey {
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param zoomLevel
+	 *            zoom level
 	 */
 	public TileMatrixKey(String tableName, long zoomLevel) {
 		this.tableName = tableName;

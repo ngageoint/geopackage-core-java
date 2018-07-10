@@ -28,8 +28,11 @@ public class GeometryColumnsDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public GeometryColumnsDao(ConnectionSource connectionSource,
 			Class<GeometryColumns> dataClass) throws SQLException {
@@ -41,6 +44,7 @@ public class GeometryColumnsDao extends
 	 * 
 	 * @return feature tables
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<String> getFeatureTables() throws SQLException {
 
@@ -200,8 +204,10 @@ public class GeometryColumnsDao extends
 	 * Query for the table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @return geometry columns
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public GeometryColumns queryForTableName(String tableName)
 			throws SQLException {

@@ -22,8 +22,11 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public MetadataReferenceDao(ConnectionSource connectionSource,
 			Class<MetadataReference> dataClass) throws SQLException {
@@ -84,6 +87,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 *            file id
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByMetadata(long fileId) throws SQLException {
 
@@ -103,6 +107,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 *            parent id
 	 * @return updated count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int removeMetadataParent(long parentId) throws SQLException {
 
@@ -126,6 +131,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 *            parent id
 	 * @return metadata references
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<MetadataReference> queryByMetadata(long fileId, Long parentId)
 			throws SQLException {
@@ -144,6 +150,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 *            file id
 	 * @return metadata references
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<MetadataReference> queryByMetadata(long fileId)
 			throws SQLException {
@@ -162,6 +169,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 *            parent id
 	 * @return metadata references
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<MetadataReference> queryByMetadataParent(long parentId)
 			throws SQLException {

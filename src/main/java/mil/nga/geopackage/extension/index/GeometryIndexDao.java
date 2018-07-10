@@ -29,8 +29,11 @@ public class GeometryIndexDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public GeometryIndexDao(ConnectionSource connectionSource,
 			Class<GeometryIndex> dataClass) throws SQLException {
@@ -240,6 +243,7 @@ public class GeometryIndexDao extends
 	 * 
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 * @since 1.1.5
 	 */
 	public int deleteAll() throws SQLException {

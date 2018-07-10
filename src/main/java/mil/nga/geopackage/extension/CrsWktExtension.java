@@ -100,7 +100,9 @@ public class CrsWktExtension extends BaseExtension {
 	 * Update the extension definition
 	 * 
 	 * @param srsId
+	 *            srs id
 	 * @param definition
+	 *            definition
 	 */
 	public void updateDefinition(long srsId, String definition) {
 		connection.execSQL("UPDATE " + SpatialReferenceSystem.TABLE_NAME
@@ -111,6 +113,8 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Get the extension definition
 	 * 
+	 * @param srsId
+	 *            srs id
 	 * @return definition
 	 */
 	public String getDefinition(long srsId) {

@@ -19,7 +19,9 @@ public class TileDaoUtils {
 	 * into the tile matrix lengths
 	 * 
 	 * @param tileMatrixSet
+	 *            tile matrix set
 	 * @param tileMatrices
+	 *            tile matrices
 	 */
 	public static void adjustTileMatrixLengths(TileMatrixSet tileMatrixSet,
 			List<TileMatrix> tileMatrices) {

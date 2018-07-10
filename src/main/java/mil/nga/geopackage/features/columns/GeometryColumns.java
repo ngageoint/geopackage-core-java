@@ -151,6 +151,7 @@ public class GeometryColumns {
 	 * Set the id
 	 * 
 	 * @param id
+	 *            id
 	 */
 	public void setId(TableColumnKey id) {
 		tableName = id.getTableName();

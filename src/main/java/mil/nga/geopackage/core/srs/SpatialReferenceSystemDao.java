@@ -56,8 +56,11 @@ public class SpatialReferenceSystemDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public SpatialReferenceSystemDao(ConnectionSource connectionSource,
 			Class<SpatialReferenceSystem> dataClass) throws SQLException {
@@ -68,6 +71,7 @@ public class SpatialReferenceSystemDao extends
 	 * Set the CRS WKT Extension
 	 * 
 	 * @param crsWktExtension
+	 *            CRS WKT Extension
 	 * @since 1.1.8
 	 */
 	public void setCrsWktExtension(CrsWktExtension crsWktExtension) {
@@ -91,6 +95,7 @@ public class SpatialReferenceSystemDao extends
 	 *
 	 * @return spatial reference system
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public SpatialReferenceSystem createWgs84() throws SQLException {
 
@@ -126,6 +131,7 @@ public class SpatialReferenceSystemDao extends
 	 *
 	 * @return spatial reference system
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public SpatialReferenceSystem createUndefinedCartesian()
 			throws SQLException {
@@ -167,6 +173,7 @@ public class SpatialReferenceSystemDao extends
 	 *
 	 * @return spatial reference system
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public SpatialReferenceSystem createUndefinedGeographic()
 			throws SQLException {
@@ -208,6 +215,7 @@ public class SpatialReferenceSystemDao extends
 	 *
 	 * @return spatial reference system
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public SpatialReferenceSystem createWebMercator() throws SQLException {
 
@@ -242,6 +250,7 @@ public class SpatialReferenceSystemDao extends
 	 *
 	 * @return spatial reference system
 	 * @throws SQLException
+	 *             upon creation failure
 	 * @since 1.2.1
 	 */
 	public SpatialReferenceSystem createWgs84Geographical3D()
@@ -514,6 +523,7 @@ public class SpatialReferenceSystemDao extends
 	 *            epsg
 	 * @return srs
 	 * @throws SQLException
+	 *             upon query or creation failure
 	 * @since 1.2.0
 	 */
 	public SpatialReferenceSystem getOrCreateFromEpsg(long epsg)
@@ -531,6 +541,7 @@ public class SpatialReferenceSystemDao extends
 	 *            coordsys id
 	 * @return srs
 	 * @throws SQLException
+	 *             upon query or creation failure
 	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystem getOrCreateCode(String organization,
@@ -553,6 +564,7 @@ public class SpatialReferenceSystemDao extends
 	 *            organization coordsys id
 	 * @return srs
 	 * @throws SQLException
+	 *             upon query failure
 	 * @since 1.3.0
 	 */
 	public SpatialReferenceSystem queryForOrganizationCoordsysId(
@@ -650,6 +662,7 @@ public class SpatialReferenceSystemDao extends
 	 *            spatial reference system
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteCascade(SpatialReferenceSystem srs) throws SQLException {
 		int count = 0;
@@ -696,6 +709,7 @@ public class SpatialReferenceSystemDao extends
 	 *            spatial reference system collection
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteCascade(Collection<SpatialReferenceSystem> srsCollection)
 			throws SQLException {
@@ -716,6 +730,7 @@ public class SpatialReferenceSystemDao extends
 	 *            prepared delete query
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteCascade(
 			PreparedQuery<SpatialReferenceSystem> preparedDelete)
@@ -735,6 +750,7 @@ public class SpatialReferenceSystemDao extends
 	 *            id
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteByIdCascade(Long id) throws SQLException {
 		int count = 0;
@@ -754,6 +770,7 @@ public class SpatialReferenceSystemDao extends
 	 *            id collection
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteIdsCascade(Collection<Long> idCollection)
 			throws SQLException {
@@ -771,6 +788,7 @@ public class SpatialReferenceSystemDao extends
 	 * 
 	 * @return contents dao
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	private ContentsDao getContentsDao() throws SQLException {
 		if (contentsDao == null) {
@@ -785,6 +803,7 @@ public class SpatialReferenceSystemDao extends
 	 * 
 	 * @return geometry columns dao
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
 		if (geometryColumnsDao == null) {
@@ -799,6 +818,7 @@ public class SpatialReferenceSystemDao extends
 	 * 
 	 * @return tile matrix set dao
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
 		if (tileMatrixSetDao == null) {

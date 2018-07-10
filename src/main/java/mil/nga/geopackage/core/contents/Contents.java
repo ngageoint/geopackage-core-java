@@ -203,26 +203,59 @@ public class Contents {
 		srsId = contents.srsId;
 	}
 
+	/**
+	 * Get the id
+	 * 
+	 * @return id
+	 */
 	public String getId() {
 		return tableName;
 	}
 
+	/**
+	 * Set the id
+	 * 
+	 * @param id
+	 *            id
+	 */
 	public void setId(String id) {
 		this.tableName = id;
 	}
 
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
 	public String getTableName() {
 		return tableName;
 	}
 
+	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
 
+	/**
+	 * Get the data type
+	 * 
+	 * @return data type
+	 */
 	public ContentsDataType getDataType() {
 		return ContentsDataType.fromName(dataType);
 	}
 
+	/**
+	 * Set the data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 */
 	public void setDataType(ContentsDataType dataType) {
 		this.dataType = dataType.getName();
 	}
@@ -248,71 +281,164 @@ public class Contents {
 		this.dataType = dataType;
 	}
 
+	/**
+	 * Get the identifier
+	 * 
+	 * @return identifier
+	 */
 	public String getIdentifier() {
 		return identifier;
 	}
 
+	/**
+	 * Set the identifier
+	 * 
+	 * @param identifier
+	 *            identifier
+	 */
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
 
+	/**
+	 * Get the description
+	 * 
+	 * @return description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Set the description
+	 * 
+	 * @param description
+	 *            description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * Get the last change
+	 * 
+	 * @return last change
+	 */
 	public Date getLastChange() {
 		return lastChange;
 	}
 
+	/**
+	 * Set the last change
+	 * 
+	 * @param lastChange
+	 *            last change
+	 */
 	public void setLastChange(Date lastChange) {
 		this.lastChange = lastChange;
 	}
 
+	/**
+	 * Get the min x
+	 * 
+	 * @return min x
+	 */
 	public Double getMinX() {
 		return minX;
 	}
 
+	/**
+	 * Set the min x
+	 * 
+	 * @param minX
+	 *            min x
+	 */
 	public void setMinX(Double minX) {
 		this.minX = minX;
 	}
 
+	/**
+	 * Get the min y
+	 * 
+	 * @return min y
+	 */
 	public Double getMinY() {
 		return minY;
 	}
 
+	/**
+	 * Set the min y
+	 * 
+	 * @param minY
+	 *            min y
+	 */
 	public void setMinY(Double minY) {
 		this.minY = minY;
 	}
 
+	/**
+	 * Get the max x
+	 * 
+	 * @return max x
+	 */
 	public Double getMaxX() {
 		return maxX;
 	}
 
+	/**
+	 * Set the max x
+	 * 
+	 * @param maxX
+	 *            max x
+	 */
 	public void setMaxX(Double maxX) {
 		this.maxX = maxX;
 	}
 
+	/**
+	 * Get the max y
+	 * 
+	 * @return max y
+	 */
 	public Double getMaxY() {
 		return maxY;
 	}
 
+	/**
+	 * Set the max y
+	 * 
+	 * @param maxY
+	 *            max y
+	 */
 	public void setMaxY(Double maxY) {
 		this.maxY = maxY;
 	}
 
+	/**
+	 * Get the SRS
+	 * 
+	 * @return srs
+	 */
 	public SpatialReferenceSystem getSrs() {
 		return srs;
 	}
 
+	/**
+	 * Set the srs
+	 * 
+	 * @param srs
+	 *            srs
+	 */
 	public void setSrs(SpatialReferenceSystem srs) {
 		this.srs = srs;
 		srsId = srs != null ? srs.getId() : null;
 	}
 
+	/**
+	 * Get the srs id
+	 * 
+	 * @return srs id
+	 */
 	public Long getSrsId() {
 		return srsId;
 	}

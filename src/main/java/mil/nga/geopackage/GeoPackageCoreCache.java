@@ -53,6 +53,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Get the GeoPackage with name
 	 * 
 	 * @param name
+	 *            GeoPackage name
 	 * @return cached GeoPackage
 	 */
 	public T get(String name) {
@@ -63,6 +64,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Checks if the GeoPackage name exists in the cache
 	 * 
 	 * @param name
+	 *            GeoPackage name
 	 * @return true if exists
 	 */
 	public boolean exists(String name) {
@@ -83,6 +85,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Add a GeoPackage to the cache
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 */
 	public void add(T geoPackage) {
 		cache.put(geoPackage.getName(), geoPackage);
@@ -93,6 +96,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * {@link #close(String)} to close and remove
 	 * 
 	 * @param name
+	 *            GeoPackage name
 	 * @return removed GeoPackage
 	 */
 	public T remove(String name) {
@@ -113,6 +117,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Remove and close the GeoPackage with name, same as {@link #close(String)}
 	 * 
 	 * @param name
+	 *            GeoPackage name
 	 * @return true if found, removed, and closed
 	 */
 	public boolean removeAndClose(String name) {
@@ -123,6 +128,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Close the GeoPackage with name
 	 * 
 	 * @param name
+	 *            GeoPackage name
 	 * @return true if found and closed
 	 * @since 1.0.1
 	 */
@@ -138,6 +144,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Close GeoPackages not specified in the retain GeoPackage names
 	 * 
 	 * @param retain
+	 *            GeoPackages to retain
 	 * @since 1.0.1
 	 */
 	public void closeRetain(Collection<String> retain) {
@@ -152,6 +159,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Close GeoPackages with names
 	 * 
 	 * @param names
+	 *            GeoPackage names
 	 * @since 1.0.1
 	 */
 	public void close(Collection<String> names) {

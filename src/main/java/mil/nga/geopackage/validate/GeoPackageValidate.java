@@ -21,6 +21,7 @@ public class GeoPackageValidate {
 	 * Check the file extension to see if it is a GeoPackage
 	 * 
 	 * @param file
+	 *            GeoPackage file
 	 * @return true if GeoPackage extension
 	 */
 	public static boolean hasGeoPackageExtension(File file) {
@@ -36,6 +37,7 @@ public class GeoPackageValidate {
 	 * Validate the extension file as a GeoPackage
 	 * 
 	 * @param file
+	 *            GeoPackage file
 	 */
 	public static void validateGeoPackageExtension(File file) {
 		if (!hasGeoPackageExtension(file)) {
@@ -50,6 +52,7 @@ public class GeoPackageValidate {
 	 * Check the GeoPackage for the minimum required tables
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 * @return true if has minimum tables
 	 */
 	public static boolean hasMinimumTables(GeoPackageCore geoPackage) {
@@ -70,6 +73,7 @@ public class GeoPackageValidate {
 	 * Validate the GeoPackage has the minimum required tables
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 */
 	public static void validateMinimumTables(GeoPackageCore geoPackage) {
 		if (!hasMinimumTables(geoPackage)) {

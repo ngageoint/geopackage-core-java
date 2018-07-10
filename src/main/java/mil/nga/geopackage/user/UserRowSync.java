@@ -13,8 +13,11 @@ import mil.nga.geopackage.GeoPackageException;
  * near simultaneous asynchronous requests are made
  * 
  * @param <TColumn>
+ *            column type
  * @param <TTable>
+ *            table type
  * @param <TRow>
+ *            row type
  * 
  * @author osbornb
  * @since 2.0.0

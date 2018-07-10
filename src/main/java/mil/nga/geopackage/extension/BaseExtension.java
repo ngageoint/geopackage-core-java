@@ -27,6 +27,7 @@ public abstract class BaseExtension {
 	 * Constructor
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 */
 	protected BaseExtension(GeoPackageCore geoPackage) {
 		this.geoPackage = geoPackage;

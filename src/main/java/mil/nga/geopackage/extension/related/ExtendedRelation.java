@@ -131,6 +131,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param id
+	 *            id
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -156,6 +157,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param baseTableName
+	 *            base table name
 	 */
 	public void setBaseTableName(String baseTableName) {
 		this.baseTableName = baseTableName;
@@ -174,6 +176,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param basePrimaryColumn
+	 *            base primary column
 	 */
 	public void setBasePrimaryColumn(String basePrimaryColumn) {
 		this.basePrimaryColumn = basePrimaryColumn;
@@ -192,6 +195,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param relatedTableName
+	 *            related table name
 	 */
 	public void setRelatedTableName(String relatedTableName) {
 		this.relatedTableName = relatedTableName;
@@ -210,6 +214,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param relatedPrimaryColumn
+	 *            related primary column
 	 */
 	public void setRelatedPrimaryColumn(String relatedPrimaryColumn) {
 		this.relatedPrimaryColumn = relatedPrimaryColumn;
@@ -237,6 +242,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param relationName
+	 *            relation name
 	 */
 	public void setRelationName(String relationName) {
 		this.relationName = relationName;
@@ -255,6 +261,7 @@ public class ExtendedRelation {
 	 * Setter
 	 * 
 	 * @param mappingTableName
+	 *            mapping table name
 	 */
 	public void setMappingTableName(String mappingTableName) {
 		this.mappingTableName = mappingTableName;

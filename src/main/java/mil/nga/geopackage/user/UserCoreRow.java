@@ -14,7 +14,9 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * User Row containing the values from a single cursor row
  * 
  * @param <TColumn>
+ *            column type
  * @param <TTable>
+ *            table type
  * 
  * @author osbornb
  */
@@ -39,8 +41,11 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Constructor
 	 * 
 	 * @param table
+	 *            table
 	 * @param columnTypes
+	 *            column types
 	 * @param values
+	 *            values
 	 */
 	protected UserCoreRow(TTable table, int[] columnTypes, Object[] values) {
 		this.table = table;
@@ -52,6 +57,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Constructor to create an empty row
 	 * 
 	 * @param table
+	 *            table
 	 */
 	protected UserCoreRow(TTable table) {
 		this.table = table;
@@ -165,6 +171,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column name at the index
 	 * 
 	 * @param index
+	 *            index
 	 * @return column name
 	 */
 	public String getColumnName(int index) {
@@ -175,6 +182,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the index of the column name
 	 * 
 	 * @param columnName
+	 *            column name
 	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
@@ -185,6 +193,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the value at the index
 	 * 
 	 * @param index
+	 *            index
 	 * @return value
 	 */
 	public Object getValue(int index) {
@@ -195,6 +204,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the value of the column name
 	 * 
 	 * @param columnName
+	 *            column name
 	 * @return value
 	 */
 	public Object getValue(String columnName) {
@@ -223,6 +233,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the Cursor column data type at the index
 	 * 
 	 * @param index
+	 *            index
 	 * @return row column type
 	 */
 	public int getRowColumnType(int index) {
@@ -233,6 +244,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the Cursor column data type of the column name
 	 * 
 	 * @param columnName
+	 *            column name
 	 * @return row column type
 	 */
 	public int getRowColumnType(String columnName) {
@@ -252,6 +264,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column at the index
 	 * 
 	 * @param index
+	 *            index
 	 * @return column
 	 */
 	public TColumn getColumn(int index) {
@@ -262,6 +275,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Get the column of the column name
 	 * 
 	 * @param columnName
+	 *            column name
 	 * @return column
 	 */
 	public TColumn getColumn(String columnName) {
@@ -353,7 +367,9 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Set the column value at the index
 	 * 
 	 * @param index
+	 *            index
 	 * @param value
+	 *            value
 	 */
 	public void setValue(int index, Object value) {
 		if (index == table.getPkColumnIndex()) {
@@ -369,7 +385,9 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Set the column value of the column name
 	 * 
 	 * @param columnName
+	 *            column name
 	 * @param value
+	 *            value
 	 */
 	public void setValue(String columnName, Object value) {
 		setValue(getColumnIndex(columnName), value);
@@ -399,8 +417,11 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * type class
 	 * 
 	 * @param column
+	 *            column
 	 * @param value
+	 *            value
 	 * @param valueTypes
+	 *            value types
 	 */
 	protected void validateValue(TColumn column, Object value,
 			Class<?>... valueTypes) {

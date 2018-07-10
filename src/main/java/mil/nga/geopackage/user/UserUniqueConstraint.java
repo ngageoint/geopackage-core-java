@@ -7,6 +7,7 @@ import java.util.List;
  * User table unique constraint for one or more columns
  * 
  * @param <TColumn>
+ *            column type
  * 
  * @author osbornb
  */
@@ -28,6 +29,7 @@ public class UserUniqueConstraint<TColumn extends UserColumn> {
 	 * Constructor
 	 * 
 	 * @param columns
+	 *            columns
 	 */
 	public UserUniqueConstraint(
 			@SuppressWarnings("unchecked") TColumn... columns) {
@@ -40,6 +42,7 @@ public class UserUniqueConstraint<TColumn extends UserColumn> {
 	 * Add a column
 	 * 
 	 * @param column
+	 *            column
 	 */
 	public void add(TColumn column) {
 		columns.add(column);

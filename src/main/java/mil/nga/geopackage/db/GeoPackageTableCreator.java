@@ -240,6 +240,8 @@ public class GeoPackageTableCreator {
 	 * 
 	 * @param table
 	 *            user table
+	 * @param <TColumn>
+	 *            column type
 	 */
 	public <TColumn extends UserColumn> void createTable(
 			UserTable<TColumn> table) {

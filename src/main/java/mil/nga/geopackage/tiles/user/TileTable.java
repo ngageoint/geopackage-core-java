@@ -63,7 +63,9 @@ public class TileTable extends UserTable<TileColumn> {
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columns
+	 *            columns
 	 */
 	public TileTable(String tableName, List<TileColumn> columns) {
 		super(tableName, columns);

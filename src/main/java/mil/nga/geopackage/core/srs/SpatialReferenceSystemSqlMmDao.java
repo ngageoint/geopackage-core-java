@@ -17,8 +17,11 @@ public class SpatialReferenceSystemSqlMmDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public SpatialReferenceSystemSqlMmDao(ConnectionSource connectionSource,
 			Class<SpatialReferenceSystemSqlMm> dataClass) throws SQLException {

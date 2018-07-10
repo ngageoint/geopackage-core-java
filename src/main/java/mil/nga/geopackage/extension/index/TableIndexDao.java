@@ -30,8 +30,11 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon creation failure
 	 */
 	public TableIndexDao(ConnectionSource connectionSource,
 			Class<TableIndex> dataClass) throws SQLException {
@@ -42,8 +45,10 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete the TableIndex, cascading
 	 * 
 	 * @param tableIndex
+	 *            table index
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion error
 	 */
 	public int deleteCascade(TableIndex tableIndex) throws SQLException {
 		int count = 0;
@@ -70,8 +75,10 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete the collection of TableIndex, cascading
 	 * 
 	 * @param tableIndexCollection
+	 *            table index collection
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteCascade(Collection<TableIndex> tableIndexCollection)
 			throws SQLException {
@@ -88,8 +95,10 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete the TableIndex matching the prepared query, cascading
 	 * 
 	 * @param preparedDelete
+	 *            prepared query
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteCascade(PreparedQuery<TableIndex> preparedDelete)
 			throws SQLException {
@@ -105,8 +114,10 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete a TableIndex by id, cascading
 	 * 
 	 * @param id
+	 *            id
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteByIdCascade(String id) throws SQLException {
 		int count = 0;
@@ -123,8 +134,10 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete the TableIndex with the provided ids, cascading
 	 * 
 	 * @param idCollection
+	 *            id collection
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 */
 	public int deleteIdsCascade(Collection<String> idCollection)
 			throws SQLException {
@@ -141,6 +154,7 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * Delete the table
 	 * 
 	 * @param table
+	 *            table name
 	 */
 	public void deleteTable(String table) {
 		try {
@@ -169,6 +183,7 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * 
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 * @since 1.1.5
 	 */
 	public int deleteAllCascade() throws SQLException {
@@ -186,6 +201,7 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 * 
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon deletion failure
 	 * @since 1.1.5
 	 */
 	public int deleteAll() throws SQLException {

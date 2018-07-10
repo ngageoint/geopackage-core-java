@@ -146,63 +146,143 @@ public class SpatialReferenceSystem {
 		definition_12_063 = srs.definition_12_063;
 	}
 
+	/**
+	 * Get the id
+	 * 
+	 * @return id
+	 */
 	public long getId() {
 		return srsId;
 	}
 
+	/**
+	 * Set the id
+	 * 
+	 * @param id
+	 *            id
+	 */
 	public void setId(long id) {
 		this.srsId = id;
 	}
 
+	/**
+	 * Get the srs name
+	 * 
+	 * @return srs name
+	 */
 	public String getSrsName() {
 		return srsName;
 	}
 
+	/**
+	 * Set the srs name
+	 * 
+	 * @param srsName
+	 *            srs name
+	 */
 	public void setSrsName(String srsName) {
 		this.srsName = srsName;
 	}
 
+	/**
+	 * Get the srs id
+	 * 
+	 * @return srs id
+	 */
 	public long getSrsId() {
 		return srsId;
 	}
 
+	/**
+	 * Set the srs id
+	 * 
+	 * @param srsId
+	 *            srs id
+	 */
 	public void setSrsId(long srsId) {
 		this.srsId = srsId;
 	}
 
+	/**
+	 * Get the organization
+	 * 
+	 * @return organization
+	 */
 	public String getOrganization() {
 		return organization;
 	}
 
+	/**
+	 * Set the organization
+	 * 
+	 * @param organization
+	 *            organization
+	 */
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
 
+	/**
+	 * Get the organization coordsys id
+	 * 
+	 * @return organization coordsys id
+	 */
 	public long getOrganizationCoordsysId() {
 		return organizationCoordsysId;
 	}
 
+	/**
+	 * Set the organization coordsys id
+	 * 
+	 * @param organizationCoordsysId
+	 *            organization coordsys id
+	 */
 	public void setOrganizationCoordsysId(long organizationCoordsysId) {
 		this.organizationCoordsysId = organizationCoordsysId;
 	}
 
+	/**
+	 * Get the definition
+	 * 
+	 * @return definition
+	 */
 	public String getDefinition() {
 		return definition;
 	}
 
+	/**
+	 * Set the definition
+	 * 
+	 * @param definition
+	 *            definition
+	 */
 	public void setDefinition(String definition) {
 		this.definition = definition;
 	}
 
+	/**
+	 * Get the description
+	 * 
+	 * @return description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Set the description
+	 * 
+	 * @param description
+	 *            description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	/**
+	 * Get the 12_063 WKT definition
+	 * 
+	 * @return 12_06 3WKT definition
 	 * @since 1.2.1
 	 */
 	public String getDefinition_12_063() {
@@ -210,20 +290,39 @@ public class SpatialReferenceSystem {
 	}
 
 	/**
+	 * Set the 12_063 WKT definition
+	 * 
+	 * @param definition_12_063
+	 *            12_063 WKT definition
 	 * @since 1.2.1
 	 */
 	public void setDefinition_12_063(String definition_12_063) {
 		this.definition_12_063 = definition_12_063;
 	}
 
+	/**
+	 * Get the contents
+	 * 
+	 * @return contents
+	 */
 	public ForeignCollection<Contents> getContents() {
 		return contents;
 	}
 
+	/**
+	 * Get the geometry columns
+	 * 
+	 * @return geometry columns
+	 */
 	public ForeignCollection<GeometryColumns> getGeometryColumns() {
 		return geometryColumns;
 	}
 
+	/**
+	 * Get the tile matrix set
+	 * 
+	 * @return tile matrix set
+	 */
 	public ForeignCollection<TileMatrixSet> getTileMatrixSet() {
 		return tileMatrixSet;
 	}

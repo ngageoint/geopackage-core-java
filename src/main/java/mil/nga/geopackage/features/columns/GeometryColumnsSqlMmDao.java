@@ -27,8 +27,11 @@ public class GeometryColumnsSqlMmDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public GeometryColumnsSqlMmDao(ConnectionSource connectionSource,
 			Class<GeometryColumnsSqlMm> dataClass) throws SQLException {

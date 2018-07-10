@@ -18,7 +18,9 @@ public class GeoPackageExtensions {
 	 * Delete all table extensions for the table within the GeoPackage
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 * @param table
+	 *            table name
 	 */
 	public static void deleteTableExtensions(GeoPackageCore geoPackage,
 			String table) {
@@ -33,6 +35,7 @@ public class GeoPackageExtensions {
 	 * Delete all extensions
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 */
 	public static void deleteExtensions(GeoPackageCore geoPackage) {
 		deleteExtensions(geoPackage, false);
@@ -42,6 +45,7 @@ public class GeoPackageExtensions {
 	 * Delete all extensions
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 * @param ignoreErrors
 	 *            true to ignore errors when deleting tables
 	 */

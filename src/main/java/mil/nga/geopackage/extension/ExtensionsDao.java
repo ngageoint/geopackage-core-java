@@ -24,8 +24,11 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public ExtensionsDao(ConnectionSource connectionSource,
 			Class<Extensions> dataClass) throws SQLException {
@@ -80,6 +83,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            extension name
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByExtension(String extensionName) throws SQLException {
 
@@ -100,6 +104,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            table name
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByExtension(String extensionName, String tableName)
 			throws SQLException {
@@ -124,6 +129,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            column name
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByExtension(String extensionName, String tableName,
 			String columnName) throws SQLException {
@@ -144,6 +150,8 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * @param tableName
 	 *            table name
 	 * @return rows deleted
+	 * @throws SQLException
+	 *             upon failure
 	 * @since 1.1.8
 	 */
 	public int deleteByTableName(String tableName) throws SQLException {
@@ -161,6 +169,8 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 * Delete all extensions
 	 * 
 	 * @return rows deleted
+	 * @throws SQLException
+	 *             upon failure
 	 * @since 1.1.8
 	 */
 	public int deleteAll() throws SQLException {
@@ -178,6 +188,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            extension name
 	 * @return extensions
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<Extensions> queryByExtension(String extensionName)
 			throws SQLException {
@@ -200,6 +211,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            table name
 	 * @return extensions
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<Extensions> queryByExtension(String extensionName,
 			String tableName) throws SQLException {
@@ -224,6 +236,7 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 	 *            column name
 	 * @return extensions
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public Extensions queryByExtension(String extensionName, String tableName,
 			String columnName) throws SQLException {

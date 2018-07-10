@@ -89,8 +89,11 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Constructor
 	 * 
 	 * @param geoPackage
+	 *            GeoPackage
 	 * @param tableName
+	 *            table name
 	 * @param columnName
+	 *            column name
 	 */
 	protected FeatureTableCoreIndex(GeoPackageCore geoPackage,
 			String tableName, String columnName) {
@@ -132,6 +135,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Set the progress tracker
 	 *
 	 * @param progress
+	 *            progress tracker
 	 */
 	public void setProgress(GeoPackageProgress progress) {
 		this.progress = progress;
@@ -168,6 +172,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Index the feature table
 	 *
 	 * @param tableIndex
+	 *            table index
 	 * @return count
 	 */
 	protected abstract int indexTable(TableIndex tableIndex);
@@ -176,8 +181,11 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Index the geometry id and geometry data
 	 * 
 	 * @param tableIndex
+	 *            table index
 	 * @param geomId
+	 *            geometry id
 	 * @param geomData
+	 *            geometry data
 	 * 
 	 * @return true if indexed
 	 */
@@ -268,6 +276,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Delete the index for the geometry id
 	 * 
 	 * @param geomId
+	 *            geometry id
 	 * 
 	 * @return deleted rows, should be 0 or 1
 	 */
@@ -540,6 +549,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * correctly
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 * @return geometry indices iterator
 	 */
 	public CloseableIterator<GeometryIndex> query(BoundingBox boundingBox) {
@@ -553,6 +563,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * correctly
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 * @return count
 	 */
 	public long count(BoundingBox boundingBox) {
@@ -565,6 +576,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Query for Geometry Index objects within the Geometry Envelope
 	 * 
 	 * @param envelope
+	 *            geometry envelope
 	 * @return geometry indices iterator
 	 */
 	public CloseableIterator<GeometryIndex> query(GeometryEnvelope envelope) {
@@ -588,6 +600,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Query for Geometry Index count within the Geometry Envelope
 	 * 
 	 * @param envelope
+	 *            geometry envelope
 	 * @return count
 	 */
 	public long count(GeometryEnvelope envelope) {
@@ -611,6 +624,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Geometry Envelope
 	 * 
 	 * @param envelope
+	 *            geometry envelope
 	 * @return query builder
 	 */
 	public QueryBuilder<GeometryIndex, GeometryIndexKey> queryBuilder(

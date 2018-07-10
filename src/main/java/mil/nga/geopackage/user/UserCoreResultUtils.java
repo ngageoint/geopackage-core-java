@@ -40,9 +40,12 @@ public class UserCoreResultUtils {
 	 * Get the value from the cursor from the provided column
 	 *
 	 * @param result
+	 *            result
 	 * @param index
+	 *            index
 	 * @param dataType
-	 * @return value
+	 *            data type
+	 * @return value value
 	 */
 	public static Object getValue(UserCoreResult<?, ?, ?> result, int index,
 			GeoPackageDataType dataType) {
@@ -87,8 +90,12 @@ public class UserCoreResultUtils {
 	/**
 	 * Get the integer value from the cursor of the column
 	 *
+	 * @param result
+	 *            result
 	 * @param index
+	 *            index
 	 * @param dataType
+	 *            data type
 	 * @return integer value
 	 */
 	public static Object getIntegerValue(UserCoreResult<?, ?, ?> result,
@@ -130,8 +137,12 @@ public class UserCoreResultUtils {
 	/**
 	 * Get the float value from the cursor of the column
 	 *
+	 * @param result
+	 *            result
 	 * @param index
+	 *            index
 	 * @param dataType
+	 *            data type
 	 * @return float value
 	 */
 	public static Object getFloatValue(UserCoreResult<?, ?, ?> result,

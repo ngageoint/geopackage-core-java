@@ -22,7 +22,9 @@ public class GeometryIndexKey {
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param geomId
+	 *            geom id
 	 */
 	public GeometryIndexKey(String tableName, long geomId) {
 		this.tableName = tableName;
@@ -42,6 +44,7 @@ public class GeometryIndexKey {
 	 * Set the table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;

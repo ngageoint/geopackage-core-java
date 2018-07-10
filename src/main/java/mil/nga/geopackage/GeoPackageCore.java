@@ -624,6 +624,10 @@ public interface GeoPackageCore extends Closeable {
 	 *
 	 * @param type
 	 *            dao class type
+	 * @param <T>
+	 *            class type
+	 * @param <S>
+	 *            dao type
 	 * @return base dao implementation
 	 * @since 1.1.0
 	 */

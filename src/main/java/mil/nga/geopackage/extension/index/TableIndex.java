@@ -83,6 +83,7 @@ public class TableIndex {
 	 * Set the table name
 	 * 
 	 * @param tableName
+	 *            table name
 	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
@@ -101,6 +102,7 @@ public class TableIndex {
 	 * Set the last indexed date
 	 * 
 	 * @param lastIndexed
+	 *            last indexed date
 	 */
 	public void setLastIndexed(Date lastIndexed) {
 		this.lastIndexed = lastIndexed;

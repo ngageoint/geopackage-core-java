@@ -240,6 +240,7 @@ public class TileScaling {
 	 * Set the max levels to zoom out
 	 * 
 	 * @param zoomOut
+	 *            zoom out level
 	 */
 	public void setZoomOut(Long zoomOut) {
 		this.zoomOut = zoomOut;

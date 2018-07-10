@@ -49,12 +49,19 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Constructor
 	 * 
 	 * @param index
+	 *            column index
 	 * @param name
-	 * @param max
-	 * @param notNull
-	 * @param defaultValue
-	 * @param primaryKey
+	 *            column name
 	 * @param dataType
+	 *            data type
+	 * @param max
+	 *            max value
+	 * @param notNull
+	 *            not null flag
+	 * @param defaultValue
+	 *            default value
+	 * @param primaryKey
+	 *            primary key flag
 	 */
 	protected UserColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey) {

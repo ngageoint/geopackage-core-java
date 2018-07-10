@@ -66,6 +66,7 @@ public class BoundingBox {
 	 * Constructor
 	 * 
 	 * @param boundingBox
+	 *            bounding box
 	 * @since 1.1.6
 	 */
 	public BoundingBox(BoundingBox boundingBox) {
@@ -85,34 +86,78 @@ public class BoundingBox {
 				envelope.getMaxY());
 	}
 
+	/**
+	 * Get the min longitude
+	 * 
+	 * @return min longitude
+	 */
 	public double getMinLongitude() {
 		return minLongitude;
 	}
 
+	/**
+	 * Set the min longitude
+	 * 
+	 * @param minLongitude
+	 *            min longitude
+	 */
 	public void setMinLongitude(double minLongitude) {
 		this.minLongitude = minLongitude;
 	}
 
+	/**
+	 * Get the max longitude
+	 * 
+	 * @return max longitude
+	 */
 	public double getMaxLongitude() {
 		return maxLongitude;
 	}
 
+	/**
+	 * Set the max longitude
+	 * 
+	 * @param maxLongitude
+	 *            max longitude
+	 */
 	public void setMaxLongitude(double maxLongitude) {
 		this.maxLongitude = maxLongitude;
 	}
 
+	/**
+	 * Get the min latitude
+	 * 
+	 * @return min latitude
+	 */
 	public double getMinLatitude() {
 		return minLatitude;
 	}
 
+	/**
+	 * Set the min latitude
+	 * 
+	 * @param minLatitude
+	 *            min latitude
+	 */
 	public void setMinLatitude(double minLatitude) {
 		this.minLatitude = minLatitude;
 	}
 
+	/**
+	 * Get the max latitude
+	 * 
+	 * @return max latitude
+	 */
 	public double getMaxLatitude() {
 		return maxLatitude;
 	}
 
+	/**
+	 * Set the max latitude
+	 * 
+	 * @param maxLatitude
+	 *            max latitude
+	 */
 	public void setMaxLatitude(double maxLatitude) {
 		this.maxLatitude = maxLatitude;
 	}

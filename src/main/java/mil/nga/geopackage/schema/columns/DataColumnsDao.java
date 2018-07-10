@@ -26,8 +26,11 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public DataColumnsDao(ConnectionSource connectionSource,
 			Class<DataColumns> dataClass) throws SQLException {
@@ -180,6 +183,7 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 	 *            constraint name
 	 * @return data columns
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<DataColumns> queryByConstraintName(String constraintName)
 			throws SQLException {
@@ -195,6 +199,7 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 	 *            column name to query for
 	 * @return DataColumns
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public DataColumns getDataColumn(String tableName, String columnName)
 			throws SQLException {

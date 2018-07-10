@@ -71,6 +71,7 @@ public class FeatureTileLink {
 	 * Set the id
 	 * 
 	 * @param id
+	 *            id
 	 */
 	public void setId(FeatureTileLinkKey id) {
 		featureTableName = id.getFeatureTableName();
@@ -90,6 +91,7 @@ public class FeatureTileLink {
 	 * Set the feature table name
 	 * 
 	 * @param featureTableName
+	 *            feature table name
 	 */
 	public void setFeatureTableName(String featureTableName) {
 		this.featureTableName = featureTableName;
@@ -108,6 +110,7 @@ public class FeatureTileLink {
 	 * Set the tile table name
 	 * 
 	 * @param tileTableName
+	 *            tile table name
 	 */
 	public void setTileTableName(String tileTableName) {
 		this.tileTableName = tileTableName;

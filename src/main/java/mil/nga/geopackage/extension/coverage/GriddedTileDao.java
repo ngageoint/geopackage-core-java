@@ -25,8 +25,11 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public GriddedTileDao(ConnectionSource connectionSource,
 			Class<GriddedTile> dataClass) throws SQLException {
@@ -92,6 +95,7 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
 	 * Delete by contents
 	 * 
 	 * @param contents
+	 *            contents
 	 * @return deleted count
 	 */
 	public int delete(Contents contents) {

@@ -174,6 +174,7 @@ public class GeometryIndex {
 	 * Set the id
 	 * 
 	 * @param id
+	 *            geometry index key
 	 */
 	public void setId(GeometryIndexKey id) {
 		tableName = id.getTableName();
@@ -193,6 +194,7 @@ public class GeometryIndex {
 	 * Set the table index
 	 * 
 	 * @param tableIndex
+	 *            table index
 	 */
 	public void setTableIndex(TableIndex tableIndex) {
 		this.tableIndex = tableIndex;
@@ -225,6 +227,7 @@ public class GeometryIndex {
 	 * Set the geometry id
 	 * 
 	 * @param geomId
+	 *            geom id
 	 */
 	public void setGeomId(long geomId) {
 		this.geomId = geomId;
@@ -243,6 +246,7 @@ public class GeometryIndex {
 	 * Set the min x
 	 * 
 	 * @param minX
+	 *            min x
 	 */
 	public void setMinX(double minX) {
 		this.minX = minX;
@@ -261,6 +265,7 @@ public class GeometryIndex {
 	 * Set the max x
 	 * 
 	 * @param maxX
+	 *            max x
 	 */
 	public void setMaxX(double maxX) {
 		this.maxX = maxX;
@@ -279,6 +284,7 @@ public class GeometryIndex {
 	 * Set the min y
 	 * 
 	 * @param minY
+	 *            min y
 	 */
 	public void setMinY(double minY) {
 		this.minY = minY;
@@ -297,6 +303,7 @@ public class GeometryIndex {
 	 * Set the max y
 	 * 
 	 * @param maxY
+	 *            max y
 	 */
 	public void setMaxY(double maxY) {
 		this.maxY = maxY;
@@ -315,6 +322,7 @@ public class GeometryIndex {
 	 * Set the min z
 	 * 
 	 * @param minZ
+	 *            min z
 	 */
 	public void setMinZ(Double minZ) {
 		this.minZ = minZ;
@@ -333,6 +341,7 @@ public class GeometryIndex {
 	 * Set the max z
 	 * 
 	 * @param maxZ
+	 *            max z
 	 */
 	public void setMaxZ(Double maxZ) {
 		this.maxZ = maxZ;
@@ -351,6 +360,7 @@ public class GeometryIndex {
 	 * Set the min m
 	 * 
 	 * @param minM
+	 *            min m
 	 */
 	public void setMinM(Double minM) {
 		this.minM = minM;
@@ -369,6 +379,7 @@ public class GeometryIndex {
 	 * Set the max m
 	 * 
 	 * @param maxM
+	 *            max m
 	 */
 	public void setMaxM(Double maxM) {
 		this.maxM = maxM;

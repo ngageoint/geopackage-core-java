@@ -28,8 +28,11 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public MetadataDao(ConnectionSource connectionSource,
 			Class<Metadata> dataClass) throws SQLException {
@@ -43,6 +46,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 *            metadata
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(Metadata metadata) throws SQLException {
 		int count = 0;
@@ -67,6 +71,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 *            metadata collection
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(Collection<Metadata> metadataCollection)
 			throws SQLException {
@@ -86,6 +91,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 *            prepared delete query
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(PreparedQuery<Metadata> preparedDelete)
 			throws SQLException {
@@ -104,6 +110,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 *            id
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByIdCascade(Long id) throws SQLException {
 		int count = 0;
@@ -123,6 +130,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 *            id collection
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteIdsCascade(Collection<Long> idCollection)
 			throws SQLException {

@@ -39,6 +39,7 @@ public class DataColumnConstraintsDao extends
 	 * @param dataClass
 	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public DataColumnConstraintsDao(ConnectionSource connectionSource,
 			Class<DataColumnConstraints> dataClass) throws SQLException {
@@ -52,6 +53,7 @@ public class DataColumnConstraintsDao extends
 	 *            data column constraints
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(DataColumnConstraints constraints)
 			throws SQLException {
@@ -101,6 +103,7 @@ public class DataColumnConstraintsDao extends
 	 *            constraints collection
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(
 			Collection<DataColumnConstraints> constraintsCollection)
@@ -121,6 +124,7 @@ public class DataColumnConstraintsDao extends
 	 *            prepared delete query
 	 * @return deleted count
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteCascade(PreparedQuery<DataColumnConstraints> preparedDelete)
 			throws SQLException {
@@ -204,6 +208,7 @@ public class DataColumnConstraintsDao extends
 	 *            constraint name
 	 * @return data column constraints
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<DataColumnConstraints> queryByConstraintName(
 			String constraintName) throws SQLException {
@@ -222,6 +227,7 @@ public class DataColumnConstraintsDao extends
 	 *            value
 	 * @return data column constraints
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public DataColumnConstraints queryByUnique(String constraintName,
 			DataColumnConstraintType constraintType, String value)

@@ -5,9 +5,13 @@ package mil.nga.geopackage.user;
  * connection types
  * 
  * @param <TColumn>
+ *            column type
  * @param <TTable>
+ *            table type
  * @param <TRow>
+ *            row type
  * @param <TResult>
+ *            result type
  * 
  * @author osbornb
  */
@@ -18,7 +22,9 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * result set.
 	 * 
 	 * @param sql
+	 *            sql statement
 	 * @param selectionArgs
+	 *            selection arguments
 	 * @return result
 	 */
 	public abstract TResult rawQuery(String sql, String[] selectionArgs);

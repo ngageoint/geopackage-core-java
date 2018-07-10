@@ -14,7 +14,9 @@ import mil.nga.sf.GeometryType;
  * Reads the metadata from an existing user table
  * 
  * @param <TColumn>
+ *            column type
  * @param <TTable>
+ *            table type
  * 
  * @author osbornb
  */

@@ -57,6 +57,8 @@ public class DublinCoreMetadata {
 	 *            user table
 	 * @param type
 	 *            Dublin Core Type
+	 * @param <T>
+	 *            column type
 	 * @return column
 	 */
 	public static <T extends UserColumn> T getColumn(UserTable<T> table,
@@ -85,6 +87,8 @@ public class DublinCoreMetadata {
 	 *            user row
 	 * @param type
 	 *            Dublin Core Type
+	 * @param <T>
+	 *            column type
 	 * @return column
 	 */
 	public static <T extends UserColumn> T getColumn(UserCoreRow<T, ?> row,

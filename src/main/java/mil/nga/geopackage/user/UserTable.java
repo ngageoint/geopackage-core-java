@@ -15,6 +15,7 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * Abstract user table
  * 
  * @param <TColumn>
+ *            column type
  * 
  * @author osbornb
  */
@@ -133,8 +134,11 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Check for duplicate column names
 	 * 
 	 * @param index
+	 *            index
 	 * @param previousIndex
+	 *            previous index
 	 * @param column
+	 *            column
 	 */
 	protected void duplicateCheck(int index, Integer previousIndex,
 			String column) {

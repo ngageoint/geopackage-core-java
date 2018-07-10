@@ -28,8 +28,11 @@ public class FeatureTileLinkDao extends
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public FeatureTileLinkDao(ConnectionSource connectionSource,
 			Class<FeatureTileLink> dataClass) throws SQLException {
@@ -182,6 +185,7 @@ public class FeatureTileLinkDao extends
 	 * Query by feature table name
 	 * 
 	 * @param featureTableName
+	 *            feature table name
 	 * @return feature tile links
 	 */
 	public List<FeatureTileLink> queryForFeatureTableName(
@@ -202,6 +206,7 @@ public class FeatureTileLinkDao extends
 	 * Query by tile table name
 	 * 
 	 * @param tileTableName
+	 *            tile table name
 	 * @return feature tile links
 	 */
 	public List<FeatureTileLink> queryForTileTableName(String tileTableName) {
@@ -224,6 +229,7 @@ public class FeatureTileLinkDao extends
 	 *            table name, feature or tile
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public int deleteByTableName(String tableName) throws SQLException {
 		DeleteBuilder<FeatureTileLink, FeatureTileLinkKey> db = deleteBuilder();
@@ -241,6 +247,7 @@ public class FeatureTileLinkDao extends
 	 * 
 	 * @return rows deleted
 	 * @throws SQLException
+	 *             upon failure
 	 * @since 1.1.5
 	 */
 	public int deleteAll() throws SQLException {

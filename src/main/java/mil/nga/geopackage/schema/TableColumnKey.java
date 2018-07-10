@@ -21,7 +21,9 @@ public class TableColumnKey {
 	 * Constructor
 	 * 
 	 * @param tableName
+	 *            table name
 	 * @param columnName
+	 *            column name
 	 */
 	public TableColumnKey(String tableName, String columnName) {
 		this.tableName = tableName;

@@ -12,6 +12,7 @@ public interface GeoPackageProgress {
 	 * Set the max progress value
 	 * 
 	 * @param max
+	 *            max value
 	 */
 	public void setMax(int max);
 
@@ -19,6 +20,7 @@ public interface GeoPackageProgress {
 	 * Add to the total progress
 	 * 
 	 * @param progress
+	 *            progress made
 	 */
 	public void addProgress(int progress);
 

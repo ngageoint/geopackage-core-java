@@ -166,6 +166,7 @@ public class TileMatrix {
 	 * Set the tile matrix id
 	 * 
 	 * @param id
+	 *            id
 	 */
 	public void setId(TileMatrixKey id) {
 		tableName = id.getTableName();

@@ -24,8 +24,11 @@ public class TileMatrixDao extends BaseDaoImpl<TileMatrix, TileMatrixKey> {
 	 * Constructor, required by ORMLite
 	 * 
 	 * @param connectionSource
+	 *            connection source
 	 * @param dataClass
+	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public TileMatrixDao(ConnectionSource connectionSource,
 			Class<TileMatrix> dataClass) throws SQLException {

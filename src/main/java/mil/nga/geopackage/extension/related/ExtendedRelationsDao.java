@@ -28,6 +28,7 @@ public class ExtendedRelationsDao extends
 	 * @param dataClass
 	 *            data class
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public ExtendedRelationsDao(ConnectionSource connectionSource,
 			Class<ExtendedRelation> dataClass) throws SQLException {
@@ -39,6 +40,7 @@ public class ExtendedRelationsDao extends
 	 * 
 	 * @return base table names
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<String> getBaseTables() throws SQLException {
 
@@ -57,6 +59,7 @@ public class ExtendedRelationsDao extends
 	 * 
 	 * @return related table names
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<String> getRelatedTables() throws SQLException {
 
@@ -77,6 +80,7 @@ public class ExtendedRelationsDao extends
 	 *            base table
 	 * @return extended relations
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<ExtendedRelation> getBaseTableRelations(String baseTable)
 			throws SQLException {
@@ -90,6 +94,7 @@ public class ExtendedRelationsDao extends
 	 *            related table
 	 * @return extended relations
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<ExtendedRelation> getRelatedTableRelations(String relatedTable)
 			throws SQLException {
@@ -104,6 +109,7 @@ public class ExtendedRelationsDao extends
 	 *            table name
 	 * @return extended relations
 	 * @throws SQLException
+	 *             upon failure
 	 */
 	public List<ExtendedRelation> getTableRelations(String table)
 			throws SQLException {
