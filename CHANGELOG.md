@@ -6,7 +6,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.0.1 (TBD)
 
-* TBD
+* Related Tables Extension support
+* Additional table, table type, and contents methods and improvements
+* User DAO "like" query support
+* User DAO, table, and row support for id-less schemas
+* Custom User table and column implementations
 
 ## [3.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.0.0) (05-17-2018)
 
