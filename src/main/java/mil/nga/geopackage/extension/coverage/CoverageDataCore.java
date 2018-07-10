@@ -26,6 +26,9 @@ import org.osgeo.proj4j.ProjCoordinate;
 /**
  * Tiled Gridded Coverage Core Data Extension
  * 
+ * @param <TImage>
+ *            image type
+ * 
  * @author osbornb
  * @since 2.0.1
  */
