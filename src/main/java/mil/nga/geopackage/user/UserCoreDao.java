@@ -494,6 +494,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Delete rows matching the field values
+	 * 
+	 * @param fieldValues
+	 *            field values
+	 * @return deleted count
+	 * @since 3.0.2
+	 */
+	public int delete(Map<String, Object> fieldValues) {
+		String whereClause = buildWhere(fieldValues.entrySet());
+		String[] whereArgs = buildWhereArgs(fieldValues.values());
+		return delete(whereClause, whereArgs);
+	}
+
+	/**
 	 * Creates a new row, same as calling {@link #insert(UserCoreRow)}
 	 * 
 	 * @param row
@@ -814,6 +828,62 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public Integer max(String column, String where, String[] args) {
 		return db.max(getTableName(), column, where, args);
+	}
+
+	/**
+	 * Query for a single result string
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single result object
+	 * @since 3.0.2
+	 */
+	public String querySingleStringResult(String sql, String[] args) {
+		return db.querySingleStringResult(sql, args);
+	}
+
+	/**
+	 * Query for a single result integer
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single result object
+	 * @since 3.0.2
+	 */
+	public Integer querySingleIntResult(String sql, String[] args) {
+		return db.querySingleIntResult(sql, args);
+	}
+
+	/**
+	 * Query for a single result object
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single result object
+	 * @since 3.0.2
+	 */
+	public Object querySingleObjectResult(String sql, String[] args) {
+		return db.querySingleObjectResult(sql, args);
+	}
+
+	/**
+	 * Query for values from a single column
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single column values
+	 * @since 3.0.2
+	 */
+	public List<Object> querySingleColumnResults(String sql, String[] args) {
+		return db.querySingleColumnResults(sql, args);
 	}
 
 	/**

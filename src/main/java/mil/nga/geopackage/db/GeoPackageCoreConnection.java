@@ -3,6 +3,7 @@ package mil.nga.geopackage.db;
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
@@ -163,6 +164,31 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @since 1.2.1
 	 */
 	public abstract Integer querySingleIntResult(String sql, String[] args);
+
+	/**
+	 * Query for a single result object
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single result object
+	 * @since 3.0.2
+	 */
+	public abstract Object querySingleObjectResult(String sql, String[] args);
+
+	/**
+	 * Query for values from a single column
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single column values
+	 * @since 3.0.2
+	 */
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args);
 
 	/**
 	 * Set the GeoPackage application id
