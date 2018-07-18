@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension;
+package mil.nga.geopackage.extension.properties;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +10,9 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.extension.BaseExtension;
+import mil.nga.geopackage.extension.ExtensionScopeType;
+import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.UserCoreDao;
@@ -69,18 +72,6 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 	 * Value column
 	 */
 	public static final String COLUMN_VALUE = "value";
-
-	// TODO value type column?
-
-	/**
-	 * Predefined name property
-	 */
-	public static final String PROPERTY_NAME = "name";
-
-	/**
-	 * Predefined tag property
-	 */
-	public static final String PROPERTY_TAG = "tag";
 
 	/**
 	 * Constructor
