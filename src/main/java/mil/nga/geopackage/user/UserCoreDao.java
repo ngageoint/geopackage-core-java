@@ -508,6 +508,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Delete all rows
+	 * 
+	 * @return deleted count
+	 * @since 3.0.2
+	 */
+	public int deleteAll() {
+		return delete(null, null);
+	}
+
+	/**
 	 * Creates a new row, same as calling {@link #insert(UserCoreRow)}
 	 * 
 	 * @param row

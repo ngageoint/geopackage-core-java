@@ -313,6 +313,15 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 	}
 
 	/**
+	 * Delete all properties and values
+	 * 
+	 * @return deleted values count
+	 */
+	public int deleteAll() {
+		return getDao().deleteAll();
+	}
+
+	/**
 	 * Remove the extension
 	 */
 	public void removeExtension() {
