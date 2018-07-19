@@ -375,11 +375,15 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 	private List<String> getValues(UserCoreResult<?, ?, ?> results) {
 
 		List<String> values = null;
-		if (results.getCount() > 0) {
-			int columnIndex = results.getColumnIndex(COLUMN_VALUE);
-			values = getColumnResults(columnIndex, results);
-		} else {
-			values = new ArrayList<>();
+		try {
+			if (results.getCount() > 0) {
+				int columnIndex = results.getColumnIndex(COLUMN_VALUE);
+				values = getColumnResults(columnIndex, results);
+			} else {
+				values = new ArrayList<>();
+			}
+		} finally {
+			results.close();
 		}
 
 		return values;
@@ -398,12 +402,8 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 			UserCoreResult<?, ?, ?> results) {
 
 		List<String> values = new ArrayList<>();
-		try {
-			while (results.moveToNext()) {
-				values.add(results.getString(columnIndex));
-			}
-		} finally {
-			results.close();
+		while (results.moveToNext()) {
+			values.add(results.getString(columnIndex));
 		}
 
 		return values;
