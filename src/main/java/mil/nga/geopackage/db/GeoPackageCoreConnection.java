@@ -166,19 +166,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public abstract Integer querySingleIntResult(String sql, String[] args);
 
 	/**
-	 * Query for a single result object
-	 * 
-	 * @param sql
-	 *            sql statement
-	 * @param args
-	 *            sql arguments
-	 * @return single result object
-	 * @since 3.0.2
-	 */
-	public abstract Object querySingleObjectResult(String sql, String[] args);
-
-	/**
-	 * Query for values from a single column
+	 * Query for string values from a single column
 	 * 
 	 * @param sql
 	 *            sql statement
@@ -187,7 +175,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column values
 	 * @since 3.0.2
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
+	public abstract List<String> querySingleColumnStringResults(String sql,
 			String[] args);
 
 	/**

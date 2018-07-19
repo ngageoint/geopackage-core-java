@@ -147,12 +147,9 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 	 * @return list of properties
 	 */
 	public List<String> getProperties() {
-		@SuppressWarnings("unchecked")
-		List<String> properties = (List<String>) (Object) getDao()
-				.querySingleColumnResults(
-						"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM "
-								+ TABLE_NAME, null);
-		return properties;
+		return getDao().querySingleColumnStringResults(
+				"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM " + TABLE_NAME,
+				null);
 	}
 
 	/**

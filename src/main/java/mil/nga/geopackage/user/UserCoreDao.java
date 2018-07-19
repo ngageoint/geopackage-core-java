@@ -869,21 +869,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for a single result object
-	 * 
-	 * @param sql
-	 *            sql statement
-	 * @param args
-	 *            sql arguments
-	 * @return single result object
-	 * @since 3.0.2
-	 */
-	public Object querySingleObjectResult(String sql, String[] args) {
-		return db.querySingleObjectResult(sql, args);
-	}
-
-	/**
-	 * Query for values from a single column
+	 * Query for string values from a single column
 	 * 
 	 * @param sql
 	 *            sql statement
@@ -892,8 +878,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return single column values
 	 * @since 3.0.2
 	 */
-	public List<Object> querySingleColumnResults(String sql, String[] args) {
-		return db.querySingleColumnResults(sql, args);
+	public List<String> querySingleColumnStringResults(String sql, String[] args) {
+		return db.querySingleColumnStringResults(sql, args);
 	}
 
 	/**
