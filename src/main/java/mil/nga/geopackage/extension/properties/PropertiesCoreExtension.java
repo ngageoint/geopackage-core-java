@@ -23,8 +23,10 @@ import mil.nga.geopackage.user.UserCoreRow;
  * GeoPackage properties core extension for defining GeoPackage specific
  * properties, attributes, and metadata
  * 
+ * @param <TGeoPackage>
+ *            GeoPackage type
  * @param <TRow>
- *            DAO row
+ *            row type
  * @param <TResult>
  *            result type
  * @param <TDao>
@@ -33,7 +35,7 @@ import mil.nga.geopackage.user.UserCoreRow;
  * @author osbornb
  * @since 3.0.2
  */
-public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TResult extends UserCoreResult<?, ?, TRow>, TDao extends UserCoreDao<?, ?, TRow, TResult>>
+public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore, TRow extends UserCoreRow<?, ?>, TResult extends UserCoreResult<?, ?, TRow>, TDao extends UserCoreDao<?, ?, TRow, TResult>>
 		extends BaseExtension {
 
 	/**
@@ -80,8 +82,17 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 	 *            GeoPackage
 	 * 
 	 */
-	protected PropertiesCoreExtension(GeoPackageCore geoPackage) {
+	protected PropertiesCoreExtension(TGeoPackage geoPackage) {
 		super(geoPackage);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public TGeoPackage getGeoPackage() {
+		return (TGeoPackage) geoPackage;
 	}
 
 	/**
@@ -329,7 +340,7 @@ public abstract class PropertiesCoreExtension<TRow extends UserCoreRow<?, ?>, TR
 
 		try {
 			if (extensionsDao.isTableExists()) {
-				extensionsDao.deleteByExtension(EXTENSION_NAME);
+				extensionsDao.deleteByExtension(EXTENSION_NAME, TABLE_NAME);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
