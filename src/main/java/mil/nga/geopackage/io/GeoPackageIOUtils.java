@@ -46,6 +46,32 @@ public class GeoPackageIOUtils {
 	}
 
 	/**
+	 * Check if the file has an extension
+	 * 
+	 * @param file
+	 *            file
+	 * @return true if has extension
+	 * @since 3.0.2
+	 */
+	public static boolean hasFileExtension(File file) {
+		return getFileExtension(file) != null;
+	}
+
+	/**
+	 * Add a the file extension to the file
+	 * 
+	 * @param file
+	 *            file
+	 * @param extension
+	 *            file extension
+	 * @return new file with extension
+	 * @since 3.0.2
+	 */
+	public static File addFileExtension(File file, String extension) {
+		return new File(file.getAbsolutePath() + "." + extension);
+	}
+
+	/**
 	 * Get the file name with the extension removed
 	 * 
 	 * @param file
