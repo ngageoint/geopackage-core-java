@@ -92,6 +92,19 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	}
 
 	/**
+	 * Add the collection of GeoPackages
+	 * 
+	 * @param geoPackages
+	 *            GeoPackages
+	 * @since 3.0.2
+	 */
+	public void addAll(Collection<T> geoPackages) {
+		for (T geoPackage : geoPackages) {
+			add(geoPackage);
+		}
+	}
+
+	/**
 	 * Remove the GeoPackage with the name but does not close it, call
 	 * {@link #close(String)} to close and remove
 	 * 
