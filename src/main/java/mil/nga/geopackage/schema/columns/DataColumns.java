@@ -3,7 +3,6 @@ package mil.nga.geopackage.schema.columns;
 import java.sql.SQLException;
 import java.util.List;
 
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
@@ -178,13 +177,6 @@ public class DataColumns {
 	public void setContents(Contents contents) {
 		this.contents = contents;
 		if (contents != null) {
-			// Verify the Contents have a data type
-			if (contents.getDataType() == null) {
-				throw new GeoPackageException("The "
-						+ Contents.class.getSimpleName() + " of a "
-						+ DataColumns.class.getSimpleName()
-						+ " must have a data type");
-			}
 			tableName = contents.getId();
 		} else {
 			tableName = null;
