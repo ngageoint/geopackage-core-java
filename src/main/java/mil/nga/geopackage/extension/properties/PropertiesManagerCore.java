@@ -157,6 +157,24 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	}
 
 	/**
+	 * Get the GeoPackages missing the property name
+	 * 
+	 * @param property
+	 *            property name
+	 * @return GeoPackages
+	 */
+	public List<T> missingProperty(String property) {
+		List<T> geoPackages = new ArrayList<>();
+		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
+				.values()) {
+			if (!properties.has() || !properties.hasProperty(property)) {
+				geoPackages.add(properties.getGeoPackage());
+			}
+		}
+		return geoPackages;
+	}
+
+	/**
 	 * Get the number of unique values for the property
 	 * 
 	 * @param property
@@ -210,6 +228,26 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
 			if (properties.has() && properties.hasValue(property, value)) {
+				geoPackages.add(properties.getGeoPackage());
+			}
+		}
+		return geoPackages;
+	}
+
+	/**
+	 * Get the GeoPackages missing the property name and value
+	 * 
+	 * @param property
+	 *            property name
+	 * @param value
+	 *            property value
+	 * @return GeoPackages
+	 */
+	public List<T> missingValue(String property, String value) {
+		List<T> geoPackages = new ArrayList<>();
+		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
+				.values()) {
+			if (!properties.has() || !properties.hasValue(property, value)) {
 				geoPackages.add(properties.getGeoPackage());
 			}
 		}
