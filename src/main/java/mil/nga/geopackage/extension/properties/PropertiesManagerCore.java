@@ -125,9 +125,9 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	/**
 	 * Get the unique properties
 	 * 
-	 * @return list of properties
+	 * @return set of properties
 	 */
-	public List<String> getProperties() {
+	public Set<String> getProperties() {
 		Set<String> allProperties = new HashSet<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
@@ -135,7 +135,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 				allProperties.addAll(properties.getProperties());
 			}
 		}
-		return new ArrayList<>(allProperties);
+		return allProperties;
 	}
 
 	/**
@@ -183,9 +183,9 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 * 
 	 * @param property
 	 *            property name
-	 * @return list of values
+	 * @return set of values
 	 */
-	public List<String> getValues(String property) {
+	public Set<String> getValues(String property) {
 		Set<String> allValues = new HashSet<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
@@ -193,7 +193,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 				allValues.addAll(properties.getValues(property));
 			}
 		}
-		return new ArrayList<>(allValues);
+		return allValues;
 	}
 
 	/**
