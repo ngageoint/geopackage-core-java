@@ -1,18 +1,17 @@
 package mil.nga.geopackage.extension.properties;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageCore;
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.NGAExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.UserCoreDao;
@@ -333,20 +332,7 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * Remove the extension
 	 */
 	public void removeExtension() {
-
-		if (geoPackage.isTable(TABLE_NAME)) {
-			geoPackage.deleteTable(TABLE_NAME);
-		}
-
-		try {
-			if (extensionsDao.isTableExists()) {
-				extensionsDao.deleteByExtension(EXTENSION_NAME, TABLE_NAME);
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to delete Properties extension. GeoPackage: "
-							+ geoPackage.getName(), e);
-		}
+		NGAExtensions.deletePropertiesExtension(geoPackage);
 	}
 
 	/**

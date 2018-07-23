@@ -12,6 +12,7 @@ import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
+import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.extension.scale.TileTableScaling;
@@ -72,6 +73,7 @@ public class NGAExtensions {
 		deleteGeometryIndexExtension(geoPackage, ignoreErrors);
 		deleteFeatureTileLinkExtension(geoPackage, ignoreErrors);
 		deleteTileScalingExtension(geoPackage, ignoreErrors);
+		deletePropertiesExtension(geoPackage);
 
 		// Delete future extension tables here
 	}
@@ -264,6 +266,35 @@ public class NGAExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Tile Scaling extension and table. GeoPackage: "
+							+ geoPackage.getName(), e);
+		}
+
+	}
+
+	/**
+	 * Delete the properties extension from the GeoPackage
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @since 3.0.2
+	 */
+	public static void deletePropertiesExtension(GeoPackageCore geoPackage) {
+
+		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+		if (geoPackage.isTable(PropertiesCoreExtension.TABLE_NAME)) {
+			geoPackage.deleteTable(PropertiesCoreExtension.TABLE_NAME);
+		}
+
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(
+						PropertiesCoreExtension.EXTENSION_NAME,
+						PropertiesCoreExtension.TABLE_NAME);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Properties extension. GeoPackage: "
 							+ geoPackage.getName(), e);
 		}
 
