@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageCoreCache;
 
 /**
  * Properties Manager Core using the Properties Extension on a group of cached
@@ -52,6 +53,16 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 */
 	protected PropertiesManagerCore(Collection<T> geoPackages) {
 		add(geoPackages);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param cache
+	 *            GeoPackage cache
+	 */
+	protected PropertiesManagerCore(GeoPackageCoreCache<T> cache) {
+		this(cache.getGeoPackages());
 	}
 
 	/**
