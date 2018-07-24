@@ -42,7 +42,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 *            GeoPackage
 	 */
 	protected PropertiesManagerCore(T geoPackage) {
-		add(geoPackage);
+		addGeoPackage(geoPackage);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 *            collection of GeoPackages
 	 */
 	protected PropertiesManagerCore(Collection<T> geoPackages) {
-		add(geoPackages);
+		addGeoPackages(geoPackages);
 	}
 
 	/**
@@ -80,8 +80,42 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 * 
 	 * @return names
 	 */
-	public Set<String> getNames() {
+	public Set<String> getGeoPackageNames() {
 		return propertiesMap.keySet();
+	}
+
+	/**
+	 * Get the number of GeoPackages
+	 * 
+	 * @return GeoPackage count
+	 */
+	public int numGeoPackages() {
+		return propertiesMap.size();
+	}
+
+	/**
+	 * Get the GeoPackages
+	 * 
+	 * @return collection of GeoPackages
+	 */
+	public List<T> getGeoPackages() {
+		List<T> geoPackages = new ArrayList<>();
+		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
+				.values()) {
+			geoPackages.add(properties.getGeoPackage());
+		}
+		return geoPackages;
+	}
+
+	/**
+	 * Checks if the GeoPackage name exists
+	 * 
+	 * @param name
+	 *            GeoPackage name
+	 * @return true if exists
+	 */
+	public boolean hasGeoPackage(String name) {
+		return propertiesMap.containsKey(name);
 	}
 
 	/**
@@ -107,9 +141,9 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 * @param geoPackages
 	 *            GeoPackages
 	 */
-	public void add(Collection<T> geoPackages) {
+	public void addGeoPackages(Collection<T> geoPackages) {
 		for (T geoPackage : geoPackages) {
-			add(geoPackage);
+			addGeoPackage(geoPackage);
 		}
 	}
 
@@ -119,9 +153,97 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 	 * @param geoPackage
 	 *            GeoPackage
 	 */
-	public void add(T geoPackage) {
+	public void addGeoPackage(T geoPackage) {
 		PropertiesCoreExtension<T, ?, ?, ?> propertiesExtension = getPropertiesExtension(geoPackage);
 		propertiesMap.put(geoPackage.getName(), propertiesExtension);
+	}
+
+	/**
+	 * Close all GeoPackages in the manager
+	 */
+	public void closeGeoPackages() {
+		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
+				.values()) {
+			properties.getGeoPackage().close();
+		}
+		propertiesMap.clear();
+	}
+
+	/**
+	 * Remove the GeoPackage with the name but does not close it
+	 * 
+	 * @param name
+	 *            GeoPackage name
+	 * @return removed GeoPackage
+	 */
+	public T removeGeoPackage(String name) {
+		T removed = null;
+		PropertiesCoreExtension<T, ?, ?, ?> properties = propertiesMap
+				.remove(name);
+		if (properties != null) {
+			removed = properties.getGeoPackage();
+		}
+		return removed;
+	}
+
+	/**
+	 * Clears all cached GeoPackages but does not close them
+	 */
+	public void clearGeoPackages() {
+		propertiesMap.clear();
+	}
+
+	/**
+	 * Remove and close the GeoPackage with name, same as
+	 * {@link #closeGeoPackage(String)}
+	 * 
+	 * @param name
+	 *            GeoPackage name
+	 * @return true if found, removed, and closed
+	 */
+	public boolean removeAndCloseGeoPackage(String name) {
+		return closeGeoPackage(name);
+	}
+
+	/**
+	 * Close the GeoPackage with name
+	 * 
+	 * @param name
+	 *            GeoPackage name
+	 * @return true if found and closed
+	 */
+	public boolean closeGeoPackage(String name) {
+		T geoPackage = removeGeoPackage(name);
+		if (geoPackage != null) {
+			geoPackage.close();
+		}
+		return geoPackage != null;
+	}
+
+	/**
+	 * Close GeoPackages not specified in the retain GeoPackage names
+	 * 
+	 * @param retain
+	 *            GeoPackages to retain
+	 */
+	public void closeRetainGeoPackages(Collection<String> retain) {
+		Set<String> close = new HashSet<>(propertiesMap.keySet());
+		close.removeAll(retain);
+		for (String name : close) {
+			closeGeoPackage(name);
+		}
+	}
+
+	/**
+	 * Close GeoPackages with names
+	 * 
+	 * @param names
+	 *            GeoPackage names
+	 */
+	public void closeGeoPackages(Collection<String> names) {
+		for (String name : names) {
+			closeGeoPackage(name);
+		}
 	}
 
 	/**
