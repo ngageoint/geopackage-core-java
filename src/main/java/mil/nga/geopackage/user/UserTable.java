@@ -325,6 +325,18 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Add unique constraint
+	 * 
+	 * @param uniqueConstraints
+	 *            unique constraints
+	 * @since 3.0.2
+	 */
+	public void addUniqueConstraints(
+			List<UserUniqueConstraint<TColumn>> uniqueConstraints) {
+		this.uniqueConstraints.addAll(uniqueConstraints);
+	}
+
+	/**
 	 * Get the unique constraints
 	 * 
 	 * @return unique constraints

@@ -36,6 +36,7 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.UserUniqueConstraint;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 
@@ -762,6 +763,26 @@ public interface GeoPackageCore extends Closeable {
 	 * Create a new attributes table.
 	 * 
 	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param uniqueConstraints
+	 *            unique constraints
+	 * @return attributes table
+	 * @since 3.0.2
+	 */
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
+
+	/**
+	 * Create a new attributes table.
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
 	 * columns, an id column with the provided name and the provided additional
 	 * columns.
 	 * 
@@ -781,6 +802,29 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Create a new attributes table.
 	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param uniqueConstraints
+	 *            unique constraints
+	 * @return attributes table
+	 * @since 3.0.2
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
+
+	/**
+	 * Create a new attributes table.
+	 * 
 	 * The attributes table will be created with columns.size() columns and must
 	 * include an integer id column
 	 * 
@@ -793,6 +837,25 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns);
+
+	/**
+	 * Create a new attributes table.
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @param uniqueConstraints
+	 *            unique constraints
+	 * @return attributes table
+	 * @since 3.0.2
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
 
 	/**
 	 * Get a Tile Scaling DAO

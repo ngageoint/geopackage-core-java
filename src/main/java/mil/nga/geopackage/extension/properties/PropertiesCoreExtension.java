@@ -17,6 +17,7 @@ import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.UserCoreDao;
 import mil.nga.geopackage.user.UserCoreResult;
 import mil.nga.geopackage.user.UserCoreRow;
+import mil.nga.geopackage.user.UserUniqueConstraint;
 
 /**
  * GeoPackage properties core extension for defining GeoPackage specific
@@ -103,13 +104,22 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 
 		// Create the attributes table
 		if (!geoPackage.isTable(TABLE_NAME)) {
+
+			AttributesColumn propertyColumn = AttributesColumn.createColumn(1,
+					COLUMN_PROPERTY, GeoPackageDataType.TEXT, true, null);
+			AttributesColumn valueColumn = AttributesColumn.createColumn(2,
+					COLUMN_VALUE, GeoPackageDataType.TEXT, false, null);
+
 			List<AttributesColumn> additionalColumns = new ArrayList<>();
-			additionalColumns.add(AttributesColumn.createColumn(1,
-					COLUMN_PROPERTY, GeoPackageDataType.TEXT, true, null));
-			additionalColumns.add(AttributesColumn.createColumn(2,
-					COLUMN_VALUE, GeoPackageDataType.TEXT, false, null));
+			additionalColumns.add(propertyColumn);
+			additionalColumns.add(valueColumn);
+
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints = new ArrayList<>();
+			uniqueConstraints.add(new UserUniqueConstraint<AttributesColumn>(
+					propertyColumn, valueColumn));
+
 			geoPackage.createAttributesTableWithId(TABLE_NAME,
-					additionalColumns);
+					additionalColumns, uniqueConstraints);
 		}
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, TABLE_NAME, null,

@@ -66,6 +66,7 @@ import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.UserUniqueConstraint;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
@@ -1144,8 +1145,30 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints) {
+		return createAttributesTable(tableName, null, additionalColumns,
+				uniqueConstraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns) {
+		return createAttributesTable(tableName, idColumnName,
+				additionalColumns, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints) {
 
 		if (idColumnName == null) {
 			idColumnName = "id";
@@ -1158,7 +1181,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			columns.addAll(additionalColumns);
 		}
 
-		return createAttributesTable(tableName, columns);
+		return createAttributesTable(tableName, columns, uniqueConstraints);
 	}
 
 	/**
@@ -1167,9 +1190,26 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns) {
+		return createAttributesTable(tableName, columns, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns,
+			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints) {
+
+		// Build the user attributes table
+		AttributesTable table = new AttributesTable(tableName, columns);
+
+		// Add unique constraints
+		if (uniqueConstraints != null) {
+			table.addUniqueConstraints(uniqueConstraints);
+		}
 
 		// Create the user attributes table
-		AttributesTable table = new AttributesTable(tableName, columns);
 		createAttributesTable(table);
 
 		try {
