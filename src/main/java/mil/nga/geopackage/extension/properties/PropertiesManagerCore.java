@@ -264,9 +264,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		Set<String> allProperties = new HashSet<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (properties.has()) {
-				allProperties.addAll(properties.getProperties());
-			}
+			allProperties.addAll(properties.getProperties());
 		}
 		return allProperties;
 	}
@@ -282,7 +280,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		List<T> geoPackages = new ArrayList<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (properties.has() && properties.hasProperty(property)) {
+			if (properties.hasProperty(property)) {
 				geoPackages.add(properties.getGeoPackage());
 			}
 		}
@@ -300,7 +298,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		List<T> geoPackages = new ArrayList<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (!properties.has() || !properties.hasProperty(property)) {
+			if (!properties.hasProperty(property)) {
 				geoPackages.add(properties.getGeoPackage());
 			}
 		}
@@ -340,9 +338,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		Set<String> allValues = new HashSet<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (properties.has()) {
-				allValues.addAll(properties.getValues(property));
-			}
+			allValues.addAll(properties.getValues(property));
 		}
 		return allValues;
 	}
@@ -360,7 +356,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		List<T> geoPackages = new ArrayList<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (properties.has() && properties.hasValue(property, value)) {
+			if (properties.hasValue(property, value)) {
 				geoPackages.add(properties.getGeoPackage());
 			}
 		}
@@ -380,7 +376,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		List<T> geoPackages = new ArrayList<>();
 		for (PropertiesCoreExtension<T, ?, ?, ?> properties : propertiesMap
 				.values()) {
-			if (!properties.has() || !properties.hasValue(property, value)) {
+			if (!properties.hasValue(property, value)) {
 				geoPackages.add(properties.getGeoPackage());
 			}
 		}
@@ -422,7 +418,6 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		PropertiesCoreExtension<T, ?, ?, ?> properties = propertiesMap
 				.get(geoPackage);
 		if (properties != null) {
-			properties.getOrCreate();
 			added = properties.addValue(property, value);
 		}
 		return added;
@@ -458,7 +453,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		boolean deleted = false;
 		PropertiesCoreExtension<T, ?, ?, ?> properties = propertiesMap
 				.get(geoPackage);
-		if (properties != null && properties.has()) {
+		if (properties != null) {
 			deleted = properties.deleteProperty(property) > 0;
 		}
 		return deleted;
@@ -498,7 +493,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		boolean deleted = false;
 		PropertiesCoreExtension<T, ?, ?, ?> properties = propertiesMap
 				.get(geoPackage);
-		if (properties != null && properties.has()) {
+		if (properties != null) {
 			deleted = properties.deleteValue(property, value) > 0;
 		}
 		return deleted;
@@ -530,7 +525,7 @@ public abstract class PropertiesManagerCore<T extends GeoPackageCore> {
 		boolean deleted = false;
 		PropertiesCoreExtension<T, ?, ?, ?> properties = propertiesMap
 				.get(geoPackage);
-		if (properties != null && properties.has()) {
+		if (properties != null) {
 			deleted = properties.deleteAll() > 0;
 		}
 		return deleted;

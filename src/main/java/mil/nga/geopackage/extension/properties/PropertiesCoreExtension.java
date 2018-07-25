@@ -157,9 +157,15 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return list of properties
 	 */
 	public List<String> getProperties() {
-		return getDao().querySingleColumnStringResults(
-				"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM " + TABLE_NAME,
-				null);
+		List<String> properties = null;
+		if (has()) {
+			properties = getDao().querySingleColumnStringResults(
+					"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM "
+							+ TABLE_NAME, null);
+		} else {
+			properties = new ArrayList<>();
+		}
+		return properties;
 	}
 
 	/**
@@ -179,7 +185,11 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return number of total property values
 	 */
 	public int numValues() {
-		return getDao().count();
+		int count = 0;
+		if (has()) {
+			count = getDao().count();
+		}
+		return count;
 	}
 
 	/**
@@ -191,11 +201,13 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 */
 	public int numValues(String property) {
 		int count = 0;
-		TResult result = queryForValues(property);
-		try {
-			count = result.getCount();
-		} finally {
-			result.close();
+		if (has()) {
+			TResult result = queryForValues(property);
+			try {
+				count = result.getCount();
+			} finally {
+				result.close();
+			}
 		}
 		return count;
 	}
@@ -260,18 +272,20 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 */
 	public boolean hasValue(String property, String value) {
 		boolean hasValue = false;
-		Map<String, Object> fieldValues = buildFieldValues(property, value);
-		TResult result = getDao().queryForFieldValues(fieldValues);
-		try {
-			hasValue = result.getCount() > 0;
-		} finally {
-			result.close();
+		if (has()) {
+			Map<String, Object> fieldValues = buildFieldValues(property, value);
+			TResult result = getDao().queryForFieldValues(fieldValues);
+			try {
+				hasValue = result.getCount() > 0;
+			} finally {
+				result.close();
+			}
 		}
 		return hasValue;
 	}
 
 	/**
-	 * Add a property value
+	 * Add a property value, creating the extension if needed
 	 * 
 	 * @param property
 	 *            property name
@@ -280,6 +294,9 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return true if added, false if already existed
 	 */
 	public boolean addValue(String property, String value) {
+		if (!has()) {
+			getOrCreate();
+		}
 		boolean added = false;
 		if (!hasValue(property, value)) {
 			TRow row = newRow();
@@ -299,10 +316,14 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return deleted values count
 	 */
 	public int deleteProperty(String property) {
-		TDao dao = getDao();
-		String where = dao.buildWhere(COLUMN_PROPERTY, property);
-		String[] whereArgs = dao.buildWhereArgs(property);
-		return dao.delete(where, whereArgs);
+		int count = 0;
+		if (has()) {
+			TDao dao = getDao();
+			String where = dao.buildWhere(COLUMN_PROPERTY, property);
+			String[] whereArgs = dao.buildWhereArgs(property);
+			count = dao.delete(where, whereArgs);
+		}
+		return count;
 	}
 
 	/**
@@ -315,8 +336,12 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return deleted values count
 	 */
 	public int deleteValue(String property, String value) {
-		Map<String, Object> fieldValues = buildFieldValues(property, value);
-		return getDao().delete(fieldValues);
+		int count = 0;
+		if (has()) {
+			Map<String, Object> fieldValues = buildFieldValues(property, value);
+			count = getDao().delete(fieldValues);
+		}
+		return count;
 	}
 
 	/**
@@ -325,7 +350,11 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return deleted values count
 	 */
 	public int deleteAll() {
-		return getDao().deleteAll();
+		int count = 0;
+		if (has()) {
+			count = getDao().deleteAll();
+		}
+		return count;
 	}
 
 	/**
@@ -359,7 +388,11 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * @return result
 	 */
 	private TResult queryForValues(String property) {
-		return getDao().queryForEq(COLUMN_PROPERTY, property);
+		TResult result = null;
+		if (has()) {
+			result = getDao().queryForEq(COLUMN_PROPERTY, property);
+		}
+		return result;
 	}
 
 	/**
@@ -372,15 +405,19 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	private List<String> getValues(UserCoreResult<?, ?, ?> results) {
 
 		List<String> values = null;
-		try {
-			if (results.getCount() > 0) {
-				int columnIndex = results.getColumnIndex(COLUMN_VALUE);
-				values = getColumnResults(columnIndex, results);
-			} else {
-				values = new ArrayList<>();
+		if (results != null) {
+			try {
+				if (results.getCount() > 0) {
+					int columnIndex = results.getColumnIndex(COLUMN_VALUE);
+					values = getColumnResults(columnIndex, results);
+				} else {
+					values = new ArrayList<>();
+				}
+			} finally {
+				results.close();
 			}
-		} finally {
-			results.close();
+		} else {
+			values = new ArrayList<>();
 		}
 
 		return values;
