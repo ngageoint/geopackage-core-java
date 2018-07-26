@@ -7,9 +7,13 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 3.0.2 (TBD)
 
 * Properties Extension for saving GeoPackage metadata in the file
+* Properties Manager for using the Properties Extension on multiple open GeoPackages
 * Additional User Core DAO deletion and query methods
 * Additional GeoPackage Core Connection query method
 * Remove Data Columns requirement of enumerated data types
+* Create Attributes Table methods with unique constraints
+* GeoPackage Cache add all method
+* IO Utils file extension utilities
 
 ## [3.0.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.0.1) (07-13-2018)
 
