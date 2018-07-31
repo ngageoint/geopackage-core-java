@@ -103,7 +103,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.0.1
 	 */
 	public boolean isNamed(String name) {
-		return name.equals(name);
+		return this.name != null && this.name.equals(name);
 	}
 
 	/**
