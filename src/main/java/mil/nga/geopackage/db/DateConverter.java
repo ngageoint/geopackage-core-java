@@ -23,6 +23,11 @@ public class DateConverter {
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	/**
+	 * Non standard Date format
+	 */
+	public static final String DATE_FORMAT2 = "yyyy/MM/dd";
+
+	/**
 	 * Date Time format
 	 */
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -63,7 +68,7 @@ public class DateConverter {
 	 * @return date converter
 	 */
 	public static DateConverter dateConverter() {
-		return new DateConverter(DATE_FORMAT);
+		return new DateConverter(DATE_FORMAT, DATE_FORMAT2);
 	}
 
 	/**

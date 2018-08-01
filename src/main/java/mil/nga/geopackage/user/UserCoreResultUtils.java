@@ -1,5 +1,8 @@
 package mil.nga.geopackage.user;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -10,6 +13,12 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * @author osbornb
  */
 public class UserCoreResultUtils {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(UserCoreResultUtils.class.getName());
 
 	/**
 	 * Integer field type
@@ -70,7 +79,14 @@ public class UserCoreResultUtils {
 			if (dataType == GeoPackageDataType.DATE
 					|| dataType == GeoPackageDataType.DATETIME) {
 				DateConverter converter = DateConverter.converter(dataType);
-				value = converter.dateValue(stringValue);
+				try {
+					value = converter.dateValue(stringValue);
+				} catch (Exception e) {
+					logger.log(Level.WARNING,
+							"Invalid " + dataType + " format: " + stringValue
+									+ ", String value used", e);
+					value = stringValue;
+				}
 			} else {
 				value = stringValue;
 			}
