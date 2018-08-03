@@ -1,16 +1,22 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.ResourceIOUtils;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.user.custom.UserCustomColumn;
+import mil.nga.geopackage.user.custom.UserCustomTable;
+import mil.nga.sf.GeometryEnvelope;
 
 /**
  * RTree Index abstract core extension
@@ -56,6 +62,13 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public static final String CREATE_PROPERTY = "create";
 
 	/**
+	 * Table SQL property
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String TABLE_PROPERTY = "table";
+
+	/**
 	 * Load SQL property
 	 */
 	public static final String LOAD_PROPERTY = "load";
@@ -99,6 +112,41 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Trigger drop name
 	 */
 	public static final String TRIGGER_DROP_PROPERTY = "drop";
+
+	/**
+	 * ID column name
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String COLUMN_ID = "id";
+
+	/**
+	 * Min X column name
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String COLUMN_MIN_X = "minx";
+
+	/**
+	 * Max X column name
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String COLUMN_MAX_X = "maxx";
+
+	/**
+	 * Min Y column name
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String COLUMN_MIN_Y = "miny";
+
+	/**
+	 * Max Y column name
+	 * 
+	 * @since 3.0.3
+	 */
+	public static final String COLUMN_MAX_Y = "maxy";
 
 	/**
 	 * Extension name
@@ -231,7 +279,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has(String tableName, String columnName) {
-		return has(EXTENSION_NAME, tableName, columnName);
+		return has(EXTENSION_NAME, tableName, columnName)
+				&& connection.tableExists(getRTreeTableName(tableName,
+						columnName));
 	}
 
 	/**
@@ -625,16 +675,19 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void delete(String tableName, String geometryColumnName) {
 
-		drop(tableName, geometryColumnName);
+		if (has(tableName, geometryColumnName)) {
+			drop(tableName, geometryColumnName);
 
-		try {
-			extensionsDao.deleteByExtension(EXTENSION_NAME, tableName,
-					geometryColumnName);
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to delete RTree Index extension. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + tableName
-							+ ", Geometry Column: " + geometryColumnName, e);
+			try {
+				extensionsDao.deleteByExtension(EXTENSION_NAME, tableName,
+						geometryColumnName);
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to delete RTree Index extension. GeoPackage: "
+								+ geoPackage.getName() + ", Table: "
+								+ tableName + ", Geometry Column: "
+								+ geometryColumnName, e);
+			}
 		}
 
 	}
@@ -940,6 +993,67 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		}
 
 		return substituted;
+	}
+
+	/**
+	 * Get or build a geometry envelope from the Geometry Data
+	 * 
+	 * @param data
+	 *            geometry data
+	 * @return geometry envelope
+	 */
+	protected GeometryEnvelope getEnvelope(GeoPackageGeometryData data) {
+		GeometryEnvelope envelope = null;
+		if (data != null) {
+			envelope = data.getOrBuildEnvelope();
+		}
+		return envelope;
+	}
+
+	/**
+	 * Get the RTree Table name for the feature table and geometry column
+	 * 
+	 * @param tableName
+	 *            feature table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @return RTree table name
+	 */
+	private String getRTreeTableName(String tableName, String geometryColumnName) {
+		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
+				TABLE_PROPERTY);
+		String rTreeTableName = substituteSqlArguments(sqlName, tableName,
+				geometryColumnName, null, null);
+		return rTreeTableName;
+	}
+
+	/**
+	 * Get the RTree Table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @return RTree table
+	 */
+	protected UserCustomTable getRTreeTable(FeatureTable featureTable) {
+
+		List<UserCustomColumn> columns = new ArrayList<>();
+		columns.add(UserCustomColumn.createPrimaryKeyColumn(0, COLUMN_ID));
+		columns.add(UserCustomColumn.createColumn(1, COLUMN_MIN_X,
+				GeoPackageDataType.FLOAT, false, null));
+		columns.add(UserCustomColumn.createColumn(2, COLUMN_MAX_X,
+				GeoPackageDataType.FLOAT, false, null));
+		columns.add(UserCustomColumn.createColumn(3, COLUMN_MIN_Y,
+				GeoPackageDataType.FLOAT, false, null));
+		columns.add(UserCustomColumn.createColumn(4, COLUMN_MAX_Y,
+				GeoPackageDataType.FLOAT, false, null));
+
+		String rTreeTableName = getRTreeTableName(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
+
+		UserCustomTable userCustomTable = new UserCustomTable(rTreeTableName,
+				columns);
+
+		return userCustomTable;
 	}
 
 }
