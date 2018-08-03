@@ -16,9 +16,7 @@ import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryEnvelope;
-import mil.nga.sf.util.GeometryEnvelopeBuilder;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -196,16 +194,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 		if (geomData != null) {
 
-			// Get the envelope
-			GeometryEnvelope envelope = geomData.getEnvelope();
-
-			// If no envelope, build one from the geometry
-			if (envelope == null) {
-				Geometry geometry = geomData.getGeometry();
-				if (geometry != null) {
-					envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
-				}
-			}
+			// Get or build the envelope
+			GeometryEnvelope envelope = geomData.getOrBuildEnvelope();
 
 			// Create the new index row
 			if (envelope != null) {
@@ -258,7 +248,9 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
 		try {
 			// Delete geometry indices and table index
-			deleted = tableIndexDao.deleteByIdCascade(tableName) > 0;
+			if (tableIndexDao.isTableExists()) {
+				deleted = tableIndexDao.deleteByIdCascade(tableName) > 0;
+			}
 			// Delete the extensions entry
 			deleted = extensionsDao
 					.deleteByExtension(EXTENSION_NAME, tableName) > 0

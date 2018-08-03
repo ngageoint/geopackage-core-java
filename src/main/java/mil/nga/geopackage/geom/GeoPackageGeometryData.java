@@ -12,6 +12,7 @@ import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.util.ByteReader;
 import mil.nga.sf.util.ByteWriter;
+import mil.nga.sf.util.GeometryEnvelopeBuilder;
 import mil.nga.sf.wkb.GeometryReader;
 import mil.nga.sf.wkb.GeometryWriter;
 
@@ -562,6 +563,23 @@ public class GeoPackageGeometryData {
 			indicator += 2;
 		}
 		return indicator;
+	}
+
+	/**
+	 * Get the envelope if it exists or build it from the geometry if not null
+	 * 
+	 * @return geometry envelope
+	 * @since 3.0.3
+	 */
+	public GeometryEnvelope getOrBuildEnvelope() {
+		GeometryEnvelope envelope = getEnvelope();
+		if (envelope == null) {
+			Geometry geometry = getGeometry();
+			if (geometry != null) {
+				envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
+			}
+		}
+		return envelope;
 	}
 
 }
