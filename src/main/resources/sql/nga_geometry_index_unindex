@@ -1,0 +1,15 @@
+DROP INDEX IF EXISTS idx_nga_geometry_index_min_x;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_max_x;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_min_y;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_max_y;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_min_z;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_max_z;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_min_m;
+
+DROP INDEX IF EXISTS idx_nga_geometry_index_max_m;

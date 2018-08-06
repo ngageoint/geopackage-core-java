@@ -12,19 +12,3 @@ CREATE TABLE nga_geometry_index (
   CONSTRAINT pk_ngi PRIMARY KEY (table_name, geom_id),
   CONSTRAINT fk_ngi_nti_tn FOREIGN KEY (table_name) REFERENCES nga_table_index(table_name)
 );
-
-CREATE INDEX idx_nga_geometry_index_min_x ON nga_geometry_index ( min_x );
-
-CREATE INDEX idx_nga_geometry_index_max_x ON nga_geometry_index ( max_x );
-
-CREATE INDEX idx_nga_geometry_index_min_y ON nga_geometry_index ( min_y );
-
-CREATE INDEX idx_nga_geometry_index_max_y ON nga_geometry_index ( max_y );
-
-CREATE INDEX idx_nga_geometry_index_min_z ON nga_geometry_index ( min_z );
-
-CREATE INDEX idx_nga_geometry_index_max_z ON nga_geometry_index ( max_z );
-
-CREATE INDEX idx_nga_geometry_index_min_m ON nga_geometry_index ( min_m );
-
-CREATE INDEX idx_nga_geometry_index_max_m ON nga_geometry_index ( max_m );

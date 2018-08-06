@@ -710,12 +710,28 @@ public interface GeoPackageCore extends Closeable {
 	public GeometryIndexDao getGeometryIndexDao();
 
 	/**
-	 * Create Geometry Index Table if it does not exist
+	 * Create Geometry Index Table if it does not exist and index it
 	 * 
 	 * @return true if created
 	 * @since 1.1.0
 	 */
 	public boolean createGeometryIndexTable();
+
+	/**
+	 * Index the Geometry Index Table if needed
+	 * 
+	 * @return true if indexed
+	 * @since 3.0.3
+	 */
+	public boolean indexGeometryIndexTable();
+
+	/**
+	 * Un-index the Geometry Index Table if needed
+	 * 
+	 * @return true if unindexed
+	 * @since 3.0.3
+	 */
+	public boolean unindexGeometryIndexTable();
 
 	/**
 	 * Get a Feature Tile Link DAO

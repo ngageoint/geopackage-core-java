@@ -43,7 +43,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createSpatialReferenceSystem() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "spatial_reference_system"));
 	}
 
@@ -53,7 +53,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createContents() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "contents"));
 	}
 
@@ -63,7 +63,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createGeometryColumns() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "geometry_columns"));
 	}
 
@@ -73,7 +73,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createTileMatrixSet() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "tile_matrix_set"));
 	}
 
@@ -83,7 +83,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createTileMatrix() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "tile_matrix"));
 	}
 
@@ -93,7 +93,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createDataColumns() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "data_columns"));
 	}
 
@@ -103,7 +103,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createDataColumnConstraints() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "data_column_constraints"));
 	}
 
@@ -113,7 +113,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createMetadata() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "metadata"));
 	}
 
@@ -123,7 +123,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createMetadataReference() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "metadata_reference"));
 	}
 
@@ -133,7 +133,7 @@ public class GeoPackageTableCreator {
 	 * @return executed statements
 	 */
 	public int createExtensions() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "extensions"));
 	}
 
@@ -144,7 +144,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.2.1
 	 */
 	public int createGriddedCoverage() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "2d_gridded_coverage"));
 	}
 
@@ -155,7 +155,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.2.1
 	 */
 	public int createGriddedTile() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "2d_gridded_tile"));
 	}
 
@@ -166,7 +166,7 @@ public class GeoPackageTableCreator {
 	 * @since 3.0.1
 	 */
 	public int createExtendedRelations() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "extended_relations"));
 	}
 
@@ -177,7 +177,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.1.0
 	 */
 	public int createTableIndex() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "table_index"));
 	}
 
@@ -188,8 +188,33 @@ public class GeoPackageTableCreator {
 	 * @since 1.1.0
 	 */
 	public int createGeometryIndex() {
-		return createTable(GeoPackageProperties.getProperty(
-				PropertyConstants.SQL, "geometry_index"));
+		return execSQLScript(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL, "geometry_index"))
+				+ indexGeometryIndex();
+	}
+
+	/**
+	 * Create Geometry Index table column indexes
+	 * 
+	 * @return executed statements
+	 * @since 3.0.3
+	 */
+	public int indexGeometryIndex() {
+		return execSQLScript(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL + PropertyConstants.PROPERTY_DIVIDER
+						+ "geometry_index", "index"));
+	}
+
+	/**
+	 * Un-index (drop) Geometry Index table column indexes
+	 * 
+	 * @return executed statements
+	 * @since 3.0.3
+	 */
+	public int unindexGeometryIndex() {
+		return execSQLScript(GeoPackageProperties.getProperty(
+				PropertyConstants.SQL + PropertyConstants.PROPERTY_DIVIDER
+						+ "geometry_index", "unindex"));
 	}
 
 	/**
@@ -199,7 +224,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.1.5
 	 */
 	public int createFeatureTileLink() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "feature_tile_link"));
 	}
 
@@ -210,23 +235,23 @@ public class GeoPackageTableCreator {
 	 * @since 2.0.2
 	 */
 	public int createTileScaling() {
-		return createTable(GeoPackageProperties.getProperty(
+		return execSQLScript(GeoPackageProperties.getProperty(
 				PropertyConstants.SQL, "tile_scaling"));
 	}
 
 	/**
-	 * Create a table using the table script
+	 * Execute the SQL Script
 	 * 
-	 * @param tableScript
-	 *            table script
+	 * @param sqlScript
+	 *            SQL script property file name
 	 * @return executed statements
 	 */
-	private int createTable(String tableScript) {
+	private int execSQLScript(String sqlScript) {
 
 		String path = GeoPackageProperties.getProperty(PropertyConstants.SQL,
 				"directory");
 		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
-				tableScript);
+				sqlScript);
 
 		for (String statement : statements) {
 			db.execSQL(statement);

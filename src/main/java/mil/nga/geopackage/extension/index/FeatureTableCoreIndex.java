@@ -161,7 +161,9 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			getOrCreateExtension();
 			TableIndex tableIndex = getOrCreateTableIndex();
 			createOrClearGeometryIndices();
+			geoPackage.unindexGeometryIndexTable();
 			count = indexTable(tableIndex);
+			geoPackage.indexGeometryIndexTable();
 		}
 		return count;
 	}

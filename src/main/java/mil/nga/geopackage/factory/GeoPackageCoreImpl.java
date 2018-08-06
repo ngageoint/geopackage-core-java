@@ -1099,6 +1099,48 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean indexGeometryIndexTable() {
+		verifyWritable();
+
+		boolean indexed = false;
+		GeometryIndexDao dao = getGeometryIndexDao();
+		try {
+			if (dao.isTableExists()) {
+				indexed = tableCreator.indexGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GeometryIndex.class.getSimpleName()
+					+ " table exists to index", e);
+		}
+		return indexed;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean unindexGeometryIndexTable() {
+		verifyWritable();
+
+		boolean unindexed = false;
+		GeometryIndexDao dao = getGeometryIndexDao();
+		try {
+			if (dao.isTableExists()) {
+				unindexed = tableCreator.unindexGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GeometryIndex.class.getSimpleName()
+					+ " table exists to unindex", e);
+		}
+		return unindexed;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public FeatureTileLinkDao getFeatureTileLinkDao() {
 		return createDao(FeatureTileLink.class);
 	}

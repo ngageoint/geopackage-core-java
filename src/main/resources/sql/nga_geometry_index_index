@@ -1,0 +1,15 @@
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_min_x ON nga_geometry_index ( min_x );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_max_x ON nga_geometry_index ( max_x );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_min_y ON nga_geometry_index ( min_y );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_max_y ON nga_geometry_index ( max_y );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_min_z ON nga_geometry_index ( min_z );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_max_z ON nga_geometry_index ( max_z );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_min_m ON nga_geometry_index ( min_m );
+
+CREATE INDEX IF NOT EXISTS idx_nga_geometry_index_max_m ON nga_geometry_index ( max_m );
