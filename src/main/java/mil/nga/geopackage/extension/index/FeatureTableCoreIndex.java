@@ -84,6 +84,11 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	protected GeoPackageProgress progress;
 
 	/**
+	 * Query single chunk limit
+	 */
+	protected Integer chunkLimit = 1000;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
@@ -137,6 +142,27 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	public void setProgress(GeoPackageProgress progress) {
 		this.progress = progress;
+	}
+
+	/**
+	 * Get the SQL query chunk limit
+	 * 
+	 * @return chunk limit
+	 * @since 3.0.3
+	 */
+	public Integer getChunkLimit() {
+		return chunkLimit;
+	}
+
+	/**
+	 * Set the SQL query chunk limit
+	 * 
+	 * @param chunkLimit
+	 *            chunk limit
+	 * @since 3.0.3
+	 */
+	public void setChunkLimit(Integer chunkLimit) {
+		this.chunkLimit = chunkLimit;
 	}
 
 	/**

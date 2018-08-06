@@ -442,6 +442,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Query for rows starting at the id and returning no more than the limit.
+	 * The results are sorted by id and the last row id + 1 should be used for
+	 * the next chunk
+	 * 
+	 * @param id
+	 *            starting id
+	 * @param limit
+	 *            chunk limit, null for no limit
+	 * @return result
+	 * @since 3.0.3
+	 */
+	public TResult queryForChunk(long id, Integer limit) {
+		String idColumn = table.getPkColumn().getName();
+		String where = buildWhere(idColumn, id, ">=");
+		String[] whereArgs = buildWhereArgs(id);
+		return query(where, whereArgs, null, null, idColumn,
+				limit != null ? limit.toString() : null);
+	}
+
+	/**
 	 * Update the row
 	 * 
 	 * @param row
