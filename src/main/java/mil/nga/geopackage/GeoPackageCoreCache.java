@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Abstract GeoPackage Core Cache for maintaining and reusing open GeoPackage
@@ -18,15 +20,47 @@ import java.util.Set;
 public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 
 	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(GeoPackageCoreCache.class.getName());
+
+	/**
 	 * Cache of GeoPackage names and GeoPackages
 	 */
 	private Map<String, T> cache = new HashMap<String, T>();
+
+	/**
+	 * Close quietly flag
+	 */
+	private boolean closeQuietly = true;
 
 	/**
 	 * Constructor
 	 */
 	public GeoPackageCoreCache() {
 
+	}
+
+	/**
+	 * Is close quietly mode enabled
+	 * 
+	 * @return true if close quiet mode
+	 * @since 3.0.3
+	 */
+	public boolean isCloseQuietly() {
+		return closeQuietly;
+	}
+
+	/**
+	 * Set the close quietly mode
+	 * 
+	 * @param closeQuietly
+	 *            true to close quietly
+	 * @since 3.0.3
+	 */
+	public void setCloseQuietly(boolean closeQuietly) {
+		this.closeQuietly = closeQuietly;
 	}
 
 	/**
@@ -47,6 +81,18 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 */
 	public Collection<T> getGeoPackages() {
 		return cache.values();
+	}
+
+	/**
+	 * Determine if the cache has the GeoPackage name
+	 * 
+	 * @param name
+	 *            GeoPackage name
+	 * @return cached GeoPackage
+	 * @since 3.0.3
+	 */
+	public boolean has(String name) {
+		return cache.containsKey(name);
 	}
 
 	/**
@@ -76,7 +122,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 */
 	public void closeAll() {
 		for (T geoPackage : cache.values()) {
-			geoPackage.close();
+			close(geoPackage);
 		}
 		cache.clear();
 	}
@@ -148,7 +194,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	public boolean close(String name) {
 		T geoPackage = remove(name);
 		if (geoPackage != null) {
-			geoPackage.close();
+			close(geoPackage);
 		}
 		return geoPackage != null;
 	}
@@ -178,6 +224,24 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	public void close(Collection<String> names) {
 		for (String name : names) {
 			close(name);
+		}
+	}
+
+	/**
+	 * Close the GeoPackage
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 */
+	private void close(T geoPackage) {
+		try {
+			geoPackage.close();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error closing GeoPackage: " + geoPackage.getName(), e);
+			if (!closeQuietly) {
+				throw e;
+			}
 		}
 	}
 
