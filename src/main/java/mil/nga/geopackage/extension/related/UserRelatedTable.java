@@ -22,6 +22,11 @@ public class UserRelatedTable extends UserCustomTable {
 	private final String relationName;
 
 	/**
+	 * Contents data type
+	 */
+	private final String dataType;
+
+	/**
 	 * Foreign key to Contents
 	 */
 	private Contents contents;
@@ -33,12 +38,15 @@ public class UserRelatedTable extends UserCustomTable {
 	 *            table name
 	 * @param relationName
 	 *            relation name
+	 * @param dataType
+	 *            contents data type
 	 * @param columns
 	 *            list of columns
+	 * @since 3.0.3
 	 */
 	public UserRelatedTable(String tableName, String relationName,
-			List<UserCustomColumn> columns) {
-		this(tableName, relationName, columns, null);
+			String dataType, List<UserCustomColumn> columns) {
+		this(tableName, relationName, dataType, columns, null);
 	}
 
 	/**
@@ -48,15 +56,20 @@ public class UserRelatedTable extends UserCustomTable {
 	 *            table name
 	 * @param relationName
 	 *            relation name
+	 * @param dataType
+	 *            contents data type
 	 * @param columns
 	 *            list of columns
 	 * @param requiredColumns
 	 *            list of required columns
+	 * @since 3.0.3
 	 */
 	public UserRelatedTable(String tableName, String relationName,
-			List<UserCustomColumn> columns, Collection<String> requiredColumns) {
+			String dataType, List<UserCustomColumn> columns,
+			Collection<String> requiredColumns) {
 		super(tableName, columns, requiredColumns);
 		this.relationName = relationName;
+		this.dataType = dataType;
 	}
 
 	/**
@@ -64,12 +77,17 @@ public class UserRelatedTable extends UserCustomTable {
 	 * 
 	 * @param relationName
 	 *            relation name
+	 * @param dataType
+	 *            contents data type
 	 * @param userCustomTable
 	 *            user custom table
+	 * @since 3.0.3
 	 */
-	public UserRelatedTable(String relationName, UserCustomTable userCustomTable) {
+	public UserRelatedTable(String relationName, String dataType,
+			UserCustomTable userCustomTable) {
 		super(userCustomTable);
 		this.relationName = relationName;
+		this.dataType = dataType;
 	}
 
 	/**
@@ -79,6 +97,16 @@ public class UserRelatedTable extends UserCustomTable {
 	 */
 	public String getRelationName() {
 		return relationName;
+	}
+
+	/**
+	 * Get the contents data type
+	 * 
+	 * @return data type
+	 * @since 3.0.3
+	 */
+	public String getDataType() {
+		return dataType;
 	}
 
 	/**
@@ -100,12 +128,12 @@ public class UserRelatedTable extends UserCustomTable {
 		this.contents = contents;
 		if (contents != null) {
 			// Verify the Contents have a relation name data type
-			String dataType = contents.getDataTypeString();
-			if (dataType == null || !dataType.equals(relationName)) {
+			String contentsDataType = contents.getDataTypeString();
+			if (contentsDataType == null || !contentsDataType.equals(dataType)) {
 				throw new GeoPackageException("The "
 						+ Contents.class.getSimpleName() + " of a "
 						+ getClass().getSimpleName()
-						+ " must have a data type of " + relationName);
+						+ " must have a data type of " + dataType);
 			}
 		}
 	}

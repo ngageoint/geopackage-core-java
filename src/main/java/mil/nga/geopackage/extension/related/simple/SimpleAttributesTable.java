@@ -187,7 +187,8 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 */
 	private SimpleAttributesTable(String tableName,
 			List<UserCustomColumn> columns, Collection<String> requiredColumns) {
-		super(tableName, RELATION_TYPE.getName(), columns, requiredColumns);
+		super(tableName, RELATION_TYPE.getName(), RELATION_TYPE.getDataType(),
+				columns, requiredColumns);
 		validateColumns();
 	}
 
@@ -198,7 +199,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 *            user custom table
 	 */
 	SimpleAttributesTable(UserCustomTable table) {
-		super(RELATION_TYPE.getName(), table);
+		super(RELATION_TYPE.getName(), RELATION_TYPE.getDataType(), table);
 		validateColumns();
 	}
 

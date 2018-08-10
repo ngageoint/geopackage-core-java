@@ -248,7 +248,8 @@ public class MediaTable extends UserRelatedTable {
 	 */
 	private MediaTable(String tableName, List<UserCustomColumn> columns,
 			Collection<String> requiredColumns) {
-		super(tableName, RELATION_TYPE.getName(), columns, requiredColumns);
+		super(tableName, RELATION_TYPE.getName(), RELATION_TYPE.getDataType(),
+				columns, requiredColumns);
 	}
 
 	/**
@@ -258,7 +259,7 @@ public class MediaTable extends UserRelatedTable {
 	 *            user custom table
 	 */
 	MediaTable(UserCustomTable table) {
-		super(RELATION_TYPE.getName(), table);
+		super(RELATION_TYPE.getName(), RELATION_TYPE.getDataType(), table);
 	}
 
 	/**

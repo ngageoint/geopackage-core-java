@@ -575,11 +575,11 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				break;
 			case SIMPLE_ATTRIBUTES:
 			case MEDIA:
-				if (!geoPackage.isTableType(relationType.getName(),
+				if (!geoPackage.isTableType(relationType.getDataType(),
 						relatedTableName)) {
 					throw new GeoPackageException(
 							"The related table must be a "
-									+ relationType.getName()
+									+ relationType.getDataType()
 									+ " table. Related Table: "
 									+ relatedTableName + ", Type: "
 									+ geoPackage.getTableType(relatedTableName));
@@ -659,7 +659,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				// Create the contents
 				Contents contents = new Contents();
 				contents.setTableName(relatedTableName);
-				contents.setDataTypeString(relatedTable.getRelationName());
+				contents.setDataTypeString(relatedTable.getDataType());
 				contents.setIdentifier(relatedTableName);
 				ContentsDao contentsDao = geoPackage.getContentsDao();
 				contentsDao.create(contents);

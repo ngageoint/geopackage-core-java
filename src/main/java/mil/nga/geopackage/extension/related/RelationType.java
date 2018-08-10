@@ -1,5 +1,7 @@
 package mil.nga.geopackage.extension.related;
 
+import mil.nga.geopackage.core.contents.ContentsDataType;
+
 /**
  * Spec supported User-Defined Related Data Tables
  * 
@@ -11,18 +13,18 @@ public enum RelationType {
 	/**
 	 * Link features with other features
 	 */
-	FEATURES("features"),
+	FEATURES("features", ContentsDataType.FEATURES),
 
 	/**
 	 * Relate sets of tabular text or numeric data
 	 */
-	SIMPLE_ATTRIBUTES("simple_attributes"),
+	SIMPLE_ATTRIBUTES("simple_attributes", ContentsDataType.ATTRIBUTES),
 
 	/**
 	 * Relate features or attributes to multimedia files such as pictures and
 	 * videos
 	 */
-	MEDIA("media");
+	MEDIA("media", ContentsDataType.ATTRIBUTES);
 
 	/**
 	 * Relation type name
@@ -30,13 +32,33 @@ public enum RelationType {
 	private final String name;
 
 	/**
+	 * Relation type contents data type
+	 */
+	private final String dataType;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param name
 	 *            relation name
+	 * @param dataType
+	 *            contents data type
 	 */
-	private RelationType(String name) {
+	private RelationType(String name, ContentsDataType dataType) {
+		this(name, dataType.getName());
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            relation name
+	 * @param dataType
+	 *            contents data type
+	 */
+	private RelationType(String name, String dataType) {
 		this.name = name;
+		this.dataType = dataType;
 	}
 
 	/**
@@ -46,6 +68,16 @@ public enum RelationType {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Get the contents data type
+	 * 
+	 * @return contents data type
+	 * @since 3.0.3
+	 */
+	public String getDataType() {
+		return dataType;
 	}
 
 	/**
