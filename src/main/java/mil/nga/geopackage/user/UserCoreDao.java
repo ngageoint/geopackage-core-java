@@ -462,23 +462,48 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for rows starting at the id and returning no more than the limit.
-	 * The results are sorted by id and the last row id + 1 should be used for
-	 * the next chunk
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
 	 * 
-	 * @param id
-	 *            starting id
 	 * @param limit
-	 *            chunk limit, null for no limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
 	 * @return result
 	 * @since 3.0.3
 	 */
-	public TResult queryForChunk(long id, Integer limit) {
-		String idColumn = table.getPkColumn().getName();
-		String where = buildWhere(idColumn, id, ">=");
-		String[] whereArgs = buildWhereArgs(id);
-		return query(where, whereArgs, null, null, idColumn,
-				limit != null ? limit.toString() : null);
+	public TResult queryForChunk(int limit, long offset) {
+		return queryForChunk(table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.0.3
+	 */
+	public TResult queryForChunk(String orderBy, int limit, long offset) {
+		return query(null, null, null, null, orderBy, buildLimit(limit, offset));
+	}
+
+	/**
+	 * Build a limit String with the limit and offset
+	 * 
+	 * @param limit
+	 *            limit
+	 * @param offset
+	 *            offset
+	 * @return 3.0.3
+	 */
+	public String buildLimit(int limit, long offset) {
+		return offset + "," + limit;
 	}
 
 	/**
