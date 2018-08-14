@@ -25,6 +25,7 @@ import mil.nga.sf.proj.ProjectionTransform;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -569,16 +570,19 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @since 3.0.3
 	 */
 	public BoundingBox bounds() {
-		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = geometryIndexDao
-				.queryBuilder();
-		qb.selectRaw("MIN(" + GeometryIndex.COLUMN_MIN_X + ")", "MIN("
-				+ GeometryIndex.COLUMN_MIN_Y + ")", "MAX("
-				+ GeometryIndex.COLUMN_MAX_X + ")", "MAX("
-				+ GeometryIndex.COLUMN_MAX_Y + ")");
-		GenericRawResults<String[]> results = null;
-		String[] values = null;
+
+		GenericRawResults<Object[]> results = null;
+		Object[] values = null;
 		try {
-			results = geometryIndexDao.queryRaw(qb.prepareStatementString());
+			results = geometryIndexDao.queryRaw("SELECT MIN("
+					+ GeometryIndex.COLUMN_MIN_X + "), MIN("
+					+ GeometryIndex.COLUMN_MIN_Y + "), MAX("
+					+ GeometryIndex.COLUMN_MAX_X + "), MAX("
+					+ GeometryIndex.COLUMN_MAX_Y + ") FROM "
+					+ GeometryIndex.TABLE_NAME + " WHERE "
+					+ GeometryIndex.COLUMN_TABLE_NAME + " = ?", new DataType[] {
+					DataType.DOUBLE, DataType.DOUBLE, DataType.DOUBLE,
+					DataType.DOUBLE }, tableName);
 			values = results.getFirstResult();
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -595,9 +599,9 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			}
 		}
 
-		BoundingBox boundingBox = new BoundingBox(Double.valueOf(values[0]),
-				Double.valueOf(values[1]), Double.valueOf(values[2]),
-				Double.valueOf(values[3]));
+		BoundingBox boundingBox = new BoundingBox((double) values[0],
+				(double) values[1], (double) values[2], (double) values[3]);
+
 		return boundingBox;
 	}
 
