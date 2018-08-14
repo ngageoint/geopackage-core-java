@@ -948,6 +948,49 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Query for string values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return 3.0.3
+	 */
+	public List<String[]> queryStringResults(String sql, String[] args) {
+		return db.queryStringResults(sql, args);
+	}
+
+	/**
+	 * Query for string values in a single (first) row
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return 3.0.3
+	 */
+	public String[] querySingleRowStringResults(String sql, String[] args) {
+		return db.querySingleRowStringResults(sql, args);
+
+	}
+
+	/**
+	 * Query for string values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @return 3.0.3
+	 */
+	public List<String[]> queryStringResults(String sql, String[] args,
+			Integer limit) {
+		return db.queryStringResults(sql, args, limit);
+	}
+
+	/**
 	 * Get the approximate zoom level of where the bounding box of the user data
 	 * fits into the world
 	 * 

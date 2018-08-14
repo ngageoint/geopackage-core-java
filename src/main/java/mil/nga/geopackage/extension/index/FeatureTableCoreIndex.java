@@ -1,7 +1,10 @@
 package mil.nga.geopackage.extension.index;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
@@ -17,8 +20,11 @@ import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -35,6 +41,12 @@ import com.j256.ormlite.stmt.Where;
  * @since 1.1.0
  */
 public abstract class FeatureTableCoreIndex extends BaseExtension {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(FeatureTableCoreIndex.class.getName());
 
 	/**
 	 * Extension author
@@ -106,6 +118,14 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		tableIndexDao = geoPackage.getTableIndexDao();
 		geometryIndexDao = geoPackage.getGeometryIndexDao();
 	}
+
+	/**
+	 * Get the feature projection
+	 * 
+	 * @return projection
+	 * @since 3.0.3
+	 */
+	public abstract Projection getProjection();
 
 	/**
 	 * Get the GeoPackage
@@ -543,6 +563,61 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	}
 
 	/**
+	 * Query for the bounds of the feature table index
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox bounds() {
+		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = geometryIndexDao
+				.queryBuilder();
+		qb.selectRaw("MIN(" + GeometryIndex.COLUMN_MIN_X + ")", "MIN("
+				+ GeometryIndex.COLUMN_MIN_Y + ")", "MAX("
+				+ GeometryIndex.COLUMN_MAX_X + ")", "MAX("
+				+ GeometryIndex.COLUMN_MAX_Y + ")");
+		GenericRawResults<String[]> results = null;
+		String[] values = null;
+		try {
+			results = geometryIndexDao.queryRaw(qb.prepareStatementString());
+			values = results.getFirstResult();
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for indexed feature bounds: " + tableName,
+					e);
+		} finally {
+			if (results != null) {
+				try {
+					results.close();
+				} catch (IOException e) {
+					logger.log(Level.WARNING,
+							"Failed to close bounds query results", e);
+				}
+			}
+		}
+
+		BoundingBox boundingBox = new BoundingBox(Double.valueOf(values[0]),
+				Double.valueOf(values[1]), Double.valueOf(values[2]),
+				Double.valueOf(values[3]));
+		return boundingBox;
+	}
+
+	/**
+	 * Query for the feature index bounds and return in the provided projection
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox bounds(Projection projection) {
+		BoundingBox bounds = bounds();
+		ProjectionTransform projectionTransform = getProjection()
+				.getTransformation(projection);
+		BoundingBox requestedBounds = bounds.transform(projectionTransform);
+		return requestedBounds;
+	}
+
+	/**
 	 * Build a query builder to query for all Geometry Index objects
 	 * 
 	 * @return query builder
@@ -579,6 +654,27 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	}
 
 	/**
+	 * Query for Geometry Index objects within the bounding box, projected
+	 * correctly
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param projection
+	 *            projection of the provided bounding box
+	 * @return geometry indices iterator
+	 */
+	public CloseableIterator<GeometryIndex> query(BoundingBox boundingBox,
+			Projection projection) {
+
+		BoundingBox featureBoundingBox = getFeatureBoundingBox(boundingBox,
+				projection);
+
+		CloseableIterator<GeometryIndex> geometryIndices = query(featureBoundingBox);
+
+		return geometryIndices;
+	}
+
+	/**
 	 * Query for Geometry Index count within the bounding box, projected
 	 * correctly
 	 * 
@@ -589,6 +685,26 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	public long count(BoundingBox boundingBox) {
 		GeometryEnvelope envelope = boundingBox.buildEnvelope();
 		long count = count(envelope);
+		return count;
+	}
+
+	/**
+	 * Query for Geometry Index count within the bounding box, projected
+	 * correctly
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param projection
+	 *            projection of the provided bounding box
+	 * @return count
+	 */
+	public long count(BoundingBox boundingBox, Projection projection) {
+
+		BoundingBox featureBoundingBox = getFeatureBoundingBox(boundingBox,
+				projection);
+
+		long count = count(featureBoundingBox);
+
 		return count;
 	}
 
@@ -681,6 +797,25 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		}
 
 		return qb;
+	}
+
+	/**
+	 * Get the bounding box in the feature projection from the bounding box in
+	 * the provided projection
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param projection
+	 *            projection
+	 * @return feature projected bounding box
+	 */
+	protected BoundingBox getFeatureBoundingBox(BoundingBox boundingBox,
+			Projection projection) {
+		ProjectionTransform projectionTransform = projection
+				.getTransformation(getProjection());
+		BoundingBox featureBoundingBox = boundingBox
+				.transform(projectionTransform);
+		return featureBoundingBox;
 	}
 
 }

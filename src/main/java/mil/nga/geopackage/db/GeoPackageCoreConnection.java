@@ -179,6 +179,43 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 			String[] args);
 
 	/**
+	 * Query for string values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return 3.0.3
+	 */
+	public abstract List<String[]> queryStringResults(String sql, String[] args);
+
+	/**
+	 * Query for string values in a single (first) row
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return 3.0.3
+	 */
+	public abstract String[] querySingleRowStringResults(String sql,
+			String[] args);
+
+	/**
+	 * Query for string values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @return 3.0.3
+	 */
+	public abstract List<String[]> queryStringResults(String sql,
+			String[] args, Integer limit);
+
+	/**
 	 * Set the GeoPackage application id
 	 */
 	public void setApplicationId() {
