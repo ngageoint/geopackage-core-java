@@ -118,7 +118,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @return definition
 	 */
 	public String getDefinition(long srsId) {
-		String definition = connection.querySingleStringResult("SELECT "
+		String definition = connection.querySingleTypedResult("SELECT "
 				+ COLUMN_NAME + " FROM " + SpatialReferenceSystem.TABLE_NAME
 				+ " WHERE " + SpatialReferenceSystem.COLUMN_SRS_ID + " = ?",
 				new String[] { String.valueOf(srsId) });

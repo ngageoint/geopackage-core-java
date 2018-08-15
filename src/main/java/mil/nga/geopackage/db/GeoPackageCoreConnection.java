@@ -142,67 +142,264 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	}
 
 	/**
-	 * Query for a single result string
+	 * Query the SQL for a single result object in the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 1.1.8
+	 * @since 3.0.3
 	 */
-	public abstract String querySingleStringResult(String sql, String[] args);
+	public abstract Object querySingleResult(String sql, String[] args);
 
 	/**
-	 * Query for a single result integer
+	 * Query the SQL for a single result typed object in the first column
 	 * 
+	 * @param <T>
+	 *            result value type
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 1.2.1
+	 * @since 3.0.3
 	 */
-	public abstract Integer querySingleIntResult(String sql, String[] args);
+	public abstract <T> T querySingleTypedResult(String sql, String[] args);
 
 	/**
-	 * Query for string values from a single column
+	 * Query the SQL for a single result object in the first column with the
+	 * expected data type
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single result object
+	 * @since 3.0.3
+	 */
+	public abstract Object querySingleResult(String sql, String[] args,
+			GeoPackageDataType dataType);
+
+	/**
+	 * Query the SQL for a single result typed object in the first column with
+	 * the expected data type
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single result object
+	 * @since 3.0.3
+	 */
+	public abstract <T> T querySingleTypedResult(String sql, String[] args,
+			GeoPackageDataType dataType);
+
+	/**
+	 * Query the SQL for a single result object
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public abstract Object querySingleResult(String sql, String[] args,
+			int column);
+
+	/**
+	 * Query the SQL for a single result typed object
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public abstract <T> T querySingleTypedResult(String sql, String[] args,
+			int column);
+
+	/**
+	 * Query the SQL for a single result object with the expected data type
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public abstract Object querySingleResult(String sql, String[] args,
+			int column, GeoPackageDataType dataType);
+
+	/**
+	 * Query the SQL for a single result typed object with the expected data
+	 * type
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public abstract <T> T querySingleTypedResult(String sql, String[] args,
+			int column, GeoPackageDataType dataType);
+
+	/**
+	 * Query for values from the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.2
+	 * @since 3.0.3
 	 */
-	public abstract List<String> querySingleColumnStringResults(String sql,
+	public abstract List<Object> querySingleColumnResults(String sql,
 			String[] args);
 
 	/**
-	 * Query for string values
+	 * Query for values from the first column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single column values
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args);
+
+	/**
+	 * Query for values from the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            arguments
-	 * @return 3.0.3
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
 	 */
-	public abstract List<String[]> queryStringResults(String sql, String[] args);
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args, GeoPackageDataType dataType);
 
 	/**
-	 * Query for string values in a single (first) row
+	 * Query for typed values from the first column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args, GeoPackageDataType dataType);
+
+	/**
+	 * Query for values from a single column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            arguments
-	 * @return 3.0.3
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
 	 */
-	public abstract String[] querySingleRowStringResults(String sql,
-			String[] args);
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args, int column);
 
 	/**
-	 * Query for string values
+	 * Query for typed values from a single column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args, int column);
+
+	/**
+	 * Query for values from a single column
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args, int column, GeoPackageDataType dataType);
+
+	/**
+	 * Query for typed values from a single column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args, int column, GeoPackageDataType dataType);
+
+	/**
+	 * Query for values from a single column up to the limit
 	 * 
 	 * @param sql
 	 *            sql statement
@@ -210,10 +407,260 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *            arguments
 	 * @param limit
 	 *            result row limit
-	 * @return 3.0.3
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
 	 */
-	public abstract List<String[]> queryStringResults(String sql,
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args, int column, Integer limit);
+
+	/**
+	 * Query for typed values from a single column up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args, int column, Integer limit);
+
+	/**
+	 * Query for values from a single column up to the limit
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @param limit
+	 *            result row limit
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract List<Object> querySingleColumnResults(String sql,
+			String[] args, int column, GeoPackageDataType dataType,
+			Integer limit);
+
+	/**
+	 * Query for typed values from a single column up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @param limit
+	 *            result row limit
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args, int column, GeoPackageDataType dataType,
+			Integer limit);
+
+	/**
+	 * Query for values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract List<List<Object>> queryResults(String sql, String[] args);
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<List<T>> queryTypedResults(String sql,
+			String[] args);
+
+	/**
+	 * Query for values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract List<List<Object>> queryResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes);
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<List<T>> queryTypedResults(String sql,
+			String[] args, GeoPackageDataType[] dataTypes);
+
+	/**
+	 * Query for values in a single (first) row
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public abstract List<Object> querySingleRowResults(String sql, String[] args);
+
+	/**
+	 * Query for typed values in a single (first) row
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleRowTypedResults(String sql,
+			String[] args);
+
+	/**
+	 * Query for values in a single (first) row
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public abstract List<Object> querySingleRowResults(String sql,
+			String[] args, GeoPackageDataType[] dataTypes);
+
+	/**
+	 * Query for typed values in a single (first) row
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<T> querySingleRowTypedResults(String sql,
+			String[] args, GeoPackageDataType[] dataTypes);
+
+	/**
+	 * Query for values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract List<List<Object>> queryResults(String sql, String[] args,
+			Integer limit);
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<List<T>> queryTypedResults(String sql,
 			String[] args, Integer limit);
+
+	/**
+	 * Query for values up to the limit
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract List<List<Object>> queryResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes, Integer limit);
+
+	/**
+	 * Query for typed values up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public abstract <T> List<List<T>> queryTypedResults(String sql,
+			String[] args, GeoPackageDataType[] dataTypes, Integer limit);
 
 	/**
 	 * Set the GeoPackage application id
@@ -244,12 +691,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 */
 	public String getApplicationId() {
 		String applicationId = null;
-		Integer applicationIdInteger = querySingleIntResult(
-				"PRAGMA application_id", null);
-		if (applicationIdInteger != null) {
+		Integer applicationIdObject = querySingleTypedResult(
+				"PRAGMA application_id", null, GeoPackageDataType.MEDIUMINT);
+		if (applicationIdObject != null) {
 			try {
 				applicationId = new String(ByteBuffer.allocate(4)
-						.putInt(applicationIdInteger).array(), "UTF-8");
+						.putInt(applicationIdObject).array(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				throw new GeoPackageException(
 						"Unexpected application id character encoding", e);
@@ -286,10 +733,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 */
 	public int getUserVersion() {
 		int userVersion = -1;
-		Integer userVersionInteger = querySingleIntResult(
-				"PRAGMA user_version", null);
-		if (userVersionInteger != null) {
-			userVersion = userVersionInteger;
+		Integer userVersionObject = querySingleTypedResult(
+				"PRAGMA user_version", null, GeoPackageDataType.MEDIUMINT);
+		if (userVersionObject != null) {
+			userVersion = userVersionObject;
 		}
 		return userVersion;
 	}

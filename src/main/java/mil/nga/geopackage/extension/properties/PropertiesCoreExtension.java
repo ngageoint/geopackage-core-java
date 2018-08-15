@@ -166,10 +166,11 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * 
 	 * @return list of properties
 	 */
+
 	public List<String> getProperties() {
 		List<String> properties = null;
 		if (has()) {
-			properties = getDao().querySingleColumnStringResults(
+			properties = getDao().querySingleColumnTypedResults(
 					"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM "
 							+ TABLE_NAME, null);
 		} else {

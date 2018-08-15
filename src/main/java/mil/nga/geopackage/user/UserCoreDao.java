@@ -11,6 +11,7 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
@@ -500,7 +501,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            limit
 	 * @param offset
 	 *            offset
-	 * @return 3.0.3
+	 * @return limit
+	 * @since 3.0.3
 	 */
 	public String buildLimit(int limit, long offset) {
 		return offset + "," + limit;
@@ -906,58 +908,439 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for a single result string
+	 * Query the SQL for a single result object in the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.2
+	 * @since 3.0.3
 	 */
-	public String querySingleStringResult(String sql, String[] args) {
-		return db.querySingleStringResult(sql, args);
+	public Object querySingleResult(String sql, String[] args) {
+		return db.querySingleResult(sql, args);
 	}
 
 	/**
-	 * Query for a single result integer
+	 * Query the SQL for a single result typed object in the first column
 	 * 
+	 * @param <T>
+	 *            result value type
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.2
+	 * @since 3.0.3
 	 */
-	public Integer querySingleIntResult(String sql, String[] args) {
-		return db.querySingleIntResult(sql, args);
+	public <T> T querySingleTypedResult(String sql, String[] args) {
+		return db.querySingleTypedResult(sql, args);
 	}
 
 	/**
-	 * Query for string values from a single column
+	 * Query the SQL for a single result object in the first column with the
+	 * expected data type
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single result object
+	 * @since 3.0.3
+	 */
+	public Object querySingleResult(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return db.querySingleResult(sql, args, dataType);
+	}
+
+	/**
+	 * Query the SQL for a single result typed object in the first column with
+	 * the expected data type
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single result object
+	 * @since 3.0.3
+	 */
+	public <T> T querySingleTypedResult(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return db.querySingleTypedResult(sql, args, dataType);
+	}
+
+	/**
+	 * Query the SQL for a single result object
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public Object querySingleResult(String sql, String[] args, int column) {
+		return db.querySingleResult(sql, args, column);
+	}
+
+	/**
+	 * Query the SQL for a single result typed object
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public <T> T querySingleTypedResult(String sql, String[] args, int column) {
+		return db.querySingleTypedResult(sql, args, column);
+	}
+
+	/**
+	 * Query the SQL for a single result object with the expected data type
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public Object querySingleResult(String sql, String[] args, int column,
+			GeoPackageDataType dataType) {
+		return db.querySingleResult(sql, args, column, dataType);
+	}
+
+	/**
+	 * Query the SQL for a single result typed object with the expected data
+	 * type
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return result, null if no result
+	 * @since 3.0.3
+	 */
+	public <T> T querySingleTypedResult(String sql, String[] args, int column,
+			GeoPackageDataType dataType) {
+		return db.querySingleTypedResult(sql, args, column, dataType);
+	}
+
+	/**
+	 * Query for values from the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.2
+	 * @since 3.0.3
 	 */
-	public List<String> querySingleColumnStringResults(String sql, String[] args) {
-		return db.querySingleColumnStringResults(sql, args);
+	public List<Object> querySingleColumnResults(String sql, String[] args) {
+		return db.querySingleColumnResults(sql, args);
 	}
 
 	/**
-	 * Query for string values
+	 * Query for typed values from the first column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            sql arguments
+	 * @return single column values
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
+		return db.querySingleColumnTypedResults(sql, args);
+	}
+
+	/**
+	 * Query for values from the first column
 	 * 
 	 * @param sql
 	 *            sql statement
 	 * @param args
 	 *            arguments
-	 * @return 3.0.3
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
 	 */
-	public List<String[]> queryStringResults(String sql, String[] args) {
-		return db.queryStringResults(sql, args);
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return db.querySingleColumnResults(sql, args, dataType);
+	}
+
+	/**
+	 * Query for typed values from the first column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return db.querySingleColumnTypedResults(sql, args, dataType);
+	}
+
+	/**
+	 * Query for values from a single column
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column) {
+		return db.querySingleColumnResults(sql, args, column);
+	}
+
+	/**
+	 * Query for typed values from a single column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column) {
+		return db.querySingleColumnTypedResults(sql, args, column);
+	}
+
+	/**
+	 * Query for values from a single column
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType) {
+		return db.querySingleColumnResults(sql, args, column, dataType);
+	}
+
+	/**
+	 * Query for typed values from a single column
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType) {
+		return db.querySingleColumnTypedResults(sql, args, column, dataType);
+	}
+
+	/**
+	 * Query for values from a single column up to the limit
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column, Integer limit) {
+		return db.querySingleColumnResults(sql, args, column, limit);
+	}
+
+	/**
+	 * Query for typed values from a single column up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @param column
+	 *            column index
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, Integer limit) {
+		return db.querySingleColumnTypedResults(sql, args, column, limit);
+	}
+
+	/**
+	 * Query for values from a single column up to the limit
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @param limit
+	 *            result row limit
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType, Integer limit) {
+		return db.querySingleColumnResults(sql, args, column, dataType, limit);
+	}
+
+	/**
+	 * Query for typed values from a single column up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param column
+	 *            column index
+	 * @param dataType
+	 *            GeoPackage data type
+	 * @param limit
+	 *            result row limit
+	 * @return single column results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType, Integer limit) {
+		return db.querySingleColumnTypedResults(sql, args, column, dataType,
+				limit);
+	}
+
+	/**
+	 * Query for values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public List<List<Object>> queryResults(String sql, String[] args) {
+		return db.queryResults(sql, args);
+	}
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args) {
+		return db.queryTypedResults(sql, args);
+	}
+
+	/**
+	 * Query for values
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public List<List<Object>> queryResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		return db.queryResults(sql, args, dataTypes);
+	}
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		return db.queryTypedResults(sql, args, dataTypes);
 	}
 
 	/**
@@ -967,15 +1350,67 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            sql statement
 	 * @param args
 	 *            arguments
-	 * @return 3.0.3
+	 * @return single row results
+	 * @since 3.0.3
 	 */
-	public String[] querySingleRowStringResults(String sql, String[] args) {
-		return db.querySingleRowStringResults(sql, args);
-
+	public List<Object> querySingleRowResults(String sql, String[] args) {
+		return db.querySingleRowResults(sql, args);
 	}
 
 	/**
-	 * Query for string values
+	 * Query for string typed values in a single (first) row
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleRowTypedResults(String sql, String[] args) {
+		return db.querySingleRowTypedResults(sql, args);
+	}
+
+	/**
+	 * Query for values in a single (first) row
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public List<Object> querySingleRowResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		return db.querySingleRowResults(sql, args, dataTypes);
+	}
+
+	/**
+	 * Query for typed values in a single (first) row
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @return single row results
+	 * @since 3.0.3
+	 */
+	public <T> List<T> querySingleRowTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		return db.querySingleRowTypedResults(sql, args, dataTypes);
+	}
+
+	/**
+	 * Query for values
 	 * 
 	 * @param sql
 	 *            sql statement
@@ -983,11 +1418,71 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            arguments
 	 * @param limit
 	 *            result row limit
-	 * @return 3.0.3
+	 * @return results
+	 * @since 3.0.3
 	 */
-	public List<String[]> queryStringResults(String sql, String[] args,
+	public List<List<Object>> queryResults(String sql, String[] args,
 			Integer limit) {
-		return db.queryStringResults(sql, args, limit);
+		return db.queryResults(sql, args, limit);
+	}
+
+	/**
+	 * Query for typed values
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			Integer limit) {
+		return db.queryTypedResults(sql, args, limit);
+	}
+
+	/**
+	 * Query for values up to the limit
+	 * 
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public List<List<Object>> queryResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes, Integer limit) {
+		return db.queryResults(sql, args, dataTypes, limit);
+	}
+
+	/**
+	 * Query for typed values up to the limit
+	 * 
+	 * @param <T>
+	 *            result value type
+	 * @param sql
+	 *            sql statement
+	 * @param args
+	 *            arguments
+	 * @param dataTypes
+	 *            column data types
+	 * @param limit
+	 *            result row limit
+	 * @return results
+	 * @since 3.0.3
+	 */
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes, Integer limit) {
+		return db.queryTypedResults(sql, args, dataTypes, limit);
 	}
 
 	/**
