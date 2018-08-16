@@ -32,7 +32,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
-		return overlap(boundingBox, boundingBox2, false);
+		return boundingBox.overlap(boundingBox2);
 	}
 
 	/**
@@ -51,26 +51,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox overlap(BoundingBox boundingBox,
 			BoundingBox boundingBox2, boolean allowEmpty) {
-
-		double minLongitude = Math.max(boundingBox.getMinLongitude(),
-				boundingBox2.getMinLongitude());
-		double maxLongitude = Math.min(boundingBox.getMaxLongitude(),
-				boundingBox2.getMaxLongitude());
-		double minLatitude = Math.max(boundingBox.getMinLatitude(),
-				boundingBox2.getMinLatitude());
-		double maxLatitude = Math.min(boundingBox.getMaxLatitude(),
-				boundingBox2.getMaxLatitude());
-
-		BoundingBox overlap = null;
-
-		if ((minLongitude < maxLongitude && minLatitude < maxLatitude)
-				|| (allowEmpty && minLongitude <= maxLongitude && minLatitude <= maxLatitude)) {
-			overlap = new BoundingBox(minLongitude, minLatitude, maxLongitude,
-					maxLatitude);
-		}
-
-		return overlap;
-
+		return boundingBox.overlap(boundingBox2, allowEmpty);
 	}
 
 	/**
@@ -151,8 +132,7 @@ public class TileBoundingBoxUtils {
 			BoundingBox boundingBox) {
 		BoundingBox pointBoundingbox = new BoundingBox(point.getX(),
 				point.getY(), point.getX(), point.getY());
-		BoundingBox overlap = overlap(boundingBox, pointBoundingbox, true);
-		return overlap != null;
+		return boundingBox.intersects(pointBoundingbox, true);
 	}
 
 	/**
@@ -188,24 +168,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox union(BoundingBox boundingBox,
 			BoundingBox boundingBox2) {
-
-		double minLongitude = Math.min(boundingBox.getMinLongitude(),
-				boundingBox2.getMinLongitude());
-		double maxLongitude = Math.max(boundingBox.getMaxLongitude(),
-				boundingBox2.getMaxLongitude());
-		double minLatitude = Math.min(boundingBox.getMinLatitude(),
-				boundingBox2.getMinLatitude());
-		double maxLatitude = Math.max(boundingBox.getMaxLatitude(),
-				boundingBox2.getMaxLatitude());
-
-		BoundingBox union = null;
-
-		if (minLongitude < maxLongitude && minLatitude < maxLatitude) {
-			union = new BoundingBox(minLongitude, minLatitude, maxLongitude,
-					maxLatitude);
-		}
-
-		return union;
+		return boundingBox.union(boundingBox2);
 	}
 
 	/**

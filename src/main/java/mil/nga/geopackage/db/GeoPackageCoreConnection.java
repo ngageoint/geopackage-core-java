@@ -151,7 +151,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single result object
 	 * @since 3.0.3
 	 */
-	public abstract Object querySingleResult(String sql, String[] args);
+	public Object querySingleResult(String sql, String[] args) {
+		return querySingleResult(sql, args, 0);
+	}
 
 	/**
 	 * Query the SQL for a single result typed object in the first column
@@ -165,7 +167,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single result object
 	 * @since 3.0.3
 	 */
-	public abstract <T> T querySingleTypedResult(String sql, String[] args);
+	public <T> T querySingleTypedResult(String sql, String[] args) {
+		@SuppressWarnings("unchecked")
+		T result = (T) querySingleResult(sql, args);
+		return result;
+	}
 
 	/**
 	 * Query the SQL for a single result object in the first column with the
@@ -180,8 +186,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single result object
 	 * @since 3.0.3
 	 */
-	public abstract Object querySingleResult(String sql, String[] args,
-			GeoPackageDataType dataType);
+	public Object querySingleResult(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return querySingleResult(sql, args, 0, dataType);
+	}
 
 	/**
 	 * Query the SQL for a single result typed object in the first column with
@@ -198,8 +206,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single result object
 	 * @since 3.0.3
 	 */
-	public abstract <T> T querySingleTypedResult(String sql, String[] args,
-			GeoPackageDataType dataType);
+	public <T> T querySingleTypedResult(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		@SuppressWarnings("unchecked")
+		T result = (T) querySingleResult(sql, args, dataType);
+		return result;
+	}
 
 	/**
 	 * Query the SQL for a single result object
@@ -213,8 +225,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return result, null if no result
 	 * @since 3.0.3
 	 */
-	public abstract Object querySingleResult(String sql, String[] args,
-			int column);
+	public Object querySingleResult(String sql, String[] args, int column) {
+		return querySingleResult(sql, args, column, null);
+	}
 
 	/**
 	 * Query the SQL for a single result typed object
@@ -230,8 +243,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return result, null if no result
 	 * @since 3.0.3
 	 */
-	public abstract <T> T querySingleTypedResult(String sql, String[] args,
-			int column);
+	public <T> T querySingleTypedResult(String sql, String[] args, int column) {
+		@SuppressWarnings("unchecked")
+		T result = (T) querySingleResult(sql, args, column);
+		return result;
+	}
 
 	/**
 	 * Query the SQL for a single result object with the expected data type
@@ -267,8 +283,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return result, null if no result
 	 * @since 3.0.3
 	 */
-	public abstract <T> T querySingleTypedResult(String sql, String[] args,
-			int column, GeoPackageDataType dataType);
+	public <T> T querySingleTypedResult(String sql, String[] args, int column,
+			GeoPackageDataType dataType) {
+		@SuppressWarnings("unchecked")
+		T result = (T) querySingleResult(sql, args, column, dataType);
+		return result;
+	}
 
 	/**
 	 * Query for values from the first column
@@ -280,8 +300,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column values
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
-			String[] args);
+	public List<Object> querySingleColumnResults(String sql, String[] args) {
+		return querySingleColumnResults(sql, args, 0, null, null);
+	}
 
 	/**
 	 * Query for values from the first column
@@ -295,8 +316,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column values
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args);
+		return result;
+	}
 
 	/**
 	 * Query for values from the first column
@@ -310,8 +334,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
-			String[] args, GeoPackageDataType dataType);
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		return querySingleColumnResults(sql, args, 0, dataType, null);
+	}
 
 	/**
 	 * Query for typed values from the first column
@@ -327,8 +353,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args, GeoPackageDataType dataType);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			GeoPackageDataType dataType) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args, dataType);
+		return result;
+	}
 
 	/**
 	 * Query for values from a single column
@@ -342,8 +372,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
-			String[] args, int column);
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column) {
+		return querySingleColumnResults(sql, args, column, null, null);
+	}
 
 	/**
 	 * Query for typed values from a single column
@@ -359,8 +391,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args, int column);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args, column);
+		return result;
+	}
 
 	/**
 	 * Query for values from a single column
@@ -376,8 +412,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
-			String[] args, int column, GeoPackageDataType dataType);
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType) {
+		return querySingleColumnResults(sql, args, column, dataType, null);
+	}
 
 	/**
 	 * Query for typed values from a single column
@@ -395,8 +433,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args, int column, GeoPackageDataType dataType);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args, column,
+				dataType);
+		return result;
+	}
 
 	/**
 	 * Query for values from a single column up to the limit
@@ -412,8 +455,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleColumnResults(String sql,
-			String[] args, int column, Integer limit);
+	public List<Object> querySingleColumnResults(String sql, String[] args,
+			int column, Integer limit) {
+		return querySingleColumnResults(sql, args, column, null, limit);
+	}
 
 	/**
 	 * Query for typed values from a single column up to the limit
@@ -431,8 +476,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args, int column, Integer limit);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, Integer limit) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args, column,
+				limit);
+		return result;
+	}
 
 	/**
 	 * Query for values from a single column up to the limit
@@ -472,9 +522,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleColumnTypedResults(String sql,
-			String[] args, int column, GeoPackageDataType dataType,
-			Integer limit);
+	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
+			int column, GeoPackageDataType dataType, Integer limit) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleColumnResults(sql, args, column,
+				dataType, limit);
+		return result;
+	}
 
 	/**
 	 * Query for values
@@ -486,7 +540,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract List<List<Object>> queryResults(String sql, String[] args);
+	public List<List<Object>> queryResults(String sql, String[] args) {
+		return queryResults(sql, args, null, null);
+	}
 
 	/**
 	 * Query for typed values
@@ -500,8 +556,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<List<T>> queryTypedResults(String sql,
-			String[] args);
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args) {
+		@SuppressWarnings("unchecked")
+		List<List<T>> result = (List<List<T>>) (Object) queryResults(sql, args);
+		return result;
+	}
 
 	/**
 	 * Query for values
@@ -515,8 +574,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract List<List<Object>> queryResults(String sql, String[] args,
-			GeoPackageDataType[] dataTypes);
+	public List<List<Object>> queryResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		return queryResults(sql, args, dataTypes, null);
+	}
 
 	/**
 	 * Query for typed values
@@ -532,8 +593,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<List<T>> queryTypedResults(String sql,
-			String[] args, GeoPackageDataType[] dataTypes);
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		@SuppressWarnings("unchecked")
+		List<List<T>> result = (List<List<T>>) (Object) queryResults(sql, args,
+				dataTypes);
+		return result;
+	}
 
 	/**
 	 * Query for values in a single (first) row
@@ -545,7 +611,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single row results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleRowResults(String sql, String[] args);
+	public List<Object> querySingleRowResults(String sql, String[] args) {
+		return querySingleRowResults(sql, args, null);
+	}
 
 	/**
 	 * Query for typed values in a single (first) row
@@ -559,8 +627,11 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single row results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleRowTypedResults(String sql,
-			String[] args);
+	public <T> List<T> querySingleRowTypedResults(String sql, String[] args) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleRowResults(sql, args);
+		return result;
+	}
 
 	/**
 	 * Query for values in a single (first) row
@@ -574,8 +645,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single row results
 	 * @since 3.0.3
 	 */
-	public abstract List<Object> querySingleRowResults(String sql,
-			String[] args, GeoPackageDataType[] dataTypes);
+	public List<Object> querySingleRowResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		List<List<Object>> results = queryResults(sql, args, dataTypes, 1);
+		List<Object> singleRow = null;
+		if (!results.isEmpty()) {
+			singleRow = results.get(0);
+		}
+		return singleRow;
+	}
 
 	/**
 	 * Query for typed values in a single (first) row
@@ -591,8 +669,12 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single row results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<T> querySingleRowTypedResults(String sql,
-			String[] args, GeoPackageDataType[] dataTypes);
+	public <T> List<T> querySingleRowTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes) {
+		@SuppressWarnings("unchecked")
+		List<T> result = (List<T>) querySingleRowResults(sql, args, dataTypes);
+		return result;
+	}
 
 	/**
 	 * Query for values
@@ -606,8 +688,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract List<List<Object>> queryResults(String sql, String[] args,
-			Integer limit);
+	public List<List<Object>> queryResults(String sql, String[] args,
+			Integer limit) {
+		return queryResults(sql, args, null, limit);
+	}
 
 	/**
 	 * Query for typed values
@@ -623,8 +707,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<List<T>> queryTypedResults(String sql,
-			String[] args, Integer limit);
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			Integer limit) {
+		@SuppressWarnings("unchecked")
+		List<List<T>> result = (List<List<T>>) (Object) queryResults(sql, args,
+				limit);
+		return result;
+	}
 
 	/**
 	 * Query for values up to the limit
@@ -659,8 +748,13 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return results
 	 * @since 3.0.3
 	 */
-	public abstract <T> List<List<T>> queryTypedResults(String sql,
-			String[] args, GeoPackageDataType[] dataTypes, Integer limit);
+	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
+			GeoPackageDataType[] dataTypes, Integer limit) {
+		@SuppressWarnings("unchecked")
+		List<List<T>> result = (List<List<T>>) (Object) queryResults(sql, args,
+				dataTypes, limit);
+		return result;
+	}
 
 	/**
 	 * Set the GeoPackage application id

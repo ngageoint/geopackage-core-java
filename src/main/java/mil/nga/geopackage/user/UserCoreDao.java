@@ -97,6 +97,17 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public abstract BoundingBox getBoundingBox();
 
 	/**
+	 * Get the bounding box of the user table data
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * 
+	 * @return bounding box of user table data
+	 * @since 3.0.3
+	 */
+	public abstract BoundingBox getBoundingBox(Projection projection);
+
+	/**
 	 * Project the provided bounding box in the declared projection to the user
 	 * DAO projection
 	 * 

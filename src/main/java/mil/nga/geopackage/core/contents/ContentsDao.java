@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
@@ -14,6 +15,7 @@ import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
+import mil.nga.sf.proj.Projection;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
@@ -187,6 +189,80 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 			tableNames.add(content.getTableName());
 		}
 		return tableNames;
+	}
+
+	/**
+	 * Get the bounding box for all tables in the provided projection
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection) {
+
+		BoundingBox boundingBox = null;
+
+		List<String> tables = null;
+		try {
+			tables = getTables();
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for contents tables", e);
+		}
+
+		for (String table : tables) {
+			BoundingBox tableBoundingBox = getBoundingBox(projection, table);
+			if (tableBoundingBox != null) {
+				if (boundingBox != null) {
+					boundingBox = boundingBox.union(tableBoundingBox);
+				} else {
+					boundingBox = tableBoundingBox;
+				}
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the bounding box for the table in the table's projection
+	 * 
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(String table) {
+		return getBoundingBox(null, table);
+	}
+
+	/**
+	 * Get the bounding box for the table in the provided projection
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection, String table) {
+
+		BoundingBox boundingBox = null;
+
+		try {
+			Contents contents = queryForId(table);
+			boundingBox = contents.getBoundingBox(projection);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for contents of table: " + table, e);
+		}
+
+		return boundingBox;
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.coverage;
 
 import mil.nga.geopackage.BoundingBox;
-import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 
 /**
  * Coverage Data request to retrieve coverage data values for a point or
@@ -100,8 +99,7 @@ public class CoverageDataRequest {
 		if (point) {
 			overlap = projectedBoundingBox;
 		} else {
-			overlap = TileBoundingBoxUtils.overlap(projectedBoundingBox,
-					projectedCoverage);
+			overlap = projectedBoundingBox.overlap(projectedCoverage);
 		}
 		return overlap;
 	}

@@ -161,7 +161,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		this.width = width;
 		this.height = height;
 		this.requestProjection = requestProjection;
-		coverageProjection = tileMatrixSet.getSrs().getProjection();
+		coverageProjection = tileMatrixSet.getProjection();
 		coverageBoundingBox = tileMatrixSet.getBoundingBox();
 
 		// Check if the projections have the same units

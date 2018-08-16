@@ -67,6 +67,7 @@ import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.UserUniqueConstraint;
+import mil.nga.sf.proj.Projection;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
@@ -369,6 +370,153 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public BoundingBox getContentsBoundingBox(Projection projection) {
+		ContentsDao contentsDao = getContentsDao();
+		BoundingBox boundingBox = contentsDao.getBoundingBox(projection);
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(Projection projection) {
+		return getBoundingBox(projection, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(Projection projection, boolean manual) {
+
+		BoundingBox boundingBox = getContentsBoundingBox(projection);
+
+		List<String> tables = getTables();
+		for (String table : tables) {
+			BoundingBox tableBoundingBox = getBoundingBox(projection, table,
+					manual);
+			if (tableBoundingBox != null) {
+				if (boundingBox != null) {
+					boundingBox = boundingBox.union(tableBoundingBox);
+				} else {
+					boundingBox = tableBoundingBox;
+				}
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getContentsBoundingBox(String table) {
+		ContentsDao contentsDao = getContentsDao();
+		BoundingBox boundingBox = contentsDao.getBoundingBox(table);
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getContentsBoundingBox(Projection projection,
+			String table) {
+		ContentsDao contentsDao = getContentsDao();
+		BoundingBox boundingBox = contentsDao.getBoundingBox(projection, table);
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(String table) {
+		return getBoundingBox(null, table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(Projection projection, String table) {
+		return getBoundingBox(projection, table, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(String table, boolean manual) {
+		return getBoundingBox(null, table, manual);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getBoundingBox(Projection projection, String table,
+			boolean manual) {
+
+		BoundingBox boundingBox = getContentsBoundingBox(projection, table);
+
+		BoundingBox tableBoundingBox = null;
+		String tableType = getTableType(table);
+		ContentsDataType dataType = ContentsDataType.fromName(tableType);
+		if (dataType != null) {
+			switch (dataType) {
+			case FEATURES:
+				tableBoundingBox = getFeatureBoundingBox(projection, table,
+						manual);
+				break;
+			case TILES:
+			case GRIDDED_COVERAGE:
+				try {
+					TileMatrixSet tileMatrixSet = getTileMatrixSetDao()
+							.queryForId(table);
+					tableBoundingBox = tileMatrixSet.getBoundingBox(projection);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to retrieve tile matrix set for table: "
+									+ table, e);
+				}
+				break;
+			default:
+
+			}
+		}
+
+		if (tableBoundingBox != null) {
+			if (boundingBox == null) {
+				boundingBox = tableBoundingBox;
+			} else {
+				boundingBox = boundingBox.union(tableBoundingBox);
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the feature table bounding box
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            true to manually query if not indexed
+	 * @return bounding box
+	 */
+	protected abstract BoundingBox getFeatureBoundingBox(Projection projection,
+			String table, boolean manual);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public SpatialReferenceSystemDao getSpatialReferenceSystemDao() {
 		SpatialReferenceSystemDao dao = createDao(SpatialReferenceSystem.class);
 		dao.setCrsWktExtension(new CrsWktExtension(this));
@@ -556,10 +704,12 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setDataType(ContentsDataType.FEATURES);
 			contents.setIdentifier(geometryColumns.getTableName());
 			// contents.setLastChange(new Date());
-			contents.setMinX(boundingBox.getMinLongitude());
-			contents.setMinY(boundingBox.getMinLatitude());
-			contents.setMaxX(boundingBox.getMaxLongitude());
-			contents.setMaxY(boundingBox.getMaxLatitude());
+			if (boundingBox != null) {
+				contents.setMinX(boundingBox.getMinLongitude());
+				contents.setMinY(boundingBox.getMinLatitude());
+				contents.setMaxX(boundingBox.getMaxLongitude());
+				contents.setMaxY(boundingBox.getMaxLatitude());
+			}
 			contents.setSrs(srs);
 			getContentsDao().create(contents);
 

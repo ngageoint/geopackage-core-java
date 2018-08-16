@@ -6,6 +6,7 @@ import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.sf.GeometryType;
+import mil.nga.sf.proj.Projection;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -217,6 +218,16 @@ public class GeometryColumnsSqlMm {
 
 	public String getSrsName() {
 		return srsName;
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @return projection
+	 * @since 3.0.3
+	 */
+	public Projection getProjection() {
+		return getSrs().getProjection();
 	}
 
 }

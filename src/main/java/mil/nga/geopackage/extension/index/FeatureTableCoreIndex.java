@@ -569,7 +569,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @return bounding box
 	 * @since 3.0.3
 	 */
-	public BoundingBox bounds() {
+	public BoundingBox getBoundingBox() {
 
 		GenericRawResults<Object[]> results = null;
 		Object[] values = null;
@@ -613,12 +613,14 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @return bounding box
 	 * @since 3.0.3
 	 */
-	public BoundingBox bounds(Projection projection) {
-		BoundingBox bounds = bounds();
-		ProjectionTransform projectionTransform = getProjection()
-				.getTransformation(projection);
-		BoundingBox requestedBounds = bounds.transform(projectionTransform);
-		return requestedBounds;
+	public BoundingBox getBoundingBox(Projection projection) {
+		BoundingBox boundingBox = getBoundingBox();
+		if (boundingBox != null && projection != null) {
+			ProjectionTransform projectionTransform = getProjection()
+					.getTransformation(projection);
+			boundingBox = boundingBox.transform(projectionTransform);
+		}
+		return boundingBox;
 	}
 
 	/**

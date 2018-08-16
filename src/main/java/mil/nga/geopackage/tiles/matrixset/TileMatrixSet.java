@@ -5,6 +5,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -225,6 +227,27 @@ public class TileMatrixSet {
 	}
 
 	/**
+	 * Get a bounding box in the provided projection
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection) {
+		BoundingBox boundingBox = getBoundingBox();
+		if (projection != null) {
+			ProjectionTransform transform = getProjection().getTransformation(
+					projection);
+			if (!transform.isSameProjection()) {
+				boundingBox = boundingBox.transform(transform);
+			}
+		}
+		return boundingBox;
+	}
+
+	/**
 	 * Set a bounding box
 	 * 
 	 * @param boundingBox
@@ -235,6 +258,16 @@ public class TileMatrixSet {
 		setMaxX(boundingBox.getMaxLongitude());
 		setMinY(boundingBox.getMinLatitude());
 		setMaxY(boundingBox.getMaxLatitude());
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @return projection
+	 * @since 3.0.3
+	 */
+	public Projection getProjection() {
+		return getSrs().getProjection();
 	}
 
 }

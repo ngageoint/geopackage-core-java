@@ -37,6 +37,7 @@ import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.UserUniqueConstraint;
+import mil.nga.sf.proj.Projection;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 
@@ -261,6 +262,127 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public String getTableType(String table);
+
+	/**
+	 * Get the bounding box for all table contents in the provided projection
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getContentsBoundingBox(Projection projection);
+
+	/**
+	 * Get the bounding box for all tables in the provided projection, including
+	 * contents and table metadata
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection);
+
+	/**
+	 * Get the bounding box for all tables in the provided projection, including
+	 * contents, table metadata, and manual queries if enabled
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection, boolean manual);
+
+	/**
+	 * Get the bounding box from the contents for the table in the table's
+	 * projection
+	 * 
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getContentsBoundingBox(String table);
+
+	/**
+	 * Get the bounding box from the contents for the table in the provided
+	 * projection
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getContentsBoundingBox(Projection projection,
+			String table);
+
+	/**
+	 * Get the bounding box for the table in the table's projection, including
+	 * contents and table metadata
+	 * 
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(String table);
+
+	/**
+	 * Get the bounding box for the table in the provided projection, including
+	 * contents and table metadata
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection, String table);
+
+	/**
+	 * Get the bounding box for the table in the table's projection, including
+	 * contents, table metadata, and manual queries if enabled
+	 * 
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(String table, boolean manual);
+
+	/**
+	 * Get the bounding box for the table in the provided projection, including
+	 * contents, table metadata, and manual queries if enabled
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection, String table,
+			boolean manual);
 
 	/**
 	 * Get a Spatial Reference System DAO

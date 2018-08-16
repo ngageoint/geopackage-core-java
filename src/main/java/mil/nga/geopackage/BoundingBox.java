@@ -347,6 +347,122 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Determine if intersects with the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @return true if intersects
+	 * @since 3.0.3
+	 */
+	public boolean intersects(BoundingBox boundingBox) {
+		return overlap(boundingBox) != null;
+	}
+
+	/**
+	 * Determine if intersects with the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param allowEmpty
+	 *            allow empty ranges when determining intersection
+	 *
+	 * @return true if intersects
+	 * @since 3.0.3
+	 */
+	public boolean intersects(BoundingBox boundingBox, boolean allowEmpty) {
+		return overlap(boundingBox, allowEmpty) != null;
+	}
+
+	/**
+	 * Get the overlapping bounding box with the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox overlap(BoundingBox boundingBox) {
+		return overlap(boundingBox, false);
+	}
+
+	/**
+	 * Get the overlapping bounding box with the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @param allowEmpty
+	 *            allow empty ranges when determining overlap
+	 *
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox overlap(BoundingBox boundingBox, boolean allowEmpty) {
+
+		double minLongitude = Math.max(getMinLongitude(),
+				boundingBox.getMinLongitude());
+		double maxLongitude = Math.min(getMaxLongitude(),
+				boundingBox.getMaxLongitude());
+		double minLatitude = Math.max(getMinLatitude(),
+				boundingBox.getMinLatitude());
+		double maxLatitude = Math.min(getMaxLatitude(),
+				boundingBox.getMaxLatitude());
+
+		BoundingBox overlap = null;
+
+		if ((minLongitude < maxLongitude && minLatitude < maxLatitude)
+				|| (allowEmpty && minLongitude <= maxLongitude && minLatitude <= maxLatitude)) {
+			overlap = new BoundingBox(minLongitude, minLatitude, maxLongitude,
+					maxLatitude);
+		}
+
+		return overlap;
+	}
+
+	/**
+	 * Get the union bounding box with the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox union(BoundingBox boundingBox) {
+
+		double minLongitude = Math.min(getMinLongitude(),
+				boundingBox.getMinLongitude());
+		double maxLongitude = Math.max(getMaxLongitude(),
+				boundingBox.getMaxLongitude());
+		double minLatitude = Math.min(getMinLatitude(),
+				boundingBox.getMinLatitude());
+		double maxLatitude = Math.max(getMaxLatitude(),
+				boundingBox.getMaxLatitude());
+
+		BoundingBox union = null;
+
+		if (minLongitude < maxLongitude && minLatitude < maxLatitude) {
+			union = new BoundingBox(minLongitude, minLatitude, maxLongitude,
+					maxLatitude);
+		}
+
+		return union;
+	}
+
+	/**
+	 * Determine if inclusively contains the provided bounding box
+	 *
+	 * @param boundingBox
+	 *            bounding box
+	 * @return true if contains
+	 * @since 3.0.3
+	 */
+	public boolean contains(BoundingBox boundingBox) {
+		return getMinLongitude() <= boundingBox.getMinLongitude()
+				&& getMaxLongitude() >= boundingBox.getMaxLongitude()
+				&& getMinLatitude() <= boundingBox.getMinLatitude()
+				&& getMaxLatitude() >= boundingBox.getMaxLatitude();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

@@ -11,6 +11,8 @@ import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.ForeignCollection;
@@ -527,6 +529,27 @@ public class Contents {
 	}
 
 	/**
+	 * Get a bounding box in the provided projection
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * 
+	 * @return bounding box
+	 * @since 3.0.3
+	 */
+	public BoundingBox getBoundingBox(Projection projection) {
+		BoundingBox boundingBox = getBoundingBox();
+		if (boundingBox != null && projection != null) {
+			ProjectionTransform transform = getProjection().getTransformation(
+					projection);
+			if (!transform.isSameProjection()) {
+				boundingBox = boundingBox.transform(transform);
+			}
+		}
+		return boundingBox;
+	}
+
+	/**
 	 * Set a bounding box
 	 * 
 	 * @param boundingBox
@@ -537,6 +560,16 @@ public class Contents {
 		setMaxX(boundingBox.getMaxLongitude());
 		setMinY(boundingBox.getMinLatitude());
 		setMaxY(boundingBox.getMaxLatitude());
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @return projection
+	 * @since 3.0.3
+	 */
+	public Projection getProjection() {
+		return getSrs().getProjection();
 	}
 
 }
