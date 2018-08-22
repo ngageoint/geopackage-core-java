@@ -952,9 +952,20 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		for (String statement : statements) {
 			String sql = substituteSqlArguments(statement, tableName,
 					geometryColumnName, idColumnName, triggerName);
-			connection.execSQL(sql);
+			executeSQL(sql);
 		}
 
+	}
+
+	/**
+	 * Execute the SQL statement
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @since 3.0.3
+	 */
+	protected void executeSQL(String sql) {
+		connection.execSQL(sql);
 	}
 
 	/**
