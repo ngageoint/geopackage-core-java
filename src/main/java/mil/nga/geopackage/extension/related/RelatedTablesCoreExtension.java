@@ -19,8 +19,6 @@ import mil.nga.geopackage.extension.related.simple.SimpleAttributesTable;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
-import com.j256.ormlite.table.TableUtils;
-
 /**
  * Related Tables core extension
  * 
@@ -780,7 +778,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 					geoPackage.deleteTable(extendedRelation
 							.getMappingTableName());
 				}
-				TableUtils.dropTable(extendedRelationsDao, false);
+				geoPackage.dropTable(extendedRelationsDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
 				extensionsDao.deleteByExtension(EXTENSION_NAME);

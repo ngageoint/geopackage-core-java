@@ -5,20 +5,13 @@ import java.sql.SQLException;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.index.FeatureTableCoreIndex;
-import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
-import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
-import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
-import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.extension.scale.TileTableScaling;
-
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 
 /**
  * NGA extension management class for deleting extensions for a table or in a
@@ -124,17 +117,13 @@ public class NGAExtensions {
 		GeometryIndexDao geometryIndexDao = geoPackage.getGeometryIndexDao();
 		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-		ConnectionSource connectionSource = geoPackage.getDatabase()
-				.getConnectionSource();
 
 		try {
 			if (geometryIndexDao.isTableExists()) {
-				TableUtils.dropTable(connectionSource, GeometryIndex.class,
-						ignoreErrors);
+				geoPackage.dropTable(geometryIndexDao.getTableName());
 			}
 			if (tableIndexDao.isTableExists()) {
-				TableUtils.dropTable(connectionSource, TableIndex.class,
-						ignoreErrors);
+				geoPackage.dropTable(tableIndexDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
 				extensionsDao
@@ -189,12 +178,9 @@ public class NGAExtensions {
 		FeatureTileLinkDao featureTileLinkDao = geoPackage
 				.getFeatureTileLinkDao();
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-		ConnectionSource connectionSource = geoPackage.getDatabase()
-				.getConnectionSource();
 		try {
 			if (featureTileLinkDao.isTableExists()) {
-				TableUtils.dropTable(connectionSource, FeatureTileLink.class,
-						ignoreErrors);
+				geoPackage.dropTable(featureTileLinkDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
 				extensionsDao
@@ -252,12 +238,9 @@ public class NGAExtensions {
 
 		TileScalingDao tileScalingDao = geoPackage.getTileScalingDao();
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-		ConnectionSource connectionSource = geoPackage.getDatabase()
-				.getConnectionSource();
 		try {
 			if (tileScalingDao.isTableExists()) {
-				TableUtils.dropTable(connectionSource, TileScaling.class,
-						ignoreErrors);
+				geoPackage.dropTable(tileScalingDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
 				extensionsDao
