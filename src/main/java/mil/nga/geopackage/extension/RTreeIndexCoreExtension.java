@@ -217,7 +217,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * Connection
 	 */
-	private GeoPackageCoreConnection connection = null;
+	protected GeoPackageCoreConnection connection = null;
 
 	/**
 	 * Constructor
@@ -952,7 +952,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		for (String statement : statements) {
 			String sql = substituteSqlArguments(statement, tableName,
 					geometryColumnName, idColumnName, triggerName);
-			executeSQL(sql);
+			executeSQL(sql, triggerName != null);
 		}
 
 	}
@@ -962,9 +962,11 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * 
 	 * @param sql
 	 *            SQL statement
+	 * @param trigger
+	 *            true if a trigger statement
 	 * @since 3.0.3
 	 */
-	protected void executeSQL(String sql) {
+	protected void executeSQL(String sql, boolean trigger) {
 		connection.execSQL(sql);
 	}
 
