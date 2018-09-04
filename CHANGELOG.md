@@ -6,7 +6,24 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.0.3 (TBD)
 
-* TBD
+* Simple Features Projection (sf-proj) version 2.0.1
+* Related Tables Extension fix to save Simple Attributes and Media tables as Attribute table types
+* User Column isNamed fix
+* Bounding Box methods: intersects, overlap, union, and contains
+* GeoPackage Contents Bounding Box and overall Bounding Box methods
+* GeoPackage Geometry Index Table index methods, independent of table creation
+* GeoPackage Cache connection close improvements
+* Contents (and DAO) bounds and projection methods
+* Additional Date Converter format to handle format yyyy/MM/dd
+* Connection query improvements
+* Table Creator improvements for generic SQL script execution
+* Database common Result interface and utilities, implemented by UserCoreResult
+* RTree extension support improvements
+* Feature Table Index improvements for limited chunked queries and bounds retrieval
+* Geometry Columns projection method
+* Geometry Data get or build envelope method
+* Tile Matrix Set bounds and projection methods
+* User DAO query, bounds, and projection improvements
 
 ## [3.0.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.0.2) (07-27-2018)
 
