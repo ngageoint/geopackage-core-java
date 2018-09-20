@@ -545,6 +545,23 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Get the envelope if it exists or build it from the geometry if not null
+	 * 
+	 * @return geometry envelope
+	 * @since 3.0.3
+	 */
+	public GeometryEnvelope getOrBuildEnvelope() {
+		GeometryEnvelope envelope = getEnvelope();
+		if (envelope == null) {
+			Geometry geometry = getGeometry();
+			if (geometry != null) {
+				envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
+			}
+		}
+		return envelope;
+	}
+
+	/**
 	 * Get the envelope flag indicator
 	 * 
 	 * 1 for xy, 2 for xyz, 3 for xym, 4 for xyzm (null would be 0)
@@ -563,23 +580,6 @@ public class GeoPackageGeometryData {
 			indicator += 2;
 		}
 		return indicator;
-	}
-
-	/**
-	 * Get the envelope if it exists or build it from the geometry if not null
-	 * 
-	 * @return geometry envelope
-	 * @since 3.0.3
-	 */
-	public GeometryEnvelope getOrBuildEnvelope() {
-		GeometryEnvelope envelope = getEnvelope();
-		if (envelope == null) {
-			Geometry geometry = getGeometry();
-			if (geometry != null) {
-				envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
-			}
-		}
-		return envelope;
 	}
 
 }

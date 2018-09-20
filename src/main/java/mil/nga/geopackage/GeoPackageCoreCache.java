@@ -88,7 +88,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * 
 	 * @param name
 	 *            GeoPackage name
-	 * @return cached GeoPackage
+	 * @return true if has cached GeoPackage
 	 * @since 3.0.3
 	 */
 	public boolean has(String name) {
