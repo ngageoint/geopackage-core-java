@@ -99,7 +99,12 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	/**
 	 * Query single chunk limit
 	 */
-	protected Integer chunkLimit = 1000;
+	protected int chunkLimit = 1000;
+
+	/**
+	 * Query range tolerance
+	 */
+	protected double tolerance = .00000000000001;
 
 	/**
 	 * Constructor
@@ -171,7 +176,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @return chunk limit
 	 * @since 3.0.3
 	 */
-	public Integer getChunkLimit() {
+	public int getChunkLimit() {
 		return chunkLimit;
 	}
 
@@ -182,8 +187,29 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 *            chunk limit
 	 * @since 3.0.3
 	 */
-	public void setChunkLimit(Integer chunkLimit) {
+	public void setChunkLimit(int chunkLimit) {
 		this.chunkLimit = chunkLimit;
+	}
+
+	/**
+	 * Get the query range tolerance
+	 * 
+	 * @return query range tolerance
+	 * @since 3.0.3
+	 */
+	public double getTolerance() {
+		return tolerance;
+	}
+
+	/**
+	 * Set the query range tolerance
+	 * 
+	 * @param tolerance
+	 *            query range tolerance
+	 * @since 3.0.3
+	 */
+	public void setTolerance(double tolerance) {
+		this.tolerance = tolerance;
 	}
 
 	/**
@@ -776,23 +802,30 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 				.queryBuilder();
 		try {
 
+			double minX = envelope.getMinX() - tolerance;
+			double maxX = envelope.getMaxX() + tolerance;
+			double minY = envelope.getMinY() - tolerance;
+			double maxY = envelope.getMaxY() + tolerance;
+
 			Where<GeometryIndex, GeometryIndexKey> where = qb.where();
 			where.eq(GeometryIndex.COLUMN_TABLE_NAME, tableName).and()
-					.le(GeometryIndex.COLUMN_MIN_X, envelope.getMaxX()).and()
-					.ge(GeometryIndex.COLUMN_MAX_X, envelope.getMinX()).and()
-					.le(GeometryIndex.COLUMN_MIN_Y, envelope.getMaxY()).and()
-					.ge(GeometryIndex.COLUMN_MAX_Y, envelope.getMinY());
+					.le(GeometryIndex.COLUMN_MIN_X, maxX).and()
+					.ge(GeometryIndex.COLUMN_MAX_X, minX).and()
+					.le(GeometryIndex.COLUMN_MIN_Y, maxY).and()
+					.ge(GeometryIndex.COLUMN_MAX_Y, minY);
 
 			if (envelope.hasZ()) {
-				where.and().le(GeometryIndex.COLUMN_MIN_Z, envelope.getMaxZ())
-						.and()
-						.ge(GeometryIndex.COLUMN_MAX_Z, envelope.getMinZ());
+				double minZ = envelope.getMinZ() - tolerance;
+				double maxZ = envelope.getMaxZ() + tolerance;
+				where.and().le(GeometryIndex.COLUMN_MIN_Z, maxZ).and()
+						.ge(GeometryIndex.COLUMN_MAX_Z, minZ);
 			}
 
 			if (envelope.hasM()) {
-				where.and().le(GeometryIndex.COLUMN_MIN_M, envelope.getMaxM())
-						.and()
-						.ge(GeometryIndex.COLUMN_MAX_M, envelope.getMinM());
+				double minM = envelope.getMinM() - tolerance;
+				double maxM = envelope.getMaxM() + tolerance;
+				where.and().le(GeometryIndex.COLUMN_MIN_M, maxM).and()
+						.ge(GeometryIndex.COLUMN_MAX_M, minM);
 			}
 
 		} catch (SQLException e) {
