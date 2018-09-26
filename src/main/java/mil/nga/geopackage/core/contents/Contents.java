@@ -535,7 +535,7 @@ public class Contents {
 	 *            desired projection
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
@@ -566,7 +566,7 @@ public class Contents {
 	 * Get the projection
 	 * 
 	 * @return projection
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Projection getProjection() {
 		return getSrs().getProjection();

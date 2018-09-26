@@ -46,7 +46,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * Is close quietly mode enabled
 	 * 
 	 * @return true if close quiet mode
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean isCloseQuietly() {
 		return closeQuietly;
@@ -57,7 +57,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * 
 	 * @param closeQuietly
 	 *            true to close quietly
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public void setCloseQuietly(boolean closeQuietly) {
 		this.closeQuietly = closeQuietly;
@@ -89,7 +89,7 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * @param name
 	 *            GeoPackage name
 	 * @return true if has cached GeoPackage
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean has(String name) {
 		return cache.containsKey(name);

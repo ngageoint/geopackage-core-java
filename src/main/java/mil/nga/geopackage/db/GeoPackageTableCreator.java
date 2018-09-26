@@ -197,7 +197,7 @@ public class GeoPackageTableCreator {
 	 * Create Geometry Index table column indexes
 	 * 
 	 * @return executed statements
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public int indexGeometryIndex() {
 		return execSQLScript(GeoPackageProperties.getProperty(
@@ -209,7 +209,7 @@ public class GeoPackageTableCreator {
 	 * Un-index (drop) Geometry Index table column indexes
 	 * 
 	 * @return executed statements
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public int unindexGeometryIndex() {
 		return execSQLScript(GeoPackageProperties.getProperty(

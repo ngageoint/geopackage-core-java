@@ -103,7 +103,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            desired projection
 	 * 
 	 * @return bounding box of user table data
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public abstract BoundingBox getBoundingBox(Projection projection);
 
@@ -116,7 +116,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param projection
 	 *            projection
 	 * @return projected bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox projectBoundingBox(BoundingBox boundingBox,
 			Projection projection) {
@@ -482,7 +482,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(int limit, long offset) {
 		return queryForChunk(table.getPkColumn().getName(), limit, offset);
@@ -499,7 +499,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(String orderBy, int limit, long offset) {
 		return query(null, null, null, null, orderBy, buildLimit(limit, offset));
@@ -513,7 +513,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            offset
 	 * @return limit
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public String buildLimit(int limit, long offset) {
 		return offset + "," + limit;
@@ -926,7 +926,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args) {
 		return db.querySingleResult(sql, args);
@@ -942,7 +942,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args) {
 		return db.querySingleTypedResult(sql, args);
@@ -959,7 +959,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -979,7 +979,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -996,7 +996,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args, int column) {
 		return db.querySingleResult(sql, args, column);
@@ -1014,7 +1014,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args, int column) {
 		return db.querySingleTypedResult(sql, args, column);
@@ -1032,7 +1032,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args, int column,
 			GeoPackageDataType dataType) {
@@ -1054,7 +1054,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args, int column,
 			GeoPackageDataType dataType) {
@@ -1069,7 +1069,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args) {
 		return db.querySingleColumnResults(sql, args);
@@ -1085,7 +1085,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
 		return db.querySingleColumnTypedResults(sql, args);
@@ -1101,7 +1101,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -1120,7 +1120,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -1137,7 +1137,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column) {
@@ -1156,7 +1156,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column) {
@@ -1175,7 +1175,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType) {
@@ -1196,7 +1196,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType) {
@@ -1215,7 +1215,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column, Integer limit) {
@@ -1236,7 +1236,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, Integer limit) {
@@ -1257,7 +1257,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType, Integer limit) {
@@ -1280,7 +1280,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType, Integer limit) {
@@ -1296,7 +1296,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args) {
 		return db.queryResults(sql, args);
@@ -1312,7 +1312,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args) {
 		return db.queryTypedResults(sql, args);
@@ -1328,7 +1328,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataTypes
 	 *            column data types
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -1347,7 +1347,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataTypes
 	 *            column data types
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -1362,7 +1362,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleRowResults(String sql, String[] args) {
 		return db.querySingleRowResults(sql, args);
@@ -1378,7 +1378,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleRowTypedResults(String sql, String[] args) {
 		return db.querySingleRowTypedResults(sql, args);
@@ -1394,7 +1394,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataTypes
 	 *            column data types
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleRowResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -1413,7 +1413,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param dataTypes
 	 *            column data types
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleRowTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -1430,7 +1430,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args,
 			Integer limit) {
@@ -1449,7 +1449,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			Integer limit) {
@@ -1468,7 +1468,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes, Integer limit) {
@@ -1489,7 +1489,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes, Integer limit) {

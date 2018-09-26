@@ -149,7 +149,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args) {
 		return querySingleResult(sql, args, 0);
@@ -165,7 +165,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            sql arguments
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args) {
 		@SuppressWarnings("unchecked")
@@ -184,7 +184,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -204,7 +204,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single result object
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -223,7 +223,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Object querySingleResult(String sql, String[] args, int column) {
 		return querySingleResult(sql, args, column, null);
@@ -241,7 +241,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args, int column) {
 		@SuppressWarnings("unchecked")
@@ -261,7 +261,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public abstract Object querySingleResult(String sql, String[] args,
 			int column, GeoPackageDataType dataType);
@@ -281,7 +281,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return result, null if no result
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> T querySingleTypedResult(String sql, String[] args, int column,
 			GeoPackageDataType dataType) {
@@ -298,7 +298,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args) {
 		return querySingleColumnResults(sql, args, 0, null, null);
@@ -314,7 +314,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            sql arguments
 	 * @return single column values
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
 		@SuppressWarnings("unchecked")
@@ -332,7 +332,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -351,7 +351,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			GeoPackageDataType dataType) {
@@ -370,7 +370,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column) {
@@ -389,7 +389,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column) {
@@ -410,7 +410,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType) {
@@ -431,7 +431,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType) {
@@ -453,7 +453,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleColumnResults(String sql, String[] args,
 			int column, Integer limit) {
@@ -474,7 +474,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column index
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, Integer limit) {
@@ -498,7 +498,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public abstract List<Object> querySingleColumnResults(String sql,
 			String[] args, int column, GeoPackageDataType dataType,
@@ -520,7 +520,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			int column, GeoPackageDataType dataType, Integer limit) {
@@ -538,7 +538,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args) {
 		return queryResults(sql, args, null, null);
@@ -554,7 +554,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args) {
 		@SuppressWarnings("unchecked")
@@ -572,7 +572,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataTypes
 	 *            column data types
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -591,7 +591,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataTypes
 	 *            column data types
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -609,7 +609,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleRowResults(String sql, String[] args) {
 		return querySingleRowResults(sql, args, null);
@@ -625,7 +625,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleRowTypedResults(String sql, String[] args) {
 		@SuppressWarnings("unchecked")
@@ -643,7 +643,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataTypes
 	 *            column data types
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<Object> querySingleRowResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -667,7 +667,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param dataTypes
 	 *            column data types
 	 * @return single row results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<T> querySingleRowTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes) {
@@ -686,7 +686,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public List<List<Object>> queryResults(String sql, String[] args,
 			Integer limit) {
@@ -705,7 +705,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			Integer limit) {
@@ -727,7 +727,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public abstract List<List<Object>> queryResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes, Integer limit);
@@ -746,7 +746,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public <T> List<List<T>> queryTypedResults(String sql, String[] args,
 			GeoPackageDataType[] dataTypes, Integer limit) {

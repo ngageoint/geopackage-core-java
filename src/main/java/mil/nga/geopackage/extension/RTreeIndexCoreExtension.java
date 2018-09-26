@@ -64,7 +64,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * Table SQL property
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String TABLE_PROPERTY = "table";
 
@@ -116,35 +116,35 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * ID column name
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String COLUMN_ID = "id";
 
 	/**
 	 * Min X column name
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String COLUMN_MIN_X = "minx";
 
 	/**
 	 * Max X column name
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String COLUMN_MAX_X = "maxx";
 
 	/**
 	 * Min Y column name
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String COLUMN_MIN_Y = "miny";
 
 	/**
 	 * Max Y column name
 	 * 
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static final String COLUMN_MAX_Y = "maxy";
 
@@ -964,7 +964,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            SQL statement
 	 * @param trigger
 	 *            true if a trigger statement
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	protected void executeSQL(String sql, boolean trigger) {
 		connection.execSQL(sql);

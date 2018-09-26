@@ -548,7 +548,7 @@ public class GeoPackageGeometryData {
 	 * Get the envelope if it exists or build it from the geometry if not null
 	 * 
 	 * @return geometry envelope
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public GeometryEnvelope getOrBuildEnvelope() {
 		GeometryEnvelope envelope = getEnvelope();

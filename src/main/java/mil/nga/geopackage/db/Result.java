@@ -4,7 +4,7 @@ package mil.nga.geopackage.db;
  * Database result interface
  * 
  * @author osbornb
- * @since 3.0.3
+ * @since 3.1.0
  */
 public interface Result {
 

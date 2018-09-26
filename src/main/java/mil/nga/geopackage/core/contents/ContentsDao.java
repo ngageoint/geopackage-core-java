@@ -198,7 +198,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            desired bounding box projection
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection) {
 
@@ -233,7 +233,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(String table) {
 		return getBoundingBox(null, table);
@@ -248,7 +248,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection, String table) {
 

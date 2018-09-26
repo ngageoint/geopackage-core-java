@@ -42,7 +42,7 @@ public class UserRelatedTable extends UserCustomTable {
 	 *            contents data type
 	 * @param columns
 	 *            list of columns
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public UserRelatedTable(String tableName, String relationName,
 			String dataType, List<UserCustomColumn> columns) {
@@ -62,7 +62,7 @@ public class UserRelatedTable extends UserCustomTable {
 	 *            list of columns
 	 * @param requiredColumns
 	 *            list of required columns
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public UserRelatedTable(String tableName, String relationName,
 			String dataType, List<UserCustomColumn> columns,
@@ -81,7 +81,7 @@ public class UserRelatedTable extends UserCustomTable {
 	 *            contents data type
 	 * @param userCustomTable
 	 *            user custom table
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public UserRelatedTable(String relationName, String dataType,
 			UserCustomTable userCustomTable) {
@@ -103,7 +103,7 @@ public class UserRelatedTable extends UserCustomTable {
 	 * Get the contents data type
 	 * 
 	 * @return data type
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public String getDataType() {
 		return dataType;

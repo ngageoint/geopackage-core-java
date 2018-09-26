@@ -352,7 +352,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box
 	 * @return true if intersects
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean intersects(BoundingBox boundingBox) {
 		return overlap(boundingBox) != null;
@@ -367,7 +367,7 @@ public class BoundingBox {
 	 *            allow empty ranges when determining intersection
 	 *
 	 * @return true if intersects
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean intersects(BoundingBox boundingBox, boolean allowEmpty) {
 		return overlap(boundingBox, allowEmpty) != null;
@@ -379,7 +379,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox overlap(BoundingBox boundingBox) {
 		return overlap(boundingBox, false);
@@ -394,7 +394,7 @@ public class BoundingBox {
 	 *            allow empty ranges when determining overlap
 	 *
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox overlap(BoundingBox boundingBox, boolean allowEmpty) {
 
@@ -424,7 +424,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox union(BoundingBox boundingBox) {
 
@@ -453,7 +453,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box
 	 * @return true if contains
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean contains(BoundingBox boundingBox) {
 		return getMinLongitude() <= boundingBox.getMinLongitude()

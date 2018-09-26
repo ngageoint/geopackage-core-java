@@ -11,7 +11,7 @@ import mil.nga.geopackage.GeoPackageException;
  * Database Result utilities
  * 
  * @author osbornb
- * @since 3.0.3
+ * @since 3.1.0
  */
 public class ResultUtils {
 
@@ -221,7 +221,7 @@ public class ResultUtils {
 	 * @param dataType
 	 *            GeoPackage data type
 	 * @return value
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static Object buildSingleResult(Result result, int column,
 			GeoPackageDataType dataType) {
@@ -250,7 +250,7 @@ public class ResultUtils {
 	 * @param limit
 	 *            result row limit
 	 * @return single column results
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public static List<Object> buildSingleColumnResults(Result result,
 			int column, GeoPackageDataType dataType, Integer limit) {
@@ -281,7 +281,6 @@ public class ResultUtils {
 	 * @param limit
 	 *            result row limit
 	 * @return results
-	 * @since 3.0.3
 	 */
 	public static List<List<Object>> buildResults(Result result,
 			GeoPackageDataType[] dataTypes, Integer limit) {

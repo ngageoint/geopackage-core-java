@@ -270,7 +270,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            desired bounding box projection
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getContentsBoundingBox(Projection projection);
 
@@ -282,7 +282,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            desired bounding box projection
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection);
 
@@ -296,7 +296,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            manual query flag, true to determine missing bounds manually
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection, boolean manual);
 
@@ -308,7 +308,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getContentsBoundingBox(String table);
 
@@ -322,7 +322,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getContentsBoundingBox(Projection projection,
 			String table);
@@ -335,7 +335,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(String table);
 
@@ -349,7 +349,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection, String table);
 
@@ -363,7 +363,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            manual query flag, true to determine missing bounds manually
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(String table, boolean manual);
 
@@ -379,7 +379,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            manual query flag, true to determine missing bounds manually
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection, String table,
 			boolean manual);
@@ -843,7 +843,7 @@ public interface GeoPackageCore extends Closeable {
 	 * Index the Geometry Index Table if needed
 	 * 
 	 * @return true if indexed
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean indexGeometryIndexTable();
 
@@ -851,7 +851,7 @@ public interface GeoPackageCore extends Closeable {
 	 * Un-index the Geometry Index Table if needed
 	 * 
 	 * @return true if unindexed
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public boolean unindexGeometryIndexTable();
 

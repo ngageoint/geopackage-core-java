@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.0.3 (TBD)
+## 3.1.0 (TBD)
 
 * Simple Features Projection (sf-proj) version 2.0.1
 * Related Tables Extension fix to save Simple Attributes and Media tables as Attribute table types

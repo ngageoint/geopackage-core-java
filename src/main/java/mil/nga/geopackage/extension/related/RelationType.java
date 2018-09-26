@@ -74,7 +74,7 @@ public enum RelationType {
 	 * Get the contents data type
 	 * 
 	 * @return contents data type
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public String getDataType() {
 		return dataType;

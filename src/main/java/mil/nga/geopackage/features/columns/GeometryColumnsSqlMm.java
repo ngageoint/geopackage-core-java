@@ -224,7 +224,7 @@ public class GeometryColumnsSqlMm {
 	 * Get the projection
 	 * 
 	 * @return projection
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Projection getProjection() {
 		return getSrs().getProjection();

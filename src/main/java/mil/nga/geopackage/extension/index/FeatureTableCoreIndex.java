@@ -129,7 +129,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Get the feature projection
 	 * 
 	 * @return projection
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public abstract Projection getProjection();
 
@@ -174,7 +174,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Get the SQL query chunk limit
 	 * 
 	 * @return chunk limit
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public int getChunkLimit() {
 		return chunkLimit;
@@ -185,7 +185,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * 
 	 * @param chunkLimit
 	 *            chunk limit
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public void setChunkLimit(int chunkLimit) {
 		this.chunkLimit = chunkLimit;
@@ -195,7 +195,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Get the query range tolerance
 	 * 
 	 * @return query range tolerance
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public double getTolerance() {
 		return tolerance;
@@ -206,7 +206,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * 
 	 * @param tolerance
 	 *            query range tolerance
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
@@ -593,7 +593,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Query for the bounds of the feature table index
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox() {
 
@@ -637,7 +637,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @param projection
 	 *            desired projection
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();

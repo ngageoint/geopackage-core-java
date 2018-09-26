@@ -233,7 +233,7 @@ public class TileMatrixSet {
 	 *            desired projection
 	 * 
 	 * @return bounding box
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
@@ -264,7 +264,7 @@ public class TileMatrixSet {
 	 * Get the projection
 	 * 
 	 * @return projection
-	 * @since 3.0.3
+	 * @since 3.1.0
 	 */
 	public Projection getProjection() {
 		return getSrs().getProjection();
