@@ -9,6 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Simple Features Projection (sf-proj) version 2.0.1
 * Related Tables Extension fix to save Simple Attributes and Media tables as Attribute table types
 * User Column isNamed fix
+* ORMLite DaoManager cache memory leak fix, visible when opening many GeoPackages
 * Bounding Box methods: intersects, overlap, union, and contains
 * GeoPackage Contents Bounding Box and overall Bounding Box methods
 * GeoPackage Geometry Index Table index methods, independent of table creation

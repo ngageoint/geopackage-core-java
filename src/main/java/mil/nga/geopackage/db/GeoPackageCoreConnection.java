@@ -19,11 +19,28 @@ import com.j256.ormlite.support.ConnectionSource;
 public abstract class GeoPackageCoreConnection implements Closeable {
 
 	/**
+	 * Connection source
+	 */
+	protected final ConnectionSource connectionSource;
+
+	/**
+	 * Constructor
+	 *
+	 * @param connectionSource
+	 *            connection source
+	 */
+	protected GeoPackageCoreConnection(ConnectionSource connectionSource) {
+		this.connectionSource = connectionSource;
+	}
+
+	/**
 	 * Get a connection source
 	 * 
 	 * @return connection source
 	 */
-	public abstract ConnectionSource getConnectionSource();
+	public ConnectionSource getConnectionSource() {
+		return connectionSource;
+	}
 
 	/**
 	 * Execute the sql
@@ -98,7 +115,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public abstract void close();
+	public void close() {
+		GeoPackageDaoManager.unregisterDaos(connectionSource);
+		connectionSource.closeQuietly();
+	}
 
 	/**
 	 * Check if the table exists
