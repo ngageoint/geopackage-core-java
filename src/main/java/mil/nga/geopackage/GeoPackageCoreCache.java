@@ -232,17 +232,60 @@ public abstract class GeoPackageCoreCache<T extends GeoPackageCore> {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
+	 * @since 3.1.0
 	 */
-	private void close(T geoPackage) {
-		try {
-			geoPackage.close();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE,
-					"Error closing GeoPackage: " + geoPackage.getName(), e);
-			if (!closeQuietly) {
-				throw e;
+	public void close(T geoPackage) {
+		if (geoPackage != null) {
+			try {
+				geoPackage.close();
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Error closing GeoPackage: "
+						+ geoPackage.getName(), e);
+				if (!closeQuietly) {
+					throw e;
+				}
 			}
 		}
+	}
+
+	/**
+	 * Close the GeoPackage if it is cached (same GeoPackage instance)
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return true if closed
+	 * @since 3.1.0
+	 */
+	public boolean closeIfCached(T geoPackage) {
+		boolean closed = false;
+		if (geoPackage != null) {
+			T cached = get(geoPackage.getName());
+			if (cached != null && cached == geoPackage) {
+				closed = close(geoPackage.getName());
+			}
+		}
+		return closed;
+	}
+
+	/**
+	 * Close the GeoPackage if it is not cached (GeoPackage not cached or
+	 * different instance)
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return true if closed
+	 * @since 3.1.0
+	 */
+	public boolean closeIfNotCached(T geoPackage) {
+		boolean closed = false;
+		if (geoPackage != null) {
+			T cached = get(geoPackage.getName());
+			if (cached == null || cached != geoPackage) {
+				close(geoPackage);
+				closed = true;
+			}
+		}
+		return closed;
 	}
 
 }
