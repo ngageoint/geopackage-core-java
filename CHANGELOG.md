@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 3.1.1 (TBD)
+
+* TBD
+
 ## [3.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.1.0) (10-04-2018)
 
 * Simple Features Projection (sf-proj) version 2.0.1
