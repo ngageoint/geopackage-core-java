@@ -41,6 +41,9 @@ public class GeoPackageDaoManager {
 	 *            connection source
 	 */
 	public static void unregisterDaos(ConnectionSource connectionSource) {
+		// TODO when ormlite-core version > 5.1 is released, replace with:
+		// "DaoManager.unregisterDaos(connectionSource);"
+		// See https://github.com/j256/ormlite-core/pull/149
 		unregisterDao(connectionSource, Contents.class,
 				SpatialReferenceSystem.class,
 				SpatialReferenceSystemSfSql.class,

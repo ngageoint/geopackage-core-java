@@ -13,6 +13,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
@@ -1026,6 +1027,22 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public boolean createExtendedRelationsTable();
+
+	/**
+	 * Get a Contents Id DAO
+	 * 
+	 * @return contents id dao
+	 * @since 3.1.1
+	 */
+	public ContentsIdDao getContentsIdDao();
+
+	/**
+	 * Create the Contents Id Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 3.1.1
+	 */
+	public boolean createContentsIdTable();
 
 	/**
 	 * Create a new user table
