@@ -106,7 +106,7 @@ public class MetadataReference {
 	 * gpkg_metadata table id column value for the metadata to which this
 	 * gpkg_metadata_reference applies
 	 */
-	@DatabaseField(columnName = COLUMN_FILE_ID, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_FILE_ID, canBeNull = false, readOnly = true)
 	private long fileId;
 
 	/**
@@ -120,7 +120,7 @@ public class MetadataReference {
 	 * gpkg_metadata for the gpkg_metadata to which this gpkg_metadata_reference
 	 * applies, or NULL if md_file_id forms the root of a metadata hierarchy
 	 */
-	@DatabaseField(columnName = COLUMN_PARENT_ID)
+	@DatabaseField(columnName = COLUMN_PARENT_ID, readOnly = true)
 	private Long parentId;
 
 	/**

@@ -70,7 +70,7 @@ public class TileMatrixSet {
 	/**
 	 * Tile Pyramid User Data Table Name
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, readOnly = true)
 	private String tableName;
 
 	/**
@@ -82,7 +82,7 @@ public class TileMatrixSet {
 	/**
 	 * Unique identifier for each Spatial Reference System within a GeoPackage
 	 */
-	@DatabaseField(columnName = COLUMN_SRS_ID, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_SRS_ID, canBeNull = false, readOnly = true)
 	private long srsId;
 
 	/**

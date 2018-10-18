@@ -79,7 +79,7 @@ public class GriddedTile {
 	/**
 	 * Name of tile pyramid user data table
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false, readOnly = true)
 	private String tableName;
 
 	/**

@@ -74,7 +74,7 @@ public class GeometryColumnsSqlMm {
 	/**
 	 * Name of the table containing the geometry column
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true, readOnly = true)
 	private String tableName;
 
 	/**
@@ -99,7 +99,7 @@ public class GeometryColumnsSqlMm {
 	/**
 	 * Unique identifier for each Spatial Reference System within a GeoPackage
 	 */
-	@DatabaseField(columnName = COLUMN_SRS_ID, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_SRS_ID, canBeNull = false, readOnly = true)
 	private long srsId;
 
 	/**

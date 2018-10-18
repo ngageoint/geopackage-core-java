@@ -156,7 +156,7 @@ public class Contents {
 	/**
 	 * Unique identifier for each Spatial Reference System within a GeoPackage
 	 */
-	@DatabaseField(columnName = COLUMN_SRS_ID)
+	@DatabaseField(columnName = COLUMN_SRS_ID, readOnly = true)
 	private Long srsId;
 
 	/**

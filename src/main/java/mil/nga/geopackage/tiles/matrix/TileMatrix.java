@@ -82,7 +82,7 @@ public class TileMatrix {
 	/**
 	 * Tile Pyramid User Data Table Name
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true, readOnly = true)
 	private String tableName;
 
 	/**

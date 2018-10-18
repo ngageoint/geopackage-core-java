@@ -85,7 +85,7 @@ public class DataColumns {
 	/**
 	 * Name of the tiles or feature table
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, id = true, canBeNull = false, uniqueCombo = true, readOnly = true)
 	private String tableName;
 
 	/**

@@ -44,7 +44,7 @@ public class ContentsId {
 	/**
 	 * The name of the actual content table, foreign key to gpkg_contents
 	 */
-	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false, unique = true)
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false, unique = true, readOnly = true)
 	private String tableName;
 
 	/**

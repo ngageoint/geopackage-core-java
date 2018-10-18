@@ -97,7 +97,7 @@ public class GriddedCoverage {
 	/**
 	 * Foreign key to table_name in gpkg_tile_matrix_set
 	 */
-	@DatabaseField(columnName = COLUMN_TILE_MATRIX_SET_NAME, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_TILE_MATRIX_SET_NAME, canBeNull = false, readOnly = true)
 	private String tileMatrixSetName;
 
 	/**
