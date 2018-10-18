@@ -1,5 +1,7 @@
 package mil.nga.geopackage.extension.contents;
 
+import mil.nga.geopackage.core.contents.Contents;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -30,8 +32,14 @@ public class ContentsId {
 	/**
 	 * Id primary key
 	 */
-	@DatabaseField(columnName = COLUMN_ID, id = true, canBeNull = false)
+	@DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
 	private long id;
+
+	/**
+	 * Foreign key to Contents by table name
+	 */
+	@DatabaseField(columnName = COLUMN_TABLE_NAME, canBeNull = false, unique = true, foreign = true, foreignAutoRefresh = true)
+	private Contents contents;
 
 	/**
 	 * The name of the actual content table, foreign key to gpkg_contents
@@ -54,6 +62,7 @@ public class ContentsId {
 	 */
 	public ContentsId(ContentsId contentsId) {
 		id = contentsId.id;
+		contents = contentsId.contents;
 		tableName = contentsId.tableName;
 	}
 
@@ -77,22 +86,36 @@ public class ContentsId {
 	}
 
 	/**
+	 * Get the contents
+	 * 
+	 * @return contents
+	 */
+	public Contents getContents() {
+		return contents;
+	}
+
+	/**
+	 * Set the contents
+	 * 
+	 * @param contents
+	 *            contents
+	 */
+	public void setContents(Contents contents) {
+		this.contents = contents;
+		if (contents != null) {
+			this.tableName = contents.getId();
+		} else {
+			this.tableName = null;
+		}
+	}
+
+	/**
 	 * Get the table name
 	 * 
 	 * @return table name
 	 */
 	public String getTableName() {
 		return tableName;
-	}
-
-	/**
-	 * Set the table name
-	 * 
-	 * @param tableName
-	 *            table name
-	 */
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
 	}
 
 }

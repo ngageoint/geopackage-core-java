@@ -1,15 +1,25 @@
 package mil.nga.geopackage.extension.contents;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 /**
  * This extension assigns a unique integer identifier to tables defined in the
@@ -20,6 +30,12 @@ import mil.nga.geopackage.property.PropertyConstants;
  * @since 3.1.1
  */
 public class ContentsIdExtension extends BaseExtension {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(ContentsIdExtension.class.getName());
 
 	/**
 	 * Extension author
@@ -108,8 +124,15 @@ public class ContentsIdExtension extends BaseExtension {
 	 */
 	public ContentsId get(String tableName) {
 		ContentsId contentsId = null;
-		if (has()) {
-			contentsId = contentsIdDao.queryForTableName(tableName);
+		try {
+			if (contentsIdDao.isTableExists()) {
+				contentsId = contentsIdDao.queryForTableName(tableName);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query contents id for GeoPackage: "
+							+ geoPackage.getName() + ", Table Name: "
+							+ tableName, e);
 		}
 		return contentsId;
 	}
@@ -161,10 +184,13 @@ public class ContentsIdExtension extends BaseExtension {
 	 */
 	public ContentsId create(String tableName) {
 
-		getOrCreateExtension();
+		if (!has()) {
+			getOrCreateExtension();
+		}
 
 		ContentsId contentsId = new ContentsId();
-		contentsId.setTableName(tableName);
+		Contents contents = geoPackage.getTableContents(tableName);
+		contentsId.setContents(contents);
 		try {
 			contentsIdDao.create(contentsId);
 		} catch (SQLException e) {
@@ -271,7 +297,9 @@ public class ContentsIdExtension extends BaseExtension {
 	public boolean delete(String tableName) {
 		boolean deleted = false;
 		try {
-			deleted = contentsIdDao.deleteByTableName(tableName) > 0;
+			if (contentsIdDao.isTableExists()) {
+				deleted = contentsIdDao.deleteByTableName(tableName) > 0;
+			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Contents Id extension table. GeoPackage: "
@@ -282,11 +310,270 @@ public class ContentsIdExtension extends BaseExtension {
 	}
 
 	/**
+	 * Create contents ids for contents currently without
+	 * 
+	 * @return newly created contents ids count
+	 */
+	public int createIds() {
+		return createIds("");
+	}
+
+	/**
+	 * Create contents ids for contents of the data type and currently without
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return newly created contents ids count
+	 */
+	public int createIds(ContentsDataType type) {
+		return createIds(type.getName());
+	}
+
+	/**
+	 * Create contents ids for contents of the data type and currently without
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return newly created contents ids count
+	 */
+	public int createIds(String type) {
+
+		List<String> tables = getMissing(type);
+
+		for (String tableName : tables) {
+			getOrCreate(tableName);
+		}
+
+		return tables.size();
+	}
+
+	/**
+	 * Delete all contents ids
+	 * 
+	 * @return deleted contents ids count
+	 */
+	public int deleteIds() {
+		int deleted = 0;
+		try {
+			if (contentsIdDao.isTableExists()) {
+				deleted = contentsIdDao.delete(contentsIdDao.deleteBuilder()
+						.prepare());
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete all contents ids. GeoPackage: "
+							+ geoPackage.getName(), e);
+		}
+		return deleted;
+	}
+
+	/**
+	 * Delete contents ids for contents of the data type
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return deleted contents ids count
+	 */
+	public int deleteIds(ContentsDataType type) {
+		return deleteIds(type.getName());
+	}
+
+	/**
+	 * Delete contents ids for contents of the data type
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return deleted contents ids count
+	 */
+	public int deleteIds(String type) {
+		int deleted = 0;
+		try {
+			if (contentsIdDao.isTableExists()) {
+				List<ContentsId> contentsIds = getIds(type);
+				deleted = contentsIdDao.delete(contentsIds);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete contents ids by type. GeoPackage: "
+							+ geoPackage.getName() + ", Type: " + type, e);
+		}
+		return deleted;
+	}
+
+	/**
+	 * Get all contents ids
+	 * 
+	 * @return contents ids
+	 */
+	public List<ContentsId> getIds() {
+		List<ContentsId> contentsIds = null;
+		try {
+			if (contentsIdDao.isTableExists()) {
+				contentsIds = contentsIdDao.queryForAll();
+			} else {
+				contentsIds = new ArrayList<>();
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for all contents ids. GeoPackage: "
+							+ geoPackage.getName(), e);
+		}
+		return contentsIds;
+	}
+
+	/**
+	 * Get by contents data type
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return contents ids
+	 */
+	public List<ContentsId> getIds(ContentsDataType type) {
+		return getIds(type.getName());
+	}
+
+	/**
+	 * Get by contents data type
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return contents ids
+	 */
+	public List<ContentsId> getIds(String type) {
+
+		List<ContentsId> contentsIds = null;
+
+		ContentsDao contentsDao = geoPackage.getContentsDao();
+
+		try {
+
+			if (contentsIdDao.isTableExists()) {
+
+				QueryBuilder<Contents, String> contentsQueryBuilder = contentsDao
+						.queryBuilder();
+				QueryBuilder<ContentsId, Long> contentsIdQueryBuilder = contentsIdDao
+						.queryBuilder();
+
+				contentsQueryBuilder.where()
+						.eq(Contents.COLUMN_DATA_TYPE, type);
+				contentsIdQueryBuilder.join(contentsQueryBuilder);
+
+				contentsIds = contentsIdQueryBuilder.query();
+
+			} else {
+				contentsIds = new ArrayList<>();
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for contents id by contents data type. GeoPackage: "
+							+ geoPackage.getName() + ", Type: " + type, e);
+		}
+
+		return contentsIds;
+	}
+
+	/**
+	 * Get contents without contents ids
+	 * 
+	 * @return table names without contents ids
+	 */
+	public List<String> getMissing() {
+		return getMissing("");
+	}
+
+	/**
+	 * Get contents by data type without contents ids
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return table names without contents ids
+	 */
+	public List<String> getMissing(ContentsDataType type) {
+		return getMissing(type.getName());
+	}
+
+	/**
+	 * Get contents by data type without contents ids
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return table names without contents ids
+	 */
+	public List<String> getMissing(String type) {
+
+		List<String> missing = new ArrayList<>();
+
+		ContentsDao contentsDao = geoPackage.getContentsDao();
+
+		GenericRawResults<String[]> results = null;
+		try {
+
+			StringBuilder query = new StringBuilder();
+			query.append("SELECT ");
+			query.append(Contents.COLUMN_TABLE_NAME);
+			query.append(" FROM ");
+			query.append(Contents.TABLE_NAME);
+
+			StringBuilder where = new StringBuilder();
+
+			String[] queryArgs;
+			if (type != null && !type.isEmpty()) {
+				where.append(Contents.COLUMN_DATA_TYPE);
+				where.append(" = ?");
+				queryArgs = new String[] { type };
+			} else {
+				queryArgs = new String[] {};
+				type = null;
+			}
+
+			if (contentsIdDao.isTableExists()) {
+				if (where.length() > 0) {
+					where.append(" AND ");
+				}
+				where.append(Contents.COLUMN_TABLE_NAME);
+				where.append(" NOT IN (SELECT ");
+				where.append(ContentsId.COLUMN_TABLE_NAME);
+				where.append(" FROM ");
+				where.append(ContentsId.TABLE_NAME);
+				where.append(")");
+			}
+
+			if (where.length() > 0) {
+				query.append(" WHERE ").append(where);
+			}
+
+			results = contentsDao.queryRaw(query.toString(), queryArgs);
+			for (String[] resultRow : results) {
+				missing.add(resultRow[0]);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for missing contents ids. GeoPackage: "
+							+ geoPackage.getName() + ", Type: " + type, e);
+		} finally {
+			if (results != null) {
+				try {
+					results.close();
+				} catch (IOException e) {
+					logger.log(Level.WARNING,
+							"Failed to close generic raw results from missing contents ids query. type: "
+									+ type, e);
+				}
+			}
+		}
+
+		return missing;
+	}
+
+	/**
 	 * Get or create if needed the extension
 	 * 
 	 * @return extensions object
 	 */
-	private Extensions getOrCreateExtension() {
+	public Extensions getOrCreateExtension() {
+
+		// Create table
+		geoPackage.createContentsIdTable();
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
 				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
