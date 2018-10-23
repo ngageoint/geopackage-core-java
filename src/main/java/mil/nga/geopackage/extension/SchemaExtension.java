@@ -1,9 +1,14 @@
 package mil.nga.geopackage.extension;
 
+import java.sql.SQLException;
+
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.schema.columns.DataColumns;
+import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
 
 /**
  * Schema extension
@@ -64,6 +69,33 @@ public class SchemaExtension extends BaseExtension {
 		boolean exists = has(EXTENSION_NAME, null, null);
 
 		return exists;
+	}
+
+	/**
+	 * Remove all trace of the extension
+	 * 
+	 * @since 3.1.1
+	 */
+	public void removeExtension() {
+
+		if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+			geoPackage.dropTable(DataColumns.TABLE_NAME);
+		}
+
+		if (geoPackage.isTable(DataColumnConstraints.TABLE_NAME)) {
+			geoPackage.dropTable(DataColumnConstraints.TABLE_NAME);
+		}
+
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(EXTENSION_NAME);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Schema extension. GeoPackage: "
+							+ geoPackage.getName(), e);
+		}
+
 	}
 
 }

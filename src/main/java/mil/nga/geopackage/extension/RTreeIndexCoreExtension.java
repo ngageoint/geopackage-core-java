@@ -285,12 +285,24 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Determine if the GeoPackage table has the extension
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return true if has extension
+	 * @since 3.1.1
+	 */
+	public boolean has(String tableName) {
+		return super.has(EXTENSION_NAME, tableName);
+	}
+
+	/**
 	 * Determine if the GeoPackage has the extension for any table
 	 * 
 	 * @return true if has extension
 	 */
 	public boolean has() {
-		return has(EXTENSION_NAME, null, null);
+		return super.has(EXTENSION_NAME);
 	}
 
 	/**
@@ -688,6 +700,55 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 								+ tableName + ", Geometry Column: "
 								+ geometryColumnName, e);
 			}
+		}
+
+	}
+
+	/**
+	 * Delete all RTree Index extensions for the table. Drops the triggers,
+	 * RTree tables, and deletes the extensions.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * 
+	 * @since 3.1.1
+	 */
+	public void delete(String tableName) {
+		try {
+			if (extensionsDao.isTableExists()) {
+				List<Extensions> extensions = extensionsDao.queryByExtension(
+						EXTENSION_NAME, tableName);
+				for (Extensions extension : extensions) {
+					delete(extension.getTableName(), extension.getColumnName());
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete RTree Index extensions for table. GeoPackage: "
+							+ geoPackage.getName() + ", Table: " + tableName, e);
+		}
+
+	}
+
+	/**
+	 * Delete all RTree Index extensions. Drops the triggers, RTree tables, and
+	 * deletes the extensions.
+	 * 
+	 * @since 3.1.1
+	 */
+	public void deleteAll() {
+		try {
+			if (extensionsDao.isTableExists()) {
+				List<Extensions> extensions = extensionsDao
+						.queryByExtension(EXTENSION_NAME);
+				for (Extensions extension : extensions) {
+					delete(extension.getTableName(), extension.getColumnName());
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete all RTree Index extensions. GeoPackage: "
+							+ geoPackage.getName(), e);
 		}
 
 	}

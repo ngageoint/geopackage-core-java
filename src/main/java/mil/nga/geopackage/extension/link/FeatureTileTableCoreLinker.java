@@ -260,6 +260,16 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	}
 
 	/**
+	 * Check if has extension
+	 * 
+	 * @return true if has extension
+	 * @since 3.1.1
+	 */
+	public boolean has() {
+		return getExtension() != null;
+	}
+
+	/**
 	 * Get the extension
 	 * 
 	 * @return extensions object or null if one does not exist
@@ -280,7 +290,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 
 		boolean active = false;
 
-		if (getExtension() != null) {
+		if (has()) {
 			try {
 				active = featureTileLinkDao.isTableExists();
 			} catch (SQLException e) {

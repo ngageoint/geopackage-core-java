@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.extension.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.index.FeatureTableCoreIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
@@ -36,6 +38,9 @@ public class NGAExtensions {
 		deleteGeometryIndex(geoPackage, table);
 		deleteFeatureTileLink(geoPackage, table);
 		deleteTileScaling(geoPackage, table);
+		deleteProperties(geoPackage, table);
+		deleteFeatureStyle(geoPackage, table);
+		deleteContentsId(geoPackage, table);
 
 		// Delete future extensions for the table here
 	}
@@ -48,25 +53,13 @@ public class NGAExtensions {
 	 *            GeoPackage
 	 */
 	public static void deleteExtensions(GeoPackageCore geoPackage) {
-		deleteExtensions(geoPackage, false);
-	}
 
-	/**
-	 * Delete all NGA extensions including custom extension tables for the
-	 * GeoPackage
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @param ignoreErrors
-	 *            true to ignore errors when deleting tables
-	 */
-	public static void deleteExtensions(GeoPackageCore geoPackage,
-			boolean ignoreErrors) {
-
-		deleteGeometryIndexExtension(geoPackage, ignoreErrors);
-		deleteFeatureTileLinkExtension(geoPackage, ignoreErrors);
-		deleteTileScalingExtension(geoPackage, ignoreErrors);
+		deleteGeometryIndexExtension(geoPackage);
+		deleteFeatureTileLinkExtension(geoPackage);
+		deleteTileScalingExtension(geoPackage);
 		deletePropertiesExtension(geoPackage);
+		deleteFeatureStyleExtension(geoPackage);
+		deleteContentsIdExtension(geoPackage);
 
 		// Delete future extension tables here
 	}
@@ -107,12 +100,9 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param ignoreErrors
-	 *            true to ignore errors
-	 * @since 1.1.5
+	 * @since 3.1.1
 	 */
-	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage,
-			boolean ignoreErrors) {
+	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage) {
 
 		GeometryIndexDao geometryIndexDao = geoPackage.getGeometryIndexDao();
 		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
@@ -168,12 +158,9 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param ignoreErrors
-	 *            true to ignore errors
-	 * @since 1.1.5
+	 * @since 3.1.1
 	 */
-	public static void deleteFeatureTileLinkExtension(
-			GeoPackageCore geoPackage, boolean ignoreErrors) {
+	public static void deleteFeatureTileLinkExtension(GeoPackageCore geoPackage) {
 
 		FeatureTileLinkDao featureTileLinkDao = geoPackage
 				.getFeatureTileLinkDao();
@@ -229,12 +216,9 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param ignoreErrors
-	 *            true to ignore errors
-	 * @since 2.0.2
+	 * @since 3.1.1
 	 */
-	public static void deleteTileScalingExtension(GeoPackageCore geoPackage,
-			boolean ignoreErrors) {
+	public static void deleteTileScalingExtension(GeoPackageCore geoPackage) {
 
 		TileScalingDao tileScalingDao = geoPackage.getTileScalingDao();
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
@@ -255,6 +239,24 @@ public class NGAExtensions {
 	}
 
 	/**
+	 * Delete the Properties extension if the deleted table is the properties
+	 * table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @since 3.1.1
+	 */
+	public static void deleteProperties(GeoPackageCore geoPackage, String table) {
+
+		if (table.equalsIgnoreCase(PropertiesCoreExtension.TABLE_NAME)) {
+			deletePropertiesExtension(geoPackage);
+		}
+
+	}
+
+	/**
 	 * Delete the properties extension from the GeoPackage
 	 * 
 	 * @param geoPackage
@@ -266,7 +268,8 @@ public class NGAExtensions {
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 		if (geoPackage.isTable(PropertiesCoreExtension.TABLE_NAME)) {
-			geoPackage.deleteTable(PropertiesCoreExtension.TABLE_NAME);
+			ContentsDao contentsDao = geoPackage.getContentsDao();
+			contentsDao.deleteTable(PropertiesCoreExtension.TABLE_NAME);
 		}
 
 		try {
@@ -279,6 +282,73 @@ public class NGAExtensions {
 			throw new GeoPackageException(
 					"Failed to delete Properties extension. GeoPackage: "
 							+ geoPackage.getName(), e);
+		}
+
+	}
+
+	/**
+	 * Delete the Feature Style extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @since 3.1.1
+	 */
+	public static void deleteFeatureStyle(GeoPackageCore geoPackage,
+			String table) {
+
+		// TODO
+
+	}
+
+	/**
+	 * Delete the Feature Style extension including the extension entries and
+	 * custom tables
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @since 3.1.1
+	 */
+	public static void deleteFeatureStyleExtension(GeoPackageCore geoPackage) {
+
+		// TODO
+
+	}
+
+	/**
+	 * Delete the Contents Id extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @since 3.1.1
+	 */
+	public static void deleteContentsId(GeoPackageCore geoPackage, String table) {
+
+		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
+				geoPackage);
+		if (contentsIdExtension.has()) {
+			contentsIdExtension.delete(table);
+		}
+
+	}
+
+	/**
+	 * Delete the Contents Id extension including the extension entries and
+	 * custom tables
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @since 3.1.1
+	 */
+	public static void deleteContentsIdExtension(GeoPackageCore geoPackage) {
+
+		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
+				geoPackage);
+		if (contentsIdExtension.has()) {
+			contentsIdExtension.removeExtension();
 		}
 
 	}

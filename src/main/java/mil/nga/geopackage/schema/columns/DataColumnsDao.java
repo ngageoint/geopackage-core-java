@@ -207,4 +207,22 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 		return queryForId(id);
 	}
 
+	/**
+	 * Delete by table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return rows deleted
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public int deleteByTableName(String tableName) throws SQLException {
+		DeleteBuilder<DataColumns, TableColumnKey> db = deleteBuilder();
+		db.where().eq(DataColumns.COLUMN_TABLE_NAME, tableName);
+		PreparedDelete<DataColumns> deleteQuery = db.prepare();
+		int deleted = delete(deleteQuery);
+		return deleted;
+	}
+
 }

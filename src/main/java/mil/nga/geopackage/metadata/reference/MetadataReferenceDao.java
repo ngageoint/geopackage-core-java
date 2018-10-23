@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
@@ -202,6 +203,24 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 			where.and().eq(MetadataReference.COLUMN_PARENT_ID, parentId);
 		}
 
+	}
+
+	/**
+	 * Delete by table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return rows deleted
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public int deleteByTableName(String tableName) throws SQLException {
+		DeleteBuilder<MetadataReference, Void> db = deleteBuilder();
+		db.where().eq(MetadataReference.COLUMN_TABLE_NAME, tableName);
+		PreparedDelete<MetadataReference> deleteQuery = db.prepare();
+		int deleted = delete(deleteQuery);
+		return deleted;
 	}
 
 }

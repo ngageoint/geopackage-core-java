@@ -235,7 +235,17 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isFeatureOrTileTable(String table);
 
 	/**
-	 * Check if the table exists as a user table
+	 * Check if the table exists as a user contents table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a user contents table
+	 * @since 3.1.1
+	 */
+	public boolean isContentsTable(String table);
+	
+	/**
+	 * Check if the table exists
 	 * 
 	 * @param table
 	 *            table name

@@ -766,6 +766,28 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Remove all relationships that include the table
+	 * 
+	 * @param table
+	 *            base or related table name
+	 * @since 3.1.1
+	 */
+	public void removeRelationships(String table) {
+		try {
+			if (extendedRelationsDao.isTableExists()) {
+				List<ExtendedRelation> extendedRelations = extendedRelationsDao
+						.getTableRelations(table);
+				for (ExtendedRelation extendedRelation : extendedRelations) {
+					removeRelationship(extendedRelation);
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to remove relationships for table: " + table, e);
+		}
+	}
+
+	/**
 	 * Remove all trace of the extension
 	 */
 	public void removeExtension() {

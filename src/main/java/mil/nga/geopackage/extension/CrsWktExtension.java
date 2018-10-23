@@ -1,7 +1,10 @@
 package mil.nga.geopackage.extension;
 
+import java.sql.SQLException;
+
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.property.GeoPackageProperties;
@@ -165,6 +168,25 @@ public class CrsWktExtension extends BaseExtension {
 		boolean exists = connection.columnExists(
 				SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME);
 		return exists;
+	}
+
+	/**
+	 * Remove the extension. Leaves the column and values.
+	 * 
+	 * @since 3.1.1
+	 */
+	public void removeExtension() {
+
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(EXTENSION_NAME);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete CRS WKT extension. GeoPackage: "
+							+ geoPackage.getName(), e);
+		}
+
 	}
 
 }

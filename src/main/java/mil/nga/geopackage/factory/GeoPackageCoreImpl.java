@@ -2,9 +2,7 @@ package mil.nga.geopackage.factory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
@@ -292,8 +290,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isFeatureTable(String table) {
-		Set<String> featureTables = new HashSet<String>(getFeatureTables());
-		return featureTables.contains(table);
+		return isTableType(ContentsDataType.FEATURES, table);
 	}
 
 	/**
@@ -301,8 +298,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTileTable(String table) {
-		Set<String> tileTables = new HashSet<String>(getTileTables());
-		return tileTables.contains(table);
+		return isTableType(ContentsDataType.TILES, table);
 	}
 
 	/**
@@ -326,8 +322,22 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isFeatureOrTileTable(String table) {
-		Set<String> tables = new HashSet<String>(getFeatureAndTileTables());
-		return tables.contains(table);
+		boolean isType = false;
+		Contents contents = getTableContents(table);
+		if (contents != null) {
+			ContentsDataType dataType = contents.getDataType();
+			isType = dataType != null
+					&& (dataType == ContentsDataType.FEATURES || dataType == ContentsDataType.TILES);
+		}
+		return isType;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isContentsTable(String table) {
+		return getTableContents(table) != null;
 	}
 
 	/**
@@ -335,8 +345,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTable(String table) {
-		Set<String> tables = new HashSet<String>(getTables());
-		return tables.contains(table);
+		return database.tableExists(table);
 	}
 
 	/**

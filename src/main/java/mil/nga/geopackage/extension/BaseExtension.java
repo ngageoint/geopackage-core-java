@@ -1,6 +1,7 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
@@ -139,9 +140,82 @@ public abstract class BaseExtension {
 	 */
 	protected boolean has(String extensionName, String tableName,
 			String columnName) {
-
 		Extensions extension = get(extensionName, tableName, columnName);
 		return extension != null;
+	}
+
+	/**
+	 * Get the extension for the name and table name
+	 * 
+	 * @param extensionName
+	 *            extension name
+	 * @param tableName
+	 *            table name
+	 * @return extension
+	 */
+	protected List<Extensions> getExtensions(String extensionName,
+			String tableName) {
+
+		List<Extensions> extensions = null;
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensions = extensionsDao.queryByExtension(extensionName,
+						tableName);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to query for '"
+					+ extensionName + "' extension for GeoPackage: "
+					+ geoPackage.getName() + ", Table Name: " + tableName, e);
+		}
+		return extensions;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension
+	 * 
+	 * @param extensionName
+	 *            extension name
+	 * @param tableName
+	 *            table name
+	 * @return true if has extension
+	 */
+	protected boolean has(String extensionName, String tableName) {
+		List<Extensions> extensions = getExtensions(extensionName, tableName);
+		return extensions != null && !extensions.isEmpty();
+	}
+
+	/**
+	 * Get the extension for the name
+	 * 
+	 * @param extensionName
+	 *            extension name
+	 * @return extension
+	 */
+	protected List<Extensions> getExtensions(String extensionName) {
+
+		List<Extensions> extensions = null;
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensions = extensionsDao.queryByExtension(extensionName);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to query for '"
+					+ extensionName + "' extension for GeoPackage: "
+					+ geoPackage.getName(), e);
+		}
+		return extensions;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension
+	 * 
+	 * @param extensionName
+	 *            extension name
+	 * @return true if has extension
+	 */
+	protected boolean has(String extensionName) {
+		List<Extensions> extensions = getExtensions(extensionName);
+		return extensions != null && !extensions.isEmpty();
 	}
 
 }

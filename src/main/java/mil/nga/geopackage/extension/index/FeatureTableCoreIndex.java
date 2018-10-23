@@ -327,9 +327,10 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 				deleted = tableIndexDao.deleteByIdCascade(tableName) > 0;
 			}
 			// Delete the extensions entry
-			deleted = extensionsDao
-					.deleteByExtension(EXTENSION_NAME, tableName) > 0
-					|| deleted;
+			if (extensionsDao.isTableExists()) {
+				deleted = extensionsDao.deleteByExtension(EXTENSION_NAME,
+						tableName) > 0 || deleted;
+			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table Index. GeoPackage: "
