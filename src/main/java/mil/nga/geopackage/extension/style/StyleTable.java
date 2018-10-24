@@ -76,7 +76,7 @@ public class StyleTable extends SimpleAttributesTable {
 	/**
 	 * Create the style columns
 	 * 
-	 * @return
+	 * @return columns
 	 */
 	private static List<UserCustomColumn> createColumns() {
 

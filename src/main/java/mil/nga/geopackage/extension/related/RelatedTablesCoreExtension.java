@@ -148,7 +148,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param table
 	 *            user related table
 	 */
-	protected void setContents(UserRelatedTable table) {
+	public void setContents(UserRelatedTable table) {
 		ContentsDao dao = geoPackage.getContentsDao();
 		Contents contents = null;
 		try {

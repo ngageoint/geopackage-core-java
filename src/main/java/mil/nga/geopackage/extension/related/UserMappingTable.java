@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.related;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -57,7 +56,7 @@ public class UserMappingTable extends UserCustomTable {
 			columns.addAll(additionalColumns);
 		}
 
-		return new UserMappingTable(tableName, columns, requiredColumns());
+		return new UserMappingTable(tableName, columns);
 	}
 
 	/**
@@ -137,12 +136,9 @@ public class UserMappingTable extends UserCustomTable {
 	 *            table name
 	 * @param columns
 	 *            list of columns
-	 * @param requiredColumns
-	 *            list of required columns
 	 */
-	private UserMappingTable(String tableName, List<UserCustomColumn> columns,
-			Collection<String> requiredColumns) {
-		super(tableName, columns, requiredColumns);
+	protected UserMappingTable(String tableName, List<UserCustomColumn> columns) {
+		super(tableName, columns, requiredColumns());
 	}
 
 	/**
@@ -151,7 +147,7 @@ public class UserMappingTable extends UserCustomTable {
 	 * @param table
 	 *            user custom table
 	 */
-	UserMappingTable(UserCustomTable table) {
+	protected UserMappingTable(UserCustomTable table) {
 		super(table);
 	}
 

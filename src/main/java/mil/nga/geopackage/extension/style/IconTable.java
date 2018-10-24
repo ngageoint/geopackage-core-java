@@ -73,7 +73,7 @@ public class IconTable extends MediaTable {
 	/**
 	 * Create the style columns
 	 * 
-	 * @return
+	 * @return columns
 	 */
 	private static List<UserCustomColumn> createColumns() {
 
