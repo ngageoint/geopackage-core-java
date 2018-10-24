@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.related.simple;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
@@ -65,8 +64,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 			tableColumns.addAll(columns);
 		}
 
-		return new SimpleAttributesTable(tableName, tableColumns,
-				requiredColumns(idColumnName));
+		return new SimpleAttributesTable(tableName, tableColumns, idColumnName);
 	}
 
 	/**
@@ -182,13 +180,26 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 *            table name
 	 * @param columns
 	 *            list of columns
-	 * @param requiredColumns
-	 *            list of required columns
 	 */
-	private SimpleAttributesTable(String tableName,
-			List<UserCustomColumn> columns, Collection<String> requiredColumns) {
+	protected SimpleAttributesTable(String tableName,
+			List<UserCustomColumn> columns) {
+		this(tableName, columns, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            list of columns
+	 * @param idColumnName
+	 *            id column name
+	 */
+	protected SimpleAttributesTable(String tableName,
+			List<UserCustomColumn> columns, String idColumnName) {
 		super(tableName, RELATION_TYPE.getName(), RELATION_TYPE.getDataType(),
-				columns, requiredColumns);
+				columns, requiredColumns(idColumnName));
 		validateColumns();
 	}
 
@@ -198,7 +209,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 * @param table
 	 *            user custom table
 	 */
-	SimpleAttributesTable(UserCustomTable table) {
+	protected SimpleAttributesTable(UserCustomTable table) {
 		super(RELATION_TYPE.getName(), RELATION_TYPE.getDataType(), table);
 		validateColumns();
 	}

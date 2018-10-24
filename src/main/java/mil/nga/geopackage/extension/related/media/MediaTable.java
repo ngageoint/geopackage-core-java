@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.related.media;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -99,7 +98,7 @@ public class MediaTable extends UserRelatedTable {
 			columns.addAll(additionalColumns);
 		}
 
-		return new MediaTable(tableName, columns, requiredColumns(idColumnName));
+		return new MediaTable(tableName, columns, idColumnName);
 	}
 
 	/**
@@ -243,13 +242,25 @@ public class MediaTable extends UserRelatedTable {
 	 *            table name
 	 * @param columns
 	 *            list of columns
-	 * @param requiredColumns
-	 *            list of required columns
 	 */
-	private MediaTable(String tableName, List<UserCustomColumn> columns,
-			Collection<String> requiredColumns) {
+	protected MediaTable(String tableName, List<UserCustomColumn> columns) {
+		this(tableName, columns, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            list of columns
+	 * @param idColumnName
+	 *            id column name
+	 */
+	protected MediaTable(String tableName, List<UserCustomColumn> columns,
+			String idColumnName) {
 		super(tableName, RELATION_TYPE.getName(), RELATION_TYPE.getDataType(),
-				columns, requiredColumns);
+				columns, requiredColumns(idColumnName));
 	}
 
 	/**
@@ -258,7 +269,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param table
 	 *            user custom table
 	 */
-	MediaTable(UserCustomTable table) {
+	protected MediaTable(UserCustomTable table) {
 		super(RELATION_TYPE.getName(), RELATION_TYPE.getDataType(), table);
 	}
 
