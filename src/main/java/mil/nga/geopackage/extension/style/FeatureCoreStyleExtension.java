@@ -19,7 +19,7 @@ import mil.nga.sf.GeometryType;
  * @author osbornb
  * @since 3.1.1
  */
-public abstract class FeatureCoreStyles extends BaseExtension {
+public abstract class FeatureCoreStyleExtension extends BaseExtension {
 
 	/**
 	 * Table name prefix for mapping styles
@@ -83,7 +83,7 @@ public abstract class FeatureCoreStyles extends BaseExtension {
 	 * @param relatedTables
 	 *            related tables
 	 */
-	protected FeatureCoreStyles(GeoPackageCore geoPackage,
+	protected FeatureCoreStyleExtension(GeoPackageCore geoPackage,
 			RelatedTablesCoreExtension relatedTables) {
 		super(geoPackage);
 		this.relatedTables = relatedTables;
