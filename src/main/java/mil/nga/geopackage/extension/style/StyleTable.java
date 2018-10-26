@@ -42,7 +42,7 @@ public class StyleTable extends SimpleAttributesTable {
 	public static final String COLUMN_OPACITY = "opacity";
 
 	/**
-	 * Geometry line stroke or point width >= 0.0
+	 * Geometry line stroke or point width greater than or equal to 0.0
 	 */
 	public static final String COLUMN_WIDTH = "width";
 
