@@ -813,6 +813,203 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Determine if has one or more relations matching the base table and
+	 * related table
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @return true if has relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public boolean hasRelations(String baseTable, String relatedTable)
+			throws SQLException {
+		return hasRelations(baseTable, null, relatedTable, null, null, null);
+	}
+
+	/**
+	 * Get the relations to the base table and related table
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public List<ExtendedRelation> getRelations(String baseTable,
+			String relatedTable) throws SQLException {
+		return getRelations(baseTable, null, relatedTable, null, null, null);
+	}
+
+	/**
+	 * Determine if has one or more relations matching the non null provided
+	 * values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return true if has relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public boolean hasRelations(String baseTable, String relatedTable,
+			String mappingTable) throws SQLException {
+		return hasRelations(baseTable, null, relatedTable, null, null,
+				mappingTable);
+	}
+
+	/**
+	 * Get the relations matching the non null provided values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public List<ExtendedRelation> getRelations(String baseTable,
+			String relatedTable, String mappingTable) throws SQLException {
+		return getRelations(baseTable, null, relatedTable, null, null,
+				mappingTable);
+	}
+
+	/**
+	 * Determine if has one or more relations matching the non null provided
+	 * values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @param relation
+	 *            relation name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return true if has relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public boolean hasRelations(String baseTable, String relatedTable,
+			String relation, String mappingTable) throws SQLException {
+		return hasRelations(baseTable, null, relatedTable, null, relation,
+				mappingTable);
+	}
+
+	/**
+	 * Get the relations matching the non null provided values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param relatedTable
+	 *            related table name
+	 * @param relation
+	 *            relation name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public List<ExtendedRelation> getRelations(String baseTable,
+			String relatedTable, String relation, String mappingTable)
+			throws SQLException {
+		return getRelations(baseTable, null, relatedTable, null, relation,
+				mappingTable);
+	}
+
+	/**
+	 * Determine if has one or more relations matching the non null provided
+	 * values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param baseColumn
+	 *            base primary column name
+	 * @param relatedTable
+	 *            related table name
+	 * @param relatedColumn
+	 *            related primary column name
+	 * @param relation
+	 *            relation name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return true if has relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public boolean hasRelations(String baseTable, String baseColumn,
+			String relatedTable, String relatedColumn, String relation,
+			String mappingTable) throws SQLException {
+		return !getRelations(baseTable, baseColumn, relatedTable,
+				relatedColumn, relation, mappingTable).isEmpty();
+	}
+
+	/**
+	 * Get the relations matching the non null provided values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param baseColumn
+	 *            base primary column name
+	 * @param relatedTable
+	 *            related table name
+	 * @param relatedColumn
+	 *            related primary column name
+	 * @param relation
+	 *            relation name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public List<ExtendedRelation> getRelations(String baseTable,
+			String baseColumn, String relatedTable, String relatedColumn,
+			String relation, String mappingTable) throws SQLException {
+
+		List<ExtendedRelation> relations = null;
+
+		try {
+			if (extendedRelationsDao.isTableExists()) {
+				relations = extendedRelationsDao.getRelations(baseTable,
+						baseColumn, relatedTable, relatedColumn, relation,
+						mappingTable);
+			} else {
+				relations = new ArrayList<>();
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to get relationships. Base Table: " + baseTable
+							+ ", Base Column: " + baseColumn
+							+ ", Related Table: " + relatedTable
+							+ ", Related Column: " + relatedColumn
+							+ ", Relation: " + relation + ", Mapping Table: "
+							+ mappingTable, e);
+		}
+
+		return relations;
+	}
+
+	/**
 	 * Build the custom relation name with author
 	 * 
 	 * @param author

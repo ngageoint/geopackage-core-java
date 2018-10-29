@@ -1,9 +1,11 @@
 package mil.nga.geopackage.extension.style;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.contents.ContentsId;
@@ -29,7 +31,7 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	/**
 	 * Table name prefix for mapping style defaults
 	 */
-	public final String TABLE_MAPPING_STYLE_DEFAULT = EXTENSION_AUTHOR
+	public final String TABLE_MAPPING_TABLE_STYLE = EXTENSION_AUTHOR
 			+ "_style_default_";
 
 	/**
@@ -40,7 +42,7 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	/**
 	 * Table name prefix for mapping icon defaults
 	 */
-	public final String TABLE_MAPPING_ICON_DEFAULT = EXTENSION_AUTHOR
+	public final String TABLE_MAPPING_TABLE_ICON = EXTENSION_AUTHOR
 			+ "_icon_default_";
 
 	/**
@@ -112,42 +114,65 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 		createStyleRelationship(TABLE_MAPPING_STYLE, featureTable, false, true);
 	}
 
-	public void createStyleDefaultRelationship(String featureTable) {
-		createStyleRelationship(TABLE_MAPPING_STYLE_DEFAULT, featureTable,
-				true, true);
+	public void createTableStyleRelationship(String featureTable) {
+		createStyleRelationship(TABLE_MAPPING_TABLE_STYLE, featureTable, true,
+				true);
 	}
 
 	public void createIconRelationship(String featureTable) {
 		createStyleRelationship(TABLE_MAPPING_ICON, featureTable, false, false);
 	}
 
-	public void createIconDefaultRelationship(String featureTable) {
-		createStyleRelationship(TABLE_MAPPING_ICON_DEFAULT, featureTable, true,
+	public void createTableIconRelationship(String featureTable) {
+		createStyleRelationship(TABLE_MAPPING_TABLE_ICON, featureTable, true,
 				false);
 	}
 
 	private void createStyleRelationship(String tablePrefix,
-			String featureTable, boolean featureDefault, boolean style) {
+			String featureTable, boolean tableStyle, boolean style) {
 
-		String baseTableName = null;
-		if (featureDefault) {
-			if (!contentsId.has()) {
-				contentsId.getOrCreateExtension();
-			}
-			baseTableName = ContentsId.TABLE_NAME;
+		String baseTable = null;
+		if (tableStyle) {
+			baseTable = ContentsId.TABLE_NAME;
 		} else {
-			baseTableName = featureTable;
+			baseTable = featureTable;
 		}
 
-		StyleMappingTable mappingTable = new StyleMappingTable(tablePrefix
-				+ featureTable);
-
+		String relatedTable = null;
 		if (style) {
-			relatedTables.addSimpleAttributesRelationship(baseTableName,
-					new StyleTable(), mappingTable);
+			relatedTable = StyleTable.TABLE_NAME;
 		} else {
-			relatedTables.addMediaRelationship(baseTableName, new IconTable(),
-					mappingTable);
+			relatedTable = IconTable.TABLE_NAME;
+		}
+
+		String mappingTableName = tablePrefix + featureTable;
+
+		try {
+			if (!relatedTables.hasRelations(baseTable, relatedTable,
+					mappingTableName)) {
+
+				if (tableStyle) {
+					if (!contentsId.has()) {
+						contentsId.getOrCreateExtension();
+					}
+				}
+
+				StyleMappingTable mappingTable = new StyleMappingTable(
+						mappingTableName);
+
+				if (style) {
+					relatedTables.addSimpleAttributesRelationship(baseTable,
+							new StyleTable(), mappingTable);
+				} else {
+					relatedTables.addMediaRelationship(baseTable,
+							new IconTable(), mappingTable);
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to create Feature Style Relationship. Base Table: "
+							+ baseTable + ", Related Table: " + relatedTable
+							+ ", Mapping Table: " + mappingTableName, e);
 		}
 
 	}

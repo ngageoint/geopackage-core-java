@@ -9,6 +9,7 @@ import mil.nga.geopackage.schema.TableColumnKey;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
 /**
@@ -120,6 +121,89 @@ public class ExtendedRelationsDao extends
 		PreparedQuery<ExtendedRelation> preparedQuery = qb.prepare();
 
 		return query(preparedQuery);
+	}
+
+	/**
+	 * Get the relations matching the non null provided values
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @param baseColumn
+	 *            base primary column name
+	 * @param relatedTable
+	 *            related table name
+	 * @param relatedColumn
+	 *            related primary column name
+	 * @param relation
+	 *            relation name
+	 * @param mappingTable
+	 *            mapping table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.1.1
+	 */
+	public List<ExtendedRelation> getRelations(String baseTable,
+			String baseColumn, String relatedTable, String relatedColumn,
+			String relation, String mappingTable) throws SQLException {
+
+		QueryBuilder<ExtendedRelation, TableColumnKey> qb = queryBuilder();
+		Where<ExtendedRelation, TableColumnKey> where = null;
+
+		if (baseTable != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_BASE_TABLE_NAME, baseTable);
+		}
+
+		if (baseColumn != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_BASE_PRIMARY_COLUMN, baseColumn);
+		}
+
+		if (relatedTable != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_RELATED_TABLE_NAME, relatedTable);
+		}
+
+		if (relatedColumn != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_RELATED_PRIMARY_COLUMN,
+					relatedColumn);
+		}
+
+		if (relation != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_RELATION_NAME, relation);
+		}
+
+		if (mappingTable != null) {
+			where = addToWhere(qb, where);
+			where.like(ExtendedRelation.COLUMN_MAPPING_TABLE_NAME, mappingTable);
+		}
+
+		PreparedQuery<ExtendedRelation> preparedQuery = qb.prepare();
+
+		return query(preparedQuery);
+	}
+
+	/**
+	 * Add to the where clause, either as new or with an and
+	 * 
+	 * @param qb
+	 *            query builder
+	 * @param where
+	 *            where clause
+	 * @return where clause
+	 */
+	private Where<ExtendedRelation, TableColumnKey> addToWhere(
+			QueryBuilder<ExtendedRelation, TableColumnKey> qb,
+			Where<ExtendedRelation, TableColumnKey> where) {
+		if (where == null) {
+			where = qb.where();
+		} else {
+			where.and();
+		}
+		return where;
 	}
 
 }
