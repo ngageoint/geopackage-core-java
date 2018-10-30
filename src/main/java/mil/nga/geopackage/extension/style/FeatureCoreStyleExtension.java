@@ -1,8 +1,6 @@
 package mil.nga.geopackage.extension.style;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
@@ -13,7 +11,6 @@ import mil.nga.geopackage.extension.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.sf.GeometryType;
 
 /**
  * Feature Core Style extension
@@ -175,25 +172,6 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 							+ ", Mapping Table: " + mappingTableName, e);
 		}
 
-	}
-
-	/**
-	 * Geometry geometry type inheritance starting with the provided geometry
-	 * type followed by parent types
-	 * 
-	 * @param geometryType
-	 *            geometry type
-	 * @return geometry types
-	 */
-	public static List<GeometryType> getGeometryTypeInheritance(
-			GeometryType geometryType) {
-		List<GeometryType> geometryTypes = new ArrayList<>();
-		if (geometryType != null) {
-			geometryTypes.add(geometryType);
-			// TODO add parent types
-			// TODO move to simple features
-		}
-		return geometryTypes;
 	}
 
 }
