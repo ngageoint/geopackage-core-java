@@ -107,24 +107,61 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 		return contentsId;
 	}
 
+	/**
+	 * Create a style relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
 	public void createStyleRelationship(String featureTable) {
 		createStyleRelationship(TABLE_MAPPING_STYLE, featureTable, false, true);
 	}
 
+	/**
+	 * Create a feature table style relationship
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
 	public void createTableStyleRelationship(String featureTable) {
 		createStyleRelationship(TABLE_MAPPING_TABLE_STYLE, featureTable, true,
 				true);
 	}
 
+	/**
+	 * Create a icon relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
 	public void createIconRelationship(String featureTable) {
 		createStyleRelationship(TABLE_MAPPING_ICON, featureTable, false, false);
 	}
 
+	/**
+	 * Create a feature table icon relationship
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
 	public void createTableIconRelationship(String featureTable) {
 		createStyleRelationship(TABLE_MAPPING_TABLE_ICON, featureTable, true,
 				false);
 	}
 
+	/**
+	 * Create a style extension relationship between a feature table and style
+	 * extension table
+	 * 
+	 * @param tablePrefix
+	 *            table name prefix
+	 * @param featureTable
+	 *            feature table name
+	 * @param tableStyle
+	 *            true if a table style or icon
+	 * @param style
+	 *            true if a style, false if an icon
+	 */
 	private void createStyleRelationship(String tablePrefix,
 			String featureTable, boolean tableStyle, boolean style) {
 
