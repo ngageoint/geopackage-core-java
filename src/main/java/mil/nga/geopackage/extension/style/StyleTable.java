@@ -3,10 +3,9 @@ package mil.nga.geopackage.extension.style;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.db.GeoPackageDataType;
-import mil.nga.geopackage.extension.related.simple.SimpleAttributesTable;
-import mil.nga.geopackage.user.custom.UserCustomColumn;
-import mil.nga.geopackage.user.custom.UserCustomTable;
 
 /**
  * Style Table
@@ -14,12 +13,17 @@ import mil.nga.geopackage.user.custom.UserCustomTable;
  * @author osbornb
  * @since 3.1.1
  */
-public class StyleTable extends SimpleAttributesTable {
+public class StyleTable extends AttributesTable {
 
 	/**
 	 * Table name
 	 */
 	public static final String TABLE_NAME = "nga_style";
+
+	/**
+	 * id name
+	 */
+	public static final String COLUMN_ID = "id";
 
 	/**
 	 * Feature Style name
@@ -66,11 +70,12 @@ public class StyleTable extends SimpleAttributesTable {
 	/**
 	 * Constructor
 	 * 
-	 * @param table
-	 *            user custom table
+	 * @param attributesTable
+	 *            attributes table
 	 */
-	protected StyleTable(UserCustomTable table) {
-		super(table);
+	public StyleTable(AttributesTable attributesTable) {
+		this();
+		setContents(attributesTable.getContents());
 	}
 
 	/**
@@ -78,25 +83,25 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return columns
 	 */
-	private static List<UserCustomColumn> createColumns() {
+	private static List<AttributesColumn> createColumns() {
 
-		List<UserCustomColumn> columns = new ArrayList<>();
-		columns.addAll(createRequiredColumns());
+		List<AttributesColumn> columns = new ArrayList<>();
+		int index = 0;
 
-		int index = columns.size();
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_NAME,
+		columns.add(AttributesColumn.createPrimaryKeyColumn(index++, COLUMN_ID));
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_NAME,
 				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_DESCRIPTION,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_DESCRIPTION,
 				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_COLOR,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_COLOR,
 				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_OPACITY,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_OPACITY,
 				GeoPackageDataType.DOUBLE, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_WIDTH,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_WIDTH,
 				GeoPackageDataType.DOUBLE, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_FILL_COLOR,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_COLOR,
 				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_FILL_OPACITY,
+		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_OPACITY,
 				GeoPackageDataType.DOUBLE, false, null));
 
 		return columns;
@@ -116,7 +121,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return name column
 	 */
-	public UserCustomColumn getNameColumn() {
+	public AttributesColumn getNameColumn() {
 		return getColumn(COLUMN_NAME);
 	}
 
@@ -134,7 +139,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return description column
 	 */
-	public UserCustomColumn getDescriptionColumn() {
+	public AttributesColumn getDescriptionColumn() {
 		return getColumn(COLUMN_DESCRIPTION);
 	}
 
@@ -152,7 +157,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return color column
 	 */
-	public UserCustomColumn getColorColumn() {
+	public AttributesColumn getColorColumn() {
 		return getColumn(COLUMN_COLOR);
 	}
 
@@ -170,7 +175,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return opacity column
 	 */
-	public UserCustomColumn getOpacityColumn() {
+	public AttributesColumn getOpacityColumn() {
 		return getColumn(COLUMN_OPACITY);
 	}
 
@@ -188,7 +193,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return width column
 	 */
-	public UserCustomColumn getWidthColumn() {
+	public AttributesColumn getWidthColumn() {
 		return getColumn(COLUMN_WIDTH);
 	}
 
@@ -206,7 +211,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return fill color column
 	 */
-	public UserCustomColumn getFillColorColumn() {
+	public AttributesColumn getFillColorColumn() {
 		return getColumn(COLUMN_FILL_COLOR);
 	}
 
@@ -224,7 +229,7 @@ public class StyleTable extends SimpleAttributesTable {
 	 * 
 	 * @return fill opacity column
 	 */
-	public UserCustomColumn getFillOpacityColumn() {
+	public AttributesColumn getFillOpacityColumn() {
 		return getColumn(COLUMN_FILL_OPACITY);
 	}
 
