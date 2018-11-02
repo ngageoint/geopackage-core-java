@@ -3,6 +3,9 @@ package mil.nga.geopackage.tiles.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.UserUniqueConstraint;
@@ -126,6 +129,14 @@ public class TileTable extends UserTable<TileColumn> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDataType() {
+		return ContentsDataType.TILES.getName();
+	}
+
+	/**
 	 * Get the zoom level column index
 	 * 
 	 * @return zoom level index
@@ -223,6 +234,24 @@ public class TileTable extends UserTable<TileColumn> {
 		columns.add(TileColumn.createTileDataColumn(startingIndex++));
 
 		return columns;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void validateContents(Contents contents) {
+		// Verify the Contents have a tiles data type
+		ContentsDataType dataType = contents.getDataType();
+		if (dataType == null
+				|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.GRIDDED_COVERAGE)) {
+			throw new GeoPackageException("The "
+					+ Contents.class.getSimpleName() + " of a "
+					+ TileTable.class.getSimpleName()
+					+ " must have a data type of "
+					+ ContentsDataType.TILES.getName() + " or "
+					+ ContentsDataType.GRIDDED_COVERAGE.getName());
+		}
 	}
 
 }

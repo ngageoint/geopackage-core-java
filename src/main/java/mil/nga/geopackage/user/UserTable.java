@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
 /**
@@ -50,6 +51,11 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Unique constraints
 	 */
 	private final List<UserUniqueConstraint<TColumn>> uniqueConstraints;
+
+	/**
+	 * Foreign key to Contents
+	 */
+	private Contents contents;
 
 	/**
 	 * Constructor
@@ -129,6 +135,14 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		this.pkIndex = userTable.pkIndex;
 		this.uniqueConstraints = userTable.uniqueConstraints;
 	}
+
+	/**
+	 * Get the contents data type
+	 * 
+	 * @return data type
+	 * @since 3.1.1
+	 */
+	public abstract String getDataType();
 
 	/**
 	 * Check for duplicate column names
@@ -361,6 +375,37 @@ public abstract class UserTable<TColumn extends UserColumn> {
 			}
 		}
 		return columnsOfType;
+	}
+
+	/**
+	 * Get the contents
+	 * 
+	 * @return contents
+	 * @since 3.1.1
+	 */
+	public Contents getContents() {
+		return contents;
+	}
+
+	/**
+	 * Set the contents
+	 * 
+	 * @param contents
+	 *            contents
+	 * @since 3.1.1
+	 */
+	public void setContents(Contents contents) {
+		this.contents = contents;
+		if (contents != null) {
+			validateContents(contents);
+		}
+	}
+
+	/**
+	 * Validate that the set contents are valid
+	 */
+	protected void validateContents(Contents contents) {
+
 	}
 
 }

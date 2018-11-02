@@ -79,4 +79,12 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 		super(userCustomTable);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDataType() {
+		return null;
+	}
+
 }

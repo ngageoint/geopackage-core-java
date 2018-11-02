@@ -724,6 +724,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setSrs(srs);
 			getContentsDao().create(contents);
 
+			table.setContents(contents);
+			
 			// Create new geometry columns
 			geometryColumns.setContents(contents);
 			geometryColumns.setSrs(contents.getSrs());
@@ -858,6 +860,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setSrs(contentsSrs);
 			getContentsDao().create(contents);
 
+			table.setContents(contents);
+			
 			// Create new matrix tile set
 			tileMatrixSet = new TileMatrixSet();
 			tileMatrixSet.setContents(contents);

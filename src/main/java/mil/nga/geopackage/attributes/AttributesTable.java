@@ -16,11 +16,6 @@ import mil.nga.geopackage.user.UserTable;
 public class AttributesTable extends UserTable<AttributesColumn> {
 
 	/**
-	 * Foreign key to Contents
-	 */
-	private Contents contents;
-
-	/**
 	 * Constructor
 	 * 
 	 * @param tableName
@@ -33,32 +28,26 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 	}
 
 	/**
-	 * Get the contents
-	 * 
-	 * @return contents
+	 * {@inheritDoc}
 	 */
-	public Contents getContents() {
-		return contents;
+	@Override
+	public String getDataType() {
+		return ContentsDataType.ATTRIBUTES.getName();
 	}
 
 	/**
-	 * Set the contents
-	 * 
-	 * @param contents
-	 *            contents
+	 * {@inheritDoc}
 	 */
-	public void setContents(Contents contents) {
-		this.contents = contents;
-		if (contents != null) {
-			// Verify the Contents have an attributes data type
-			ContentsDataType dataType = contents.getDataType();
-			if (dataType == null || dataType != ContentsDataType.ATTRIBUTES) {
-				throw new GeoPackageException("The "
-						+ Contents.class.getSimpleName() + " of a "
-						+ AttributesTable.class.getSimpleName()
-						+ " must have a data type of "
-						+ ContentsDataType.ATTRIBUTES.getName());
-			}
+	@Override
+	protected void validateContents(Contents contents) {
+		// Verify the Contents have an attributes data type
+		ContentsDataType dataType = contents.getDataType();
+		if (dataType == null || dataType != ContentsDataType.ATTRIBUTES) {
+			throw new GeoPackageException("The "
+					+ Contents.class.getSimpleName() + " of a "
+					+ AttributesTable.class.getSimpleName()
+					+ " must have a data type of "
+					+ ContentsDataType.ATTRIBUTES.getName());
 		}
 	}
 
