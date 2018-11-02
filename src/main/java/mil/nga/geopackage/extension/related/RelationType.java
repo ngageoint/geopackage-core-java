@@ -24,7 +24,14 @@ public enum RelationType {
 	 * Relate features or attributes to multimedia files such as pictures and
 	 * videos
 	 */
-	MEDIA("media", ContentsDataType.ATTRIBUTES);
+	MEDIA("media", ContentsDataType.ATTRIBUTES),
+
+	/**
+	 * Relate features or attributes with attributes
+	 * 
+	 * @since 3.1.1
+	 */
+	ATTRIBUTES("attributes", ContentsDataType.ATTRIBUTES);
 
 	/**
 	 * Relation type name

@@ -9,6 +9,7 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.extension.BaseExtension;
@@ -18,6 +19,8 @@ import mil.nga.geopackage.extension.related.media.MediaTable;
 import mil.nga.geopackage.extension.related.simple.SimpleAttributesTable;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * Related Tables core extension
@@ -143,12 +146,12 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public abstract String getPrimaryKeyColumnName(String tableName);
 
 	/**
-	 * Set the contents in the user related table
+	 * Set the contents in the user table
 	 * 
 	 * @param table
-	 *            user related table
+	 *            user table
 	 */
-	public void setContents(UserRelatedTable table) {
+	public void setContents(UserTable<? extends UserColumn> table) {
 		ContentsDao dao = geoPackage.getContentsDao();
 		Contents contents = null;
 		try {
@@ -361,11 +364,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserRelatedTable relatedTable, String mappingTableName) {
-
-		UserMappingTable userMappingTable = UserMappingTable
-				.create(mappingTableName);
-
-		return addRelationship(baseTableName, relatedTable, userMappingTable);
+		return addRelationship(baseTableName, relatedTable,
+				relatedTable.getRelationName(), mappingTableName);
 	}
 
 	/**
@@ -382,12 +382,100 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserRelatedTable relatedTable, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, relatedTable,
+				relatedTable.getRelationName(), userMappingTable);
+	}
+
+	/**
+	 * Adds a relationship between the base and user related table. Creates a
+	 * default user mapping table and the related table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			UserTable<? extends UserColumn> relatedTable,
+			String mappingTableName) {
+		return addRelationship(baseTableName, relatedTable,
+				relatedTable.getDataType(), mappingTableName);
+	}
+
+	/**
+	 * Adds a relationship between the base and user related table. Creates the
+	 * user mapping table and related table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			UserTable<? extends UserColumn> relatedTable,
+			UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, relatedTable,
+				relatedTable.getDataType(), userMappingTable);
+	}
+
+	/**
+	 * Adds a relationship between the base and user related table. Creates a
+	 * default user mapping table and the related table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param relationName
+	 *            relation name
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			UserTable<? extends UserColumn> relatedTable, String relationName,
+			String mappingTableName) {
+
+		UserMappingTable userMappingTable = UserMappingTable
+				.create(mappingTableName);
+
+		return addRelationship(baseTableName, relatedTable, relationName,
+				userMappingTable);
+	}
+
+	/**
+	 * Adds a relationship between the base and user related table. Creates the
+	 * user mapping table and related table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTable
+	 *            user related table
+	 * @param relationName
+	 *            relation name
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addRelationship(String baseTableName,
+			UserTable<? extends UserColumn> relatedTable, String relationName,
+			UserMappingTable userMappingTable) {
 
 		// Create the related table if needed
 		createRelatedTable(relatedTable);
 
 		return addRelationship(baseTableName, relatedTable.getTableName(),
-				userMappingTable, relatedTable.getRelationName());
+				userMappingTable, relationName);
 	}
 
 	/**
@@ -504,6 +592,82 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Adds an attributes relationship between the base table and related
+	 * attributes table. Creates a default user mapping table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedAttributesTableName
+	 *            related attributes table name
+	 * @param mappingTableName
+	 *            mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addAttributesRelationship(String baseTableName,
+			String relatedAttributesTableName, String mappingTableName) {
+		return addRelationship(baseTableName, relatedAttributesTableName,
+				mappingTableName, RelationType.ATTRIBUTES);
+	}
+
+	/**
+	 * Adds an attributes relationship between the base table and related
+	 * attributes table. Creates the user mapping table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedAttributesTableName
+	 *            related attributes table name
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addAttributesRelationship(String baseTableName,
+			String relatedAttributesTableName, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, relatedAttributesTableName,
+				userMappingTable, RelationType.ATTRIBUTES);
+	}
+
+	/**
+	 * Adds an attributes relationship between the base table and user
+	 * attributes related table. Creates a default user mapping table and the
+	 * attributes table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param attributesTable
+	 *            user attributes table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addAttributesRelationship(String baseTableName,
+			AttributesTable attributesTable, String mappingTableName) {
+		return addRelationship(baseTableName, attributesTable, mappingTableName);
+	}
+
+	/**
+	 * Adds an attributes relationship between the base table and user
+	 * attributes related table. Creates the user mapping table and an
+	 * attributes table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param attributesTable
+	 *            user attributes table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addAttributesRelationship(String baseTableName,
+			AttributesTable attributesTable, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, attributesTable, userMappingTable);
+	}
+
+	/**
 	 * Validate that the relation name is valid between the base and related
 	 * table
 	 * 
@@ -573,6 +737,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				break;
 			case SIMPLE_ATTRIBUTES:
 			case MEDIA:
+			case ATTRIBUTES:
 				if (!geoPackage.isTableType(relationType.getDataType(),
 						relatedTableName)) {
 					throw new GeoPackageException(
@@ -643,8 +808,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param relatedTable
 	 *            user related table
 	 * @return true if created, false if the table already existed
+	 * @since 3.1.1
 	 */
-	public boolean createRelatedTable(UserRelatedTable relatedTable) {
+	public boolean createRelatedTable(
+			UserTable<? extends UserColumn> relatedTable) {
 
 		boolean created = false;
 
