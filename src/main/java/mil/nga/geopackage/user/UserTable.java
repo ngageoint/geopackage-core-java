@@ -403,6 +403,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 
 	/**
 	 * Validate that the set contents are valid
+	 * 
+	 * @param contents
+	 *            contents
 	 */
 	protected void validateContents(Contents contents) {
 
