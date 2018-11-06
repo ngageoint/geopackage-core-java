@@ -1,10 +1,13 @@
 package mil.nga.geopackage.extension.style;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
+import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.contents.ContentsId;
 import mil.nga.geopackage.extension.contents.ContentsIdExtension;
@@ -91,6 +94,57 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get or create the extension
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @return extension
+	 */
+	private Extensions getOrCreate(String featureTable) {
+
+		Extensions extension = getOrCreate(EXTENSION_NAME, featureTable, null,
+				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+
+		return extension;
+	}
+
+	/**
+	 * Get the feature tables registered with the extension
+	 * 
+	 * @return list of feature table names
+	 */
+	public List<String> getTables() {
+		List<String> tables = new ArrayList<>();
+		List<Extensions> extensions = getExtensions(EXTENSION_NAME);
+		if (extensions != null) {
+			for (Extensions extension : extensions) {
+				tables.add(extension.getTableName());
+			}
+		}
+		return tables;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension
+	 * 
+	 * @return true if has extension
+	 */
+	public boolean has() {
+		return super.has(EXTENSION_NAME);
+	}
+
+	/**
+	 * Determine if the GeoPackage has the extension for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @return true if has extension
+	 */
+	public boolean has(String featureTable) {
+		return has(EXTENSION_NAME, featureTable, null);
+	}
+
+	/**
 	 * Get the related tables extension
 	 * 
 	 * @return related tables extension
@@ -106,6 +160,35 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	 */
 	public ContentsIdExtension getContentsId() {
 		return contentsId;
+	}
+
+	/**
+	 * Create style, icon, table style, and table icon relationships for the
+	 * feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void createRelationships(String featureTable) {
+		createStyleRelationship(featureTable);
+		createTableStyleRelationship(featureTable);
+		createIconRelationship(featureTable);
+		createTableIconRelationship(featureTable);
+	}
+
+	/**
+	 * Check if feature table has a style, icon, table style, or table icon
+	 * relationships
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @return true if has a relationship
+	 */
+	public boolean hasRelationship(String featureTable) {
+		return hasStyleRelationship(featureTable)
+				|| hasTableStyleRelationship(featureTable)
+				|| hasIconRelationship(featureTable)
+				|| hasTableIconRelationship(featureTable);
 	}
 
 	/**
@@ -271,6 +354,9 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 
 		if (!hasStyleRelationship(mappingTableName, baseTable, relatedTable)) {
 
+			// Create the extension
+			getOrCreate(featureTable);
+
 			if (baseTable.equals(ContentsId.TABLE_NAME)) {
 				if (!contentsId.has()) {
 					contentsId.getOrCreateExtension();
@@ -287,6 +373,133 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 				relatedTables.addMediaRelationship(baseTable, new IconTable(),
 						mappingTable);
 			}
+		}
+
+	}
+
+	/**
+	 * Delete the style and icon table and row relationships for all feature
+	 * tables
+	 */
+	public void deleteRelationships() {
+		List<String> tables = getTables();
+		for (String table : tables) {
+			deleteRelationships(table);
+		}
+	}
+
+	/**
+	 * Delete the style and icon table and row relationships for the feature
+	 * table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void deleteRelationships(String featureTable) {
+		deleteStyleRelationship(featureTable);
+		deleteTableStyleRelationship(featureTable);
+		deleteIconRelationship(featureTable);
+		deleteTableIconRelationship(featureTable);
+	}
+
+	/**
+	 * Delete a style relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void deleteStyleRelationship(String featureTable) {
+		deleteStyleRelationship(
+				getMappingTableName(TABLE_MAPPING_STYLE, featureTable),
+				featureTable);
+	}
+
+	/**
+	 * Delete a table style relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void deleteTableStyleRelationship(String featureTable) {
+		deleteStyleRelationship(
+				getMappingTableName(TABLE_MAPPING_TABLE_STYLE, featureTable),
+				featureTable);
+	}
+
+	/**
+	 * Delete a icon relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void deleteIconRelationship(String featureTable) {
+		deleteStyleRelationship(
+				getMappingTableName(TABLE_MAPPING_ICON, featureTable),
+				featureTable);
+	}
+
+	/**
+	 * Delete a table icon relationship for the feature table
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 */
+	public void deleteTableIconRelationship(String featureTable) {
+		deleteStyleRelationship(
+				getMappingTableName(TABLE_MAPPING_TABLE_ICON, featureTable),
+				featureTable);
+	}
+
+	/**
+	 * Delete a style extension feature table relationship and the mapping table
+	 * 
+	 * @param mappingTableName
+	 *            mapping table name
+	 * @param featureTable
+	 *            feature table name
+	 */
+	private void deleteStyleRelationship(String mappingTableName,
+			String featureTable) {
+
+		relatedTables.removeRelationshipsWithMappingTable(mappingTableName);
+
+		geoPackage.dropTable(mappingTableName);
+
+		if (!hasRelationship(featureTable)) {
+			try {
+				if (extensionsDao.isTableExists()) {
+					extensionsDao.deleteByExtension(EXTENSION_NAME,
+							featureTable);
+				}
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to delete Feature Style extension. GeoPackage: "
+								+ geoPackage.getName() + ", Feature Table: "
+								+ featureTable, e);
+			}
+		}
+
+	}
+
+	/**
+	 * Completely remove and delete the extension and all styles and icons
+	 */
+	public void removeExtension() {
+
+		deleteRelationships();
+
+		geoPackage.deleteTable(StyleTable.TABLE_NAME);
+
+		geoPackage.deleteTable(IconTable.TABLE_NAME);
+
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(EXTENSION_NAME);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Feature Style extension. GeoPackage: "
+							+ geoPackage.getName(), e);
 		}
 
 	}
