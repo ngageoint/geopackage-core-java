@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mil.nga.geopackage.schema.TableColumnKey;
-
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -18,8 +16,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author jyutzler
  * @since 3.0.1
  */
-public class ExtendedRelationsDao extends
-		BaseDaoImpl<ExtendedRelation, TableColumnKey> {
+public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -115,7 +112,7 @@ public class ExtendedRelationsDao extends
 	public List<ExtendedRelation> getTableRelations(String table)
 			throws SQLException {
 
-		QueryBuilder<ExtendedRelation, TableColumnKey> qb = queryBuilder();
+		QueryBuilder<ExtendedRelation, Long> qb = queryBuilder();
 		qb.where().like(ExtendedRelation.COLUMN_BASE_TABLE_NAME, table).or()
 				.like(ExtendedRelation.COLUMN_RELATED_TABLE_NAME, table);
 		PreparedQuery<ExtendedRelation> preparedQuery = qb.prepare();
@@ -147,8 +144,8 @@ public class ExtendedRelationsDao extends
 			String baseColumn, String relatedTable, String relatedColumn,
 			String relation, String mappingTable) throws SQLException {
 
-		QueryBuilder<ExtendedRelation, TableColumnKey> qb = queryBuilder();
-		Where<ExtendedRelation, TableColumnKey> where = null;
+		QueryBuilder<ExtendedRelation, Long> qb = queryBuilder();
+		Where<ExtendedRelation, Long> where = null;
 
 		if (baseTable != null) {
 			where = addToWhere(qb, where);
@@ -195,9 +192,9 @@ public class ExtendedRelationsDao extends
 	 *            where clause
 	 * @return where clause
 	 */
-	private Where<ExtendedRelation, TableColumnKey> addToWhere(
-			QueryBuilder<ExtendedRelation, TableColumnKey> qb,
-			Where<ExtendedRelation, TableColumnKey> where) {
+	private Where<ExtendedRelation, Long> addToWhere(
+			QueryBuilder<ExtendedRelation, Long> qb,
+			Where<ExtendedRelation, Long> where) {
 		if (where == null) {
 			where = qb.where();
 		} else {
