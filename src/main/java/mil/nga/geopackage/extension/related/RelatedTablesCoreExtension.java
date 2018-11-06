@@ -2,9 +2,7 @@ package mil.nga.geopackage.extension.related;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
@@ -892,6 +890,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		try {
 			if (extendedRelationsDao.isTableExists()) {
+				geoPackage.deleteTable(extendedRelation.getMappingTableName());
 				extendedRelationsDao.delete(extendedRelation);
 			}
 		} catch (SQLException e) {
@@ -919,20 +918,11 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		try {
 			if (extendedRelationsDao.isTableExists()) {
-				Map<String, Object> fieldValues = new HashMap<String, Object>();
-				fieldValues.put(ExtendedRelation.COLUMN_BASE_TABLE_NAME,
-						baseTableName);
-				fieldValues.put(ExtendedRelation.COLUMN_RELATED_TABLE_NAME,
-						relatedTableName);
-				fieldValues.put(ExtendedRelation.COLUMN_RELATION_NAME,
-						relationName);
-				List<ExtendedRelation> extendedRelations = extendedRelationsDao
-						.queryForFieldValues(fieldValues);
+				List<ExtendedRelation> extendedRelations = getRelations(
+						baseTableName, relatedTableName, relationName, null);
 				for (ExtendedRelation extendedRelation : extendedRelations) {
-					geoPackage.deleteTable(extendedRelation
-							.getMappingTableName());
+					removeRelationship(extendedRelation);
 				}
-				extendedRelationsDao.delete(extendedRelations);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to remove relationship '"
