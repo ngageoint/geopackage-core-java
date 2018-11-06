@@ -12,8 +12,10 @@ import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
+import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.extension.scale.TileTableScaling;
+import mil.nga.geopackage.extension.style.FeatureCoreStyleExtension;
 
 /**
  * NGA extension management class for deleting extensions for a table or in a
@@ -298,7 +300,10 @@ public class NGAExtensions {
 	public static void deleteFeatureStyle(GeoPackageCore geoPackage,
 			String table) {
 
-		// TODO
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(geoPackage);
+		if (featureStyleExtension.has(table)) {
+			featureStyleExtension.deleteRelationships(table);
+		}
 
 	}
 
@@ -312,8 +317,33 @@ public class NGAExtensions {
 	 */
 	public static void deleteFeatureStyleExtension(GeoPackageCore geoPackage) {
 
-		// TODO
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(geoPackage);
+		if (featureStyleExtension.has()) {
+			featureStyleExtension.removeExtension();
+		}
 
+	}
+
+	/**
+	 * Get a Feature Style Extension used only for deletions
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return Feature Style Extension
+	 */
+	private static FeatureCoreStyleExtension getFeatureStyleExtension(
+			GeoPackageCore geoPackage) {
+
+		RelatedTablesCoreExtension relatedTables = new RelatedTablesCoreExtension(
+				geoPackage) {
+			@Override
+			public String getPrimaryKeyColumnName(String tableName) {
+				return null;
+			}
+		};
+
+		return new FeatureCoreStyleExtension(geoPackage, relatedTables) {
+		};
 	}
 
 	/**
