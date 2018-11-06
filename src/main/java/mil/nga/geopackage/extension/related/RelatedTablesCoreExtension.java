@@ -889,9 +889,19 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            extended relation
 	 */
 	public void removeRelationship(ExtendedRelation extendedRelation) {
-		removeRelationship(extendedRelation.getBaseTableName(),
-				extendedRelation.getRelatedTableName(),
-				extendedRelation.getRelationName());
+
+		try {
+			if (extendedRelationsDao.isTableExists()) {
+				extendedRelationsDao.delete(extendedRelation);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to remove relationship '"
+					+ extendedRelation.getRelationName() + "' between "
+					+ extendedRelation.getBaseTableName() + " and "
+					+ extendedRelation.getRelatedTableName()
+					+ " with mapping table "
+					+ extendedRelation.getMappingTableName(), e);
+		}
 	}
 
 	/**
@@ -951,6 +961,29 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to remove relationships for table: " + table, e);
+		}
+	}
+
+	/**
+	 * Remove all relationships with the mapping table
+	 * 
+	 * @param mappingTable
+	 *            mapping table
+	 * @since 3.1.1
+	 */
+	public void removeRelationshipsWithMappingTable(String mappingTable) {
+		try {
+			if (extendedRelationsDao.isTableExists()) {
+				List<ExtendedRelation> extendedRelations = getRelations(null,
+						null, mappingTable);
+				for (ExtendedRelation extendedRelation : extendedRelations) {
+					removeRelationship(extendedRelation);
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to remove relationships for mapping table: "
+							+ mappingTable, e);
 		}
 	}
 
