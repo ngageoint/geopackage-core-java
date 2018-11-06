@@ -422,6 +422,26 @@ public class ContentsIdExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get the count of contents ids
+	 * 
+	 * @return count
+	 * @since 3.1.1
+	 */
+	public long count() {
+		long count = 0;
+		if (has()) {
+			try {
+				count = contentsIdDao.countOf();
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to count contents ids. GeoPackage: "
+								+ geoPackage.getName(), e);
+			}
+		}
+		return count;
+	}
+
+	/**
 	 * Get by contents data type
 	 * 
 	 * @param type
