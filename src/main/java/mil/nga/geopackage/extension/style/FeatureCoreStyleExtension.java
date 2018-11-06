@@ -463,8 +463,6 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 
 		relatedTables.removeRelationshipsWithMappingTable(mappingTableName);
 
-		geoPackage.dropTable(mappingTableName);
-
 		if (!hasRelationship(featureTable)) {
 			try {
 				if (extensionsDao.isTableExists()) {
