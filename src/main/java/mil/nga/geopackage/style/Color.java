@@ -30,6 +30,13 @@ public class Color {
 	private float opacity = 1.0f;
 
 	/**
+	 * Default color constructor, defaults to opaque black
+	 */
+	public Color() {
+
+	}
+
+	/**
 	 * Create the color in hex
 	 * 
 	 * @param color
