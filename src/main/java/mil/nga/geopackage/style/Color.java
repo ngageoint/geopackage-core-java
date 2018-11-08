@@ -359,7 +359,9 @@ public class Color {
 		setRed(ColorUtils.getRed(color));
 		setGreen(ColorUtils.getGreen(color));
 		setBlue(ColorUtils.getBlue(color));
-		setAlpha(ColorUtils.getAlpha(color));
+		if (color > 16777215 || color < 0) {
+			setAlpha(ColorUtils.getAlpha(color));
+		}
 	}
 
 	/**
