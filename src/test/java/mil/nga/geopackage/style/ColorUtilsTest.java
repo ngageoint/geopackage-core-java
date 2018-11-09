@@ -227,16 +227,25 @@ public class ColorUtilsTest {
 		TestCase.assertEquals("33", ColorUtils.getBlue("#44112233"));
 		TestCase.assertEquals("44", ColorUtils.getAlpha("#44112233"));
 
-		System.out.println();
 		TestCase.assertEquals(0, ColorUtils.getRed(-16711936));
 		TestCase.assertEquals(255, ColorUtils.getGreen(-16711936));
 		TestCase.assertEquals(0, ColorUtils.getBlue(-16711936));
 		TestCase.assertEquals(255, ColorUtils.getAlpha(-16711936));
 
+		TestCase.assertEquals(0, ColorUtils.getRed(0xFF00FF00));
+		TestCase.assertEquals(255, ColorUtils.getGreen(0xff00ff00));
+		TestCase.assertEquals(0, ColorUtils.getBlue(0xFF00FF00));
+		TestCase.assertEquals(255, ColorUtils.getAlpha(0xff00ff00));
+
 		TestCase.assertEquals(0, ColorUtils.getRed(65280));
 		TestCase.assertEquals(255, ColorUtils.getGreen(65280));
 		TestCase.assertEquals(0, ColorUtils.getBlue(65280));
 		TestCase.assertEquals(0, ColorUtils.getAlpha(65280));
+
+		TestCase.assertEquals(0, ColorUtils.getRed(0x00FF00));
+		TestCase.assertEquals(255, ColorUtils.getGreen(0x00ff00));
+		TestCase.assertEquals(0, ColorUtils.getBlue(0x00FF00));
+		TestCase.assertEquals(0, ColorUtils.getAlpha(0x00ff00));
 
 		TestCase.assertEquals(
 				65280,
