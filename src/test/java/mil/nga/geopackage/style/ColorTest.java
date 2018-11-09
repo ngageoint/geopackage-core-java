@@ -24,43 +24,50 @@ public class ColorTest {
 
 		color.setRed(64);
 		validateColor(color, 0x400000, "#400000", "#400000", 64, 0, 0);
-		color.setRed(0.5f);
+		color.setRed(128 / 255.0f);
 		validateColor(color, 0x800000, "#800000", "#800000", 128, 0, 0);
 		color.setRed("C0");
 		validateColor(color, 0xC00000, "#C00000", "#C00000", 192, 0, 0);
 		color.setRed(0xFF);
 		validateColor(color, 0xFF0000, "#FF0000", "#F00", 255, 0, 0);
+		TestCase.assertTrue(color.isOpaque());
 
 		color.setGreen(64);
 		validateColor(color, 0xFF4000, "#FF4000", "#FF4000", 255, 64, 0);
-		color.setGreen(0.5f);
+		color.setGreen(128 / 255.0f);
 		validateColor(color, 0xFF8000, "#FF8000", "#FF8000", 255, 128, 0);
 		color.setGreen("c0");
 		validateColor(color, 0xFFC000, "#FFC000", "#FFC000", 255, 192, 0);
 		color.setGreen(0xFF);
 		validateColor(color, 0xFFFF00, "#FFFF00", "#FF0", 255, 255, 0);
+		TestCase.assertTrue(color.isOpaque());
 
 		color.setBlue(64);
 		validateColor(color, 0xFFFF40, "#FFFF40", "#FFFF40", 255, 255, 64);
-		color.setBlue(0.5f);
+		color.setBlue(128 / 255.0f);
 		validateColor(color, 0xFFFF80, "#FFFF80", "#FFFF80", 255, 255, 128);
 		color.setBlue("C0");
 		validateColor(color, 0xFFFFC0, "#FFFFC0", "#FFFFC0", 255, 255, 192);
 		color.setBlue(0xFF);
 		validateColor(color, 0xFFFFFF, "#FFFFFF", "#FFF", 255, 255, 255);
+		TestCase.assertTrue(color.isOpaque());
 
 		color.setAlpha(64);
 		validateColor(color, 0xFFFFFF, 0x40FFFFFF, "#FFFFFF", "#FFF",
 				"#40FFFFFF", "#40FFFFFF", 255, 255, 255, 64);
+		TestCase.assertFalse(color.isOpaque());
 		color.setOpacity(0.5f);
 		validateColor(color, 0xFFFFFF, 0x80FFFFFF, "#FFFFFF", "#FFF",
 				"#80FFFFFF", "#80FFFFFF", 255, 255, 255, 128, 0.5f);
+		TestCase.assertFalse(color.isOpaque());
 		color.setAlpha("C0");
 		validateColor(color, 0xFFFFFF, 0xC0FFFFFF, "#FFFFFF", "#FFF",
 				"#C0FFFFFF", "#C0FFFFFF", 255, 255, 255, 192);
+		TestCase.assertFalse(color.isOpaque());
 		color.setAlpha(0xFF);
 		validateColor(color, 0xFFFFFF, 0xFFFFFFFF, "#FFFFFF", "#FFF",
 				"#FFFFFFFF", "#FFFF", 255, 255, 255, 255);
+		TestCase.assertTrue(color.isOpaque());
 
 	}
 

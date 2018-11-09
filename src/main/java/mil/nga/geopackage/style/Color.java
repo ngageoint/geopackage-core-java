@@ -10,19 +10,19 @@ package mil.nga.geopackage.style;
 public class Color {
 
 	/**
-	 * Red hex color, shorthanded when possible
+	 * Red arithmetic color value
 	 */
-	private String red = "0";
+	private float red = 0.0f;
 
 	/**
-	 * Green hex color, shorthanded when possible
+	 * Green arithmetic color value
 	 */
-	private String green = "0";
+	private float green = 0.0f;
 
 	/**
-	 * Blue hex color, shorthanded when possible
+	 * Blue arithmetic color value
 	 */
-	private String blue = "0";
+	private float blue = 0.0f;
 
 	/**
 	 * Opacity arithmetic value
@@ -30,7 +30,7 @@ public class Color {
 	private float opacity = 1.0f;
 
 	/**
-	 * Default color constructor, defaults to opaque black
+	 * Default color constructor, opaque black
 	 */
 	public Color() {
 
@@ -378,7 +378,7 @@ public class Color {
 	 *            red hex color in format RR or R
 	 */
 	public void setRed(String red) {
-		this.red = formatHexSingle(red);
+		setRed(ColorUtils.toArithmeticRGB(red));
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class Color {
 	 *            green hex color in format GG or G
 	 */
 	public void setGreen(String green) {
-		this.green = formatHexSingle(green);
+		setGreen(ColorUtils.toArithmeticRGB(green));
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class Color {
 	 *            blue hex color in format BB or B
 	 */
 	public void setBlue(String blue) {
-		this.blue = formatHexSingle(blue);
+		setBlue(ColorUtils.toArithmeticRGB(blue));
 	}
 
 	/**
@@ -458,7 +458,8 @@ public class Color {
 	 *            red float color inclusively between 0.0 and 1.0
 	 */
 	public void setRed(float red) {
-		setRed(ColorUtils.toHex(red));
+		ColorUtils.validateArithmeticRGB(red);
+		this.red = red;
 	}
 
 	/**
@@ -468,7 +469,8 @@ public class Color {
 	 *            green float color inclusively between 0.0 and 1.0
 	 */
 	public void setGreen(float green) {
-		setGreen(ColorUtils.toHex(green));
+		ColorUtils.validateArithmeticRGB(green);
+		this.green = green;
 	}
 
 	/**
@@ -478,7 +480,8 @@ public class Color {
 	 *            blue float color inclusively between 0.0 and 1.0
 	 */
 	public void setBlue(float blue) {
-		setBlue(ColorUtils.toHex(blue));
+		ColorUtils.validateArithmeticRGB(blue);
+		this.blue = blue;
 	}
 
 	/**
@@ -517,7 +520,7 @@ public class Color {
 	 * @return hex color in the format #RRGGBB
 	 */
 	public String getColorHex() {
-		return ColorUtils.toColor(red, green, blue);
+		return ColorUtils.toColor(getRedHex(), getGreenHex(), getBlueHex());
 	}
 
 	/**
@@ -526,7 +529,8 @@ public class Color {
 	 * @return hex color in the format #AARRGGBB
 	 */
 	public String getColorHexWithAlpha() {
-		return ColorUtils.toColorWithAlpha(red, green, blue, getAlphaHex());
+		return ColorUtils.toColorWithAlpha(getRedHex(), getGreenHex(),
+				getBlueHex(), getAlphaHex());
 	}
 
 	/**
@@ -535,7 +539,8 @@ public class Color {
 	 * @return hex color in the format #RGB or #RRGGBB
 	 */
 	public String getColorHexShorthand() {
-		return ColorUtils.toColorShorthand(red, green, blue);
+		return ColorUtils.toColorShorthand(getRedHex(), getGreenHex(),
+				getBlueHex());
 	}
 
 	/**
@@ -544,8 +549,8 @@ public class Color {
 	 * @return hex color in the format #ARGB or #AARRGGBB
 	 */
 	public String getColorHexShorthandWithAlpha() {
-		return ColorUtils.toColorShorthandWithAlpha(red, green, blue,
-				getAlphaHex());
+		return ColorUtils.toColorShorthandWithAlpha(getRedHex(), getGreenHex(),
+				getBlueHex(), getAlphaHex());
 	}
 
 	/**
@@ -573,7 +578,7 @@ public class Color {
 	 * @return red hex color in format RR
 	 */
 	public String getRedHex() {
-		return ColorUtils.expandShorthandHexSingle(red);
+		return ColorUtils.toHex(red);
 	}
 
 	/**
@@ -582,7 +587,7 @@ public class Color {
 	 * @return green hex color in format GG
 	 */
 	public String getGreenHex() {
-		return ColorUtils.expandShorthandHexSingle(green);
+		return ColorUtils.toHex(green);
 	}
 
 	/**
@@ -591,7 +596,7 @@ public class Color {
 	 * @return blue hex color in format BB
 	 */
 	public String getBlueHex() {
-		return ColorUtils.expandShorthandHexSingle(blue);
+		return ColorUtils.toHex(blue);
 	}
 
 	/**
@@ -609,7 +614,7 @@ public class Color {
 	 * @return red hex color in format R or RR
 	 */
 	public String getRedHexShorthand() {
-		return red;
+		return ColorUtils.shorthandHexSingle(getRedHex());
 	}
 
 	/**
@@ -618,7 +623,7 @@ public class Color {
 	 * @return green hex color in format G or GG
 	 */
 	public String getGreenHexShorthand() {
-		return green;
+		return ColorUtils.shorthandHexSingle(getGreenHex());
 	}
 
 	/**
@@ -627,7 +632,7 @@ public class Color {
 	 * @return blue hex color in format B or BB
 	 */
 	public String getBlueHexShorthand() {
-		return blue;
+		return ColorUtils.shorthandHexSingle(getBlueHex());
 	}
 
 	/**
@@ -681,7 +686,7 @@ public class Color {
 	 * @return red float color inclusively between 0.0 and 1.0
 	 */
 	public float getRedArithmetic() {
-		return ColorUtils.toArithmeticRGB(red);
+		return red;
 	}
 
 	/**
@@ -690,7 +695,7 @@ public class Color {
 	 * @return green float color inclusively between 0.0 and 1.0
 	 */
 	public float getGreenArithmetic() {
-		return ColorUtils.toArithmeticRGB(green);
+		return green;
 	}
 
 	/**
@@ -699,7 +704,7 @@ public class Color {
 	 * @return blue float color inclusively between 0.0 and 1.0
 	 */
 	public float getBlueArithmetic() {
-		return ColorUtils.toArithmeticRGB(blue);
+		return blue;
 	}
 
 	/**
@@ -718,17 +723,6 @@ public class Color {
 	 */
 	public float getAlphaArithmetic() {
 		return getOpacity();
-	}
-
-	/**
-	 * Validate and format the hex single color to be upper case and shorthand
-	 * 
-	 * @param color
-	 *            hex single color
-	 * @return formatted hex single color
-	 */
-	private static String formatHexSingle(String color) {
-		return ColorUtils.shorthandHexSingle(color).toUpperCase();
 	}
 
 }
