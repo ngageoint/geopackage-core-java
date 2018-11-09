@@ -86,13 +86,13 @@ public class IconTable extends MediaTable {
 		columns.add(UserCustomColumn.createColumn(index++, COLUMN_DESCRIPTION,
 				GeoPackageDataType.TEXT, false, null));
 		columns.add(UserCustomColumn.createColumn(index++, COLUMN_WIDTH,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 		columns.add(UserCustomColumn.createColumn(index++, COLUMN_HEIGHT,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 		columns.add(UserCustomColumn.createColumn(index++, COLUMN_ANCHOR_U,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 		columns.add(UserCustomColumn.createColumn(index++, COLUMN_ANCHOR_V,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 
 		return columns;
 	}

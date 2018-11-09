@@ -96,13 +96,13 @@ public class StyleTable extends AttributesTable {
 		columns.add(AttributesColumn.createColumn(index++, COLUMN_COLOR,
 				GeoPackageDataType.TEXT, false, null));
 		columns.add(AttributesColumn.createColumn(index++, COLUMN_OPACITY,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 		columns.add(AttributesColumn.createColumn(index++, COLUMN_WIDTH,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_COLOR,
 				GeoPackageDataType.TEXT, false, null));
 		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_OPACITY,
-				GeoPackageDataType.DOUBLE, false, null));
+				GeoPackageDataType.REAL, false, null));
 
 		return columns;
 	}
