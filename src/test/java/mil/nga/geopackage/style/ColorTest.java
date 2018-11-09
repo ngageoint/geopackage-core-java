@@ -12,7 +12,60 @@ import org.junit.Test;
 public class ColorTest {
 
 	/**
-	 * Test color hex contants
+	 * Test color creation and setters
+	 */
+	@Test
+	public void testColorCreation() {
+
+		Color color = new Color();
+
+		// Default color, opaque black
+		validateColor(color, 0, "#000000", "#000", 0, 0, 0);
+
+		color.setRed(64);
+		validateColor(color, 0x400000, "#400000", "#400000", 64, 0, 0);
+		color.setRed(0.5f);
+		validateColor(color, 0x800000, "#800000", "#800000", 128, 0, 0);
+		color.setRed("C0");
+		validateColor(color, 0xC00000, "#C00000", "#C00000", 192, 0, 0);
+		color.setRed(0xFF);
+		validateColor(color, 0xFF0000, "#FF0000", "#F00", 255, 0, 0);
+
+		color.setGreen(64);
+		validateColor(color, 0xFF4000, "#FF4000", "#FF4000", 255, 64, 0);
+		color.setGreen(0.5f);
+		validateColor(color, 0xFF8000, "#FF8000", "#FF8000", 255, 128, 0);
+		color.setGreen("c0");
+		validateColor(color, 0xFFC000, "#FFC000", "#FFC000", 255, 192, 0);
+		color.setGreen(0xFF);
+		validateColor(color, 0xFFFF00, "#FFFF00", "#FF0", 255, 255, 0);
+
+		color.setBlue(64);
+		validateColor(color, 0xFFFF40, "#FFFF40", "#FFFF40", 255, 255, 64);
+		color.setBlue(0.5f);
+		validateColor(color, 0xFFFF80, "#FFFF80", "#FFFF80", 255, 255, 128);
+		color.setBlue("C0");
+		validateColor(color, 0xFFFFC0, "#FFFFC0", "#FFFFC0", 255, 255, 192);
+		color.setBlue(0xFF);
+		validateColor(color, 0xFFFFFF, "#FFFFFF", "#FFF", 255, 255, 255);
+
+		color.setAlpha(64);
+		validateColor(color, 0xFFFFFF, 0x40FFFFFF, "#FFFFFF", "#FFF",
+				"#40FFFFFF", "#40FFFFFF", 255, 255, 255, 64);
+		color.setOpacity(0.5f);
+		validateColor(color, 0xFFFFFF, 0x80FFFFFF, "#FFFFFF", "#FFF",
+				"#80FFFFFF", "#80FFFFFF", 255, 255, 255, 128, 0.5f);
+		color.setAlpha("C0");
+		validateColor(color, 0xFFFFFF, 0xC0FFFFFF, "#FFFFFF", "#FFF",
+				"#C0FFFFFF", "#C0FFFFFF", 255, 255, 255, 192);
+		color.setAlpha(0xFF);
+		validateColor(color, 0xFFFFFF, 0xFFFFFFFF, "#FFFFFF", "#FFF",
+				"#FFFFFFFF", "#FFFF", 255, 255, 255, 255);
+
+	}
+
+	/**
+	 * Test color hex constants
 	 */
 	@Test
 	public void testColorHexConstants() {
@@ -61,13 +114,11 @@ public class ColorTest {
 				255, 0, 217, 0.85f);
 
 		validateColor(new Color("#80000000"), 0, Integer.MIN_VALUE, "#000000",
-				"#000", "#80000000", "#80000000", 0, 0, 0, 128, 128.0f / 255.0f);
+				"#000", "#80000000", "#80000000", 0, 0, 0, 128);
 		validateColor(new Color("#40FFA500"), 16753920, 1090495744, "#FFA500",
-				"#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64,
-				64.0f / 255.0f);
+				"#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64);
 		validateColor(new Color("#D9FFFF00"), 16776960, -637534464, "#FFFF00",
-				"#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217,
-				217.0f / 255.0f);
+				"#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217);
 
 	}
 
@@ -144,13 +195,63 @@ public class ColorTest {
 		validateColor(new Color(16777216), 0, 16777216, "#000000", "#000",
 				"#01000000", "#01000000", 0, 0, 0, 1, 0.00392156862f);
 		validateColor(new Color(Integer.MAX_VALUE), 16777215, 2147483647,
-				"#FFFFFF", "#FFF", "#7FFFFFFF", "#7FFFFFFF", 255, 255, 255,
-				127, 127.0f / 255.0f);
+				"#FFFFFF", "#FFF", "#7FFFFFFF", "#7FFFFFFF", 255, 255, 255, 127);
 		validateColor(new Color(Integer.MIN_VALUE), 0, Integer.MIN_VALUE,
-				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128,
-				128.0f / 255.0f);
+				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128);
 		validateColor(new Color(-1), 16777215, -1, "#FFFFFF", "#FFF",
 				"#FFFFFFFF", "#FFFF", 255, 255, 255, 255, 1.0f);
+
+	}
+
+	/**
+	 * Test color hex constants
+	 */
+	@Test
+	public void testColorHexIntegers() {
+
+		validateColor(new Color(0x000000), 0, "#000000", "#000", 0, 0, 0);
+		validateColor(new Color(0x0000FF), 255, "#0000FF", "#00F", 0, 0, 255);
+		validateColor(new Color(0xA52A2A), 10824234, "#A52A2A", "#A52A2A", 165,
+				42, 42);
+		validateColor(new Color(0x00FFFF), 65535, "#00FFFF", "#0FF", 0, 255,
+				255);
+		validateColor(new Color(0x444444), 4473924, "#444444", "#444", 68, 68,
+				68);
+		validateColor(new Color(0x888888), 8947848, "#888888", "#888", 136,
+				136, 136);
+		validateColor(new Color(0x00FF00), 65280, "#00FF00", "#0F0", 0, 255, 0);
+		validateColor(new Color(0xCCCCCC), 13421772, "#CCCCCC", "#CCC", 204,
+				204, 204);
+		validateColor(new Color(0xFF00FF), 16711935, "#FF00FF", "#F0F", 255, 0,
+				255);
+		validateColor(new Color(0xFFA500), 16753920, "#FFA500", "#FFA500", 255,
+				165, 0);
+		validateColor(new Color(0xFFC0CB), 16761035, "#FFC0CB", "#FFC0CB", 255,
+				192, 203);
+		validateColor(new Color(0x800080), 8388736, "#800080", "#800080", 128,
+				0, 128);
+		validateColor(new Color(0xFF0000), 16711680, "#FF0000", "#F00", 255, 0,
+				0);
+		validateColor(new Color(0xEE82EE), 15631086, "#EE82EE", "#EE82EE", 238,
+				130, 238);
+		validateColor(new Color(0xFFFFFF), 16777215, "#FFFFFF", "#FFF", 255,
+				255, 255);
+		validateColor(new Color(0xFFFF00), 16776960, "#FFFF00", "#FF0", 255,
+				255, 0);
+
+		validateColor(new Color(0x80000000), 0, Integer.MIN_VALUE, "#000000",
+				"#000", "#80000000", "#80000000", 0, 0, 0, 128);
+		validateColor(new Color(0x40FFA500), 16753920, 1090495744, "#FFA500",
+				"#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64);
+		validateColor(new Color(0xD9FFFF00), 16776960, -637534464, "#FFFF00",
+				"#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217);
+
+		validateColor(new Color(0x80000000), 0, Integer.MIN_VALUE, "#000000",
+				"#000", "#80000000", "#80000000", 0, 0, 0, 128);
+		validateColor(new Color(0x40FFA500), 16753920, 1090495744, "#FFA500",
+				"#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64);
+		validateColor(new Color(0xD9FFFF00), 16776960, -637534464, "#FFFF00",
+				"#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217);
 
 	}
 
@@ -191,13 +292,11 @@ public class ColorTest {
 				255, 0);
 
 		validateColor(new Color(0, 0, 0, 128), 0, Integer.MIN_VALUE, "#000000",
-				"#000", "#80000000", "#80000000", 0, 0, 0, 128, 128.0 / 255.0f);
+				"#000", "#80000000", "#80000000", 0, 0, 0, 128);
 		validateColor(new Color(255, 165, 0, 64), 16753920, 1090495744,
-				"#FFA500", "#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0,
-				64, 64.0 / 255.0f);
+				"#FFA500", "#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64);
 		validateColor(new Color(255, 255, 0, 217), 16776960, -637534464,
-				"#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217,
-				217.0 / 255.0f);
+				"#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217);
 
 		validateColor(new Color(0, 0, 0, 0.5f), 0, Integer.MIN_VALUE,
 				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128, 0.5f);
@@ -255,13 +354,13 @@ public class ColorTest {
 
 		validateColor(new Color(0.0f, 0.0f, 0.0f, 0.50196078431f), 0,
 				Integer.MIN_VALUE, "#000000", "#000", "#80000000", "#80000000",
-				0, 0, 0, 128, 128.0 / 255.0f);
+				0, 0, 0, 128);
 		validateColor(new Color(1.0f, 0.64705882352f, 0.0f, 0.25098039215f),
 				16753920, 1090495744, "#FFA500", "#FFA500", "#40FFA500",
-				"#40FFA500", 255, 165, 0, 64, 64.0 / 255.0f);
+				"#40FFA500", 255, 165, 0, 64);
 		validateColor(new Color(1.0f, 1.0f, 0.0f, 0.85098039215f), 16776960,
 				-637534464, "#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255,
-				255, 0, 217, 217.0 / 255.0f);
+				255, 0, 217);
 
 	}
 
@@ -305,14 +404,11 @@ public class ColorTest {
 				255, 255, 0);
 
 		validateColor(new Color("00", "00", "00", "80"), 0, Integer.MIN_VALUE,
-				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128,
-				128.0 / 255.0f);
+				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128);
 		validateColor(new Color("f", "A5", "0", "40"), 16753920, 1090495744,
-				"#FFA500", "#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0,
-				64, 64.0 / 255.0f);
+				"#FFA500", "#FFA500", "#40FFA500", "#40FFA500", 255, 165, 0, 64);
 		validateColor(new Color("ff", "F", "00", "D9"), 16776960, -637534464,
-				"#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217,
-				217.0 / 255.0f);
+				"#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255, 255, 0, 217);
 
 		validateColor(new Color("00", "00", "00", 0.5f), 0, Integer.MIN_VALUE,
 				"#000000", "#000", "#80000000", "#80000000", 0, 0, 0, 128, 0.5f);
@@ -342,6 +438,14 @@ public class ColorTest {
 		validateColor(color, colorInt, colorAlphaInt, hex, hexShorthand,
 				hexAlpha, hexShorthandAlpha, red, green, blue, alpha, opacity);
 
+	}
+
+	private void validateColor(Color color, int colorInt, int colorAlphaInt,
+			String hex, String hexShorthand, String hexAlpha,
+			String hexShorthandAlpha, int red, int green, int blue, int alpha) {
+		validateColor(color, colorInt, colorAlphaInt, hex, hexShorthand,
+				hexAlpha, hexShorthandAlpha, red, green, blue, alpha,
+				alpha / 255.0f);
 	}
 
 	private void validateColor(Color color, int colorInt, int colorAlphaInt,
