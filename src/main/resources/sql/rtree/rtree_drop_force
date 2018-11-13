@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS "rtree_<t>_<c>_node"
+
+DROP TABLE IF EXISTS "rtree_<t>_<c>_parent"
+
+DROP TABLE IF EXISTS "rtree_<t>_<c>_rowid"
+
+PRAGMA writable_schema = ON
+
+DELETE FROM sqlite_master WHERE type = "table" AND name = "rtree_<t>_<c>"
+
+PRAGMA writable_schema = OFF

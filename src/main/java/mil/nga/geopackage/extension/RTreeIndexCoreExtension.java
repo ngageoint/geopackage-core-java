@@ -79,6 +79,13 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public static final String DROP_PROPERTY = "drop";
 
 	/**
+	 * Drop Force SQL property
+	 * 
+	 * @since 3.1.1
+	 */
+	public static final String DROP_FORCE_PROPERTY = "drop_force";
+
+	/**
 	 * Trigger Insert name
 	 */
 	public static final String TRIGGER_INSERT_NAME = "insert";
@@ -802,7 +809,19 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 
 		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
 				DROP_PROPERTY);
-		executeSQL(sqlName, tableName, geometryColumnName);
+		try {
+			executeSQL(sqlName, tableName, geometryColumnName);
+		} catch (Exception e) {
+			// If no rtree module, try to delete manually
+			if (e.getMessage().indexOf("no such module: rtree") > -1) {
+				sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
+						DROP_FORCE_PROPERTY);
+				executeSQL(sqlName, tableName, geometryColumnName);
+			} else {
+				throw e;
+			}
+		}
+
 	}
 
 	/**
