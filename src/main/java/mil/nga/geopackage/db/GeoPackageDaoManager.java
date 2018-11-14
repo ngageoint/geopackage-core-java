@@ -5,6 +5,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSql;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.contents.ContentsId;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.index.GeometryIndex;
@@ -55,7 +56,7 @@ public class GeoPackageDaoManager {
 				GeometryColumnsSqlMm.class, Metadata.class,
 				MetadataReference.class, DataColumns.class,
 				DataColumnConstraints.class, TileMatrix.class,
-				TileMatrixSet.class);
+				TileMatrixSet.class, ContentsId.class);
 	}
 
 	/**
