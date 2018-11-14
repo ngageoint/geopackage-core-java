@@ -183,6 +183,34 @@ public class Color {
 	}
 
 	/**
+	 * Create the color with HSL (hue, saturation, lightness) or HSL (alpha)
+	 * values
+	 * 
+	 * @param hsl
+	 *            HSL array where: 0 = hue, 1 = saturation, 2 = lightness,
+	 *            optional 3 = alpha
+	 */
+	public Color(float[] hsl) {
+		if (hsl.length > 3) {
+			setColorByHSL(hsl[0], hsl[1], hsl[2], hsl[3]);
+		} else {
+			setColorByHSL(hsl[0], hsl[1], hsl[2]);
+		}
+	}
+
+	/**
+	 * Create the color with HSLA (hue, saturation, lightness, alpha) values
+	 * 
+	 * @param hsl
+	 *            HSL array where: 0 = hue, 1 = saturation, 2 = lightness
+	 * @param alpha
+	 *            alpha inclusively between 0.0 and 1.0
+	 */
+	public Color(float[] hsl, float alpha) {
+		setColorByHSL(hsl[0], hsl[1], hsl[2], alpha);
+	}
+
+	/**
 	 * Create the color as a single integer
 	 * 
 	 * @param color
@@ -354,6 +382,42 @@ public class Color {
 	public void setColor(float red, float green, float blue, float opacity) {
 		setColor(red, green, blue);
 		setOpacity(opacity);
+	}
+
+	/**
+	 * Set the color with HSL (hue, saturation, lightness) values
+	 * 
+	 * @param hue
+	 *            hue value inclusively between 0.0 and 360.0
+	 * @param saturation
+	 *            saturation inclusively between 0.0 and 1.0
+	 * @param lightness
+	 *            lightness inclusively between 0.0 and 1.0
+	 */
+	public void setColorByHSL(float hue, float saturation, float lightness) {
+		float[] arithmeticRGB = ColorUtils.toArithmeticRGB(hue, saturation,
+				lightness);
+		setRed(arithmeticRGB[0]);
+		setGreen(arithmeticRGB[1]);
+		setBlue(arithmeticRGB[2]);
+	}
+
+	/**
+	 * Set the color with HSLA (hue, saturation, lightness, alpha) values
+	 * 
+	 * @param hue
+	 *            hue value inclusively between 0.0 and 360.0
+	 * @param saturation
+	 *            saturation inclusively between 0.0 and 1.0
+	 * @param lightness
+	 *            lightness inclusively between 0.0 and 1.0
+	 * @param alpha
+	 *            alpha inclusively between 0.0 and 1.0
+	 */
+	public void setColorByHSL(float hue, float saturation, float lightness,
+			float alpha) {
+		setColorByHSL(hue, saturation, lightness);
+		setAlpha(alpha);
 	}
 
 	/**
@@ -723,6 +787,42 @@ public class Color {
 	 */
 	public float getAlphaArithmetic() {
 		return getOpacity();
+	}
+
+	/**
+	 * Get the HSL (hue, saturation, lightness) values
+	 * 
+	 * @return HSL array where: 0 = hue, 1 = saturation, 2 = lightness
+	 */
+	public float[] getHSL() {
+		return ColorUtils.toHSL(red, green, blue);
+	}
+
+	/**
+	 * Get the HSL hue value
+	 * 
+	 * @return hue value
+	 */
+	public float getHue() {
+		return getHSL()[0];
+	}
+
+	/**
+	 * Get the HSL saturation value
+	 * 
+	 * @return saturation value
+	 */
+	public float getSaturation() {
+		return getHSL()[1];
+	}
+
+	/**
+	 * Get the HSL lightness value
+	 * 
+	 * @return lightness value
+	 */
+	public float getLightness() {
+		return getHSL()[2];
 	}
 
 }

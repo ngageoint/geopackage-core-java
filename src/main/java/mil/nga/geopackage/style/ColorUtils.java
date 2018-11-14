@@ -284,6 +284,129 @@ public class ColorUtils {
 	}
 
 	/**
+	 * Convert red, green, and blue arithmetic values to HSL (hue, saturation,
+	 * lightness) values
+	 * 
+	 * @param red
+	 *            red color inclusively between 0.0 and 1.0
+	 * @param green
+	 *            green color inclusively between 0.0 and 1.0
+	 * @param blue
+	 *            blue color inclusively between 0.0 and 1.0
+	 * @return HSL array where: 0 = hue, 1 = saturation, 2 = lightness
+	 */
+	public static float[] toHSL(float red, float green, float blue) {
+
+		validateArithmeticRGB(red);
+		validateArithmeticRGB(green);
+		validateArithmeticRGB(blue);
+
+		float min = Math.min(Math.min(red, green), blue);
+		float max = Math.max(Math.max(red, green), blue);
+
+		float range = max - min;
+
+		float hue = 0.0f;
+		if (range > 0.0f) {
+			if (red >= green && red >= blue) {
+				hue = (green - blue) / range;
+			} else if (green >= blue) {
+				hue = 2 + (blue - red) / range;
+			} else {
+				hue = 4 + (red - green) / range;
+			}
+		}
+
+		hue *= 60.0f;
+		if (hue < 0.0f) {
+			hue += 360.0f;
+		}
+
+		float sum = min + max;
+
+		float lightness = sum / 2.0f;
+
+		float saturation;
+		if (min == max) {
+			saturation = 0.0f;
+		} else {
+			if (lightness < 0.5f) {
+				saturation = range / sum;
+			} else {
+				saturation = range / (2.0f - max - min);
+			}
+		}
+
+		return new float[] { hue, saturation, lightness };
+	}
+
+	/**
+	 * Convert HSL (hue, saturation, and lightness) values to RGB arithmetic
+	 * values
+	 * 
+	 * @param hue
+	 *            hue value inclusively between 0.0 and 360.0
+	 * @param saturation
+	 *            saturation inclusively between 0.0 and 1.0
+	 * @param lightness
+	 *            lightness inclusively between 0.0 and 1.0
+	 * @return arithmetic RGB array where: 0 = red, 1 = green, 2 = blue
+	 */
+	public static float[] toArithmeticRGB(float hue, float saturation,
+			float lightness) {
+
+		validateHue(hue);
+		validateSaturation(saturation);
+		validateLightness(lightness);
+
+		hue /= 60.0f;
+		float t2;
+		if (lightness <= 0.5f) {
+			t2 = lightness * (saturation + 1);
+		} else {
+			t2 = lightness + saturation - (lightness * saturation);
+		}
+		float t1 = lightness * 2.0f - t2;
+
+		float red = hslConvert(t1, t2, hue + 2);
+		float green = hslConvert(t1, t2, hue);
+		float blue = hslConvert(t1, t2, hue - 2);
+
+		return new float[] { red, green, blue };
+	}
+
+	/**
+	 * HSL convert helper method
+	 * 
+	 * @param t1
+	 *            t1
+	 * @param t2
+	 *            t2
+	 * @param hue
+	 *            hue
+	 * @return arithmetic RBG value
+	 */
+	private static float hslConvert(float t1, float t2, float hue) {
+		float value;
+		if (hue < 0) {
+			hue += 6;
+		}
+		if (hue >= 6) {
+			hue -= 6;
+		}
+		if (hue < 1) {
+			value = (t2 - t1) * hue + t1;
+		} else if (hue < 3) {
+			value = t2;
+		} else if (hue < 4) {
+			value = (t2 - t1) * (4 - hue) + t1;
+		} else {
+			value = t1;
+		}
+		return value;
+	}
+
+	/**
 	 * Get the hex red color from the hex string
 	 * 
 	 * @param hex
@@ -599,6 +722,85 @@ public class ColorUtils {
 			throw new GeoPackageException(
 					"Must be inclusively between 0.0 and 1.0, invalid value: "
 							+ color);
+		}
+	}
+
+	/**
+	 * Check if the HSL hue float value is valid, inclusively between 0.0 and
+	 * 360.0
+	 * 
+	 * @param hue
+	 *            hue value
+	 * @return true if valid
+	 */
+	public static boolean isValidHue(float hue) {
+		return hue >= 0.0 && hue <= 360.0;
+	}
+
+	/**
+	 * Validate the HSL hue float value is inclusively between 0.0 and 360.0
+	 * 
+	 * @param hue
+	 *            hue value
+	 */
+	public static void validateHue(float hue) {
+		if (!isValidHue(hue)) {
+			throw new GeoPackageException(
+					"Must be inclusively between 0.0 and 360.0, invalid value: "
+							+ hue);
+		}
+	}
+
+	/**
+	 * Check if the HSL saturation float value is valid, inclusively between 0.0
+	 * and 1.0
+	 * 
+	 * @param saturation
+	 *            saturation value
+	 * @return true if valid
+	 */
+	public static boolean isValidSaturation(float saturation) {
+		return saturation >= 0.0 && saturation <= 1.0;
+	}
+
+	/**
+	 * Validate the HSL saturation float value is inclusively between 0.0 and
+	 * 1.0
+	 * 
+	 * @param saturation
+	 *            saturation value
+	 */
+	public static void validateSaturation(float saturation) {
+		if (!isValidSaturation(saturation)) {
+			throw new GeoPackageException(
+					"Must be inclusively between 0.0 and 1.0, invalid value: "
+							+ saturation);
+		}
+	}
+
+	/**
+	 * Check if the HSL lightness float value is valid, inclusively between 0.0
+	 * and 1.0
+	 * 
+	 * @param lightness
+	 *            lightness value
+	 * @return true if valid
+	 */
+	public static boolean isValidLightness(float lightness) {
+		return lightness >= 0.0 && lightness <= 1.0;
+	}
+
+	/**
+	 * Validate the HSL lightness float value is inclusively between 0.0 and 1.0
+	 * 
+	 * @param lightness
+	 *            lightness value
+	 */
+	public static void validateLightness(float lightness) {
+		if (!isValidLightness(lightness)) {
+			throw new GeoPackageException(
+					"Must be inclusively between 0.0 and 1.0, invalid value: "
+							+ lightness);
 		}
 	}
 

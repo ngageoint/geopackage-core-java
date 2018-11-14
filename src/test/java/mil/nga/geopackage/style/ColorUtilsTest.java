@@ -100,6 +100,24 @@ public class ColorUtilsTest {
 		TestCase.assertTrue(ColorUtils.isValidArithmeticRGB(1.0f));
 		TestCase.assertFalse(ColorUtils.isValidArithmeticRGB(1.0f + .0000001f));
 
+		TestCase.assertFalse(ColorUtils.isValidHue(-0.0001f));
+		TestCase.assertTrue(ColorUtils.isValidHue(0.0f));
+		TestCase.assertTrue(ColorUtils.isValidHue(180.0f));
+		TestCase.assertTrue(ColorUtils.isValidHue(360.0f));
+		TestCase.assertFalse(ColorUtils.isValidHue(360.0001f));
+
+		TestCase.assertFalse(ColorUtils.isValidSaturation(-0.0001f));
+		TestCase.assertTrue(ColorUtils.isValidSaturation(0.0f));
+		TestCase.assertTrue(ColorUtils.isValidSaturation(0.5f));
+		TestCase.assertTrue(ColorUtils.isValidSaturation(1.0f));
+		TestCase.assertFalse(ColorUtils.isValidSaturation(1.0001f));
+
+		TestCase.assertFalse(ColorUtils.isValidLightness(-0.0001f));
+		TestCase.assertTrue(ColorUtils.isValidLightness(0.0f));
+		TestCase.assertTrue(ColorUtils.isValidLightness(0.5f));
+		TestCase.assertTrue(ColorUtils.isValidLightness(1.0f));
+		TestCase.assertFalse(ColorUtils.isValidLightness(1.0001f));
+
 	}
 
 	/**
@@ -332,6 +350,90 @@ public class ColorUtilsTest {
 		TestCase.assertEquals("0A", ColorUtils.expandShorthandHexSingle("0A"));
 		TestCase.assertEquals("dd", ColorUtils.expandShorthandHexSingle("d"));
 		TestCase.assertEquals("CC", ColorUtils.expandShorthandHexSingle("C"));
+
+		float[] hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
+				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(0));
+		TestCase.assertEquals(0.0f, hsl[0]);
+		TestCase.assertEquals(0.0f, hsl[1]);
+		TestCase.assertEquals(0.0f, hsl[2]);
+
+		float[] arithmeticRGB = ColorUtils.toArithmeticRGB(0.0f, 0.0f, 0.0f);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[0]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
+
+		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(255),
+				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(0));
+		TestCase.assertEquals(0.0f, hsl[0]);
+		TestCase.assertEquals(1.0f, hsl[1]);
+		TestCase.assertEquals(0.5f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(0.0f, 1.0f, 0.5f);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[0]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
+
+		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
+				ColorUtils.toArithmeticRGB(255), ColorUtils.toArithmeticRGB(0));
+		TestCase.assertEquals(120.0f, hsl[0]);
+		TestCase.assertEquals(1.0f, hsl[1]);
+		TestCase.assertEquals(0.5f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(120.0f, 1.0f, 0.5f);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[0]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[1]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
+
+		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
+				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(255));
+		TestCase.assertEquals(240.0f, hsl[0]);
+		TestCase.assertEquals(1.0f, hsl[1]);
+		TestCase.assertEquals(0.5f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(240.0f, 1.0f, 0.5f);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[0]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[2]);
+
+		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(255),
+				ColorUtils.toArithmeticRGB(255),
+				ColorUtils.toArithmeticRGB(255));
+		TestCase.assertEquals(0.0f, hsl[0]);
+		TestCase.assertEquals(0.0f, hsl[1]);
+		TestCase.assertEquals(1.0f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(0.0f, 0.0f, 1.0f);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[0]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[1]);
+		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[2]);
+
+		hsl = ColorUtils
+				.toHSL(ColorUtils.toArithmeticRGB(200),
+						ColorUtils.toArithmeticRGB(165),
+						ColorUtils.toArithmeticRGB(10));
+		TestCase.assertEquals(48.94737f, hsl[0]);
+		TestCase.assertEquals(0.9047619f, hsl[1]);
+		TestCase.assertEquals(0.4117647f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(48.94737f, 0.9047619f,
+				0.4117647f);
+		TestCase.assertEquals(200, ColorUtils.toRGB(arithmeticRGB[0]));
+		TestCase.assertEquals(165, ColorUtils.toRGB(arithmeticRGB[1]));
+		TestCase.assertEquals(10, ColorUtils.toRGB(arithmeticRGB[2]));
+
+		hsl = ColorUtils
+				.toHSL(ColorUtils.toArithmeticRGB(52),
+						ColorUtils.toArithmeticRGB(113),
+						ColorUtils.toArithmeticRGB(82));
+		TestCase.assertEquals(149.50821f, hsl[0]);
+		TestCase.assertEquals(0.36969694f, hsl[1]);
+		TestCase.assertEquals(0.32352942f, hsl[2]);
+
+		arithmeticRGB = ColorUtils.toArithmeticRGB(149.50821f, 0.36969694f,
+				0.32352942f);
+		TestCase.assertEquals(52, ColorUtils.toRGB(arithmeticRGB[0]));
+		TestCase.assertEquals(113, ColorUtils.toRGB(arithmeticRGB[1]));
+		TestCase.assertEquals(82, ColorUtils.toRGB(arithmeticRGB[2]));
 
 	}
 
