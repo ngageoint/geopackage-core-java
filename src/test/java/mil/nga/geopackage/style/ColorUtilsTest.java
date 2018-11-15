@@ -351,8 +351,7 @@ public class ColorUtilsTest {
 		TestCase.assertEquals("dd", ColorUtils.expandShorthandHexSingle("d"));
 		TestCase.assertEquals("CC", ColorUtils.expandShorthandHexSingle("C"));
 
-		float[] hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
-				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(0));
+		float[] hsl = ColorUtils.toHSL(0, 0, 0);
 		TestCase.assertEquals(0.0f, hsl[0]);
 		TestCase.assertEquals(0.0f, hsl[1]);
 		TestCase.assertEquals(0.0f, hsl[2]);
@@ -362,8 +361,7 @@ public class ColorUtilsTest {
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
 
-		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(255),
-				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(0));
+		hsl = ColorUtils.toHSL(255, 0, 0);
 		TestCase.assertEquals(0.0f, hsl[0]);
 		TestCase.assertEquals(1.0f, hsl[1]);
 		TestCase.assertEquals(0.5f, hsl[2]);
@@ -373,8 +371,7 @@ public class ColorUtilsTest {
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
 
-		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
-				ColorUtils.toArithmeticRGB(255), ColorUtils.toArithmeticRGB(0));
+		hsl = ColorUtils.toHSL(0, 255, 0);
 		TestCase.assertEquals(120.0f, hsl[0]);
 		TestCase.assertEquals(1.0f, hsl[1]);
 		TestCase.assertEquals(0.5f, hsl[2]);
@@ -384,8 +381,7 @@ public class ColorUtilsTest {
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[1]);
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[2]);
 
-		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(0),
-				ColorUtils.toArithmeticRGB(0), ColorUtils.toArithmeticRGB(255));
+		hsl = ColorUtils.toHSL(0, 0, 255);
 		TestCase.assertEquals(240.0f, hsl[0]);
 		TestCase.assertEquals(1.0f, hsl[1]);
 		TestCase.assertEquals(0.5f, hsl[2]);
@@ -395,9 +391,7 @@ public class ColorUtilsTest {
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(0), arithmeticRGB[1]);
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[2]);
 
-		hsl = ColorUtils.toHSL(ColorUtils.toArithmeticRGB(255),
-				ColorUtils.toArithmeticRGB(255),
-				ColorUtils.toArithmeticRGB(255));
+		hsl = ColorUtils.toHSL(255, 255, 255);
 		TestCase.assertEquals(0.0f, hsl[0]);
 		TestCase.assertEquals(0.0f, hsl[1]);
 		TestCase.assertEquals(1.0f, hsl[2]);
@@ -407,33 +401,25 @@ public class ColorUtilsTest {
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[1]);
 		TestCase.assertEquals(ColorUtils.toArithmeticRGB(255), arithmeticRGB[2]);
 
-		hsl = ColorUtils
-				.toHSL(ColorUtils.toArithmeticRGB(200),
-						ColorUtils.toArithmeticRGB(165),
-						ColorUtils.toArithmeticRGB(10));
+		hsl = ColorUtils.toHSL(200, 165, 10);
 		TestCase.assertEquals(48.94737f, hsl[0]);
 		TestCase.assertEquals(0.9047619f, hsl[1]);
 		TestCase.assertEquals(0.4117647f, hsl[2]);
 
-		arithmeticRGB = ColorUtils.toArithmeticRGB(48.94737f, 0.9047619f,
-				0.4117647f);
-		TestCase.assertEquals(200, ColorUtils.toRGB(arithmeticRGB[0]));
-		TestCase.assertEquals(165, ColorUtils.toRGB(arithmeticRGB[1]));
-		TestCase.assertEquals(10, ColorUtils.toRGB(arithmeticRGB[2]));
+		int[] rgb = ColorUtils.toRGB(48.94737f, 0.9047619f, 0.4117647f);
+		TestCase.assertEquals(200, rgb[0]);
+		TestCase.assertEquals(165, rgb[1]);
+		TestCase.assertEquals(10, rgb[2]);
 
-		hsl = ColorUtils
-				.toHSL(ColorUtils.toArithmeticRGB(52),
-						ColorUtils.toArithmeticRGB(113),
-						ColorUtils.toArithmeticRGB(82));
+		hsl = ColorUtils.toHSL(52, 113, 82);
 		TestCase.assertEquals(149.50821f, hsl[0]);
 		TestCase.assertEquals(0.36969694f, hsl[1]);
 		TestCase.assertEquals(0.32352942f, hsl[2]);
 
-		arithmeticRGB = ColorUtils.toArithmeticRGB(149.50821f, 0.36969694f,
-				0.32352942f);
-		TestCase.assertEquals(52, ColorUtils.toRGB(arithmeticRGB[0]));
-		TestCase.assertEquals(113, ColorUtils.toRGB(arithmeticRGB[1]));
-		TestCase.assertEquals(82, ColorUtils.toRGB(arithmeticRGB[2]));
+		rgb = ColorUtils.toRGB(149.50821f, 0.36969694f, 0.32352942f);
+		TestCase.assertEquals(52, rgb[0]);
+		TestCase.assertEquals(113, rgb[1]);
+		TestCase.assertEquals(82, rgb[2]);
 
 	}
 

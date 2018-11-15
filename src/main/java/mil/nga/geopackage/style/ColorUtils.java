@@ -341,6 +341,23 @@ public class ColorUtils {
 	}
 
 	/**
+	 * Convert red, green, and blue integer values to HSL (hue, saturation,
+	 * lightness) values
+	 * 
+	 * @param red
+	 *            red color inclusively between 0 and 255
+	 * @param green
+	 *            green color inclusively between 0 and 255
+	 * @param blue
+	 *            blue color inclusively between 0 and 255
+	 * @return HSL array where: 0 = hue, 1 = saturation, 2 = lightness
+	 */
+	public static float[] toHSL(int red, int green, int blue) {
+		return toHSL(toArithmeticRGB(red), toArithmeticRGB(green),
+				toArithmeticRGB(blue));
+	}
+
+	/**
 	 * Convert HSL (hue, saturation, and lightness) values to RGB arithmetic
 	 * values
 	 * 
@@ -373,6 +390,24 @@ public class ColorUtils {
 		float blue = hslConvert(t1, t2, hue - 2);
 
 		return new float[] { red, green, blue };
+	}
+
+	/**
+	 * Convert HSL (hue, saturation, and lightness) values to RGB integer values
+	 * 
+	 * @param hue
+	 *            hue value inclusively between 0.0 and 360.0
+	 * @param saturation
+	 *            saturation inclusively between 0.0 and 1.0
+	 * @param lightness
+	 *            lightness inclusively between 0.0 and 1.0
+	 * @return RGB integer array where: 0 = red, 1 = green, 2 = blue
+	 */
+	public static int[] toRGB(float hue, float saturation, float lightness) {
+		float[] arithmeticRGB = toArithmeticRGB(hue, saturation, lightness);
+		int[] rgb = new int[] { toRGB(arithmeticRGB[0]),
+				toRGB(arithmeticRGB[1]), toRGB(arithmeticRGB[2]) };
+		return rgb;
 	}
 
 	/**
