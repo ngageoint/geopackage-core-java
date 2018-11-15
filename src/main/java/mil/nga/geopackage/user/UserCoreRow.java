@@ -212,6 +212,35 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the value at the index as a string
+	 * 
+	 * @param index
+	 *            index
+	 * @return value
+	 * @since 3.1.1
+	 */
+	public String getValueString(int index) {
+		String stringValue = null;
+		Object value = getValue(index);
+		if (value != null) {
+			stringValue = value.toString();
+		}
+		return stringValue;
+	}
+
+	/**
+	 * Get the value of the column name as a string
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return value
+	 * @since 3.1.1
+	 */
+	public String getValueString(String columnName) {
+		return getValueString(table.getColumnIndex(columnName));
+	}
+
+	/**
 	 * Get the row values
 	 * 
 	 * @return values
