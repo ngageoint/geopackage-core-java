@@ -269,25 +269,14 @@ public class SimpleAttributesTable extends UserRelatedTable {
 
 	/**
 	 * Determine if the data type is a simple type: TEXT, INTEGER, or REAL
+	 * storage classes
 	 * 
 	 * @param dataType
 	 *            data type
 	 * @return true if a simple column
 	 */
 	public static boolean isSimple(GeoPackageDataType dataType) {
-
-		boolean simple = false;
-
-		switch (dataType) {
-		case TEXT:
-		case INTEGER:
-		case REAL:
-			simple = true;
-			break;
-		default:
-		}
-
-		return simple;
+		return dataType != GeoPackageDataType.BLOB;
 	}
 
 }
