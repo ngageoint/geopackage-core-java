@@ -17,6 +17,7 @@ import mil.nga.geopackage.extension.related.media.MediaTable;
 import mil.nga.geopackage.extension.related.simple.SimpleAttributesTable;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 
@@ -666,6 +667,80 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Adds a tiles relationship between the base table and related tiles table.
+	 * Creates a default user mapping table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTilesTableName
+	 *            related tiles table name
+	 * @param mappingTableName
+	 *            mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addTilesRelationship(String baseTableName,
+			String relatedTilesTableName, String mappingTableName) {
+		return addRelationship(baseTableName, relatedTilesTableName,
+				mappingTableName, RelationType.TILES);
+	}
+
+	/**
+	 * Adds a tiles relationship between the base table and related tiles table.
+	 * Creates the user mapping table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param relatedTilesTableName
+	 *            related tiles table name
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addTilesRelationship(String baseTableName,
+			String relatedTilesTableName, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, relatedTilesTableName,
+				userMappingTable, RelationType.TILES);
+	}
+
+	/**
+	 * Adds a tiles relationship between the base table and user tiles related
+	 * table. Creates a default user mapping table and the tile table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param tileTable
+	 *            user tile table
+	 * @param mappingTableName
+	 *            user mapping table name
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addTilesRelationship(String baseTableName,
+			TileTable tileTable, String mappingTableName) {
+		return addRelationship(baseTableName, tileTable, mappingTableName);
+	}
+
+	/**
+	 * Adds a tiles relationship between the base table and user tiles related
+	 * table. Creates the user mapping table and a tile table if needed.
+	 * 
+	 * @param baseTableName
+	 *            base table name
+	 * @param tileTable
+	 *            user tile table
+	 * @param userMappingTable
+	 *            user mapping table
+	 * @return The relationship that was added
+	 * @since 3.1.1
+	 */
+	public ExtendedRelation addTilesRelationship(String baseTableName,
+			TileTable tileTable, UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, tileTable, userMappingTable);
+	}
+
+	/**
 	 * Validate that the relation name is valid between the base and related
 	 * table
 	 * 
@@ -715,40 +790,13 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		if (relationType != null) {
 
-			switch (relationType) {
-			case FEATURES:
-				if (!geoPackage.isFeatureTable(baseTableName)) {
-					throw new GeoPackageException(
-							"The base table must be a feature table. Relation: "
-									+ relationType.getName() + ", Base Table: "
-									+ baseTableName + ", Type: "
-									+ geoPackage.getTableType(baseTableName));
-				}
-				if (!geoPackage.isFeatureTable(relatedTableName)) {
-					throw new GeoPackageException(
-							"The related table must be a feature table. Relation: "
-									+ relationType.getName()
-									+ ", Related Table: " + relatedTableName
-									+ ", Type: "
-									+ geoPackage.getTableType(relatedTableName));
-				}
-				break;
-			case SIMPLE_ATTRIBUTES:
-			case MEDIA:
-			case ATTRIBUTES:
-				if (!geoPackage.isTableType(relationType.getDataType(),
-						relatedTableName)) {
-					throw new GeoPackageException(
-							"The related table must be a "
-									+ relationType.getDataType()
-									+ " table. Related Table: "
-									+ relatedTableName + ", Type: "
-									+ geoPackage.getTableType(relatedTableName));
-				}
-				break;
-			default:
-				throw new GeoPackageException("Unsupported relation type: "
-						+ relationType);
+			if (!geoPackage.isTableType(relationType.getDataType(),
+					relatedTableName)) {
+				throw new GeoPackageException("The related table must be a "
+						+ relationType.getDataType()
+						+ " table. Related Table: " + relatedTableName
+						+ ", Type: "
+						+ geoPackage.getTableType(relatedTableName));
 			}
 
 		}

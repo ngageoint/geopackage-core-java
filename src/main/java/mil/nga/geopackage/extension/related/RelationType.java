@@ -31,7 +31,14 @@ public enum RelationType {
 	 * 
 	 * @since 3.1.1
 	 */
-	ATTRIBUTES("attributes", ContentsDataType.ATTRIBUTES);
+	ATTRIBUTES(ContentsDataType.ATTRIBUTES.getName(), ContentsDataType.ATTRIBUTES),
+
+	/**
+	 * Relate features or attributes with tiles
+	 * 
+	 * @since 3.1.1
+	 */
+	TILES(ContentsDataType.TILES.getName(), ContentsDataType.TILES);
 
 	/**
 	 * Relation type name
