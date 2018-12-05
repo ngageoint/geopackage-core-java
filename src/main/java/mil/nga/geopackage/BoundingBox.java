@@ -1,8 +1,11 @@
 package mil.nga.geopackage;
 
+import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionTransform;
+
+import org.osgeo.proj4j.units.Units;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -169,11 +172,23 @@ public class BoundingBox {
 	 * @since 1.1.0
 	 */
 	public GeometryEnvelope buildEnvelope() {
+		return buildEnvelope(this);
+	}
+
+	/**
+	 * Build a Geometry Envelope from the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @return geometry envelope
+	 * @since 3.1.1
+	 */
+	public static GeometryEnvelope buildEnvelope(BoundingBox boundingBox) {
 		GeometryEnvelope envelope = new GeometryEnvelope();
-		envelope.setMinX(minLongitude);
-		envelope.setMaxX(maxLongitude);
-		envelope.setMinY(minLatitude);
-		envelope.setMaxY(maxLatitude);
+		envelope.setMinX(boundingBox.getMinLongitude());
+		envelope.setMaxX(boundingBox.getMaxLongitude());
+		envelope.setMinY(boundingBox.getMinLatitude());
+		envelope.setMaxY(boundingBox.getMaxLatitude());
 		return envelope;
 	}
 
@@ -340,9 +355,19 @@ public class BoundingBox {
 	 * @since 3.0.0
 	 */
 	public BoundingBox transform(ProjectionTransform transform) {
-		GeometryEnvelope envelope = buildEnvelope();
-		GeometryEnvelope transformedEnvelope = transform.transform(envelope);
-		BoundingBox transformed = new BoundingBox(transformedEnvelope);
+		BoundingBox transformed = this;
+		if (transform.isSameProjection()) {
+			transformed = new BoundingBox(transformed);
+		} else {
+			if (transform.getFromProjection().getUnit() == Units.DEGREES) {
+				transformed = TileBoundingBoxUtils
+						.boundDegreesBoundingBoxWithWebMercatorLimits(transformed);
+			}
+			GeometryEnvelope envelope = buildEnvelope(transformed);
+			GeometryEnvelope transformedEnvelope = transform
+					.transform(envelope);
+			transformed = new BoundingBox(transformedEnvelope);
+		}
 		return transformed;
 	}
 
