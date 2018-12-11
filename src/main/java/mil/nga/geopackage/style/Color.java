@@ -61,6 +61,19 @@ public class Color {
 	}
 
 	/**
+	 * Create the color in hex with an alpha
+	 * 
+	 * @param color
+	 *            hex color in format #RRGGBB, RRGGBB, #RGB, RGB, #AARRGGBB,
+	 *            AARRGGBB, #ARGB, or ARGB
+	 * @param alpha
+	 *            alpha integer color inclusively between 0 and 255
+	 */
+	public Color(String color, int alpha) {
+		setColor(color, alpha);
+	}
+
+	/**
 	 * Create the color with individual hex colors
 	 * 
 	 * @param red
@@ -249,6 +262,20 @@ public class Color {
 	public void setColor(String color, float opacity) {
 		setColor(color);
 		setOpacity(opacity);
+	}
+
+	/**
+	 * Set the color in hex with an alpha
+	 * 
+	 * @param color
+	 *            hex color in format #RRGGBB, RRGGBB, #RGB, RGB, #AARRGGBB,
+	 *            AARRGGBB, #ARGB, or ARGB
+	 * @param alpha
+	 *            alpha integer color inclusively between 0 and 255
+	 */
+	public void setColor(String color, int alpha) {
+		setColor(color);
+		setAlpha(alpha);
 	}
 
 	/**
