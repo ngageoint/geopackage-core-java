@@ -5,7 +5,7 @@ import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionTransform;
 
-import org.osgeo.proj4j.units.Units;
+import org.locationtech.proj4j.units.Units;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -359,7 +359,7 @@ public class BoundingBox {
 		if (transform.isSameProjection()) {
 			transformed = new BoundingBox(transformed);
 		} else {
-			if (transform.getFromProjection().getUnit() == Units.DEGREES) {
+			if (transform.getFromProjection().isUnit(Units.DEGREES)) {
 				transformed = TileBoundingBoxUtils
 						.boundDegreesBoundingBoxWithWebMercatorLimits(transformed);
 			}

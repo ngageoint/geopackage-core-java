@@ -17,7 +17,7 @@ import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionTransform;
 
-import org.osgeo.proj4j.units.DegreeUnit;
+import org.locationtech.proj4j.units.Units;
 
 /**
  * Abstract User DAO for reading user tables
@@ -1512,7 +1512,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		int zoomLevel = 0;
 		BoundingBox boundingBox = getBoundingBox();
 		if (boundingBox != null) {
-			if (projection.getUnit() instanceof DegreeUnit) {
+			if (projection.isUnit(Units.DEGREES)) {
 				boundingBox = TileBoundingBoxUtils
 						.boundDegreesBoundingBoxWithWebMercatorLimits(boundingBox);
 			}

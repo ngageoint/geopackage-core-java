@@ -21,7 +21,7 @@ import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
 
-import org.osgeo.proj4j.ProjCoordinate;
+import org.locationtech.proj4j.ProjCoordinate;
 
 /**
  * Tiled Gridded Coverage Core Data Extension
