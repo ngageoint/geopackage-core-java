@@ -81,27 +81,27 @@ public class GriddedCoverageDao extends BaseDaoImpl<GriddedCoverage, Long> {
 	}
 
 	/**
-	 * Delete by tile matrix set name
+	 * Delete by table name
 	 * 
-	 * @param tileMatrixSetName
-	 *            tile matrix set name
+	 * @param tableName
+	 *            table name
 	 * @return deleted count
 	 */
-	public int delete(String tileMatrixSetName) {
+	public int delete(String tableName) {
 		DeleteBuilder<GriddedCoverage, Long> db = deleteBuilder();
 
 		int deleted = 0;
 
 		try {
 			db.where().eq(GriddedCoverage.COLUMN_TILE_MATRIX_SET_NAME,
-					tileMatrixSetName);
+					tableName);
 
 			PreparedDelete<GriddedCoverage> deleteQuery = db.prepare();
 			deleted = delete(deleteQuery);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
-					"Failed to delete Gridded Coverage by Tile Matrix Set Name: "
-							+ tileMatrixSetName, e);
+					"Failed to delete Gridded Coverage by Table Name: "
+							+ tableName, e);
 		}
 
 		return deleted;
