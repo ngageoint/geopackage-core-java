@@ -425,7 +425,6 @@ public class ContentsIdExtension extends BaseExtension {
 	 * Get the count of contents ids
 	 * 
 	 * @return count
-	 * @since 3.1.1
 	 */
 	public long count() {
 		long count = 0;
