@@ -241,7 +241,7 @@ public class ColorTest {
 	}
 
 	/**
-	 * Test color hex constants
+	 * Test color hex integers
 	 */
 	@Test
 	public void testColorHexIntegers() {
@@ -526,10 +526,11 @@ public class ColorTest {
 				new float[] { 0.0f, 0.0f, 0.0f, 0.50196078431f }), 0,
 				Integer.MIN_VALUE, "#000000", "#000", "#80000000", "#80000000",
 				0, 0, 0, 128, 0.0f, 0.0f, 0.0f);
-		validateColor(new Color(1.0f, 0.64705882352f, 0.0f, 0.25098039215f),
-				16753920, 1090495744, "#FFA500", "#FFA500", "#40FFA500",
-				"#40FFA500", 255, 165, 0, 64, 39.0f, 1.0f, 0.5f);
-		validateColor(new Color(1.0f, 1.0f, 0.0f, 0.85098039215f), 16776960,
+		validateColor(new Color(new float[] { 38.823532f, 1.0f, 0.5f,
+				0.25098039215f }), 16753920, 1090495744, "#FFA500", "#FFA500",
+				"#40FFA500", "#40FFA500", 255, 165, 0, 64, 39.0f, 1.0f, 0.5f);
+		validateColor(new Color(
+				new float[] { 60.0f, 1.0f, 0.5f, 0.85098039215f }), 16776960,
 				-637534464, "#FFFF00", "#FF0", "#D9FFFF00", "#D9FFFF00", 255,
 				255, 0, 217, 60.0f, 1.0f, 0.5f);
 
