@@ -41,13 +41,9 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 	/**
 	 * Extension, with author and name
-	 * 
-	 * TODO Remove the commented sections when extension is adopted
 	 */
-	public static final String EXTENSION_NAME = /*
-												 * Extensions.buildExtensionName(
-												 * EXTENSION_AUTHOR,
-												 */EXTENSION_NAME_NO_AUTHOR/* ) */;
+	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
+			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
