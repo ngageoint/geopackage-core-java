@@ -883,7 +883,7 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createFeatureTileLinkTable();
 
 	/**
-	 * Create a new attributes table
+	 * Create a new attributes table (only the attributes table is created, no Contents entry is created)
 	 * 
 	 * @param table
 	 *            attributes table
@@ -892,7 +892,7 @@ public interface GeoPackageCore extends Closeable {
 	public void createAttributesTable(AttributesTable table);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with 1 + additionalColumns.size()
 	 * columns, an id column named "id" and the provided additional columns.
@@ -909,7 +909,7 @@ public interface GeoPackageCore extends Closeable {
 			List<AttributesColumn> additionalColumns);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with 1 + additionalColumns.size()
 	 * columns, an id column named "id" and the provided additional columns.
@@ -929,7 +929,7 @@ public interface GeoPackageCore extends Closeable {
 			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with 1 + additionalColumns.size()
 	 * columns, an id column with the provided name and the provided additional
@@ -949,7 +949,7 @@ public interface GeoPackageCore extends Closeable {
 			String idColumnName, List<AttributesColumn> additionalColumns);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with 1 + additionalColumns.size()
 	 * columns, an id column with the provided name and the provided additional
@@ -972,7 +972,7 @@ public interface GeoPackageCore extends Closeable {
 			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with columns.size() columns and must
 	 * include an integer id column
@@ -988,7 +988,7 @@ public interface GeoPackageCore extends Closeable {
 			List<AttributesColumn> columns);
 
 	/**
-	 * Create a new attributes table.
+	 * Create a new attributes table and a new Contents
 	 * 
 	 * The attributes table will be created with columns.size() columns and must
 	 * include an integer id column
