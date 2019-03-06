@@ -1069,8 +1069,14 @@ public class TileBoundingBoxUtils {
 		if (bounded.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
 			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
 		}
+		if (bounded.getMaxLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
+			bounded.setMaxLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
+		}
 		if (bounded.getMaxLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
 			bounded.setMaxLatitude(ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
+		}
+		if (bounded.getMinLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
+			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
 		}
 		return bounded;
 	}
