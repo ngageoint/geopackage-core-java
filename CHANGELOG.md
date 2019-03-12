@@ -6,7 +6,19 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.1.1 (TBD)
 
-* TBD
+* sf-wkb version 2.0.1
+* sf-proj version 3.0.0
+* NGA [Contents Id](http://ngageoint.github.io/GeoPackage/docs/extensions/contents-id.html) Extension
+* NGA [Feature Style](http://ngageoint.github.io/GeoPackage/docs/extensions/feature-style.html) Extension
+* OGC [Related Tables](http://www.geopackage.org/18-000.html) Extension improvements
+* GeoPackage user version saved as 1.2.1
+* Improved GeoPackage extension cleanup
+* Color support and utilities for hex, RBG, arithmetic RBG, HSL, and integer colors
+* Common data type and contents methods for all User Table types
+* GeoPackage contents check for table names
+* Build a Bounding Box from an envelope
+* WKT for Coordinate Reference Systems extension default value of 'undefined' removed
+* Eclipse project cleanup
 
 ## [3.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.1.0) (10-04-2018)
 
