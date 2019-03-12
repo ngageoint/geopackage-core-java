@@ -240,7 +240,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 * @return true if a user contents table
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean isContentsTable(String table);
 	
@@ -1042,7 +1042,7 @@ public interface GeoPackageCore extends Closeable {
 	 * Get a Contents Id DAO
 	 * 
 	 * @return contents id dao
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ContentsIdDao getContentsIdDao();
 
@@ -1050,7 +1050,7 @@ public interface GeoPackageCore extends Closeable {
 	 * Create the Contents Id Table if it does not exist
 	 * 
 	 * @return true if created
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean createContentsIdTable();
 

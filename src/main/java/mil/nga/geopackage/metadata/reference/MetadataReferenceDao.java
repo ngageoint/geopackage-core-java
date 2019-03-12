@@ -213,7 +213,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * @return rows deleted
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public int deleteByTableName(String tableName) throws SQLException {
 		DeleteBuilder<MetadataReference, Void> db = deleteBuilder();

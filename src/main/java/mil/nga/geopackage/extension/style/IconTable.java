@@ -12,7 +12,7 @@ import mil.nga.geopackage.user.custom.UserCustomTable;
  * Icon Table
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class IconTable extends MediaTable {
 

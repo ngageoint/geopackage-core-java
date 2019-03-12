@@ -5,7 +5,7 @@ package mil.nga.geopackage.style;
  * integer colors
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class Color {
 

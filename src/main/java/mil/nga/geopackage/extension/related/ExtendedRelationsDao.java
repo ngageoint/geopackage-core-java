@@ -138,7 +138,7 @@ public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {
 	 * @return extended relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String baseColumn, String relatedTable, String relatedColumn,

@@ -15,7 +15,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * Contents Id Data Access Object
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class ContentsIdDao extends BaseDaoImpl<ContentsId, Long> {
 

@@ -81,7 +81,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * Drop Force SQL property
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static final String DROP_FORCE_PROPERTY = "drop_force";
 
@@ -297,7 +297,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param tableName
 	 *            table name
 	 * @return true if has extension
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean has(String tableName) {
 		return super.has(EXTENSION_NAME, tableName);
@@ -718,7 +718,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param tableName
 	 *            table name
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void delete(String tableName) {
 		try {
@@ -741,7 +741,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Delete all RTree Index extensions. Drops the triggers, RTree tables, and
 	 * deletes the extensions.
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void deleteAll() {
 		try {

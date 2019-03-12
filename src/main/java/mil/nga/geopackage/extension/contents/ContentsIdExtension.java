@@ -27,7 +27,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
  * key) by an integer identifier.
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class ContentsIdExtension extends BaseExtension {
 

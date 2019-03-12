@@ -9,7 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Contents Id object, for maintaining a unique identifier for contents tables
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 @DatabaseTable(tableName = "nga_contents_id", daoClass = ContentsIdDao.class)
 public class ContentsId {

@@ -102,7 +102,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage) {
 
@@ -160,7 +160,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteFeatureTileLinkExtension(GeoPackageCore geoPackage) {
 
@@ -218,7 +218,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteTileScalingExtension(GeoPackageCore geoPackage) {
 
@@ -248,7 +248,7 @@ public class NGAExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteProperties(GeoPackageCore geoPackage, String table) {
 
@@ -295,7 +295,7 @@ public class NGAExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteFeatureStyle(GeoPackageCore geoPackage,
 			String table) {
@@ -313,7 +313,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteFeatureStyleExtension(GeoPackageCore geoPackage) {
 
@@ -353,7 +353,7 @@ public class NGAExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteContentsId(GeoPackageCore geoPackage, String table) {
 
@@ -371,7 +371,7 @@ public class NGAExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteContentsIdExtension(GeoPackageCore geoPackage) {
 

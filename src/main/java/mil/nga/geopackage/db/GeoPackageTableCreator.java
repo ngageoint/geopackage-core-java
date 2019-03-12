@@ -243,7 +243,7 @@ public class GeoPackageTableCreator {
 	 * Create Contents Id table
 	 * 
 	 * @return executed statements
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public int createContentsId() {
 		return execSQLScript(GeoPackageProperties.getProperty(

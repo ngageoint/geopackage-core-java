@@ -29,14 +29,14 @@ public enum RelationType {
 	/**
 	 * Relate features or attributes with attributes
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	ATTRIBUTES(ContentsDataType.ATTRIBUTES.getName(), ContentsDataType.ATTRIBUTES),
 
 	/**
 	 * Relate features or attributes with tiles
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	TILES(ContentsDataType.TILES.getName(), ContentsDataType.TILES);
 

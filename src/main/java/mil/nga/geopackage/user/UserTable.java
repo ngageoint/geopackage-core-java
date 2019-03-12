@@ -140,7 +140,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the contents data type
 	 * 
 	 * @return data type
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public abstract String getDataType();
 
@@ -381,7 +381,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the contents
 	 * 
 	 * @return contents
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public Contents getContents() {
 		return contents;
@@ -392,7 +392,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param contents
 	 *            contents
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void setContents(Contents contents) {
 		this.contents = contents;

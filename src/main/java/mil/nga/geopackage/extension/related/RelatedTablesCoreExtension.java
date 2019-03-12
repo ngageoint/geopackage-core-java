@@ -392,7 +392,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            user mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserTable<? extends UserColumn> relatedTable,
@@ -412,7 +412,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserTable<? extends UserColumn> relatedTable,
@@ -434,7 +434,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            user mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserTable<? extends UserColumn> relatedTable, String relationName,
@@ -460,7 +460,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addRelationship(String baseTableName,
 			UserTable<? extends UserColumn> relatedTable, String relationName,
@@ -597,7 +597,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
 			String relatedAttributesTableName, String mappingTableName) {
@@ -616,7 +616,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
 			String relatedAttributesTableName, UserMappingTable userMappingTable) {
@@ -636,7 +636,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            user mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
 			AttributesTable attributesTable, String mappingTableName) {
@@ -655,7 +655,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
 			AttributesTable attributesTable, UserMappingTable userMappingTable) {
@@ -673,7 +673,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addTilesRelationship(String baseTableName,
 			String relatedTilesTableName, String mappingTableName) {
@@ -692,7 +692,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addTilesRelationship(String baseTableName,
 			String relatedTilesTableName, UserMappingTable userMappingTable) {
@@ -711,7 +711,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTableName
 	 *            user mapping table name
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addTilesRelationship(String baseTableName,
 			TileTable tileTable, String mappingTableName) {
@@ -729,7 +729,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param userMappingTable
 	 *            user mapping table
 	 * @return The relationship that was added
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public ExtendedRelation addTilesRelationship(String baseTableName,
 			TileTable tileTable, UserMappingTable userMappingTable) {
@@ -850,7 +850,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param relatedTable
 	 *            user related table
 	 * @return true if created, false if the table already existed
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean createRelatedTable(
 			UserTable<? extends UserColumn> relatedTable) {
@@ -981,7 +981,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param table
 	 *            base or related table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void removeRelationships(String table) {
 		try {
@@ -1003,7 +1003,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * 
 	 * @param mappingTable
 	 *            mapping table
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void removeRelationshipsWithMappingTable(String mappingTable) {
 		try {
@@ -1057,7 +1057,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String relatedTable)
 			throws SQLException {
@@ -1074,7 +1074,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return extended relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String relatedTable) throws SQLException {
@@ -1094,7 +1094,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String relatedTable,
 			String mappingTable) throws SQLException {
@@ -1114,7 +1114,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return extended relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String relatedTable, String mappingTable) throws SQLException {
@@ -1137,7 +1137,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String relatedTable,
 			String relation, String mappingTable) throws SQLException {
@@ -1159,7 +1159,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return extended relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String relatedTable, String relation, String mappingTable)
@@ -1187,7 +1187,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String baseColumn,
 			String relatedTable, String relatedColumn, String relation,
@@ -1214,7 +1214,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return extended relations
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String baseColumn, String relatedTable, String relatedColumn,

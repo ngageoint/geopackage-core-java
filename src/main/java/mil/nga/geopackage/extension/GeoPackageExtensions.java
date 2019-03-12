@@ -115,7 +115,7 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteRTreeSpatialIndex(GeoPackageCore geoPackage,
 			String table) {
@@ -132,7 +132,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteRTreeSpatialIndexExtension(
 			GeoPackageCore geoPackage) {
@@ -183,7 +183,7 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteRelatedTables(GeoPackageCore geoPackage,
 			String table) {
@@ -200,7 +200,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteRelatedTablesExtension(GeoPackageCore geoPackage) {
 
@@ -235,7 +235,7 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteGriddedCoverage(GeoPackageCore geoPackage,
 			String table) {
@@ -272,7 +272,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteGriddedCoverageExtension(GeoPackageCore geoPackage) {
 
@@ -313,7 +313,7 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteSchema(GeoPackageCore geoPackage, String table) {
 
@@ -335,7 +335,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteSchemaExtension(GeoPackageCore geoPackage) {
 
@@ -353,7 +353,7 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteMetadata(GeoPackageCore geoPackage, String table) {
 
@@ -376,7 +376,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteMetadataExtension(GeoPackageCore geoPackage) {
 
@@ -392,7 +392,7 @@ public class GeoPackageExtensions {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static void deleteCrsWktExtension(GeoPackageCore geoPackage) {
 

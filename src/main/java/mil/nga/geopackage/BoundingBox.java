@@ -181,7 +181,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box
 	 * @return geometry envelope
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public static GeometryEnvelope buildEnvelope(BoundingBox boundingBox) {
 		GeometryEnvelope envelope = new GeometryEnvelope();

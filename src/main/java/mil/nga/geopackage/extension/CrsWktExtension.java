@@ -173,7 +173,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Remove the extension. Leaves the column and values.
 	 * 
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public void removeExtension() {
 

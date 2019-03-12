@@ -19,7 +19,7 @@ import mil.nga.geopackage.property.PropertyConstants;
  * Feature Core Style extension
  * 
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public abstract class FeatureCoreStyleExtension extends BaseExtension {
 

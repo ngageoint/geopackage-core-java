@@ -263,7 +263,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * Check if has extension
 	 * 
 	 * @return true if has extension
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public boolean has() {
 		return getExtension() != null;

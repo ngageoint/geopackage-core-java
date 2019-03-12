@@ -217,7 +217,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @param index
 	 *            index
 	 * @return value
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public String getValueString(int index) {
 		String stringValue = null;
@@ -234,7 +234,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @param columnName
 	 *            column name
 	 * @return value
-	 * @since 3.1.1
+	 * @since 3.2.0
 	 */
 	public String getValueString(String columnName) {
 		return getValueString(table.getColumnIndex(columnName));
