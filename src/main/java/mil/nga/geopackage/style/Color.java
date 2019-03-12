@@ -1,8 +1,8 @@
 package mil.nga.geopackage.style;
 
 /**
- * Color representation with support for hex, RBG, arithmetic RBG, and integer
- * colors
+ * Color representation with support for hex, RBG, arithmetic RBG, HSL, and
+ * integer colors
  * 
  * @author osbornb
  * @since 3.1.1

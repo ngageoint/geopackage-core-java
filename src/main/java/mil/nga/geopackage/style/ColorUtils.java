@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 import mil.nga.geopackage.GeoPackageException;
 
 /**
- * Color utilities with support for hex, RBG, arithmetic RBG, and integer colors
+ * Color utilities with support for hex, RBG, arithmetic RBG, HSL, and integer
+ * colors
  * 
  * @author osbornb
  * @since 3.1.1
