@@ -16,7 +16,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Color support and utilities for hex, RBG, arithmetic RBG, HSL, and integer colors
 * Common data type and contents methods for all User Table types
 * GeoPackage contents check for table names
-* Build a Bounding Box from an envelope
+* Build an envelope from a Bounding Box
 * WKT for Coordinate Reference Systems extension default value of 'undefined' removed
 * Eclipse project cleanup
 
