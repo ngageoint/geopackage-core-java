@@ -18,6 +18,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * GeoPackage contents check for table names
 * Build an envelope from a Bounding Box
 * WKT for Coordinate Reference Systems extension default value of 'undefined' removed
+* Tile Bounding Box Utils latitude and longitude position from pixel with tile bounds
 * Eclipse project cleanup
 
 ## [3.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.1.0) (10-04-2018)

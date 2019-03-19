@@ -207,9 +207,29 @@ public class TileBoundingBoxUtils {
 	 */
 	public static double getLongitudeFromPixel(long width,
 			BoundingBox boundingBox, float pixel) {
+		return getLongitudeFromPixel(width, boundingBox, boundingBox, pixel);
+	}
 
-		double boxWidth = boundingBox.getMaxLongitude()
-				- boundingBox.getMinLongitude();
+	/**
+	 * Get the longitude from the pixel location, bounding box, tile bounding
+	 * box (when different from bounding box), and image width
+	 * 
+	 * @param width
+	 *            width
+	 * @param boundingBox
+	 *            bounding box
+	 * @param tileBoundingBox
+	 *            tile bounding box
+	 * @param pixel
+	 *            pixel
+	 * @return longitude
+	 * @since 3.2.0
+	 */
+	public static double getLongitudeFromPixel(long width,
+			BoundingBox boundingBox, BoundingBox tileBoundingBox, float pixel) {
+
+		double boxWidth = tileBoundingBox.getMaxLongitude()
+				- tileBoundingBox.getMinLongitude();
 		double percentage = pixel / width;
 		double offset = percentage * boxWidth;
 		double longitude = offset + boundingBox.getMinLongitude();
@@ -253,9 +273,29 @@ public class TileBoundingBoxUtils {
 	 */
 	public static double getLatitudeFromPixel(long height,
 			BoundingBox boundingBox, float pixel) {
+		return getLatitudeFromPixel(height, boundingBox, boundingBox, pixel);
+	}
 
-		double boxHeight = boundingBox.getMaxLatitude()
-				- boundingBox.getMinLatitude();
+	/**
+	 * Get the latitude from the pixel location, bounding box, tile bounding box
+	 * (when different from bounding box), and image height
+	 * 
+	 * @param height
+	 *            height
+	 * @param boundingBox
+	 *            bounding box
+	 * @param tileBoundingBox
+	 *            tile bounding box
+	 * @param pixel
+	 *            pixel
+	 * @return latitude
+	 * @since 3.2.0
+	 */
+	public static double getLatitudeFromPixel(long height,
+			BoundingBox boundingBox, BoundingBox tileBoundingBox, float pixel) {
+
+		double boxHeight = tileBoundingBox.getMaxLatitude()
+				- tileBoundingBox.getMinLatitude();
 		double percentage = pixel / height;
 		double offset = percentage * boxHeight;
 		double latitude = boundingBox.getMaxLatitude() - offset;
