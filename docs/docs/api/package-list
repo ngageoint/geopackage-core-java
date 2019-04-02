@@ -4,6 +4,7 @@ mil.nga.geopackage.core.contents
 mil.nga.geopackage.core.srs
 mil.nga.geopackage.db
 mil.nga.geopackage.extension
+mil.nga.geopackage.extension.contents
 mil.nga.geopackage.extension.coverage
 mil.nga.geopackage.extension.index
 mil.nga.geopackage.extension.link
@@ -13,6 +14,7 @@ mil.nga.geopackage.extension.related.dublin
 mil.nga.geopackage.extension.related.media
 mil.nga.geopackage.extension.related.simple
 mil.nga.geopackage.extension.scale
+mil.nga.geopackage.extension.style
 mil.nga.geopackage.factory
 mil.nga.geopackage.features.columns
 mil.nga.geopackage.features.user
@@ -25,6 +27,7 @@ mil.nga.geopackage.property
 mil.nga.geopackage.schema
 mil.nga.geopackage.schema.columns
 mil.nga.geopackage.schema.constraints
+mil.nga.geopackage.style
 mil.nga.geopackage.tiles
 mil.nga.geopackage.tiles.matrix
 mil.nga.geopackage.tiles.matrixset
