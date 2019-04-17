@@ -156,9 +156,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @since 1.1.8
 	 */
 	public void addColumn(String tableName, String columnName, String columnDef) {
-		execSQL("ALTER TABLE " + CoreSQLUtils.quoteWrap(tableName)
-				+ " ADD COLUMN " + CoreSQLUtils.quoteWrap(columnName) + " "
-				+ columnDef + ";");
+		String sql = CoreSQLUtils
+				.addColumnSQL(tableName, columnName, columnDef);
+		execSQL(sql);
 	}
 
 	/**

@@ -116,6 +116,15 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Reset the column index
+	 * 
+	 * @since 3.2.1
+	 */
+	protected void resetIndex() {
+		this.index = NO_INDEX;
+	}
+
+	/**
 	 * Get the index
 	 * 
 	 * @return index

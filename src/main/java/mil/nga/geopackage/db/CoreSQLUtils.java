@@ -95,11 +95,25 @@ public class CoreSQLUtils {
 	 * @since 3.2.1
 	 */
 	public static String columnSQL(UserColumn column) {
+		return CoreSQLUtils.quoteWrap(column.getName()) + " "
+				+ columnDefinitionSQL(column);
+	}
+
+	/**
+	 * Create the column definition SQL in the format:
+	 * 
+	 * column_type[(max)] [NOT NULL] [PRIMARY KEY AUTOINCREMENT]
+	 * 
+	 * @param column
+	 *            user column
+	 * @return column definition SQL
+	 * @since 3.2.1
+	 */
+	public static String columnDefinitionSQL(UserColumn column) {
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(CoreSQLUtils.quoteWrap(column.getName())).append(" ")
-				.append(column.getTypeName());
+		sql.append(column.getTypeName());
 		if (column.getMax() != null) {
 			sql.append("(").append(column.getMax()).append(")");
 		}
@@ -111,6 +125,40 @@ public class CoreSQLUtils {
 		}
 
 		return sql.toString();
+	}
+
+	/**
+	 * Create SQL for adding a column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            user column
+	 * 
+	 * @return add column SQL
+	 * @since 3.2.1
+	 */
+	public static String addColumnSQL(String table, UserColumn column) {
+		return addColumnSQL(table, column.getName(),
+				columnDefinitionSQL(column));
+	}
+
+	/**
+	 * Create SQL for adding a column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @param columnDef
+	 *            column definition
+	 * @return add column SQL
+	 * @since 3.2.1
+	 */
+	public static String addColumnSQL(String table, String column,
+			String columnDef) {
+		return "ALTER TABLE " + CoreSQLUtils.quoteWrap(table) + " ADD COLUMN "
+				+ CoreSQLUtils.quoteWrap(column) + " " + columnDef + ";";
 	}
 
 }

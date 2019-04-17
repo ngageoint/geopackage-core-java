@@ -443,4 +443,41 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		updateColumns();
 	}
 
+	/**
+	 * Drop a column
+	 * 
+	 * @param column
+	 *            new column
+	 * @since 3.2.1
+	 */
+	protected void dropColumn(TColumn column) {
+		dropColumn(column.getIndex());
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param name
+	 *            column name
+	 * @since 3.2.1
+	 */
+	protected void dropColumn(String name) {
+		dropColumn(getColumnIndex(name));
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param index
+	 *            column index
+	 * @since 3.2.1
+	 */
+	protected void dropColumn(int index) {
+		columns.remove(index);
+		for (int i = index; i < columns.size(); i++) {
+			columns.get(i).resetIndex();
+		}
+		updateColumns();
+	}
+
 }

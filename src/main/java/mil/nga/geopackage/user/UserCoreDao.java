@@ -1690,10 +1690,59 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.1
 	 */
 	public void addColumn(TColumn column) {
-		db.execSQL("ALTER TABLE "
-				+ CoreSQLUtils.quoteWrap(table.getTableName()) + " ADD COLUMN "
-				+ CoreSQLUtils.columnSQL(column) + ";");
+		String sql = CoreSQLUtils.addColumnSQL(table.getTableName(), column);
+		db.execSQL(sql);
 		table.addColumn(column);
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param column
+	 *            column
+	 * @since 3.2.1
+	 */
+	public void dropColumn(TColumn column) {
+		dropTableColumn(column.getName());
+		table.dropColumn(column.getIndex());
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param index
+	 *            column index
+	 * @since 3.2.1
+	 */
+	public void dropColumn(int index) {
+		dropTableColumn(table.getColumnName(index));
+		table.dropColumn(index);
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param name
+	 *            column name
+	 * @since 3.2.1
+	 */
+	public void dropColumn(String name) {
+		dropTableColumn(name);
+		table.dropColumn(name);
+	}
+
+	/**
+	 * Drop a column from the table
+	 * 
+	 * @param name
+	 *            column name
+	 */
+	private void dropTableColumn(String name) {
+		// TODO
+		throw new UnsupportedOperationException("Drop column not yet supported");
+		// db.execSQL("ALTER TABLE "
+		// + CoreSQLUtils.quoteWrap(table.getTableName())
+		// + " DROP COLUMN " + CoreSQLUtils.quoteWrap(name) + ";");
 	}
 
 }
