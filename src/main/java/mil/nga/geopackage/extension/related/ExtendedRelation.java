@@ -8,6 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * mapping table
  * 
  * @author jyutzler
+ * @author osbornb
  * @since 3.0.1
  */
 @DatabaseTable(tableName = "gpkgext_relations", daoClass = ExtendedRelationsDao.class)

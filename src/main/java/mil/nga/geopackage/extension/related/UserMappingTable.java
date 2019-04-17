@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 
@@ -11,6 +12,7 @@ import mil.nga.geopackage.user.custom.UserCustomTable;
  * Contains user mapping table factory and utility methods
  * 
  * @author jyutzler
+ * @author osbornb
  * @since 3.0.1
  */
 public class UserMappingTable extends UserCustomTable {
@@ -60,12 +62,17 @@ public class UserMappingTable extends UserCustomTable {
 	}
 
 	/**
-	 * Create the required table columns, starting at index 0
+	 * Create the required table columns
 	 * 
 	 * @return user custom columns
 	 */
 	public static List<UserCustomColumn> createRequiredColumns() {
-		return createRequiredColumns(0);
+
+		List<UserCustomColumn> columns = new ArrayList<>();
+		columns.add(createBaseIdColumn());
+		columns.add(createRelatedIdColumn());
+
+		return columns;
 	}
 
 	/**
@@ -87,13 +94,33 @@ public class UserMappingTable extends UserCustomTable {
 	/**
 	 * Create a base id column
 	 * 
+	 * @return base id column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createBaseIdColumn() {
+		return createBaseIdColumn(UserColumn.NO_INDEX);
+	}
+
+	/**
+	 * Create a base id column
+	 * 
 	 * @param index
 	 *            column index
 	 * @return base id column
 	 */
 	public static UserCustomColumn createBaseIdColumn(int index) {
 		return UserCustomColumn.createColumn(index, COLUMN_BASE_ID,
-				GeoPackageDataType.INTEGER, true, null);
+				GeoPackageDataType.INTEGER, true);
+	}
+
+	/**
+	 * Create a related id column
+	 * 
+	 * @return related id column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createRelatedIdColumn() {
+		return createRelatedIdColumn(UserColumn.NO_INDEX);
 	}
 
 	/**
@@ -105,7 +132,7 @@ public class UserMappingTable extends UserCustomTable {
 	 */
 	public static UserCustomColumn createRelatedIdColumn(int index) {
 		return UserCustomColumn.createColumn(index, COLUMN_RELATED_ID,
-				GeoPackageDataType.INTEGER, true, null);
+				GeoPackageDataType.INTEGER, true);
 	}
 
 	/**

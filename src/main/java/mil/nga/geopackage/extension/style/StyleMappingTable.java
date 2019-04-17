@@ -51,10 +51,8 @@ public class StyleMappingTable extends UserMappingTable {
 		List<UserCustomColumn> columns = new ArrayList<>();
 		columns.addAll(createRequiredColumns());
 
-		int index = columns.size();
-		columns.add(UserCustomColumn
-				.createColumn(index++, COLUMN_GEOMETRY_TYPE_NAME,
-						GeoPackageDataType.TEXT, false, null));
+		columns.add(UserCustomColumn.createColumn(COLUMN_GEOMETRY_TYPE_NAME,
+				GeoPackageDataType.TEXT));
 
 		return columns;
 	}

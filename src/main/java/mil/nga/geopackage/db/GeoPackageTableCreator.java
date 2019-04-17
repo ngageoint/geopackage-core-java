@@ -302,17 +302,8 @@ public class GeoPackageTableCreator {
 			if (i > 0) {
 				sql.append(",");
 			}
-			sql.append("\n  ").append(CoreSQLUtils.quoteWrap(column.getName()))
-					.append(" ").append(column.getTypeName());
-			if (column.getMax() != null) {
-				sql.append("(").append(column.getMax()).append(")");
-			}
-			if (column.isNotNull()) {
-				sql.append(" NOT NULL");
-			}
-			if (column.isPrimaryKey()) {
-				sql.append(" PRIMARY KEY AUTOINCREMENT");
-			}
+			sql.append("\n  ");
+			sql.append(CoreSQLUtils.columnSQL(column));
 		}
 
 		// Add unique constraints

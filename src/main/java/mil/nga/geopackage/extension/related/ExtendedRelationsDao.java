@@ -14,6 +14,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * Extended Relations Data Access Object
  * 
  * @author jyutzler
+ * @author osbornb
  * @since 3.0.1
  */
 public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {

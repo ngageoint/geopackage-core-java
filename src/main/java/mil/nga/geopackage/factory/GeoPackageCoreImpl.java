@@ -676,10 +676,10 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		List<FeatureColumn> columns = new ArrayList<FeatureColumn>();
-		columns.add(FeatureColumn.createPrimaryKeyColumn(0, idColumnName));
-		columns.add(FeatureColumn.createGeometryColumn(1,
+		columns.add(FeatureColumn.createPrimaryKeyColumn(idColumnName));
+		columns.add(FeatureColumn.createGeometryColumn(
 				geometryColumns.getColumnName(),
-				geometryColumns.getGeometryType(), false, null));
+				geometryColumns.getGeometryType()));
 
 		if (additionalColumns != null) {
 			columns.addAll(additionalColumns);
@@ -725,7 +725,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			getContentsDao().create(contents);
 
 			table.setContents(contents);
-			
+
 			// Create new geometry columns
 			geometryColumns.setContents(contents);
 			geometryColumns.setSrs(contents.getSrs());
@@ -861,7 +861,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			getContentsDao().create(contents);
 
 			table.setContents(contents);
-			
+
 			// Create new matrix tile set
 			tileMatrixSet = new TileMatrixSet();
 			tileMatrixSet.setContents(contents);
@@ -1382,7 +1382,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
-		columns.add(AttributesColumn.createPrimaryKeyColumn(0, idColumnName));
+		columns.add(AttributesColumn.createPrimaryKeyColumn(idColumnName));
 
 		if (additionalColumns != null) {
 			columns.addAll(additionalColumns);

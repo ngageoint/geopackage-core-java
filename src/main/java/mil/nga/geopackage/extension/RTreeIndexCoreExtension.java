@@ -1130,15 +1130,15 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	protected UserCustomTable getRTreeTable(FeatureTable featureTable) {
 
 		List<UserCustomColumn> columns = new ArrayList<>();
-		columns.add(UserCustomColumn.createPrimaryKeyColumn(0, COLUMN_ID));
-		columns.add(UserCustomColumn.createColumn(1, COLUMN_MIN_X,
-				GeoPackageDataType.FLOAT, false, null));
-		columns.add(UserCustomColumn.createColumn(2, COLUMN_MAX_X,
-				GeoPackageDataType.FLOAT, false, null));
-		columns.add(UserCustomColumn.createColumn(3, COLUMN_MIN_Y,
-				GeoPackageDataType.FLOAT, false, null));
-		columns.add(UserCustomColumn.createColumn(4, COLUMN_MAX_Y,
-				GeoPackageDataType.FLOAT, false, null));
+		columns.add(UserCustomColumn.createPrimaryKeyColumn(COLUMN_ID));
+		columns.add(UserCustomColumn.createColumn(COLUMN_MIN_X,
+				GeoPackageDataType.FLOAT));
+		columns.add(UserCustomColumn.createColumn(COLUMN_MAX_X,
+				GeoPackageDataType.FLOAT));
+		columns.add(UserCustomColumn.createColumn(COLUMN_MIN_Y,
+				GeoPackageDataType.FLOAT));
+		columns.add(UserCustomColumn.createColumn(COLUMN_MAX_Y,
+				GeoPackageDataType.FLOAT));
 
 		String rTreeTableName = getRTreeTableName(featureTable.getTableName(),
 				featureTable.getGeometryColumn().getName());

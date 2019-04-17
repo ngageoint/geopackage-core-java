@@ -209,12 +209,20 @@ public class TileTable extends UserTable<TileColumn> {
 	}
 
 	/**
-	 * Create the required table columns, starting at index 0
+	 * Create the required table columns
 	 * 
 	 * @return tile columns
 	 */
 	public static List<TileColumn> createRequiredColumns() {
-		return createRequiredColumns(0);
+
+		List<TileColumn> columns = new ArrayList<TileColumn>();
+		columns.add(TileColumn.createIdColumn());
+		columns.add(TileColumn.createZoomLevelColumn());
+		columns.add(TileColumn.createTileColumnColumn());
+		columns.add(TileColumn.createTileRowColumn());
+		columns.add(TileColumn.createTileDataColumn());
+
+		return columns;
 	}
 
 	/**

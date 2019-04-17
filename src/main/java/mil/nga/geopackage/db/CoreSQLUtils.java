@@ -1,5 +1,7 @@
 package mil.nga.geopackage.db;
 
+import mil.nga.geopackage.user.UserColumn;
+
 /**
  * Core SQL Utility methods
  *
@@ -80,6 +82,35 @@ public class CoreSQLUtils {
 			columnsWithAs = columns;
 		}
 		return columnsWithAs;
+	}
+
+	/**
+	 * Create the column SQL in the format:
+	 * 
+	 * "column_name" column_type[(max)] [NOT NULL] [PRIMARY KEY AUTOINCREMENT]
+	 * 
+	 * @param column
+	 *            user column
+	 * @return column SQL
+	 * @since 3.2.1
+	 */
+	public static String columnSQL(UserColumn column) {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append(CoreSQLUtils.quoteWrap(column.getName())).append(" ")
+				.append(column.getTypeName());
+		if (column.getMax() != null) {
+			sql.append("(").append(column.getMax()).append(")");
+		}
+		if (column.isNotNull()) {
+			sql.append(" NOT NULL");
+		}
+		if (column.isPrimaryKey()) {
+			sql.append(" PRIMARY KEY AUTOINCREMENT");
+		}
+
+		return sql.toString();
 	}
 
 }

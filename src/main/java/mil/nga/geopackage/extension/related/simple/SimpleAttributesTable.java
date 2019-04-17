@@ -68,17 +68,16 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	}
 
 	/**
-	 * Create the required table columns, starting at index 0
+	 * Create the required table columns
 	 * 
 	 * @return user custom columns
 	 */
 	public static List<UserCustomColumn> createRequiredColumns() {
-		return createRequiredColumns(0);
+		return createRequiredColumns(null);
 	}
 
 	/**
-	 * Create the required table columns with the id column name, starting at
-	 * index 0
+	 * Create the required table columns with the id column name
 	 * 
 	 * @param idColumnName
 	 *            id column name
@@ -86,7 +85,15 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 */
 	public static List<UserCustomColumn> createRequiredColumns(
 			String idColumnName) {
-		return createRequiredColumns(0, idColumnName);
+
+		if (idColumnName == null) {
+			idColumnName = COLUMN_ID;
+		}
+
+		List<UserCustomColumn> columns = new ArrayList<>();
+		columns.add(createIdColumn(idColumnName));
+
+		return columns;
 	}
 
 	/**
@@ -121,6 +128,18 @@ public class SimpleAttributesTable extends UserRelatedTable {
 		columns.add(createIdColumn(startingIndex++, idColumnName));
 
 		return columns;
+	}
+
+	/**
+	 * Create the primary key id column
+	 * 
+	 * @param idColumnName
+	 *            id column name
+	 * @return id column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createIdColumn(String idColumnName) {
+		return createIdColumn(UserColumn.NO_INDEX, idColumnName);
 	}
 
 	/**

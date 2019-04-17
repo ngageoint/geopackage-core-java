@@ -30,7 +30,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Array of column names
 	 */
-	private final String[] columnNames;
+	private String[] columnNames;
 
 	/**
 	 * List of columns
@@ -45,7 +45,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Primary key column index
 	 */
-	private final int pkIndex;
+	private int pkIndex;
 
 	/**
 	 * Unique constraints
@@ -71,54 +71,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		this.tableName = tableName;
 		this.columns = columns;
 
-		Integer pk = null;
-
-		Set<Integer> indices = new HashSet<Integer>();
-
-		// Build the column name array for queries, find the primary key and
-		// geometry
-		this.columnNames = new String[columns.size()];
-		for (TColumn column : columns) {
-
-			int index = column.getIndex();
-
-			if (column.isPrimaryKey()) {
-				if (pk != null) {
-					throw new GeoPackageException(
-							"More than one primary key column was found for table '"
-									+ tableName + "'. Index " + pk + " and "
-									+ index);
-				}
-				pk = index;
-			}
-
-			// Check for duplicate indices
-			if (indices.contains(index)) {
-				throw new GeoPackageException("Duplicate index: " + index
-						+ ", Table Name: " + tableName);
-			}
-			indices.add(index);
-
-			columnNames[index] = column.getName();
-			nameToIndex.put(column.getName(), index);
-		}
-
-		if (pk != null) {
-			pkIndex = pk;
-		} else {
-			pkIndex = -1;
-		}
-
-		// Verify the columns have ordered indices without gaps
-		for (int i = 0; i < columns.size(); i++) {
-			if (!indices.contains(i)) {
-				throw new GeoPackageException("No column found at index: " + i
-						+ ", Table Name: " + tableName);
-			}
-		}
-
-		// Sort the columns by index
-		Collections.sort(columns);
+		updateColumns();
 	}
 
 	/**
@@ -134,6 +87,73 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		this.nameToIndex = userTable.nameToIndex;
 		this.pkIndex = userTable.pkIndex;
 		this.uniqueConstraints = userTable.uniqueConstraints;
+	}
+
+	/**
+	 * Update the table columns
+	 * 
+	 * @since 3.2.1
+	 */
+	protected void updateColumns() {
+
+		nameToIndex.clear();
+
+		Set<Integer> indices = new HashSet<Integer>();
+
+		// Check for missing indices and duplicates
+		List<TColumn> needsIndex = new ArrayList<>();
+		for (TColumn column : columns) {
+			if (column.hasIndex()) {
+				int index = column.getIndex();
+				if (indices.contains(index)) {
+					throw new GeoPackageException("Duplicate index: " + index
+							+ ", Table Name: " + tableName);
+				} else {
+					indices.add(index);
+				}
+			} else {
+				needsIndex.add(column);
+			}
+		}
+
+		// Update columns that need an index
+		int currentIndex = -1;
+		for (TColumn column : needsIndex) {
+			while (indices.contains(++currentIndex)) {
+			}
+			column.setIndex(currentIndex);
+		}
+
+		// Sort the columns by index
+		Collections.sort(columns);
+
+		pkIndex = -1;
+		columnNames = new String[columns.size()];
+
+		for (int index = 0; index < columns.size(); index++) {
+
+			TColumn column = columns.get(index);
+
+			if (column.getIndex() != index) {
+				throw new GeoPackageException("No column found at index: "
+						+ index + ", Table Name: " + tableName);
+			}
+
+			if (column.isPrimaryKey()) {
+				if (pkIndex != -1) {
+					throw new GeoPackageException(
+							"More than one primary key column was found for table '"
+									+ tableName + "'. Index " + pkIndex
+									+ " and " + index);
+				}
+				pkIndex = index;
+			}
+
+			String columnName = column.getName();
+			columnNames[index] = columnName;
+			nameToIndex.put(columnName, index);
+		}
+
 	}
 
 	/**
@@ -409,6 +429,18 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected void validateContents(Contents contents) {
 
+	}
+
+	/**
+	 * Add a new column
+	 * 
+	 * @param column
+	 *            new column
+	 * @since 3.2.1
+	 */
+	protected void addColumn(TColumn column) {
+		columns.add(column);
+		updateColumns();
 	}
 
 }

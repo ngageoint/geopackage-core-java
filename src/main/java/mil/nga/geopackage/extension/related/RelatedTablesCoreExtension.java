@@ -25,6 +25,7 @@ import mil.nga.geopackage.user.UserTable;
  * Related Tables core extension
  * 
  * @author jyutzler
+ * @author osbornb
  * @since 3.0.1
  */
 public abstract class RelatedTablesCoreExtension extends BaseExtension {

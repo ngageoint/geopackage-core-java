@@ -1682,4 +1682,18 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				Double.toString(doubleValue + tolerance) };
 	}
 
+	/**
+	 * Add a new column
+	 * 
+	 * @param column
+	 *            new column
+	 * @since 3.2.1
+	 */
+	public void addColumn(TColumn column) {
+		db.execSQL("ALTER TABLE "
+				+ CoreSQLUtils.quoteWrap(table.getTableName()) + " ADD COLUMN "
+				+ CoreSQLUtils.columnSQL(column) + ";");
+		table.addColumn(column);
+	}
+
 }

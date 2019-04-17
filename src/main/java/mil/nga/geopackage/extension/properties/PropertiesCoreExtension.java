@@ -105,10 +105,10 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 		// Create the attributes table
 		if (!geoPackage.isTable(TABLE_NAME)) {
 
-			AttributesColumn propertyColumn = AttributesColumn.createColumn(1,
+			AttributesColumn propertyColumn = AttributesColumn.createColumn(
 					COLUMN_PROPERTY, GeoPackageDataType.TEXT, true, null);
-			AttributesColumn valueColumn = AttributesColumn.createColumn(2,
-					COLUMN_VALUE, GeoPackageDataType.TEXT, false, null);
+			AttributesColumn valueColumn = AttributesColumn.createColumn(
+					COLUMN_VALUE, GeoPackageDataType.TEXT);
 
 			List<AttributesColumn> additionalColumns = new ArrayList<>();
 			additionalColumns.add(propertyColumn);

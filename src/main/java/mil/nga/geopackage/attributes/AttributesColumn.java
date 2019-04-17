@@ -14,6 +14,18 @@ public class AttributesColumn extends UserColumn {
 	/**
 	 * Create a new primary key column
 	 * 
+	 * @param name
+	 *            name
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createPrimaryKeyColumn(String name) {
+		return createPrimaryKeyColumn(NO_INDEX, name);
+	}
+
+	/**
+	 * Create a new primary key column
+	 * 
 	 * @param index
 	 *            index
 	 * @param name
@@ -23,6 +35,93 @@ public class AttributesColumn extends UserColumn {
 	public static AttributesColumn createPrimaryKeyColumn(int index, String name) {
 		return new AttributesColumn(index, name, GeoPackageDataType.INTEGER,
 				null, true, null, true);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(String name,
+			GeoPackageDataType type) {
+		return createColumn(NO_INDEX, name, type);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(int index, String name,
+			GeoPackageDataType type) {
+		return createColumn(index, name, type, false, null);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param notNull
+	 *            not null flag
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(String name,
+			GeoPackageDataType type, boolean notNull) {
+		return createColumn(NO_INDEX, name, type, notNull);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param notNull
+	 *            not null flag
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(int index, String name,
+			GeoPackageDataType type, boolean notNull) {
+		return createColumn(index, name, type, notNull, null);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param notNull
+	 *            not null flag
+	 * @param defaultValue
+	 *            default value
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(String name,
+			GeoPackageDataType type, boolean notNull, Object defaultValue) {
+		return createColumn(NO_INDEX, name, type, notNull, defaultValue);
 	}
 
 	/**
@@ -43,6 +142,64 @@ public class AttributesColumn extends UserColumn {
 	public static AttributesColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
 		return createColumn(index, name, type, null, notNull, defaultValue);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param max
+	 *            max value
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(String name,
+			GeoPackageDataType type, Long max) {
+		return createColumn(NO_INDEX, name, type, max);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param max
+	 *            max value
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(int index, String name,
+			GeoPackageDataType type, Long max) {
+		return createColumn(index, name, type, max, false, null);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param name
+	 *            name
+	 * @param type
+	 *            data type
+	 * @param max
+	 *            max value
+	 * @param notNull
+	 *            not null flag
+	 * @param defaultValue
+	 *            default value
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(String name,
+			GeoPackageDataType type, Long max, boolean notNull,
+			Object defaultValue) {
+		return createColumn(NO_INDEX, name, type, max, notNull, defaultValue);
 	}
 
 	/**

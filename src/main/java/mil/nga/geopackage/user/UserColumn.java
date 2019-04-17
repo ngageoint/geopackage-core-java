@@ -11,9 +11,16 @@ import mil.nga.geopackage.db.GeoPackageDataType;
 public abstract class UserColumn implements Comparable<UserColumn> {
 
 	/**
+	 * User Column index value
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final int NO_INDEX = -1;
+
+	/**
 	 * Column index
 	 */
-	private final int index;
+	private int index;
 
 	/**
 	 * Column name
@@ -74,6 +81,38 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.dataType = dataType;
 
 		validateMax();
+	}
+
+	/**
+	 * Check if the column has a valid index
+	 * 
+	 * @return true if has a valid index
+	 * @since 3.2.1
+	 */
+	public boolean hasIndex() {
+		return this.index > NO_INDEX;
+	}
+
+	/**
+	 * Set the column index. Only allowed when {@link #hasIndex()} is false (
+	 * {@link #getIndex()} is {@link #NO_INDEX}). Setting a valid index to an
+	 * existing valid index does nothing.
+	 * 
+	 * @param index
+	 *            column index
+	 * @since 3.2.1
+	 */
+	public void setIndex(int index) {
+		if (hasIndex()) {
+			if (index != this.index) {
+				throw new GeoPackageException(
+						"User Column with a valid index may not be changed. Column Name: "
+								+ name + ", Index: " + this.index
+								+ ", Attempted Index: " + index);
+			}
+		} else {
+			this.index = index;
+		}
 	}
 
 	/**

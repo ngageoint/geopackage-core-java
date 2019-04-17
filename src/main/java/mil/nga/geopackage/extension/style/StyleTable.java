@@ -86,23 +86,22 @@ public class StyleTable extends AttributesTable {
 	private static List<AttributesColumn> createColumns() {
 
 		List<AttributesColumn> columns = new ArrayList<>();
-		int index = 0;
 
-		columns.add(AttributesColumn.createPrimaryKeyColumn(index++, COLUMN_ID));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_NAME,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_DESCRIPTION,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_COLOR,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_OPACITY,
-				GeoPackageDataType.REAL, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_WIDTH,
-				GeoPackageDataType.REAL, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_COLOR,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(AttributesColumn.createColumn(index++, COLUMN_FILL_OPACITY,
-				GeoPackageDataType.REAL, false, null));
+		columns.add(AttributesColumn.createPrimaryKeyColumn(COLUMN_ID));
+		columns.add(AttributesColumn.createColumn(COLUMN_NAME,
+				GeoPackageDataType.TEXT));
+		columns.add(AttributesColumn.createColumn(COLUMN_DESCRIPTION,
+				GeoPackageDataType.TEXT));
+		columns.add(AttributesColumn.createColumn(COLUMN_COLOR,
+				GeoPackageDataType.TEXT));
+		columns.add(AttributesColumn.createColumn(COLUMN_OPACITY,
+				GeoPackageDataType.REAL));
+		columns.add(AttributesColumn.createColumn(COLUMN_WIDTH,
+				GeoPackageDataType.REAL));
+		columns.add(AttributesColumn.createColumn(COLUMN_FILL_COLOR,
+				GeoPackageDataType.TEXT));
+		columns.add(AttributesColumn.createColumn(COLUMN_FILL_OPACITY,
+				GeoPackageDataType.REAL));
 
 		return columns;
 	}

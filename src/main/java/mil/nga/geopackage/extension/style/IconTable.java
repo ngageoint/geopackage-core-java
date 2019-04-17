@@ -80,19 +80,18 @@ public class IconTable extends MediaTable {
 		List<UserCustomColumn> columns = new ArrayList<>();
 		columns.addAll(createRequiredColumns());
 
-		int index = columns.size();
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_NAME,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_DESCRIPTION,
-				GeoPackageDataType.TEXT, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_WIDTH,
-				GeoPackageDataType.REAL, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_HEIGHT,
-				GeoPackageDataType.REAL, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_ANCHOR_U,
-				GeoPackageDataType.REAL, false, null));
-		columns.add(UserCustomColumn.createColumn(index++, COLUMN_ANCHOR_V,
-				GeoPackageDataType.REAL, false, null));
+		columns.add(UserCustomColumn.createColumn(COLUMN_NAME,
+				GeoPackageDataType.TEXT));
+		columns.add(UserCustomColumn.createColumn(COLUMN_DESCRIPTION,
+				GeoPackageDataType.TEXT));
+		columns.add(UserCustomColumn.createColumn(COLUMN_WIDTH,
+				GeoPackageDataType.REAL));
+		columns.add(UserCustomColumn.createColumn(COLUMN_HEIGHT,
+				GeoPackageDataType.REAL));
+		columns.add(UserCustomColumn.createColumn(COLUMN_ANCHOR_U,
+				GeoPackageDataType.REAL));
+		columns.add(UserCustomColumn.createColumn(COLUMN_ANCHOR_V,
+				GeoPackageDataType.REAL));
 
 		return columns;
 	}

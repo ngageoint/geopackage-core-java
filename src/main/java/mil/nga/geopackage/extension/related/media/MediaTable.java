@@ -6,6 +6,7 @@ import java.util.List;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.extension.related.RelationType;
 import mil.nga.geopackage.extension.related.UserRelatedTable;
+import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 
@@ -102,17 +103,16 @@ public class MediaTable extends UserRelatedTable {
 	}
 
 	/**
-	 * Create the required table columns, starting at index 0
+	 * Create the required table columns
 	 * 
 	 * @return user custom columns
 	 */
 	public static List<UserCustomColumn> createRequiredColumns() {
-		return createRequiredColumns(0);
+		return createRequiredColumns(null);
 	}
 
 	/**
-	 * Create the required table columns with the id column name, starting at
-	 * index 0
+	 * Create the required table columns with the id column name
 	 * 
 	 * @param idColumnName
 	 *            id column name
@@ -120,7 +120,17 @@ public class MediaTable extends UserRelatedTable {
 	 */
 	public static List<UserCustomColumn> createRequiredColumns(
 			String idColumnName) {
-		return createRequiredColumns(0, idColumnName);
+
+		if (idColumnName == null) {
+			idColumnName = COLUMN_ID;
+		}
+
+		List<UserCustomColumn> columns = new ArrayList<>();
+		columns.add(createIdColumn(idColumnName));
+		columns.add(createDataColumn());
+		columns.add(createContentTypeColumn());
+
+		return columns;
 	}
 
 	/**
@@ -162,6 +172,18 @@ public class MediaTable extends UserRelatedTable {
 	/**
 	 * Create the primary key id column
 	 * 
+	 * @param idColumnName
+	 *            id column name
+	 * @return id column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createIdColumn(String idColumnName) {
+		return createIdColumn(UserColumn.NO_INDEX, idColumnName);
+	}
+
+	/**
+	 * Create the primary key id column
+	 * 
 	 * @param index
 	 *            column index
 	 * @param idColumnName
@@ -175,13 +197,33 @@ public class MediaTable extends UserRelatedTable {
 	/**
 	 * Create a data column
 	 * 
+	 * @return data column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createDataColumn() {
+		return createDataColumn(UserColumn.NO_INDEX);
+	}
+
+	/**
+	 * Create a data column
+	 * 
 	 * @param index
 	 *            column index
 	 * @return data column
 	 */
 	public static UserCustomColumn createDataColumn(int index) {
 		return UserCustomColumn.createColumn(index, COLUMN_DATA,
-				GeoPackageDataType.BLOB, true, null);
+				GeoPackageDataType.BLOB, true);
+	}
+
+	/**
+	 * Create a content type column
+	 * 
+	 * @return content type column
+	 * @since 3.2.1
+	 */
+	public static UserCustomColumn createContentTypeColumn() {
+		return createContentTypeColumn(UserColumn.NO_INDEX);
 	}
 
 	/**
@@ -193,7 +235,7 @@ public class MediaTable extends UserRelatedTable {
 	 */
 	public static UserCustomColumn createContentTypeColumn(int index) {
 		return UserCustomColumn.createColumn(index, COLUMN_CONTENT_TYPE,
-				GeoPackageDataType.TEXT, true, null);
+				GeoPackageDataType.TEXT, true);
 	}
 
 	/**
