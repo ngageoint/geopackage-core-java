@@ -444,6 +444,47 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Rename a column
+	 * 
+	 * @param column
+	 *            column
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	protected void renameColumn(TColumn column, String newColumnName) {
+		renameColumn(column.getName(), newColumnName);
+		column.setName(newColumnName);
+	}
+
+	/**
+	 * Rename a column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	protected void renameColumn(String columnName, String newColumnName) {
+		renameColumn(getColumnIndex(columnName), newColumnName);
+	}
+
+	/**
+	 * Rename a column
+	 * 
+	 * @param index
+	 *            column index
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	protected void renameColumn(int index, String newColumnName) {
+		columns.get(index).setName(newColumnName);
+		updateColumns();
+	}
+
+	/**
 	 * Drop a column
 	 * 
 	 * @param column
@@ -457,12 +498,12 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Drop a column
 	 * 
-	 * @param name
+	 * @param columnName
 	 *            column name
 	 * @since 3.2.1
 	 */
-	protected void dropColumn(String name) {
-		dropColumn(getColumnIndex(name));
+	protected void dropColumn(String columnName) {
+		dropColumn(getColumnIndex(columnName));
 	}
 
 	/**

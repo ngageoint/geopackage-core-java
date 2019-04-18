@@ -9,6 +9,7 @@ import java.util.Set;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -1695,6 +1696,61 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Rename column
+	 * 
+	 * @param column
+	 *            column
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	public void renameColumn(TColumn column, String newColumnName) {
+		renameTableColumn(column.getName(), newColumnName);
+		table.renameColumn(column, newColumnName);
+	}
+
+	/**
+	 * Rename column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	public void renameColumn(String columnName, String newColumnName) {
+		renameTableColumn(columnName, newColumnName);
+		table.renameColumn(columnName, newColumnName);
+	}
+
+	/**
+	 * Rename column
+	 * 
+	 * @param index
+	 *            column index
+	 * @param newColumnName
+	 *            new column name
+	 * @since 3.2.1
+	 */
+	public void renameColumn(int index, String newColumnName) {
+		renameTableColumn(table.getColumnName(index), newColumnName);
+		table.renameColumn(index, newColumnName);
+	}
+
+	/**
+	 * Rename a table column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @param newColumnName
+	 *            new column name
+	 */
+	private void renameTableColumn(String columnName, String newColumnName) {
+		AlterTable.renameColumn(db, table.getTableName(), columnName,
+				newColumnName);
+	}
+
+	/**
 	 * Drop a column
 	 * 
 	 * @param column
@@ -1721,27 +1777,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Drop a column
 	 * 
-	 * @param name
+	 * @param columnName
 	 *            column name
 	 * @since 3.2.1
 	 */
-	public void dropColumn(String name) {
-		dropTableColumn(name);
-		table.dropColumn(name);
+	public void dropColumn(String columnName) {
+		dropTableColumn(columnName);
+		table.dropColumn(columnName);
 	}
 
 	/**
 	 * Drop a column from the table
 	 * 
-	 * @param name
+	 * @param columnName
 	 *            column name
 	 */
-	private void dropTableColumn(String name) {
-		// TODO
-		throw new UnsupportedOperationException("Drop column not yet supported");
-		// db.execSQL("ALTER TABLE "
-		// + CoreSQLUtils.quoteWrap(table.getTableName())
-		// + " DROP COLUMN " + CoreSQLUtils.quoteWrap(name) + ";");
+	private void dropTableColumn(String columnName) {
+		AlterTable.dropColumn(db, table.getTableName(), columnName);
 	}
 
 }

@@ -25,7 +25,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Column name
 	 */
-	private final String name;
+	private String name;
 
 	/**
 	 * Max size
@@ -131,6 +131,17 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public int getIndex() {
 		return index;
+	}
+
+	/**
+	 * Set the name
+	 * 
+	 * @param name
+	 *            column name
+	 * @since 3.2.1
+	 */
+	protected void setName(String name) {
+		this.name = name;
 	}
 
 	/**

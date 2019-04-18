@@ -33,20 +33,20 @@ public class AlterTable {
 	 */
 	public static final String COLUMN = "COLUMN";
 
-	/**
-	 * Database connection
-	 */
-	private final GeoPackageCoreConnection db;
-
-	/**
-	 * Constructor
-	 * 
-	 * @param db
-	 *            database connection
-	 */
-	public AlterTable(GeoPackageCoreConnection db) {
-		this.db = db;
-	}
+	// /**
+	// * Database connection
+	// */
+	// private final GeoPackageCoreConnection db;
+	//
+	// /**
+	// * Constructor
+	// *
+	// * @param db
+	// * database connection
+	// */
+	// public AlterTable(GeoPackageCoreConnection db) {
+	// this.db = db;
+	// }
 
 	/**
 	 * Create the ALTER TABLE SQL command prefix
@@ -158,6 +158,22 @@ public class AlterTable {
 			String columnDef) {
 		return alterTable(tableName) + " " + ADD + " " + COLUMN + " "
 				+ CoreSQLUtils.quoteWrap(columnName) + " " + columnDef;
+	}
+
+	/**
+	 * Drop a column
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 */
+	public static void dropColumn(GeoPackageCoreConnection db,
+			String tableName, String columnName) {
+		// TODO
+		throw new UnsupportedOperationException("Drop column not yet supported");
 	}
 
 }
