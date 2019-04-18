@@ -1,5 +1,7 @@
 package mil.nga.geopackage.db;
 
+import java.util.List;
+
 import mil.nga.geopackage.user.UserColumn;
 
 /**
@@ -144,4 +146,106 @@ public class CoreSQLUtils {
 				columnDefinition(column));
 	}
 
+	/**
+	 * Query for the foreign keys value
+	 * 
+	 * @param db
+	 *            connection
+	 * @return true if enabled, false if disabled
+	 * @since 3.2.1
+	 */
+	public static boolean foreignKeys(GeoPackageCoreConnection db) {
+		Boolean foreignKeys = db.querySingleTypedResult("PRAGMA foreign_keys",
+				null, GeoPackageDataType.BOOLEAN);
+		return foreignKeys != null && foreignKeys;
+	}
+
+	/**
+	 * Change the foreign keys state
+	 * 
+	 * @param db
+	 *            connection
+	 * @param on
+	 *            true to turn on, false to turn off
+	 * @return previous foreign keys value
+	 * @since 3.2.1
+	 */
+	public static boolean foreignKeys(GeoPackageCoreConnection db, boolean on) {
+
+		boolean foreignKeys = foreignKeys(db);
+
+		if (foreignKeys != on) {
+			String sql = foreignKeysSQL(on);
+			db.execSQL(sql);
+		}
+
+		return foreignKeys;
+	}
+
+	/**
+	 * Create the foreign keys SQL
+	 * 
+	 * @param on
+	 *            true to turn on, false to turn off
+	 * @return foreign keys SQL
+	 * @since 3.2.1
+	 */
+	public static String foreignKeysSQL(boolean on) {
+		return "PRAGMA foreign_keys = " + on;
+	}
+
+	/**
+	 * Perform a foreign key check
+	 * 
+	 * @param db
+	 *            connection
+	 * @return empty list if valid or violation errors, 4 column values for each
+	 *         violation. see SQLite PRAGMA foreign_key_check
+	 * @since 3.2.1
+	 */
+	public static List<List<Object>> foreignKeyCheck(GeoPackageCoreConnection db) {
+		String sql = foreignKeyCheckSQL();
+		return db.queryResults(sql, null);
+	}
+
+	/**
+	 * Perform a foreign key check
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @return empty list if valid or violation errors, 4 column values for each
+	 *         violation. see SQLite PRAGMA foreign_key_check
+	 * @since 3.2.1
+	 */
+	public static List<List<Object>> foreignKeyCheck(
+			GeoPackageCoreConnection db, String tableName) {
+		String sql = foreignKeyCheckSQL(tableName);
+		return db.queryResults(sql, null);
+	}
+
+	/**
+	 * Create the foreign key check SQL
+	 * 
+	 * @return foreign key check SQL
+	 * @since 3.2.1
+	 */
+	public static String foreignKeyCheckSQL() {
+		return foreignKeyCheckSQL(null);
+	}
+
+	/**
+	 * Create the foreign key check SQL
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return foreign key check SQL
+	 * @since 3.2.1
+	 */
+	public static String foreignKeyCheckSQL(String tableName) {
+		return "PRAGMA foreign_key_check"
+				+ (tableName != null ? "(" + CoreSQLUtils.quoteWrap(tableName)
+						+ ")" : "");
+	}
 }
