@@ -96,7 +96,7 @@ public class CoreSQLUtils {
 	 */
 	public static String columnSQL(UserColumn column) {
 		return CoreSQLUtils.quoteWrap(column.getName()) + " "
-				+ columnDefinitionSQL(column);
+				+ columnDefinition(column);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class CoreSQLUtils {
 	 * @return column definition SQL
 	 * @since 3.2.1
 	 */
-	public static String columnDefinitionSQL(UserColumn column) {
+	public static String columnDefinition(UserColumn column) {
 
 		StringBuilder sql = new StringBuilder();
 
@@ -130,35 +130,18 @@ public class CoreSQLUtils {
 	/**
 	 * Create SQL for adding a column
 	 * 
-	 * @param table
+	 * @param db
+	 *            connection
+	 * @param tableName
 	 *            table name
 	 * @param column
 	 *            user column
-	 * 
-	 * @return add column SQL
 	 * @since 3.2.1
 	 */
-	public static String addColumnSQL(String table, UserColumn column) {
-		return addColumnSQL(table, column.getName(),
-				columnDefinitionSQL(column));
-	}
-
-	/**
-	 * Create SQL for adding a column
-	 * 
-	 * @param table
-	 *            table name
-	 * @param column
-	 *            column name
-	 * @param columnDef
-	 *            column definition
-	 * @return add column SQL
-	 * @since 3.2.1
-	 */
-	public static String addColumnSQL(String table, String column,
-			String columnDef) {
-		return "ALTER TABLE " + CoreSQLUtils.quoteWrap(table) + " ADD COLUMN "
-				+ CoreSQLUtils.quoteWrap(column) + " " + columnDef + ";";
+	public static void addColumn(GeoPackageCoreConnection db, String tableName,
+			UserColumn column) {
+		AlterTable.addColumn(db, tableName, column.getName(),
+				columnDefinition(column));
 	}
 
 }

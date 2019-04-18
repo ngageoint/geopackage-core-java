@@ -1690,8 +1690,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.1
 	 */
 	public void addColumn(TColumn column) {
-		String sql = CoreSQLUtils.addColumnSQL(table.getTableName(), column);
-		db.execSQL(sql);
+		CoreSQLUtils.addColumn(db, table.getTableName(), column);
 		table.addColumn(column);
 	}
 
