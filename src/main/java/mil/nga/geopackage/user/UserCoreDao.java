@@ -521,6 +521,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Begin a transaction
+	 * 
+	 * @since 3.2.1
+	 */
+	public abstract void beginTransaction();
+
+	/**
+	 * End a transaction successfully
+	 * 
+	 * @since 3.2.1
+	 */
+	public void endTransaction() {
+		endTransaction(true);
+	}
+
+	/**
+	 * End a transaction
+	 * 
+	 * @param successful
+	 *            true if the transaction was successful, false to rollback or
+	 *            not commit
+	 * @since 3.2.1
+	 */
+	public abstract void endTransaction(boolean successful);
+
+	/**
 	 * Update the row
 	 * 
 	 * @param row
