@@ -196,8 +196,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Drop the user table
 	 */
 	public void dropTable() {
-		db.execSQL("DROP TABLE IF EXISTS "
-				+ CoreSQLUtils.quoteWrap(getTableName()));
+		CoreSQLUtils.dropTable(db, getTableName());
 	}
 
 	/**
@@ -1784,8 +1783,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.1
 	 */
 	public void dropColumn(TColumn column) {
-		dropTableColumn(column.getName());
-		table.dropColumn(column.getIndex());
+		dropColumn(column.getName());
 	}
 
 	/**
@@ -1796,8 +1794,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.1
 	 */
 	public void dropColumn(int index) {
-		dropTableColumn(table.getColumnName(index));
-		table.dropColumn(index);
+		dropColumn(table.getColumnName(index));
 	}
 
 	/**
@@ -1808,18 +1805,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.1
 	 */
 	public void dropColumn(String columnName) {
-		dropTableColumn(columnName);
-		table.dropColumn(columnName);
-	}
-
-	/**
-	 * Drop a column from the table
-	 * 
-	 * @param columnName
-	 *            column name
-	 */
-	private void dropTableColumn(String columnName) {
-		AlterTable.dropColumn(db, table.getTableName(), columnName);
+		AlterTable.dropColumn(db, table, columnName);
 	}
 
 }

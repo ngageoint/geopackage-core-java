@@ -1,8 +1,11 @@
 package mil.nga.geopackage.db;
 
 import java.util.List;
+import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * Builds and performs alter table statements
@@ -11,21 +14,6 @@ import mil.nga.geopackage.GeoPackageException;
  * @since 3.2.1
  */
 public class AlterTable {
-
-	// /**
-	// * Database connection
-	// */
-	// private final GeoPackageCoreConnection db;
-	//
-	// /**
-	// * Constructor
-	// *
-	// * @param db
-	// * database connection
-	// */
-	// public AlterTable(GeoPackageCoreConnection db) {
-	// this.db = db;
-	// }
 
 	/**
 	 * Create the ALTER TABLE SQL command prefix
@@ -144,26 +132,69 @@ public class AlterTable {
 	 * 
 	 * @param db
 	 *            connection
-	 * @param tableName
-	 *            table name
+	 * @param table
+	 *            table
 	 * @param columnName
 	 *            column name
 	 */
 	public static void dropColumn(GeoPackageCoreConnection db,
-			String tableName, String columnName) {
+			UserTable<? extends UserColumn> table, String columnName) {
 
-		// TODO delete this
-		CoreSQLUtils.foreignKeys(db, true);
+		UserTable<? extends UserColumn> newTable = table.copy();
 
-		// Making Other Kinds Of Table Schema Changes:
-		// https://www.sqlite.org/lang_altertable.html
+		newTable.dropColumn(columnName);
+
+		alterTable(db, table, newTable);
+
+		table.dropColumn(columnName);
+	}
+
+	/**
+	 * Alter a table with a new table schema. Assumes all columns in the new
+	 * table exist with the same name in the existing table.
+	 * 
+	 * Making Other Kinds Of Table Schema Changes:
+	 * https://www.sqlite.org/lang_altertable.html
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param newTable
+	 *            new table
+	 */
+	public static void alterTable(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> table,
+			UserTable<? extends UserColumn> newTable) {
+		alterTable(db, table, newTable, null);
+	}
+
+	/**
+	 * Alter a table with a new table schema and column mapping
+	 * 
+	 * Making Other Kinds Of Table Schema Changes:
+	 * https://www.sqlite.org/lang_altertable.html
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param newTable
+	 *            new table
+	 * @param columnMapping
+	 *            mapping between new table column names and existing table
+	 *            column names
+	 */
+	public static void alterTable(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> table,
+			UserTable<? extends UserColumn> newTable,
+			Map<String, String> columnMapping) {
 
 		// 1. Disable foreign key constraints
 		boolean enableForeignKeys = CoreSQLUtils.foreignKeys(db, false);
 
-		boolean successful = true;
-
 		// 2. Start a transaction
+		boolean successful = true;
 		db.beginTransaction();
 		try {
 
@@ -171,20 +202,23 @@ public class AlterTable {
 			List<List<String>> indexesAndTriggers = db
 					.queryTypedResults(
 							"SELECT type, sql FROM sqlite_master WHERE tbl_name = ? AND type IN (?, ?)",
-							new String[] { tableName, "index", "trigger" });
+							new String[] { table.getTableName(), "index",
+									"trigger" });
 
 			// 4. Create the new table
-			// TODO Create table new_<tableName>
+			newTable.setTableName("new_" + table.getTableName());
+			GeoPackageTableCreator tableCreator = new GeoPackageTableCreator(db);
+			tableCreator.createTable(newTable);
 
 			// 5. Transfer content to new table
-			// TODO Copy from tableName to new_<tableName>: INSERT INTO new_X
-			// SELECT ... FROM X
+			CoreSQLUtils.transferTableContent(db, table.getTableName(),
+					newTable, columnMapping);
 
 			// 6. Drop the old table
-			// TODO Drop table <tableName>
+			CoreSQLUtils.dropTable(db, table.getTableName());
 
 			// 7. Rename the new table
-			// TODO Rename new_<tableName> to <tableName>
+			renameTable(db, newTable.getTableName(), table.getTableName());
 
 			// 8. Create the indexes and triggers
 			// TODO edit these in some cases
@@ -197,27 +231,7 @@ public class AlterTable {
 
 			// 10. Foreign key check
 			if (enableForeignKeys) {
-				List<List<Object>> violations = CoreSQLUtils
-						.foreignKeyCheck(db);
-				if (!violations.isEmpty()) {
-					StringBuilder violationsMessage = new StringBuilder();
-					for (int i = 0; i < violations.size(); i++) {
-						if (i > 0) {
-							violationsMessage.append("; ");
-						}
-						violationsMessage.append(i + 1).append(": ");
-						List<Object> violation = violations.get(i);
-						for (int j = 0; j < violation.size(); j++) {
-							if (j > 0) {
-								violationsMessage.append(", ");
-							}
-							violationsMessage.append(violation.get(j));
-						}
-					}
-					throw new GeoPackageException(
-							"Foreign Key Check Violations: "
-									+ violationsMessage);
-				}
+				foreignKeyCheck(db);
 			}
 
 		} catch (Throwable e) {
@@ -233,8 +247,37 @@ public class AlterTable {
 			CoreSQLUtils.foreignKeys(db, true);
 		}
 
-		// TODO
-		throw new UnsupportedOperationException("Drop column not yet supported");
+	}
+
+	/**
+	 * Perform a foreign key check for violations
+	 * 
+	 * @param db
+	 *            connection
+	 */
+	private static void foreignKeyCheck(GeoPackageCoreConnection db) {
+
+		List<List<Object>> violations = CoreSQLUtils.foreignKeyCheck(db);
+
+		if (!violations.isEmpty()) {
+			StringBuilder violationsMessage = new StringBuilder();
+			for (int i = 0; i < violations.size(); i++) {
+				if (i > 0) {
+					violationsMessage.append("; ");
+				}
+				violationsMessage.append(i + 1).append(": ");
+				List<Object> violation = violations.get(i);
+				for (int j = 0; j < violation.size(); j++) {
+					if (j > 0) {
+						violationsMessage.append(", ");
+					}
+					violationsMessage.append(violation.get(j));
+				}
+			}
+			throw new GeoPackageException("Foreign Key Check Violations: "
+					+ violationsMessage);
+		}
+
 	}
 
 }

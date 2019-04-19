@@ -532,7 +532,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 *            table name
 	 */
 	private void dropTable(String table) {
-		db.execSQL("DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(table));
+		CoreSQLUtils.dropTable(db, table);
 	}
 
 	/**

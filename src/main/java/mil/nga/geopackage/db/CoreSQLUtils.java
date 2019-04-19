@@ -1,8 +1,10 @@
 package mil.nga.geopackage.db;
 
 import java.util.List;
+import java.util.Map;
 
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * Core SQL Utility methods
@@ -248,4 +250,140 @@ public class CoreSQLUtils {
 				+ (tableName != null ? "(" + CoreSQLUtils.quoteWrap(tableName)
 						+ ")" : "");
 	}
+
+	/**
+	 * Drop the table if it exists
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @since 3.2.1
+	 */
+	public static void dropTable(GeoPackageCoreConnection db, String tableName) {
+		String sql = dropTableSQL(tableName);
+		db.execSQL(sql);
+	}
+
+	/**
+	 * Create the drop table if exists SQL
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return drop table SQL
+	 * @since 3.2.1
+	 */
+	public static String dropTableSQL(String tableName) {
+		return "DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(tableName);
+	}
+
+	/**
+	 * Transfer table content from one table to another. Uses all columns in the
+	 * "to table" and assumes the columns exist in the "from table".
+	 * 
+	 * @param db
+	 *            connection
+	 * @param fromTable
+	 *            table name to copy from
+	 * @param toTable
+	 *            table to copy to
+	 * @since 3.2.1
+	 */
+	public static void transferTableContent(GeoPackageCoreConnection db,
+			String fromTable, UserTable<? extends UserColumn> toTable) {
+		String sql = transferTableContentSQL(fromTable, toTable);
+		db.execSQL(sql);
+	}
+
+	/**
+	 * Transfer table content from one table to another
+	 * 
+	 * @param db
+	 *            connection
+	 * @param fromTable
+	 *            table name to copy from
+	 * @param toTable
+	 *            table to copy to
+	 * @param columnMapping
+	 *            mapping between "to table" column names and "from table"
+	 *            column names
+	 * @since 3.2.1
+	 */
+	public static void transferTableContent(GeoPackageCoreConnection db,
+			String fromTable, UserTable<? extends UserColumn> toTable,
+			Map<String, String> columnMapping) {
+		String sql = transferTableContentSQL(fromTable, toTable, columnMapping);
+		db.execSQL(sql);
+	}
+
+	/**
+	 * Create transfer table content from one table to another insert SQL. Uses
+	 * all columns in the "to table" and assumes the columns exist in the
+	 * "from table".
+	 * 
+	 * @param fromTable
+	 *            table name to copy from
+	 * @param toTable
+	 *            table to copy to
+	 * @return transfer SQL
+	 * @since 3.2.1
+	 */
+	public static String transferTableContentSQL(String fromTable,
+			UserTable<? extends UserColumn> toTable) {
+		return transferTableContentSQL(fromTable, toTable, null);
+	}
+
+	/**
+	 * Create transfer table content from one table to another insert SQL
+	 * 
+	 * @param fromTable
+	 *            table name to copy from
+	 * @param toTable
+	 *            table to copy to
+	 * @param columnMapping
+	 *            mapping between "to table" column names and "from table"
+	 *            column names
+	 * @return transfer SQL
+	 * @since 3.2.1
+	 */
+	public static String transferTableContentSQL(String fromTable,
+			UserTable<? extends UserColumn> toTable,
+			Map<String, String> columnMapping) {
+
+		StringBuilder insert = new StringBuilder("INSERT INTO ");
+		insert.append(CoreSQLUtils.quoteWrap(toTable.getTableName()));
+		insert.append(" (");
+
+		StringBuilder selectColumns = new StringBuilder();
+
+		boolean firstColumn = true;
+		for (UserColumn toColumn : toTable.getColumns()) {
+
+			String toColumnName = toColumn.getName();
+			String fromColumnName = toColumnName;
+
+			if (columnMapping != null) {
+				fromColumnName = columnMapping.get(toColumnName);
+			}
+
+			if (fromColumnName != null) {
+				if (firstColumn) {
+					firstColumn = false;
+				} else {
+					insert.append(", ");
+					selectColumns.append(", ");
+				}
+				insert.append(CoreSQLUtils.quoteWrap(toColumnName));
+				selectColumns.append(CoreSQLUtils.quoteWrap(fromColumnName));
+			}
+
+		}
+		insert.append(") SELECT ");
+		insert.append(selectColumns);
+		insert.append(" FROM ");
+		insert.append(CoreSQLUtils.quoteWrap(fromTable));
+
+		return insert.toString();
+	}
+
 }
