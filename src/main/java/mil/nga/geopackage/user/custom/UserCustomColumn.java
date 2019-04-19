@@ -254,4 +254,25 @@ public class UserCustomColumn extends UserColumn {
 		}
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param userCustomColumn
+	 *            user custom column
+	 * @since 3.2.1
+	 */
+	public UserCustomColumn(UserCustomColumn userCustomColumn) {
+		super(userCustomColumn);
+	}
+
+	/**
+	 * Copy the column
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public UserCustomColumn copy() {
+		return new UserCustomColumn(this);
+	}
+
 }

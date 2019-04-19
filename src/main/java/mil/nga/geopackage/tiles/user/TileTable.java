@@ -129,6 +129,29 @@ public class TileTable extends UserTable<TileColumn> {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param tileTable
+	 *            tile table
+	 * @since 3.2.1
+	 */
+	public TileTable(TileTable tileTable) {
+		super(tileTable);
+		this.zoomLevelIndex = tileTable.zoomLevelIndex;
+		this.tileColumnIndex = tileTable.tileColumnIndex;
+		this.tileRowIndex = tileTable.tileRowIndex;
+		this.tileDataIndex = tileTable.tileDataIndex;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileTable copy() {
+		return new TileTable(this);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

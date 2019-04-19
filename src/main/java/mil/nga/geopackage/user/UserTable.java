@@ -25,7 +25,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Table name
 	 */
-	private final String tableName;
+	private String tableName;
 
 	/**
 	 * Array of column names
@@ -67,7 +67,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected UserTable(String tableName, List<TColumn> columns) {
 		nameToIndex = new HashMap<String, Integer>();
-		uniqueConstraints = new ArrayList<UserUniqueConstraint<TColumn>>();
+		uniqueConstraints = new ArrayList<>();
 		this.tableName = tableName;
 		this.columns = columns;
 
@@ -75,19 +75,41 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
-	 * Constructor, re-uses existing memory structures, not a copy
+	 * Copy Constructor
 	 * 
 	 * @param userTable
 	 *            user table
+	 * @since 3.2.1
 	 */
 	protected UserTable(UserTable<TColumn> userTable) {
 		this.tableName = userTable.tableName;
-		this.columnNames = userTable.columnNames;
-		this.columns = userTable.columns;
-		this.nameToIndex = userTable.nameToIndex;
+		this.columnNames = new String[userTable.columnNames.length];
+		System.arraycopy(userTable.columnNames, 0, this.columnNames, 0,
+				this.columnNames.length);
+		this.columns = new ArrayList<>();
+		for (TColumn column : userTable.columns) {
+			@SuppressWarnings("unchecked")
+			TColumn copiedColumn = (TColumn) column.copy();
+			this.columns.add(copiedColumn);
+		}
+		this.nameToIndex = new HashMap<String, Integer>();
+		this.nameToIndex.putAll(userTable.nameToIndex);
 		this.pkIndex = userTable.pkIndex;
-		this.uniqueConstraints = userTable.uniqueConstraints;
+
+		uniqueConstraints = new ArrayList<>();
+		for (UserUniqueConstraint<TColumn> uniqueConstraint : userTable.uniqueConstraints) {
+			this.uniqueConstraints.add(uniqueConstraint.copy());
+		}
+		this.contents = userTable.contents;
 	}
+
+	/**
+	 * Copy the table
+	 * 
+	 * @return copied table
+	 * @since 3.2.1
+	 */
+	public abstract UserTable<TColumn> copy();
 
 	/**
 	 * Update the table columns
@@ -316,6 +338,17 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @since 3.2.1
+	 */
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	/**
 	 * Check if the table has a primary key column
 	 * 
 	 * @return true if has a primary key
@@ -438,7 +471,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            new column
 	 * @since 3.2.1
 	 */
-	protected void addColumn(TColumn column) {
+	public void addColumn(TColumn column) {
 		columns.add(column);
 		updateColumns();
 	}
@@ -452,7 +485,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            new column name
 	 * @since 3.2.1
 	 */
-	protected void renameColumn(TColumn column, String newColumnName) {
+	public void renameColumn(TColumn column, String newColumnName) {
 		renameColumn(column.getName(), newColumnName);
 		column.setName(newColumnName);
 	}
@@ -466,7 +499,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            new column name
 	 * @since 3.2.1
 	 */
-	protected void renameColumn(String columnName, String newColumnName) {
+	public void renameColumn(String columnName, String newColumnName) {
 		renameColumn(getColumnIndex(columnName), newColumnName);
 	}
 
@@ -479,7 +512,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            new column name
 	 * @since 3.2.1
 	 */
-	protected void renameColumn(int index, String newColumnName) {
+	public void renameColumn(int index, String newColumnName) {
 		columns.get(index).setName(newColumnName);
 		updateColumns();
 	}
@@ -491,7 +524,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            new column
 	 * @since 3.2.1
 	 */
-	protected void dropColumn(TColumn column) {
+	public void dropColumn(TColumn column) {
 		dropColumn(column.getIndex());
 	}
 
@@ -502,7 +535,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            column name
 	 * @since 3.2.1
 	 */
-	protected void dropColumn(String columnName) {
+	public void dropColumn(String columnName) {
 		dropColumn(getColumnIndex(columnName));
 	}
 
@@ -513,7 +546,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            column index
 	 * @since 3.2.1
 	 */
-	protected void dropColumn(int index) {
+	public void dropColumn(int index) {
 		columns.remove(index);
 		for (int i = index; i < columns.size(); i++) {
 			columns.get(i).resetIndex();

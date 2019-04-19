@@ -28,6 +28,25 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param attributesTable
+	 *            attributes table
+	 * @since 3.2.1
+	 */
+	public AttributesTable(AttributesTable attributesTable) {
+		super(attributesTable);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable copy() {
+		return new AttributesTable(this);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

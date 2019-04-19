@@ -249,4 +249,25 @@ public class AttributesColumn extends UserColumn {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param attributesColumn
+	 *            attributes column
+	 * @since 3.2.1
+	 */
+	public AttributesColumn(AttributesColumn attributesColumn) {
+		super(attributesColumn);
+	}
+
+	/**
+	 * Copy the column
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public AttributesColumn copy() {
+		return new AttributesColumn(this);
+	}
+
 }

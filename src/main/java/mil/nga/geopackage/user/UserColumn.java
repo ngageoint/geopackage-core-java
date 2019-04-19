@@ -84,6 +84,31 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param userColumn
+	 *            user column
+	 * @since 3.2.1
+	 */
+	protected UserColumn(UserColumn userColumn) {
+		this.index = userColumn.index;
+		this.name = userColumn.name;
+		this.max = userColumn.max;
+		this.notNull = userColumn.notNull;
+		this.defaultValue = userColumn.defaultValue;
+		this.primaryKey = userColumn.primaryKey;
+		this.dataType = userColumn.dataType;
+	}
+
+	/**
+	 * Copy the column
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public abstract UserColumn copy();
+
+	/**
 	 * Check if the column has a valid index
 	 * 
 	 * @return true if has a valid index

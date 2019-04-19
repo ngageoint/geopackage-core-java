@@ -50,6 +50,26 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @since 3.2.1
+	 */
+	public FeatureTable(FeatureTable featureTable) {
+		super(featureTable);
+		this.geometryIndex = featureTable.geometryIndex;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public FeatureTable copy() {
+		return new FeatureTable(this);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

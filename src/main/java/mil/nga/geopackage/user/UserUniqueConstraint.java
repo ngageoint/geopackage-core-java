@@ -39,6 +39,32 @@ public class UserUniqueConstraint<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param userUniqueConstraint
+	 *            user unique constraint
+	 * @since 3.2.1
+	 */
+	public UserUniqueConstraint(
+			UserUniqueConstraint<TColumn> userUniqueConstraint) {
+		for (TColumn column : userUniqueConstraint.columns) {
+			@SuppressWarnings("unchecked")
+			TColumn copiedColumn = (TColumn) column.copy();
+			add(copiedColumn);
+		}
+	}
+
+	/**
+	 * Copy the user unique constraint
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public UserUniqueConstraint<TColumn> copy() {
+		return new UserUniqueConstraint<TColumn>(this);
+	}
+
+	/**
 	 * Add a column
 	 * 
 	 * @param column

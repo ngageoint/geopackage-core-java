@@ -335,4 +335,25 @@ public class TileColumn extends UserColumn {
 		}
 	}
 
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param tileColumn
+	 *            tile column
+	 * @since 3.2.1
+	 */
+	public TileColumn(TileColumn tileColumn) {
+		super(tileColumn);
+	}
+
+	/**
+	 * Copy the column
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public TileColumn copy() {
+		return new TileColumn(this);
+	}
+
 }

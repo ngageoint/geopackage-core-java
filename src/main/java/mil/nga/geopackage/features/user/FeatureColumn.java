@@ -341,6 +341,28 @@ public class FeatureColumn extends UserColumn {
 	}
 
 	/**
+	 * Copy Constructor
+	 * 
+	 * @param featureColumn
+	 *            feature column
+	 * @since 3.2.1
+	 */
+	public FeatureColumn(FeatureColumn featureColumn) {
+		super(featureColumn);
+		this.geometryType = featureColumn.geometryType;
+	}
+
+	/**
+	 * Copy the column
+	 * 
+	 * @return copied column
+	 * @since 3.2.1
+	 */
+	public FeatureColumn copy() {
+		return new FeatureColumn(this);
+	}
+
+	/**
 	 * Determine if this column is a geometry
 	 * 
 	 * @return true if a geometry column

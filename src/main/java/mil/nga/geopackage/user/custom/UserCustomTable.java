@@ -70,13 +70,21 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 	}
 
 	/**
-	 * Constructor
+	 * Copy Constructor
 	 * 
 	 * @param userCustomTable
 	 *            user custom table
 	 */
 	public UserCustomTable(UserCustomTable userCustomTable) {
 		super(userCustomTable);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public UserCustomTable copy() {
+		return new UserCustomTable(this);
 	}
 
 	/**
