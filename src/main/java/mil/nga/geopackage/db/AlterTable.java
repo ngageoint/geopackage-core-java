@@ -1,5 +1,6 @@
 package mil.nga.geopackage.db;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -158,8 +159,11 @@ public class AlterTable {
 	}
 
 	/**
-	 * Alter a table with a new table schema. Assumes all columns in the new
-	 * table exist with the same name in the existing table.
+	 * Alter a table with a new table schema and column mapping. This creates a
+	 * new table, migrates the data, drops the old table, and renames the new
+	 * table to the old. Views on the table should be handled before and after
+	 * calling this method. Indexes and triggers are attempted to be re-created
+	 * (for those not affected by the schema change).
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
 	 * https://www.sqlite.org/lang_altertable.html
@@ -169,11 +173,18 @@ public class AlterTable {
 	 * @param tableName
 	 *            table name
 	 * @param newTable
-	 *            new table
+	 *            new table schema
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
 			String tableName, UserTable<? extends UserColumn> newTable) {
-		alterTable(db, tableName, newTable, null);
+
+		// Build the create table sql
+		String sql = CoreSQLUtils.createTableSQL(newTable);
+
+		// Build the column mapping
+		Map<String, String> columnMapping = columnMapping(newTable);
+
+		alterTable(db, tableName, sql, columnMapping);
 	}
 
 	/**
@@ -190,15 +201,15 @@ public class AlterTable {
 	 *            connection
 	 * @param tableName
 	 *            table name
-	 * @param newTable
-	 *            new table
+	 * @param sql
+	 *            new table SQL
 	 * @param columnMapping
 	 *            mapping between new table column names and existing table
-	 *            column names
+	 *            column names. columns without values map to the same column
+	 *            name.
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
-			String tableName, UserTable<? extends UserColumn> newTable,
-			Map<String, String> columnMapping) {
+			String tableName, String sql, Map<String, String> columnMapping) {
 
 		// 1. Disable foreign key constraints
 		boolean enableForeignKeys = CoreSQLUtils.foreignKeys(db, false);
@@ -216,30 +227,31 @@ public class AlterTable {
 					tableName);
 
 			// 4. Create the new table
-			newTable.setTableName("new_" + tableName);
-			GeoPackageTableCreator tableCreator = new GeoPackageTableCreator(db);
-			tableCreator.createTable(newTable);
+			String tempTableName = CoreSQLUtils.tempTableName(db, "new",
+					tableName);
+			sql = sql.replaceFirst(tableName, tempTableName);
+			db.execSQL(sql);
 
 			// 5. Transfer content to new table
-			CoreSQLUtils.transferTableContent(db, tableName, newTable,
+			CoreSQLUtils.transferTableContent(db, tableName, tempTableName,
 					columnMapping);
 
 			// 6. Drop the old table
 			CoreSQLUtils.dropTable(db, tableName);
 
 			// 7. Rename the new table
-			renameTable(db, newTable.getTableName(), tableName);
+			renameTable(db, tempTableName, tableName);
 
 			// 8. Create the indexes and triggers (those not affected by the
 			// schema change)
 			for (int i = 0; i < sqliteMaster.count(); i++) {
-				String sql = sqliteMaster.getSql(i);
+				String tableSql = sqliteMaster.getSql(i);
 				try {
-					db.execSQL(sql);
+					db.execSQL(tableSql);
 				} catch (Exception e) {
 					logger.log(Level.WARNING, "Failed to recreate "
 							+ sqliteMaster.getType(i)
-							+ " after table alteration. sql: " + sql, e);
+							+ " after table alteration. sql: " + tableSql, e);
 				}
 			}
 
@@ -264,6 +276,22 @@ public class AlterTable {
 			CoreSQLUtils.foreignKeys(db, true);
 		}
 
+	}
+
+	/**
+	 * Get a column mapping from the table
+	 * 
+	 * @param table
+	 *            user table
+	 * @return column mapping with only key values
+	 */
+	public static Map<String, String> columnMapping(
+			UserTable<? extends UserColumn> table) {
+		Map<String, String> columnMapping = new LinkedHashMap<>();
+		for (UserColumn column : table.getColumns()) {
+			columnMapping.put(column.getName(), null);
+		}
+		return columnMapping;
 	}
 
 	/**

@@ -2,9 +2,11 @@ package mil.nga.geopackage.db;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.UserUniqueConstraint;
 
 /**
  * Core SQL Utility methods
@@ -86,6 +88,59 @@ public class CoreSQLUtils {
 			columnsWithAs = columns;
 		}
 		return columnsWithAs;
+	}
+
+	/**
+	 * Create the user defined table SQL
+	 * 
+	 * @param table
+	 *            user table
+	 * @param <TColumn>
+	 *            column type
+	 * @return create table SQL
+	 * @since 3.2.1
+	 */
+	public static <TColumn extends UserColumn> String createTableSQL(
+			UserTable<TColumn> table) {
+
+		// Build the create table sql
+		StringBuilder sql = new StringBuilder();
+		sql.append("CREATE TABLE ")
+				.append(CoreSQLUtils.quoteWrap(table.getTableName()))
+				.append(" (");
+
+		// Add each column to the sql
+		List<? extends UserColumn> columns = table.getColumns();
+		for (int i = 0; i < columns.size(); i++) {
+			UserColumn column = columns.get(i);
+			if (i > 0) {
+				sql.append(",");
+			}
+			sql.append("\n  ");
+			sql.append(CoreSQLUtils.columnSQL(column));
+		}
+
+		// Add unique constraints
+		List<UserUniqueConstraint<TColumn>> uniqueConstraints = table
+				.getUniqueConstraints();
+		for (int i = 0; i < uniqueConstraints.size(); i++) {
+			UserUniqueConstraint<TColumn> uniqueConstraint = uniqueConstraints
+					.get(i);
+			sql.append(",\n  UNIQUE (");
+			List<TColumn> uniqueColumns = uniqueConstraint.getColumns();
+			for (int j = 0; j < uniqueColumns.size(); j++) {
+				TColumn uniqueColumn = uniqueColumns.get(j);
+				if (j > 0) {
+					sql.append(", ");
+				}
+				sql.append(uniqueColumn.getName());
+			}
+			sql.append(")");
+		}
+
+		sql.append("\n);");
+
+		return sql.toString();
 	}
 
 	/**
@@ -278,24 +333,6 @@ public class CoreSQLUtils {
 	}
 
 	/**
-	 * Transfer table content from one table to another. Uses all columns in the
-	 * "to table" and assumes the columns exist in the "from table".
-	 * 
-	 * @param db
-	 *            connection
-	 * @param fromTable
-	 *            table name to copy from
-	 * @param toTable
-	 *            table to copy to
-	 * @since 3.2.1
-	 */
-	public static void transferTableContent(GeoPackageCoreConnection db,
-			String fromTable, UserTable<? extends UserColumn> toTable) {
-		String sql = transferTableContentSQL(fromTable, toTable);
-		db.execSQL(sql);
-	}
-
-	/**
 	 * Transfer table content from one table to another
 	 * 
 	 * @param db
@@ -303,79 +340,57 @@ public class CoreSQLUtils {
 	 * @param fromTable
 	 *            table name to copy from
 	 * @param toTable
-	 *            table to copy to
+	 *            table name to copy to
 	 * @param columnMapping
 	 *            mapping between "to table" column names and "from table"
-	 *            column names
+	 *            column names. columns without values map to the same column
+	 *            name.
 	 * @since 3.2.1
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
-			String fromTable, UserTable<? extends UserColumn> toTable,
-			Map<String, String> columnMapping) {
+			String fromTable, String toTable, Map<String, String> columnMapping) {
 		String sql = transferTableContentSQL(fromTable, toTable, columnMapping);
 		db.execSQL(sql);
 	}
 
 	/**
-	 * Create transfer table content from one table to another insert SQL. Uses
-	 * all columns in the "to table" and assumes the columns exist in the
-	 * "from table".
+	 * Create insert SQL to transfer table content from one table to another
 	 * 
 	 * @param fromTable
 	 *            table name to copy from
 	 * @param toTable
-	 *            table to copy to
-	 * @return transfer SQL
-	 * @since 3.2.1
-	 */
-	public static String transferTableContentSQL(String fromTable,
-			UserTable<? extends UserColumn> toTable) {
-		return transferTableContentSQL(fromTable, toTable, null);
-	}
-
-	/**
-	 * Create transfer table content from one table to another insert SQL
-	 * 
-	 * @param fromTable
-	 *            table name to copy from
-	 * @param toTable
-	 *            table to copy to
+	 *            table name to copy to
 	 * @param columnMapping
 	 *            mapping between "to table" column names and "from table"
-	 *            column names
+	 *            column names. columns without values map to the same column
+	 *            name.
 	 * @return transfer SQL
 	 * @since 3.2.1
 	 */
 	public static String transferTableContentSQL(String fromTable,
-			UserTable<? extends UserColumn> toTable,
-			Map<String, String> columnMapping) {
+			String toTable, Map<String, String> columnMapping) {
 
 		StringBuilder insert = new StringBuilder("INSERT INTO ");
-		insert.append(CoreSQLUtils.quoteWrap(toTable.getTableName()));
+		insert.append(CoreSQLUtils.quoteWrap(toTable));
 		insert.append(" (");
 
 		StringBuilder selectColumns = new StringBuilder();
 
-		boolean firstColumn = true;
-		for (UserColumn toColumn : toTable.getColumns()) {
+		for (Entry<String, String> columns : columnMapping.entrySet()) {
 
-			String toColumnName = toColumn.getName();
-			String fromColumnName = toColumnName;
+			String toColumn = columns.getKey();
 
-			if (columnMapping != null) {
-				fromColumnName = columnMapping.get(toColumnName);
+			String fromColumn = columns.getValue();
+			if (fromColumn == null) {
+				fromColumn = toColumn;
 			}
 
-			if (fromColumnName != null) {
-				if (firstColumn) {
-					firstColumn = false;
-				} else {
-					insert.append(", ");
-					selectColumns.append(", ");
-				}
-				insert.append(CoreSQLUtils.quoteWrap(toColumnName));
-				selectColumns.append(CoreSQLUtils.quoteWrap(fromColumnName));
+			if (selectColumns.length() > 0) {
+				insert.append(", ");
+				selectColumns.append(", ");
 			}
+			insert.append(CoreSQLUtils.quoteWrap(toColumn));
+			selectColumns.append(CoreSQLUtils.quoteWrap(fromColumn));
 
 		}
 		insert.append(") SELECT ");
@@ -384,6 +399,30 @@ public class CoreSQLUtils {
 		insert.append(CoreSQLUtils.quoteWrap(fromTable));
 
 		return insert.toString();
+	}
+
+	/**
+	 * Get an available temporary table name. Starts with <prefix>_<baseName>
+	 * and then continues with <prefix>#_<baseName> starting at 1 and
+	 * increasing.
+	 * 
+	 * @param db
+	 *            connection
+	 * @param prefix
+	 *            name prefix
+	 * @param baseName
+	 *            base name
+	 * @return unused table name
+	 * @since 3.2.1
+	 */
+	public static String tempTableName(GeoPackageCoreConnection db,
+			String prefix, String baseName) {
+		String name = prefix + "_" + baseName;
+		int nameNumber = 0;
+		while (db.tableExists(name)) {
+			name = prefix + (++nameNumber) + "_" + baseName;
+		}
+		return name;
 	}
 
 }

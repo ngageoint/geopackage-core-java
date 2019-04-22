@@ -11,7 +11,6 @@ import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.geopackage.user.UserUniqueConstraint;
 
 import com.j256.ormlite.dao.DaoManager;
 
@@ -290,44 +289,10 @@ public class GeoPackageTableCreator {
 		}
 
 		// Build the create table sql
-		StringBuilder sql = new StringBuilder();
-		sql.append("CREATE TABLE ")
-				.append(CoreSQLUtils.quoteWrap(table.getTableName()))
-				.append(" (");
-
-		// Add each column to the sql
-		List<? extends UserColumn> columns = table.getColumns();
-		for (int i = 0; i < columns.size(); i++) {
-			UserColumn column = columns.get(i);
-			if (i > 0) {
-				sql.append(",");
-			}
-			sql.append("\n  ");
-			sql.append(CoreSQLUtils.columnSQL(column));
-		}
-
-		// Add unique constraints
-		List<UserUniqueConstraint<TColumn>> uniqueConstraints = table
-				.getUniqueConstraints();
-		for (int i = 0; i < uniqueConstraints.size(); i++) {
-			UserUniqueConstraint<TColumn> uniqueConstraint = uniqueConstraints
-					.get(i);
-			sql.append(",\n  UNIQUE (");
-			List<TColumn> uniqueColumns = uniqueConstraint.getColumns();
-			for (int j = 0; j < uniqueColumns.size(); j++) {
-				TColumn uniqueColumn = uniqueColumns.get(j);
-				if (j > 0) {
-					sql.append(", ");
-				}
-				sql.append(uniqueColumn.getName());
-			}
-			sql.append(")");
-		}
-
-		sql.append("\n);");
+		String sql = CoreSQLUtils.createTableSQL(table);
 
 		// Create the table
-		db.execSQL(sql.toString());
+		db.execSQL(sql);
 	}
 
 	/**
