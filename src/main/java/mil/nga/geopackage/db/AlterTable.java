@@ -152,7 +152,7 @@ public class AlterTable {
 
 		newTable.dropColumn(columnName);
 
-		alterTable(db, table, newTable);
+		alterTable(db, table.getTableName(), newTable);
 
 		table.dropColumn(columnName);
 	}
@@ -166,15 +166,14 @@ public class AlterTable {
 	 * 
 	 * @param db
 	 *            connection
-	 * @param table
-	 *            table
+	 * @param tableName
+	 *            table name
 	 * @param newTable
 	 *            new table
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
-			UserTable<? extends UserColumn> table,
-			UserTable<? extends UserColumn> newTable) {
-		alterTable(db, table, newTable, null);
+			String tableName, UserTable<? extends UserColumn> newTable) {
+		alterTable(db, tableName, newTable, null);
 	}
 
 	/**
@@ -189,8 +188,8 @@ public class AlterTable {
 	 * 
 	 * @param db
 	 *            connection
-	 * @param table
-	 *            table
+	 * @param tableName
+	 *            table name
 	 * @param newTable
 	 *            new table
 	 * @param columnMapping
@@ -198,8 +197,7 @@ public class AlterTable {
 	 *            column names
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
-			UserTable<? extends UserColumn> table,
-			UserTable<? extends UserColumn> newTable,
+			String tableName, UserTable<? extends UserColumn> newTable,
 			Map<String, String> columnMapping) {
 
 		// 1. Disable foreign key constraints
@@ -215,22 +213,22 @@ public class AlterTable {
 					new SQLiteMasterColumn[] { SQLiteMasterColumn.TYPE,
 							SQLiteMasterColumn.SQL }, new SQLiteMasterType[] {
 							SQLiteMasterType.INDEX, SQLiteMasterType.TRIGGER },
-					table.getTableName());
+					tableName);
 
 			// 4. Create the new table
-			newTable.setTableName("new_" + table.getTableName());
+			newTable.setTableName("new_" + tableName);
 			GeoPackageTableCreator tableCreator = new GeoPackageTableCreator(db);
 			tableCreator.createTable(newTable);
 
 			// 5. Transfer content to new table
-			CoreSQLUtils.transferTableContent(db, table.getTableName(),
-					newTable, columnMapping);
+			CoreSQLUtils.transferTableContent(db, tableName, newTable,
+					columnMapping);
 
 			// 6. Drop the old table
-			CoreSQLUtils.dropTable(db, table.getTableName());
+			CoreSQLUtils.dropTable(db, tableName);
 
 			// 7. Rename the new table
-			renameTable(db, newTable.getTableName(), table.getTableName());
+			renameTable(db, newTable.getTableName(), tableName);
 
 			// 8. Create the indexes and triggers (those not affected by the
 			// schema change)
