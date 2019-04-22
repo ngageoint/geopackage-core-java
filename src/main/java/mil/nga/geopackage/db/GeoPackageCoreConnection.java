@@ -154,8 +154,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return true if exists
 	 */
 	public boolean tableExists(String tableName) {
-		return count("sqlite_master", "tbl_name = ?",
-				new String[] { tableName }) > 0;
+		return SQLiteMaster.count(this, SQLiteMasterType.TABLE, tableName) > 0;
 	}
 
 	/**

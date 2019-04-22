@@ -199,11 +199,11 @@ public class AlterTable {
 		try {
 
 			// 3. Query indexes and triggers
-			List<List<String>> indexesAndTriggers = db
-					.queryTypedResults(
-							"SELECT type, sql FROM sqlite_master WHERE tbl_name = ? AND type IN (?, ?)",
-							new String[] { table.getTableName(), "index",
-									"trigger" });
+			SQLiteMaster sqliteMaster = SQLiteMaster.query(db,
+					new SQLiteMasterColumn[] { SQLiteMasterColumn.TYPE,
+							SQLiteMasterColumn.SQL }, new SQLiteMasterType[] {
+							SQLiteMasterType.INDEX, SQLiteMasterType.TRIGGER },
+					table.getTableName());
 
 			// 4. Create the new table
 			newTable.setTableName("new_" + table.getTableName());
@@ -222,8 +222,9 @@ public class AlterTable {
 
 			// 8. Create the indexes and triggers
 			// TODO edit these in some cases
-			for (List<String> indexOrTrigger : indexesAndTriggers) {
-				db.execSQL(indexOrTrigger.get(1));
+			for (int i = 0; i < sqliteMaster.count(); i++) {
+				String sql = sqliteMaster.getSql(i);
+				db.execSQL(sql);
 			}
 
 			// 9. Drop and create views
