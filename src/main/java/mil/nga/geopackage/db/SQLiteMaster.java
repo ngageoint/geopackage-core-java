@@ -520,6 +520,35 @@ public class SQLiteMaster {
 	 *            connection
 	 * @param type
 	 *            result type
+	 * @return count
+	 */
+	public static int count(GeoPackageCoreConnection db, SQLiteMasterType type) {
+		return count(db, new SQLiteMasterType[] { type });
+	}
+
+	/**
+	 * Query the sqlite_master table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param columns
+	 *            result columns
+	 * @param type
+	 *            result type
+	 * @return SQLiteMaster result
+	 */
+	public static SQLiteMaster query(GeoPackageCoreConnection db,
+			SQLiteMasterColumn[] columns, SQLiteMasterType type) {
+		return query(db, columns, new SQLiteMasterType[] { type });
+	}
+
+	/**
+	 * Count the sqlite_master table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param type
+	 *            result type
 	 * @param tableName
 	 *            table name
 	 * @return count
@@ -546,6 +575,36 @@ public class SQLiteMaster {
 			SQLiteMasterColumn[] columns, SQLiteMasterType type,
 			String tableName) {
 		return query(db, columns, new SQLiteMasterType[] { type }, tableName);
+	}
+
+	/**
+	 * Count the sqlite_master table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param types
+	 *            result types
+	 * @return count
+	 */
+	public static int count(GeoPackageCoreConnection db,
+			SQLiteMasterType[] types) {
+		return query(db, null, types, null).count();
+	}
+
+	/**
+	 * Query the sqlite_master table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param columns
+	 *            result columns
+	 * @param types
+	 *            result types
+	 * @return SQLiteMaster result
+	 */
+	public static SQLiteMaster query(GeoPackageCoreConnection db,
+			SQLiteMasterColumn[] columns, SQLiteMasterType[] types) {
+		return query(db, columns, types, null);
 	}
 
 	/**

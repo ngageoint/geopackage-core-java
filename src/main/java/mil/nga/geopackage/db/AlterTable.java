@@ -2,6 +2,8 @@ package mil.nga.geopackage.db;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.user.UserColumn;
@@ -14,6 +16,12 @@ import mil.nga.geopackage.user.UserTable;
  * @since 3.2.1
  */
 public class AlterTable {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger.getLogger(AlterTable.class
+			.getName());
 
 	/**
 	 * Create the ALTER TABLE SQL command prefix
@@ -170,7 +178,11 @@ public class AlterTable {
 	}
 
 	/**
-	 * Alter a table with a new table schema and column mapping
+	 * Alter a table with a new table schema and column mapping. This creates a
+	 * new table, migrates the data, drops the old table, and renames the new
+	 * table to the old. Views on the table should be handled before and after
+	 * calling this method. Indexes and triggers are attempted to be re-created
+	 * (for those not affected by the schema change).
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
 	 * https://www.sqlite.org/lang_altertable.html
@@ -220,15 +232,21 @@ public class AlterTable {
 			// 7. Rename the new table
 			renameTable(db, newTable.getTableName(), table.getTableName());
 
-			// 8. Create the indexes and triggers
-			// TODO edit these in some cases
+			// 8. Create the indexes and triggers (those not affected by the
+			// schema change)
 			for (int i = 0; i < sqliteMaster.count(); i++) {
 				String sql = sqliteMaster.getSql(i);
-				db.execSQL(sql);
+				try {
+					db.execSQL(sql);
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Failed to recreate "
+							+ sqliteMaster.getType(i)
+							+ " after table alteration. sql: " + sql, e);
+				}
 			}
 
 			// 9. Drop and create views
-			// TODO drop and create views?
+			// Views need to be handled before and after altering the table
 
 			// 10. Foreign key check
 			if (enableForeignKeys) {
