@@ -7,6 +7,8 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.master.SQLiteMaster;
+import mil.nga.geopackage.db.master.SQLiteMasterType;
 
 import com.j256.ormlite.support.ConnectionSource;
 

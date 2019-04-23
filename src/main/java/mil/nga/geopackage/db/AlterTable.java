@@ -7,6 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.master.SQLiteMaster;
+import mil.nga.geopackage.db.master.SQLiteMasterColumn;
+import mil.nga.geopackage.db.master.SQLiteMasterQuery;
+import mil.nga.geopackage.db.master.SQLiteMasterType;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 
@@ -161,9 +165,8 @@ public class AlterTable {
 	/**
 	 * Alter a table with a new table schema and column mapping. This creates a
 	 * new table, migrates the data, drops the old table, and renames the new
-	 * table to the old. Views on the table should be handled before and after
-	 * calling this method. Indexes and triggers are attempted to be re-created
-	 * (for those not affected by the schema change).
+	 * table to the old. Views on the table are attempted to be dropped and
+	 * recreated. Indexes and triggers are attempted to be recreated.
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
 	 * https://www.sqlite.org/lang_altertable.html
@@ -190,9 +193,8 @@ public class AlterTable {
 	/**
 	 * Alter a table with a new table schema and column mapping. This creates a
 	 * new table, migrates the data, drops the old table, and renames the new
-	 * table to the old. Views on the table should be handled before and after
-	 * calling this method. Indexes and triggers are attempted to be re-created
-	 * (for those not affected by the schema change).
+	 * table to the old. Views on the table are attempted to be dropped and
+	 * recreated. Indexes and triggers are attempted to be recreated.
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
 	 * https://www.sqlite.org/lang_altertable.html
@@ -219,11 +221,26 @@ public class AlterTable {
 		db.beginTransaction();
 		try {
 
+			// 9a. Query for views and remove them
+			SQLiteMaster views = SQLiteMaster.query(db, SQLiteMaster.columns(
+					SQLiteMasterColumn.NAME, SQLiteMasterColumn.SQL),
+					SQLiteMasterType.VIEW, SQLiteMasterQuery
+							.createTableViewQuery(tableName));
+			for (int i = 0; i < views.count(); i++) {
+				String viewName = views.getName(i);
+				try {
+					CoreSQLUtils.dropView(db, viewName);
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Failed to drop view: "
+							+ viewName + ", table: " + tableName, e);
+				}
+			}
+
 			// 3. Query indexes and triggers
-			SQLiteMaster sqliteMaster = SQLiteMaster.query(db,
-					new SQLiteMasterColumn[] { SQLiteMasterColumn.TYPE,
-							SQLiteMasterColumn.SQL }, new SQLiteMasterType[] {
-							SQLiteMasterType.INDEX, SQLiteMasterType.TRIGGER },
+			SQLiteMaster indexesAndTriggers = SQLiteMaster.query(db,
+					SQLiteMaster.columns(SQLiteMasterColumn.TYPE,
+							SQLiteMasterColumn.SQL), SQLiteMaster.types(
+							SQLiteMasterType.INDEX, SQLiteMasterType.TRIGGER),
 					tableName);
 
 			// 4. Create the new table
@@ -244,19 +261,29 @@ public class AlterTable {
 
 			// 8. Create the indexes and triggers (those not affected by the
 			// schema change)
-			for (int i = 0; i < sqliteMaster.count(); i++) {
-				String tableSql = sqliteMaster.getSql(i);
+			for (int i = 0; i < indexesAndTriggers.count(); i++) {
+				String tableSql = indexesAndTriggers.getSql(i);
 				try {
 					db.execSQL(tableSql);
 				} catch (Exception e) {
 					logger.log(Level.WARNING, "Failed to recreate "
-							+ sqliteMaster.getType(i)
-							+ " after table alteration. sql: " + tableSql, e);
+							+ indexesAndTriggers.getType(i)
+							+ " after table alteration. table: " + tableName
+							+ ", sql: " + tableSql, e);
 				}
 			}
 
-			// 9. Drop and create views
-			// Views need to be handled before and after altering the table
+			// 9b. Recreate views
+			for (int i = 0; i < views.count(); i++) {
+				String viewSql = views.getSql(i);
+				try {
+					db.execSQL(viewSql);
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Failed to recreate view: "
+							+ views.getName(i) + ", table: " + tableName
+							+ ", sql: " + viewSql, e);
+				}
+			}
 
 			// 10. Foreign key check
 			if (enableForeignKeys) {

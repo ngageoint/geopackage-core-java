@@ -333,6 +333,32 @@ public class CoreSQLUtils {
 	}
 
 	/**
+	 * Drop the view if it exists
+	 * 
+	 * @param db
+	 *            connection
+	 * @param viewName
+	 *            view name
+	 * @since 3.2.1
+	 */
+	public static void dropView(GeoPackageCoreConnection db, String viewName) {
+		String sql = dropViewSQL(viewName);
+		db.execSQL(sql);
+	}
+
+	/**
+	 * Create the drop view if exists SQL
+	 * 
+	 * @param viewName
+	 *            view name
+	 * @return drop view SQL
+	 * @since 3.2.1
+	 */
+	public static String dropViewSQL(String viewName) {
+		return "DROP VIEW IF EXISTS " + CoreSQLUtils.quoteWrap(viewName);
+	}
+
+	/**
 	 * Transfer table content from one table to another
 	 * 
 	 * @param db

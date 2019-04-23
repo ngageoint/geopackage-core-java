@@ -1,4 +1,4 @@
-package mil.nga.geopackage.db;
+package mil.nga.geopackage.db.master;
 
 /**
  * SQLite Master table (sqlite_master) column keywords
