@@ -6,6 +6,7 @@ import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
@@ -132,8 +133,9 @@ public class CrsWktExtension extends BaseExtension {
 	 * Create the extension column
 	 */
 	private void createColumn() {
-		connection.addColumn(SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME,
-				COLUMN_DEF);
+
+		AlterTable.addColumn(connection, SpatialReferenceSystem.TABLE_NAME,
+				COLUMN_NAME, COLUMN_DEF);
 
 		// Update the existing known SRS values
 		updateDefinition(GeoPackageProperties.getIntegerProperty(
