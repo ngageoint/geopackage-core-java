@@ -1808,4 +1808,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		AlterTable.dropColumn(db, table, columnName);
 	}
 
+	/**
+	 * Alter a column
+	 * 
+	 * @param column
+	 *            column
+	 * @since 3.2.1
+	 */
+	public void alterColumn(TColumn column) {
+		AlterTable.alterColumn(db, table, column);
+	}
+
 }

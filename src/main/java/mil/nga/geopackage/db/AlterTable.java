@@ -163,6 +163,30 @@ public class AlterTable {
 	}
 
 	/**
+	 * Alter a column
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param column
+	 *            column
+	 * @param <T>
+	 *            user column type
+	 */
+	public static <T extends UserColumn> void alterColumn(
+			GeoPackageCoreConnection db, UserTable<T> table, T column) {
+
+		UserTable<T> newTable = table.copy();
+
+		newTable.alterColumn(column);
+
+		alterTable(db, table.getTableName(), newTable);
+
+		table.alterColumn(column);
+	}
+
+	/**
 	 * Alter a table with a new table schema and column mapping. This creates a
 	 * new table, migrates the data, drops the old table, and renames the new
 	 * table to the old. Views on the table are attempted to be dropped and

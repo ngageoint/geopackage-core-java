@@ -521,7 +521,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Drop a column
 	 * 
 	 * @param column
-	 *            new column
+	 *            column to drop
 	 * @since 3.2.1
 	 */
 	public void dropColumn(TColumn column) {
@@ -552,6 +552,19 @@ public abstract class UserTable<TColumn extends UserColumn> {
 			columns.get(i).resetIndex();
 		}
 		updateColumns();
+	}
+
+	/**
+	 * Alter a column
+	 * 
+	 * @param column
+	 *            altered column
+	 * @since 3.2.1
+	 */
+	public void alterColumn(TColumn column) {
+		TColumn existingColumn = getColumn(column.getName());
+		column.setIndex(existingColumn.getIndex());
+		columns.set(column.getIndex(), column);
 	}
 
 }
