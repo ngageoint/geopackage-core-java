@@ -173,12 +173,57 @@ public class CoreSQLUtils {
 		StringBuilder sql = new StringBuilder();
 
 		sql.append(column.getTypeName());
-		if (column.getMax() != null) {
-			sql.append("(").append(column.getMax()).append(")");
+
+		Long max = column.getMax();
+		if (max != null) {
+			sql.append("(").append(max).append(")");
 		}
+
 		if (column.isNotNull()) {
 			sql.append(" NOT NULL");
 		}
+
+		Object defaultValue = column.getDefaultValue();
+		if (defaultValue != null) {
+			sql.append(" DEFAULT ");
+			String value = null;
+			switch (column.getDataType()) {
+			case BOOLEAN:
+				Boolean booleanValue = null;
+				if (defaultValue instanceof Boolean) {
+					booleanValue = (Boolean) defaultValue;
+				} else if (defaultValue instanceof String) {
+					String stringBooleanValue = (String) defaultValue;
+					switch (stringBooleanValue) {
+					case "0":
+						booleanValue = false;
+						break;
+					case "1":
+						booleanValue = true;
+						break;
+					default:
+						booleanValue = Boolean.valueOf(stringBooleanValue);
+					}
+				}
+				if (booleanValue != null) {
+					if (booleanValue) {
+						value = "1";
+					} else {
+						value = "0";
+					}
+				}
+				break;
+			case TEXT:
+				value = "'" + defaultValue.toString() + "'";
+				break;
+			default:
+			}
+			if (value == null) {
+				value = defaultValue.toString();
+			}
+			sql.append(value);
+		}
+
 		if (column.isPrimaryKey()) {
 			sql.append(" PRIMARY KEY AUTOINCREMENT");
 		}
