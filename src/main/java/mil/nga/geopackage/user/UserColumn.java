@@ -191,6 +191,16 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Determine if the column has a max value
+	 * 
+	 * @return true if has max value
+	 * @since 3.2.1
+	 */
+	public boolean hasMax() {
+		return max != null;
+	}
+
+	/**
 	 * Get the max
 	 * 
 	 * @return max
@@ -206,6 +216,16 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public boolean isNotNull() {
 		return notNull;
+	}
+
+	/**
+	 * Determine if the column has a default value
+	 * 
+	 * @return true if has default value
+	 * @since 3.2.1
+	 */
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
 	}
 
 	/**
