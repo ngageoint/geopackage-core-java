@@ -1809,6 +1809,47 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Drop columns
+	 * 
+	 * @param columns
+	 *            columns
+	 * @since 3.2.1
+	 */
+	public void dropColumns(Collection<TColumn> columns) {
+		List<String> columnNames = new ArrayList<>();
+		for (TColumn column : columns) {
+			columnNames.add(column.getName());
+		}
+		dropColumnNames(columnNames);
+	}
+
+	/**
+	 * Drop columns
+	 * 
+	 * @param indexes
+	 *            column indexes
+	 * @since 3.2.1
+	 */
+	public void dropColumnIndexes(Collection<Integer> indexes) {
+		List<String> columnNames = new ArrayList<>();
+		for (int index : indexes) {
+			columnNames.add(table.getColumnName(index));
+		}
+		dropColumnNames(columnNames);
+	}
+
+	/**
+	 * Drop columns
+	 * 
+	 * @param columnNames
+	 *            column names
+	 * @since 3.2.1
+	 */
+	public void dropColumnNames(Collection<String> columnNames) {
+		AlterTable.dropColumns(db, table, columnNames);
+	}
+
+	/**
 	 * Alter a column
 	 * 
 	 * @param column
@@ -1817,6 +1858,17 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public void alterColumn(TColumn column) {
 		AlterTable.alterColumn(db, table, column);
+	}
+
+	/**
+	 * Alter columns
+	 * 
+	 * @param columns
+	 *            columns
+	 * @since 3.2.1
+	 */
+	public void alterColumns(Collection<TColumn> columns) {
+		AlterTable.alterColumns(db, table, columns);
 	}
 
 }

@@ -1,5 +1,7 @@
 package mil.nga.geopackage.db;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -150,14 +152,34 @@ public class AlterTable {
 	 */
 	public static void dropColumn(GeoPackageCoreConnection db,
 			UserTable<? extends UserColumn> table, String columnName) {
+		dropColumns(db, table, Arrays.asList(columnName));
+	}
+
+	/**
+	 * Drop columns
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param columnNames
+	 *            column names
+	 */
+	public static void dropColumns(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> table,
+			Collection<String> columnNames) {
 
 		UserTable<? extends UserColumn> newTable = table.copy();
 
-		newTable.dropColumn(columnName);
+		for (String columnName : columnNames) {
+			newTable.dropColumn(columnName);
+		}
 
 		alterTable(db, table.getTableName(), newTable);
 
-		table.dropColumn(columnName);
+		for (String columnName : columnNames) {
+			table.dropColumn(columnName);
+		}
 	}
 
 	/**
@@ -174,14 +196,36 @@ public class AlterTable {
 	 */
 	public static <T extends UserColumn> void alterColumn(
 			GeoPackageCoreConnection db, UserTable<T> table, T column) {
+		alterColumns(db, table, Arrays.asList(column));
+	}
+
+	/**
+	 * Alter columns
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param columns
+	 *            columns
+	 * @param <T>
+	 *            user column type
+	 */
+	public static <T extends UserColumn> void alterColumns(
+			GeoPackageCoreConnection db, UserTable<T> table,
+			Collection<T> columns) {
 
 		UserTable<T> newTable = table.copy();
 
-		newTable.alterColumn(column);
+		for (T column : columns) {
+			newTable.alterColumn(column);
+		}
 
 		alterTable(db, table.getTableName(), newTable);
 
-		table.alterColumn(column);
+		for (T column : columns) {
+			table.alterColumn(column);
+		}
 	}
 
 	/**
