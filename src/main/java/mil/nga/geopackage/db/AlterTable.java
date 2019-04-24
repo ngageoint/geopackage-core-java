@@ -1,8 +1,6 @@
 package mil.nga.geopackage.db;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -209,7 +207,7 @@ public class AlterTable {
 		String sql = CoreSQLUtils.createTableSQL(newTable);
 
 		// Build the column mapping
-		Map<String, String> columnMapping = columnMapping(newTable);
+		ColumnMapping columnMapping = new ColumnMapping(newTable);
 
 		alterTable(db, tableName, sql, columnMapping);
 	}
@@ -230,12 +228,10 @@ public class AlterTable {
 	 * @param sql
 	 *            new table SQL
 	 * @param columnMapping
-	 *            mapping between new table column names and existing table
-	 *            column names. columns without values map to the same column
-	 *            name.
+	 *            column mapping
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
-			String tableName, String sql, Map<String, String> columnMapping) {
+			String tableName, String sql, ColumnMapping columnMapping) {
 
 		// 1. Disable foreign key constraints
 		boolean enableForeignKeys = CoreSQLUtils.foreignKeys(db, false);
@@ -327,22 +323,6 @@ public class AlterTable {
 			CoreSQLUtils.foreignKeys(db, true);
 		}
 
-	}
-
-	/**
-	 * Get a column mapping from the table
-	 * 
-	 * @param table
-	 *            user table
-	 * @return column mapping with only key values
-	 */
-	public static Map<String, String> columnMapping(
-			UserTable<? extends UserColumn> table) {
-		Map<String, String> columnMapping = new LinkedHashMap<>();
-		for (UserColumn column : table.getColumns()) {
-			columnMapping.put(column.getName(), null);
-		}
-		return columnMapping;
 	}
 
 	/**

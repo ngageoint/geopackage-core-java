@@ -1,7 +1,6 @@
 package mil.nga.geopackage.db;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.geopackage.user.UserColumn;
@@ -174,54 +173,17 @@ public class CoreSQLUtils {
 
 		sql.append(column.getTypeName());
 
-		Long max = column.getMax();
-		if (max != null) {
-			sql.append("(").append(max).append(")");
+		if (column.hasMax()) {
+			sql.append("(").append(column.getMax()).append(")");
 		}
 
 		if (column.isNotNull()) {
 			sql.append(" NOT NULL");
 		}
 
-		Object defaultValue = column.getDefaultValue();
-		if (defaultValue != null) {
+		if (column.hasDefaultValue()) {
 			sql.append(" DEFAULT ");
-			String value = null;
-			switch (column.getDataType()) {
-			case BOOLEAN:
-				Boolean booleanValue = null;
-				if (defaultValue instanceof Boolean) {
-					booleanValue = (Boolean) defaultValue;
-				} else if (defaultValue instanceof String) {
-					String stringBooleanValue = (String) defaultValue;
-					switch (stringBooleanValue) {
-					case "0":
-						booleanValue = false;
-						break;
-					case "1":
-						booleanValue = true;
-						break;
-					default:
-						booleanValue = Boolean.valueOf(stringBooleanValue);
-					}
-				}
-				if (booleanValue != null) {
-					if (booleanValue) {
-						value = "1";
-					} else {
-						value = "0";
-					}
-				}
-				break;
-			case TEXT:
-				value = "'" + defaultValue.toString() + "'";
-				break;
-			default:
-			}
-			if (value == null) {
-				value = defaultValue.toString();
-			}
-			sql.append(value);
+			sql.append(columnDefaultValue(column));
 		}
 
 		if (column.isPrimaryKey()) {
@@ -229,6 +191,83 @@ public class CoreSQLUtils {
 		}
 
 		return sql.toString();
+	}
+
+	/**
+	 * Get the column default value as a string
+	 * 
+	 * @param column
+	 *            user column
+	 * @return default value
+	 * @since 3.2.1
+	 */
+	public static String columnDefaultValue(UserColumn column) {
+		return columnDefaultValue(column.getDefaultValue(),
+				column.getDataType());
+	}
+
+	/**
+	 * Get the column default value as a string
+	 * 
+	 * @param defaultValue
+	 *            default value
+	 * @param dataType
+	 *            data type
+	 * @return default value
+	 * @since 3.2.1
+	 */
+	public static String columnDefaultValue(Object defaultValue,
+			GeoPackageDataType dataType) {
+
+		String value = null;
+
+		if (defaultValue != null) {
+
+			if (dataType != null) {
+
+				switch (dataType) {
+				case BOOLEAN:
+					Boolean booleanValue = null;
+					if (defaultValue instanceof Boolean) {
+						booleanValue = (Boolean) defaultValue;
+					} else if (defaultValue instanceof String) {
+						String stringBooleanValue = (String) defaultValue;
+						switch (stringBooleanValue) {
+						case "0":
+							booleanValue = false;
+							break;
+						case "1":
+							booleanValue = true;
+							break;
+						default:
+							booleanValue = Boolean.valueOf(stringBooleanValue);
+						}
+					}
+					if (booleanValue != null) {
+						if (booleanValue) {
+							value = "1";
+						} else {
+							value = "0";
+						}
+					}
+					break;
+				case TEXT:
+					value = defaultValue.toString();
+					if (!value.startsWith("'") || !value.endsWith("'")) {
+						value = "'" + value + "'";
+					}
+					break;
+				default:
+				}
+
+			}
+
+			if (value == null) {
+				value = defaultValue.toString();
+			}
+		}
+
+		return value;
 	}
 
 	/**
@@ -413,13 +452,11 @@ public class CoreSQLUtils {
 	 * @param toTable
 	 *            table name to copy to
 	 * @param columnMapping
-	 *            mapping between "to table" column names and "from table"
-	 *            column names. columns without values map to the same column
-	 *            name.
+	 *            column mapping
 	 * @since 3.2.1
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
-			String fromTable, String toTable, Map<String, String> columnMapping) {
+			String fromTable, String toTable, ColumnMapping columnMapping) {
 		String sql = transferTableContentSQL(fromTable, toTable, columnMapping);
 		db.execSQL(sql);
 	}
@@ -432,14 +469,12 @@ public class CoreSQLUtils {
 	 * @param toTable
 	 *            table name to copy to
 	 * @param columnMapping
-	 *            mapping between "to table" column names and "from table"
-	 *            column names. columns without values map to the same column
-	 *            name.
+	 *            column mapping
 	 * @return transfer SQL
 	 * @since 3.2.1
 	 */
 	public static String transferTableContentSQL(String fromTable,
-			String toTable, Map<String, String> columnMapping) {
+			String toTable, ColumnMapping columnMapping) {
 
 		StringBuilder insert = new StringBuilder("INSERT INTO ");
 		insert.append(CoreSQLUtils.quoteWrap(toTable));
@@ -447,21 +482,29 @@ public class CoreSQLUtils {
 
 		StringBuilder selectColumns = new StringBuilder();
 
-		for (Entry<String, String> columns : columnMapping.entrySet()) {
+		for (Entry<String, MappedColumn> columnEntry : columnMapping
+				.getColumns()) {
 
-			String toColumn = columns.getKey();
+			String toColumn = columnEntry.getKey();
 
-			String fromColumn = columns.getValue();
-			if (fromColumn == null) {
-				fromColumn = toColumn;
-			}
+			MappedColumn column = columnEntry.getValue();
 
 			if (selectColumns.length() > 0) {
 				insert.append(", ");
 				selectColumns.append(", ");
 			}
 			insert.append(CoreSQLUtils.quoteWrap(toColumn));
-			selectColumns.append(CoreSQLUtils.quoteWrap(fromColumn));
+
+			if (column.hasDefaultValue()) {
+				selectColumns.append("ifnull(");
+			}
+			selectColumns
+					.append(CoreSQLUtils.quoteWrap(column.getFromColumn()));
+			if (column.hasDefaultValue()) {
+				selectColumns.append(",");
+				selectColumns.append(column.getDefaultValueAsString());
+				selectColumns.append(")");
+			}
 
 		}
 		insert.append(") SELECT ");
