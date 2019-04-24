@@ -473,9 +473,8 @@ public class CoreSQLUtils {
 	}
 
 	/**
-	 * Get an available temporary table name. Starts with <prefix>_<baseName>
-	 * and then continues with <prefix>#_<baseName> starting at 1 and
-	 * increasing.
+	 * Get an available temporary table name. Starts with prefix_baseName and
+	 * then continues with prefix#_baseName starting at 1 and increasing.
 	 * 
 	 * @param db
 	 *            connection
