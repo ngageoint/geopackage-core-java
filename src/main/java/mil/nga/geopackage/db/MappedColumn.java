@@ -117,6 +117,15 @@ public class MappedColumn {
 	}
 
 	/**
+	 * Determine if the column has a new name
+	 * 
+	 * @return true if the to and from column names are different
+	 */
+	public boolean hasNewName() {
+		return fromColumn != null && !fromColumn.equals(toColumn);
+	}
+
+	/**
 	 * Get the from column
 	 * 
 	 * @return from column

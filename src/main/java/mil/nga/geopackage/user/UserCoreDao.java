@@ -1769,8 +1769,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            column name
 	 * @param newColumnName
 	 *            new column name
+	 * @since 3.2.1
 	 */
-	private void renameTableColumn(String columnName, String newColumnName) {
+	protected void renameTableColumn(String columnName, String newColumnName) {
 		AlterTable.renameColumn(db, table.getTableName(), columnName,
 				newColumnName);
 	}

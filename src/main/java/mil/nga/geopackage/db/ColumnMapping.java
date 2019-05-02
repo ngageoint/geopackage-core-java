@@ -1,5 +1,7 @@
 package mil.nga.geopackage.db;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,11 @@ public class ColumnMapping {
 	 * Mapping between column names and mapped columns
 	 */
 	private final Map<String, MappedColumn> columns = new LinkedHashMap<>();
+
+	/**
+	 * Dropped columns from the previous table version
+	 */
+	private final Set<String> droppedColumns = new HashSet<>();
 
 	/**
 	 * Constructor
@@ -50,6 +57,22 @@ public class ColumnMapping {
 	 */
 	public ColumnMapping(UserTable<? extends UserColumn> table) {
 		this(table.getColumns());
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param table
+	 *            user table
+	 * @param droppedColumnNames
+	 *            dropped column names
+	 */
+	public ColumnMapping(UserTable<? extends UserColumn> table,
+			Collection<String> droppedColumnNames) {
+		this(table);
+		for (String droppedColumnName : droppedColumnNames) {
+			addDroppedColumn(droppedColumnName);
+		}
 	}
 
 	/**
@@ -91,6 +114,15 @@ public class ColumnMapping {
 	}
 
 	/**
+	 * Get the mapped column values
+	 * 
+	 * @return columns
+	 */
+	public Collection<MappedColumn> getMappedColumns() {
+		return columns.values();
+	}
+
+	/**
 	 * Get the mapped column for the column name
 	 * 
 	 * @param columnName
@@ -99,6 +131,36 @@ public class ColumnMapping {
 	 */
 	public MappedColumn getColumn(String columnName) {
 		return columns.get(columnName);
+	}
+
+	/**
+	 * Add a dropped column
+	 * 
+	 * @param columnName
+	 *            column name
+	 */
+	public void addDroppedColumn(String columnName) {
+		droppedColumns.add(columnName);
+	}
+
+	/**
+	 * Get a set of dropped columns
+	 * 
+	 * @return dropped columns
+	 */
+	public Set<String> getDroppedColumns() {
+		return droppedColumns;
+	}
+
+	/**
+	 * Check if the column name is a dropped column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return true if a dropped column
+	 */
+	public boolean isDroppedColumn(String columnName) {
+		return droppedColumns.contains(columnName);
 	}
 
 }

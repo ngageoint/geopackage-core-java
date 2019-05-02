@@ -538,4 +538,133 @@ public class CoreSQLUtils {
 		return name;
 	}
 
+	/**
+	 * Update the SQL with column mapping modifications
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @param columnMapping
+	 *            column mapping
+	 * @return updated SQL, null if SQL contains a deleted column
+	 * @since 3.2.1
+	 */
+	public static String updateSQL(String sql, ColumnMapping columnMapping) {
+
+		String updatedSql = sql;
+
+		for (String column : columnMapping.getDroppedColumns()) {
+
+			String updated = replaceName(updatedSql, column, " ");
+			if (updated != null) {
+				updatedSql = null;
+				break;
+			}
+
+		}
+
+		if (updatedSql != null) {
+
+			for (MappedColumn column : columnMapping.getMappedColumns()) {
+				if (column.hasNewName()) {
+
+					String updated = replaceName(updatedSql,
+							column.getFromColumn(), column.getToColumn());
+					if (updated != null) {
+						updatedSql = updated;
+					}
+
+				}
+			}
+
+		}
+
+		return updatedSql;
+	}
+
+	/**
+	 * Replace the name (table, column, etc) in the SQL with the replacement.
+	 * The name must be surrounded by non word characters (i.e. not a subset of
+	 * another name).
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @param name
+	 *            name
+	 * @param replacement
+	 *            replacement value
+	 * @return null if not modified, SQL value if replaced at least once
+	 * @since 3.2.1
+	 */
+	public static String replaceName(String sql, String name, String replacement) {
+
+		String updatedSql = null;
+
+		// Quick check if contained in the SQL
+		if (sql.contains(name)) {
+
+			boolean updated = false;
+			StringBuilder updatedSqlBuilder = new StringBuilder();
+
+			// Split the SQL apart by the name
+			String[] parts = sql.split(name);
+
+			for (int i = 0; i <= parts.length; i++) {
+
+				if (i > 0) {
+
+					// Find the character before the name
+					String before = "_";
+					String beforePart = parts[i - 1];
+					if (beforePart.isEmpty()) {
+						if (i == 1) {
+							// SQL starts with the name, allow
+							before = " ";
+						}
+					} else {
+						before = beforePart.substring(beforePart.length() - 1);
+					}
+
+					// Find the character after the name
+					String after = "_";
+					if (i < parts.length) {
+						String afterPart = parts[i];
+						if (!afterPart.isEmpty()) {
+							after = afterPart.substring(0, 1);
+						}
+					} else if (sql.endsWith(name)) {
+						// SQL ends with the name, allow
+						after = " ";
+					}else{
+						break;
+					}
+
+					// Check the before and after characters for non word
+					// characters
+					if (before.matches("\\W") && after.matches("\\W")) {
+						// Replace the name
+						updatedSqlBuilder.append(replacement);
+						updated = true;
+					} else {
+						// Preserve the name
+						updatedSqlBuilder.append(name);
+					}
+				}
+
+				// Add the part to the SQL
+				if (i < parts.length) {
+					updatedSqlBuilder.append(parts[i]);
+				}
+
+			}
+
+			// Set if the SQL was modified
+			if (updated) {
+				updatedSql = updatedSqlBuilder.toString();
+			}
+
+		}
+
+		return updatedSql;
+	}
+
 }
