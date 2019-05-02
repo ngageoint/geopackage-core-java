@@ -69,6 +69,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	}
 
 	/**
+	 * Fail a transaction
+	 * 
+	 * @since 3.2.1
+	 */
+	public void failTransaction() {
+		endTransaction(false);
+	}
+
+	/**
 	 * End a transaction
 	 * 
 	 * @param successful

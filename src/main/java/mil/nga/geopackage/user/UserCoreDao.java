@@ -536,6 +536,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Fail a transaction
+	 * 
+	 * @since 3.2.1
+	 */
+	public void failTransaction() {
+		endTransaction(false);
+	}
+
+	/**
 	 * End a transaction
 	 * 
 	 * @param successful
