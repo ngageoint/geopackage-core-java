@@ -6,7 +6,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.2.1 (TBD)
 
-* TBD
+* Alter table support: rename table, rename column, add column, drop column, alter column
+* User DAO and table alter support: add, rename, drop, alter
+* Automatic user column index assignments
+* Transaction shortcut methods for connections and User DAOs
+* User column shortcut creation methods
+* User table and user column copy methods and constructors
+* SQL utilities for tables, columns, foreign keys, views, data transfers
+* SQLite Master table (sqlite_master) support
 
 ## [3.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.2.0) (04-02-2019)
 
