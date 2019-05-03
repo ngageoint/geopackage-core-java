@@ -3,6 +3,7 @@ package mil.nga.geopackage.factory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
@@ -71,6 +72,7 @@ import mil.nga.sf.proj.Projection;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.misc.TransactionManager;
 
 /**
  * A single GeoPackage database connection implementation
@@ -299,6 +301,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public boolean isTileTable(String table) {
 		return isTableType(ContentsDataType.TILES, table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isAttributeTable(String table) {
+		return isTableType(ContentsDataType.ATTRIBUTES, table);
 	}
 
 	/**
@@ -1103,6 +1113,31 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ type.getSimpleName() + " dao", e);
 		}
 		return dao;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void endTransaction() {
+		endTransaction(true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void failTransaction() {
+		endTransaction(false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T> T callInTransaction(Callable<T> callable) throws SQLException {
+		return TransactionManager.callInTransaction(
+				database.getConnectionSource(), callable);
 	}
 
 	/**

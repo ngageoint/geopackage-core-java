@@ -9,7 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Alter table support: rename table, rename column, add column, drop column, alter column
 * User DAO and table alter support: add, rename, drop, alter
 * Automatic user column index assignments
-* Transaction shortcut methods for connections and User DAOs
+* Transaction shortcut methods for the GeoPackages, connections, and User DAOs
 * User column shortcut creation methods
 * User table and user column copy methods and constructors
 * SQL utilities for tables, columns, foreign keys, views, data transfers

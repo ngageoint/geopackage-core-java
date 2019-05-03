@@ -850,4 +850,50 @@ public class SQLiteMaster {
 		return sqliteMaster;
 	}
 
+	/**
+	 * Query the sqlite_master views on the table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @return SQLiteMaster result
+	 */
+	public static SQLiteMaster queryViewsOnTable(GeoPackageCoreConnection db,
+			String tableName) {
+		return queryViewsOnTable(db, SQLiteMasterColumn.values(), tableName);
+	}
+
+	/**
+	 * Query the sqlite_master views on the table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param columns
+	 *            result columns
+	 * @param tableName
+	 *            table name
+	 * @return SQLiteMaster result
+	 */
+	public static SQLiteMaster queryViewsOnTable(GeoPackageCoreConnection db,
+			SQLiteMasterColumn[] columns, String tableName) {
+		return query(db, columns, SQLiteMasterType.VIEW,
+				SQLiteMasterQuery.createTableViewQuery(tableName));
+	}
+
+	/**
+	 * Count the sqlite_master views on the table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @return count
+	 */
+	public static int countViewsOnTable(GeoPackageCoreConnection db,
+			String tableName) {
+		return count(db, SQLiteMasterType.VIEW,
+				SQLiteMasterQuery.createTableViewQuery(tableName));
+	}
+
 }

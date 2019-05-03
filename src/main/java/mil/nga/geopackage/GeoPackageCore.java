@@ -1,7 +1,9 @@
 package mil.nga.geopackage;
 
 import java.io.Closeable;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
@@ -201,6 +203,16 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isTileTable(String table);
 
 	/**
+	 * Check if the table is an attribute table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if an attribute table
+	 * @since 3.2.1
+	 */
+	public boolean isAttributeTable(String table);
+
+	/**
 	 * Check if the table is the provided type
 	 * 
 	 * @param type
@@ -243,7 +255,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.2.0
 	 */
 	public boolean isContentsTable(String table);
-	
+
 	/**
 	 * Check if the table exists
 	 * 
@@ -777,6 +789,49 @@ public interface GeoPackageCore extends Closeable {
 	public void execSQL(String sql);
 
 	/**
+	 * Begin a transaction
+	 * 
+	 * @since 3.2.1
+	 */
+	public void beginTransaction();
+
+	/**
+	 * End a transaction successfully
+	 * 
+	 * @since 3.2.1
+	 */
+	public void endTransaction();
+
+	/**
+	 * Fail a transaction
+	 * 
+	 * @since 3.2.1
+	 */
+	public void failTransaction();
+
+	/**
+	 * End a transaction
+	 * 
+	 * @param successful
+	 *            true if the transaction was successful, false to rollback or
+	 *            not commit
+	 * @since 3.2.1
+	 */
+	public void endTransaction(boolean successful);
+
+	/**
+	 * Execute the {@link Callable} class inside an ORMLite transaction
+	 * 
+	 * @param callable
+	 *            Callable to execute inside of the transaction.
+	 * @return The object returned by the callable.
+	 * @throws SQLException
+	 *             upon transaction error
+	 * @since 3.2.1
+	 */
+	public <T> T callInTransaction(Callable<T> callable) throws SQLException;
+
+	/**
 	 * Drop the table if it exists. Drops the table with the table name, not
 	 * limited to GeoPackage specific tables.
 	 * 
@@ -883,7 +938,8 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createFeatureTileLinkTable();
 
 	/**
-	 * Create a new attributes table (only the attributes table is created, no Contents entry is created)
+	 * Create a new attributes table (only the attributes table is created, no
+	 * Contents entry is created)
 	 * 
 	 * @param table
 	 *            attributes table

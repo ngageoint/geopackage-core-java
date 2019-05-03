@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.master.SQLiteMasterColumn;
-import mil.nga.geopackage.db.master.SQLiteMasterQuery;
 import mil.nga.geopackage.db.master.SQLiteMasterType;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
@@ -323,10 +322,9 @@ public class AlterTable {
 		try {
 
 			// 9a. Query for views and remove them
-			SQLiteMaster views = SQLiteMaster.query(db, SQLiteMaster.columns(
-					SQLiteMasterColumn.NAME, SQLiteMasterColumn.SQL),
-					SQLiteMasterType.VIEW, SQLiteMasterQuery
-							.createTableViewQuery(tableName));
+			SQLiteMaster views = SQLiteMaster.queryViewsOnTable(db,
+					SQLiteMaster.columns(SQLiteMasterColumn.NAME,
+							SQLiteMasterColumn.SQL), tableName);
 			for (int i = 0; i < views.count(); i++) {
 				String viewName = views.getName(i);
 				try {
