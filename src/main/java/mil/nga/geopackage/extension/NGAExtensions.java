@@ -67,6 +67,29 @@ public class NGAExtensions {
 	}
 
 	/**
+	 * Copy all NGA table extensions for the table within the GeoPackage
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyTableExtensions(GeoPackageCore geoPackage,
+			String table, String newTable) {
+
+		copyGeometryIndex(geoPackage, table, newTable);
+		copyFeatureTileLink(geoPackage, table, newTable);
+		copyTileScaling(geoPackage, table, newTable);
+		copyFeatureStyle(geoPackage, table, newTable);
+		copyContentsId(geoPackage, table, newTable);
+
+		// Copy future extensions for the table here
+	}
+
+	/**
 	 * Delete the Geometry Index extension for the table
 	 * 
 	 * @param geoPackage
@@ -92,7 +115,8 @@ public class NGAExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table Index. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 	}
 
@@ -118,15 +142,32 @@ public class NGAExtensions {
 				geoPackage.dropTable(tableIndexDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
-				extensionsDao
-						.deleteByExtension(FeatureTableCoreIndex.EXTENSION_NAME);
+				extensionsDao.deleteByExtension(
+						FeatureTableCoreIndex.EXTENSION_NAME);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table Index extension and tables. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
+	}
+
+	/**
+	 * Copy the Geometry Index extension for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyGeometryIndex(GeoPackageCore geoPackage,
+			String table, String newTable) {
+		// TODO
 	}
 
 	/**
@@ -150,7 +191,8 @@ public class NGAExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Feature Tile Link. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 	}
 
@@ -162,7 +204,8 @@ public class NGAExtensions {
 	 *            GeoPackage
 	 * @since 3.2.0
 	 */
-	public static void deleteFeatureTileLinkExtension(GeoPackageCore geoPackage) {
+	public static void deleteFeatureTileLinkExtension(
+			GeoPackageCore geoPackage) {
 
 		FeatureTileLinkDao featureTileLinkDao = geoPackage
 				.getFeatureTileLinkDao();
@@ -172,15 +215,32 @@ public class NGAExtensions {
 				geoPackage.dropTable(featureTileLinkDao.getTableName());
 			}
 			if (extensionsDao.isTableExists()) {
-				extensionsDao
-						.deleteByExtension(FeatureTileTableCoreLinker.EXTENSION_NAME);
+				extensionsDao.deleteByExtension(
+						FeatureTileTableCoreLinker.EXTENSION_NAME);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Feature Tile Link extension and table. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
+	}
+
+	/**
+	 * Copy the Feature Tile Link extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyFeatureTileLink(GeoPackageCore geoPackage,
+			String table, String newTable) {
+		// TODO
 	}
 
 	/**
@@ -192,7 +252,8 @@ public class NGAExtensions {
 	 *            table name
 	 * @since 2.0.2
 	 */
-	public static void deleteTileScaling(GeoPackageCore geoPackage, String table) {
+	public static void deleteTileScaling(GeoPackageCore geoPackage,
+			String table) {
 
 		TileScalingDao tileScalingDao = geoPackage.getTileScalingDao();
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
@@ -202,13 +263,14 @@ public class NGAExtensions {
 				tileScalingDao.deleteById(table);
 			}
 			if (extensionsDao.isTableExists()) {
-				extensionsDao.deleteByExtension(
-						TileTableScaling.EXTENSION_NAME, table);
+				extensionsDao.deleteByExtension(TileTableScaling.EXTENSION_NAME,
+						table);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Tile Scaling. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 	}
 
@@ -235,9 +297,26 @@ public class NGAExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Tile Scaling extension and table. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
+	}
+
+	/**
+	 * Copy the Tile Scaling extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyTileScaling(GeoPackageCore geoPackage, String table,
+			String newTable) {
+		// TODO
 	}
 
 	/**
@@ -250,7 +329,8 @@ public class NGAExtensions {
 	 *            table name
 	 * @since 3.2.0
 	 */
-	public static void deleteProperties(GeoPackageCore geoPackage, String table) {
+	public static void deleteProperties(GeoPackageCore geoPackage,
+			String table) {
 
 		if (table.equalsIgnoreCase(PropertiesCoreExtension.TABLE_NAME)) {
 			deletePropertiesExtension(geoPackage);
@@ -283,7 +363,8 @@ public class NGAExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Properties extension. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 	}
@@ -300,7 +381,8 @@ public class NGAExtensions {
 	public static void deleteFeatureStyle(GeoPackageCore geoPackage,
 			String table) {
 
-		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(geoPackage);
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
+				geoPackage);
 		if (featureStyleExtension.has(table)) {
 			featureStyleExtension.deleteRelationships(table);
 		}
@@ -317,11 +399,28 @@ public class NGAExtensions {
 	 */
 	public static void deleteFeatureStyleExtension(GeoPackageCore geoPackage) {
 
-		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(geoPackage);
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
+				geoPackage);
 		if (featureStyleExtension.has()) {
 			featureStyleExtension.removeExtension();
 		}
 
+	}
+
+	/**
+	 * Copy the Feature Style extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyFeatureStyle(GeoPackageCore geoPackage, String table,
+			String newTable) {
+		// TODO
 	}
 
 	/**
@@ -336,10 +435,6 @@ public class NGAExtensions {
 
 		RelatedTablesCoreExtension relatedTables = new RelatedTablesCoreExtension(
 				geoPackage) {
-			@Override
-			public String getPrimaryKeyColumnName(String tableName) {
-				return null;
-			}
 		};
 
 		return new FeatureCoreStyleExtension(geoPackage, relatedTables) {
@@ -355,7 +450,8 @@ public class NGAExtensions {
 	 *            table name
 	 * @since 3.2.0
 	 */
-	public static void deleteContentsId(GeoPackageCore geoPackage, String table) {
+	public static void deleteContentsId(GeoPackageCore geoPackage,
+			String table) {
 
 		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
 				geoPackage);
@@ -381,6 +477,22 @@ public class NGAExtensions {
 			contentsIdExtension.removeExtension();
 		}
 
+	}
+
+	/**
+	 * Copy the Contents Id extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyContentsId(GeoPackageCore geoPackage, String table,
+			String newTable) {
+		// TODO
 	}
 
 }

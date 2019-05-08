@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.j256.ormlite.dao.BaseDaoImpl;
+
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.Contents;
@@ -41,8 +43,6 @@ import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.UserUniqueConstraint;
 import mil.nga.sf.proj.Projection;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 
 /**
  * A single GeoPackage database connection
@@ -287,6 +287,16 @@ public interface GeoPackageCore extends Closeable {
 	public String getTableType(String table);
 
 	/**
+	 * Get the contents data type of the user table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return table type or null if not an enumerated type
+	 * @since 3.2.1
+	 */
+	public ContentsDataType getTableDataType(String table);
+
+	/**
 	 * Get the bounding box for all table contents in the provided projection
 	 * 
 	 * @param projection
@@ -488,7 +498,8 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry columns
 	 */
 	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, BoundingBox boundingBox, long srsId);
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId);
 
 	/**
 	 * Create a new feature table with GeoPackage metadata. Create the Geometry
@@ -840,6 +851,28 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.1.5
 	 */
 	public void dropTable(String table);
+
+	/**
+	 * Rename the table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public void renameTable(String tableName, String newTableName);
+
+	/**
+	 * Copy the table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public void copyTable(String tableName, String newTableName);
 
 	/**
 	 * Get a 2D Gridded Coverage DAO

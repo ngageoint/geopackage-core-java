@@ -1,5 +1,8 @@
 package mil.nga.geopackage.features.columns;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -7,9 +10,6 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.proj.Projection;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Geometry Columns object. Identifies the geometry columns in tables that
@@ -159,10 +159,21 @@ public class GeometryColumns {
 		columnName = id.getColumnName();
 	}
 
+	/**
+	 * Get the contents
+	 * 
+	 * @return contents
+	 */
 	public Contents getContents() {
 		return contents;
 	}
 
+	/**
+	 * Set the contents
+	 * 
+	 * @param contents
+	 *            contents
+	 */
 	public void setContents(Contents contents) {
 		this.contents = contents;
 		if (contents != null) {
@@ -170,11 +181,11 @@ public class GeometryColumns {
 			// 23)
 			ContentsDataType dataType = contents.getDataType();
 			if (dataType == null || dataType != ContentsDataType.FEATURES) {
-				throw new GeoPackageException("The "
-						+ Contents.class.getSimpleName() + " of a "
-						+ GeometryColumns.class.getSimpleName()
-						+ " must have a data type of "
-						+ ContentsDataType.FEATURES.getName());
+				throw new GeoPackageException(
+						"The " + Contents.class.getSimpleName() + " of a "
+								+ GeometryColumns.class.getSimpleName()
+								+ " must have a data type of "
+								+ ContentsDataType.FEATURES.getName());
 			}
 			tableName = contents.getId();
 		} else {
@@ -182,56 +193,126 @@ public class GeometryColumns {
 		}
 	}
 
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
 	public String getTableName() {
 		return tableName;
 	}
 
+	/**
+	 * Get the column name
+	 * 
+	 * @return column name
+	 */
 	public String getColumnName() {
 		return columnName;
 	}
 
+	/**
+	 * Set the column name
+	 * 
+	 * @param columnName
+	 *            column name
+	 */
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
 
+	/**
+	 * Get the geometry type
+	 * 
+	 * @return geometry type
+	 */
 	public GeometryType getGeometryType() {
 		return GeometryType.fromName(geometryTypeName);
 	}
 
+	/**
+	 * Set the geometry type
+	 * 
+	 * @param geometryType
+	 *            geometry type
+	 */
 	public void setGeometryType(GeometryType geometryType) {
 		this.geometryTypeName = geometryType.getName();
 	}
 
+	/**
+	 * Get the geometry type name
+	 * 
+	 * @return geometry type name
+	 */
 	public String getGeometryTypeName() {
 		return geometryTypeName;
 	}
 
+	/**
+	 * Get the srs
+	 * 
+	 * @return srs
+	 */
 	public SpatialReferenceSystem getSrs() {
 		return srs;
 	}
 
+	/**
+	 * Set the srs
+	 * 
+	 * @param srs
+	 *            srs
+	 */
 	public void setSrs(SpatialReferenceSystem srs) {
 		this.srs = srs;
 		srsId = srs != null ? srs.getId() : -1;
 	}
 
+	/**
+	 * Get the srs id
+	 * 
+	 * @return srs id
+	 */
 	public long getSrsId() {
 		return srsId;
 	}
 
+	/**
+	 * Get the z
+	 * 
+	 * @return z
+	 */
 	public byte getZ() {
 		return z;
 	}
 
+	/**
+	 * Set the z
+	 * 
+	 * @param z
+	 *            z
+	 */
 	public void setZ(byte z) {
 		validateValues(COLUMN_Z, z);
 		this.z = z;
 	}
 
+	/**
+	 * Get the m
+	 * 
+	 * @return m
+	 */
 	public byte getM() {
 		return m;
 	}
 
+	/**
+	 * Set the m
+	 * 
+	 * @param m
+	 *            m
+	 */
 	public void setM(byte m) {
 		validateValues(COLUMN_M, m);
 		this.m = m;
@@ -256,9 +337,8 @@ public class GeometryColumns {
 	 */
 	private void validateValues(String column, byte value) {
 		if (value < 0 || value > 2) {
-			throw new GeoPackageException(
-					column
-							+ " value must be 0 for prohibited, 1 for mandatory, or 2 for optional");
+			throw new GeoPackageException(column
+					+ " value must be 0 for prohibited, 1 for mandatory, or 2 for optional");
 		}
 	}
 

@@ -20,6 +20,9 @@ import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.custom.UserCustomColumn;
+import mil.nga.geopackage.user.custom.UserCustomTable;
+import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
  * Related Tables core extension
@@ -43,14 +46,15 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extended Relations DAO
@@ -139,7 +143,16 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            table name
 	 * @return the column name
 	 */
-	public abstract String getPrimaryKeyColumnName(String tableName);
+	public String getPrimaryKeyColumnName(String tableName) {
+		UserCustomTable table = UserCustomTableReader
+				.readTable(geoPackage.getDatabase(), tableName);
+		UserCustomColumn pkColumn = table.getPkColumn();
+		if (pkColumn == null) {
+			throw new GeoPackageException(
+					"Found no primary key for table " + tableName);
+		}
+		return pkColumn.getName();
+	}
 
 	/**
 	 * Set the contents in the user table
@@ -153,9 +166,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		try {
 			contents = dao.queryForId(table.getTableName());
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to retrieve "
-					+ Contents.class.getSimpleName() + " for table name: "
-					+ table.getTableName(), e);
+			throw new GeoPackageException(
+					"Failed to retrieve " + Contents.class.getSimpleName()
+							+ " for table name: " + table.getTableName(),
+					e);
 		}
 		if (contents == null) {
 			throw new GeoPackageException(
@@ -332,16 +346,17 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		extendedRelation
 				.setBasePrimaryColumn(getPrimaryKeyColumnName(baseTableName));
 		extendedRelation.setRelatedTableName(relatedTableName);
-		extendedRelation
-				.setRelatedPrimaryColumn(getPrimaryKeyColumnName(relatedTableName));
+		extendedRelation.setRelatedPrimaryColumn(
+				getPrimaryKeyColumnName(relatedTableName));
 		extendedRelation.setMappingTableName(userMappingTable.getTableName());
 		extendedRelation.setRelationName(relationName);
 		try {
 			extendedRelationsDao.create(extendedRelation);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to add relationship '"
-					+ relationName + "' between " + baseTableName + " and "
-					+ relatedTableName, e);
+			throw new GeoPackageException(
+					"Failed to add relationship '" + relationName + "' between "
+							+ baseTableName + " and " + relatedTableName,
+					e);
 		}
 		return extendedRelation;
 	}
@@ -620,7 +635,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
-			String relatedAttributesTableName, UserMappingTable userMappingTable) {
+			String relatedAttributesTableName,
+			UserMappingTable userMappingTable) {
 		return addRelationship(baseTableName, relatedAttributesTableName,
 				userMappingTable, RelationType.ATTRIBUTES);
 	}
@@ -641,7 +657,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
 			AttributesTable attributesTable, String mappingTableName) {
-		return addRelationship(baseTableName, attributesTable, mappingTableName);
+		return addRelationship(baseTableName, attributesTable,
+				mappingTableName);
 	}
 
 	/**
@@ -659,8 +676,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @since 3.2.0
 	 */
 	public ExtendedRelation addAttributesRelationship(String baseTableName,
-			AttributesTable attributesTable, UserMappingTable userMappingTable) {
-		return addRelationship(baseTableName, attributesTable, userMappingTable);
+			AttributesTable attributesTable,
+			UserMappingTable userMappingTable) {
+		return addRelationship(baseTableName, attributesTable,
+				userMappingTable);
 	}
 
 	/**
@@ -790,9 +809,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			if (!geoPackage.isTableType(relationType.getDataType(),
 					relatedTableName)) {
 				throw new GeoPackageException("The related table must be a "
-						+ relationType.getDataType()
-						+ " table. Related Table: " + relatedTableName
-						+ ", Type: "
+						+ relationType.getDataType() + " table. Related Table: "
+						+ relatedTableName + ", Type: "
 						+ geoPackage.getTableType(relatedTableName));
 			}
 
@@ -882,7 +900,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				geoPackage.deleteTableQuietly(relatedTableName);
 				throw new GeoPackageException(
 						"Failed to create table and metadata: "
-								+ relatedTableName, e);
+								+ relatedTableName,
+						e);
 			}
 
 			created = true;
@@ -920,7 +939,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 *            relation name
 	 */
 	public void removeRelationship(String baseTableName,
-			String relatedTableName, String relationAuthor, String relationName) {
+			String relatedTableName, String relationAuthor,
+			String relationName) {
 		removeRelationship(baseTableName, relatedTableName,
 				buildRelationName(relationAuthor, relationName));
 	}
@@ -1018,7 +1038,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to remove relationships for mapping table: "
-							+ mappingTable, e);
+							+ mappingTable,
+					e);
 		}
 	}
 
@@ -1032,8 +1053,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				List<ExtendedRelation> extendedRelations = extendedRelationsDao
 						.queryForAll();
 				for (ExtendedRelation extendedRelation : extendedRelations) {
-					geoPackage.deleteTable(extendedRelation
-							.getMappingTableName());
+					geoPackage.deleteTable(
+							extendedRelation.getMappingTableName());
 				}
 				geoPackage.dropTable(extendedRelationsDao.getTableName());
 			}
@@ -1043,7 +1064,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Related Tables extension and table. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 	}
 
@@ -1193,8 +1215,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	public boolean hasRelations(String baseTable, String baseColumn,
 			String relatedTable, String relatedColumn, String relation,
 			String mappingTable) throws SQLException {
-		return !getRelations(baseTable, baseColumn, relatedTable,
-				relatedColumn, relation, mappingTable).isEmpty();
+		return !getRelations(baseTable, baseColumn, relatedTable, relatedColumn,
+				relation, mappingTable).isEmpty();
 	}
 
 	/**
@@ -1238,7 +1260,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 							+ ", Related Table: " + relatedTable
 							+ ", Related Column: " + relatedColumn
 							+ ", Relation: " + relation + ", Mapping Table: "
-							+ mappingTable, e);
+							+ mappingTable,
+					e);
 		}
 
 		return relations;

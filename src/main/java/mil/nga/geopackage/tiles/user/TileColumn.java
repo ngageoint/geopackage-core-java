@@ -2,6 +2,7 @@ package mil.nga.geopackage.tiles.user;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
 
 /**
@@ -131,7 +132,8 @@ public class TileColumn extends UserColumn {
 	 * @return tile column
 	 * @since 3.2.1
 	 */
-	public static TileColumn createColumn(String name, GeoPackageDataType type) {
+	public static TileColumn createColumn(String name,
+			GeoPackageDataType type) {
 		return createColumn(NO_INDEX, name, type);
 	}
 
@@ -309,6 +311,21 @@ public class TileColumn extends UserColumn {
 	}
 
 	/**
+	 * Create a new column
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @return tile column
+	 * @since 3.2.1
+	 */
+	public static TileColumn createColumn(TableColumn tableColumn) {
+		return new TileColumn(tableColumn.getIndex(), tableColumn.getName(),
+				tableColumn.getDataType(), tableColumn.getMax(),
+				tableColumn.isNotNull(), tableColumn.getDefaultValue(),
+				tableColumn.isPrimarykey());
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param index
@@ -326,8 +343,9 @@ public class TileColumn extends UserColumn {
 	 * @param primaryKey
 	 *            primary key
 	 */
-	TileColumn(int index, String name, GeoPackageDataType dataType, Long max,
-			boolean notNull, Object defaultValue, boolean primaryKey) {
+	private TileColumn(int index, String name, GeoPackageDataType dataType,
+			Long max, boolean notNull, Object defaultValue,
+			boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 		if (dataType == null) {
 			throw new GeoPackageException(

@@ -2,14 +2,19 @@ package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.coverage.CoverageDataCore;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
+import mil.nga.geopackage.features.columns.GeometryColumns;
+import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 
@@ -21,6 +26,12 @@ import mil.nga.geopackage.schema.columns.DataColumnsDao;
  * @since 1.1.8
  */
 public class GeoPackageExtensions {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(GeoPackageExtensions.class.getName());
 
 	/**
 	 * Delete all table extensions for the table within the GeoPackage
@@ -67,6 +78,31 @@ public class GeoPackageExtensions {
 	}
 
 	/**
+	 * Copy all table extensions for the table within the GeoPackage
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyTableExtensions(GeoPackageCore geoPackage,
+			String table, String newTable) {
+
+		// Handle copying any extensions with extra tables here
+		NGAExtensions.copyTableExtensions(geoPackage, table, newTable);
+
+		copyRTreeSpatialIndex(geoPackage, table, newTable);
+		copyRelatedTables(geoPackage, table, newTable);
+		copyGriddedCoverage(geoPackage, table, newTable);
+		copySchema(geoPackage, table, newTable);
+		copyMetadata(geoPackage, table, newTable);
+
+	}
+
+	/**
 	 * Delete the extensions for the table
 	 * 
 	 * @param geoPackage
@@ -83,7 +119,8 @@ public class GeoPackageExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table extensions. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 	}
 
@@ -103,7 +140,8 @@ public class GeoPackageExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete all extensions. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 	}
@@ -120,7 +158,8 @@ public class GeoPackageExtensions {
 	public static void deleteRTreeSpatialIndex(GeoPackageCore geoPackage,
 			String table) {
 
-		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(geoPackage);
+		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(
+				geoPackage);
 		if (rTreeIndexExtension.has(table)) {
 			rTreeIndexExtension.delete(table);
 		}
@@ -137,9 +176,51 @@ public class GeoPackageExtensions {
 	public static void deleteRTreeSpatialIndexExtension(
 			GeoPackageCore geoPackage) {
 
-		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(geoPackage);
+		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(
+				geoPackage);
 		if (rTreeIndexExtension.has()) {
 			rTreeIndexExtension.deleteAll();
+		}
+
+	}
+
+	/**
+	 * Copy the RTree Spatial extension for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyRTreeSpatialIndex(GeoPackageCore geoPackage,
+			String table, String newTable) {
+
+		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(
+				geoPackage);
+		if (rTreeIndexExtension.has(table)) {
+			GeometryColumnsDao geometryColumnsDao = geoPackage
+					.getGeometryColumnsDao();
+			try {
+				GeometryColumns geometryColumns = geometryColumnsDao
+						.queryForTableName(newTable);
+				if (geometryColumns != null) {
+					TableInfo tableInfo = TableInfo
+							.info(geoPackage.getDatabase(), newTable);
+					if (tableInfo != null) {
+						String pk = tableInfo.getPrimaryKey().getName();
+						rTreeIndexExtension.create(newTable,
+								geometryColumns.getColumnName(), pk);
+					}
+				}
+			} catch (SQLException e) {
+				logger.log(
+						Level.WARNING, "Failed to create RTree for table: "
+								+ newTable + ", copied from table: " + table,
+						e);
+			}
 		}
 
 	}
@@ -188,7 +269,8 @@ public class GeoPackageExtensions {
 	public static void deleteRelatedTables(GeoPackageCore geoPackage,
 			String table) {
 
-		RelatedTablesCoreExtension relatedTablesExtension = getRelatedTableExtension(geoPackage);
+		RelatedTablesCoreExtension relatedTablesExtension = getRelatedTableExtension(
+				geoPackage);
 		if (relatedTablesExtension.has()) {
 			relatedTablesExtension.removeRelationships(table);
 		}
@@ -204,11 +286,28 @@ public class GeoPackageExtensions {
 	 */
 	public static void deleteRelatedTablesExtension(GeoPackageCore geoPackage) {
 
-		RelatedTablesCoreExtension relatedTablesExtension = getRelatedTableExtension(geoPackage);
+		RelatedTablesCoreExtension relatedTablesExtension = getRelatedTableExtension(
+				geoPackage);
 		if (relatedTablesExtension.has()) {
 			relatedTablesExtension.removeExtension();
 		}
 
+	}
+
+	/**
+	 * Copy the Related Tables extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyRelatedTables(GeoPackageCore geoPackage,
+			String table, String newTable) {
+		// TODO
 	}
 
 	/**
@@ -221,10 +320,6 @@ public class GeoPackageExtensions {
 	private static RelatedTablesCoreExtension getRelatedTableExtension(
 			GeoPackageCore geoPackage) {
 		return new RelatedTablesCoreExtension(geoPackage) {
-			@Override
-			public String getPrimaryKeyColumnName(String tableName) {
-				return null;
-			}
 		};
 	}
 
@@ -261,7 +356,8 @@ public class GeoPackageExtensions {
 			} catch (SQLException e) {
 				throw new GeoPackageException(
 						"Failed to delete Table Index. GeoPackage: "
-								+ geoPackage.getName() + ", Table: " + table, e);
+								+ geoPackage.getName() + ", Table: " + table,
+						e);
 			}
 		}
 
@@ -274,7 +370,8 @@ public class GeoPackageExtensions {
 	 *            GeoPackage
 	 * @since 3.2.0
 	 */
-	public static void deleteGriddedCoverageExtension(GeoPackageCore geoPackage) {
+	public static void deleteGriddedCoverageExtension(
+			GeoPackageCore geoPackage) {
 
 		List<String> coverageTables = geoPackage
 				.getTables(ContentsDataType.GRIDDED_COVERAGE);
@@ -301,9 +398,26 @@ public class GeoPackageExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Gridded Coverage extension and tables. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
+	}
+
+	/**
+	 * Copy the Gridded Coverage extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyGriddedCoverage(GeoPackageCore geoPackage,
+			String table, String newTable) {
+		// TODO
 	}
 
 	/**
@@ -325,7 +439,8 @@ public class GeoPackageExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Schema extension. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 
 	}
@@ -344,6 +459,22 @@ public class GeoPackageExtensions {
 			schemaExtension.removeExtension();
 		}
 
+	}
+
+	/**
+	 * Copy the Schema extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copySchema(GeoPackageCore geoPackage, String table,
+			String newTable) {
+		// TODO
 	}
 
 	/**
@@ -366,7 +497,8 @@ public class GeoPackageExtensions {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Metadata extension. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 
 	}
@@ -385,6 +517,22 @@ public class GeoPackageExtensions {
 			metadataExtension.removeExtension();
 		}
 
+	}
+
+	/**
+	 * Copy the Metadata extensions for the table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public static void copyMetadata(GeoPackageCore geoPackage, String table,
+			String newTable) {
+		// TODO
 	}
 
 	/**

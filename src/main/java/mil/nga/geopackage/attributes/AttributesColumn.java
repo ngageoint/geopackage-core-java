@@ -1,6 +1,7 @@
 package mil.nga.geopackage.attributes;
 
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
 
 /**
@@ -32,7 +33,8 @@ public class AttributesColumn extends UserColumn {
 	 *            name
 	 * @return attributes column
 	 */
-	public static AttributesColumn createPrimaryKeyColumn(int index, String name) {
+	public static AttributesColumn createPrimaryKeyColumn(int index,
+			String name) {
 		return new AttributesColumn(index, name, GeoPackageDataType.INTEGER,
 				null, true, null, true);
 	}
@@ -227,6 +229,21 @@ public class AttributesColumn extends UserColumn {
 	}
 
 	/**
+	 * Create a new column
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @return attributes column
+	 * @since 3.2.1
+	 */
+	public static AttributesColumn createColumn(TableColumn tableColumn) {
+		return new AttributesColumn(tableColumn.getIndex(),
+				tableColumn.getName(), tableColumn.getDataType(),
+				tableColumn.getMax(), tableColumn.isNotNull(),
+				tableColumn.getDefaultValue(), tableColumn.isPrimarykey());
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param index
@@ -244,8 +261,9 @@ public class AttributesColumn extends UserColumn {
 	 * @param primaryKey
 	 *            primary key flag
 	 */
-	AttributesColumn(int index, String name, GeoPackageDataType dataType,
-			Long max, boolean notNull, Object defaultValue, boolean primaryKey) {
+	private AttributesColumn(int index, String name,
+			GeoPackageDataType dataType, Long max, boolean notNull,
+			Object defaultValue, boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
 	}
 

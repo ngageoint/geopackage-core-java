@@ -18,7 +18,17 @@ import mil.nga.geopackage.user.UserTable;
  * @author osbornb
  * @since 3.2.1
  */
-public class ColumnMapping {
+public class TableMapping {
+
+	/**
+	 * From table name
+	 */
+	private String fromTable;
+
+	/**
+	 * To table name
+	 */
+	private String toTable;
 
 	/**
 	 * Mapping between column names and mapped columns
@@ -33,17 +43,21 @@ public class ColumnMapping {
 	/**
 	 * Constructor
 	 */
-	public ColumnMapping() {
+	public TableMapping() {
 
 	}
 
 	/**
 	 * Constructor
 	 * 
+	 * @param tableName
+	 *            table name
 	 * @param columns
 	 *            user columns
 	 */
-	public ColumnMapping(List<? extends UserColumn> columns) {
+	public TableMapping(String tableName, List<? extends UserColumn> columns) {
+		this.fromTable = tableName;
+		this.toTable = tableName;
 		for (UserColumn column : columns) {
 			addColumn(new MappedColumn(column));
 		}
@@ -55,8 +69,8 @@ public class ColumnMapping {
 	 * @param table
 	 *            user table
 	 */
-	public ColumnMapping(UserTable<? extends UserColumn> table) {
-		this(table.getColumns());
+	public TableMapping(UserTable<? extends UserColumn> table) {
+		this(table.getTableName(), table.getColumns());
 	}
 
 	/**
@@ -67,12 +81,73 @@ public class ColumnMapping {
 	 * @param droppedColumnNames
 	 *            dropped column names
 	 */
-	public ColumnMapping(UserTable<? extends UserColumn> table,
+	public TableMapping(UserTable<? extends UserColumn> table,
 			Collection<String> droppedColumnNames) {
 		this(table);
 		for (String droppedColumnName : droppedColumnNames) {
 			addDroppedColumn(droppedColumnName);
 		}
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param table
+	 *            user table
+	 * @param newTableName
+	 *            new table name
+	 */
+	public TableMapping(UserTable<? extends UserColumn> table,
+			String newTableName) {
+		this(table);
+		this.toTable = newTableName;
+	}
+
+	/**
+	 * Get the from table name
+	 * 
+	 * @return from table name
+	 */
+	public String getFromTable() {
+		return fromTable;
+	}
+
+	/**
+	 * Set the from table name
+	 * 
+	 * @param fromTable
+	 *            from table name
+	 */
+	public void setFromTable(String fromTable) {
+		this.fromTable = fromTable;
+	}
+
+	/**
+	 * Get the to table name
+	 * 
+	 * @return to table name
+	 */
+	public String getToTable() {
+		return toTable;
+	}
+
+	/**
+	 * Set the to table name
+	 * 
+	 * @param toTable
+	 *            to table name
+	 */
+	public void setToTable(String toTable) {
+		this.toTable = toTable;
+	}
+
+	/**
+	 * Check if the table mapping is to a new table
+	 * 
+	 * @return true if a new table
+	 */
+	public boolean isNewTable() {
+		return toTable != null && !toTable.equals(fromTable);
 	}
 
 	/**

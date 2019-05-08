@@ -5,12 +5,13 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import com.j256.ormlite.support.ConnectionSource;
+
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.master.SQLiteMasterType;
-
-import com.j256.ormlite.support.ConnectionSource;
+import mil.nga.geopackage.db.table.TableInfo;
 
 /**
  * GeoPackage Connection used to define common functionality within different
@@ -178,7 +179,17 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return true if column exists
 	 * @since 1.1.8
 	 */
-	public abstract boolean columnExists(String tableName, String columnName);
+	public boolean columnExists(String tableName, String columnName) {
+
+		boolean exists = false;
+
+		TableInfo tableInfo = TableInfo.info(this, tableName);
+		if (tableInfo != null) {
+			exists = tableInfo.hasColumn(columnName);
+		}
+
+		return exists;
+	}
 
 	/**
 	 * Add a new column to the table
@@ -191,7 +202,8 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *            column definition
 	 * @since 1.1.8
 	 */
-	public void addColumn(String tableName, String columnName, String columnDef) {
+	public void addColumn(String tableName, String columnName,
+			String columnDef) {
 		AlterTable.addColumn(this, tableName, columnName, columnDef);
 	}
 
@@ -370,7 +382,8 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return single column values
 	 * @since 3.1.0
 	 */
-	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
+	public <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args) {
 		@SuppressWarnings("unchecked")
 		List<T> result = (List<T>) querySingleColumnResults(sql, args);
 		return result;
@@ -410,7 +423,8 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args,
 			GeoPackageDataType dataType) {
 		@SuppressWarnings("unchecked")
-		List<T> result = (List<T>) querySingleColumnResults(sql, args, dataType);
+		List<T> result = (List<T>) querySingleColumnResults(sql, args,
+				dataType);
 		return result;
 	}
 

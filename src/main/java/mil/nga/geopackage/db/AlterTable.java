@@ -10,6 +10,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.master.SQLiteMasterColumn;
 import mil.nga.geopackage.db.master.SQLiteMasterType;
+import mil.nga.geopackage.extension.RTreeIndexCoreExtension;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 
@@ -24,8 +25,8 @@ public class AlterTable {
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = Logger.getLogger(AlterTable.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(AlterTable.class.getName());
 
 	/**
 	 * Create the ALTER TABLE SQL command prefix
@@ -174,10 +175,10 @@ public class AlterTable {
 			newTable.dropColumn(columnName);
 		}
 
-		// Build the column mapping
-		ColumnMapping columnMapping = new ColumnMapping(newTable, columnNames);
+		// Build the table mapping
+		TableMapping tableMapping = new TableMapping(newTable, columnNames);
 
-		alterTable(db, table.getTableName(), newTable, columnMapping);
+		alterTable(db, newTable, tableMapping);
 
 		for (String columnName : columnNames) {
 			table.dropColumn(columnName);
@@ -223,7 +224,7 @@ public class AlterTable {
 			newTable.alterColumn(column);
 		}
 
-		alterTable(db, table.getTableName(), newTable);
+		alterTable(db, newTable);
 
 		for (T column : columns) {
 			table.alterColumn(column);
@@ -231,40 +232,31 @@ public class AlterTable {
 	}
 
 	/**
-	 * Alter a table with a new table schema assuming a default column mapping.
-	 * 
-	 * This removes views on the table, creates a new table, transfers the old
-	 * table data to the new, drops the old table, and renames the new table to
-	 * the old. Indexes, triggers, and views that reference deleted columns not
-	 * recreated. An attempt is made to recreate the others including any
-	 * modifications for renamed columns.
-	 * 
-	 * Making Other Kinds Of Table Schema Changes:
-	 * https://www.sqlite.org/lang_altertable.html
+	 * Copy the table
 	 * 
 	 * @param db
 	 *            connection
-	 * @param tableName
-	 *            table name
-	 * @param newTable
-	 *            new table schema
+	 * @param table
+	 *            table
+	 * @param newTableName
+	 *            new table name
 	 */
-	public static void alterTable(GeoPackageCoreConnection db,
-			String tableName, UserTable<? extends UserColumn> newTable) {
+	public static void copyTable(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> table, String newTableName) {
 
-		// Build the column mapping
-		ColumnMapping columnMapping = new ColumnMapping(newTable);
+		// Build the table mapping
+		TableMapping tableMapping = new TableMapping(table, newTableName);
 
-		alterTable(db, tableName, newTable, columnMapping);
+		alterTable(db, table, tableMapping);
 	}
 
 	/**
-	 * Alter a table with a new table schema and column mapping.
+	 * Alter a table with a new table schema assuming a default table mapping.
 	 * 
 	 * This removes views on the table, creates a new table, transfers the old
 	 * table data to the new, drops the old table, and renames the new table to
-	 * the old. Indexes, triggers, and views that reference deleted columns not
-	 * recreated. An attempt is made to recreate the others including any
+	 * the old. Indexes, triggers, and views that reference deleted columns are
+	 * not recreated. An attempt is made to recreate the others including any
 	 * modifications for renamed columns.
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
@@ -272,46 +264,83 @@ public class AlterTable {
 	 * 
 	 * @param db
 	 *            connection
-	 * @param tableName
-	 *            table name
 	 * @param newTable
 	 *            new table schema
-	 * @param columnMapping
-	 *            column mapping
 	 */
 	public static void alterTable(GeoPackageCoreConnection db,
-			String tableName, UserTable<? extends UserColumn> newTable,
-			ColumnMapping columnMapping) {
+			UserTable<? extends UserColumn> newTable) {
+
+		// Build the table mapping
+		TableMapping tableMapping = new TableMapping(newTable);
+
+		alterTable(db, newTable, tableMapping);
+	}
+
+	/**
+	 * Alter a table with a new table schema and table mapping.
+	 * 
+	 * Altering a table: Removes views on the table, creates a new table,
+	 * transfers the old table data to the new, drops the old table, and renames
+	 * the new table to the old. Indexes, triggers, and views that reference
+	 * deleted columns are not recreated. An attempt is made to recreate the
+	 * others including any modifications for renamed columns.
+	 * 
+	 * Creating a new table: Creates a new table and transfers the table data to
+	 * the new. Triggers are not created on the new table. Indexes and views
+	 * that reference deleted columns are not recreated. An attempt is made to
+	 * create the others on the new table.
+	 * 
+	 * Making Other Kinds Of Table Schema Changes:
+	 * https://www.sqlite.org/lang_altertable.html
+	 * 
+	 * @param db
+	 *            connection
+	 * @param newTable
+	 *            new table schema
+	 * @param tableMapping
+	 *            table mapping
+	 */
+	public static void alterTable(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> newTable,
+			TableMapping tableMapping) {
 
 		// Build the create table sql
 		String sql = CoreSQLUtils.createTableSQL(newTable);
 
-		alterTable(db, tableName, sql, columnMapping);
+		alterTable(db, sql, tableMapping);
 	}
 
 	/**
-	 * Alter a table with a new table SQL creation statement and column mapping.
+	 * Alter a table with a new table SQL creation statement and table mapping.
 	 * 
-	 * This removes views on the table, creates a new table, transfers the old
-	 * table data to the new, drops the old table, and renames the new table to
-	 * the old. Indexes, triggers, and views that reference deleted columns not
-	 * recreated. An attempt is made to recreate the others including any
-	 * modifications for renamed columns.
+	 * Altering a table: Removes views on the table, creates a new table,
+	 * transfers the old table data to the new, drops the old table, and renames
+	 * the new table to the old. Indexes, triggers, and views that reference
+	 * deleted columns are not recreated. An attempt is made to recreate the
+	 * others including any modifications for renamed columns.
+	 * 
+	 * Creating a new table: Creates a new table and transfers the table data to
+	 * the new. Triggers are not created on the new table. Indexes and views
+	 * that reference deleted columns are not recreated. An attempt is made to
+	 * create the others on the new table.
 	 * 
 	 * Making Other Kinds Of Table Schema Changes:
 	 * https://www.sqlite.org/lang_altertable.html
 	 * 
 	 * @param db
 	 *            connection
-	 * @param tableName
-	 *            table name
 	 * @param sql
 	 *            new table SQL
-	 * @param columnMapping
-	 *            column mapping
+	 * @param tableMapping
+	 *            table mapping
 	 */
-	public static void alterTable(GeoPackageCoreConnection db,
-			String tableName, String sql, ColumnMapping columnMapping) {
+	public static void alterTable(GeoPackageCoreConnection db, String sql,
+			TableMapping tableMapping) {
+
+		String tableName = tableMapping.getFromTable();
+
+		// Determine if a new table copy vs an alter table
+		boolean newTable = tableMapping.isNewTable();
 
 		// 1. Disable foreign key constraints
 		boolean enableForeignKeys = CoreSQLUtils.foreignKeys(db, false);
@@ -321,70 +350,109 @@ public class AlterTable {
 		db.beginTransaction();
 		try {
 
-			// 9a. Query for views and remove them
-			SQLiteMaster views = SQLiteMaster.queryViewsOnTable(db,
-					SQLiteMaster.columns(SQLiteMasterColumn.NAME,
-							SQLiteMasterColumn.SQL), tableName);
-			for (int i = 0; i < views.count(); i++) {
-				String viewName = views.getName(i);
-				try {
-					CoreSQLUtils.dropView(db, viewName);
-				} catch (Exception e) {
-					logger.log(Level.WARNING, "Failed to drop view: "
-							+ viewName + ", table: " + tableName, e);
+			// 9a. Query for views
+			SQLiteMaster views = SQLiteMaster.queryViewsOnTable(db, SQLiteMaster
+					.columns(SQLiteMasterColumn.NAME, SQLiteMasterColumn.SQL),
+					tableName);
+			// Remove the views if not a new table
+			if (!newTable) {
+				for (int i = 0; i < views.count(); i++) {
+					String viewName = views.getName(i);
+					try {
+						CoreSQLUtils.dropView(db, viewName);
+					} catch (Exception e) {
+						logger.log(
+								Level.WARNING, "Failed to drop view: "
+										+ viewName + ", table: " + tableName,
+								e);
+					}
 				}
 			}
 
 			// 3. Query indexes and triggers
 			SQLiteMaster indexesAndTriggers = SQLiteMaster.query(db,
-					SQLiteMaster.columns(SQLiteMasterColumn.TYPE,
-							SQLiteMasterColumn.SQL), SQLiteMaster.types(
-							SQLiteMasterType.INDEX, SQLiteMasterType.TRIGGER),
+					SQLiteMaster.columns(SQLiteMasterColumn.NAME,
+							SQLiteMasterColumn.TYPE, SQLiteMasterColumn.SQL),
+					SQLiteMaster.types(SQLiteMasterType.INDEX,
+							SQLiteMasterType.TRIGGER),
 					tableName);
 
+			// Get the temporary or new table name
+			String transferTable;
+			if (newTable) {
+				transferTable = tableMapping.getToTable();
+			} else {
+				transferTable = CoreSQLUtils.tempTableName(db, "new",
+						tableName);
+				tableMapping.setToTable(transferTable);
+			}
+
 			// 4. Create the new table
-			String tempTableName = CoreSQLUtils.tempTableName(db, "new",
-					tableName);
-			sql = sql.replaceFirst(tableName, tempTableName);
+			sql = sql.replaceFirst(tableName, transferTable);
 			db.execSQL(sql);
 
 			// 5. Transfer content to new table
-			CoreSQLUtils.transferTableContent(db, tableName, tempTableName,
-					columnMapping);
+			CoreSQLUtils.transferTableContent(db, tableMapping);
 
-			// 6. Drop the old table
-			CoreSQLUtils.dropTable(db, tableName);
+			// If altering a table
+			if (!newTable) {
 
-			// 7. Rename the new table
-			renameTable(db, tempTableName, tableName);
+				// 6. Drop the old table
+				CoreSQLUtils.dropTable(db, tableName);
+
+				// 7. Rename the new table
+				renameTable(db, transferTable, tableName);
+
+			}
+
+			if (!newTable) {
+				tableMapping.setToTable(tableName);
+			}
 
 			// 8. Create the indexes and triggers
 			for (int i = 0; i < indexesAndTriggers.count(); i++) {
-				String tableSql = CoreSQLUtils.updateSQL(
-						indexesAndTriggers.getSql(i), columnMapping);
-				if (tableSql != null) {
-					try {
-						db.execSQL(tableSql);
-					} catch (Exception e) {
-						logger.log(Level.WARNING, "Failed to recreate "
-								+ indexesAndTriggers.getType(i)
-								+ " after table alteration. table: "
-								+ tableName + ", sql: " + tableSql, e);
+				boolean create = !newTable;
+				if (!create) {
+					// Don't create rtree triggers for new tables
+					create = indexesAndTriggers
+							.getType(i) != SQLiteMasterType.TRIGGER
+							|| !indexesAndTriggers.getName(i).startsWith(
+									RTreeIndexCoreExtension.RTREE_PREFIX);
+				}
+				if (create) {
+					String tableSql = CoreSQLUtils.updateSQL(
+							indexesAndTriggers.getName(i),
+							indexesAndTriggers.getSql(i), tableMapping);
+					if (tableSql != null) {
+						try {
+							db.execSQL(tableSql);
+						} catch (Exception e) {
+							logger.log(Level.WARNING,
+									"Failed to recreate "
+											+ indexesAndTriggers.getType(i)
+											+ " after table alteration. table: "
+											+ tableMapping.getToTable()
+											+ ", sql: " + tableSql,
+									e);
+						}
 					}
 				}
 			}
 
 			// 9b. Recreate views
 			for (int i = 0; i < views.count(); i++) {
-				String viewSql = CoreSQLUtils.updateSQL(views.getSql(i),
-						columnMapping);
+				String viewSql = CoreSQLUtils.updateSQL(views.getName(i),
+						views.getSql(i), tableMapping);
 				if (viewSql != null) {
 					try {
 						db.execSQL(viewSql);
 					} catch (Exception e) {
-						logger.log(Level.WARNING, "Failed to recreate view: "
-								+ views.getName(i) + ", table: " + tableName
-								+ ", sql: " + viewSql, e);
+						logger.log(Level.WARNING,
+								"Failed to recreate view: " + views.getName(i)
+										+ ", table: "
+										+ tableMapping.getToTable() + ", sql: "
+										+ viewSql,
+								e);
 					}
 				}
 			}
@@ -434,8 +502,8 @@ public class AlterTable {
 					violationsMessage.append(violation.get(j));
 				}
 			}
-			throw new GeoPackageException("Foreign Key Check Violations: "
-					+ violationsMessage);
+			throw new GeoPackageException(
+					"Foreign Key Check Violations: " + violationsMessage);
 		}
 
 	}

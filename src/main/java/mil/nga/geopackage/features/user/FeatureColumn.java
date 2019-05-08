@@ -2,6 +2,7 @@ package mil.nga.geopackage.features.user;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.sf.GeometryType;
 
@@ -310,6 +311,36 @@ public class FeatureColumn extends UserColumn {
 	}
 
 	/**
+	 * Create a new column
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @return feature column
+	 * @since 3.2.1
+	 */
+	public static FeatureColumn createColumn(TableColumn tableColumn) {
+		return createColumn(tableColumn, null);
+	}
+
+	/**
+	 * Create a new column
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @param geometryType
+	 *            geometry type
+	 * @return feature column
+	 * @since 3.2.1
+	 */
+	public static FeatureColumn createColumn(TableColumn tableColumn,
+			GeometryType geometryType) {
+		return new FeatureColumn(tableColumn.getIndex(), tableColumn.getName(),
+				tableColumn.getDataType(), tableColumn.getMax(),
+				tableColumn.isNotNull(), tableColumn.getDefaultValue(),
+				tableColumn.isPrimarykey(), geometryType);
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param index
@@ -329,7 +360,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param geometryType
 	 *            geometry type
 	 */
-	FeatureColumn(int index, String name, GeoPackageDataType dataType,
+	private FeatureColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
 			GeometryType geometryType) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);

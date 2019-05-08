@@ -130,4 +130,23 @@ public enum GeoPackageDataType {
 		return valueOf(name.toUpperCase(Locale.US));
 	}
 
+	/**
+	 * Find the Data Type from the name if it exists, ignoring case
+	 * 
+	 * @param name
+	 *            name
+	 * @return data type or null
+	 * @since 3.2.1
+	 */
+	public static GeoPackageDataType findName(String name) {
+		GeoPackageDataType type = null;
+		for (GeoPackageDataType dataType : GeoPackageDataType.values()) {
+			if (dataType.name().equalsIgnoreCase(name)) {
+				type = dataType;
+				break;
+			}
+		}
+		return type;
+	}
+
 }

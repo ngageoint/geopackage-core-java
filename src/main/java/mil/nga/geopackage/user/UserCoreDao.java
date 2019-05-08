@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.locationtech.proj4j.units.Units;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
@@ -17,8 +20,6 @@ import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionTransform;
-
-import org.locationtech.proj4j.units.Units;
 
 /**
  * Abstract User DAO for reading user tables
@@ -181,6 +182,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TTable getTable() {
 		return table;
+	}
+
+	/**
+	 * Get the contents
+	 * 
+	 * @return contents
+	 * @since 3.2.1
+	 */
+	public Contents getContents() {
+		return table.getContents();
 	}
 
 	/**
@@ -367,7 +378,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            field values
 	 * @return result
 	 */
-	public TResult queryForValueFieldValues(Map<String, ColumnValue> fieldValues) {
+	public TResult queryForValueFieldValues(
+			Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
 		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
 		TResult result = userDb.query(getTableName(), table.getColumnNames(),
@@ -502,7 +514,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(String orderBy, int limit, long offset) {
-		return query(null, null, null, null, orderBy, buildLimit(limit, offset));
+		return query(null, null, null, null, orderBy,
+				buildLimit(limit, offset));
 	}
 
 	/**
@@ -821,8 +834,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				selectionArgs.add(value.toString());
 			}
 		}
-		return selectionArgs.isEmpty() ? null : selectionArgs
-				.toArray(new String[] {});
+		return selectionArgs.isEmpty() ? null
+				: selectionArgs.toArray(new String[] {});
 	}
 
 	/**
@@ -839,8 +852,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				selectionArgs.add(value.toString());
 			}
 		}
-		return selectionArgs.isEmpty() ? null : selectionArgs
-				.toArray(new String[] {});
+		return selectionArgs.isEmpty() ? null
+				: selectionArgs.toArray(new String[] {});
 	}
 
 	/**
@@ -863,8 +876,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				}
 			}
 		}
-		return selectionArgs.isEmpty() ? null : selectionArgs
-				.toArray(new String[] {});
+		return selectionArgs.isEmpty() ? null
+				: selectionArgs.toArray(new String[] {});
 	}
 
 	/**
@@ -1122,7 +1135,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return single column values
 	 * @since 3.1.0
 	 */
-	public <T> List<T> querySingleColumnTypedResults(String sql, String[] args) {
+	public <T> List<T> querySingleColumnTypedResults(String sql,
+			String[] args) {
 		return db.querySingleColumnTypedResults(sql, args);
 	}
 
@@ -1549,7 +1563,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		if (boundingBox != null) {
 			if (projection.isUnit(Units.DEGREES)) {
 				boundingBox = TileBoundingBoxUtils
-						.boundDegreesBoundingBoxWithWebMercatorLimits(boundingBox);
+						.boundDegreesBoundingBoxWithWebMercatorLimits(
+								boundingBox);
 			}
 			ProjectionTransform webMercatorTransform = projection
 					.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);

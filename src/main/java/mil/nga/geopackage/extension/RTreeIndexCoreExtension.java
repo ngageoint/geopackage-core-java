@@ -32,6 +32,13 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public static final String NAME = "rtree_index";
 
 	/**
+	 * RTree table and trigger name prefix
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String RTREE_PREFIX = "rtree_";
+
+	/**
 	 * Min X Function name
 	 */
 	public static final String MIN_X_FUNCTION = "ST_MinX";
@@ -246,8 +253,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return extension
 	 */
 	public Extensions getOrCreate(FeatureTable featureTable) {
-		return getOrCreate(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		return getOrCreate(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -272,8 +279,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has(FeatureTable featureTable) {
-		return has(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		return has(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -286,9 +293,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has(String tableName, String columnName) {
-		return has(EXTENSION_NAME, tableName, columnName)
-				&& connection.tableExists(getRTreeTableName(tableName,
-						columnName));
+		return has(EXTENSION_NAME, tableName, columnName) && connection
+				.tableExists(getRTreeTableName(tableName, columnName));
 	}
 
 	/**
@@ -321,8 +327,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return true if has extension and functions created
 	 */
 	public boolean createFunctions(FeatureTable featureTable) {
-		return createFunctions(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		return createFunctions(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -368,9 +374,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return extension
 	 */
 	public Extensions create(FeatureTable featureTable) {
-		return create(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName(), featureTable.getPkColumn()
-				.getName());
+		return create(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName(),
+				featureTable.getPkColumn().getName());
 	}
 
 	/**
@@ -406,8 +412,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void createRTreeIndex(FeatureTable featureTable) {
-		createRTreeIndex(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		createRTreeIndex(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -469,9 +475,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void loadRTreeIndex(FeatureTable featureTable) {
-		loadRTreeIndex(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName(), featureTable.getPkColumn()
-				.getName());
+		loadRTreeIndex(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName(),
+				featureTable.getPkColumn().getName());
 	}
 
 	/**
@@ -499,9 +505,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void createAllTriggers(FeatureTable featureTable) {
-		createAllTriggers(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName(), featureTable.getPkColumn()
-				.getName());
+		createAllTriggers(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName(),
+				featureTable.getPkColumn().getName());
 	}
 
 	/**
@@ -541,8 +547,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param idColumnName
 	 *            id column name
 	 */
-	public void createInsertTrigger(String tableName,
-			String geometryColumnName, String idColumnName) {
+	public void createInsertTrigger(String tableName, String geometryColumnName,
+			String idColumnName) {
 
 		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
 				TRIGGER_INSERT_NAME);
@@ -663,8 +669,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param idColumnName
 	 *            id column name
 	 */
-	public void createDeleteTrigger(String tableName,
-			String geometryColumnName, String idColumnName) {
+	public void createDeleteTrigger(String tableName, String geometryColumnName,
+			String idColumnName) {
 
 		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
 				TRIGGER_DELETE_NAME);
@@ -679,8 +685,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void delete(FeatureTable featureTable) {
-		delete(featureTable.getTableName(), featureTable.getGeometryColumn()
-				.getName());
+		delete(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -703,9 +709,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 			} catch (SQLException e) {
 				throw new GeoPackageException(
 						"Failed to delete RTree Index extension. GeoPackage: "
-								+ geoPackage.getName() + ", Table: "
-								+ tableName + ", Geometry Column: "
-								+ geometryColumnName, e);
+								+ geoPackage.getName() + ", Table: " + tableName
+								+ ", Geometry Column: " + geometryColumnName,
+						e);
 			}
 		}
 
@@ -723,8 +729,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void delete(String tableName) {
 		try {
 			if (extensionsDao.isTableExists()) {
-				List<Extensions> extensions = extensionsDao.queryByExtension(
-						EXTENSION_NAME, tableName);
+				List<Extensions> extensions = extensionsDao
+						.queryByExtension(EXTENSION_NAME, tableName);
 				for (Extensions extension : extensions) {
 					delete(extension.getTableName(), extension.getColumnName());
 				}
@@ -732,7 +738,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete RTree Index extensions for table. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + tableName, e);
+							+ geoPackage.getName() + ", Table: " + tableName,
+					e);
 		}
 
 	}
@@ -755,7 +762,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete all RTree Index extensions. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 	}
@@ -767,8 +775,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void drop(FeatureTable featureTable) {
-		drop(featureTable.getTableName(), featureTable.getGeometryColumn()
-				.getName());
+		drop(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -793,8 +801,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void dropRTreeIndex(FeatureTable featureTable) {
-		dropRTreeIndex(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		dropRTreeIndex(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -832,8 +840,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void dropTriggers(FeatureTable featureTable) {
-		dropTriggers(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		dropTriggers(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -861,8 +869,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void dropAllTriggers(FeatureTable featureTable) {
-		dropAllTriggers(featureTable.getTableName(), featureTable
-				.getGeometryColumn().getName());
+		dropAllTriggers(featureTable.getTableName(),
+				featureTable.getGeometryColumn().getName());
 	}
 
 	/**
@@ -904,7 +912,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param geometryColumnName
 	 *            geometry column name
 	 */
-	public void dropUpdate1Trigger(String tableName, String geometryColumnName) {
+	public void dropUpdate1Trigger(String tableName,
+			String geometryColumnName) {
 		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE1_NAME);
 	}
 
@@ -916,7 +925,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param geometryColumnName
 	 *            geometry column name
 	 */
-	public void dropUpdate2Trigger(String tableName, String geometryColumnName) {
+	public void dropUpdate2Trigger(String tableName,
+			String geometryColumnName) {
 		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE2_NAME);
 	}
 
@@ -928,7 +938,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param geometryColumnName
 	 *            geometry column name
 	 */
-	public void dropUpdate3Trigger(String tableName, String geometryColumnName) {
+	public void dropUpdate3Trigger(String tableName,
+			String geometryColumnName) {
 		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE3_NAME);
 	}
 
@@ -940,7 +951,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @param geometryColumnName
 	 *            geometry column name
 	 */
-	public void dropUpdate4Trigger(String tableName, String geometryColumnName) {
+	public void dropUpdate4Trigger(String tableName,
+			String geometryColumnName) {
 		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE4_NAME);
 	}
 
@@ -1024,10 +1036,11 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            trigger name
 	 */
 	private void executeSQL(String sqlName, String tableName,
-			String geometryColumnName, String idColumnName, String triggerName) {
+			String geometryColumnName, String idColumnName,
+			String triggerName) {
 
-		List<String> statements = ResourceIOUtils.parseSQLStatements(
-				SQL_DIRECTORY, sqlName);
+		List<String> statements = ResourceIOUtils
+				.parseSQLStatements(SQL_DIRECTORY, sqlName);
 
 		for (String statement : statements) {
 			String sql = substituteSqlArguments(statement, tableName,
@@ -1067,7 +1080,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * @return substituted sql
 	 */
 	private String substituteSqlArguments(String sql, String tableName,
-			String geometryColumnName, String idColumnName, String triggerName) {
+			String geometryColumnName, String idColumnName,
+			String triggerName) {
 
 		String substituted = sql;
 
@@ -1112,7 +1126,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 * @return RTree table name
 	 */
-	private String getRTreeTableName(String tableName, String geometryColumnName) {
+	private String getRTreeTableName(String tableName,
+			String geometryColumnName) {
 		String sqlName = GeoPackageProperties.getProperty(SQL_PROPERTY,
 				TABLE_PROPERTY);
 		String rTreeTableName = substituteSqlArguments(sqlName, tableName,

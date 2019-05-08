@@ -68,7 +68,8 @@ public class CoreSQLUtils {
 	 * @return columns with as values
 	 * @since 2.0.0
 	 */
-	public static String[] buildColumnsAs(String[] columns, String[] columnsAs) {
+	public static String[] buildColumnsAs(String[] columns,
+			String[] columnsAs) {
 		String[] columnsWithAs = null;
 		if (columnsAs != null) {
 			columnsWithAs = new String[columns.length];
@@ -344,7 +345,8 @@ public class CoreSQLUtils {
 	 *         violation. see SQLite PRAGMA foreign_key_check
 	 * @since 3.2.1
 	 */
-	public static List<List<Object>> foreignKeyCheck(GeoPackageCoreConnection db) {
+	public static List<List<Object>> foreignKeyCheck(
+			GeoPackageCoreConnection db) {
 		String sql = foreignKeyCheckSQL();
 		return db.queryResults(sql, null);
 	}
@@ -385,9 +387,9 @@ public class CoreSQLUtils {
 	 * @since 3.2.1
 	 */
 	public static String foreignKeyCheckSQL(String tableName) {
-		return "PRAGMA foreign_key_check"
-				+ (tableName != null ? "(" + CoreSQLUtils.quoteWrap(tableName)
-						+ ")" : "");
+		return "PRAGMA foreign_key_check" + (tableName != null
+				? "(" + CoreSQLUtils.quoteWrap(tableName) + ")"
+				: "");
 	}
 
 	/**
@@ -399,7 +401,8 @@ public class CoreSQLUtils {
 	 *            table name
 	 * @since 3.2.1
 	 */
-	public static void dropTable(GeoPackageCoreConnection db, String tableName) {
+	public static void dropTable(GeoPackageCoreConnection db,
+			String tableName) {
 		String sql = dropTableSQL(tableName);
 		db.execSQL(sql);
 	}
@@ -447,42 +450,33 @@ public class CoreSQLUtils {
 	 * 
 	 * @param db
 	 *            connection
-	 * @param fromTable
-	 *            table name to copy from
-	 * @param toTable
-	 *            table name to copy to
-	 * @param columnMapping
-	 *            column mapping
+	 * @param tableMapping
+	 *            table mapping
 	 * @since 3.2.1
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
-			String fromTable, String toTable, ColumnMapping columnMapping) {
-		String sql = transferTableContentSQL(fromTable, toTable, columnMapping);
+			TableMapping tableMapping) {
+		String sql = transferTableContentSQL(tableMapping);
 		db.execSQL(sql);
 	}
 
 	/**
 	 * Create insert SQL to transfer table content from one table to another
 	 * 
-	 * @param fromTable
-	 *            table name to copy from
-	 * @param toTable
-	 *            table name to copy to
-	 * @param columnMapping
-	 *            column mapping
+	 * @param tableMapping
+	 *            table mapping
 	 * @return transfer SQL
 	 * @since 3.2.1
 	 */
-	public static String transferTableContentSQL(String fromTable,
-			String toTable, ColumnMapping columnMapping) {
+	public static String transferTableContentSQL(TableMapping tableMapping) {
 
 		StringBuilder insert = new StringBuilder("INSERT INTO ");
-		insert.append(CoreSQLUtils.quoteWrap(toTable));
+		insert.append(CoreSQLUtils.quoteWrap(tableMapping.getToTable()));
 		insert.append(" (");
 
 		StringBuilder selectColumns = new StringBuilder();
 
-		for (Entry<String, MappedColumn> columnEntry : columnMapping
+		for (Entry<String, MappedColumn> columnEntry : tableMapping
 				.getColumns()) {
 
 			String toColumn = columnEntry.getKey();
@@ -510,7 +504,7 @@ public class CoreSQLUtils {
 		insert.append(") SELECT ");
 		insert.append(selectColumns);
 		insert.append(" FROM ");
-		insert.append(CoreSQLUtils.quoteWrap(fromTable));
+		insert.append(CoreSQLUtils.quoteWrap(tableMapping.getFromTable()));
 
 		return insert.toString();
 	}
@@ -539,20 +533,65 @@ public class CoreSQLUtils {
 	}
 
 	/**
-	 * Update the SQL with column mapping modifications
+	 * Update the SQL with a name change and the table mapping modifications
 	 * 
+	 * @param name
+	 *            statement name
 	 * @param sql
 	 *            SQL statement
-	 * @param columnMapping
-	 *            column mapping
+	 * @param tableMapping
+	 *            table mapping
 	 * @return updated SQL, null if SQL contains a deleted column
 	 * @since 3.2.1
 	 */
-	public static String updateSQL(String sql, ColumnMapping columnMapping) {
+	public static String updateSQL(String name, String sql,
+			TableMapping tableMapping) {
 
 		String updatedSql = sql;
 
-		for (String column : columnMapping.getDroppedColumns()) {
+		if (tableMapping.isNewTable()) {
+
+			String newName;
+			if (name.contains(tableMapping.getFromTable())) {
+				newName = name.replaceAll(tableMapping.getFromTable(),
+						tableMapping.getToTable());
+			} else {
+				newName = name + "_" + tableMapping.getToTable();
+			}
+
+			String updatedName = replaceName(updatedSql, name, newName);
+			if (updatedName != null) {
+				updatedSql = updatedName;
+			}
+
+			String updatedTable = replaceName(updatedSql,
+					tableMapping.getFromTable(), tableMapping.getToTable());
+			if (updatedTable != null) {
+				updatedSql = updatedTable;
+			}
+
+		}
+
+		updatedSql = updateSQL(updatedSql, tableMapping);
+
+		return updatedSql;
+	}
+
+	/**
+	 * Update the SQL with table mapping modifications
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @param tableMapping
+	 *            table mapping
+	 * @return updated SQL, null if SQL contains a deleted column
+	 * @since 3.2.1
+	 */
+	public static String updateSQL(String sql, TableMapping tableMapping) {
+
+		String updatedSql = sql;
+
+		for (String column : tableMapping.getDroppedColumns()) {
 
 			String updated = replaceName(updatedSql, column, " ");
 			if (updated != null) {
@@ -564,7 +603,7 @@ public class CoreSQLUtils {
 
 		if (updatedSql != null) {
 
-			for (MappedColumn column : columnMapping.getMappedColumns()) {
+			for (MappedColumn column : tableMapping.getMappedColumns()) {
 				if (column.hasNewName()) {
 
 					String updated = replaceName(updatedSql,
@@ -595,7 +634,8 @@ public class CoreSQLUtils {
 	 * @return null if not modified, SQL value if replaced at least once
 	 * @since 3.2.1
 	 */
-	public static String replaceName(String sql, String name, String replacement) {
+	public static String replaceName(String sql, String name,
+			String replacement) {
 
 		String updatedSql = null;
 
@@ -634,7 +674,7 @@ public class CoreSQLUtils {
 					} else if (sql.endsWith(name)) {
 						// SQL ends with the name, allow
 						after = " ";
-					}else{
+					} else {
 						break;
 					}
 
