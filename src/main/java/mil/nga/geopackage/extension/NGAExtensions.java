@@ -1,13 +1,16 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.extension.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.index.FeatureTableCoreIndex;
+import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
+import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
@@ -167,7 +170,57 @@ public class NGAExtensions {
 	 */
 	public static void copyGeometryIndex(GeoPackageCore geoPackage,
 			String table, String newTable) {
-		// TODO
+
+		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+		try {
+
+			if (extensionsDao.isTableExists()) {
+
+				List<Extensions> extensions = extensionsDao.queryByExtension(
+						FeatureTableCoreIndex.EXTENSION_NAME, table);
+
+				if (!extensions.isEmpty()) {
+
+					Extensions extension = extensions.get(0);
+					extension.setTableName(newTable);
+					extensionsDao.create(extension);
+
+					TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
+					if (tableIndexDao.isTableExists()) {
+
+						TableIndex tableIndex = tableIndexDao.queryForId(table);
+						if (tableIndex != null) {
+
+							tableIndex.setTableName(newTable);
+							tableIndexDao.create(tableIndex);
+
+							GeometryIndexDao geometryIndexDao = geoPackage
+									.getGeometryIndexDao();
+							if (geometryIndexDao.isTableExists()) {
+
+								// TODO insert from select?
+
+								List<GeometryIndex> geometryIndexes = geometryIndexDao
+										.queryForTableName(table);
+								for (GeometryIndex geometryIndex : geometryIndexes) {
+
+									geometryIndex.setTableIndex(tableIndex);
+									geometryIndexDao.create(geometryIndex);
+								}
+							}
+						}
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Table Index extension and tables. GeoPackage: "
+							+ geoPackage.getName(),
+					e);
+		}
+
 	}
 
 	/**
