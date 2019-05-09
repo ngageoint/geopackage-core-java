@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import mil.nga.geopackage.db.table.TableColumn;
+import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 
@@ -39,6 +41,11 @@ public class TableMapping {
 	 * Dropped columns from the previous table version
 	 */
 	private final Set<String> droppedColumns = new HashSet<>();
+
+	/**
+	 * Custom where clause (in addition to column where mappings)
+	 */
+	private String where;
 
 	/**
 	 * Constructor
@@ -101,6 +108,20 @@ public class TableMapping {
 			String newTableName) {
 		this(table);
 		this.toTable = newTableName;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableInfo
+	 *            table info
+	 */
+	public TableMapping(TableInfo tableInfo) {
+		this.fromTable = tableInfo.getTableName();
+		this.toTable = tableInfo.getTableName();
+		for (TableColumn column : tableInfo.getColumns()) {
+			addColumn(new MappedColumn(column));
+		}
 	}
 
 	/**
@@ -236,6 +257,34 @@ public class TableMapping {
 	 */
 	public boolean isDroppedColumn(String columnName) {
 		return droppedColumns.contains(columnName);
+	}
+
+	/**
+	 * Check if there is a custom where clause
+	 * 
+	 * @return true if where clause
+	 */
+	public boolean hasWhere() {
+		return where != null;
+	}
+
+	/**
+	 * Get the where clause
+	 * 
+	 * @return where clause
+	 */
+	public String getWhere() {
+		return where;
+	}
+
+	/**
+	 * Set the where clause
+	 * 
+	 * @param where
+	 *            where clause
+	 */
+	public void setWhere(String where) {
+		this.where = where;
 	}
 
 }

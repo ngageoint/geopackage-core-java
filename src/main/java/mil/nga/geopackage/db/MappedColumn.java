@@ -1,5 +1,6 @@
 package mil.nga.geopackage.db;
 
+import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
 
 /**
@@ -29,6 +30,21 @@ public class MappedColumn {
 	 * Column data type
 	 */
 	private GeoPackageDataType dataType;
+
+	/**
+	 * Constant value
+	 */
+	private Object constantValue;
+
+	/**
+	 * Where value
+	 */
+	private Object whereValue;
+
+	/**
+	 * Where value comparison operator (=, <, etc)
+	 */
+	private String whereOperator;
 
 	/**
 	 * Constructor
@@ -65,8 +81,8 @@ public class MappedColumn {
 	 * @param dataType
 	 *            data type
 	 */
-	public MappedColumn(String toColumn, String fromColumn,
-			Object defaultValue, GeoPackageDataType dataType) {
+	public MappedColumn(String toColumn, String fromColumn, Object defaultValue,
+			GeoPackageDataType dataType) {
 		this(toColumn, fromColumn);
 		this.defaultValue = defaultValue;
 		this.dataType = dataType;
@@ -94,6 +110,16 @@ public class MappedColumn {
 	 *            user column
 	 */
 	public MappedColumn(UserColumn column) {
+		this(column.getName(), column.getDefaultValue(), column.getDataType());
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param column
+	 *            table column
+	 */
+	public MappedColumn(TableColumn column) {
 		this(column.getName(), column.getDefaultValue(), column.getDataType());
 	}
 
@@ -202,6 +228,112 @@ public class MappedColumn {
 	 */
 	public void setDataType(GeoPackageDataType dataType) {
 		this.dataType = dataType;
+	}
+
+	/**
+	 * Check if the column has a constant value
+	 * 
+	 * @return true if has a constant value
+	 */
+	public boolean hasConstantValue() {
+		return constantValue != null;
+	}
+
+	/**
+	 * Get the constant value
+	 * 
+	 * @return constant value
+	 */
+	public Object getConstantValue() {
+		return constantValue;
+	}
+
+	/**
+	 * Get the constant value as a string
+	 * 
+	 * @return constant value as string
+	 */
+	public String getConstantValueAsString() {
+		return CoreSQLUtils.columnDefaultValue(constantValue, dataType);
+	}
+
+	/**
+	 * Set the constant value
+	 * 
+	 * @param constantValue
+	 *            constant value
+	 */
+	public void setConstantValue(Object constantValue) {
+		this.constantValue = constantValue;
+	}
+
+	/**
+	 * Check if the column has a where value
+	 * 
+	 * @return true if has a where value
+	 */
+	public boolean hasWhereValue() {
+		return whereValue != null;
+	}
+
+	/**
+	 * Get the where value
+	 * 
+	 * @return where value
+	 */
+	public Object getWhereValue() {
+		return whereValue;
+	}
+
+	/**
+	 * Get the where value as a string
+	 * 
+	 * @return where value as string
+	 */
+	public String getWhereValueAsString() {
+		return CoreSQLUtils.columnDefaultValue(whereValue, dataType);
+	}
+
+	/**
+	 * Set the where value
+	 * 
+	 * @param whereValue
+	 *            where value
+	 */
+	public void setWhereValue(Object whereValue) {
+		this.whereValue = whereValue;
+	}
+
+	/**
+	 * Set the where value
+	 * 
+	 * @param whereValue
+	 *            where value
+	 * @param whereOperator
+	 *            where operator
+	 */
+	public void setWhereValue(Object whereValue, String whereOperator) {
+		this.whereValue = whereValue;
+		setWhereOperator(whereOperator);
+	}
+
+	/**
+	 * Get the where operator
+	 * 
+	 * @return where operator
+	 */
+	public String getWhereOperator() {
+		return whereOperator != null ? whereOperator : "=";
+	}
+
+	/**
+	 * Set the where operator
+	 * 
+	 * @param whereOperator
+	 *            where operator
+	 */
+	public void setWhereOperator(String whereOperator) {
+		this.whereOperator = whereOperator;
 	}
 
 }

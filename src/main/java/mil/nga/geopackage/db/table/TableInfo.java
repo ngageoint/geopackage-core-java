@@ -90,6 +90,11 @@ public class TableInfo {
 	public static final int PK_INDEX = 5;
 
 	/**
+	 * Table name
+	 */
+	private final String tableName;
+
+	/**
 	 * Table columns
 	 */
 	private final List<TableColumn> columns;
@@ -107,10 +112,13 @@ public class TableInfo {
 	/**
 	 * Constructor
 	 * 
+	 * @param tableName
+	 *            table name
 	 * @param columns
 	 *            table columns
 	 */
-	private TableInfo(List<TableColumn> columns) {
+	private TableInfo(String tableName, List<TableColumn> columns) {
+		this.tableName = tableName;
 		this.columns = columns;
 		for (TableColumn column : columns) {
 			namesToColumns.put(column.getName(), column);
@@ -118,6 +126,15 @@ public class TableInfo {
 				primaryKeys.add(column);
 			}
 		}
+	}
+
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
+	public String getTableName() {
+		return tableName;
 	}
 
 	/**
@@ -268,7 +285,7 @@ public class TableInfo {
 
 		TableInfo tableInfo = null;
 		if (!tableColumns.isEmpty()) {
-			tableInfo = new TableInfo(tableColumns);
+			tableInfo = new TableInfo(tableName, tableColumns);
 		}
 
 		return tableInfo;

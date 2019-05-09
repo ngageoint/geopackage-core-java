@@ -476,6 +476,11 @@ public class CoreSQLUtils {
 
 		StringBuilder selectColumns = new StringBuilder();
 
+		StringBuilder where = new StringBuilder();
+		if (tableMapping.hasWhere()) {
+			where.append(tableMapping.getWhere());
+		}
+
 		for (Entry<String, MappedColumn> columnEntry : tableMapping
 				.getColumns()) {
 
@@ -489,15 +494,34 @@ public class CoreSQLUtils {
 			}
 			insert.append(CoreSQLUtils.quoteWrap(toColumn));
 
-			if (column.hasDefaultValue()) {
-				selectColumns.append("ifnull(");
+			if (column.hasConstantValue()) {
+
+				selectColumns.append(column.getConstantValueAsString());
+
+			} else {
+
+				if (column.hasDefaultValue()) {
+					selectColumns.append("ifnull(");
+				}
+				selectColumns
+						.append(CoreSQLUtils.quoteWrap(column.getFromColumn()));
+				if (column.hasDefaultValue()) {
+					selectColumns.append(",");
+					selectColumns.append(column.getDefaultValueAsString());
+					selectColumns.append(")");
+				}
+
 			}
-			selectColumns
-					.append(CoreSQLUtils.quoteWrap(column.getFromColumn()));
-			if (column.hasDefaultValue()) {
-				selectColumns.append(",");
-				selectColumns.append(column.getDefaultValueAsString());
-				selectColumns.append(")");
+
+			if (column.hasWhereValue()) {
+				if (where.length() > 0) {
+					where.append(" AND ");
+				}
+				where.append(CoreSQLUtils.quoteWrap(column.getFromColumn()));
+				where.append(" ");
+				where.append(column.getWhereOperator());
+				where.append(" ");
+				where.append(column.getWhereValueAsString());
 			}
 
 		}
@@ -505,6 +529,11 @@ public class CoreSQLUtils {
 		insert.append(selectColumns);
 		insert.append(" FROM ");
 		insert.append(CoreSQLUtils.quoteWrap(tableMapping.getFromTable()));
+
+		if (where.length() > 0) {
+			insert.append(" WHERE ");
+			insert.append(where);
+		}
 
 		return insert.toString();
 	}

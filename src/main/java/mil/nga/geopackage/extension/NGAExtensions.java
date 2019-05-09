@@ -6,6 +6,10 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.db.CoreSQLUtils;
+import mil.nga.geopackage.db.MappedColumn;
+import mil.nga.geopackage.db.TableMapping;
+import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.index.FeatureTableCoreIndex;
 import mil.nga.geopackage.extension.index.GeometryIndex;
@@ -195,19 +199,22 @@ public class NGAExtensions {
 							tableIndex.setTableName(newTable);
 							tableIndexDao.create(tableIndex);
 
-							GeometryIndexDao geometryIndexDao = geoPackage
-									.getGeometryIndexDao();
-							if (geometryIndexDao.isTableExists()) {
+							if (geoPackage.isTable(GeometryIndex.TABLE_NAME)) {
 
-								// TODO insert from select?
+								TableInfo tableInfo = TableInfo.info(
+										geoPackage.getDatabase(),
+										GeometryIndex.TABLE_NAME);
+								TableMapping tableMapping = new TableMapping(
+										tableInfo);
+								MappedColumn tableNameColumn = tableMapping
+										.getColumn(
+												GeometryIndex.COLUMN_TABLE_NAME);
+								tableNameColumn.setConstantValue(newTable);
+								tableNameColumn.setWhereValue(table);
 
-								List<GeometryIndex> geometryIndexes = geometryIndexDao
-										.queryForTableName(table);
-								for (GeometryIndex geometryIndex : geometryIndexes) {
+								CoreSQLUtils.transferTableContent(
+										geoPackage.getDatabase(), tableMapping);
 
-									geometryIndex.setTableIndex(tableIndex);
-									geometryIndexDao.create(geometryIndex);
-								}
 							}
 						}
 					}
