@@ -288,12 +288,8 @@ public class TableInfo {
 		if (dataType == null) {
 
 			// Check if a geometry and set as a blob
-			// TODO move this into simple features library
-			for (GeometryType geometryType : GeometryType.values()) {
-				if (geometryType.name().equalsIgnoreCase(type)) {
-					dataType = GeoPackageDataType.BLOB;
-					break;
-				}
+			if (GeometryType.findName(type) != null) {
+				dataType = GeoPackageDataType.BLOB;
 			}
 
 		}

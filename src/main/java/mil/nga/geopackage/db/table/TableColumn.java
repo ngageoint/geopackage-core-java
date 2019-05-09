@@ -129,6 +129,17 @@ public class TableColumn {
 	}
 
 	/**
+	 * Is the column the data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return true if the data type
+	 */
+	public boolean isDataType(GeoPackageDataType dataType) {
+		return this.dataType != null && this.dataType == dataType;
+	}
+
+	/**
 	 * Get the column max value
 	 * 
 	 * @return max value or null if no max

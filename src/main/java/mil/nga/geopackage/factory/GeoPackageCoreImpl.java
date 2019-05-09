@@ -14,7 +14,6 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
-import mil.nga.geopackage.attributes.AttributesTableReader;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -57,7 +56,6 @@ import mil.nga.geopackage.features.columns.GeometryColumnsSqlMm;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
-import mil.nga.geopackage.features.user.FeatureTableReader;
 import mil.nga.geopackage.metadata.Metadata;
 import mil.nga.geopackage.metadata.MetadataDao;
 import mil.nga.geopackage.metadata.reference.MetadataReference;
@@ -736,8 +734,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		createGeometryColumnsTable();
 
 		// Create the user feature table
-		FeatureTable table = new FeatureTable(geometryColumns.getTableName(),
-				columns);
+		FeatureTable table = new FeatureTable(geometryColumns, columns);
 		createFeatureTable(table);
 
 		try {
@@ -1249,7 +1246,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 						"Unsupported data type: " + dataType);
 			}
 		} else {
-			copyUserTable(tableName, newTableName);
+			copyUserTable(tableName, newTableName, false);
 		}
 
 		// Copy extensions
@@ -1266,13 +1263,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @since 3.2.1
 	 */
 	protected void copyAttributeTable(String tableName, String newTableName) {
-
-		AttributesTableReader tableReader = new AttributesTableReader(
-				tableName);
-		AttributesTable table = tableReader.readTable(database);
-		AlterTable.copyTable(database, table, newTableName);
-
-		copyContents(tableName, newTableName);
+		copyUserTable(tableName, newTableName);
 	}
 
 	/**
@@ -1300,12 +1291,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"No geometry columns for table: " + tableName);
 		}
 
-		FeatureTableReader tableReader = new FeatureTableReader(
-				geometryColumns);
-		FeatureTable table = tableReader.readTable(database);
-		AlterTable.copyTable(database, table, newTableName);
-
-		Contents contents = copyContents(tableName, newTableName);
+		Contents contents = copyUserTable(tableName, newTableName);
 
 		geometryColumns.setContents(contents);
 		try {
@@ -1328,7 +1314,55 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @since 3.2.1
 	 */
 	protected void copyTileTable(String tableName, String newTableName) {
-		// TODO
+
+		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
+		TileMatrixSet tileMatrixSet = null;
+		try {
+			tileMatrixSet = tileMatrixSetDao.queryForId(tableName);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve table tile matrix set: " + tableName,
+					e);
+		}
+		if (tileMatrixSet == null) {
+			throw new GeoPackageException(
+					"No tile matrix set for table: " + tableName);
+		}
+
+		TileMatrixDao tileMatrixDao = getTileMatrixDao();
+		List<TileMatrix> tileMatrixes = null;
+		try {
+			tileMatrixes = tileMatrixDao
+					.queryForEq(TileMatrix.COLUMN_TABLE_NAME, tableName);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve table tile matrixes: " + tableName, e);
+		}
+
+		Contents contents = copyUserTable(tableName, newTableName);
+
+		tileMatrixSet.setContents(contents);
+		try {
+			tileMatrixSetDao.create(tileMatrixSet);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to create tile matrix set for tile table: "
+							+ newTableName,
+					e);
+		}
+
+		for (TileMatrix tileMatrix : tileMatrixes) {
+			tileMatrix.setContents(contents);
+			try {
+				tileMatrixDao.create(tileMatrix);
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to create tile matrix for tile table: "
+								+ newTableName,
+						e);
+			}
+		}
+
 	}
 
 	/**
@@ -1342,12 +1376,34 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @since 3.2.1
 	 */
 	protected Contents copyUserTable(String tableName, String newTableName) {
+		return copyUserTable(tableName, newTableName, true);
+	}
+
+	/**
+	 * Copy the user table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 * @param validateContents
+	 *            true to validate a contents was copied
+	 * @return copied contents
+	 * @since 3.2.1
+	 */
+	protected Contents copyUserTable(String tableName, String newTableName,
+			boolean validateContents) {
 
 		UserCustomTable table = UserCustomTableReader.readTable(database,
 				tableName);
 		AlterTable.copyTable(database, table, newTableName);
 
-		Contents contents = copyContents(tableName, newTableName, false);
+		Contents contents = copyContents(tableName, newTableName);
+
+		if (contents == null && validateContents) {
+			throw new GeoPackageException(
+					"No table contents found for table: " + tableName);
+		}
 
 		return contents;
 	}
@@ -1363,23 +1419,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @since 3.2.1
 	 */
 	protected Contents copyContents(String tableName, String newTableName) {
-		return copyContents(tableName, newTableName, true);
-	}
-
-	/**
-	 * Copy the contents
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param newTableName
-	 *            new table name
-	 * @param validate
-	 *            true to validate a contents was copied
-	 * @return copied contents
-	 * @since 3.2.1
-	 */
-	protected Contents copyContents(String tableName, String newTableName,
-			boolean validate) {
 
 		Contents contents = getTableContents(tableName);
 
@@ -1396,9 +1435,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 								+ ", copied from table: " + tableName,
 						e);
 			}
-		} else if (validate) {
-			throw new GeoPackageException(
-					"No table contents found for table: " + tableName);
 		}
 
 		return contents;

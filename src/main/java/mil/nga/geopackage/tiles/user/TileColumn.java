@@ -1,6 +1,5 @@
 package mil.nga.geopackage.tiles.user;
 
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
@@ -319,10 +318,7 @@ public class TileColumn extends UserColumn {
 	 * @since 3.2.1
 	 */
 	public static TileColumn createColumn(TableColumn tableColumn) {
-		return new TileColumn(tableColumn.getIndex(), tableColumn.getName(),
-				tableColumn.getDataType(), tableColumn.getMax(),
-				tableColumn.isNotNull(), tableColumn.getDefaultValue(),
-				tableColumn.isPrimarykey());
+		return new TileColumn(tableColumn);
 	}
 
 	/**
@@ -347,10 +343,16 @@ public class TileColumn extends UserColumn {
 			Long max, boolean notNull, Object defaultValue,
 			boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
-		if (dataType == null) {
-			throw new GeoPackageException(
-					"Data Type is required to create column: " + name);
-		}
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 */
+	private TileColumn(TableColumn tableColumn) {
+		super(tableColumn);
 	}
 
 	/**

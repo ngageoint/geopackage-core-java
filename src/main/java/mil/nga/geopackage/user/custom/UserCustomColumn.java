@@ -1,6 +1,5 @@
 package mil.nga.geopackage.user.custom;
 
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
@@ -238,10 +237,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @since 3.2.1
 	 */
 	public static UserCustomColumn createColumn(TableColumn tableColumn) {
-		return new UserCustomColumn(tableColumn.getIndex(),
-				tableColumn.getName(), tableColumn.getDataType(),
-				tableColumn.getMax(), tableColumn.isNotNull(),
-				tableColumn.getDefaultValue(), tableColumn.isPrimarykey());
+		return new UserCustomColumn(tableColumn);
 	}
 
 	/**
@@ -266,10 +262,16 @@ public class UserCustomColumn extends UserColumn {
 			GeoPackageDataType dataType, Long max, boolean notNull,
 			Object defaultValue, boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
-		if (dataType == null) {
-			throw new GeoPackageException(
-					"Data Type is required to create column: " + name);
-		}
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 */
+	private UserCustomColumn(TableColumn tableColumn) {
+		super(tableColumn);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package mil.nga.geopackage.user;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.TableColumn;
 
 /**
  * Metadata about a single column from a user table
@@ -48,6 +49,11 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	private final boolean primaryKey;
 
 	/**
+	 * Type
+	 */
+	private final String type;
+
+	/**
 	 * Data type
 	 */
 	private final GeoPackageDataType dataType;
@@ -71,16 +77,61 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            primary key flag
 	 */
 	protected UserColumn(int index, String name, GeoPackageDataType dataType,
-			Long max, boolean notNull, Object defaultValue, boolean primaryKey) {
+			Long max, boolean notNull, Object defaultValue,
+			boolean primaryKey) {
+		this(index, name, getTypeName(name, dataType), dataType, max, notNull,
+				defaultValue, primaryKey);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param index
+	 *            column index
+	 * @param name
+	 *            column name
+	 * @param type
+	 *            string type
+	 * @param dataType
+	 *            data type
+	 * @param max
+	 *            max value
+	 * @param notNull
+	 *            not null flag
+	 * @param defaultValue
+	 *            default value
+	 * @param primaryKey
+	 *            primary key flag
+	 * @since 3.2.1
+	 */
+	protected UserColumn(int index, String name, String type,
+			GeoPackageDataType dataType, Long max, boolean notNull,
+			Object defaultValue, boolean primaryKey) {
 		this.index = index;
 		this.name = name;
 		this.max = max;
 		this.notNull = notNull;
 		this.defaultValue = defaultValue;
 		this.primaryKey = primaryKey;
+		this.type = type;
 		this.dataType = dataType;
 
+		validateDataType(name, dataType);
 		validateMax();
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @since 3.2.1
+	 */
+	protected UserColumn(TableColumn tableColumn) {
+		this(tableColumn.getIndex(), tableColumn.getName(),
+				tableColumn.getType(), tableColumn.getDataType(),
+				tableColumn.getMax(), tableColumn.isNotNull(),
+				tableColumn.getDefaultValue(), tableColumn.isPrimarykey());
 	}
 
 	/**
@@ -97,7 +148,42 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.notNull = userColumn.notNull;
 		this.defaultValue = userColumn.defaultValue;
 		this.primaryKey = userColumn.primaryKey;
+		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
+	}
+
+	/**
+	 * Get the type name from the data type
+	 * 
+	 * @param name
+	 *            column name
+	 * @param dataType
+	 *            data type
+	 * @return type name
+	 * @since 3.2.1
+	 */
+	protected static String getTypeName(String name,
+			GeoPackageDataType dataType) {
+		validateDataType(name, dataType);
+		return dataType.name();
+	}
+
+	/**
+	 * Validate the data type
+	 * 
+	 * @param name
+	 *            column name
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @since 3.2.1
+	 */
+	protected static void validateDataType(String name,
+			GeoPackageDataType dataType) {
+		if (dataType == null) {
+			throw new GeoPackageException(
+					"Data Type is required to create column: " + name);
+		}
 	}
 
 	/**
@@ -247,7 +333,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
-	 * When not a geometry column, gets the data type
+	 * Get the data type
 	 * 
 	 * @return data type
 	 */
@@ -256,15 +342,11 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
-	 * Get the database type name
+	 * Get the database type
 	 * 
-	 * @return type name
+	 * @return type
 	 */
-	public String getTypeName() {
-		String type = null;
-		if (dataType != null) {
-			type = dataType.name();
-		}
+	public String getType() {
 		return type;
 	}
 

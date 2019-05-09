@@ -237,10 +237,7 @@ public class AttributesColumn extends UserColumn {
 	 * @since 3.2.1
 	 */
 	public static AttributesColumn createColumn(TableColumn tableColumn) {
-		return new AttributesColumn(tableColumn.getIndex(),
-				tableColumn.getName(), tableColumn.getDataType(),
-				tableColumn.getMax(), tableColumn.isNotNull(),
-				tableColumn.getDefaultValue(), tableColumn.isPrimarykey());
+		return new AttributesColumn(tableColumn);
 	}
 
 	/**
@@ -265,6 +262,16 @@ public class AttributesColumn extends UserColumn {
 			GeoPackageDataType dataType, Long max, boolean notNull,
 			Object defaultValue, boolean primaryKey) {
 		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 */
+	private AttributesColumn(TableColumn tableColumn) {
+		super(tableColumn);
 	}
 
 	/**

@@ -172,7 +172,7 @@ public class CoreSQLUtils {
 
 		StringBuilder sql = new StringBuilder();
 
-		sql.append(column.getTypeName());
+		sql.append(column.getType());
 
 		if (column.hasMax()) {
 			sql.append("(").append(column.getMax()).append(")");

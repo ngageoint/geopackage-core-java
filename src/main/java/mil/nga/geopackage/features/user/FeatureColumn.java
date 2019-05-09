@@ -319,25 +319,7 @@ public class FeatureColumn extends UserColumn {
 	 * @since 3.2.1
 	 */
 	public static FeatureColumn createColumn(TableColumn tableColumn) {
-		return createColumn(tableColumn, null);
-	}
-
-	/**
-	 * Create a new column
-	 * 
-	 * @param tableColumn
-	 *            table column
-	 * @param geometryType
-	 *            geometry type
-	 * @return feature column
-	 * @since 3.2.1
-	 */
-	public static FeatureColumn createColumn(TableColumn tableColumn,
-			GeometryType geometryType) {
-		return new FeatureColumn(tableColumn.getIndex(), tableColumn.getName(),
-				tableColumn.getDataType(), tableColumn.getMax(),
-				tableColumn.isNotNull(), tableColumn.getDefaultValue(),
-				tableColumn.isPrimarykey(), geometryType);
+		return new FeatureColumn(tableColumn);
 	}
 
 	/**
@@ -363,12 +345,58 @@ public class FeatureColumn extends UserColumn {
 	private FeatureColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
 			GeometryType geometryType) {
-		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
+		super(index, name, getTypeName(name, dataType, geometryType), dataType,
+				max, notNull, defaultValue, primaryKey);
 		this.geometryType = geometryType;
-		if (dataType == null) {
-			throw new GeoPackageException(
-					"Data Type is required to create column: " + name);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 */
+	private FeatureColumn(TableColumn tableColumn) {
+		super(tableColumn);
+		this.geometryType = getGeometryType(tableColumn);
+	}
+
+	/**
+	 * Get the type name from the data and geometry type
+	 * 
+	 * @param name
+	 *            column name
+	 * @param dataType
+	 *            data type
+	 * @param geometryType
+	 *            geometry type
+	 * @return type name
+	 * @since 3.2.1
+	 */
+	protected static String getTypeName(String name,
+			GeoPackageDataType dataType, GeometryType geometryType) {
+		String type;
+		if (geometryType != null) {
+			type = geometryType.name();
+		} else {
+			type = getTypeName(name, dataType);
 		}
+		return type;
+	}
+
+	/**
+	 * Attempt to get the geometry type of the table column
+	 * 
+	 * @param tableColumn
+	 *            table column
+	 * @return geometry type
+	 */
+	private static GeometryType getGeometryType(TableColumn tableColumn) {
+		GeometryType geometryType = null;
+		if (tableColumn.isDataType(GeoPackageDataType.BLOB)) {
+			geometryType = GeometryType.findName(tableColumn.getType());
+		}
+		return geometryType;
 	}
 
 	/**
@@ -409,22 +437,6 @@ public class FeatureColumn extends UserColumn {
 	 */
 	public GeometryType getGeometryType() {
 		return geometryType;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * Either the geometry or data type
-	 */
-	@Override
-	public String getTypeName() {
-		String type;
-		if (isGeometry()) {
-			type = geometryType.name();
-		} else {
-			type = super.getTypeName();
-		}
-		return type;
 	}
 
 }

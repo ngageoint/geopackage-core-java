@@ -5,7 +5,6 @@ import java.util.List;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.user.UserTableReader;
-import mil.nga.sf.GeometryType;
 
 /**
  * Reads the metadata from an existing feature table
@@ -17,9 +16,9 @@ public class FeatureTableReader
 		extends UserTableReader<FeatureColumn, FeatureTable> {
 
 	/**
-	 * Geometry columns
+	 * Geometry column name
 	 */
-	private GeometryColumns geometryColumns;
+	private final String columnName;
 
 	/**
 	 * Constructor
@@ -28,8 +27,32 @@ public class FeatureTableReader
 	 *            geometry columns
 	 */
 	public FeatureTableReader(GeometryColumns geometryColumns) {
-		super(geometryColumns.getTableName());
-		this.geometryColumns = geometryColumns;
+		this(geometryColumns.getTableName(), geometryColumns.getColumnName());
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @since 3.2.1
+	 */
+	public FeatureTableReader(String tableName, String geometryColumnName) {
+		super(tableName);
+		this.columnName = geometryColumnName;
+	}
+
+	/**
+	 * Constructor, uses first or only found geometry column
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @since 3.2.1
+	 */
+	public FeatureTableReader(String tableName) {
+		this(tableName, null);
 	}
 
 	/**
@@ -38,7 +61,7 @@ public class FeatureTableReader
 	@Override
 	protected FeatureTable createTable(String tableName,
 			List<FeatureColumn> columnList) {
-		return new FeatureTable(tableName, columnList);
+		return new FeatureTable(tableName, columnName, columnList);
 	}
 
 	/**
@@ -46,14 +69,7 @@ public class FeatureTableReader
 	 */
 	@Override
 	protected FeatureColumn createColumn(TableColumn tableColumn) {
-
-		GeometryType geometryType = null;
-		if (tableColumn.getName()
-				.equalsIgnoreCase(geometryColumns.getColumnName())) {
-			geometryType = GeometryType.fromName(tableColumn.getType());
-		}
-
-		return FeatureColumn.createColumn(tableColumn, geometryType);
+		return FeatureColumn.createColumn(tableColumn);
 	}
 
 }
