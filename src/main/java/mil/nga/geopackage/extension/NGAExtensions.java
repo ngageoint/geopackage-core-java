@@ -23,6 +23,7 @@ import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
+import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.extension.scale.TileTableScaling;
 import mil.nga.geopackage.extension.style.FeatureCoreStyleExtension;
@@ -96,11 +97,11 @@ public class NGAExtensions {
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		copyGeometryIndex(geoPackage, table, newTable);
-		copyFeatureTileLink(geoPackage, table, newTable);
-		copyTileScaling(geoPackage, table, newTable);
-		copyFeatureStyle(geoPackage, table, newTable);
 		copyContentsId(geoPackage, table, newTable);
+		copyFeatureStyle(geoPackage, table, newTable);
+		copyTileScaling(geoPackage, table, newTable);
+		copyFeatureTileLink(geoPackage, table, newTable);
+		copyGeometryIndex(geoPackage, table, newTable);
 
 		// Copy future extensions for the table here
 	}
@@ -424,7 +425,41 @@ public class NGAExtensions {
 	 */
 	public static void copyTileScaling(GeoPackageCore geoPackage, String table,
 			String newTable) {
-		// TODO
+
+		try {
+
+			TileTableScaling tileTableScaling = new TileTableScaling(geoPackage,
+					table);
+
+			if (tileTableScaling.has()) {
+
+				Extensions extension = tileTableScaling.getExtension();
+				extension.setTableName(newTable);
+				tileTableScaling.getExtensionsDao().create(extension);
+
+				if (geoPackage.isTable(TileScaling.TABLE_NAME)) {
+
+					TableInfo tableInfo = TableInfo.info(
+							geoPackage.getDatabase(), TileScaling.TABLE_NAME);
+					TableMapping tableMapping = new TableMapping(tableInfo);
+					MappedColumn tableNameColumn = tableMapping
+							.getColumn(TileScaling.COLUMN_TABLE_NAME);
+					tableNameColumn.setConstantValue(newTable);
+					tableNameColumn.setWhereValue(table);
+
+					CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
+							tableMapping);
+
+				}
+			}
+
+		} catch (SQLException e) {
+			logger.log(Level.WARNING,
+					"Failed to create Tile Scaling for table: " + newTable
+							+ ", copied from table: " + table,
+					e);
+		}
+
 	}
 
 	/**
@@ -600,7 +635,15 @@ public class NGAExtensions {
 	 */
 	public static void copyContentsId(GeoPackageCore geoPackage, String table,
 			String newTable) {
-		// TODO
+
+		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
+				geoPackage);
+		if (contentsIdExtension.has()) {
+			if (contentsIdExtension.get(table) != null) {
+				contentsIdExtension.create(newTable);
+			}
+		}
+
 	}
 
 }
