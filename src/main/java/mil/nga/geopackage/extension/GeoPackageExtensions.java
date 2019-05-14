@@ -91,15 +91,14 @@ public class GeoPackageExtensions {
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		// Handle copying any extensions with extra tables here
-		NGAExtensions.copyTableExtensions(geoPackage, table, newTable);
-
 		copyRTreeSpatialIndex(geoPackage, table, newTable);
 		copyRelatedTables(geoPackage, table, newTable);
 		copyGriddedCoverage(geoPackage, table, newTable);
 		copySchema(geoPackage, table, newTable);
 		copyMetadata(geoPackage, table, newTable);
 
+		// Handle copying any extensions with extra tables here
+		NGAExtensions.copyTableExtensions(geoPackage, table, newTable);
 	}
 
 	/**

@@ -23,6 +23,7 @@ import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
+import mil.nga.geopackage.extension.related.UserMappingTable;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.extension.scale.TileTableScaling;
@@ -434,22 +435,26 @@ public class NGAExtensions {
 			if (tileTableScaling.has()) {
 
 				Extensions extension = tileTableScaling.getExtension();
-				extension.setTableName(newTable);
-				tileTableScaling.getExtensionsDao().create(extension);
 
-				if (geoPackage.isTable(TileScaling.TABLE_NAME)) {
+				if (extension != null) {
+					extension.setTableName(newTable);
+					tileTableScaling.getExtensionsDao().create(extension);
 
-					TableInfo tableInfo = TableInfo.info(
-							geoPackage.getDatabase(), TileScaling.TABLE_NAME);
-					TableMapping tableMapping = new TableMapping(tableInfo);
-					MappedColumn tableNameColumn = tableMapping
-							.getColumn(TileScaling.COLUMN_TABLE_NAME);
-					tableNameColumn.setConstantValue(newTable);
-					tableNameColumn.setWhereValue(table);
+					if (geoPackage.isTable(TileScaling.TABLE_NAME)) {
 
-					CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
-							tableMapping);
+						TableInfo tableInfo = TableInfo.info(
+								geoPackage.getDatabase(),
+								TileScaling.TABLE_NAME);
+						TableMapping tableMapping = new TableMapping(tableInfo);
+						MappedColumn tableNameColumn = tableMapping
+								.getColumn(TileScaling.COLUMN_TABLE_NAME);
+						tableNameColumn.setConstantValue(newTable);
+						tableNameColumn.setWhereValue(table);
 
+						CoreSQLUtils.transferTableContent(
+								geoPackage.getDatabase(), tableMapping);
+
+					}
 				}
 			}
 
@@ -551,7 +556,9 @@ public class NGAExtensions {
 	}
 
 	/**
-	 * Copy the Feature Style extensions for the table
+	 * Copy the Feature Style extensions for the table. Relies on
+	 * {@link GeoPackageExtensions#copyRelatedTables(GeoPackageCore, String, String)}
+	 * to be called first.
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
@@ -563,7 +570,79 @@ public class NGAExtensions {
 	 */
 	public static void copyFeatureStyle(GeoPackageCore geoPackage, String table,
 			String newTable) {
-		// TODO
+
+		try {
+			FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
+					geoPackage);
+			if (featureStyleExtension.hasRelationship(table)) {
+
+				Extensions extension = featureStyleExtension.get(
+						FeatureCoreStyleExtension.EXTENSION_NAME, table, null);
+
+				if (extension != null) {
+					extension.setTableName(newTable);
+					featureStyleExtension.getExtensionsDao().create(extension);
+
+					Long newTableContentsId = featureStyleExtension
+							.getContentsId().getId(newTable);
+
+					if (newTableContentsId != null) {
+
+						if (featureStyleExtension
+								.hasTableStyleRelationship(table)) {
+							updateFeatureStyleContentsId(featureStyleExtension,
+									FeatureCoreStyleExtension.TABLE_MAPPING_TABLE_STYLE,
+									newTable, newTableContentsId);
+						}
+
+						if (featureStyleExtension
+								.hasTableIconRelationship(table)) {
+							updateFeatureStyleContentsId(featureStyleExtension,
+									FeatureCoreStyleExtension.TABLE_MAPPING_TABLE_ICON,
+									newTable, newTableContentsId);
+						}
+
+					}
+
+				}
+
+			}
+
+		} catch (SQLException e) {
+			logger.log(Level.WARNING,
+					"Failed to create Feature Style for table: " + newTable
+							+ ", copied from table: " + table,
+					e);
+		}
+	}
+
+	/**
+	 * Update the feature style contents id for the copied table
+	 * 
+	 * @param featureStyleExtension
+	 *            feature style extension
+	 * @param mappingTablePrefix
+	 *            mapping table prefix
+	 * @param tableName
+	 *            table name
+	 * @param contentsId
+	 *            contents id
+	 */
+	private static void updateFeatureStyleContentsId(
+			FeatureCoreStyleExtension featureStyleExtension,
+			String mappingTablePrefix, String tableName, long contentsId) {
+
+		GeoPackageCore geoPackage = featureStyleExtension.getGeoPackage();
+
+		String mappingTableName = featureStyleExtension
+				.getMappingTableName(mappingTablePrefix, tableName);
+		if (geoPackage.isTable(mappingTableName)) {
+			String sql = "UPDATE " + CoreSQLUtils.quoteWrap(mappingTableName)
+					+ " SET "
+					+ CoreSQLUtils.quoteWrap(UserMappingTable.COLUMN_BASE_ID)
+					+ " = " + contentsId;
+			geoPackage.execSQL(sql);
+		}
 	}
 
 	/**
