@@ -2,6 +2,8 @@ package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
@@ -16,6 +18,7 @@ import mil.nga.geopackage.extension.index.GeometryIndex;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
+import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.extension.properties.PropertiesCoreExtension;
@@ -32,6 +35,12 @@ import mil.nga.geopackage.extension.style.FeatureCoreStyleExtension;
  * @since 1.1.0
  */
 public class NGAExtensions {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(NGAExtensions.class.getName());
 
 	/**
 	 * Delete all NGA table extensions for the table within the GeoPackage
@@ -222,9 +231,9 @@ public class NGAExtensions {
 			}
 
 		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to delete Table Index extension and tables. GeoPackage: "
-							+ geoPackage.getName(),
+			logger.log(Level.WARNING,
+					"Failed to create Geometry Index for table: " + newTable
+							+ ", copied from table: " + table,
 					e);
 		}
 
@@ -300,7 +309,46 @@ public class NGAExtensions {
 	 */
 	public static void copyFeatureTileLink(GeoPackageCore geoPackage,
 			String table, String newTable) {
-		// TODO
+
+		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+		try {
+
+			if (extensionsDao.isTableExists()) {
+
+				List<Extensions> extensions = extensionsDao.queryByExtension(
+						FeatureTileTableCoreLinker.EXTENSION_NAME);
+
+				if (!extensions.isEmpty()) {
+
+					FeatureTileLinkDao featureTileLinkDao = geoPackage
+							.getFeatureTileLinkDao();
+					if (featureTileLinkDao.isTableExists()) {
+
+						for (FeatureTileLink featureTileLink : featureTileLinkDao
+								.queryForFeatureTableName(table)) {
+							featureTileLink.setFeatureTableName(newTable);
+							featureTileLinkDao.create(featureTileLink);
+						}
+
+						for (FeatureTileLink featureTileLink : featureTileLinkDao
+								.queryForTileTableName(table)) {
+							featureTileLink.setTileTableName(newTable);
+							featureTileLinkDao.create(featureTileLink);
+						}
+
+					}
+
+				}
+			}
+
+		} catch (SQLException e) {
+			logger.log(Level.WARNING,
+					"Failed to create Feature Tile Link for table: " + newTable
+							+ ", copied from table: " + table,
+					e);
+		}
+
 	}
 
 	/**
