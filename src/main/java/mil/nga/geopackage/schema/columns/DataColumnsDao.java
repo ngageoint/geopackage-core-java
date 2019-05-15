@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.schema.TableColumnKey;
-
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.schema.TableColumnKey;
 
 /**
  * Data Columns Data Access Object
@@ -46,16 +46,16 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 		if (key != null) {
 			Map<String, Object> fieldValues = new HashMap<String, Object>();
 			fieldValues.put(DataColumns.COLUMN_TABLE_NAME, key.getTableName());
-			fieldValues
-					.put(DataColumns.COLUMN_COLUMN_NAME, key.getColumnName());
+			fieldValues.put(DataColumns.COLUMN_COLUMN_NAME,
+					key.getColumnName());
 			List<DataColumns> results = queryForFieldValues(fieldValues);
 			if (!results.isEmpty()) {
 				if (results.size() > 1) {
-					throw new SQLException("More than one "
-							+ DataColumns.class.getSimpleName()
-							+ " returned for key. Table Name: "
-							+ key.getTableName() + ", Column Name: "
-							+ key.getColumnName());
+					throw new SQLException(
+							"More than one " + DataColumns.class.getSimpleName()
+									+ " returned for key. Table Name: "
+									+ key.getTableName() + ", Column Name: "
+									+ key.getColumnName());
 				}
 				dataColumns = results.get(0);
 			}
@@ -165,10 +165,9 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 		ub.updateColumnValue(DataColumns.COLUMN_CONSTRAINT_NAME,
 				dataColumns.getConstraintName());
 
-		ub.where()
-				.eq(DataColumns.COLUMN_TABLE_NAME, dataColumns.getTableName())
-				.and()
-				.eq(DataColumns.COLUMN_COLUMN_NAME, dataColumns.getColumnName());
+		ub.where().eq(DataColumns.COLUMN_TABLE_NAME, dataColumns.getTableName())
+				.and().eq(DataColumns.COLUMN_COLUMN_NAME,
+						dataColumns.getColumnName());
 
 		PreparedUpdate<DataColumns> update = ub.prepare();
 		int updated = update(update);
@@ -205,6 +204,21 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 			throws SQLException {
 		TableColumnKey id = new TableColumnKey(tableName, columnName);
 		return queryForId(id);
+	}
+
+	/**
+	 * Query by table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return data columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.2.1
+	 */
+	public List<DataColumns> queryByTable(String tableName)
+			throws SQLException {
+		return queryForEq(DataColumns.COLUMN_TABLE_NAME, tableName);
 	}
 
 	/**
