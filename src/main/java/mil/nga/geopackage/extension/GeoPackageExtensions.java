@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.db.CoreSQLUtils;
+import mil.nga.geopackage.db.MappedColumn;
+import mil.nga.geopackage.db.TableMapping;
 import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.coverage.CoverageDataCore;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
@@ -15,6 +18,7 @@ import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
+import mil.nga.geopackage.metadata.reference.MetadataReference;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 
@@ -531,7 +535,21 @@ public class GeoPackageExtensions {
 	 */
 	public static void copyMetadata(GeoPackageCore geoPackage, String table,
 			String newTable) {
-		// TODO
+
+		if (geoPackage.isTable(MetadataReference.TABLE_NAME)) {
+
+			TableInfo tableInfo = TableInfo.info(geoPackage.getDatabase(),
+					MetadataReference.TABLE_NAME);
+			TableMapping tableMapping = new TableMapping(tableInfo);
+			MappedColumn tableNameColumn = tableMapping
+					.getColumn(MetadataReference.COLUMN_TABLE_NAME);
+			tableNameColumn.setConstantValue(newTable);
+			tableNameColumn.setWhereValue(table);
+
+			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
+					tableMapping);
+		}
+
 	}
 
 	/**
