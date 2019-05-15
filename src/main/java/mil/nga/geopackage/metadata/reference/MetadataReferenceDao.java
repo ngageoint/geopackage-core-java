@@ -183,6 +183,21 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	}
 
 	/**
+	 * Query by table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return metadata references
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 3.2.1
+	 */
+	public List<MetadataReference> queryByTable(String tableName)
+			throws SQLException {
+		return queryForEq(MetadataReference.COLUMN_TABLE_NAME, tableName);
+	}
+
+	/**
 	 * Set the foreign key column criteria in the where clause
 	 * 
 	 * @param where
