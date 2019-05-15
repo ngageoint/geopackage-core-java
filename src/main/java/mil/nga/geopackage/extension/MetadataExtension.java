@@ -1,6 +1,8 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
@@ -32,8 +34,8 @@ public class MetadataExtension extends BaseExtension {
 	/**
 	 * Extension definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS, NAME);
+	public static final String DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME);
 
 	/**
 	 * Constructor
@@ -49,14 +51,18 @@ public class MetadataExtension extends BaseExtension {
 	/**
 	 * Get or create the extension
 	 * 
-	 * @return extension
+	 * @return extensions
 	 */
-	public Extensions getOrCreate() {
+	public List<Extensions> getOrCreate() {
 
-		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
-				DEFINITION, ExtensionScopeType.READ_WRITE);
+		List<Extensions> extensions = new ArrayList<>();
 
-		return extension;
+		extensions.add(getOrCreate(EXTENSION_NAME, Metadata.TABLE_NAME, null,
+				DEFINITION, ExtensionScopeType.READ_WRITE));
+		extensions.add(getOrCreate(EXTENSION_NAME, MetadataReference.TABLE_NAME,
+				null, DEFINITION, ExtensionScopeType.READ_WRITE));
+
+		return extensions;
 	}
 
 	/**
@@ -66,7 +72,7 @@ public class MetadataExtension extends BaseExtension {
 	 */
 	public boolean has() {
 
-		boolean exists = has(EXTENSION_NAME, null, null);
+		boolean exists = has(EXTENSION_NAME);
 
 		return exists;
 	}
@@ -93,7 +99,8 @@ public class MetadataExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Metadata extension. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 	}
