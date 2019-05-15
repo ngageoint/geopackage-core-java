@@ -38,6 +38,41 @@ public class DateConverter {
 	public static final String DATETIME_FORMAT2 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 	/**
+	 * SQLite date function
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String FUNCTION_DATE = "date";
+
+	/**
+	 * SQLite time function
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String FUNCTION_TIME = "time";
+
+	/**
+	 * SQLite datetime function
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String FUNCTION_DATETIME = "datetime";
+
+	/**
+	 * SQLite julianday function
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String FUNCTION_JULIANDAY = "julianday";
+
+	/**
+	 * SQLite strftime function
+	 * 
+	 * @since 3.2.1
+	 */
+	public static final String FUNCTION_STRFTIME = "strftime";
+
+	/**
 	 * Get a date converter for the data type
 	 * 
 	 * @param type
@@ -146,12 +181,33 @@ public class DateConverter {
 			// If no value could be parsed throw the first expected parse
 			// format exception
 			if (value == null) {
-				throw new GeoPackageException("Failed to parse date string: "
-						+ date, exception);
+				throw new GeoPackageException(
+						"Failed to parse date string: " + date, exception);
 			}
 
 		}
 		return value;
+	}
+
+	/**
+	 * Determine if the date/time string value is a SQLite function
+	 * 
+	 * @param value
+	 *            date/time string value
+	 * @return true if a function, false if the value should be parsed
+	 * @since 3.2.1
+	 */
+	public static boolean isFunction(String value) {
+		boolean function = false;
+		if (value != null) {
+			value = value.trim().toLowerCase();
+			function = value.startsWith(FUNCTION_DATE)
+					|| value.startsWith(FUNCTION_TIME)
+					|| value.startsWith(FUNCTION_DATETIME)
+					|| value.startsWith(FUNCTION_JULIANDAY)
+					|| value.startsWith(FUNCTION_STRFTIME);
+		}
+		return function;
 	}
 
 }

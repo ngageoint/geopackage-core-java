@@ -347,12 +347,16 @@ public class TableInfo {
 				break;
 			case DATE:
 			case DATETIME:
-				DateConverter converter = DateConverter.converter(type);
-				try {
-					value = converter.dateValue(defaultValue);
-				} catch (Exception e) {
-					logger.log(Level.WARNING, "Invalid " + type + " format: "
-							+ defaultValue + ", String value used", e);
+				if (!DateConverter.isFunction(defaultValue)) {
+					DateConverter converter = DateConverter.converter(type);
+					try {
+						value = converter.dateValue(defaultValue);
+					} catch (Exception e) {
+						logger.log(
+								Level.WARNING, "Invalid " + type + " format: "
+										+ defaultValue + ", String value used",
+								e);
+					}
 				}
 				break;
 			case BOOLEAN:
