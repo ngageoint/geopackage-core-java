@@ -9,9 +9,6 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.db.CoreSQLUtils;
-import mil.nga.geopackage.db.MappedColumn;
-import mil.nga.geopackage.db.TableMapping;
-import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.index.FeatureTableCoreIndex;
 import mil.nga.geopackage.extension.index.GeometryIndex;
@@ -212,19 +209,11 @@ public class NGAExtensions {
 
 							if (geoPackage.isTable(GeometryIndex.TABLE_NAME)) {
 
-								TableInfo tableInfo = TableInfo.info(
-										geoPackage.getDatabase(),
-										GeometryIndex.TABLE_NAME);
-								TableMapping tableMapping = new TableMapping(
-										tableInfo);
-								MappedColumn tableNameColumn = tableMapping
-										.getColumn(
-												GeometryIndex.COLUMN_TABLE_NAME);
-								tableNameColumn.setConstantValue(newTable);
-								tableNameColumn.setWhereValue(table);
-
 								CoreSQLUtils.transferTableContent(
-										geoPackage.getDatabase(), tableMapping);
+										geoPackage.getDatabase(),
+										GeometryIndex.TABLE_NAME,
+										GeometryIndex.COLUMN_TABLE_NAME,
+										newTable, table);
 
 							}
 						}
@@ -442,17 +431,10 @@ public class NGAExtensions {
 
 					if (geoPackage.isTable(TileScaling.TABLE_NAME)) {
 
-						TableInfo tableInfo = TableInfo.info(
-								geoPackage.getDatabase(),
-								TileScaling.TABLE_NAME);
-						TableMapping tableMapping = new TableMapping(tableInfo);
-						MappedColumn tableNameColumn = tableMapping
-								.getColumn(TileScaling.COLUMN_TABLE_NAME);
-						tableNameColumn.setConstantValue(newTable);
-						tableNameColumn.setWhereValue(table);
-
 						CoreSQLUtils.transferTableContent(
-								geoPackage.getDatabase(), tableMapping);
+								geoPackage.getDatabase(),
+								TileScaling.TABLE_NAME,
+								TileScaling.COLUMN_TABLE_NAME, newTable, table);
 
 					}
 				}

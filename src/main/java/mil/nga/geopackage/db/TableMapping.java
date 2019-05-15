@@ -125,6 +125,18 @@ public class TableMapping {
 	}
 
 	/**
+	 * Constructor
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 */
+	public TableMapping(GeoPackageCoreConnection db, String tableName) {
+		this(TableInfo.info(db, tableName));
+	}
+
+	/**
 	 * Get the from table name
 	 * 
 	 * @return from table name

@@ -9,11 +9,11 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.db.CoreSQLUtils;
-import mil.nga.geopackage.db.MappedColumn;
-import mil.nga.geopackage.db.TableMapping;
 import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.coverage.CoverageDataCore;
+import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
+import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -421,7 +421,58 @@ public class GeoPackageExtensions {
 	 */
 	public static void copyGriddedCoverage(GeoPackageCore geoPackage,
 			String table, String newTable) {
-		// TODO
+
+		if (geoPackage.isTableType(ContentsDataType.GRIDDED_COVERAGE, table)) {
+
+			ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+			try {
+				if (extensionsDao.isTableExists()) {
+
+					List<Extensions> extensions = extensionsDao
+							.queryByExtension(CoverageDataCore.EXTENSION_NAME,
+									table);
+
+					if (!extensions.isEmpty()) {
+
+						Extensions extension = extensions.get(0);
+						extension.setTableName(newTable);
+						extensionsDao.create(extension);
+
+						GriddedCoverageDao griddedCoverageDao = geoPackage
+								.getGriddedCoverageDao();
+						if (griddedCoverageDao.isTableExists()) {
+
+							CoreSQLUtils.transferTableContent(
+									geoPackage.getDatabase(),
+									GriddedCoverage.TABLE_NAME,
+									GriddedCoverage.COLUMN_TILE_MATRIX_SET_NAME,
+									newTable, table);
+
+						}
+
+						GriddedTileDao griddedTileDao = geoPackage
+								.getGriddedTileDao();
+						if (griddedTileDao.isTableExists()) {
+
+							CoreSQLUtils.transferTableContent(
+									geoPackage.getDatabase(),
+									GriddedTile.TABLE_NAME,
+									GriddedTile.COLUMN_TABLE_NAME, newTable,
+									table);
+
+						}
+					}
+				}
+			} catch (SQLException e) {
+				logger.log(Level.WARNING,
+						"Failed to create Gridded Coverage for table: "
+								+ newTable + ", copied from table: " + table,
+						e);
+			}
+
+		}
+
 	}
 
 	/**
@@ -481,16 +532,10 @@ public class GeoPackageExtensions {
 
 		if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
 
-			TableInfo tableInfo = TableInfo.info(geoPackage.getDatabase(),
-					DataColumns.TABLE_NAME);
-			TableMapping tableMapping = new TableMapping(tableInfo);
-			MappedColumn tableNameColumn = tableMapping
-					.getColumn(DataColumns.COLUMN_TABLE_NAME);
-			tableNameColumn.setConstantValue(newTable);
-			tableNameColumn.setWhereValue(table);
-
 			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
-					tableMapping);
+					DataColumns.TABLE_NAME, DataColumns.COLUMN_TABLE_NAME,
+					newTable, table);
+
 		}
 
 	}
@@ -553,16 +598,10 @@ public class GeoPackageExtensions {
 
 		if (geoPackage.isTable(MetadataReference.TABLE_NAME)) {
 
-			TableInfo tableInfo = TableInfo.info(geoPackage.getDatabase(),
-					MetadataReference.TABLE_NAME);
-			TableMapping tableMapping = new TableMapping(tableInfo);
-			MappedColumn tableNameColumn = tableMapping
-					.getColumn(MetadataReference.COLUMN_TABLE_NAME);
-			tableNameColumn.setConstantValue(newTable);
-			tableNameColumn.setWhereValue(table);
-
 			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
-					tableMapping);
+					MetadataReference.TABLE_NAME,
+					MetadataReference.COLUMN_TABLE_NAME, newTable, table);
+
 		}
 
 	}
