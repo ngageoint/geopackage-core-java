@@ -20,6 +20,7 @@ import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.metadata.reference.MetadataReference;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
+import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 
 /**
@@ -477,7 +478,21 @@ public class GeoPackageExtensions {
 	 */
 	public static void copySchema(GeoPackageCore geoPackage, String table,
 			String newTable) {
-		// TODO
+
+		if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+
+			TableInfo tableInfo = TableInfo.info(geoPackage.getDatabase(),
+					DataColumns.TABLE_NAME);
+			TableMapping tableMapping = new TableMapping(tableInfo);
+			MappedColumn tableNameColumn = tableMapping
+					.getColumn(DataColumns.COLUMN_TABLE_NAME);
+			tableNameColumn.setConstantValue(newTable);
+			tableNameColumn.setWhereValue(table);
+
+			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
+					tableMapping);
+		}
+
 	}
 
 	/**
