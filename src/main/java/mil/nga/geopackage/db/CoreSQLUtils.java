@@ -558,8 +558,37 @@ public class CoreSQLUtils {
 	public static void transferTableContent(GeoPackageCoreConnection db,
 			String tableName, String columnName, Object newColumnValue,
 			Object currentColumnValue) {
+		transferTableContent(db, tableName, columnName, newColumnValue,
+				currentColumnValue, null);
+	}
+
+	/**
+	 * Transfer table content to itself with new rows containing a new column
+	 * value. All rows containing the current column value are inserted as new
+	 * rows with the new column value.
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param newColumnValue
+	 *            new column value for new rows
+	 * @param currentColumnValue
+	 *            column value for rows to insert as new rows
+	 * @param idColumnName
+	 *            id column name
+	 * @since 3.2.1
+	 */
+	public static void transferTableContent(GeoPackageCoreConnection db,
+			String tableName, String columnName, Object newColumnValue,
+			Object currentColumnValue, String idColumnName) {
 
 		TableMapping tableMapping = new TableMapping(db, tableName);
+		if (idColumnName != null) {
+			tableMapping.removeColumn(idColumnName);
+		}
 		MappedColumn tileMatrixSetNameColumn = tableMapping
 				.getColumn(columnName);
 		tileMatrixSetNameColumn.setConstantValue(newColumnValue);
