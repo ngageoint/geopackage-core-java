@@ -545,7 +545,8 @@ public class SQLiteMaster {
 	 *            result type
 	 * @return count
 	 */
-	public static int count(GeoPackageCoreConnection db, SQLiteMasterType type) {
+	public static int count(GeoPackageCoreConnection db,
+			SQLiteMasterType type) {
 		return count(db, types(type));
 	}
 
@@ -643,8 +644,8 @@ public class SQLiteMaster {
 	 */
 	public static int count(GeoPackageCoreConnection db,
 			SQLiteMasterType[] types, String tableName) {
-		return count(db, types, SQLiteMasterQuery.create(
-				SQLiteMasterColumn.TBL_NAME, tableName));
+		return count(db, types, SQLiteMasterQuery
+				.create(SQLiteMasterColumn.TBL_NAME, tableName));
 	}
 
 	/**
@@ -663,8 +664,8 @@ public class SQLiteMaster {
 	public static SQLiteMaster query(GeoPackageCoreConnection db,
 			SQLiteMasterColumn[] columns, SQLiteMasterType[] types,
 			String tableName) {
-		return query(db, columns, types, SQLiteMasterQuery.create(
-				SQLiteMasterColumn.TBL_NAME, tableName));
+		return query(db, columns, types, SQLiteMasterQuery
+				.create(SQLiteMasterColumn.TBL_NAME, tableName));
 	}
 
 	/**
@@ -690,7 +691,8 @@ public class SQLiteMaster {
 	 *            query
 	 * @return count
 	 */
-	public static int count(GeoPackageCoreConnection db, SQLiteMasterQuery query) {
+	public static int count(GeoPackageCoreConnection db,
+			SQLiteMasterQuery query) {
 		return count(db, types(), query);
 	}
 
@@ -821,7 +823,7 @@ public class SQLiteMaster {
 
 			if (hasQuery) {
 				sql.append(query.buildSQL());
-				args.addAll(query.buildArguments());
+				args.addAll(query.getArguments());
 			}
 
 			if (hasTypes) {

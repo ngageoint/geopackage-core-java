@@ -22,7 +22,12 @@ public class SQLiteMasterQuery {
 	/**
 	 * List of queries
 	 */
-	private final List<List<String>> queries = new ArrayList<>();
+	private final List<String> queries = new ArrayList<>();
+
+	/**
+	 * List of arguments
+	 */
+	private final List<String> arguments = new ArrayList<>();
 
 	/**
 	 * Create a query with the combine operation
@@ -57,15 +62,44 @@ public class SQLiteMasterQuery {
 	 *            value
 	 */
 	public void add(SQLiteMasterColumn column, String operation, String value) {
+		validateAdd();
+		queries.add(CoreSQLUtils.quoteWrap(column.name().toLowerCase()) + " "
+				+ operation + " ?");
+		arguments.add(value);
+	}
+
+	/**
+	 * Add an is null query
+	 * 
+	 * @param column
+	 *            column
+	 */
+	public void addIsNull(SQLiteMasterColumn column) {
+		validateAdd();
+		queries.add(CoreSQLUtils.quoteWrap(column.name().toLowerCase())
+				+ " IS NULL");
+	}
+
+	/**
+	 * Add an is not null query
+	 * 
+	 * @param column
+	 *            column
+	 */
+	public void addIsNotNull(SQLiteMasterColumn column) {
+		validateAdd();
+		queries.add(CoreSQLUtils.quoteWrap(column.name().toLowerCase())
+				+ " IS NOT NULL");
+	}
+
+	/**
+	 * Validate the state of the query when adding to the query
+	 */
+	private void validateAdd() {
 		if (combineOperation == null && !queries.isEmpty()) {
 			throw new IllegalStateException(
 					"Query without a combination operation supports only a single query");
 		}
-		List<String> query = new ArrayList<>();
-		query.add(column.name().toLowerCase());
-		query.add(operation);
-		query.add(value);
-		queries.add(query);
 	}
 
 	/**
@@ -93,11 +127,7 @@ public class SQLiteMasterQuery {
 				sql.append(combineOperation);
 				sql.append(" ");
 			}
-			List<String> query = queries.get(i);
-			sql.append(CoreSQLUtils.quoteWrap(query.get(0)));
-			sql.append(" ");
-			sql.append(query.get(1));
-			sql.append(" ?");
+			sql.append(queries.get(i));
 		}
 		if (queries.size() > 1) {
 			sql.append(" )");
@@ -106,16 +136,12 @@ public class SQLiteMasterQuery {
 	}
 
 	/**
-	 * Build the query arguments
+	 * Get the query arguments
 	 * 
 	 * @return arguments
 	 */
-	public List<String> buildArguments() {
-		List<String> args = new ArrayList<>();
-		for (List<String> query : queries) {
-			args.add(query.get(2));
-		}
-		return args;
+	public List<String> getArguments() {
+		return arguments;
 	}
 
 	/**
