@@ -204,6 +204,17 @@ public class TableMapping {
 	}
 
 	/**
+	 * Remove a column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return removed mapped column or null
+	 */
+	public MappedColumn removeColumn(String columnName) {
+		return columns.remove(columnName);
+	}
+
+	/**
 	 * Get the column names
 	 * 
 	 * @return column names
@@ -249,6 +260,17 @@ public class TableMapping {
 	 */
 	public void addDroppedColumn(String columnName) {
 		droppedColumns.add(columnName);
+	}
+
+	/**
+	 * Remove a dropped column
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return true if removed
+	 */
+	public boolean removeDroppedColumn(String columnName) {
+		return droppedColumns.remove(columnName);
 	}
 
 	/**
