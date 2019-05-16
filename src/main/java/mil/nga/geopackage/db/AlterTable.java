@@ -420,20 +420,21 @@ public class AlterTable {
 									RTreeIndexCoreExtension.RTREE_PREFIX);
 				}
 				if (create) {
-					String tableSql = CoreSQLUtils.updateSQL(
-							indexesAndTriggers.getName(i),
-							indexesAndTriggers.getSql(i), tableMapping);
+					String tableSql = indexesAndTriggers.getSql(i);
 					if (tableSql != null) {
-						try {
-							db.execSQL(tableSql);
-						} catch (Exception e) {
-							logger.log(Level.WARNING,
-									"Failed to recreate "
-											+ indexesAndTriggers.getType(i)
-											+ " after table alteration. table: "
-											+ tableMapping.getToTable()
-											+ ", sql: " + tableSql,
-									e);
+						tableSql = CoreSQLUtils.updateSQL(
+								indexesAndTriggers.getName(i), tableSql,
+								tableMapping);
+						if (tableSql != null) {
+							try {
+								db.execSQL(tableSql);
+							} catch (Exception e) {
+								logger.log(Level.WARNING, "Failed to recreate "
+										+ indexesAndTriggers.getType(i)
+										+ " after table alteration. table: "
+										+ tableMapping.getToTable() + ", sql: "
+										+ tableSql, e);
+							}
 						}
 					}
 				}
@@ -441,18 +442,21 @@ public class AlterTable {
 
 			// 9b. Recreate views
 			for (int i = 0; i < views.count(); i++) {
-				String viewSql = CoreSQLUtils.updateSQL(views.getName(i),
-						views.getSql(i), tableMapping);
+				String viewSql = views.getSql(i);
 				if (viewSql != null) {
-					try {
-						db.execSQL(viewSql);
-					} catch (Exception e) {
-						logger.log(Level.WARNING,
-								"Failed to recreate view: " + views.getName(i)
-										+ ", table: "
-										+ tableMapping.getToTable() + ", sql: "
-										+ viewSql,
-								e);
+					viewSql = CoreSQLUtils.updateSQL(views.getName(i), viewSql,
+							tableMapping);
+					if (viewSql != null) {
+						try {
+							db.execSQL(viewSql);
+						} catch (Exception e) {
+							logger.log(Level.WARNING,
+									"Failed to recreate view: "
+											+ views.getName(i) + ", table: "
+											+ tableMapping.getToTable()
+											+ ", sql: " + viewSql,
+									e);
+						}
 					}
 				}
 			}
