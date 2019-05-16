@@ -90,6 +90,11 @@ public class TableInfo {
 	public static final int PK_INDEX = 5;
 
 	/**
+	 * Default of NULL value
+	 */
+	public static final String DEFAULT_NULL = "NULL";
+
+	/**
 	 * Table name
 	 */
 	private final String tableName;
@@ -340,7 +345,8 @@ public class TableInfo {
 			GeoPackageDataType type) {
 		Object value = defaultValue;
 
-		if (defaultValue != null && type != null) {
+		if (defaultValue != null && type != null
+				&& !defaultValue.equalsIgnoreCase(DEFAULT_NULL)) {
 
 			switch (type) {
 			case TEXT:
