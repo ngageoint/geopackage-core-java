@@ -447,7 +447,7 @@ public class GeoPackageExtensions {
 									geoPackage.getDatabase(),
 									GriddedCoverage.TABLE_NAME,
 									GriddedCoverage.COLUMN_TILE_MATRIX_SET_NAME,
-									newTable, table);
+									newTable, table, GriddedCoverage.COLUMN_ID);
 
 						}
 
@@ -459,7 +459,7 @@ public class GeoPackageExtensions {
 									geoPackage.getDatabase(),
 									GriddedTile.TABLE_NAME,
 									GriddedTile.COLUMN_TABLE_NAME, newTable,
-									table);
+									table, GriddedTile.COLUMN_ID);
 
 						}
 					}
