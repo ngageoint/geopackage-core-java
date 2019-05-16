@@ -73,8 +73,6 @@ import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.UserUniqueConstraint;
-import mil.nga.geopackage.user.custom.UserCustomTable;
-import mil.nga.geopackage.user.custom.UserCustomTableReader;
 import mil.nga.sf.proj.Projection;
 
 /**
@@ -1394,9 +1392,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	protected Contents copyUserTable(String tableName, String newTableName,
 			boolean validateContents) {
 
-		UserCustomTable table = UserCustomTableReader.readTable(database,
-				tableName);
-		AlterTable.copyTable(database, table, newTableName);
+		AlterTable.copyTable(database, tableName, newTableName);
 
 		Contents contents = copyContents(tableName, newTableName);
 

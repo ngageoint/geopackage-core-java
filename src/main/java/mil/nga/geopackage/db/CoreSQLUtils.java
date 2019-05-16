@@ -639,13 +639,8 @@ public class CoreSQLUtils {
 
 		if (tableMapping.isNewTable()) {
 
-			String newName;
-			if (name.contains(tableMapping.getFromTable())) {
-				newName = name.replaceAll(tableMapping.getFromTable(),
-						tableMapping.getToTable());
-			} else {
-				newName = name + "_" + tableMapping.getToTable();
-			}
+			String newName = createName(name, tableMapping.getFromTable(),
+					tableMapping.getToTable());
 
 			String updatedName = replaceName(updatedSql, name, newName);
 			if (updatedName != null) {
@@ -793,6 +788,29 @@ public class CoreSQLUtils {
 		}
 
 		return updatedSql;
+	}
+
+	/**
+	 * Create a new name by replacing a case insensitive value with a new value.
+	 * If no replacement is done, create a new name in the form
+	 * name_replacement.
+	 * 
+	 * @param name
+	 *            current name
+	 * @param replace
+	 *            value to replace
+	 * @param replacement
+	 *            replacement value
+	 * @return new name
+	 * @since 3.2.1
+	 */
+	public static String createName(String name, String replace,
+			String replacement) {
+		String newName = name.replaceAll("(?i)" + replace, replacement);
+		if (newName.equals(name)) {
+			newName = name + "_" + replacement;
+		}
+		return newName;
 	}
 
 }

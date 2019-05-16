@@ -13,6 +13,8 @@ import mil.nga.geopackage.db.master.SQLiteMasterType;
 import mil.nga.geopackage.extension.RTreeIndexCoreExtension;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.custom.UserCustomTable;
+import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
  * Builds and performs alter table statements
@@ -248,6 +250,23 @@ public class AlterTable {
 		TableMapping tableMapping = new TableMapping(table, newTableName);
 
 		alterTable(db, table, tableMapping);
+	}
+
+	/**
+	 * Copy the table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 */
+	public static void copyTable(GeoPackageCoreConnection db, String tableName,
+			String newTableName) {
+		UserCustomTable userTable = UserCustomTableReader.readTable(db,
+				tableName);
+		copyTable(db, userTable, newTableName);
 	}
 
 	/**

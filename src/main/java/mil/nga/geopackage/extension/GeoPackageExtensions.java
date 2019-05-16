@@ -8,13 +8,18 @@ import java.util.logging.Logger;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
+import mil.nga.geopackage.db.MappedColumn;
+import mil.nga.geopackage.db.TableMapping;
 import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.coverage.CoverageDataCore;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
+import mil.nga.geopackage.extension.related.ExtendedRelation;
+import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -22,6 +27,8 @@ import mil.nga.geopackage.metadata.reference.MetadataReference;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.user.custom.UserCustomTable;
+import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
  * GeoPackage extension management class for deleting extensions for a table or
@@ -311,7 +318,80 @@ public class GeoPackageExtensions {
 	 */
 	public static void copyRelatedTables(GeoPackageCore geoPackage,
 			String table, String newTable) {
-		// TODO
+
+		try {
+
+			RelatedTablesCoreExtension relatedTablesExtension = getRelatedTableExtension(
+					geoPackage);
+			if (relatedTablesExtension.has()) {
+
+				ExtendedRelationsDao extendedRelationsDao = relatedTablesExtension
+						.getExtendedRelationsDao();
+				ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+				List<ExtendedRelation> extendedRelations = extendedRelationsDao
+						.getBaseTableRelations(table);
+				for (ExtendedRelation extendedRelation : extendedRelations) {
+
+					String mappingTableName = extendedRelation
+							.getMappingTableName();
+
+					List<Extensions> extensions = extensionsDao
+							.queryByExtension(
+									RelatedTablesCoreExtension.EXTENSION_NAME,
+									mappingTableName);
+
+					if (!extensions.isEmpty()) {
+
+						String newMappingTableName = CoreSQLUtils
+								.createName(mappingTableName, table, newTable);
+
+						UserCustomTable userTable = UserCustomTableReader
+								.readTable(geoPackage.getDatabase(),
+										mappingTableName);
+						AlterTable.copyTable(geoPackage.getDatabase(),
+								userTable, newMappingTableName);
+
+						TableMapping mappingTableTableMapping = new TableMapping(
+								userTable, newMappingTableName);
+						CoreSQLUtils.transferTableContent(
+								geoPackage.getDatabase(),
+								mappingTableTableMapping);
+
+						Extensions extension = extensions.get(0);
+						extension.setTableName(newMappingTableName);
+						extensionsDao.create(extension);
+
+						TableMapping extendedRelationTableMapping = new TableMapping(
+								geoPackage.getDatabase(),
+								ExtendedRelation.TABLE_NAME);
+						extendedRelationTableMapping
+								.removeColumn(ExtendedRelation.COLUMN_ID);
+						MappedColumn baseTableNameColumn = extendedRelationTableMapping
+								.getColumn(
+										ExtendedRelation.COLUMN_BASE_TABLE_NAME);
+						baseTableNameColumn.setConstantValue(newTable);
+						baseTableNameColumn.setWhereValue(table);
+						MappedColumn mappingTableNameColumn = extendedRelationTableMapping
+								.getColumn(
+										ExtendedRelation.COLUMN_MAPPING_TABLE_NAME);
+						mappingTableNameColumn
+								.setConstantValue(newMappingTableName);
+						mappingTableNameColumn.setWhereValue(mappingTableName);
+						CoreSQLUtils.transferTableContent(
+								geoPackage.getDatabase(),
+								extendedRelationTableMapping);
+
+					}
+				}
+			}
+		} catch (SQLException e) {
+			logger.log(Level.WARNING,
+					"Failed to create Related Tables for table: " + newTable
+							+ ", copied from table: " + table,
+					e);
+		}
+
 	}
 
 	/**
