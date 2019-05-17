@@ -1222,31 +1222,55 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void copyTable(String tableName, String newTableName) {
-		copyTable(tableName, newTableName, true);
+		copyTable(tableName, newTableName, true, true);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void copyTable(String tableName, String newTableName,
-			boolean extensions) {
+	public void copyTableNoExtensions(String tableName, String newTableName) {
+		copyTable(tableName, newTableName, true, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void copyTableAsEmpty(String tableName, String newTableName) {
+		copyTable(tableName, newTableName, false, false);
+	}
+
+	/**
+	 * Copy the table
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 * @param transferContent
+	 *            transfer content flag
+	 * @param extensions
+	 *            extensions copy flag
+	 */
+	protected void copyTable(String tableName, String newTableName,
+			boolean transferContent, boolean extensions) {
 
 		ContentsDataType dataType = getTableDataType(tableName);
 		if (dataType != null) {
 			switch (dataType) {
 
 			case ATTRIBUTES:
-				copyAttributeTable(tableName, newTableName);
+				copyAttributeTable(tableName, newTableName, transferContent);
 				break;
 
 			case FEATURES:
-				copyFeatureTable(tableName, newTableName);
+				copyFeatureTable(tableName, newTableName, transferContent);
 				break;
 
 			case TILES:
 			case GRIDDED_COVERAGE:
-				copyTileTable(tableName, newTableName);
+				copyTileTable(tableName, newTableName, transferContent);
 				break;
 
 			default:
@@ -1254,7 +1278,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 						"Unsupported data type: " + dataType);
 			}
 		} else {
-			copyUserTable(tableName, newTableName, false);
+			copyUserTable(tableName, newTableName, transferContent, false);
 		}
 
 		// Copy extensions
@@ -1271,10 +1295,13 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer content flag
 	 * @since 3.2.1
 	 */
-	protected void copyAttributeTable(String tableName, String newTableName) {
-		copyUserTable(tableName, newTableName);
+	protected void copyAttributeTable(String tableName, String newTableName,
+			boolean transferContent) {
+		copyUserTable(tableName, newTableName, transferContent);
 	}
 
 	/**
@@ -1284,9 +1311,12 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer content flag
 	 * @since 3.2.1
 	 */
-	protected void copyFeatureTable(String tableName, String newTableName) {
+	protected void copyFeatureTable(String tableName, String newTableName,
+			boolean transferContent) {
 
 		GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
 		GeometryColumns geometryColumns = null;
@@ -1302,7 +1332,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"No geometry columns for table: " + tableName);
 		}
 
-		Contents contents = copyUserTable(tableName, newTableName);
+		Contents contents = copyUserTable(tableName, newTableName,
+				transferContent);
 
 		geometryColumns.setContents(contents);
 		try {
@@ -1322,9 +1353,12 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer content flag
 	 * @since 3.2.1
 	 */
-	protected void copyTileTable(String tableName, String newTableName) {
+	protected void copyTileTable(String tableName, String newTableName,
+			boolean transferContent) {
 
 		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
 		TileMatrixSet tileMatrixSet = null;
@@ -1350,7 +1384,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"Failed to retrieve table tile matrixes: " + tableName, e);
 		}
 
-		Contents contents = copyUserTable(tableName, newTableName);
+		Contents contents = copyUserTable(tableName, newTableName,
+				transferContent);
 
 		tileMatrixSet.setContents(contents);
 		try {
@@ -1383,11 +1418,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer user table content flag
 	 * @return copied contents
 	 * @since 3.2.1
 	 */
-	protected Contents copyUserTable(String tableName, String newTableName) {
-		return copyUserTable(tableName, newTableName, true);
+	protected Contents copyUserTable(String tableName, String newTableName,
+			boolean transferContent) {
+		return copyUserTable(tableName, newTableName, transferContent, true);
 	}
 
 	/**
@@ -1397,15 +1435,18 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer user table content flag
 	 * @param validateContents
 	 *            true to validate a contents was copied
 	 * @return copied contents
 	 * @since 3.2.1
 	 */
 	protected Contents copyUserTable(String tableName, String newTableName,
-			boolean validateContents) {
+			boolean transferContent, boolean validateContents) {
 
-		AlterTable.copyTable(database, tableName, newTableName);
+		AlterTable.copyTable(database, tableName, newTableName,
+				transferContent);
 
 		Contents contents = copyContents(tableName, newTableName);
 

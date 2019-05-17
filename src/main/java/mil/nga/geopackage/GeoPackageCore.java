@@ -864,7 +864,7 @@ public interface GeoPackageCore extends Closeable {
 	public void renameTable(String tableName, String newTableName);
 
 	/**
-	 * Copy the table including extensions
+	 * Copy the table with transferred contents and extensions
 	 * 
 	 * @param tableName
 	 *            table name
@@ -875,18 +875,26 @@ public interface GeoPackageCore extends Closeable {
 	public void copyTable(String tableName, String newTableName);
 
 	/**
-	 * Copy the table optionally including extensions
+	 * Copy the table with transferred contents but no extensions
 	 * 
 	 * @param tableName
 	 *            table name
 	 * @param newTableName
 	 *            new table name
-	 * @param extensions
-	 *            include extensions flag
 	 * @since 3.2.1
 	 */
-	public void copyTable(String tableName, String newTableName,
-			boolean extensions);
+	public void copyTableNoExtensions(String tableName, String newTableName);
+
+	/**
+	 * Copy the table but leave the user table empty and without extensions
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 * @since 3.2.1
+	 */
+	public void copyTableAsEmpty(String tableName, String newTableName);
 
 	/**
 	 * Get a 2D Gridded Coverage DAO
