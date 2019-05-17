@@ -352,12 +352,6 @@ public class GeoPackageExtensions {
 						AlterTable.copyTable(geoPackage.getDatabase(),
 								userTable, newMappingTableName);
 
-						TableMapping mappingTableTableMapping = new TableMapping(
-								userTable, newMappingTableName);
-						CoreSQLUtils.transferTableContent(
-								geoPackage.getDatabase(),
-								mappingTableTableMapping);
-
 						Extensions extension = extensions.get(0);
 						extension.setTableName(newMappingTableName);
 						extensionsDao.create(extension);

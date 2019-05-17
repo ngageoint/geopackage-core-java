@@ -649,7 +649,7 @@ public class NGAExtensions {
 			UserCustomTable userTable = UserCustomTableReader
 					.readTable(geoPackage.getDatabase(), mappingTableName);
 			AlterTable.copyTable(geoPackage.getDatabase(), userTable,
-					newMappingTableName);
+					newMappingTableName, false);
 
 			TableMapping mappingTableTableMapping = new TableMapping(userTable,
 					newMappingTableName);
