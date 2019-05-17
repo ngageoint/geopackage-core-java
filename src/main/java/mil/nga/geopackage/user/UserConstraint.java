@@ -11,6 +11,11 @@ import mil.nga.geopackage.db.CoreSQLUtils;
 public abstract class UserConstraint {
 
 	/**
+	 * Constraint keyword
+	 */
+	public static final String CONSTRAINT = "CONSTRAINT";
+
+	/**
 	 * Optional constraint name
 	 */
 	private String name;
@@ -59,7 +64,7 @@ public abstract class UserConstraint {
 	protected String buildNameSql() {
 		String sql = "";
 		if (name != null) {
-			sql = "CONSTRAINT " + CoreSQLUtils.quoteWrap(name) + " ";
+			sql = CONSTRAINT + " " + CoreSQLUtils.quoteWrap(name) + " ";
 		}
 		return sql;
 	}

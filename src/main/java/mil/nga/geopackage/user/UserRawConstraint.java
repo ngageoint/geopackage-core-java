@@ -59,6 +59,10 @@ public class UserRawConstraint extends UserConstraint {
 	 */
 	@Override
 	public String buildSql() {
+		String sql = this.sql;
+		if (!sql.toUpperCase().startsWith(CONSTRAINT)) {
+			sql = buildNameSql() + sql;
+		}
 		return sql;
 	}
 

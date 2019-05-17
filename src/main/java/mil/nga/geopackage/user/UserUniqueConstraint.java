@@ -11,6 +11,11 @@ import java.util.List;
 public class UserUniqueConstraint extends UserConstraint {
 
 	/**
+	 * Unique keyword
+	 */
+	public static final String UNIQUE = "UNIQUE";
+
+	/**
 	 * Columns included in the unique constraint
 	 */
 	private final List<UserColumn> columns = new ArrayList<>();
@@ -76,7 +81,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	public String buildSql() {
 		StringBuilder sql = new StringBuilder();
 		sql.append(buildNameSql());
-		sql.append("UNIQUE (");
+		sql.append(UNIQUE);
+		sql.append(" (");
 		for (int i = 0; i < columns.size(); i++) {
 			UserColumn column = columns.get(i);
 			if (i > 0) {
