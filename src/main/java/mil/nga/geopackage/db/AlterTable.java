@@ -234,7 +234,7 @@ public class AlterTable {
 	}
 
 	/**
-	 * Copy the table
+	 * Copy the table and row content
 	 * 
 	 * @param db
 	 *            connection
@@ -245,11 +245,45 @@ public class AlterTable {
 	 */
 	public static void copyTable(GeoPackageCoreConnection db,
 			UserTable<? extends UserColumn> table, String newTableName) {
+		copyTable(db, table, newTableName, true);
+	}
+
+	/**
+	 * Copy the table
+	 * 
+	 * @param db
+	 *            connection
+	 * @param table
+	 *            table
+	 * @param newTableName
+	 *            new table name
+	 * @param transferContent
+	 *            transfer row content to the new table
+	 */
+	public static void copyTable(GeoPackageCoreConnection db,
+			UserTable<? extends UserColumn> table, String newTableName,
+			boolean transferContent) {
 
 		// Build the table mapping
 		TableMapping tableMapping = new TableMapping(table, newTableName);
+		tableMapping.setTransferContent(transferContent);
 
 		alterTable(db, table, tableMapping);
+	}
+
+	/**
+	 * Copy the table and row content
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param newTableName
+	 *            new table name
+	 */
+	public static void copyTable(GeoPackageCoreConnection db, String tableName,
+			String newTableName) {
+		copyTable(db, tableName, newTableName, true);
 	}
 
 	/**
@@ -261,12 +295,14 @@ public class AlterTable {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
+	 * @param transferContent
+	 *            transfer row content to the new table
 	 */
 	public static void copyTable(GeoPackageCoreConnection db, String tableName,
-			String newTableName) {
+			String newTableName, boolean transferContent) {
 		UserCustomTable userTable = UserCustomTableReader.readTable(db,
 				tableName);
-		copyTable(db, userTable, newTableName);
+		copyTable(db, userTable, newTableName, transferContent);
 	}
 
 	/**
@@ -410,8 +446,13 @@ public class AlterTable {
 			sql = sql.replaceFirst(tableName, transferTable);
 			db.execSQL(sql);
 
-			// 5. Transfer content to new table
-			CoreSQLUtils.transferTableContent(db, tableMapping);
+			// If transferring content
+			if (tableMapping.isTransferContent()) {
+
+				// 5. Transfer content to new table
+				CoreSQLUtils.transferTableContent(db, tableMapping);
+
+			}
 
 			// If altering a table
 			if (!newTable) {
@@ -441,7 +482,7 @@ public class AlterTable {
 				if (create) {
 					String tableSql = indexesAndTriggers.getSql(i);
 					if (tableSql != null) {
-						tableSql = CoreSQLUtils.updateSQL(
+						tableSql = CoreSQLUtils.modifySQL(
 								indexesAndTriggers.getName(i), tableSql,
 								tableMapping);
 						if (tableSql != null) {
@@ -463,7 +504,7 @@ public class AlterTable {
 			for (int i = 0; i < views.count(); i++) {
 				String viewSql = views.getSql(i);
 				if (viewSql != null) {
-					viewSql = CoreSQLUtils.updateSQL(views.getName(i), viewSql,
+					viewSql = CoreSQLUtils.modifySQL(views.getName(i), viewSql,
 							tableMapping);
 					if (viewSql != null) {
 						try {

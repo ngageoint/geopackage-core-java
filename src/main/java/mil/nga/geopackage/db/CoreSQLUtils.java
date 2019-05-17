@@ -621,7 +621,7 @@ public class CoreSQLUtils {
 	}
 
 	/**
-	 * Update the SQL with a name change and the table mapping modifications
+	 * Modify the SQL with a name change and the table mapping modifications
 	 * 
 	 * @param name
 	 *            statement name
@@ -632,7 +632,7 @@ public class CoreSQLUtils {
 	 * @return updated SQL, null if SQL contains a deleted column
 	 * @since 3.2.1
 	 */
-	public static String updateSQL(String name, String sql,
+	public static String modifySQL(String name, String sql,
 			TableMapping tableMapping) {
 
 		String updatedSql = sql;
@@ -655,13 +655,13 @@ public class CoreSQLUtils {
 
 		}
 
-		updatedSql = updateSQL(updatedSql, tableMapping);
+		updatedSql = modifySQL(updatedSql, tableMapping);
 
 		return updatedSql;
 	}
 
 	/**
-	 * Update the SQL with table mapping modifications
+	 * Modify the SQL with table mapping modifications
 	 * 
 	 * @param sql
 	 *            SQL statement
@@ -670,7 +670,7 @@ public class CoreSQLUtils {
 	 * @return updated SQL, null if SQL contains a deleted column
 	 * @since 3.2.1
 	 */
-	public static String updateSQL(String sql, TableMapping tableMapping) {
+	public static String modifySQL(String sql, TableMapping tableMapping) {
 
 		String updatedSql = sql;
 

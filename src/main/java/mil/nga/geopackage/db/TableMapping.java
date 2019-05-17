@@ -33,6 +33,11 @@ public class TableMapping {
 	private String toTable;
 
 	/**
+	 * Transfer row content to new table
+	 */
+	private boolean transferContent = true;
+
+	/**
 	 * Mapping between column names and mapped columns
 	 */
 	private final Map<String, MappedColumn> columns = new LinkedHashMap<>();
@@ -181,6 +186,25 @@ public class TableMapping {
 	 */
 	public boolean isNewTable() {
 		return toTable != null && !toTable.equals(fromTable);
+	}
+
+	/**
+	 * Is the transfer content flag enabled
+	 * 
+	 * @return true if data should be transfered to the new table
+	 */
+	public boolean isTransferContent() {
+		return transferContent;
+	}
+
+	/**
+	 * Set the transfer content flag
+	 * 
+	 * @param transferContent
+	 *            true if data should be transfered to the new table
+	 */
+	public void setTransferContent(boolean transferContent) {
+		this.transferContent = transferContent;
 	}
 
 	/**
