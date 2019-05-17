@@ -1222,6 +1222,16 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public void copyTable(String tableName, String newTableName) {
+		copyTable(tableName, newTableName, true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void copyTable(String tableName, String newTableName,
+			boolean extensions) {
+
 		ContentsDataType dataType = getTableDataType(tableName);
 		if (dataType != null) {
 			switch (dataType) {
@@ -1248,7 +1258,10 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		// Copy extensions
-		GeoPackageExtensions.copyTableExtensions(this, tableName, newTableName);
+		if (extensions) {
+			GeoPackageExtensions.copyTableExtensions(this, tableName,
+					newTableName);
+		}
 	}
 
 	/**
