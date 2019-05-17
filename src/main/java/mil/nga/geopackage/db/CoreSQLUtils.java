@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.geopackage.user.UserUniqueConstraint;
 
 /**
  * Core SQL Utility methods
@@ -121,21 +121,9 @@ public class CoreSQLUtils {
 		}
 
 		// Add unique constraints
-		List<UserUniqueConstraint<TColumn>> uniqueConstraints = table
-				.getUniqueConstraints();
-		for (int i = 0; i < uniqueConstraints.size(); i++) {
-			UserUniqueConstraint<TColumn> uniqueConstraint = uniqueConstraints
-					.get(i);
-			sql.append(",\n  UNIQUE (");
-			List<TColumn> uniqueColumns = uniqueConstraint.getColumns();
-			for (int j = 0; j < uniqueColumns.size(); j++) {
-				TColumn uniqueColumn = uniqueColumns.get(j);
-				if (j > 0) {
-					sql.append(", ");
-				}
-				sql.append(uniqueColumn.getName());
-			}
-			sql.append(")");
+		for (UserConstraint constraint : table.getConstraints()) {
+			sql.append(",\n  ");
+			sql.append(constraint.buildSql());
 		}
 
 		sql.append("\n);");

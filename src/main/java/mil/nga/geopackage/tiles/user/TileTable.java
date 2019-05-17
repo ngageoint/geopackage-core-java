@@ -79,7 +79,7 @@ public class TileTable extends UserTable<TileColumn> {
 		Integer tileData = null;
 
 		// Build a unique constraint on zoom level, tile column, and tile data
-		UserUniqueConstraint<TileColumn> uniqueConstraint = new UserUniqueConstraint<TileColumn>();
+		UserUniqueConstraint uniqueConstraint = new UserUniqueConstraint();
 
 		// Find the required columns
 		for (TileColumn column : columns) {
@@ -124,7 +124,7 @@ public class TileTable extends UserTable<TileColumn> {
 		tileDataIndex = tileData;
 
 		// Add the unique constraint
-		addUniqueConstraint(uniqueConstraint);
+		addConstraint(uniqueConstraint);
 
 	}
 

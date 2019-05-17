@@ -1,6 +1,7 @@
 package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,9 +49,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	private int pkIndex;
 
 	/**
-	 * Unique constraints
+	 * Constraints
 	 */
-	private final List<UserUniqueConstraint<TColumn>> uniqueConstraints;
+	private final List<UserConstraint> constraints;
 
 	/**
 	 * Foreign key to Contents
@@ -67,7 +68,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected UserTable(String tableName, List<TColumn> columns) {
 		nameToIndex = new HashMap<String, Integer>();
-		uniqueConstraints = new ArrayList<>();
+		constraints = new ArrayList<>();
 		this.tableName = tableName;
 		this.columns = columns;
 
@@ -96,9 +97,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		this.nameToIndex.putAll(userTable.nameToIndex);
 		this.pkIndex = userTable.pkIndex;
 
-		uniqueConstraints = new ArrayList<>();
-		for (UserUniqueConstraint<TColumn> uniqueConstraint : userTable.uniqueConstraints) {
-			this.uniqueConstraints.add(uniqueConstraint.copy());
+		constraints = new ArrayList<>();
+		for (UserConstraint constraint : userTable.constraints) {
+			this.constraints.add(constraint.copy());
 		}
 		this.contents = userTable.contents;
 	}
@@ -381,35 +382,35 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
-	 * Add unique constraint
+	 * Add constraint
 	 * 
-	 * @param uniqueConstraint
-	 *            unique constraint
+	 * @param constraint
+	 *            constraint
+	 * @since 3.2.1
 	 */
-	public void addUniqueConstraint(
-			UserUniqueConstraint<TColumn> uniqueConstraint) {
-		uniqueConstraints.add(uniqueConstraint);
+	public void addConstraint(UserConstraint constraint) {
+		constraints.add(constraint);
 	}
 
 	/**
-	 * Add unique constraint
+	 * Add constraints
 	 * 
-	 * @param uniqueConstraints
-	 *            unique constraints
-	 * @since 3.0.2
+	 * @param constraints
+	 *            constraints
+	 * @since 3.2.1
 	 */
-	public void addUniqueConstraints(
-			List<UserUniqueConstraint<TColumn>> uniqueConstraints) {
-		this.uniqueConstraints.addAll(uniqueConstraints);
+	public void addConstraints(Collection<UserConstraint> constraints) {
+		this.constraints.addAll(constraints);
 	}
 
 	/**
-	 * Get the unique constraints
+	 * Get the constraints
 	 * 
-	 * @return unique constraints
+	 * @return constraints
+	 * @since 3.2.1
 	 */
-	public List<UserUniqueConstraint<TColumn>> getUniqueConstraints() {
-		return uniqueConstraints;
+	public List<UserConstraint> getConstraints() {
+		return constraints;
 	}
 
 	/**

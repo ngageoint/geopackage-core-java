@@ -14,6 +14,7 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.NGAExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserCoreDao;
 import mil.nga.geopackage.user.UserCoreResult;
 import mil.nga.geopackage.user.UserCoreRow;
@@ -114,12 +115,12 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 			additionalColumns.add(propertyColumn);
 			additionalColumns.add(valueColumn);
 
-			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints = new ArrayList<>();
-			uniqueConstraints.add(new UserUniqueConstraint<AttributesColumn>(
+			List<UserConstraint> constraints = new ArrayList<>();
+			constraints.add(new UserUniqueConstraint(
 					propertyColumn, valueColumn));
 
 			geoPackage.createAttributesTableWithId(TABLE_NAME,
-					additionalColumns, uniqueConstraints);
+					additionalColumns, constraints);
 		}
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, TABLE_NAME, null,

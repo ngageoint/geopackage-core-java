@@ -2,6 +2,7 @@ package mil.nga.geopackage;
 
 import java.io.Closeable;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -40,8 +41,8 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.geopackage.user.UserUniqueConstraint;
 import mil.nga.sf.proj.Projection;
 
 /**
@@ -1030,14 +1031,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @param additionalColumns
 	 *            additional attributes table columns to create in addition to
 	 *            id
-	 * @param uniqueConstraints
-	 *            unique constraints
+	 * @param constraints
+	 *            constraints
 	 * @return attributes table
-	 * @since 3.0.2
+	 * @since 3.2.1
 	 */
 	public AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns,
-			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
+			Collection<UserConstraint> constraints);
 
 	/**
 	 * Create a new attributes table and a new Contents
@@ -1073,14 +1074,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @param additionalColumns
 	 *            additional attributes table columns to create in addition to
 	 *            id
-	 * @param uniqueConstraints
-	 *            unique constraints
+	 * @param constraints
+	 *            constraints
 	 * @return attributes table
-	 * @since 3.0.2
+	 * @since 3.2.1
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
-			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
+			Collection<UserConstraint> constraints);
 
 	/**
 	 * Create a new attributes table and a new Contents
@@ -1108,14 +1109,14 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * @param columns
 	 *            table columns to create
-	 * @param uniqueConstraints
-	 *            unique constraints
+	 * @param constraints
+	 *            constraints
 	 * @return attributes table
-	 * @since 3.0.2
+	 * @since 3.2.1
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns,
-			List<UserUniqueConstraint<AttributesColumn>> uniqueConstraints);
+			Collection<UserConstraint> constraints);
 
 	/**
 	 * Get a Tile Scaling DAO
