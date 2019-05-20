@@ -5,6 +5,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.db.table.TableInfo;
 
@@ -81,7 +82,11 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 			columnList.add(column);
 		}
 
-		return createTable(tableName, columnList);
+		TTable table = createTable(tableName, columnList);
+
+		table.addConstraints(SQLiteMaster.queryForConstraints(db, tableName));
+
+		return table;
 	}
 
 }

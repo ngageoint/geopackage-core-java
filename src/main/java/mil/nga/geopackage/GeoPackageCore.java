@@ -17,6 +17,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
@@ -41,7 +42,6 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
-import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.sf.proj.Projection;
 
@@ -1038,7 +1038,7 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns,
-			Collection<UserConstraint> constraints);
+			Collection<Constraint> constraints);
 
 	/**
 	 * Create a new attributes table and a new Contents
@@ -1081,7 +1081,7 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<UserConstraint> constraints);
+			Collection<Constraint> constraints);
 
 	/**
 	 * Create a new attributes table and a new Contents
@@ -1116,7 +1116,7 @@ public interface GeoPackageCore extends Closeable {
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns,
-			Collection<UserConstraint> constraints);
+			Collection<Constraint> constraints);
 
 	/**
 	 * Get a Tile Scaling DAO

@@ -1,14 +1,16 @@
-package mil.nga.geopackage.user;
+package mil.nga.geopackage.db.table;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.user.UserColumn;
+
 /**
- * User table unique constraint for one or more columns
+ * Table unique constraint for one or more columns
  * 
  * @author osbornb
  */
-public class UserUniqueConstraint extends UserConstraint {
+public class UniqueConstraint extends Constraint {
 
 	/**
 	 * Unique keyword
@@ -23,8 +25,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	/**
 	 * Constructor
 	 */
-	public UserUniqueConstraint() {
-
+	public UniqueConstraint() {
+		super(ConstraintType.UNIQUE);
 	}
 
 	/**
@@ -33,8 +35,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	 * @param name
 	 *            constraint name
 	 */
-	public UserUniqueConstraint(String name) {
-		super(name);
+	public UniqueConstraint(String name) {
+		super(ConstraintType.UNIQUE, name);
 	}
 
 	/**
@@ -43,7 +45,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	 * @param columns
 	 *            columns
 	 */
-	public UserUniqueConstraint(UserColumn... columns) {
+	public UniqueConstraint(UserColumn... columns) {
+		super(ConstraintType.UNIQUE);
 		add(columns);
 	}
 
@@ -55,8 +58,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	 * @param columns
 	 *            columns
 	 */
-	public UserUniqueConstraint(String name, UserColumn... columns) {
-		super(name);
+	public UniqueConstraint(String name, UserColumn... columns) {
+		super(ConstraintType.UNIQUE, name);
 		add(columns);
 	}
 
@@ -67,8 +70,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	 *            user unique constraint
 	 * @since 3.2.1
 	 */
-	public UserUniqueConstraint(UserUniqueConstraint userUniqueConstraint) {
-		super(userUniqueConstraint.getName());
+	public UniqueConstraint(UniqueConstraint userUniqueConstraint) {
+		super(ConstraintType.UNIQUE, userUniqueConstraint.getName());
 		for (UserColumn column : userUniqueConstraint.columns) {
 			add(column.copy());
 		}
@@ -98,8 +101,8 @@ public class UserUniqueConstraint extends UserConstraint {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public UserUniqueConstraint copy() {
-		return new UserUniqueConstraint(this);
+	public UniqueConstraint copy() {
+		return new UniqueConstraint(this);
 	}
 
 	/**

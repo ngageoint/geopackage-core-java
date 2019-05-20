@@ -8,17 +8,17 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.NGAExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserCoreDao;
 import mil.nga.geopackage.user.UserCoreResult;
 import mil.nga.geopackage.user.UserCoreRow;
-import mil.nga.geopackage.user.UserUniqueConstraint;
 
 /**
  * GeoPackage properties core extension for defining GeoPackage specific
@@ -115,8 +115,8 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 			additionalColumns.add(propertyColumn);
 			additionalColumns.add(valueColumn);
 
-			List<UserConstraint> constraints = new ArrayList<>();
-			constraints.add(new UserUniqueConstraint(
+			List<Constraint> constraints = new ArrayList<>();
+			constraints.add(new UniqueConstraint(
 					propertyColumn, valueColumn));
 
 			geoPackage.createAttributesTableWithId(TABLE_NAME,

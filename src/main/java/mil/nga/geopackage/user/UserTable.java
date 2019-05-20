@@ -12,6 +12,8 @@ import java.util.Set;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.ConstraintType;
 
 /**
  * Abstract user table
@@ -51,7 +53,12 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Constraints
 	 */
-	private final List<UserConstraint> constraints;
+	private final List<Constraint> constraints;
+
+	/**
+	 * Type Constraints
+	 */
+	private final Map<ConstraintType, List<Constraint>> typedContraints;
 
 	/**
 	 * Foreign key to Contents
@@ -69,6 +76,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	protected UserTable(String tableName, List<TColumn> columns) {
 		nameToIndex = new HashMap<String, Integer>();
 		constraints = new ArrayList<>();
+		typedContraints = new HashMap<>();
 		this.tableName = tableName;
 		this.columns = columns;
 
@@ -98,8 +106,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		this.pkIndex = userTable.pkIndex;
 
 		constraints = new ArrayList<>();
-		for (UserConstraint constraint : userTable.constraints) {
-			this.constraints.add(constraint.copy());
+		typedContraints = new HashMap<>();
+		for (Constraint constraint : userTable.constraints) {
+			addConstraint(constraint.copy());
 		}
 		this.contents = userTable.contents;
 	}
@@ -388,8 +397,15 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            constraint
 	 * @since 3.2.1
 	 */
-	public void addConstraint(UserConstraint constraint) {
+	public void addConstraint(Constraint constraint) {
 		constraints.add(constraint);
+		List<Constraint> typeConstraints = typedContraints
+				.get(constraint.getType());
+		if (typeConstraints == null) {
+			typeConstraints = new ArrayList<>();
+			typedContraints.put(constraint.getType(), typeConstraints);
+		}
+		typeConstraints.add(constraint);
 	}
 
 	/**
@@ -399,8 +415,10 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            constraints
 	 * @since 3.2.1
 	 */
-	public void addConstraints(Collection<UserConstraint> constraints) {
-		this.constraints.addAll(constraints);
+	public void addConstraints(Collection<Constraint> constraints) {
+		for (Constraint constraint : constraints) {
+			addConstraint(constraint);
+		}
 	}
 
 	/**
@@ -409,8 +427,37 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return constraints
 	 * @since 3.2.1
 	 */
-	public List<UserConstraint> getConstraints() {
+	public List<Constraint> getConstraints() {
 		return constraints;
+	}
+
+	/**
+	 * Get the constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return constraints
+	 * @since 3.2.1
+	 */
+	public List<Constraint> getConstraints(ConstraintType type) {
+		List<Constraint> constraints = typedContraints.get(type);
+		if (constraints == null) {
+			constraints = new ArrayList<>();
+		}
+		return constraints;
+	}
+
+	/**
+	 * Clear the constraints
+	 * 
+	 * @return cleared constraints
+	 * @since 3.2.1
+	 */
+	public List<Constraint> clearConstraints() {
+		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
+		constraints.clear();
+		typedContraints.clear();
+		return constraintsCopy;
 	}
 
 	/**

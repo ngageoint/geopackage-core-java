@@ -3,8 +3,8 @@ package mil.nga.geopackage.db;
 import java.util.List;
 import java.util.Map.Entry;
 
+import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.user.UserColumn;
-import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserTable;
 
 /**
@@ -50,6 +50,26 @@ public class CoreSQLUtils {
 			}
 		}
 		return quoteNames;
+	}
+
+	/**
+	 * Remove double quotes from the name
+	 * 
+	 * @param name
+	 *            name
+	 * @return unquoted name
+	 * @since 3.2.1
+	 */
+	public static String quoteUnwrap(String name) {
+		String unquotedName = null;
+		if (name != null) {
+			if (name.startsWith("\"") && name.endsWith("\"")) {
+				unquotedName = name.substring(1, name.length() - 1);
+			} else {
+				unquotedName = name;
+			}
+		}
+		return unquotedName;
 	}
 
 	/**
@@ -121,7 +141,7 @@ public class CoreSQLUtils {
 		}
 
 		// Add unique constraints
-		for (UserConstraint constraint : table.getConstraints()) {
+		for (Constraint constraint : table.getConstraints()) {
 			sql.append(",\n  ");
 			sql.append(constraint.buildSql());
 		}
@@ -625,7 +645,7 @@ public class CoreSQLUtils {
 
 		String updatedSql = sql;
 
-		if (tableMapping.isNewTable()) {
+		if (name != null && tableMapping.isNewTable()) {
 
 			String newName = createName(name, tableMapping.getFromTable(),
 					tableMapping.getToTable());

@@ -10,6 +10,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.master.SQLiteMasterColumn;
 import mil.nga.geopackage.db.master.SQLiteMasterType;
+import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.extension.RTreeIndexCoreExtension;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
@@ -359,6 +361,17 @@ public class AlterTable {
 			UserTable<? extends UserColumn> newTable,
 			TableMapping tableMapping) {
 
+		// Update table constraints
+		List<Constraint> contraints = newTable.clearConstraints();
+		for (Constraint constraint : contraints) {
+			String updatedSql = CoreSQLUtils.modifySQL(constraint.getName(),
+					constraint.buildSql(), tableMapping);
+			if (updatedSql != null) {
+				newTable.addConstraint(
+						new RawConstraint(constraint.getType(), updatedSql));
+			}
+		}
+
 		// Build the create table sql
 		String sql = CoreSQLUtils.createTableSQL(newTable);
 
@@ -463,9 +476,6 @@ public class AlterTable {
 				// 7. Rename the new table
 				renameTable(db, transferTable, tableName);
 
-			}
-
-			if (!newTable) {
 				tableMapping.setToTable(tableName);
 			}
 

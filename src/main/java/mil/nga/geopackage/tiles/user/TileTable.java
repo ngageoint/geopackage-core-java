@@ -7,8 +7,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.geopackage.user.UserUniqueConstraint;
 
 /**
  * Represents a user tile table
@@ -79,7 +79,7 @@ public class TileTable extends UserTable<TileColumn> {
 		Integer tileData = null;
 
 		// Build a unique constraint on zoom level, tile column, and tile data
-		UserUniqueConstraint uniqueConstraint = new UserUniqueConstraint();
+		UniqueConstraint uniqueConstraint = new UniqueConstraint();
 
 		// Find the required columns
 		for (TileColumn column : columns) {

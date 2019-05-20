@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.ConstraintParser;
 
 /**
  * SQLite Master table queries (sqlite_master)
@@ -205,6 +207,24 @@ public class SQLiteMaster {
 					"Column does not exist in row values: " + column);
 		}
 		return index;
+	}
+
+	/**
+	 * Get the constraints from table SQL
+	 * 
+	 * @param row
+	 *            row index
+	 * @return constraints
+	 */
+	public List<Constraint> getConstraints(int row) {
+		List<Constraint> constraints = new ArrayList<>();
+		if (getType(row) == SQLiteMasterType.TABLE) {
+			String sql = getSql(row);
+			if (sql != null) {
+				constraints.addAll(ConstraintParser.getConstraints(sql));
+			}
+		}
+		return constraints;
 	}
 
 	/**
@@ -896,6 +916,26 @@ public class SQLiteMaster {
 			String tableName) {
 		return count(db, SQLiteMasterType.VIEW,
 				SQLiteMasterQuery.createTableViewQuery(tableName));
+	}
+
+	/**
+	 * Query for the table constraints
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @return SQL constraints
+	 */
+	public static List<Constraint> queryForConstraints(
+			GeoPackageCoreConnection db, String tableName) {
+		List<Constraint> constraints = new ArrayList<>();
+		SQLiteMaster tableMaster = SQLiteMaster.queryByType(db,
+				SQLiteMasterType.TABLE, tableName);
+		for (int i = 0; i < tableMaster.count(); i++) {
+			constraints.addAll(tableMaster.getConstraints(i));
+		}
+		return constraints;
 	}
 
 }

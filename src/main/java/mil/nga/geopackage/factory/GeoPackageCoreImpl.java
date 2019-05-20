@@ -27,6 +27,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
+import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
@@ -72,7 +73,6 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.user.UserColumn;
-import mil.nga.geopackage.user.UserConstraint;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.sf.proj.Projection;
 
@@ -1706,7 +1706,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns,
-			Collection<UserConstraint> constraints) {
+			Collection<Constraint> constraints) {
 		return createAttributesTable(tableName, null, additionalColumns,
 				constraints);
 	}
@@ -1727,7 +1727,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<UserConstraint> constraints) {
+			Collection<Constraint> constraints) {
 
 		if (idColumnName == null) {
 			idColumnName = "id";
@@ -1758,7 +1758,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns,
-			Collection<UserConstraint> constraints) {
+			Collection<Constraint> constraints) {
 
 		// Build the user attributes table
 		AttributesTable table = new AttributesTable(tableName, columns);

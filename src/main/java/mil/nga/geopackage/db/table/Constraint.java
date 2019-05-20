@@ -1,4 +1,4 @@
-package mil.nga.geopackage.user;
+package mil.nga.geopackage.db.table;
 
 import mil.nga.geopackage.db.CoreSQLUtils;
 
@@ -8,7 +8,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
  * @author osbornb
  * @since 3.2.1
  */
-public abstract class UserConstraint {
+public abstract class Constraint {
 
 	/**
 	 * Constraint keyword
@@ -21,19 +21,30 @@ public abstract class UserConstraint {
 	private String name;
 
 	/**
-	 * Constructor
+	 * Constraint type
 	 */
-	protected UserConstraint() {
+	private ConstraintType type;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 *            constraint type
+	 */
+	protected Constraint(ConstraintType type) {
+		this(type, null);
 	}
 
 	/**
 	 * Constructor
 	 * 
+	 * @param type
+	 *            constraint type
 	 * @param name
 	 *            constraint name
 	 */
-	protected UserConstraint(String name) {
+	protected Constraint(ConstraintType type, String name) {
+		this.type = type;
 		this.name = name;
 	}
 
@@ -54,6 +65,25 @@ public abstract class UserConstraint {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Get the constraint type
+	 * 
+	 * @return constraint type
+	 */
+	public ConstraintType getType() {
+		return type;
+	}
+
+	/**
+	 * Set the constraint type
+	 * 
+	 * @param type
+	 *            constraint type
+	 */
+	public void setType(ConstraintType type) {
+		this.type = type;
 	}
 
 	/**
@@ -81,6 +111,6 @@ public abstract class UserConstraint {
 	 * 
 	 * @return copied constraint
 	 */
-	public abstract UserConstraint copy();
+	public abstract Constraint copy();
 
 }
