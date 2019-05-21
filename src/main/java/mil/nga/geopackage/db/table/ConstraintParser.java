@@ -17,92 +17,190 @@ import mil.nga.geopackage.db.CoreSQLUtils;
 public class ConstraintParser {
 
 	/**
-	 * Constraint prefix regex
+	 * Regex prefix for ignoring: case insensitive, dotall mode (match line
+	 * terminators), and start of line
 	 */
-	public static String PREFIX_REGEX = "(?i)(?s)((CONSTRAINT\\s+(\\\".+\\\"|\\S+)\\s+)?";
+	private static String REGEX_PREFIX = "(?i)(?s)^";
 
 	/**
-	 * Constraint suffix regex
+	 * Constraint keyword with name regex
 	 */
-	public static String SUFFIX_REGEX = "\\s+\\(.*\\).*)[,\\)$]";
-
-	/**
-	 * Constraint pattern matcher group
-	 */
-	public static int CONSTRAINT_GROUP = 1;
-
-	/**
-	 * Constraint name pattern matcher group
-	 */
-	public static int CONSTRAINT_NAME_GROUP = 3;
-
-	/**
-	 * Constraint name suffix regex
-	 */
-	public static String NAME_REGEX = "(?i)(?s)CONSTRAINT\\s+(\".+\"|\\S+)\\s+";
-
-	/**
-	 * Name pattern matcher group
-	 */
-	public static int NAME_GROUP = 1;
-
-	/**
-	 * Primary key constraint regex
-	 */
-	public static String PRIMARY_KEY_REGEX = "PRIMARY\\s+KEY";
-
-	/**
-	 * Unique constraint regex
-	 */
-	public static String UNIQUE_REGEX = "UNIQUE";
-
-	/**
-	 * Check constraint regex
-	 */
-	public static String CHECK_REGEX = "CHECK";
-
-	/**
-	 * Foreign key constraint regex
-	 */
-	public static String FOREIGN_KEY_REGEX = "FOREIGN\\s+KEY";
+	private static String CONSTRAINT_REGEX = "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
 
 	/**
 	 * Constraint name pattern
 	 */
-	public static Pattern NAME_PATTERN = Pattern.compile(NAME_REGEX);
+	private static Pattern NAME_PATTERN = Pattern
+			.compile(REGEX_PREFIX + CONSTRAINT_REGEX);
 
 	/**
-	 * Compile a pattern for the constraint regex
+	 * Name pattern matcher group
+	 */
+	private static int NAME_GROUP = 1;
+
+	/**
+	 * Compile a pattern for the constraint regex: {@link #REGEX_PREFIX},
+	 * optional {@link #CONSTRAINT_REGEX}, and constraint regex
 	 * 
 	 * @param constraintRegex
 	 *            constraint regex
 	 * @return pattern
 	 */
 	private static Pattern compilePattern(String constraintRegex) {
-		return Pattern.compile(PREFIX_REGEX + constraintRegex + SUFFIX_REGEX);
+		return Pattern.compile(REGEX_PREFIX + "(" + CONSTRAINT_REGEX + "+)?"
+				+ constraintRegex);
 	}
 
 	/**
 	 * Primary key constraint pattern
 	 */
-	public static Pattern PRIMARY_KEY_PATTERN = compilePattern(
-			PRIMARY_KEY_REGEX);
+	private static Pattern PRIMARY_KEY_PATTERN = compilePattern(
+			"PRIMARY\\s+KEY");
 
 	/**
 	 * Unique constraint pattern
 	 */
-	public static Pattern UNIQUE_PATTERN = compilePattern(UNIQUE_REGEX);
+	private static Pattern UNIQUE_PATTERN = compilePattern("UNIQUE");
 
 	/**
 	 * Check constraint pattern
 	 */
-	public static Pattern CHECK_PATTERN = compilePattern(CHECK_REGEX);
+	private static Pattern CHECK_PATTERN = compilePattern("CHECK");
 
 	/**
 	 * Foreign key constraint pattern
 	 */
-	public static Pattern FOREIGN_KEY_PATTERN = compilePattern(
-			FOREIGN_KEY_REGEX);
+	private static Pattern FOREIGN_KEY_PATTERN = compilePattern(
+			"FOREIGN\\s+KEY");
+
+	/**
+	 * Get the constraints for the table SQL
+	 * 
+	 * @param tableSql
+	 *            table SQL
+	 * @return constraints
+	 */
+	public static List<Constraint> getConstraints(String tableSql) {
+		return getConstraints(tableSql, null);
+	}
+
+	/**
+	 * Get the constraints for the table SQL of the specified type
+	 * 
+	 * @param tableSql
+	 *            table SQL
+	 * @param type
+	 *            constraint type
+	 * @return constraints
+	 */
+	public static List<Constraint> getConstraints(String tableSql,
+			ConstraintType type) {
+
+		List<Constraint> constraints = new ArrayList<>();
+
+		// Find the start and end of the column definitions and table
+		// constraints
+		int start = tableSql.indexOf("(");
+		int end = tableSql.lastIndexOf(")");
+
+		if (start >= 0 && end >= 0) {
+
+			String definitions = tableSql.substring(start + 1, end).trim();
+
+			// Parse the column definitions and table constraints, divided by
+			// columns when not within parentheses. Create constraints when
+			// found.
+			int openParentheses = 0;
+			int sqlStart = 0;
+
+			for (int i = 0; i < definitions.length(); i++) {
+				char character = definitions.charAt(i);
+				if (character == '(') {
+					openParentheses++;
+				} else if (character == ')') {
+					openParentheses--;
+				} else if (character == ',' && openParentheses == 0) {
+					String sql = definitions.substring(sqlStart, i);
+					addConstraint(constraints, sql, type);
+					sqlStart = i + 1;
+				}
+			}
+			if (sqlStart < definitions.length()) {
+				String sql = definitions.substring(sqlStart,
+						definitions.length());
+				addConstraint(constraints, sql, type);
+			}
+		}
+
+		return constraints;
+	}
+
+	/**
+	 * Add a constraint if the SQL is a constraint and of the constraint type
+	 * 
+	 * @param constraints
+	 *            constraints to add to
+	 * @param sql
+	 *            SQL statement
+	 * @param type
+	 *            constraint type or null for all constraint types
+	 */
+	private static void addConstraint(List<Constraint> constraints, String sql,
+			ConstraintType type) {
+		Constraint constraint = getConstraint(sql, type);
+		if (constraint != null) {
+			constraints.add(constraint);
+		}
+	}
+
+	/**
+	 * Attempt to get a constraint by parsing the SQL statement
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @return constraint or null
+	 */
+	public static Constraint getConstraint(String sql) {
+		return getConstraint(sql, null);
+	}
+
+	/**
+	 * Attempt to get a constraint of a specified type by parsing the SQL
+	 * statement
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @param type
+	 *            matching constraint type or null for all constraint types
+	 * @return constraint or null
+	 */
+	public static Constraint getConstraint(String sql, ConstraintType type) {
+
+		Constraint constraint = null;
+
+		sql = sql.trim();
+		ConstraintType constraintType = getType(sql);
+		if (constraintType != null
+				&& (type == null || constraintType == type)) {
+			String name = getName(sql);
+			constraint = new RawConstraint(constraintType, name, sql);
+		}
+
+		return constraint;
+	}
+
+	/**
+	 * Determine if the constraint SQL is the constraint type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return true if the constraint type
+	 */
+	public static boolean isType(ConstraintType type, String constraintSql) {
+		return getPattern(type).matcher(constraintSql).find();
+	}
 
 	/**
 	 * Get the constraint pattern
@@ -111,7 +209,7 @@ public class ConstraintParser {
 	 *            constraint type
 	 * @return pattern
 	 */
-	public static Pattern getPattern(ConstraintType type) {
+	private static Pattern getPattern(ConstraintType type) {
 
 		Pattern pattern = null;
 
@@ -134,58 +232,6 @@ public class ConstraintParser {
 		}
 
 		return pattern;
-	}
-
-	/**
-	 * Get the constraints for the table SQL
-	 * 
-	 * @param tableSql
-	 *            table SQL
-	 * @return constraints
-	 */
-	public static List<Constraint> getConstraints(String tableSql) {
-		List<Constraint> constraints = new ArrayList<>();
-		for (ConstraintType type : ConstraintType.values()) {
-			constraints.addAll(getConstraints(type, tableSql));
-		}
-		return constraints;
-	}
-
-	/**
-	 * Get the constraints of the specified type for the table SQL
-	 * 
-	 * @param type
-	 *            constraint type
-	 * @param tableSql
-	 *            table SQL
-	 * @return constraints
-	 */
-	public static List<Constraint> getConstraints(ConstraintType type,
-			String tableSql) {
-		List<Constraint> constraints = new ArrayList<>();
-		Matcher matcher = getPattern(type).matcher(tableSql);
-		while (matcher.find()) {
-			String constraintSql = matcher.group(CONSTRAINT_GROUP).trim();
-			String name = CoreSQLUtils
-					.quoteUnwrap(matcher.group(CONSTRAINT_NAME_GROUP));
-			RawConstraint constraint = new RawConstraint(type, name,
-					constraintSql);
-			constraints.add(constraint);
-		}
-		return constraints;
-	}
-
-	/**
-	 * Determine if the constraint SQL is the constraint type
-	 * 
-	 * @param type
-	 *            constraint type
-	 * @param constraintSql
-	 *            constraint SQL
-	 * @return true if the constraint type
-	 */
-	public static boolean isType(ConstraintType type, String constraintSql) {
-		return getPattern(type).matcher(constraintSql).find();
 	}
 
 	/**
