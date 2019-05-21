@@ -63,6 +63,86 @@ public class ConstraintTest {
 	}
 
 	/**
+	 * Test parsing constraints in the table SQL
+	 */
+	@Test
+	public void testSql() {
+
+		testSQL(null, 0, 0, 0, 0, createNames());
+		testSQL("", 0, 0, 0, 0, createNames());
+		testSQL("CREATE TABLE table_name (\n"
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n"
+				+ " column_name INTEGER NOT NULL UNIQUE\n" + ");", 0, 0, 0, 0,
+				createNames());
+		testSQL("CREATE TABLE table_name ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+				+ " column_name INTEGER NOT NULL UNIQUE" + ");", 0, 0, 0, 0,
+				createNames());
+		testSQL("CREATE TABLE table_name (\n" + " column1 TEXT NOT NULL,\n"
+				+ " column2 INTEGER NOT NULL UNIQUE,\n"
+				+ " CONSTRAINT pk_name PRIMARY KEY (column1, column2)\n" + ");",
+				1, 0, 0, 0, createNames("pk_name"));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT NOT NULL,"
+				+ " column2 INTEGER NOT NULL UNIQUE,"
+				+ " CONSTRAINT    pk_name   PRIMARY KEY (column1, column2)"
+				+ ");", 1, 0, 0, 0, createNames("pk_name"));
+		testSQL("CREATE TABLE table_name (\n" + " column1 TEXT NOT NULL,\n"
+				+ " column2 INTEGER NOT NULL,\n"
+				+ " CONSTRAINT uk_name UNIQUE (column1, column2)\n" + ");", 0,
+				1, 0, 0, createNames("uk_name"));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT NOT NULL,"
+				+ " column2 INTEGER NOT NULL," + " UNIQUE (column1, column2)"
+				+ ")", 0, 1, 0, 0, createNames(1));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT NOT NULL,"
+				+ " column2 INTEGER NOT NULL,"
+				+ " CONSTRAINT c_name CHECK (column1 in ('value1','value2'))"
+				+ ")", 0, 0, 1, 0, createNames("c_name"));
+		testSQL("CREATE   TABLE    table_name    ("
+				+ "   column1 TEXT NOT NULL , " + " column2 INTEGER NOT NULL ,"
+				+ "\tCHECK ( column1 in ( 'value1' , 'value2'  )   )  " + ")",
+				0, 0, 1, 0, createNames(1));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT NOT NULL,"
+				+ " column2 INTEGER NOT NULL,"
+				+ " CONSTRAINT fk_name FOREIGN KEY (column2) REFERENCES table_name2(column3)"
+				+ ")", 0, 0, 0, 1, createNames("fk_name"));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT NOT NULL,"
+				+ " column2 INTEGER NOT NULL,"
+				+ " FOREIGN       KEY (column2) REFERENCES table_name2(column3)"
+				+ ")", 0, 0, 0, 1, createNames(1));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT,"
+				+ " column2 INTEGER,"
+				+ " CONSTRAINT pk_name PRIMARY KEY (column1, column2),"
+				+ " CONSTRAINT uk_name UNIQUE (column1, column2),"
+				+ " CONSTRAINT c_name CHECK (column1 in ('value1','value2')),"
+				+ " CONSTRAINT fk_name FOREIGN KEY (column2) REFERENCES table_name2(column3)"
+				+ ")", 1, 1, 1, 1,
+				createNames("pk_name", "uk_name", "c_name", "fk_name"));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT,"
+				+ " column2 INTEGER,"
+				+ " CONSTRAINT \"pk name\" PRIMARY KEY (column1, column2),"
+				+ " UNIQUE (column1, column2),"
+				+ " CONSTRAINT \"c_name\" CHECK (column1 in ('value1','value2')),"
+				+ " CONSTRAINT fk_name FOREIGN KEY (column2) REFERENCES table_name2(column3)"
+				+ ")", 1, 1, 1, 1,
+				createNames("pk name", null, "c_name", "fk_name"));
+		testSQL("CREATE TABLE table_name (" + " column1 TEXT,"
+				+ " column2 INTEGER," + " PRIMARY KEY (column1, column2),"
+				+ " UNIQUE (column1, column2),"
+				+ " CHECK (column1 in ('value1','value2')),"
+				+ " FOREIGN KEY (column2) REFERENCES table_name2(column3)"
+				+ ")", 1, 1, 1, 1, createNames(4));
+		testSQL("create table table_name (" + " column1 TEXT,"
+				+ " column2 INTEGER,"
+				+ " constraint pk_name primary key (column1, column2),"
+				+ " constraint uk_name unique (column1, column2),"
+				+ " constraint c_name check (column1 in ('value1','value2')),"
+				+ " constraint fk_name foreign key (column2) references table_name2(column3)"
+				+ ")", 1, 1, 1, 1,
+				createNames("pk_name", "uk_name", "c_name", "fk_name"));
+
+	}
+
+	/**
 	 * Create a list of names
 	 * 
 	 * @param names
@@ -71,6 +151,21 @@ public class ConstraintTest {
 	 */
 	private List<String> createNames(String... names) {
 		return Arrays.asList(names);
+	}
+
+	/**
+	 * Create a list of null names
+	 * 
+	 * @param count
+	 *            number of names
+	 * @return names
+	 */
+	private List<String> createNames(int count) {
+		List<String> names = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			names.add(null);
+		}
+		return names;
 	}
 
 	/**
@@ -101,26 +196,52 @@ public class ConstraintTest {
 		List<String> statements = GeoPackageTableCreator.readSQLScript(script);
 		for (String sql : statements) {
 
-			List<Constraint> constraints = testConstraint(sql, names);
+			ConstraintTestResult constraintResult = testConstraint(sql, names);
 
-			count += constraints.size();
-
-			primaryKeyCount += ConstraintParser
-					.getConstraints(sql, ConstraintType.PRIMARY_KEY).size();
-			uniqueCount += ConstraintParser
-					.getConstraints(sql, ConstraintType.UNIQUE).size();
-			checkCount += ConstraintParser
-					.getConstraints(sql, ConstraintType.CHECK).size();
-			foreignKeyCount += ConstraintParser
-					.getConstraints(sql, ConstraintType.FOREIGN_KEY).size();
+			count += constraintResult.getCount();
+			primaryKeyCount += constraintResult.getPrimaryKeyCount();
+			uniqueCount += constraintResult.getUniqueCount();
+			checkCount += constraintResult.getCheckCount();
+			foreignKeyCount += constraintResult.getForeignKeyCount();
 		}
 
 		TestCase.assertEquals(primaryKey + unique + check + foreignKey, count);
-		TestCase.assertEquals(primaryKeyCount, primaryKey);
-		TestCase.assertEquals(uniqueCount, unique);
-		TestCase.assertEquals(checkCount, check);
-		TestCase.assertEquals(foreignKeyCount, foreignKey);
+		TestCase.assertEquals(primaryKey, primaryKeyCount);
+		TestCase.assertEquals(unique, uniqueCount);
+		TestCase.assertEquals(check, checkCount);
+		TestCase.assertEquals(foreignKey, foreignKeyCount);
 
+	}
+
+	/**
+	 * Test the database script for constraint parsing
+	 * 
+	 * @param sql
+	 *            table sql
+	 * @param primaryKey
+	 *            expected primary key count
+	 * @param unique
+	 *            expected unique count
+	 * @param check
+	 *            expected check count
+	 * @param foreignKey
+	 *            expected foreign key count
+	 * @param names
+	 *            expected constraint names
+	 */
+	private void testSQL(String sql, int primaryKey, int unique, int check,
+			int foreignKey, List<String> names) {
+
+		ConstraintTestResult constraintResult = testConstraint(sql, names);
+
+		TestCase.assertEquals(primaryKey + unique + check + foreignKey,
+				constraintResult.getCount());
+		TestCase.assertEquals(primaryKey,
+				constraintResult.getPrimaryKeyCount());
+		TestCase.assertEquals(unique, constraintResult.getUniqueCount());
+		TestCase.assertEquals(check, constraintResult.getCheckCount());
+		TestCase.assertEquals(foreignKey,
+				constraintResult.getForeignKeyCount());
 	}
 
 	/**
@@ -130,9 +251,10 @@ public class ConstraintTest {
 	 *            table SQL
 	 * @param names
 	 *            expected constraint names
-	 * @return constraints
+	 * @return constraint test results
 	 */
-	private List<Constraint> testConstraint(String sql, List<String> names) {
+	private ConstraintTestResult testConstraint(String sql,
+			List<String> names) {
 
 		int primaryKeyCount = 0;
 		int uniqueCount = 0;
@@ -187,7 +309,8 @@ public class ConstraintTest {
 						ConstraintType.FOREIGN_KEY),
 				foreignKeyNames, foreignKeyCount, ConstraintType.FOREIGN_KEY);
 
-		return constraints;
+		return new ConstraintTestResult(constraints, primaryKeyCount,
+				uniqueCount, checkCount, foreignKeyCount);
 	}
 
 	/**
