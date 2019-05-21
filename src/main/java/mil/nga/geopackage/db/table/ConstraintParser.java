@@ -100,8 +100,12 @@ public class ConstraintParser {
 
 		// Find the start and end of the column definitions and table
 		// constraints
-		int start = tableSql.indexOf("(");
-		int end = tableSql.lastIndexOf(")");
+		int start = -1;
+		int end = -1;
+		if (tableSql != null) {
+			start = tableSql.indexOf("(");
+			end = tableSql.lastIndexOf(")");
+		}
 
 		if (start >= 0 && end >= 0) {
 
