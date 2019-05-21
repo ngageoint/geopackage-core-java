@@ -836,6 +836,8 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @param callable
 	 *            Callable to execute inside of the transaction.
+	 * @param <T>
+	 *            callable type
 	 * @return The object returned by the callable.
 	 * @throws SQLException
 	 *             upon transaction error
@@ -1115,8 +1117,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.2.1
 	 */
 	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns,
-			Collection<Constraint> constraints);
+			List<AttributesColumn> columns, Collection<Constraint> constraints);
 
 	/**
 	 * Get a Tile Scaling DAO
