@@ -186,17 +186,9 @@ public class CoreSQLUtils {
 			sql.append("(").append(column.getMax()).append(")");
 		}
 
-		if (column.isNotNull()) {
-			sql.append(" NOT NULL");
-		}
-
-		if (column.hasDefaultValue()) {
-			sql.append(" DEFAULT ");
-			sql.append(columnDefaultValue(column));
-		}
-
-		if (column.isPrimaryKey()) {
-			sql.append(" PRIMARY KEY AUTOINCREMENT");
+		for (String constraint : column.getConstraints()) {
+			sql.append(" ");
+			sql.append(constraint);
 		}
 
 		return sql.toString();

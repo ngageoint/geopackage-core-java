@@ -1,6 +1,10 @@
 package mil.nga.geopackage.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 
@@ -31,32 +35,37 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Max size
 	 */
-	private final Long max;
+	private Long max;
 
 	/**
 	 * True if a not null column
 	 */
-	private final boolean notNull;
+	private boolean notNull;
 
 	/**
 	 * Default column value
 	 */
-	private final Object defaultValue;
+	private Object defaultValue;
 
 	/**
 	 * True if a primary key column
 	 */
-	private final boolean primaryKey;
+	private boolean primaryKey;
 
 	/**
 	 * Type
 	 */
-	private final String type;
+	private String type;
 
 	/**
 	 * Data type
 	 */
-	private final GeoPackageDataType dataType;
+	private GeoPackageDataType dataType;
+
+	/**
+	 * List of column constraints
+	 */
+	private final List<String> constraints = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -118,6 +127,8 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 
 		validateDataType(name, dataType);
 		validateMax();
+
+		addDefaultConstraints();
 	}
 
 	/**
@@ -231,7 +242,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @since 3.2.1
 	 */
-	protected void resetIndex() {
+	public void resetIndex() {
 		this.index = NO_INDEX;
 	}
 
@@ -251,7 +262,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            column name
 	 * @since 3.2.1
 	 */
-	protected void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -287,12 +298,34 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Set the max
+	 * 
+	 * @param max
+	 *            max
+	 * @since 3.2.1
+	 */
+	public void setMax(Long max) {
+		this.max = max;
+	}
+
+	/**
 	 * Get the max
 	 * 
 	 * @return max
 	 */
 	public Long getMax() {
 		return max;
+	}
+
+	/**
+	 * Set the not null flag
+	 * 
+	 * @param notNull
+	 *            not null flag
+	 * @since 3.2.1
+	 */
+	public void setNotNull(boolean notNull) {
+		this.notNull = notNull;
 	}
 
 	/**
@@ -315,12 +348,34 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Set the default value
+	 * 
+	 * @param defaultValue
+	 *            default value
+	 * @since 3.2.1
+	 */
+	public void setDefaultValue(Object defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	/**
 	 * Get the default value
 	 * 
 	 * @return default value
 	 */
 	public Object getDefaultValue() {
 		return defaultValue;
+	}
+
+	/**
+	 * Set the primary key flag
+	 * 
+	 * @param primaryKey
+	 *            primary key flag
+	 * @since 3.2.1
+	 */
+	public void setPrimaryKey(boolean primaryKey) {
+		this.primaryKey = primaryKey;
 	}
 
 	/**
@@ -333,6 +388,17 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Set the data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @since 3.2.1
+	 */
+	public void setDataType(GeoPackageDataType dataType) {
+		this.dataType = dataType;
+	}
+
+	/**
 	 * Get the data type
 	 * 
 	 * @return data type
@@ -342,12 +408,115 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Set the database type
+	 * 
+	 * @param type
+	 *            database type
+	 * @since 3.2.1
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
 	 * Get the database type
 	 * 
 	 * @return type
 	 */
 	public String getType() {
 		return type;
+	}
+
+	/**
+	 * Get the constraints
+	 * 
+	 * @return constraints
+	 * @since 3.2.1
+	 */
+	public List<String> getConstraints() {
+		return constraints;
+	}
+
+	/**
+	 * Clear the constraints
+	 * 
+	 * @return cleared constraints
+	 * @since 3.2.1
+	 */
+	public List<String> clearConstraints() {
+		List<String> constraintsCopy = new ArrayList<>(constraints);
+		constraints.clear();
+		return constraintsCopy;
+	}
+
+	/**
+	 * Add the default constraints that are enabled (not null, default value,
+	 * primary key) from the column properties
+	 * 
+	 * @since 3.2.1
+	 */
+	public void addDefaultConstraints() {
+		if (isNotNull()) {
+			addNotNullConstraint();
+		}
+		if (hasDefaultValue()) {
+			addDefaultValueConstraint(getDefaultValue());
+		}
+		if (isPrimaryKey()) {
+			addPrimaryKeyConstraint();
+		}
+	}
+
+	/**
+	 * Add a constraint
+	 * 
+	 * @param constraint
+	 *            constraint
+	 */
+	public void addConstraint(String constraint) {
+		constraints.add(constraint);
+	}
+
+	/**
+	 * Add a not null constraint
+	 * 
+	 * @since 3.2.1
+	 */
+	public void addNotNullConstraint() {
+		setNotNull(true);
+		addConstraint("NOT NULL");
+	}
+
+	/**
+	 * Add a default value constraint
+	 * 
+	 * @param defaultValue
+	 *            default value
+	 * 
+	 * @since 3.2.1
+	 */
+	public void addDefaultValueConstraint(Object defaultValue) {
+		setDefaultValue(defaultValue);
+		addConstraint("DEFAULT " + CoreSQLUtils.columnDefaultValue(this));
+	}
+
+	/**
+	 * Add a primary key constraint
+	 * 
+	 * @since 3.2.1
+	 */
+	public void addPrimaryKeyConstraint() {
+		setPrimaryKey(true);
+		addConstraint("PRIMARY KEY AUTOINCREMENT");
+	}
+
+	/**
+	 * Add a unique constraint
+	 * 
+	 * @since 3.2.1
+	 */
+	public void addUniqueConstraint() {
+		addConstraint("UNIQUE");
 	}
 
 	/**
