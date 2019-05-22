@@ -228,7 +228,7 @@ public class NGAExtensions {
 				}
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Geometry Index for table: " + newTable
 							+ ", copied from table: " + table,
@@ -340,7 +340,7 @@ public class NGAExtensions {
 				}
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Feature Tile Link for table: " + newTable
 							+ ", copied from table: " + table,
@@ -447,7 +447,7 @@ public class NGAExtensions {
 				}
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Tile Scaling for table: " + newTable
 							+ ", copied from table: " + table,
@@ -603,7 +603,7 @@ public class NGAExtensions {
 
 			}
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Feature Style for table: " + newTable
 							+ ", copied from table: " + table,

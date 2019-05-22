@@ -226,7 +226,7 @@ public class GeoPackageExtensions {
 								geometryColumns.getColumnName(), pk);
 					}
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				logger.log(
 						Level.WARNING, "Failed to create RTree for table: "
 								+ newTable + ", copied from table: " + table,
@@ -379,7 +379,7 @@ public class GeoPackageExtensions {
 					}
 				}
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Related Tables for table: " + newTable
 							+ ", copied from table: " + table,
@@ -538,7 +538,7 @@ public class GeoPackageExtensions {
 						}
 					}
 				}
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				logger.log(Level.WARNING,
 						"Failed to create Gridded Coverage for table: "
 								+ newTable + ", copied from table: " + table,
