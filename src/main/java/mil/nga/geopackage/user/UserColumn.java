@@ -9,6 +9,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.ColumnConstraints;
 import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.db.table.TableColumn;
 
 /**
@@ -68,7 +69,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * List of column constraints
 	 */
-	private final List<String> constraints = new ArrayList<>();
+	private final List<Constraint> constraints = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -436,7 +437,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @return constraints
 	 * @since 3.2.1
 	 */
-	public List<String> getConstraints() {
+	public List<Constraint> getConstraints() {
 		return constraints;
 	}
 
@@ -446,8 +447,8 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @return cleared constraints
 	 * @since 3.2.1
 	 */
-	public List<String> clearConstraints() {
-		List<String> constraintsCopy = new ArrayList<>(constraints);
+	public List<Constraint> clearConstraints() {
+		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
 		constraints.clear();
 		return constraintsCopy;
 	}
@@ -477,7 +478,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            constraint
 	 * @since 3.2.1
 	 */
-	public void addConstraint(String constraint) {
+	public void addConstraint(Constraint constraint) {
 		constraints.add(constraint);
 	}
 
@@ -488,8 +489,8 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            constraint
 	 * @since 3.2.1
 	 */
-	public void addConstraint(Constraint constraint) {
-		addConstraint(constraint.buildSql());
+	public void addConstraint(String constraint) {
+		constraints.add(new RawConstraint(constraint));
 	}
 
 	/**

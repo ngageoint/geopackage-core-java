@@ -186,9 +186,9 @@ public class CoreSQLUtils {
 			sql.append("(").append(column.getMax()).append(")");
 		}
 
-		for (String constraint : column.getConstraints()) {
+		for (Constraint constraint : column.getConstraints()) {
 			sql.append(" ");
-			sql.append(constraint);
+			sql.append(constraint.buildSql());
 		}
 
 		return sql.toString();

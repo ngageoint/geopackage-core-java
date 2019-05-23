@@ -361,14 +361,29 @@ public class AlterTable {
 			UserTable<? extends UserColumn> newTable,
 			TableMapping tableMapping) {
 
+		// Update column constraints
+		for (UserColumn column : newTable.getColumns()) {
+			List<Constraint> columnConstraints = column.clearConstraints();
+			for (Constraint columnConstraint : columnConstraints) {
+				String updatedSql = CoreSQLUtils.modifySQL(
+						columnConstraint.getName(), columnConstraint.buildSql(),
+						tableMapping);
+				if (updatedSql != null) {
+					column.addConstraint(new RawConstraint(
+							columnConstraint.getType(), updatedSql));
+				}
+			}
+		}
+
 		// Update table constraints
-		List<Constraint> contraints = newTable.clearConstraints();
-		for (Constraint constraint : contraints) {
-			String updatedSql = CoreSQLUtils.modifySQL(constraint.getName(),
-					constraint.buildSql(), tableMapping);
+		List<Constraint> tableContraints = newTable.clearConstraints();
+		for (Constraint tableConstraint : tableContraints) {
+			String updatedSql = CoreSQLUtils.modifySQL(
+					tableConstraint.getName(), tableConstraint.buildSql(),
+					tableMapping);
 			if (updatedSql != null) {
-				newTable.addConstraint(
-						new RawConstraint(constraint.getType(), updatedSql));
+				newTable.addConstraint(new RawConstraint(
+						tableConstraint.getType(), updatedSql));
 			}
 		}
 
