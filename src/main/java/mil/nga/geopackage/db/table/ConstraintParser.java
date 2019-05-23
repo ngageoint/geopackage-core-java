@@ -141,7 +141,7 @@ public class ConstraintParser {
 	 */
 	public static ColumnConstraints getColumnConstraints(String constraintSql) {
 
-		String[] parts = constraintSql.trim().split(" ");
+		String[] parts = constraintSql.trim().split("\\s+");
 		String columnName = CoreSQLUtils.quoteUnwrap(parts[0]);
 
 		ColumnConstraints constraints = new ColumnConstraints(columnName);
@@ -157,6 +157,7 @@ public class ConstraintParser {
 				if (constraintType != null) {
 					constraints.addConstraint(createConstraint(parts,
 							constraintIndex, i, constraintType));
+					constraintType = null;
 				}
 
 				constraintIndex = i;
@@ -239,7 +240,7 @@ public class ConstraintParser {
 		String definition = nameAndDefinition[1];
 		if (definition != null) {
 
-			String prefix = definition.split(" ")[0];
+			String prefix = definition.split("\\s+")[0];
 			ConstraintType type = null;
 			if (table) {
 				type = ConstraintType.getTableType(prefix);

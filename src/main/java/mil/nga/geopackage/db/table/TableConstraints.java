@@ -2,9 +2,10 @@ package mil.nga.geopackage.db.table;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Table Constraints including column constraint
@@ -22,7 +23,7 @@ public class TableConstraints {
 	/**
 	 * Column constraints
 	 */
-	private Map<String, ColumnConstraints> columnConstraints = new HashMap<>();
+	private Map<String, ColumnConstraints> columnConstraints = new LinkedHashMap<>();
 
 	/**
 	 * Constructor
@@ -163,6 +164,15 @@ public class TableConstraints {
 	 */
 	public Map<String, ColumnConstraints> getColumnConstraints() {
 		return columnConstraints;
+	}
+
+	/**
+	 * Get the column names with constraints
+	 * 
+	 * @return column names
+	 */
+	public Set<String> getColumnsWithConstraints() {
+		return columnConstraints.keySet();
 	}
 
 	/**

@@ -38,7 +38,7 @@ public class ConstraintTest {
 		testSQLScript(GeoPackageTableCreator.DATA_COLUMN_CONSTRAINTS, 0, 1, 0,
 				0, createNames("gdcc_ntv"));
 		testSQLScript(GeoPackageTableCreator.METADATA, 0, 0, 0, 0,
-				createNames());
+				createNames("m_pk"));
 		testSQLScript(GeoPackageTableCreator.METADATA_REFERENCE, 0, 0, 0, 2,
 				createNames("crmr_mfi_fk", "crmr_mpi_fk"));
 		testSQLScript(GeoPackageTableCreator.EXTENSIONS, 0, 1, 0, 0,
@@ -78,6 +78,16 @@ public class ConstraintTest {
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 				+ " column_name INTEGER NOT NULL UNIQUE" + ");", 0, 0, 0, 0,
 				createNames());
+		testSQL("CREATE TABLE table_name (\n"
+				+ " id INTEGER CONSTRAINT my_pk PRIMARY KEY AUTOINCREMENT CONSTRAINT my_not_null NOT NULL,\n"
+				+ " column_name INTEGER NOT NULL CONSTRAINT my_unique UNIQUE\n"
+				+ ");", 0, 0, 0, 0,
+				createNames("my_pk", "my_not_null", "my_unique"));
+		testSQL("CREATE TABLE table_name ("
+				+ " id INTEGER constraint \"my pk\" PRIMARY \nKEY    AUTOINCREMENT \tCONSTRAINT\n\n my_not_null\n NOT\t NULL,"
+				+ "\ncolumn_name\nINTEGER\nNOT\nNULL\nCONSTRAINT\n\"my unique\"\nUNIQUE"
+				+ ");", 0, 0, 0, 0,
+				createNames("my pk", "my_not_null", "my unique"));
 		testSQL("CREATE TABLE table_name (\n" + " column1 TEXT NOT NULL,\n"
 				+ " column2 INTEGER NOT NULL UNIQUE,\n"
 				+ " CONSTRAINT pk_name PRIMARY KEY (column1, column2)\n" + ");",
@@ -139,6 +149,16 @@ public class ConstraintTest {
 				+ " constraint fk_name foreign key (column2) references table_name2(column3)"
 				+ ")", 1, 1, 1, 1,
 				createNames("pk_name", "uk_name", "c_name", "fk_name"));
+		testSQL("create table table_name ("
+				+ " column1 TEXT CONSTRAINT col1_not_null NOT NULL CONSTRAINT col1_unique UNIQUE,"
+				+ " column2 INTEGER CONSTRAINT col2_check CHECK(column2 > 0),"
+				+ " constraint pk_name primary key (column1, column2),"
+				+ " constraint uk_name unique (column1, column2),"
+				+ " constraint c_name check (column1 in ('value1','value2')),"
+				+ " constraint fk_name foreign key (column2) references table_name2(column3)"
+				+ ")", 1, 1, 1, 1,
+				createNames("pk_name", "uk_name", "c_name", "fk_name",
+						"col1_not_null", "col1_unique", "col2_check"));
 
 	}
 
@@ -227,7 +247,8 @@ public class ConstraintTest {
 	 * @param foreignKey
 	 *            expected foreign key count
 	 * @param names
-	 *            expected constraint names
+	 *            expected constraint names, table names (null or not) followed
+	 *            by columns (non null)
 	 */
 	private void testSQL(String sql, int primaryKey, int unique, int check,
 			int foreignKey, List<String> names) {
@@ -250,7 +271,8 @@ public class ConstraintTest {
 	 * @param sql
 	 *            table SQL
 	 * @param names
-	 *            expected constraint names
+	 *            expected constraint names, table names (null or not) followed
+	 *            by columns (non null)
 	 * @return constraint test results
 	 */
 	private ConstraintTestResult testConstraint(String sql,
@@ -285,6 +307,24 @@ public class ConstraintTest {
 			default:
 				TestCase.fail("Unexpected table constraint type: "
 						+ constraint.getType());
+			}
+		}
+
+		int nameIndex = constraints.numTableConstraints();
+
+		for (String columnName : constraints.getColumnsWithConstraints()) {
+			for (int i = 0; i < constraints
+					.numColumnConstraints(columnName); i++) {
+
+				Constraint constraint = constraints
+						.getColumnConstraint(columnName, i);
+
+				String name = null;
+				if (constraint.getName() != null) {
+					name = names.get(nameIndex++);
+				}
+
+				testConstraint(constraint, name, constraint.getType());
 			}
 		}
 
