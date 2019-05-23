@@ -1,11 +1,8 @@
 package mil.nga.geopackage.db.table;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
 
 /**
@@ -23,55 +20,43 @@ public class ConstraintParser {
 	private static String REGEX_PREFIX = "(?i)(?s)^";
 
 	/**
-	 * Constraint keyword with name regex
+	 * Constraint name regex
 	 */
-	private static String CONSTRAINT_REGEX = "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
+	private static String CONSTRAINT_NAME_REGEX = REGEX_PREFIX
+			+ "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
+
+	/**
+	 * Constraint name and definition regex
+	 */
+	private static String CONSTRAINT_REGEX = REGEX_PREFIX + "("
+			+ CONSTRAINT_NAME_REGEX + ")?(.*)";
 
 	/**
 	 * Constraint name pattern
 	 */
 	private static Pattern NAME_PATTERN = Pattern
-			.compile(REGEX_PREFIX + CONSTRAINT_REGEX);
+			.compile(CONSTRAINT_NAME_REGEX);
 
 	/**
-	 * Name pattern matcher group
+	 * Constraint name pattern name matcher group
 	 */
-	private static int NAME_GROUP = 1;
+	private static int NAME_PATTERN_NAME_GROUP = 1;
 
 	/**
-	 * Compile a pattern for the constraint regex: {@link #REGEX_PREFIX},
-	 * optional {@link #CONSTRAINT_REGEX}, and constraint regex
-	 * 
-	 * @param constraintRegex
-	 *            constraint regex
-	 * @return pattern
+	 * Constraint name and definition pattern
 	 */
-	private static Pattern compilePattern(String constraintRegex) {
-		return Pattern.compile(REGEX_PREFIX + "(" + CONSTRAINT_REGEX + "+)?"
-				+ constraintRegex);
-	}
+	private static Pattern CONSTRAINT_PATTERN = Pattern
+			.compile(CONSTRAINT_REGEX);
 
 	/**
-	 * Primary key constraint pattern
+	 * Constraint name and definition pattern name matcher group
 	 */
-	private static Pattern PRIMARY_KEY_PATTERN = compilePattern(
-			"PRIMARY\\s+KEY");
+	private static int CONSTRAINT_PATTERN_NAME_GROUP = 2;
 
 	/**
-	 * Unique constraint pattern
+	 * Constraint name and definition pattern definition matcher group
 	 */
-	private static Pattern UNIQUE_PATTERN = compilePattern("UNIQUE");
-
-	/**
-	 * Check constraint pattern
-	 */
-	private static Pattern CHECK_PATTERN = compilePattern("CHECK");
-
-	/**
-	 * Foreign key constraint pattern
-	 */
-	private static Pattern FOREIGN_KEY_PATTERN = compilePattern(
-			"FOREIGN\\s+KEY");
+	private static int CONSTRAINT_PATTERN_DEFINITION_GROUP = 3;
 
 	/**
 	 * Get the constraints for the table SQL
@@ -80,23 +65,9 @@ public class ConstraintParser {
 	 *            table SQL
 	 * @return constraints
 	 */
-	public static List<Constraint> getConstraints(String tableSql) {
-		return getConstraints(tableSql, null);
-	}
+	public static TableConstraints getConstraints(String tableSql) {
 
-	/**
-	 * Get the constraints for the table SQL of the specified type
-	 * 
-	 * @param tableSql
-	 *            table SQL
-	 * @param type
-	 *            constraint type
-	 * @return constraints
-	 */
-	public static List<Constraint> getConstraints(String tableSql,
-			ConstraintType type) {
-
-		List<Constraint> constraints = new ArrayList<>();
+		TableConstraints constraints = new TableConstraints();
 
 		// Find the start and end of the column definitions and table
 		// constraints
@@ -124,15 +95,15 @@ public class ConstraintParser {
 				} else if (character == ')') {
 					openParentheses--;
 				} else if (character == ',' && openParentheses == 0) {
-					String sql = definitions.substring(sqlStart, i);
-					addConstraint(constraints, sql, type);
+					String constraintSql = definitions.substring(sqlStart, i);
+					addConstraints(constraints, constraintSql);
 					sqlStart = i + 1;
 				}
 			}
 			if (sqlStart < definitions.length()) {
-				String sql = definitions.substring(sqlStart,
+				String constraintSql = definitions.substring(sqlStart,
 						definitions.length());
-				addConstraint(constraints, sql, type);
+				addConstraints(constraints, constraintSql);
 			}
 		}
 
@@ -140,57 +111,305 @@ public class ConstraintParser {
 	}
 
 	/**
-	 * Add a constraint if the SQL is a constraint and of the constraint type
+	 * Add constraints of the optional type or all constraints
 	 * 
 	 * @param constraints
 	 *            constraints to add to
-	 * @param sql
-	 *            SQL statement
-	 * @param type
-	 *            constraint type or null for all constraint types
+	 * @param constraintSQL
+	 *            constraint SQL statement
 	 */
-	private static void addConstraint(List<Constraint> constraints, String sql,
-			ConstraintType type) {
-		Constraint constraint = getConstraint(sql, type);
+	private static void addConstraints(TableConstraints constraints,
+			String constraintSql) {
+		Constraint constraint = getTableConstraint(constraintSql);
 		if (constraint != null) {
-			constraints.add(constraint);
+			constraints.addTableConstraint(constraint);
+		} else {
+			ColumnConstraints columnConstraints = getColumnConstraints(
+					constraintSql);
+			if (columnConstraints.hasConstraints()) {
+				constraints.addColumnConstraints(columnConstraints);
+			}
 		}
+	}
+
+	/**
+	 * Attempt to get column constraints by parsing the SQL statement
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return constraints
+	 */
+	public static ColumnConstraints getColumnConstraints(String constraintSql) {
+
+		String[] parts = constraintSql.trim().split(" ");
+		String columnName = CoreSQLUtils.quoteUnwrap(parts[0]);
+
+		ColumnConstraints constraints = new ColumnConstraints(columnName);
+
+		int constraintIndex = -1;
+		ConstraintType constraintType = null;
+
+		for (int i = 1; i < parts.length; i++) {
+			String part = parts[i];
+
+			if (Constraint.CONSTRAINT.equalsIgnoreCase(part)) {
+
+				if (constraintType != null) {
+					constraints.addConstraint(createConstraint(parts,
+							constraintIndex, i, constraintType));
+				}
+
+				constraintIndex = i;
+
+			} else {
+
+				ConstraintType type = ConstraintType.getColumnType(part);
+				if (type != null) {
+
+					if (constraintType != null) {
+						constraints.addConstraint(createConstraint(parts,
+								constraintIndex, i, constraintType));
+						constraintIndex = -1;
+					}
+
+					if (constraintIndex < 0) {
+						constraintIndex = i;
+					}
+					constraintType = type;
+
+				}
+			}
+		}
+
+		if (constraintType != null) {
+			constraints.addConstraint(createConstraint(parts, constraintIndex,
+					parts.length, constraintType));
+		}
+
+		return constraints;
+	}
+
+	/**
+	 * Create a constraint from the SQL parts with the range for the type
+	 * 
+	 * @param parts
+	 *            SQL parts
+	 * @param startIndex
+	 *            start index (inclusive)
+	 * @param endIndex
+	 *            end index (exclusive)
+	 * @param type
+	 *            constraint type
+	 * @return constraint
+	 */
+	private static Constraint createConstraint(String[] parts, int startIndex,
+			int endIndex, ConstraintType type) {
+
+		StringBuilder constraintSql = new StringBuilder();
+		for (int i = startIndex; i < endIndex; i++) {
+			if (constraintSql.length() > 0) {
+				constraintSql.append(" ");
+			}
+			constraintSql.append(parts[i]);
+		}
+
+		String sql = constraintSql.toString();
+		String name = getName(sql);
+
+		return new RawConstraint(type, name, sql);
+	}
+
+	/**
+	 * Attempt to get the constraint by parsing the SQL statement
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @param table
+	 *            true to search for a table constraint, false to search for a
+	 *            column constraint
+	 * @return constraint or null
+	 */
+	private static Constraint getConstraint(String constraintSql,
+			boolean table) {
+
+		Constraint constraint = null;
+
+		String[] nameAndDefinition = getNameAndDefinition(constraintSql);
+
+		String definition = nameAndDefinition[1];
+		if (definition != null) {
+
+			String prefix = definition.split(" ")[0];
+			ConstraintType type = null;
+			if (table) {
+				type = ConstraintType.getTableType(prefix);
+			} else {
+				type = ConstraintType.getColumnType(prefix);
+			}
+
+			if (type != null) {
+				constraint = new RawConstraint(type, nameAndDefinition[0],
+						constraintSql.trim());
+			}
+		}
+
+		return constraint;
+	}
+
+	/**
+	 * Attempt to get a table constraint by parsing the SQL statement
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return constraint or null
+	 */
+	public static Constraint getTableConstraint(String constraintSql) {
+		return getConstraint(constraintSql, true);
+	}
+
+	/**
+	 * Check if the SQL is a table type constraint
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return true if a table constraint
+	 */
+	public static boolean isTableConstraint(String constraintSql) {
+		return getTableConstraint(constraintSql) != null;
+	}
+
+	/**
+	 * Get the table constraint type of the constraint SQL
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return constraint type or null
+	 */
+	public static ConstraintType getTableType(String constraintSql) {
+		ConstraintType type = null;
+		Constraint constraint = getTableConstraint(constraintSql);
+		if (constraint != null) {
+			type = constraint.getType();
+		}
+		return type;
+	}
+
+	/**
+	 * Determine if the table constraint SQL is the constraint type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return true if the constraint type
+	 */
+	public static boolean isTableType(ConstraintType type,
+			String constraintSql) {
+		boolean isType = false;
+		ConstraintType constraintType = getTableType(constraintSql);
+		if (constraintType != null) {
+			isType = type == constraintType;
+		}
+		return isType;
+	}
+
+	/**
+	 * Attempt to get a column constraint by parsing the SQL statement
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return constraint or null
+	 */
+	public static Constraint getColumnConstraint(String constraintSql) {
+		return getConstraint(constraintSql, false);
+	}
+
+	/**
+	 * Check if the SQL is a column type constraint
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return true if a column constraint
+	 */
+	public static boolean isColumnConstraint(String constraintSql) {
+		return getColumnConstraint(constraintSql) != null;
+	}
+
+	/**
+	 * Get the column constraint type of the constraint SQL
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return constraint type or null
+	 */
+	public static ConstraintType getColumnType(String constraintSql) {
+		ConstraintType type = null;
+		Constraint constraint = getColumnConstraint(constraintSql);
+		if (constraint != null) {
+			type = constraint.getType();
+		}
+		return type;
+	}
+
+	/**
+	 * Determine if the column constraint SQL is the constraint type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return true if the constraint type
+	 */
+	public static boolean isColumnType(ConstraintType type,
+			String constraintSql) {
+		boolean isType = false;
+		ConstraintType constraintType = getColumnType(constraintSql);
+		if (constraintType != null) {
+			isType = type == constraintType;
+		}
+		return isType;
 	}
 
 	/**
 	 * Attempt to get a constraint by parsing the SQL statement
 	 * 
-	 * @param sql
-	 *            SQL statement
+	 * @param constraintSql
+	 *            constraint SQL statement
 	 * @return constraint or null
 	 */
-	public static Constraint getConstraint(String sql) {
-		return getConstraint(sql, null);
+	public static Constraint getConstraint(String constraintSql) {
+		Constraint constraint = getTableConstraint(constraintSql);
+		if (constraint == null) {
+			constraint = getColumnConstraint(constraintSql);
+		}
+		return constraint;
 	}
 
 	/**
-	 * Attempt to get a constraint of a specified type by parsing the SQL
-	 * statement
+	 * Check if the SQL is a constraint
 	 * 
-	 * @param sql
-	 *            SQL statement
-	 * @param type
-	 *            matching constraint type or null for all constraint types
-	 * @return constraint or null
+	 * @param constraintSql
+	 *            constraint SQL statement
+	 * @return true if a constraint
 	 */
-	public static Constraint getConstraint(String sql, ConstraintType type) {
+	public static boolean isConstraint(String constraintSql) {
+		return getConstraint(constraintSql) != null;
+	}
 
-		Constraint constraint = null;
-
-		sql = sql.trim();
-		ConstraintType constraintType = getType(sql);
-		if (constraintType != null
-				&& (type == null || constraintType == type)) {
-			String name = getName(sql);
-			constraint = new RawConstraint(constraintType, name, sql);
+	/**
+	 * Get the constraint type of the constraint SQL
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return constraint type or null
+	 */
+	public static ConstraintType getType(String constraintSql) {
+		ConstraintType type = null;
+		Constraint constraint = getConstraint(constraintSql);
+		if (constraint != null) {
+			type = constraint.getType();
 		}
-
-		return constraint;
+		return type;
 	}
 
 	/**
@@ -203,78 +422,55 @@ public class ConstraintParser {
 	 * @return true if the constraint type
 	 */
 	public static boolean isType(ConstraintType type, String constraintSql) {
-		return getPattern(type).matcher(constraintSql).find();
-	}
-
-	/**
-	 * Get the constraint pattern
-	 * 
-	 * @param type
-	 *            constraint type
-	 * @return pattern
-	 */
-	private static Pattern getPattern(ConstraintType type) {
-
-		Pattern pattern = null;
-
-		switch (type) {
-		case PRIMARY_KEY:
-			pattern = PRIMARY_KEY_PATTERN;
-			break;
-		case UNIQUE:
-			pattern = UNIQUE_PATTERN;
-			break;
-		case CHECK:
-			pattern = CHECK_PATTERN;
-			break;
-		case FOREIGN_KEY:
-			pattern = FOREIGN_KEY_PATTERN;
-			break;
-		default:
-			throw new GeoPackageException(
-					"Unsupporte constraint type: " + type);
+		boolean isType = false;
+		ConstraintType constraintType = getType(constraintSql);
+		if (constraintType != null) {
+			isType = type == constraintType;
 		}
-
-		return pattern;
-	}
-
-	/**
-	 * Get the constraint type of the constraint SQL
-	 * 
-	 * @param constraintSql
-	 *            constraint SQL
-	 * @return constraint type or null
-	 */
-	public static ConstraintType getType(String constraintSql) {
-		ConstraintType type = null;
-
-		if (isType(ConstraintType.PRIMARY_KEY, constraintSql)) {
-			type = ConstraintType.PRIMARY_KEY;
-		} else if (isType(ConstraintType.UNIQUE, constraintSql)) {
-			type = ConstraintType.UNIQUE;
-		} else if (isType(ConstraintType.CHECK, constraintSql)) {
-			type = ConstraintType.CHECK;
-		} else if (isType(ConstraintType.FOREIGN_KEY, constraintSql)) {
-			type = ConstraintType.FOREIGN_KEY;
-		}
-
-		return type;
+		return isType;
 	}
 
 	/**
 	 * Get the constraint name if it has one
 	 * 
 	 * @param constraintSql
-	 *            constraint sql
+	 *            constraint SQL
 	 * @return constraint name or null
 	 */
 	public static String getName(String constraintSql) {
 		String name = null;
 		Matcher matcher = NAME_PATTERN.matcher(constraintSql);
 		if (matcher.find()) {
-			name = CoreSQLUtils.quoteUnwrap(matcher.group(NAME_GROUP));
+			name = CoreSQLUtils
+					.quoteUnwrap(matcher.group(NAME_PATTERN_NAME_GROUP));
 		}
 		return name;
+	}
+
+	/**
+	 * Get the constraint name and remaining definition
+	 * 
+	 * @param constraintSql
+	 *            constraint SQL
+	 * @return array with name or null at index 0, definition at index 1
+	 */
+	public static String[] getNameAndDefinition(String constraintSql) {
+		String parts[] = null;
+		Matcher matcher = CONSTRAINT_PATTERN.matcher(constraintSql.trim());
+		if (matcher.find()) {
+			String name = CoreSQLUtils
+					.quoteUnwrap(matcher.group(CONSTRAINT_PATTERN_NAME_GROUP));
+			if (name != null) {
+				name = name.trim();
+			}
+			String definition = matcher
+					.group(CONSTRAINT_PATTERN_DEFINITION_GROUP);
+			if (definition != null) {
+				definition = definition.trim();
+			}
+			parts = new String[] { name, definition };
+		}
+		return parts;
 	}
 
 }

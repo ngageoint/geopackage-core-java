@@ -1,7 +1,5 @@
 package mil.nga.geopackage.db.table;
 
-import java.util.List;
-
 /**
  * Constraint test result
  * 
@@ -9,7 +7,7 @@ import java.util.List;
  */
 public class ConstraintTestResult {
 
-	private List<Constraint> constraints;
+	private TableConstraints constraints;
 	private int primaryKeyCount = 0;
 	private int uniqueCount = 0;
 	private int checkCount = 0;
@@ -29,7 +27,7 @@ public class ConstraintTestResult {
 	 * @param foreignKeyCount
 	 *            foreign key count
 	 */
-	public ConstraintTestResult(List<Constraint> constraints,
+	public ConstraintTestResult(TableConstraints constraints,
 			int primaryKeyCount, int uniqueCount, int checkCount,
 			int foreignKeyCount) {
 		this.constraints = constraints;
@@ -44,7 +42,7 @@ public class ConstraintTestResult {
 	 * 
 	 * @return constraints
 	 */
-	public List<Constraint> getConstraints() {
+	public TableConstraints getConstraints() {
 		return constraints;
 	}
 
@@ -54,7 +52,7 @@ public class ConstraintTestResult {
 	 * @return count
 	 */
 	public int getCount() {
-		return constraints.size();
+		return constraints.numTableConstraints();
 	}
 
 	/**

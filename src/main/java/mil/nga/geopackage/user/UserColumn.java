@@ -1,11 +1,14 @@
 package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.table.ColumnConstraints;
+import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.TableColumn;
 
 /**
@@ -472,9 +475,45 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraint
 	 *            constraint
+	 * @since 3.2.1
 	 */
 	public void addConstraint(String constraint) {
 		constraints.add(constraint);
+	}
+
+	/**
+	 * Add a constraint
+	 * 
+	 * @param constraint
+	 *            constraint
+	 * @since 3.2.1
+	 */
+	public void addConstraint(Constraint constraint) {
+		addConstraint(constraint.buildSql());
+	}
+
+	/**
+	 * Add constraints
+	 * 
+	 * @param constraints
+	 *            constraints
+	 * @since 3.2.1
+	 */
+	public void addConstraints(Collection<Constraint> constraints) {
+		for (Constraint constraint : constraints) {
+			addConstraint(constraint);
+		}
+	}
+
+	/**
+	 * Add constraints
+	 * 
+	 * @param constraints
+	 *            constraints
+	 * @since 3.2.1
+	 */
+	public void addConstraints(ColumnConstraints constraints) {
+		addConstraints(constraints.getConstraints());
 	}
 
 	/**

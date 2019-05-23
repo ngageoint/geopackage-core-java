@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
-import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.ConstraintParser;
+import mil.nga.geopackage.db.table.TableConstraints;
 
 /**
  * SQLite Master table queries (sqlite_master)
@@ -216,12 +216,12 @@ public class SQLiteMaster {
 	 *            row index
 	 * @return constraints
 	 */
-	public List<Constraint> getConstraints(int row) {
-		List<Constraint> constraints = new ArrayList<>();
+	public TableConstraints getConstraints(int row) {
+		TableConstraints constraints = new TableConstraints();
 		if (getType(row) == SQLiteMasterType.TABLE) {
 			String sql = getSql(row);
 			if (sql != null) {
-				constraints.addAll(ConstraintParser.getConstraints(sql));
+				constraints = ConstraintParser.getConstraints(sql);
 			}
 		}
 		return constraints;
@@ -927,13 +927,13 @@ public class SQLiteMaster {
 	 *            table name
 	 * @return SQL constraints
 	 */
-	public static List<Constraint> queryForConstraints(
+	public static TableConstraints queryForConstraints(
 			GeoPackageCoreConnection db, String tableName) {
-		List<Constraint> constraints = new ArrayList<>();
+		TableConstraints constraints = new TableConstraints();
 		SQLiteMaster tableMaster = SQLiteMaster.queryByType(db,
 				SQLiteMasterType.TABLE, tableName);
 		for (int i = 0; i < tableMaster.count(); i++) {
-			constraints.addAll(tableMaster.getConstraints(i));
+			constraints.addConstraints(tableMaster.getConstraints(i));
 		}
 		return constraints;
 	}

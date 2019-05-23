@@ -6,7 +6,9 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.master.SQLiteMaster;
+import mil.nga.geopackage.db.table.ColumnConstraints;
 import mil.nga.geopackage.db.table.TableColumn;
+import mil.nga.geopackage.db.table.TableConstraints;
 import mil.nga.geopackage.db.table.TableInfo;
 
 /**
@@ -73,18 +75,30 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 			throw new GeoPackageException("Table does not exist: " + tableName);
 		}
 
+		TableConstraints constraints = SQLiteMaster.queryForConstraints(db,
+				tableName);
+
 		for (TableColumn tableColumn : tableInfo.getColumns()) {
 			if (tableColumn.getDataType() == null) {
 				throw new GeoPackageException("Unsupported column data type "
 						+ tableColumn.getType());
 			}
 			TColumn column = createColumn(tableColumn);
+
+			ColumnConstraints columnConstraints = constraints
+					.getColumnConstraints(column.getName());
+			if (columnConstraints != null
+					&& columnConstraints.hasConstraints()) {
+				column.clearConstraints();
+				column.addConstraints(columnConstraints);
+			}
+
 			columnList.add(column);
 		}
 
 		TTable table = createTable(tableName, columnList);
 
-		table.addConstraints(SQLiteMaster.queryForConstraints(db, tableName));
+		table.addConstraints(constraints.getTableConstraints());
 
 		return table;
 	}

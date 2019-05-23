@@ -261,15 +261,10 @@ public class ConstraintTest {
 		int checkCount = 0;
 		int foreignKeyCount = 0;
 
-		List<String> primaryKeyNames = new ArrayList<>();
-		List<String> uniqueNames = new ArrayList<>();
-		List<String> checkNames = new ArrayList<>();
-		List<String> foreignKeyNames = new ArrayList<>();
+		TableConstraints constraints = ConstraintParser.getConstraints(sql);
+		for (int i = 0; i < constraints.numTableConstraints(); i++) {
 
-		List<Constraint> constraints = ConstraintParser.getConstraints(sql);
-		for (int i = 0; i < constraints.size(); i++) {
-
-			Constraint constraint = constraints.get(i);
+			Constraint constraint = constraints.getTableConstraint(i);
 			String name = names.get(i);
 
 			testConstraint(constraint, name, constraint.getType());
@@ -277,62 +272,24 @@ public class ConstraintTest {
 			switch (constraint.getType()) {
 			case PRIMARY_KEY:
 				primaryKeyCount++;
-				primaryKeyNames.add(name);
 				break;
 			case UNIQUE:
 				uniqueCount++;
-				uniqueNames.add(name);
 				break;
 			case CHECK:
 				checkCount++;
-				checkNames.add(name);
 				break;
 			case FOREIGN_KEY:
 				foreignKeyCount++;
-				foreignKeyNames.add(name);
 				break;
+			default:
+				TestCase.fail("Unexpected table constraint type: "
+						+ constraint.getType());
 			}
 		}
 
-		testConstraints(
-				ConstraintParser.getConstraints(sql,
-						ConstraintType.PRIMARY_KEY),
-				primaryKeyNames, primaryKeyCount, ConstraintType.PRIMARY_KEY);
-		testConstraints(
-				ConstraintParser.getConstraints(sql, ConstraintType.UNIQUE),
-				uniqueNames, uniqueCount, ConstraintType.UNIQUE);
-		testConstraints(
-				ConstraintParser.getConstraints(sql, ConstraintType.CHECK),
-				checkNames, checkCount, ConstraintType.CHECK);
-		testConstraints(
-				ConstraintParser.getConstraints(sql,
-						ConstraintType.FOREIGN_KEY),
-				foreignKeyNames, foreignKeyCount, ConstraintType.FOREIGN_KEY);
-
 		return new ConstraintTestResult(constraints, primaryKeyCount,
 				uniqueCount, checkCount, foreignKeyCount);
-	}
-
-	/**
-	 * Test the constraints
-	 * 
-	 * @param constraints
-	 *            constraints
-	 * @param names
-	 *            expected names
-	 * @param count
-	 *            expected count
-	 * @param type
-	 *            constraint type
-	 */
-	private void testConstraints(List<Constraint> constraints,
-			List<String> names, int count, ConstraintType type) {
-		TestCase.assertEquals(count, constraints.size());
-		for (int i = 0; i < constraints.size(); i++) {
-			Constraint constraint = constraints.get(i);
-			String name = names.get(i);
-			testConstraint(constraint, name, type);
-		}
 	}
 
 	/**
@@ -351,9 +308,6 @@ public class ConstraintTest {
 		String constraintSql = constraint.buildSql();
 		testConstraintHelper(ConstraintParser.getConstraint(constraintSql),
 				name, type);
-		testConstraintHelper(
-				ConstraintParser.getConstraint(constraintSql, type), name,
-				type);
 	}
 
 	/**
