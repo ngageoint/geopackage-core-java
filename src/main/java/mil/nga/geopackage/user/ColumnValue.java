@@ -41,10 +41,20 @@ public class ColumnValue {
 		this.tolerance = tolerance;
 	}
 
+	/**
+	 * Get the value
+	 * 
+	 * @return value
+	 */
 	public Object getValue() {
 		return value;
 	}
 
+	/**
+	 * Get the tolerance
+	 * 
+	 * @return tolerance
+	 */
 	public Double getTolerance() {
 		return tolerance;
 	}
