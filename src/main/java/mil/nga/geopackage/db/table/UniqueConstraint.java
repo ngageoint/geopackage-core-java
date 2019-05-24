@@ -9,6 +9,7 @@ import mil.nga.geopackage.user.UserColumn;
  * Table unique constraint for one or more columns
  * 
  * @author osbornb
+ * @since 3.3.0
  */
 public class UniqueConstraint extends Constraint {
 
@@ -68,7 +69,6 @@ public class UniqueConstraint extends Constraint {
 	 * 
 	 * @param userUniqueConstraint
 	 *            user unique constraint
-	 * @since 3.2.1
 	 */
 	public UniqueConstraint(UniqueConstraint userUniqueConstraint) {
 		super(ConstraintType.UNIQUE, userUniqueConstraint.getName());

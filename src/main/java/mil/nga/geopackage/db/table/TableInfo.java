@@ -19,7 +19,7 @@ import mil.nga.sf.GeometryType;
  * Table Info queries (table_info)
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class TableInfo {
 

@@ -28,7 +28,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 *            geometry columns
 	 * @param columns
 	 *            feature columns
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public FeatureTable(GeometryColumns geometryColumns,
 			List<FeatureColumn> columns) {
@@ -57,7 +57,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 *            geometry column
 	 * @param columns
 	 *            feature columns
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public FeatureTable(String tableName, String geometryColumn,
 			List<FeatureColumn> columns) {
@@ -94,7 +94,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 * 
 	 * @param featureTable
 	 *            feature table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public FeatureTable(FeatureTable featureTable) {
 		super(featureTable);

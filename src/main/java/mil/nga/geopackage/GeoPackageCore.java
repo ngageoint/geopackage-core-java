@@ -209,7 +209,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 * @return true if an attribute table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public boolean isAttributeTable(String table);
 
@@ -293,7 +293,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 * @return table type or null if not an enumerated type
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public ContentsDataType getTableDataType(String table);
 
@@ -803,21 +803,21 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Begin a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void beginTransaction();
 
 	/**
 	 * End a transaction successfully
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void endTransaction();
 
 	/**
 	 * Fail a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void failTransaction();
 
@@ -827,7 +827,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param successful
 	 *            true if the transaction was successful, false to rollback or
 	 *            not commit
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void endTransaction(boolean successful);
 
@@ -841,7 +841,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return The object returned by the callable.
 	 * @throws SQLException
 	 *             upon transaction error
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public <T> T callInTransaction(Callable<T> callable) throws SQLException;
 
@@ -862,7 +862,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameTable(String tableName, String newTableName);
 
@@ -873,7 +873,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void copyTable(String tableName, String newTableName);
 
@@ -884,7 +884,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void copyTableNoExtensions(String tableName, String newTableName);
 
@@ -895,7 +895,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            table name
 	 * @param newTableName
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void copyTableAsEmpty(String tableName, String newTableName);
 
@@ -1036,7 +1036,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns,
@@ -1079,7 +1079,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
@@ -1114,7 +1114,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns, Collection<Constraint> constraints);

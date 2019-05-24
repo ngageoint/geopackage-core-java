@@ -9,7 +9,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
  * SQL constraint parser from create table statements
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class ConstraintParser {
 

@@ -40,35 +40,35 @@ public class DateConverter {
 	/**
 	 * SQLite date function
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FUNCTION_DATE = "date";
 
 	/**
 	 * SQLite time function
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FUNCTION_TIME = "time";
 
 	/**
 	 * SQLite datetime function
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FUNCTION_DATETIME = "datetime";
 
 	/**
 	 * SQLite julianday function
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FUNCTION_JULIANDAY = "julianday";
 
 	/**
 	 * SQLite strftime function
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FUNCTION_STRFTIME = "strftime";
 
@@ -195,7 +195,7 @@ public class DateConverter {
 	 * @param value
 	 *            date/time string value
 	 * @return true if a function, false if the value should be parsed
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static boolean isFunction(String value) {
 		boolean function = false;

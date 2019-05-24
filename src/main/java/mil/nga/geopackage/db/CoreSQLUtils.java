@@ -58,7 +58,7 @@ public class CoreSQLUtils {
 	 * @param name
 	 *            name
 	 * @return unquoted name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String quoteUnwrap(String name) {
 		String unquotedName = null;
@@ -118,7 +118,7 @@ public class CoreSQLUtils {
 	 * @param <TColumn>
 	 *            column type
 	 * @return create table SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static <TColumn extends UserColumn> String createTableSQL(
 			UserTable<TColumn> table) {
@@ -159,7 +159,7 @@ public class CoreSQLUtils {
 	 * @param column
 	 *            user column
 	 * @return column SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String columnSQL(UserColumn column) {
 		return CoreSQLUtils.quoteWrap(column.getName()) + " "
@@ -174,7 +174,7 @@ public class CoreSQLUtils {
 	 * @param column
 	 *            user column
 	 * @return column definition SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String columnDefinition(UserColumn column) {
 
@@ -200,7 +200,7 @@ public class CoreSQLUtils {
 	 * @param column
 	 *            user column
 	 * @return default value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String columnDefaultValue(UserColumn column) {
 		return columnDefaultValue(column.getDefaultValue(),
@@ -215,7 +215,7 @@ public class CoreSQLUtils {
 	 * @param dataType
 	 *            data type
 	 * @return default value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String columnDefaultValue(Object defaultValue,
 			GeoPackageDataType dataType) {
@@ -280,7 +280,7 @@ public class CoreSQLUtils {
 	 *            table name
 	 * @param column
 	 *            user column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void addColumn(GeoPackageCoreConnection db, String tableName,
 			UserColumn column) {
@@ -294,7 +294,7 @@ public class CoreSQLUtils {
 	 * @param db
 	 *            connection
 	 * @return true if enabled, false if disabled
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static boolean foreignKeys(GeoPackageCoreConnection db) {
 		Boolean foreignKeys = db.querySingleTypedResult("PRAGMA foreign_keys",
@@ -310,7 +310,7 @@ public class CoreSQLUtils {
 	 * @param on
 	 *            true to turn on, false to turn off
 	 * @return previous foreign keys value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static boolean foreignKeys(GeoPackageCoreConnection db, boolean on) {
 
@@ -330,7 +330,7 @@ public class CoreSQLUtils {
 	 * @param on
 	 *            true to turn on, false to turn off
 	 * @return foreign keys SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String foreignKeysSQL(boolean on) {
 		return "PRAGMA foreign_keys = " + on;
@@ -343,7 +343,7 @@ public class CoreSQLUtils {
 	 *            connection
 	 * @return empty list if valid or violation errors, 4 column values for each
 	 *         violation. see SQLite PRAGMA foreign_key_check
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static List<List<Object>> foreignKeyCheck(
 			GeoPackageCoreConnection db) {
@@ -360,7 +360,7 @@ public class CoreSQLUtils {
 	 *            table name
 	 * @return empty list if valid or violation errors, 4 column values for each
 	 *         violation. see SQLite PRAGMA foreign_key_check
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static List<List<Object>> foreignKeyCheck(
 			GeoPackageCoreConnection db, String tableName) {
@@ -372,7 +372,7 @@ public class CoreSQLUtils {
 	 * Create the foreign key check SQL
 	 * 
 	 * @return foreign key check SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String foreignKeyCheckSQL() {
 		return foreignKeyCheckSQL(null);
@@ -384,7 +384,7 @@ public class CoreSQLUtils {
 	 * @param tableName
 	 *            table name
 	 * @return foreign key check SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String foreignKeyCheckSQL(String tableName) {
 		return "PRAGMA foreign_key_check" + (tableName != null
@@ -399,7 +399,7 @@ public class CoreSQLUtils {
 	 *            connection
 	 * @param tableName
 	 *            table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void dropTable(GeoPackageCoreConnection db,
 			String tableName) {
@@ -413,7 +413,7 @@ public class CoreSQLUtils {
 	 * @param tableName
 	 *            table name
 	 * @return drop table SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String dropTableSQL(String tableName) {
 		return "DROP TABLE IF EXISTS " + CoreSQLUtils.quoteWrap(tableName);
@@ -426,7 +426,7 @@ public class CoreSQLUtils {
 	 *            connection
 	 * @param viewName
 	 *            view name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void dropView(GeoPackageCoreConnection db, String viewName) {
 		String sql = dropViewSQL(viewName);
@@ -439,7 +439,7 @@ public class CoreSQLUtils {
 	 * @param viewName
 	 *            view name
 	 * @return drop view SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String dropViewSQL(String viewName) {
 		return "DROP VIEW IF EXISTS " + CoreSQLUtils.quoteWrap(viewName);
@@ -452,7 +452,7 @@ public class CoreSQLUtils {
 	 *            connection
 	 * @param tableMapping
 	 *            table mapping
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
 			TableMapping tableMapping) {
@@ -466,7 +466,7 @@ public class CoreSQLUtils {
 	 * @param tableMapping
 	 *            table mapping
 	 * @return transfer SQL
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String transferTableContentSQL(TableMapping tableMapping) {
 
@@ -553,7 +553,7 @@ public class CoreSQLUtils {
 	 *            new column value for new rows
 	 * @param currentColumnValue
 	 *            column value for rows to insert as new rows
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
 			String tableName, String columnName, Object newColumnValue,
@@ -579,7 +579,7 @@ public class CoreSQLUtils {
 	 *            column value for rows to insert as new rows
 	 * @param idColumnName
 	 *            id column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void transferTableContent(GeoPackageCoreConnection db,
 			String tableName, String columnName, Object newColumnValue,
@@ -608,7 +608,7 @@ public class CoreSQLUtils {
 	 * @param baseName
 	 *            base name
 	 * @return unused table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String tempTableName(GeoPackageCoreConnection db,
 			String prefix, String baseName) {
@@ -630,7 +630,7 @@ public class CoreSQLUtils {
 	 * @param tableMapping
 	 *            table mapping
 	 * @return updated SQL, null if SQL contains a deleted column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String modifySQL(String name, String sql,
 			TableMapping tableMapping) {
@@ -668,7 +668,7 @@ public class CoreSQLUtils {
 	 * @param tableMapping
 	 *            table mapping
 	 * @return updated SQL, null if SQL contains a deleted column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String modifySQL(String sql, TableMapping tableMapping) {
 
@@ -715,7 +715,7 @@ public class CoreSQLUtils {
 	 * @param replacement
 	 *            replacement value
 	 * @return null if not modified, SQL value if replaced at least once
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String replaceName(String sql, String name,
 			String replacement) {
@@ -802,7 +802,7 @@ public class CoreSQLUtils {
 	 * @param replacement
 	 *            replacement value
 	 * @return new name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static String createName(String name, String replace,
 			String replacement) {

@@ -34,7 +34,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * RTree table and trigger name prefix
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String RTREE_PREFIX = "rtree_";
 

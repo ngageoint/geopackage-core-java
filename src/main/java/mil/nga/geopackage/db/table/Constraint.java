@@ -6,7 +6,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
  * User table constraint
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public abstract class Constraint {
 

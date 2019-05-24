@@ -4,7 +4,7 @@ package mil.nga.geopackage.db.master;
  * SQLite Master table (sqlite_master) column keywords
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public enum SQLiteMasterColumn {
 

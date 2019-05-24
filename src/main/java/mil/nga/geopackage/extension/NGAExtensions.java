@@ -97,7 +97,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -185,7 +185,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyGeometryIndex(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -303,7 +303,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyFeatureTileLink(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -418,7 +418,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyTileScaling(GeoPackageCore geoPackage, String table,
 			String newTable) {
@@ -555,7 +555,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyFeatureStyle(GeoPackageCore geoPackage, String table,
 			String newTable) {
@@ -747,7 +747,7 @@ public class NGAExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyContentsId(GeoPackageCore geoPackage, String table,
 			String newTable) {

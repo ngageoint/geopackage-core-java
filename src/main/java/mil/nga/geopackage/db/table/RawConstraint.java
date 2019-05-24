@@ -4,7 +4,7 @@ package mil.nga.geopackage.db.table;
  * Table raw or unparsed constraint
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class RawConstraint extends Constraint {
 
@@ -55,7 +55,6 @@ public class RawConstraint extends Constraint {
 	 * 
 	 * @param userRawConstraint
 	 *            user raw constraint
-	 * @since 3.2.1
 	 */
 	public RawConstraint(RawConstraint userRawConstraint) {
 		super(userRawConstraint.getType(), userRawConstraint.getName());

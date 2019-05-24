@@ -7,7 +7,7 @@ import mil.nga.geopackage.user.UserColumn;
  * Mapped column, to a column and potentially from a differently named column
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class MappedColumn {
 

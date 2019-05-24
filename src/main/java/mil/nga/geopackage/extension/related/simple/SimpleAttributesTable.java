@@ -136,7 +136,7 @@ public class SimpleAttributesTable extends UserRelatedTable {
 	 * @param idColumnName
 	 *            id column name
 	 * @return id column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createIdColumn(String idColumnName) {
 		return createIdColumn(UserColumn.NO_INDEX, idColumnName);

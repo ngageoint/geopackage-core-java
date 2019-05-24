@@ -10,7 +10,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
  * Query on the SQLiteMaster table
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class SQLiteMasterQuery {
 

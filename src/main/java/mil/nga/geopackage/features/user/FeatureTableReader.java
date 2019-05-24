@@ -10,7 +10,7 @@ import mil.nga.geopackage.user.UserTableReader;
  * Reads the metadata from an existing feature table
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class FeatureTableReader
 		extends UserTableReader<FeatureColumn, FeatureTable> {
@@ -37,7 +37,6 @@ public class FeatureTableReader
 	 *            table name
 	 * @param geometryColumnName
 	 *            geometry column name
-	 * @since 3.2.1
 	 */
 	public FeatureTableReader(String tableName, String geometryColumnName) {
 		super(tableName);
@@ -49,7 +48,6 @@ public class FeatureTableReader
 	 * 
 	 * @param tableName
 	 *            table name
-	 * @since 3.2.1
 	 */
 	public FeatureTableReader(String tableName) {
 		this(tableName, null);

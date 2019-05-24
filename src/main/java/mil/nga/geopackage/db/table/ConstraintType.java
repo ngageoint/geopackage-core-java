@@ -10,7 +10,7 @@ import java.util.Set;
  * Constraint types
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public enum ConstraintType {
 

@@ -9,7 +9,7 @@ import mil.nga.geopackage.user.UserTableReader;
  * Reads the metadata from an existing tile table
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class TileTableReader extends UserTableReader<TileColumn, TileTable> {
 

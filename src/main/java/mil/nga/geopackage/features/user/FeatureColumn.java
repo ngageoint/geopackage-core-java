@@ -24,7 +24,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param name
 	 *            name
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createPrimaryKeyColumn(String name) {
 		return createPrimaryKeyColumn(NO_INDEX, name);
@@ -52,7 +52,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param type
 	 *            geometry type
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createGeometryColumn(String name,
 			GeometryType type) {
@@ -69,7 +69,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param type
 	 *            geometry type
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createGeometryColumn(int index, String name,
 			GeometryType type) {
@@ -88,7 +88,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createGeometryColumn(String name,
 			GeometryType type, boolean notNull, Object defaultValue) {
@@ -129,7 +129,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(String name,
 			GeoPackageDataType type) {
@@ -146,7 +146,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(int index, String name,
 			GeoPackageDataType type) {
@@ -163,7 +163,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -182,7 +182,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -201,7 +201,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -238,7 +238,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(String name,
 			GeoPackageDataType type, Long max) {
@@ -257,7 +257,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max) {
@@ -278,7 +278,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(String name,
 			GeoPackageDataType type, Long max, boolean notNull,
@@ -316,7 +316,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param tableColumn
 	 *            table column
 	 * @return feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static FeatureColumn createColumn(TableColumn tableColumn) {
 		return new FeatureColumn(tableColumn);
@@ -371,7 +371,7 @@ public class FeatureColumn extends UserColumn {
 	 * @param geometryType
 	 *            geometry type
 	 * @return type name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected static String getTypeName(String name,
 			GeoPackageDataType dataType, GeometryType geometryType) {
@@ -404,7 +404,7 @@ public class FeatureColumn extends UserColumn {
 	 * 
 	 * @param featureColumn
 	 *            feature column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public FeatureColumn(FeatureColumn featureColumn) {
 		super(featureColumn);
@@ -415,7 +415,7 @@ public class FeatureColumn extends UserColumn {
 	 * Copy the column
 	 * 
 	 * @return copied column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public FeatureColumn copy() {
 		return new FeatureColumn(this);

@@ -95,7 +95,7 @@ public class UserMappingTable extends UserCustomTable {
 	 * Create a base id column
 	 * 
 	 * @return base id column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createBaseIdColumn() {
 		return createBaseIdColumn(UserColumn.NO_INDEX);
@@ -117,7 +117,7 @@ public class UserMappingTable extends UserCustomTable {
 	 * Create a related id column
 	 * 
 	 * @return related id column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createRelatedIdColumn() {
 		return createRelatedIdColumn(UserColumn.NO_INDEX);

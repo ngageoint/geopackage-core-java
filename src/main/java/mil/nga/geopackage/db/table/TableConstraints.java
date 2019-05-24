@@ -11,7 +11,7 @@ import java.util.Set;
  * Table Constraints including column constraint
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class TableConstraints {
 

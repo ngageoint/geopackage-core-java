@@ -42,7 +42,7 @@ public class GeoPackageTableCreator {
 	 * @param property
 	 *            property name
 	 * @return script name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String getScript(String property) {
 		return GeoPackageProperties.getProperty(PropertyConstants.SQL,
@@ -52,7 +52,7 @@ public class GeoPackageTableCreator {
 	/**
 	 * Spatial Reference System script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String SPATIAL_REFERENCE_SYSTEM = getScript(
 			"spatial_reference_system");
@@ -60,42 +60,42 @@ public class GeoPackageTableCreator {
 	/**
 	 * Contents script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String CONTENTS = getScript("contents");
 
 	/**
 	 * Geometry Columns script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String GEOMETRY_COLUMNS = getScript("geometry_columns");
 
 	/**
 	 * Tile Matrix Set script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String TILE_MATRIX_SET = getScript("tile_matrix_set");
 
 	/**
 	 * Tile Matrix script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String TILE_MATRIX = getScript("tile_matrix");
 
 	/**
 	 * Data Columns script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String DATA_COLUMNS = getScript("data_columns");
 
 	/**
 	 * Data Column Constraints script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String DATA_COLUMN_CONSTRAINTS = getScript(
 			"data_column_constraints");
@@ -103,14 +103,14 @@ public class GeoPackageTableCreator {
 	/**
 	 * Metadata script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String METADATA = getScript("metadata");
 
 	/**
 	 * Metadata Reference script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String METADATA_REFERENCE = getScript(
 			"metadata_reference");
@@ -118,14 +118,14 @@ public class GeoPackageTableCreator {
 	/**
 	 * Extensions script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String EXTENSIONS = getScript("extensions");
 
 	/**
 	 * Tiled Gridded Coverage Data Coverage extension script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String GRIDDED_COVERAGE = getScript(
 			"2d_gridded_coverage");
@@ -133,14 +133,14 @@ public class GeoPackageTableCreator {
 	/**
 	 * Tiled Gridded Coverage Data Tile extension script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String GRIDDED_TILE = getScript("2d_gridded_tile");
 
 	/**
 	 * Extended Relations script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String EXTENDED_RELATIONS = getScript(
 			"extended_relations");
@@ -148,21 +148,21 @@ public class GeoPackageTableCreator {
 	/**
 	 * Table Index script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String TABLE_INDEX = getScript("table_index");
 
 	/**
 	 * Geometry Index script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String GEOMETRY_INDEX = getScript("geometry_index");
 
 	/**
 	 * Index Geometry Index script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String INDEX_GEOMETRY_INDEX = GeoPackageProperties
 			.getProperty(PropertyConstants.SQL
@@ -172,7 +172,7 @@ public class GeoPackageTableCreator {
 	/**
 	 * Unindex Geometry Index script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String UNINDEX_GEOMETRY_INDEX = GeoPackageProperties
 			.getProperty(PropertyConstants.SQL
@@ -182,7 +182,7 @@ public class GeoPackageTableCreator {
 	/**
 	 * Feature Tile Link script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String FEATURE_TILE_LINK = getScript(
 			"feature_tile_link");
@@ -190,14 +190,14 @@ public class GeoPackageTableCreator {
 	/**
 	 * Tile Scaling script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String TILE_SCALING = getScript("tile_scaling");
 
 	/**
 	 * Contents Id script
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final String CONTENTS_ID = getScript("contents_id");
 
@@ -397,7 +397,7 @@ public class GeoPackageTableCreator {
 	 * @param sqlScript
 	 *            SQL script property file name
 	 * @return executed statements
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public int execSQLScript(String sqlScript) {
 
@@ -416,7 +416,7 @@ public class GeoPackageTableCreator {
 	 * @param sqlScript
 	 *            SQL script property file name
 	 * @return statements
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static List<String> readSQLScript(String sqlScript) {
 		String path = GeoPackageProperties.getProperty(PropertyConstants.SQL,

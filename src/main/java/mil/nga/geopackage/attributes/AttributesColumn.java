@@ -18,7 +18,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param name
 	 *            name
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createPrimaryKeyColumn(String name) {
 		return createPrimaryKeyColumn(NO_INDEX, name);
@@ -47,7 +47,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(String name,
 			GeoPackageDataType type) {
@@ -64,7 +64,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(int index, String name,
 			GeoPackageDataType type) {
@@ -81,7 +81,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -100,7 +100,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -119,7 +119,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -156,7 +156,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(String name,
 			GeoPackageDataType type, Long max) {
@@ -175,7 +175,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max) {
@@ -196,7 +196,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(String name,
 			GeoPackageDataType type, Long max, boolean notNull,
@@ -234,7 +234,7 @@ public class AttributesColumn extends UserColumn {
 	 * @param tableColumn
 	 *            table column
 	 * @return attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static AttributesColumn createColumn(TableColumn tableColumn) {
 		return new AttributesColumn(tableColumn);
@@ -279,7 +279,7 @@ public class AttributesColumn extends UserColumn {
 	 * 
 	 * @param attributesColumn
 	 *            attributes column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesColumn(AttributesColumn attributesColumn) {
 		super(attributesColumn);
@@ -289,7 +289,7 @@ public class AttributesColumn extends UserColumn {
 	 * Copy the column
 	 * 
 	 * @return copied column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesColumn copy() {
 		return new AttributesColumn(this);

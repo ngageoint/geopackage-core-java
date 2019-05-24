@@ -1298,7 +1298,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            new table name
 	 * @param transferContent
 	 *            transfer content flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected void copyAttributeTable(String tableName, String newTableName,
 			boolean transferContent) {
@@ -1314,7 +1314,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            new table name
 	 * @param transferContent
 	 *            transfer content flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected void copyFeatureTable(String tableName, String newTableName,
 			boolean transferContent) {
@@ -1356,7 +1356,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            new table name
 	 * @param transferContent
 	 *            transfer content flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected void copyTileTable(String tableName, String newTableName,
 			boolean transferContent) {
@@ -1422,7 +1422,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @param transferContent
 	 *            transfer user table content flag
 	 * @return copied contents
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected Contents copyUserTable(String tableName, String newTableName,
 			boolean transferContent) {
@@ -1441,7 +1441,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @param validateContents
 	 *            true to validate a contents was copied
 	 * @return copied contents
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected Contents copyUserTable(String tableName, String newTableName,
 			boolean transferContent, boolean validateContents) {
@@ -1467,7 +1467,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * @param newTableName
 	 *            new table name
 	 * @return copied contents
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected Contents copyContents(String tableName, String newTableName) {
 

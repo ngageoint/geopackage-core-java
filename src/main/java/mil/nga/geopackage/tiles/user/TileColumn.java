@@ -15,7 +15,7 @@ public class TileColumn extends UserColumn {
 	 * Create an id column
 	 * 
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createIdColumn() {
 		return createIdColumn(NO_INDEX);
@@ -37,7 +37,7 @@ public class TileColumn extends UserColumn {
 	 * Create a zoom level column
 	 * 
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createZoomLevelColumn() {
 		return createZoomLevelColumn(NO_INDEX);
@@ -59,7 +59,7 @@ public class TileColumn extends UserColumn {
 	 * Create a tile column column
 	 * 
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createTileColumnColumn() {
 		return createTileColumnColumn(NO_INDEX);
@@ -81,7 +81,7 @@ public class TileColumn extends UserColumn {
 	 * Create a tile row column
 	 * 
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createTileRowColumn() {
 		return createTileRowColumn(NO_INDEX);
@@ -103,7 +103,7 @@ public class TileColumn extends UserColumn {
 	 * Create a tile data column
 	 * 
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createTileDataColumn() {
 		return createTileDataColumn(NO_INDEX);
@@ -129,7 +129,7 @@ public class TileColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(String name,
 			GeoPackageDataType type) {
@@ -146,7 +146,7 @@ public class TileColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(int index, String name,
 			GeoPackageDataType type) {
@@ -163,7 +163,7 @@ public class TileColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(String name, GeoPackageDataType type,
 			boolean notNull) {
@@ -182,7 +182,7 @@ public class TileColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -201,7 +201,7 @@ public class TileColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(String name, GeoPackageDataType type,
 			boolean notNull, Object defaultValue) {
@@ -238,7 +238,7 @@ public class TileColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(String name, GeoPackageDataType type,
 			Long max) {
@@ -257,7 +257,7 @@ public class TileColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max) {
@@ -278,7 +278,7 @@ public class TileColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(String name, GeoPackageDataType type,
 			Long max, boolean notNull, Object defaultValue) {
@@ -315,7 +315,7 @@ public class TileColumn extends UserColumn {
 	 * @param tableColumn
 	 *            table column
 	 * @return tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static TileColumn createColumn(TableColumn tableColumn) {
 		return new TileColumn(tableColumn);
@@ -360,7 +360,7 @@ public class TileColumn extends UserColumn {
 	 * 
 	 * @param tileColumn
 	 *            tile column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public TileColumn(TileColumn tileColumn) {
 		super(tileColumn);
@@ -370,7 +370,7 @@ public class TileColumn extends UserColumn {
 	 * Copy the column
 	 * 
 	 * @return copied column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public TileColumn copy() {
 		return new TileColumn(this);

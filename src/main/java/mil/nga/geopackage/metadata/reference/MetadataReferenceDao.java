@@ -190,7 +190,7 @@ public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
 	 * @return metadata references
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<MetadataReference> queryByTable(String tableName)
 			throws SQLException {

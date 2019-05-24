@@ -214,7 +214,7 @@ public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
 	 * @return data columns
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<DataColumns> queryByTable(String tableName)
 			throws SQLException {

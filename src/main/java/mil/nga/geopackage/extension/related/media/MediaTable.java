@@ -175,7 +175,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param idColumnName
 	 *            id column name
 	 * @return id column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createIdColumn(String idColumnName) {
 		return createIdColumn(UserColumn.NO_INDEX, idColumnName);
@@ -198,7 +198,7 @@ public class MediaTable extends UserRelatedTable {
 	 * Create a data column
 	 * 
 	 * @return data column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createDataColumn() {
 		return createDataColumn(UserColumn.NO_INDEX);
@@ -220,7 +220,7 @@ public class MediaTable extends UserRelatedTable {
 	 * Create a content type column
 	 * 
 	 * @return content type column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createContentTypeColumn() {
 		return createContentTypeColumn(UserColumn.NO_INDEX);

@@ -88,7 +88,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param userTable
 	 *            user table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected UserTable(UserTable<TColumn> userTable) {
 		this.tableName = userTable.tableName;
@@ -117,14 +117,14 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Copy the table
 	 * 
 	 * @return copied table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract UserTable<TColumn> copy();
 
 	/**
 	 * Update the table columns
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected void updateColumns() {
 
@@ -352,7 +352,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param tableName
 	 *            table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
@@ -395,7 +395,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param constraint
 	 *            constraint
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraint(Constraint constraint) {
 		constraints.add(constraint);
@@ -413,7 +413,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraints(Collection<Constraint> constraints) {
 		for (Constraint constraint : constraints) {
@@ -425,7 +425,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<Constraint> getConstraints() {
 		return constraints;
@@ -437,7 +437,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<Constraint> getConstraints(ConstraintType type) {
 		List<Constraint> constraints = typedContraints.get(type);
@@ -451,7 +451,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Clear the constraints
 	 * 
 	 * @return cleared constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<Constraint> clearConstraints() {
 		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
@@ -517,7 +517,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param column
 	 *            new column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addColumn(TColumn column) {
 		columns.add(column);
@@ -531,7 +531,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            column
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(TColumn column, String newColumnName) {
 		renameColumn(column.getName(), newColumnName);
@@ -545,7 +545,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            column name
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(String columnName, String newColumnName) {
 		renameColumn(getColumnIndex(columnName), newColumnName);
@@ -558,7 +558,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            column index
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(int index, String newColumnName) {
 		columns.get(index).setName(newColumnName);
@@ -570,7 +570,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param column
 	 *            column to drop
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(TColumn column) {
 		dropColumn(column.getIndex());
@@ -581,7 +581,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param columnName
 	 *            column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(String columnName) {
 		dropColumn(getColumnIndex(columnName));
@@ -592,7 +592,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param index
 	 *            column index
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(int index) {
 		columns.remove(index);
@@ -607,7 +607,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param column
 	 *            altered column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void alterColumn(TColumn column) {
 		TColumn existingColumn = getColumn(column.getName());

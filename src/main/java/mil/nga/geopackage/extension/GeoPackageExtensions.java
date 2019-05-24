@@ -98,7 +98,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -204,7 +204,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyRTreeSpatialIndex(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -314,7 +314,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyRelatedTables(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -491,7 +491,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyGriddedCoverage(GeoPackageCore geoPackage,
 			String table, String newTable) {
@@ -599,7 +599,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copySchema(GeoPackageCore geoPackage, String table,
 			String newTable) {
@@ -665,7 +665,7 @@ public class GeoPackageExtensions {
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static void copyMetadata(GeoPackageCore geoPackage, String table,
 			String newTable) {

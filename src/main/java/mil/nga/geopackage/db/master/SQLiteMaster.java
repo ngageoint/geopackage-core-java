@@ -15,7 +15,7 @@ import mil.nga.geopackage.db.table.TableConstraints;
  * SQLite Master table queries (sqlite_master)
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class SQLiteMaster {
 

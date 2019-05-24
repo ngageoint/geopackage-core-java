@@ -136,7 +136,7 @@ public enum GeoPackageDataType {
 	 * @param name
 	 *            name
 	 * @return data type or null
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static GeoPackageDataType findName(String name) {
 		GeoPackageDataType type = null;

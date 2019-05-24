@@ -22,7 +22,7 @@ import mil.nga.geopackage.user.custom.UserCustomTableReader;
  * Builds and performs alter table statements
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class AlterTable {
 

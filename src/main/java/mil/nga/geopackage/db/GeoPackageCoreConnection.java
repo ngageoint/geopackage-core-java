@@ -56,14 +56,14 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	/**
 	 * Begin a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract void beginTransaction();
 
 	/**
 	 * End a transaction successfully
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void endTransaction() {
 		endTransaction(true);
@@ -72,7 +72,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	/**
 	 * Fail a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void failTransaction() {
 		endTransaction(false);
@@ -84,7 +84,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param successful
 	 *            true if the transaction was successful, false to rollback or
 	 *            not commit
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract void endTransaction(boolean successful);
 

@@ -32,7 +32,7 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 	 * 
 	 * @param attributesTable
 	 *            attributes table
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public AttributesTable(AttributesTable attributesTable) {
 		super(attributesTable);

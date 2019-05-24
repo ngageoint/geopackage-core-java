@@ -10,7 +10,7 @@ import mil.nga.geopackage.user.UserTableReader;
  * Reads the metadata from an existing user custom table
  * 
  * @author osbornb
- * @since 3.2.1
+ * @since 3.3.0
  */
 public class UserCustomTableReader
 		extends UserTableReader<UserCustomColumn, UserCustomTable> {

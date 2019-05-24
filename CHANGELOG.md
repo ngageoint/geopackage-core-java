@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.2.1 (TBD)
+## 3.3.0 (TBD)
 
 * sf-wkb version 2.0.2
 * sf-proj version 3.0.1

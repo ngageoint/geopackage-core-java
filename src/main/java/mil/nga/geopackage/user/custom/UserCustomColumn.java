@@ -18,7 +18,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param name
 	 *            name
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createPrimaryKeyColumn(String name) {
 		return createPrimaryKeyColumn(NO_INDEX, name);
@@ -47,7 +47,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(String name,
 			GeoPackageDataType type) {
@@ -64,7 +64,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param type
 	 *            data type
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type) {
@@ -81,7 +81,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -100,7 +100,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param notNull
 	 *            not null flag
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, boolean notNull) {
@@ -119,7 +119,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(String name,
 			GeoPackageDataType type, boolean notNull, Object defaultValue) {
@@ -156,7 +156,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(String name,
 			GeoPackageDataType type, Long max) {
@@ -175,7 +175,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param max
 	 *            max value
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(int index, String name,
 			GeoPackageDataType type, Long max) {
@@ -196,7 +196,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param defaultValue
 	 *            default value
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(String name,
 			GeoPackageDataType type, Long max, boolean notNull,
@@ -234,7 +234,7 @@ public class UserCustomColumn extends UserColumn {
 	 * @param tableColumn
 	 *            table column
 	 * @return user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createColumn(TableColumn tableColumn) {
 		return new UserCustomColumn(tableColumn);
@@ -279,7 +279,7 @@ public class UserCustomColumn extends UserColumn {
 	 * 
 	 * @param userCustomColumn
 	 *            user custom column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public UserCustomColumn(UserCustomColumn userCustomColumn) {
 		super(userCustomColumn);
@@ -289,7 +289,7 @@ public class UserCustomColumn extends UserColumn {
 	 * Copy the column
 	 * 
 	 * @return copied column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public UserCustomColumn copy() {
 		return new UserCustomColumn(this);

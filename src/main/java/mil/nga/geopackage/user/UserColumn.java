@@ -22,7 +22,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * User Column index value
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public static final int NO_INDEX = -1;
 
@@ -115,7 +115,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected UserColumn(int index, String name, String type,
 			GeoPackageDataType dataType, Long max, boolean notNull,
@@ -140,7 +140,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param tableColumn
 	 *            table column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected UserColumn(TableColumn tableColumn) {
 		this(tableColumn.getIndex(), tableColumn.getName(),
@@ -154,7 +154,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param userColumn
 	 *            user column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected UserColumn(UserColumn userColumn) {
 		this.index = userColumn.index;
@@ -175,7 +175,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @param dataType
 	 *            data type
 	 * @return type name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected static String getTypeName(String name,
 			GeoPackageDataType dataType) {
@@ -191,7 +191,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param dataType
 	 *            data type
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected static void validateDataType(String name,
 			GeoPackageDataType dataType) {
@@ -205,7 +205,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Copy the column
 	 * 
 	 * @return copied column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract UserColumn copy();
 
@@ -213,7 +213,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Check if the column has a valid index
 	 * 
 	 * @return true if has a valid index
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public boolean hasIndex() {
 		return this.index > NO_INDEX;
@@ -226,7 +226,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param index
 	 *            column index
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setIndex(int index) {
 		if (hasIndex()) {
@@ -244,7 +244,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Reset the column index
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void resetIndex() {
 		this.index = NO_INDEX;
@@ -264,7 +264,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param name
 	 *            column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -295,7 +295,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Determine if the column has a max value
 	 * 
 	 * @return true if has max value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public boolean hasMax() {
 		return max != null;
@@ -306,7 +306,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param max
 	 *            max
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setMax(Long max) {
 		this.max = max;
@@ -326,7 +326,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param notNull
 	 *            not null flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setNotNull(boolean notNull) {
 		this.notNull = notNull;
@@ -345,7 +345,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Determine if the column has a default value
 	 * 
 	 * @return true if has default value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public boolean hasDefaultValue() {
 		return defaultValue != null;
@@ -356,7 +356,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param defaultValue
 	 *            default value
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = defaultValue;
@@ -376,7 +376,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param primaryKey
 	 *            primary key flag
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
@@ -396,7 +396,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param dataType
 	 *            data type
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setDataType(GeoPackageDataType dataType) {
 		this.dataType = dataType;
@@ -416,7 +416,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param type
 	 *            database type
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -435,7 +435,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<Constraint> getConstraints() {
 		return constraints;
@@ -445,7 +445,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Clear the constraints
 	 * 
 	 * @return cleared constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public List<Constraint> clearConstraints() {
 		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
@@ -457,7 +457,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Add the default constraints that are enabled (not null, default value,
 	 * primary key) from the column properties
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addDefaultConstraints() {
 		if (isNotNull()) {
@@ -476,7 +476,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraint
 	 *            constraint
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraint(Constraint constraint) {
 		constraints.add(constraint);
@@ -487,7 +487,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraint
 	 *            constraint
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraint(String constraint) {
 		constraints.add(new RawConstraint(constraint));
@@ -498,7 +498,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraints(Collection<Constraint> constraints) {
 		for (Constraint constraint : constraints) {
@@ -511,7 +511,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addConstraints(ColumnConstraints constraints) {
 		addConstraints(constraints.getConstraints());
@@ -520,7 +520,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Add a not null constraint
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addNotNullConstraint() {
 		setNotNull(true);
@@ -533,7 +533,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @param defaultValue
 	 *            default value
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addDefaultValueConstraint(Object defaultValue) {
 		setDefaultValue(defaultValue);
@@ -543,7 +543,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Add a primary key constraint
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addPrimaryKeyConstraint() {
 		setPrimaryKey(true);
@@ -553,7 +553,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Add a unique constraint
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addUniqueConstraint() {
 		addConstraint("UNIQUE");

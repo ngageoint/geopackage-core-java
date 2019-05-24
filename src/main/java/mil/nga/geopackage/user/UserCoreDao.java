@@ -188,7 +188,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get the contents
 	 * 
 	 * @return contents
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public Contents getContents() {
 		return table.getContents();
@@ -535,14 +535,14 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Begin a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract void beginTransaction();
 
 	/**
 	 * End a transaction successfully
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void endTransaction() {
 		endTransaction(true);
@@ -551,7 +551,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Fail a transaction
 	 * 
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void failTransaction() {
 		endTransaction(false);
@@ -563,7 +563,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param successful
 	 *            true if the transaction was successful, false to rollback or
 	 *            not commit
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public abstract void endTransaction(boolean successful);
 
@@ -1737,7 +1737,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param column
 	 *            new column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void addColumn(TColumn column) {
 		CoreSQLUtils.addColumn(db, table.getTableName(), column);
@@ -1751,7 +1751,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            column
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(TColumn column, String newColumnName) {
 		renameTableColumn(column.getName(), newColumnName);
@@ -1765,7 +1765,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            column name
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(String columnName, String newColumnName) {
 		renameTableColumn(columnName, newColumnName);
@@ -1779,7 +1779,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            column index
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void renameColumn(int index, String newColumnName) {
 		renameTableColumn(table.getColumnName(index), newColumnName);
@@ -1793,7 +1793,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            column name
 	 * @param newColumnName
 	 *            new column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	protected void renameTableColumn(String columnName, String newColumnName) {
 		AlterTable.renameColumn(db, table.getTableName(), columnName,
@@ -1805,7 +1805,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param column
 	 *            column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(TColumn column) {
 		dropColumn(column.getName());
@@ -1816,7 +1816,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param index
 	 *            column index
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(int index) {
 		dropColumn(table.getColumnName(index));
@@ -1827,7 +1827,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param columnName
 	 *            column name
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumn(String columnName) {
 		AlterTable.dropColumn(db, table, columnName);
@@ -1838,7 +1838,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param columns
 	 *            columns
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumns(Collection<TColumn> columns) {
 		List<String> columnNames = new ArrayList<>();
@@ -1853,7 +1853,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param indexes
 	 *            column indexes
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumnIndexes(Collection<Integer> indexes) {
 		List<String> columnNames = new ArrayList<>();
@@ -1868,7 +1868,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param columnNames
 	 *            column names
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void dropColumnNames(Collection<String> columnNames) {
 		AlterTable.dropColumns(db, table, columnNames);
@@ -1879,7 +1879,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param column
 	 *            column
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void alterColumn(TColumn column) {
 		AlterTable.alterColumn(db, table, column);
@@ -1890,7 +1890,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param columns
 	 *            columns
-	 * @since 3.2.1
+	 * @since 3.3.0
 	 */
 	public void alterColumns(Collection<TColumn> columns) {
 		AlterTable.alterColumns(db, table, columns);
