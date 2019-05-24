@@ -432,6 +432,16 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Check if has constraints
+	 * 
+	 * @return true if has constraints
+	 * @since 3.3.0
+	 */
+	public boolean hasConstraints() {
+		return !constraints.isEmpty();
+	}
+
+	/**
 	 * Get the constraints
 	 * 
 	 * @return constraints
