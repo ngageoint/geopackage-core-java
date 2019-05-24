@@ -6,14 +6,28 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.2.1 (TBD)
 
-* Alter table support: rename table, rename column, add column, drop column, alter column
+* sf-wkb version 2.0.2
+* sf-proj version 3.0.1
+* Alter table support: rename table, rename column, add column, drop column, alter column, copy table
 * User DAO and table alter support: add, rename, drop, alter
+* GeoPackage rename and copy table support
 * Automatic user column index assignments
 * Transaction shortcut methods for the GeoPackages, connections, and User DAOs
 * User column shortcut creation methods
 * User table and user column copy methods and constructors
 * SQL utilities for tables, columns, foreign keys, views, data transfers
 * SQLite Master table (sqlite_master) support
+* Table Info (PRAGMA table_info) support
+* Table and column mapping for table alterations
+* Table and column constraints, including manual creation and automatic table parsing
+* Core table readers
+* Date Converter check for date functions
+* GeoPackage Data Type find by name method
+* Extensions table copy support
+* Missing extension table rows for Metadata Extension and Schema Extension
+* Missing comma in gpkg_2d_gridded_coverage_ancillary table schema
+* gpkg_data_columns table: removed foreign key requirement, unique constraint update
+* Missing comma in nga_tile_scaling table schema
 
 ## [3.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.2.0) (04-02-2019)
 
