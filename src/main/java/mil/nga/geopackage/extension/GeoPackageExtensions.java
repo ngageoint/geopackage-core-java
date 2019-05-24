@@ -10,8 +10,11 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
+import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.MappedColumn;
 import mil.nga.geopackage.db.TableMapping;
+import mil.nga.geopackage.db.table.ConstraintParser;
+import mil.nga.geopackage.db.table.TableConstraints;
 import mil.nga.geopackage.db.table.TableInfo;
 import mil.nga.geopackage.extension.coverage.CoverageDataCore;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
@@ -27,6 +30,7 @@ import mil.nga.geopackage.metadata.reference.MetadataReference;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
@@ -605,6 +609,26 @@ public class GeoPackageExtensions {
 			String newTable) {
 
 		if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+
+			UserCustomTable dataColumnsTable = UserCustomTableReader.readTable(
+					geoPackage.getDatabase(), DataColumns.TABLE_NAME);
+			UserCustomColumn nameColumn = dataColumnsTable
+					.getColumn(DataColumns.COLUMN_NAME);
+			if (nameColumn.hasConstraints()) {
+				nameColumn.clearConstraints();
+				if (dataColumnsTable.hasConstraints()) {
+					dataColumnsTable.clearConstraints();
+					String constraintSql = GeoPackageTableCreator
+							.readSQLScript(GeoPackageTableCreator.DATA_COLUMNS)
+							.get(0);
+					TableConstraints constraints = ConstraintParser
+							.getConstraints(constraintSql);
+					dataColumnsTable
+							.addConstraints(constraints.getTableConstraints());
+				}
+				AlterTable.alterColumn(geoPackage.getDatabase(),
+						dataColumnsTable, nameColumn);
+			}
 
 			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
 					DataColumns.TABLE_NAME, DataColumns.COLUMN_TABLE_NAME,
