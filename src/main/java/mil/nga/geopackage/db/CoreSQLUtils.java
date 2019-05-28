@@ -2,7 +2,11 @@ package mil.nga.geopackage.db;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
+import mil.nga.geopackage.db.master.SQLiteMaster;
+import mil.nga.geopackage.db.master.SQLiteMasterColumn;
+import mil.nga.geopackage.db.master.SQLiteMasterQuery;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
@@ -14,6 +18,11 @@ import mil.nga.geopackage.user.UserTable;
  * @since 1.2.1
  */
 public class CoreSQLUtils {
+
+	/**
+	 * Pattern for matching numbers
+	 */
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
 
 	/**
 	 * Wrap the name in double quotes
@@ -654,12 +663,32 @@ public class CoreSQLUtils {
 	 */
 	public static String modifySQL(String name, String sql,
 			TableMapping tableMapping) {
+		return modifySQL(null, name, sql, tableMapping);
+	}
+
+	/**
+	 * Modify the SQL with a name change and the table mapping modifications
+	 * 
+	 * @param db
+	 *            optional connection, used for SQLite Master name conflict
+	 *            detection
+	 * @param name
+	 *            statement name
+	 * @param sql
+	 *            SQL statement
+	 * @param tableMapping
+	 *            table mapping
+	 * @return updated SQL, null if SQL contains a deleted column
+	 * @since 3.3.0
+	 */
+	public static String modifySQL(GeoPackageCoreConnection db, String name,
+			String sql, TableMapping tableMapping) {
 
 		String updatedSql = sql;
 
 		if (name != null && tableMapping.isNewTable()) {
 
-			String newName = createName(name, tableMapping.getFromTable(),
+			String newName = createName(db, name, tableMapping.getFromTable(),
 					tableMapping.getToTable());
 
 			String updatedName = replaceName(updatedSql, name, newName);
@@ -812,8 +841,8 @@ public class CoreSQLUtils {
 
 	/**
 	 * Create a new name by replacing a case insensitive value with a new value.
-	 * If no replacement is done, create a new name in the form
-	 * name_replacement.
+	 * If no replacement is done, create a new name in the form name_#, where #
+	 * is either 2 or one greater than an existing name number suffix.
 	 * 
 	 * @param name
 	 *            current name
@@ -826,11 +855,63 @@ public class CoreSQLUtils {
 	 */
 	public static String createName(String name, String replace,
 			String replacement) {
-		// TODO better name replacement when table name not in the name?
+		return createName(null, name, replace, replacement);
+	}
+
+	/**
+	 * Create a new name by replacing a case insensitive value with a new value.
+	 * If no replacement is done, create a new name in the form name_#, where #
+	 * is either 2 or one greater than an existing name number suffix. When a db
+	 * connection is provided, check for conflicting SQLite Master names and
+	 * increment # until an available name is found.
+	 * 
+	 * @param db
+	 *            optional connection, used for SQLite Master name conflict
+	 *            detection
+	 * @param name
+	 *            current name
+	 * @param replace
+	 *            value to replace
+	 * @param replacement
+	 *            replacement value
+	 * @return new name
+	 * @since 3.3.0
+	 */
+	public static String createName(GeoPackageCoreConnection db, String name,
+			String replace, String replacement) {
+
+		// Attempt the replacement
 		String newName = name.replaceAll("(?i)" + replace, replacement);
+
+		// If no name change was made
 		if (newName.equals(name)) {
-			newName = name + "_" + replacement;
+
+			String baseName = newName;
+			int count = 1;
+
+			// Find any existing end number: name_#
+			int index = baseName.lastIndexOf("_");
+			if (index >= 0 && index + 1 < baseName.length()) {
+				String numberPart = baseName.substring(index + 1);
+				if (NUMBER_PATTERN.matcher(numberPart).matches()) {
+					baseName = baseName.substring(0, index);
+					count = Integer.valueOf(numberPart);
+				}
+			}
+
+			// Set the new name to name_2 or name_(#+1)
+			newName = baseName + "_" + (++count);
+
+			if (db != null) {
+				// Check for conflicting SQLite Master table names
+				while (SQLiteMaster.count(db, SQLiteMasterQuery
+						.create(SQLiteMasterColumn.NAME, newName)) > 0) {
+					newName = baseName + "_" + (++count);
+				}
+			}
+
 		}
+
 		return newName;
 	}
 

@@ -507,7 +507,7 @@ public class AlterTable {
 				if (create) {
 					String tableSql = indexesAndTriggers.getSql(i);
 					if (tableSql != null) {
-						tableSql = CoreSQLUtils.modifySQL(
+						tableSql = CoreSQLUtils.modifySQL(db,
 								indexesAndTriggers.getName(i), tableSql,
 								tableMapping);
 						if (tableSql != null) {
@@ -529,8 +529,8 @@ public class AlterTable {
 			for (int i = 0; i < views.count(); i++) {
 				String viewSql = views.getSql(i);
 				if (viewSql != null) {
-					viewSql = CoreSQLUtils.modifySQL(views.getName(i), viewSql,
-							tableMapping);
+					viewSql = CoreSQLUtils.modifySQL(db, views.getName(i),
+							viewSql, tableMapping);
 					if (viewSql != null) {
 						try {
 							db.execSQL(viewSql);

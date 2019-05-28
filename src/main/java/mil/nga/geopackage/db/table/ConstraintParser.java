@@ -17,46 +17,46 @@ public class ConstraintParser {
 	 * Regex prefix for ignoring: case insensitive, dotall mode (match line
 	 * terminators), and start of line
 	 */
-	private static String REGEX_PREFIX = "(?i)(?s)^";
+	private static final String REGEX_PREFIX = "(?i)(?s)^";
 
 	/**
 	 * Constraint name regex
 	 */
-	private static String CONSTRAINT_NAME_REGEX = REGEX_PREFIX
+	private static final String CONSTRAINT_NAME_REGEX = REGEX_PREFIX
 			+ "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
 
 	/**
 	 * Constraint name and definition regex
 	 */
-	private static String CONSTRAINT_REGEX = REGEX_PREFIX + "("
+	private static final String CONSTRAINT_REGEX = REGEX_PREFIX + "("
 			+ CONSTRAINT_NAME_REGEX + ")?(.*)";
 
 	/**
 	 * Constraint name pattern
 	 */
-	private static Pattern NAME_PATTERN = Pattern
+	private static final Pattern NAME_PATTERN = Pattern
 			.compile(CONSTRAINT_NAME_REGEX);
 
 	/**
 	 * Constraint name pattern name matcher group
 	 */
-	private static int NAME_PATTERN_NAME_GROUP = 1;
+	private static final int NAME_PATTERN_NAME_GROUP = 1;
 
 	/**
 	 * Constraint name and definition pattern
 	 */
-	private static Pattern CONSTRAINT_PATTERN = Pattern
+	private static final Pattern CONSTRAINT_PATTERN = Pattern
 			.compile(CONSTRAINT_REGEX);
 
 	/**
 	 * Constraint name and definition pattern name matcher group
 	 */
-	private static int CONSTRAINT_PATTERN_NAME_GROUP = 2;
+	private static final int CONSTRAINT_PATTERN_NAME_GROUP = 2;
 
 	/**
 	 * Constraint name and definition pattern definition matcher group
 	 */
-	private static int CONSTRAINT_PATTERN_DEFINITION_GROUP = 3;
+	private static final int CONSTRAINT_PATTERN_DEFINITION_GROUP = 3;
 
 	/**
 	 * Get the constraints for the table SQL

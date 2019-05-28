@@ -355,8 +355,9 @@ public class GeoPackageExtensions {
 
 					if (!extensions.isEmpty()) {
 
-						String newMappingTableName = CoreSQLUtils
-								.createName(mappingTableName, table, newTable);
+						String newMappingTableName = CoreSQLUtils.createName(
+								geoPackage.getDatabase(), mappingTableName,
+								table, newTable);
 
 						UserCustomTable userTable = UserCustomTableReader
 								.readTable(geoPackage.getDatabase(),
