@@ -393,6 +393,26 @@ public class CoreSQLUtils {
 	}
 
 	/**
+	 * Create the integrity check SQL
+	 * 
+	 * @return integrity check SQL
+	 * @since 3.3.0
+	 */
+	public static String integrityCheckSQL() {
+		return "PRAGMA integrity_check";
+	}
+
+	/**
+	 * Create the quick check SQL
+	 * 
+	 * @return quick check SQL
+	 * @since 3.3.0
+	 */
+	public static String quickCheckSQL() {
+		return "PRAGMA quick_check";
+	}
+
+	/**
 	 * Drop the table if it exists
 	 * 
 	 * @param db
@@ -806,11 +826,23 @@ public class CoreSQLUtils {
 	 */
 	public static String createName(String name, String replace,
 			String replacement) {
+		// TODO better name replacement when table name not in the name?
 		String newName = name.replaceAll("(?i)" + replace, replacement);
 		if (newName.equals(name)) {
 			newName = name + "_" + replacement;
 		}
 		return newName;
+	}
+
+	/**
+	 * Rebuild the GeoPackage, repacking it into a minimal amount of disk space
+	 * 
+	 * @param db
+	 *            connection
+	 * @since 3.3.0
+	 */
+	public static void vacuum(GeoPackageCoreConnection db) {
+		db.execSQL("VACUUM");
 	}
 
 }

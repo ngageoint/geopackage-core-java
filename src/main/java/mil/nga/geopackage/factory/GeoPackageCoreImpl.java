@@ -25,6 +25,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.AlterTable;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
@@ -1166,6 +1167,30 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void enableForeignKeys() {
+		database.enableForeignKeys();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean foreignKeys() {
+		return database.foreignKeys();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean foreignKeys(boolean on) {
+		return database.foreignKeys(on);
+	}
+
+	/**
 	 * Verify table or view exists
 	 *
 	 * @param dao
@@ -1489,6 +1514,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		return contents;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void vacuum() {
+		CoreSQLUtils.vacuum(database);
 	}
 
 	/**

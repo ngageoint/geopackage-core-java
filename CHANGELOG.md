@@ -10,12 +10,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * sf-proj version 3.0.1
 * Alter table support: rename table, rename column, add column, drop column, alter column, copy table
 * User DAO and table alter support: add, rename, drop, alter
-* GeoPackage rename and copy table support
+* GeoPackage rename table, copy table, foreign keys, and vacuum support
 * Automatic user column index assignments
 * Transaction shortcut methods for the GeoPackages, connections, and User DAOs
 * User column shortcut creation methods
 * User table and user column copy methods and constructors
-* SQL utilities for tables, columns, foreign keys, views, data transfers
+* SQL utilities for tables, columns, foreign keys, views, data transfers, checks, and vacuum
 * SQLite Master table (sqlite_master) support
 * Table Info (PRAGMA table_info) support
 * Table and column mapping for table alterations

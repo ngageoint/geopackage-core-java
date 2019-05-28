@@ -4,6 +4,8 @@ import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -20,6 +22,12 @@ import mil.nga.geopackage.db.table.TableInfo;
  * @author osbornb
  */
 public abstract class GeoPackageCoreConnection implements Closeable {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger
+			.getLogger(GeoPackageCoreConnection.class.getName());
 
 	/**
 	 * Connection source
@@ -87,6 +95,80 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @since 3.3.0
 	 */
 	public abstract void endTransaction(boolean successful);
+
+	/**
+	 * If foreign keys is disabled and there are no foreign key violations,
+	 * enables foreign key checks, else logs violations
+	 * 
+	 * @return true if enabled or already enabled, false if foreign key
+	 *         violations and not enabled
+	 * @since 3.3.0
+	 */
+	public boolean enableForeignKeys() {
+		boolean enabled = foreignKeys();
+		if (!enabled) {
+			List<List<Object>> violations = foreignKeyCheck();
+			if (violations.isEmpty()) {
+				foreignKeys(true);
+				enabled = true;
+			} else {
+				for (List<Object> violation : violations) {
+					logger.log(Level.WARNING,
+							"Foreign Key violation. Table: " + violation.get(0)
+									+ ", Row Id: " + violation.get(1)
+									+ ", Referred Table: " + violation.get(2)
+									+ ", FK Index: " + violation.get(3));
+				}
+			}
+		}
+		return enabled;
+	}
+
+	/**
+	 * Query for the foreign keys value
+	 * 
+	 * @return true if enabled, false if disabled
+	 * @since 3.3.0
+	 */
+	public boolean foreignKeys() {
+		return CoreSQLUtils.foreignKeys(this);
+	}
+
+	/**
+	 * Change the foreign keys state
+	 * 
+	 * @param on
+	 *            true to turn on, false to turn off
+	 * @return previous foreign keys value
+	 * @since 3.3.0
+	 */
+	public boolean foreignKeys(boolean on) {
+		return CoreSQLUtils.foreignKeys(this, on);
+	}
+
+	/**
+	 * Perform a foreign key check
+	 * 
+	 * @return empty list if valid or violation errors, 4 column values for each
+	 *         violation. see SQLite PRAGMA foreign_key_check
+	 * @since 3.3.0
+	 */
+	public List<List<Object>> foreignKeyCheck() {
+		return CoreSQLUtils.foreignKeyCheck(this);
+	}
+
+	/**
+	 * Perform a foreign key check
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return empty list if valid or violation errors, 4 column values for each
+	 *         violation. see SQLite PRAGMA foreign_key_check
+	 * @since 3.3.0
+	 */
+	public List<List<Object>> foreignKeyCheck(String tableName) {
+		return CoreSQLUtils.foreignKeyCheck(this, tableName);
+	}
 
 	/**
 	 * Convenience method for deleting rows in the database.

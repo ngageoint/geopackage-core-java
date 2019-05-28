@@ -846,6 +846,32 @@ public interface GeoPackageCore extends Closeable {
 	public <T> T callInTransaction(Callable<T> callable) throws SQLException;
 
 	/**
+	 * If foreign keys is disabled and there are no foreign key violations,
+	 * enables foreign key checks, else logs violations
+	 * 
+	 * @since 3.3.0
+	 */
+	public void enableForeignKeys();
+
+	/**
+	 * Query for the foreign keys value
+	 * 
+	 * @return true if enabled, false if disabled
+	 * @since 3.3.0
+	 */
+	public boolean foreignKeys();
+
+	/**
+	 * Change the foreign keys state
+	 * 
+	 * @param on
+	 *            true to turn on, false to turn off
+	 * @return previous foreign keys value
+	 * @since 3.3.0
+	 */
+	public boolean foreignKeys(boolean on);
+
+	/**
 	 * Drop the table if it exists. Drops the table with the table name, not
 	 * limited to GeoPackage specific tables.
 	 * 
@@ -898,6 +924,13 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.3.0
 	 */
 	public void copyTableAsEmpty(String tableName, String newTableName);
+
+	/**
+	 * Rebuild the GeoPackage, repacking it into a minimal amount of disk space
+	 * 
+	 * @since 3.3.0
+	 */
+	public void vacuum();
 
 	/**
 	 * Get a 2D Gridded Coverage DAO

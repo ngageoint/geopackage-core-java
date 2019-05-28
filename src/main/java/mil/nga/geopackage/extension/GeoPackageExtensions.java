@@ -107,14 +107,22 @@ public class GeoPackageExtensions {
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		copyRTreeSpatialIndex(geoPackage, table, newTable);
-		copyRelatedTables(geoPackage, table, newTable);
-		copyGriddedCoverage(geoPackage, table, newTable);
-		copySchema(geoPackage, table, newTable);
-		copyMetadata(geoPackage, table, newTable);
+		try {
 
-		// Handle copying any extensions with extra tables here
-		NGAExtensions.copyTableExtensions(geoPackage, table, newTable);
+			copyRTreeSpatialIndex(geoPackage, table, newTable);
+			copyRelatedTables(geoPackage, table, newTable);
+			copyGriddedCoverage(geoPackage, table, newTable);
+			copySchema(geoPackage, table, newTable);
+			copyMetadata(geoPackage, table, newTable);
+
+			// Handle copying any extensions with extra tables here
+			NGAExtensions.copyTableExtensions(geoPackage, table, newTable);
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to copy extensions for table: "
+					+ newTable + ", copied from table: " + table, e);
+		}
+
 	}
 
 	/**
@@ -213,12 +221,14 @@ public class GeoPackageExtensions {
 	public static void copyRTreeSpatialIndex(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(
-				geoPackage);
-		if (rTreeIndexExtension.has(table)) {
-			GeometryColumnsDao geometryColumnsDao = geoPackage
-					.getGeometryColumnsDao();
-			try {
+		try {
+
+			RTreeIndexCoreExtension rTreeIndexExtension = getRTreeIndexExtension(
+					geoPackage);
+			if (rTreeIndexExtension.has(table)) {
+				GeometryColumnsDao geometryColumnsDao = geoPackage
+						.getGeometryColumnsDao();
+
 				GeometryColumns geometryColumns = geometryColumnsDao
 						.queryForTableName(newTable);
 				if (geometryColumns != null) {
@@ -230,14 +240,12 @@ public class GeoPackageExtensions {
 								geometryColumns.getColumnName(), pk);
 					}
 				}
-			} catch (Exception e) {
-				logger.log(
-						Level.WARNING, "Failed to create RTree for table: "
-								+ newTable + ", copied from table: " + table,
-						e);
 			}
-		}
 
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to create RTree for table: "
+					+ newTable + ", copied from table: " + table, e);
+		}
 	}
 
 	/**
@@ -383,6 +391,7 @@ public class GeoPackageExtensions {
 					}
 				}
 			}
+
 		} catch (Exception e) {
 			logger.log(Level.WARNING,
 					"Failed to create Related Tables for table: " + newTable
@@ -500,11 +509,13 @@ public class GeoPackageExtensions {
 	public static void copyGriddedCoverage(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		if (geoPackage.isTableType(ContentsDataType.GRIDDED_COVERAGE, table)) {
+		try {
 
-			ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+			if (geoPackage.isTableType(ContentsDataType.GRIDDED_COVERAGE,
+					table)) {
 
-			try {
+				ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
 				if (extensionsDao.isTableExists()) {
 
 					List<Extensions> extensions = extensionsDao
@@ -542,13 +553,13 @@ public class GeoPackageExtensions {
 						}
 					}
 				}
-			} catch (Exception e) {
-				logger.log(Level.WARNING,
-						"Failed to create Gridded Coverage for table: "
-								+ newTable + ", copied from table: " + table,
-						e);
 			}
 
+		} catch (Exception e) {
+			logger.log(Level.WARNING,
+					"Failed to create Gridded Coverage for table: " + newTable
+							+ ", copied from table: " + table,
+					e);
 		}
 
 	}
@@ -608,32 +619,41 @@ public class GeoPackageExtensions {
 	public static void copySchema(GeoPackageCore geoPackage, String table,
 			String newTable) {
 
-		if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+		try {
 
-			UserCustomTable dataColumnsTable = UserCustomTableReader.readTable(
-					geoPackage.getDatabase(), DataColumns.TABLE_NAME);
-			UserCustomColumn nameColumn = dataColumnsTable
-					.getColumn(DataColumns.COLUMN_NAME);
-			if (nameColumn.hasConstraints()) {
-				nameColumn.clearConstraints();
-				if (dataColumnsTable.hasConstraints()) {
-					dataColumnsTable.clearConstraints();
-					String constraintSql = GeoPackageTableCreator
-							.readSQLScript(GeoPackageTableCreator.DATA_COLUMNS)
-							.get(0);
-					TableConstraints constraints = ConstraintParser
-							.getConstraints(constraintSql);
-					dataColumnsTable
-							.addConstraints(constraints.getTableConstraints());
+			if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+
+				UserCustomTable dataColumnsTable = UserCustomTableReader
+						.readTable(geoPackage.getDatabase(),
+								DataColumns.TABLE_NAME);
+				UserCustomColumn nameColumn = dataColumnsTable
+						.getColumn(DataColumns.COLUMN_NAME);
+				if (nameColumn.hasConstraints()) {
+					nameColumn.clearConstraints();
+					if (dataColumnsTable.hasConstraints()) {
+						dataColumnsTable.clearConstraints();
+						String constraintSql = GeoPackageTableCreator
+								.readSQLScript(
+										GeoPackageTableCreator.DATA_COLUMNS)
+								.get(0);
+						TableConstraints constraints = ConstraintParser
+								.getConstraints(constraintSql);
+						dataColumnsTable.addConstraints(
+								constraints.getTableConstraints());
+					}
+					AlterTable.alterColumn(geoPackage.getDatabase(),
+							dataColumnsTable, nameColumn);
 				}
-				AlterTable.alterColumn(geoPackage.getDatabase(),
-						dataColumnsTable, nameColumn);
+
+				CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
+						DataColumns.TABLE_NAME, DataColumns.COLUMN_TABLE_NAME,
+						newTable, table);
+
 			}
 
-			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
-					DataColumns.TABLE_NAME, DataColumns.COLUMN_TABLE_NAME,
-					newTable, table);
-
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to create Schema for table: "
+					+ newTable + ", copied from table: " + table, e);
 		}
 
 	}
@@ -694,12 +714,19 @@ public class GeoPackageExtensions {
 	public static void copyMetadata(GeoPackageCore geoPackage, String table,
 			String newTable) {
 
-		if (geoPackage.isTable(MetadataReference.TABLE_NAME)) {
+		try {
 
-			CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
-					MetadataReference.TABLE_NAME,
-					MetadataReference.COLUMN_TABLE_NAME, newTable, table);
+			if (geoPackage.isTable(MetadataReference.TABLE_NAME)) {
 
+				CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
+						MetadataReference.TABLE_NAME,
+						MetadataReference.COLUMN_TABLE_NAME, newTable, table);
+
+			}
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to create Metadata for table: "
+					+ newTable + ", copied from table: " + table, e);
 		}
 
 	}

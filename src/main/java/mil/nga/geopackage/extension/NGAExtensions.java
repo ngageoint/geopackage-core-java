@@ -102,13 +102,21 @@ public class NGAExtensions {
 	public static void copyTableExtensions(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		copyContentsId(geoPackage, table, newTable);
-		copyFeatureStyle(geoPackage, table, newTable);
-		copyTileScaling(geoPackage, table, newTable);
-		copyFeatureTileLink(geoPackage, table, newTable);
-		copyGeometryIndex(geoPackage, table, newTable);
+		try {
 
-		// Copy future extensions for the table here
+			copyContentsId(geoPackage, table, newTable);
+			copyFeatureStyle(geoPackage, table, newTable);
+			copyTileScaling(geoPackage, table, newTable);
+			copyFeatureTileLink(geoPackage, table, newTable);
+			copyGeometryIndex(geoPackage, table, newTable);
+
+			// Copy future extensions for the table here
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to copy extensions for table: "
+					+ newTable + ", copied from table: " + table, e);
+		}
+
 	}
 
 	/**
@@ -190,9 +198,9 @@ public class NGAExtensions {
 	public static void copyGeometryIndex(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-
 		try {
+
+			ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 			if (extensionsDao.isTableExists()) {
 
@@ -308,9 +316,9 @@ public class NGAExtensions {
 	public static void copyFeatureTileLink(GeoPackageCore geoPackage,
 			String table, String newTable) {
 
-		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-
 		try {
+
+			ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 			if (extensionsDao.isTableExists()) {
 
@@ -561,6 +569,7 @@ public class NGAExtensions {
 			String newTable) {
 
 		try {
+
 			FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
 					geoPackage);
 			if (featureStyleExtension.hasRelationship(table)) {
@@ -609,6 +618,7 @@ public class NGAExtensions {
 							+ ", copied from table: " + table,
 					e);
 		}
+
 	}
 
 	/**
@@ -752,12 +762,19 @@ public class NGAExtensions {
 	public static void copyContentsId(GeoPackageCore geoPackage, String table,
 			String newTable) {
 
-		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
-				geoPackage);
-		if (contentsIdExtension.has()) {
-			if (contentsIdExtension.get(table) != null) {
-				contentsIdExtension.create(newTable);
+		try {
+
+			ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
+					geoPackage);
+			if (contentsIdExtension.has()) {
+				if (contentsIdExtension.get(table) != null) {
+					contentsIdExtension.create(newTable);
+				}
 			}
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Failed to create Contents Id for table: "
+					+ newTable + ", copied from table: " + table, e);
 		}
 
 	}
