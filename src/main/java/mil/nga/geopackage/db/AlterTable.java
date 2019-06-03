@@ -15,6 +15,7 @@ import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.extension.RTreeIndexCoreExtension;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
@@ -190,6 +191,38 @@ public class AlterTable {
 	}
 
 	/**
+	 * Drop a column
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 */
+	public static void dropColumn(GeoPackageCoreConnection db, String tableName,
+			String columnName) {
+		dropColumns(db, tableName, Arrays.asList(columnName));
+	}
+
+	/**
+	 * Drop columns
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param columnNames
+	 *            column names
+	 */
+	public static void dropColumns(GeoPackageCoreConnection db,
+			String tableName, Collection<String> columnNames) {
+		UserCustomTable userTable = UserCustomTableReader.readTable(db,
+				tableName);
+		dropColumns(db, userTable, columnNames);
+	}
+
+	/**
 	 * Alter a column
 	 * 
 	 * @param db
@@ -233,6 +266,44 @@ public class AlterTable {
 		for (T column : columns) {
 			table.alterColumn(column);
 		}
+	}
+
+	/**
+	 * Alter a column
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param column
+	 *            column
+	 * @param <T>
+	 *            user column type
+	 */
+	public static <T extends UserColumn> void alterColumn(
+			GeoPackageCoreConnection db, String tableName,
+			UserCustomColumn column) {
+		alterColumns(db, tableName, Arrays.asList(column));
+	}
+
+	/**
+	 * Alter columns
+	 * 
+	 * @param db
+	 *            connection
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param <T>
+	 *            user column type
+	 */
+	public static <T extends UserColumn> void alterColumns(
+			GeoPackageCoreConnection db, String tableName,
+			Collection<UserCustomColumn> columns) {
+		UserCustomTable userTable = UserCustomTableReader.readTable(db,
+				tableName);
+		alterColumns(db, userTable, columns);
 	}
 
 	/**
