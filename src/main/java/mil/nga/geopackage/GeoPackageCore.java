@@ -262,7 +262,7 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @param table
 	 *            table name
-	 * @return true if a user table
+	 * @return true if a table
 	 * @since 1.2.1
 	 */
 	public boolean isTable(String table);
