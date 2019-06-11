@@ -63,8 +63,9 @@ public class SQLiteMasterQuery {
 	 */
 	public void add(SQLiteMasterColumn column, String operation, String value) {
 		validateAdd();
-		queries.add(CoreSQLUtils.quoteWrap(column.name().toLowerCase()) + " "
-				+ operation + " ?");
+		queries.add(
+				"LOWER(" + CoreSQLUtils.quoteWrap(column.name().toLowerCase())
+						+ ") " + operation + " LOWER(?)");
 		arguments.add(value);
 	}
 
