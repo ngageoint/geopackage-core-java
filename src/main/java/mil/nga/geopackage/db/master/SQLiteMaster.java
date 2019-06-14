@@ -20,6 +20,11 @@ import mil.nga.geopackage.db.table.TableConstraints;
 public class SQLiteMaster {
 
 	/**
+	 * Table Name
+	 */
+	public static final String TABLE_NAME = "sqlite_master";
+
+	/**
 	 * SQLiteMaster query results
 	 */
 	private final List<List<Object>> results;
@@ -832,7 +837,8 @@ public class SQLiteMaster {
 			sql.append("count(*)");
 		}
 
-		sql.append(" FROM sqlite_master");
+		sql.append(" FROM ");
+		sql.append(TABLE_NAME);
 
 		boolean hasQuery = query != null && query.has();
 		boolean hasTypes = types != null && types.length > 0;
