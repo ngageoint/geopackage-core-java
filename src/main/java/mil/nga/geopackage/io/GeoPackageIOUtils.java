@@ -184,6 +184,42 @@ public class GeoPackageIOUtils {
 	}
 
 	/**
+	 * Get the stream string in UTF-8
+	 * 
+	 * @param stream
+	 *            input stream
+	 * @return stream string
+	 * @throws IOException
+	 *             upon failure
+	 * @since 3.3.0
+	 */
+	public static String streamString(InputStream stream) throws IOException {
+		return streamString(stream, "UTF-8");
+	}
+
+	/**
+	 * Get the stream string
+	 * 
+	 * @param stream
+	 *            input stream
+	 * @param charsetName
+	 *            character set name
+	 * @return stream string
+	 * @throws IOException
+	 *             upon failure
+	 * @since 3.3.0
+	 */
+	public static String streamString(InputStream stream, String charsetName)
+			throws IOException {
+
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+		copyStream(stream, bytes);
+
+		return bytes.toString(charsetName);
+	}
+
+	/**
 	 * Copy an input stream to an output stream
 	 * 
 	 * @param copyFrom
