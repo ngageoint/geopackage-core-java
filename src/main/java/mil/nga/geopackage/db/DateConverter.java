@@ -116,6 +116,18 @@ public class DateConverter {
 	}
 
 	/**
+	 * Get a date converter for the provided formats
+	 * 
+	 * @param formats
+	 *            formats
+	 * @return date converter
+	 */
+	public static DateConverter dateConverter(String... formats) {
+		return new DateConverter(formats);
+
+	}
+
+	/**
 	 * Simple date formatters
 	 */
 	private final List<SimpleDateFormat> formatters = new ArrayList<>();
