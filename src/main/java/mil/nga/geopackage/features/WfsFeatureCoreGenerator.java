@@ -21,7 +21,7 @@ import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.geojson.Feature;
-import mil.nga.sf.geojson.wfs.CollectionInfo;
+import mil.nga.sf.geojson.wfs.Collection;
 import mil.nga.sf.geojson.wfs.Link;
 import mil.nga.sf.geojson.wfs.WfsFeatureCollection;
 import mil.nga.sf.geojson.wfs.WfsFeaturesConverter;
@@ -394,18 +394,18 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	/**
 	 * Get the supported projections
 	 * 
-	 * @param collectionInfo
-	 *            collection info
+	 * @param collection
+	 *            collection
 	 * @return map of orgs and projections
 	 */
 	public Map<String, Map<String, Projection>> getProjections(
-			CollectionInfo collectionInfo) {
+			Collection collection) {
 
 		Map<String, Map<String, Projection>> projections = new HashMap<>();
 
-		if (collectionInfo != null) {
+		if (collection != null) {
 
-			for (String crs : collectionInfo.getCrs()) {
+			for (String crs : collection.getCrs()) {
 
 				Matcher matcher = CRS_PATTERN.matcher(crs);
 				if (matcher.find()) {
@@ -506,42 +506,41 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
-	 * Collection info request
+	 * Collection request
 	 * 
-	 * @return collection info
+	 * @return collection
 	 */
-	public CollectionInfo collectionRequest() {
+	public Collection collectionRequest() {
 		return collectionRequest(buildCollectionRequestUrl());
 	}
 
 	/**
-	 * Collection info request for the provided URL
+	 * Collection request for the provided URL
 	 * 
 	 * @param url
 	 *            url value
-	 * @return collection info
+	 * @return collection
 	 */
-	protected CollectionInfo collectionRequest(String url) {
+	protected Collection collectionRequest(String url) {
 
-		CollectionInfo collectionInfo = null;
+		Collection collection = null;
 
 		url += "?f=json";
 
-		String collection = urlRequest(url);
+		String collectionValue = urlRequest(url);
 
-		if (collection != null) {
+		if (collectionValue != null) {
 
 			try {
-				collectionInfo = WfsFeaturesConverter
-						.toCollectionInfo(collection);
+				collection = WfsFeaturesConverter.toCollection(collectionValue);
 			} catch (Exception e) {
 				LOGGER.log(Level.WARNING,
-						"Failed to translate collection info. url: " + url, e);
+						"Failed to translate collection. url: " + url, e);
 			}
 
 		}
 
-		return collectionInfo;
+		return collection;
 	}
 
 	/**
