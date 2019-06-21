@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -20,9 +21,13 @@ import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.geojson.Feature;
+import mil.nga.sf.geojson.wfs.CollectionInfo;
 import mil.nga.sf.geojson.wfs.Link;
 import mil.nga.sf.geojson.wfs.WfsFeatureCollection;
 import mil.nga.sf.geojson.wfs.WfsFeaturesConverter;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
 
 /**
  * WFS 3 Feature Generator
@@ -46,6 +51,22 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * Limit pattern
 	 */
 	private static final Pattern LIMIT_PATTERN = Pattern.compile("limit=\\d+");
+
+	/**
+	 * CRS pattern
+	 */
+	private static final Pattern CRS_PATTERN = Pattern
+			.compile("http.+/([^/]+)/[^/]+/([^/]+)$");
+
+	/**
+	 * CRS pattern authority group
+	 */
+	private static final int CRS_AUTHORITY_GROUP = 1;
+
+	/**
+	 * CRS pattern code group
+	 */
+	private static final int CRS_CODE_GROUP = 2;
 
 	/**
 	 * Base server url
@@ -278,14 +299,18 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	@Override
 	public int generateFeatures() throws SQLException {
 
-		StringBuilder urlBuilder = new StringBuilder(server);
+		String url = buildCollectionRequestUrl();
 
-		if (!server.endsWith("/")) {
-			urlBuilder.append("/");
+		Map<String, Map<String, Projection>> projections = getProjections(url);
+		if (getProjection(projections, projection) == null) {
+			LOGGER.log(Level.WARNING,
+					"The projection is not advertised by the server. Authority: "
+							+ projection.getAuthority() + ", Code: "
+							+ projection.getCode());
 		}
 
-		urlBuilder.append("collections/");
-		urlBuilder.append(name);
+		StringBuilder urlBuilder = new StringBuilder(url);
+
 		urlBuilder.append("/items");
 
 		boolean params = false;
@@ -325,6 +350,198 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 		String urlValue = urlBuilder.toString();
 
 		return generateFeatures(urlValue, 0);
+	}
+
+	/**
+	 * Build the collection request URL
+	 * 
+	 * @return url
+	 */
+	protected String buildCollectionRequestUrl() {
+
+		StringBuilder urlBuilder = new StringBuilder(server);
+
+		if (!server.endsWith("/")) {
+			urlBuilder.append("/");
+		}
+
+		urlBuilder.append("collections/");
+		urlBuilder.append(name);
+
+		return urlBuilder.toString();
+	}
+
+	/**
+	 * Get the supported projections
+	 * 
+	 * @return map of orgs and projections
+	 */
+	public Map<String, Map<String, Projection>> getProjections() {
+		return getProjections(buildCollectionRequestUrl());
+	}
+
+	/**
+	 * Get the supported projections
+	 * 
+	 * @param url
+	 *            URL
+	 * @return map of orgs and projections
+	 */
+	public Map<String, Map<String, Projection>> getProjections(String url) {
+		return getProjections(collectionRequest(url));
+	}
+
+	/**
+	 * Get the supported projections
+	 * 
+	 * @param collectionInfo
+	 *            collection info
+	 * @return map of orgs and projections
+	 */
+	public Map<String, Map<String, Projection>> getProjections(
+			CollectionInfo collectionInfo) {
+
+		Map<String, Map<String, Projection>> projections = new HashMap<>();
+
+		if (collectionInfo != null) {
+
+			for (String crs : collectionInfo.getCrs()) {
+
+				Matcher matcher = CRS_PATTERN.matcher(crs);
+				if (matcher.find()) {
+					String authority = matcher.group(CRS_AUTHORITY_GROUP);
+					String code = matcher.group(CRS_CODE_GROUP);
+					addProjection(projections, authority, code);
+				}
+
+			}
+
+		}
+
+		if (projections.isEmpty()) {
+			addProjection(projections, ProjectionConstants.AUTHORITY_OGC,
+					ProjectionConstants.OGC_CRS84);
+			addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
+					String.valueOf(
+							ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+		} else if (getProjection(projections, ProjectionConstants.AUTHORITY_OGC,
+				ProjectionConstants.OGC_CRS84) != null) {
+			addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
+					String.valueOf(
+							ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+		}
+
+		return projections;
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param projection
+	 *            projection
+	 * @return projection or null
+	 */
+	public Projection getProjection(
+			Map<String, Map<String, Projection>> projections,
+			Projection projection) {
+		return getProjection(projections, projection.getAuthority(),
+				projection.getCode());
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @return projection or null
+	 */
+	public Projection getProjection(
+			Map<String, Map<String, Projection>> projections, String authority,
+			String code) {
+		Projection projection = null;
+		Map<String, Projection> authorityProjections = projections
+				.get(authority);
+		if (authorityProjections != null) {
+			projection = authorityProjections.get(code);
+		}
+		return projection;
+	}
+
+	/**
+	 * Add a projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 */
+	protected void addProjection(
+			Map<String, Map<String, Projection>> projections, String authority,
+			String code) {
+
+		Map<String, Projection> authorityProjections = projections
+				.get(authority);
+		if (authorityProjections == null) {
+			authorityProjections = new HashMap<>();
+			projections.put(authority, authorityProjections);
+		}
+
+		try {
+			Projection projection = ProjectionFactory.getProjection(authority,
+					code);
+			authorityProjections.put(code, projection);
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Unable to create projection. Authority: "
+					+ authority + ", Code: " + code);
+		}
+
+	}
+
+	/**
+	 * Collection info request
+	 * 
+	 * @return collection info
+	 */
+	public CollectionInfo collectionRequest() {
+		return collectionRequest(buildCollectionRequestUrl());
+	}
+
+	/**
+	 * Collection info request for the provided URL
+	 * 
+	 * @param url
+	 *            url value
+	 * @return collection info
+	 */
+	protected CollectionInfo collectionRequest(String url) {
+
+		CollectionInfo collectionInfo = null;
+
+		url += "?f=json";
+
+		String collection = urlRequest(url);
+
+		if (collection != null) {
+
+			try {
+				collectionInfo = WfsFeaturesConverter
+						.toCollectionInfo(collection);
+			} catch (Exception e) {
+				LOGGER.log(Level.WARNING,
+						"Failed to translate collection info. url: " + url, e);
+			}
+
+		}
+
+		return collectionInfo;
 	}
 
 	/**
@@ -379,40 +596,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 			urlBuilder.append("f=json");
 		}
 
-		urlString = urlBuilder.toString();
-
-		URL url;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			throw new GeoPackageException(
-					"Failed to download features. URL: " + urlString, e);
-		}
-
-		String features = null;
-
-		int attempt = 1;
-		while (true) {
-			try {
-				features = downloadFeatures(urlString, url);
-				break;
-			} catch (Exception e) {
-				if (attempt < downloadAttempts) {
-					LOGGER.log(Level.WARNING,
-							"Failed to download features after attempt "
-									+ attempt + " of " + downloadAttempts
-									+ ". URL: " + urlString,
-							e);
-					attempt++;
-				} else {
-					throw new GeoPackageException(
-							"Failed to download features after "
-									+ downloadAttempts + " attempts. URL: "
-									+ urlString,
-							e);
-				}
-			}
-		}
+		String features = urlRequest(urlBuilder.toString());
 
 		if (features != null) {
 			WfsFeatureCollection featureCollection = createFeatures(features);
@@ -439,7 +623,52 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
-	 * Download the features
+	 * URL request
+	 * 
+	 * @param urlValue
+	 *            URL value
+	 * @return response string
+	 */
+	protected String urlRequest(String urlValue) {
+
+		String response = null;
+
+		URL url;
+		try {
+			url = new URL(urlValue);
+		} catch (MalformedURLException e) {
+			throw new GeoPackageException("Failed request. URL: " + urlValue,
+					e);
+		}
+
+		int attempt = 1;
+		while (true) {
+			try {
+				response = urlRequest(urlValue, url);
+				break;
+			} catch (Exception e) {
+				if (attempt < downloadAttempts) {
+					LOGGER.log(Level.WARNING,
+							"Failed to download features after attempt "
+									+ attempt + " of " + downloadAttempts
+									+ ". URL: " + urlValue,
+							e);
+					attempt++;
+				} else {
+					throw new GeoPackageException(
+							"Failed to download features after "
+									+ downloadAttempts + " attempts. URL: "
+									+ urlValue,
+							e);
+				}
+			}
+		}
+
+		return response;
+	}
+
+	/**
+	 * Perform a URL request
 	 * 
 	 * @param urlValue
 	 *            URL string value
@@ -447,9 +676,9 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	 *            URL
 	 * @return features response
 	 */
-	private String downloadFeatures(String urlValue, URL url) {
+	protected String urlRequest(String urlValue, URL url) {
 
-		String features = null;
+		String response = null;
 
 		HttpURLConnection connection = null;
 		try {
@@ -469,27 +698,25 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 			}
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				throw new GeoPackageException(
-						"Failed to download features. URL: " + urlValue
-								+ ", Response Code: "
-								+ connection.getResponseCode()
-								+ ", Response Message: "
-								+ connection.getResponseMessage());
+				throw new GeoPackageException("Failed request. URL: " + urlValue
+						+ ", Response Code: " + connection.getResponseCode()
+						+ ", Response Message: "
+						+ connection.getResponseMessage());
 			}
 
 			InputStream responseStream = connection.getInputStream();
-			features = GeoPackageIOUtils.streamString(responseStream);
+			response = GeoPackageIOUtils.streamString(responseStream);
 
 		} catch (IOException e) {
-			throw new GeoPackageException(
-					"Failed to download features. URL: " + urlValue, e);
+			throw new GeoPackageException("Failed request. URL: " + urlValue,
+					e);
 		} finally {
 			if (connection != null) {
 				connection.disconnect();
 			}
 		}
 
-		return features;
+		return response;
 	}
 
 	/**
@@ -501,7 +728,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * @throws SQLException
 	 *             upon error
 	 */
-	private WfsFeatureCollection createFeatures(String features)
+	protected WfsFeatureCollection createFeatures(String features)
 			throws SQLException {
 
 		WfsFeatureCollection featureCollection = WfsFeaturesConverter
