@@ -43,11 +43,6 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 			.getLogger(WfsFeatureCoreGenerator.class.getName());
 
 	/**
-	 * Format pattern
-	 */
-	private static final Pattern FORMAT_PATTERN = Pattern.compile("f=json");
-
-	/**
 	 * Limit pattern
 	 */
 	private static final Pattern LIMIT_PATTERN = Pattern.compile("limit=\\d+");
@@ -525,9 +520,13 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		Collection collection = null;
 
-		url += "?f=json";
-
-		String collectionValue = urlRequest(url);
+		String collectionValue = null;
+		try {
+			collectionValue = urlRequest(url);
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING,
+					"Failed to request the collection. url: " + url, e);
+		}
 
 		if (collectionValue != null) {
 
@@ -583,16 +582,6 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 				urlBuilder.append("limit=");
 				urlBuilder.append(requestLimit);
 			}
-		}
-
-		if (!FORMAT_PATTERN.matcher(urlString).find()) {
-			if (params) {
-				urlBuilder.append("&");
-			} else {
-				urlBuilder.append("?");
-				params = true;
-			}
-			urlBuilder.append("f=json");
 		}
 
 		String features = urlRequest(urlBuilder.toString());
@@ -683,6 +672,8 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 		try {
 			LOGGER.log(Level.INFO, urlValue);
 			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestProperty("Accept",
+					"application/json,application/geo+json");
 			connection.connect();
 
 			int responseCode = connection.getResponseCode();
