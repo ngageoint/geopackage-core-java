@@ -19,28 +19,28 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
+import mil.nga.openapi.features.json.Collection;
+import mil.nga.openapi.features.json.FeatureCollection;
+import mil.nga.openapi.features.json.FeaturesConverter;
+import mil.nga.openapi.features.json.Link;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.geojson.Feature;
-import mil.nga.sf.geojson.wfs.Collection;
-import mil.nga.sf.geojson.wfs.Link;
-import mil.nga.sf.geojson.wfs.WfsFeatureCollection;
-import mil.nga.sf.geojson.wfs.WfsFeaturesConverter;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionFactory;
 
 /**
- * WFS 3 Feature Generator
+ * OGC OpenAPI Features Generator
  * 
  * @author osbornb
  */
-public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
+public abstract class OpenAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 	/**
 	 * Logger
 	 */
 	private static final Logger LOGGER = Logger
-			.getLogger(WfsFeatureCoreGenerator.class.getName());
+			.getLogger(OpenAPIFeatureCoreGenerator.class.getName());
 
 	/**
 	 * Limit pattern
@@ -111,8 +111,8 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * @param name
 	 *            collection identifier
 	 */
-	public WfsFeatureCoreGenerator(GeoPackageCore geoPackage, String tableName,
-			String server, String name) {
+	public OpenAPIFeatureCoreGenerator(GeoPackageCore geoPackage,
+			String tableName, String server, String name) {
 		super(geoPackage, tableName);
 		this.server = server;
 		this.name = name;
@@ -531,7 +531,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 		if (collectionValue != null) {
 
 			try {
-				collection = WfsFeaturesConverter.toCollection(collectionValue);
+				collection = FeaturesConverter.toCollection(collectionValue);
 			} catch (Exception e) {
 				LOGGER.log(Level.WARNING,
 						"Failed to translate collection. url: " + url, e);
@@ -564,7 +564,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 		Integer requestLimit = limit;
 		if (totalLimit != null && totalLimit
 				- currentCount < (requestLimit != null ? requestLimit
-						: WfsFeatureCollection.LIMIT_DEFAULT)) {
+						: FeatureCollection.LIMIT_DEFAULT)) {
 			requestLimit = totalLimit - currentCount;
 		}
 		if (requestLimit != null) {
@@ -587,7 +587,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 		String features = urlRequest(urlBuilder.toString());
 
 		if (features != null) {
-			WfsFeatureCollection featureCollection = createFeatures(features);
+			FeatureCollection featureCollection = createFeatures(features);
 
 			Integer numberReturned = featureCollection.getNumberReturned();
 			if (numberReturned != null) {
@@ -595,7 +595,7 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 			}
 
 			List<Link> nextLinks = featureCollection.getRelationLinks()
-					.get(WfsFeatureCollection.LINK_RELATION_NEXT);
+					.get(FeatureCollection.LINK_RELATION_NEXT);
 			if (nextLinks != null) {
 				for (Link nextLink : nextLinks) {
 					if (totalLimit != null && totalLimit <= currentCount) {
@@ -718,10 +718,10 @@ public abstract class WfsFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * @throws SQLException
 	 *             upon error
 	 */
-	protected WfsFeatureCollection createFeatures(String features)
+	protected FeatureCollection createFeatures(String features)
 			throws SQLException {
 
-		WfsFeatureCollection featureCollection = WfsFeaturesConverter
+		FeatureCollection featureCollection = FeaturesConverter
 				.toFeatureCollection(features);
 		for (Feature feature : featureCollection.getFeatureCollection()
 				.getFeatures()) {
