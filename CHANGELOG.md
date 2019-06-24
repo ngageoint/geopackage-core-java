@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * sf-wkb version 2.0.2
 * sf-proj version 3.0.1
+* features-json version 1.0.0
 * Alter table support: rename table, rename column, add column, drop column, alter column, copy table
 * User DAO and table alter support: add, rename, drop, alter
 * GeoPackage rename table, copy table, foreign keys, and vacuum support
@@ -28,6 +29,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Missing comma in gpkg_2d_gridded_coverage_ancillary table schema
 * gpkg_data_columns table: removed foreign key requirement, unique constraint update
 * Missing comma in nga_tile_scaling table schema
+* OGC OpenAPI Features download to GeoPackage support
 
 ## [3.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.2.0) (04-02-2019)
 
