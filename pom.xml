@@ -58,8 +58,8 @@
 			<version>3.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.openapi.features</groupId>
-			<artifactId>features-json</artifactId>
+			<groupId>mil.nga.oapi.features</groupId>
+			<artifactId>oapi-features-json</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>

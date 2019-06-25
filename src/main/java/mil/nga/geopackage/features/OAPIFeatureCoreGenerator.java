@@ -19,10 +19,10 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
-import mil.nga.openapi.features.json.Collection;
-import mil.nga.openapi.features.json.FeatureCollection;
-import mil.nga.openapi.features.json.FeaturesConverter;
-import mil.nga.openapi.features.json.Link;
+import mil.nga.oapi.features.json.Collection;
+import mil.nga.oapi.features.json.FeatureCollection;
+import mil.nga.oapi.features.json.FeaturesConverter;
+import mil.nga.oapi.features.json.Link;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.geojson.Feature;
 import mil.nga.sf.proj.Projection;
@@ -30,17 +30,17 @@ import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionFactory;
 
 /**
- * OGC OpenAPI Features Generator
+ * OGC API Features Generator
  * 
  * @author osbornb
  */
-public abstract class OpenAPIFeatureCoreGenerator extends FeatureCoreGenerator {
+public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 	/**
 	 * Logger
 	 */
 	private static final Logger LOGGER = Logger
-			.getLogger(OpenAPIFeatureCoreGenerator.class.getName());
+			.getLogger(OAPIFeatureCoreGenerator.class.getName());
 
 	/**
 	 * Limit pattern
@@ -111,8 +111,8 @@ public abstract class OpenAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * @param name
 	 *            collection identifier
 	 */
-	public OpenAPIFeatureCoreGenerator(GeoPackageCore geoPackage,
-			String tableName, String server, String name) {
+	public OAPIFeatureCoreGenerator(GeoPackageCore geoPackage, String tableName,
+			String server, String name) {
 		super(geoPackage, tableName);
 		this.server = server;
 		this.name = name;
