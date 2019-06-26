@@ -20,6 +20,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 import mil.nga.oapi.features.json.Collection;
+import mil.nga.oapi.features.json.Crs;
 import mil.nga.oapi.features.json.FeatureCollection;
 import mil.nga.oapi.features.json.FeaturesConverter;
 import mil.nga.oapi.features.json.Link;
@@ -46,22 +47,6 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * Limit pattern
 	 */
 	private static final Pattern LIMIT_PATTERN = Pattern.compile("limit=\\d+");
-
-	/**
-	 * CRS pattern
-	 */
-	private static final Pattern CRS_PATTERN = Pattern
-			.compile("http.+/([^/]+)/[^/]+/([^/]+)$");
-
-	/**
-	 * CRS pattern authority group
-	 */
-	private static final int CRS_AUTHORITY_GROUP = 1;
-
-	/**
-	 * CRS pattern code group
-	 */
-	private static final int CRS_CODE_GROUP = 2;
 
 	/**
 	 * Base server url
@@ -402,11 +387,10 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 			for (String crs : collection.getCrs()) {
 
-				Matcher matcher = CRS_PATTERN.matcher(crs);
-				if (matcher.find()) {
-					String authority = matcher.group(CRS_AUTHORITY_GROUP);
-					String code = matcher.group(CRS_CODE_GROUP);
-					addProjection(projections, authority, code);
+				Crs crsValue = new Crs(crs);
+				if (crsValue.isValid()) {
+					addProjection(projections, crsValue.getAuthority(),
+							crsValue.getCode());
 				}
 
 			}
