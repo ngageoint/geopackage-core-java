@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
+import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 import mil.nga.oapi.features.json.Collection;
 import mil.nga.oapi.features.json.Crs;
@@ -46,43 +48,54 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	/**
 	 * Limit pattern
 	 */
-	private static final Pattern LIMIT_PATTERN = Pattern.compile("limit=\\d+");
+	protected static final Pattern LIMIT_PATTERN = Pattern
+			.compile("limit=\\d+");
 
 	/**
 	 * Base server url
 	 */
-	private final String server;
+	protected final String server;
 
 	/**
 	 * Identifier (name) of a specific collection
 	 */
-	private final String name;
+	protected final String name;
 
 	/**
 	 * The optional limit parameter limits the number of items that are
 	 * presented in the response document.
 	 */
-	private Integer limit = null;
+	protected Integer limit = null;
 
 	/**
 	 * Either a date-time or a period string that adheres to RFC 3339
 	 */
-	private String time = null;
+	protected String time = null;
 
 	/**
 	 * Time period string that adheres to RFC 3339
 	 */
-	private String period = null;
+	protected String period = null;
 
 	/**
 	 * Total limit of number of items to request
 	 */
-	private Integer totalLimit = null;
+	protected Integer totalLimit = null;
 
 	/**
 	 * Download attempts per tile
 	 */
-	private int downloadAttempts = 1;
+	protected int downloadAttempts = 1;
+
+	/**
+	 * Number of rows to save in a single transaction
+	 */
+	protected int transactionLimit = 1000;
+
+	/**
+	 * Table Geometry Columns
+	 */
+	protected GeometryColumns geometryColumns;
 
 	/**
 	 * Constructor
@@ -249,6 +262,25 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
+	 * Get the single transaction limit
+	 * 
+	 * @return transaction limit
+	 */
+	public int getTransactionLimit() {
+		return transactionLimit;
+	}
+
+	/**
+	 * Set the single transaction limit
+	 * 
+	 * @param transactionLimit
+	 *            transaction limit
+	 */
+	public void setTransactionLimit(int transactionLimit) {
+		this.transactionLimit = transactionLimit;
+	}
+
+	/**
 	 * Create the feature
 	 * 
 	 * @param feature
@@ -270,8 +302,47 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * @throws SQLException
 	 *             upon error
 	 */
-	protected abstract void createFeature(Geometry geometry,
-			Map<String, Object> properties) throws SQLException;
+	protected void createFeature(Geometry geometry,
+			Map<String, Object> properties) throws SQLException {
+
+		if (srs == null) {
+			createSrs();
+		}
+
+		if (geometryColumns == null) {
+			geoPackage.endTransaction();
+			geometryColumns = createTable(properties);
+			initializeTable();
+			geoPackage.beginTransaction();
+		}
+
+		Map<String, Object> values = new HashMap<>();
+
+		for (Entry<String, Object> property : properties.entrySet()) {
+			String column = property.getKey();
+			Object value = getValue(column, property.getValue());
+			values.put(column, value);
+		}
+
+		saveFeature(geometry, values);
+
+	}
+
+	/**
+	 * Initialize after the feature table is created
+	 */
+	protected abstract void initializeTable();
+
+	/**
+	 * Save the feature
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param values
+	 *            column to value mapping
+	 */
+	protected abstract void saveFeature(Geometry geometry,
+			Map<String, Object> values);
 
 	/**
 	 * {@inheritDoc}
@@ -698,7 +769,7 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * 
 	 * @param features
 	 *            features json
-	 * @return next links
+	 * @return feature collection
 	 * @throws SQLException
 	 *             upon error
 	 */
@@ -707,17 +778,48 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		FeatureCollection featureCollection = FeaturesConverter
 				.toFeatureCollection(features);
-		for (Feature feature : featureCollection.getFeatureCollection()
-				.getFeatures()) {
-			try {
-				createFeature(feature);
-			} catch (Exception e) {
-				LOGGER.log(Level.WARNING,
-						"Failed to create feature: " + feature.getId(), e);
-			}
-		}
+
+		createFeatures(featureCollection);
 
 		return featureCollection;
+	}
+
+	/**
+	 * Create features from the feature collection
+	 * 
+	 * @param featureCollection
+	 *            feature collection
+	 */
+	protected void createFeatures(FeatureCollection featureCollection) {
+
+		int count = 0;
+
+		geoPackage.beginTransaction();
+		try {
+
+			for (Feature feature : featureCollection.getFeatureCollection()
+					.getFeatures()) {
+				try {
+					createFeature(feature);
+					count++;
+				} catch (Exception e) {
+					LOGGER.log(Level.WARNING,
+							"Failed to create feature: " + feature.getId(), e);
+				}
+
+				if (count > 0 && count % transactionLimit == 0) {
+					geoPackage.commit();
+				}
+
+			}
+
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Failed to create features", e);
+			geoPackage.failTransaction();
+		} finally {
+			geoPackage.endTransaction();
+		}
+
 	}
 
 }
