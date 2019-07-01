@@ -568,6 +568,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public abstract void endTransaction(boolean successful);
 
 	/**
+	 * End a transaction as successful and begin a new transaction
+	 *
+	 * @since 3.3.0
+	 */
+	public void endAndBeginTransaction() {
+		endTransaction();
+		beginTransaction();
+	}
+
+	/**
+	 * Commit changes on the connection
+	 * 
+	 * @since 3.3.0
+	 */
+	public abstract void commit();
+
+	/**
 	 * Update the row
 	 * 
 	 * @param row

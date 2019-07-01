@@ -1161,6 +1161,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void endAndBeginTransaction() {
+		endTransaction();
+		beginTransaction();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public <T> T callInTransaction(Callable<T> callable) throws SQLException {
 		return TransactionManager
 				.callInTransaction(database.getConnectionSource(), callable);

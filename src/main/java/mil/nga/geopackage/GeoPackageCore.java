@@ -832,6 +832,20 @@ public interface GeoPackageCore extends Closeable {
 	public void endTransaction(boolean successful);
 
 	/**
+	 * End a transaction as successful and begin a new transaction
+	 *
+	 * @since 3.3.0
+	 */
+	public void endAndBeginTransaction();
+
+	/**
+	 * Commit changes on the connection
+	 * 
+	 * @since 3.3.0
+	 */
+	public void commit();
+
+	/**
 	 * Execute the {@link Callable} class inside an ORMLite transaction
 	 * 
 	 * @param callable
