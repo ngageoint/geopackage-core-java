@@ -30,6 +30,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * gpkg_data_columns table: removed foreign key requirement, unique constraint update
 * Missing comma in nga_tile_scaling table schema
 * OGC API Features download to GeoPackage support
+* Modifiable GeoPackageIOUtils copy buffer, defaulted at 8k byte chunks
 
 ## [3.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.2.0) (04-02-2019)
 

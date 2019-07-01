@@ -26,6 +26,13 @@ public class GeoPackageIOUtils {
 			.getLogger(GeoPackageIOUtils.class.getName());
 
 	/**
+	 * Copy stream buffer chunk size in bytes
+	 * 
+	 * @since 3.3.0
+	 */
+	public static int COPY_BUFFER_SIZE = 8192;
+
+	/**
 	 * Get the file extension
 	 * 
 	 * @param file
@@ -250,7 +257,7 @@ public class GeoPackageIOUtils {
 			GeoPackageProgress progress) throws IOException {
 
 		try {
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[COPY_BUFFER_SIZE];
 			int length;
 			while ((progress == null || progress.isActive())
 					&& (length = copyFrom.read(buffer)) > 0) {
