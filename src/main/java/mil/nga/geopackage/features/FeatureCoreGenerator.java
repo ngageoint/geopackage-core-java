@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
@@ -32,6 +34,12 @@ import mil.nga.sf.proj.ProjectionFactory;
 public abstract class FeatureCoreGenerator {
 
 	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = Logger
+			.getLogger(FeatureCoreGenerator.class.getName());
+
+	/**
 	 * GeoPackage
 	 */
 	protected final GeoPackageCore geoPackage;
@@ -51,6 +59,16 @@ public abstract class FeatureCoreGenerator {
 	 */
 	protected Projection projection = ProjectionFactory
 			.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+
+	/**
+	 * Number of rows to save in a single transaction
+	 */
+	protected int transactionLimit = 1000;
+
+	/**
+	 * Table Geometry Columns
+	 */
+	protected GeometryColumns geometryColumns;
 
 	/**
 	 * Table columns
@@ -133,6 +151,52 @@ public abstract class FeatureCoreGenerator {
 	}
 
 	/**
+	 * Get the single transaction limit
+	 * 
+	 * @return transaction limit
+	 */
+	public int getTransactionLimit() {
+		return transactionLimit;
+	}
+
+	/**
+	 * Set the single transaction limit
+	 * 
+	 * @param transactionLimit
+	 *            transaction limit
+	 */
+	public void setTransactionLimit(int transactionLimit) {
+		this.transactionLimit = transactionLimit;
+	}
+
+	/**
+	 * Get the geometry columns
+	 * 
+	 * @return geometry columns
+	 */
+	public GeometryColumns getGeometryColumns() {
+		return geometryColumns;
+	}
+
+	/**
+	 * Get the columns
+	 * 
+	 * @return columns
+	 */
+	public Map<String, FeatureColumn> getColumns() {
+		return columns;
+	}
+
+	/**
+	 * Get the Spatial Reference System
+	 * 
+	 * @return srs
+	 */
+	public SpatialReferenceSystem getSrs() {
+		return srs;
+	}
+
+	/**
 	 * Generate the features
 	 * 
 	 * @return generated count
@@ -148,6 +212,57 @@ public abstract class FeatureCoreGenerator {
 	 *            feature column
 	 */
 	protected abstract void addColumn(FeatureColumn featureColumn);
+
+	/**
+	 * Initialize after the feature table is created
+	 */
+	protected void initializeTable() {
+		// Override if needed
+	}
+
+	/**
+	 * Save the feature
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param values
+	 *            column to value mapping
+	 */
+	protected abstract void saveFeature(Geometry geometry,
+			Map<String, Object> values);
+
+	/**
+	 * Create the feature
+	 *
+	 * @param geometry
+	 *            geometry
+	 * @param properties
+	 *            properties
+	 * @throws SQLException
+	 *             upon error
+	 */
+	protected void createFeature(Geometry geometry,
+			Map<String, Object> properties) throws SQLException {
+
+		if (srs == null) {
+			createSrs();
+		}
+
+		if (geometryColumns == null) {
+			createTable(properties);
+		}
+
+		Map<String, Object> values = new HashMap<>();
+
+		for (Entry<String, Object> property : properties.entrySet()) {
+			String column = property.getKey();
+			Object value = getValue(column, property.getValue());
+			values.put(column, value);
+		}
+
+		saveFeature(geometry, values);
+
+	}
 
 	/**
 	 * Create the Spatial Reference System
@@ -169,20 +284,23 @@ public abstract class FeatureCoreGenerator {
 	 * 
 	 * @param properties
 	 *            properties
-	 * @return geometry columns
 	 * @throws SQLException
 	 */
-	protected GeometryColumns createTable(Map<String, Object> properties)
+	protected void createTable(Map<String, Object> properties)
 			throws SQLException {
 
 		// Create a new geometry columns or update an existing
 		GeometryColumnsDao geometryColumnsDao = geoPackage
 				.getGeometryColumnsDao();
-		GeometryColumns geometryColumns = null;
 		if (geometryColumnsDao.isTableExists()) {
 			geometryColumns = geometryColumnsDao.queryForTableName(tableName);
 		}
 		if (geometryColumns == null) {
+
+			boolean inTransaction = geoPackage.inTransaction();
+			if (inTransaction) {
+				geoPackage.endTransaction();
+			}
 
 			List<FeatureColumn> featureColumns = new ArrayList<>();
 			for (Entry<String, Object> property : properties.entrySet()) {
@@ -194,17 +312,22 @@ public abstract class FeatureCoreGenerator {
 			}
 
 			// Create the feature table
-			geometryColumns = new GeometryColumns();
-			geometryColumns.setId(new TableColumnKey(tableName, "geometry"));
-			geometryColumns.setGeometryType(GeometryType.GEOMETRY);
-			geometryColumns.setZ((byte) 0);
-			geometryColumns.setM((byte) 0);
+			GeometryColumns geomColumns = new GeometryColumns();
+			geomColumns.setId(new TableColumnKey(tableName, "geometry"));
+			geomColumns.setGeometryType(GeometryType.GEOMETRY);
+			geomColumns.setZ((byte) 0);
+			geomColumns.setM((byte) 0);
 			geometryColumns = geoPackage.createFeatureTableWithMetadata(
-					geometryColumns, tableName + "_id", featureColumns,
-					boundingBox, srs.getSrsId());
+					geomColumns, tableName + "_id", featureColumns, boundingBox,
+					srs.getSrsId());
+
+			initializeTable();
+
+			if (inTransaction) {
+				geoPackage.beginTransaction();
+			}
 		}
 
-		return geometryColumns;
 	}
 
 	/**
@@ -238,9 +361,16 @@ public abstract class FeatureCoreGenerator {
 		FeatureColumn featureColumn = columns.get(column);
 
 		if (featureColumn == null) {
+			boolean inTransaction = geoPackage.inTransaction();
+			if (inTransaction) {
+				geoPackage.endTransaction();
+			}
 			featureColumn = createColumn(column, value);
 			addColumn(featureColumn);
 			columns.put(column, featureColumn);
+			if (inTransaction) {
+				geoPackage.beginTransaction();
+			}
 		}
 
 		return featureColumn;
@@ -364,6 +494,77 @@ public abstract class FeatureCoreGenerator {
 		}
 
 		return value;
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param projection
+	 *            projection
+	 * @return projection or null
+	 */
+	public Projection getProjection(
+			Map<String, Map<String, Projection>> projections,
+			Projection projection) {
+		return getProjection(projections, projection.getAuthority(),
+				projection.getCode());
+	}
+
+	/**
+	 * Get the projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @return projection or null
+	 */
+	public Projection getProjection(
+			Map<String, Map<String, Projection>> projections, String authority,
+			String code) {
+		Projection projection = null;
+		Map<String, Projection> authorityProjections = projections
+				.get(authority);
+		if (authorityProjections != null) {
+			projection = authorityProjections.get(code);
+		}
+		return projection;
+	}
+
+	/**
+	 * Add a projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 */
+	protected void addProjection(
+			Map<String, Map<String, Projection>> projections, String authority,
+			String code) {
+
+		Map<String, Projection> authorityProjections = projections
+				.get(authority);
+		if (authorityProjections == null) {
+			authorityProjections = new HashMap<>();
+			projections.put(authority, authorityProjections);
+		}
+
+		try {
+			Projection projection = ProjectionFactory.getProjection(authority,
+					code);
+			authorityProjections.put(code, projection);
+		} catch (Exception e) {
+			LOGGER.log(Level.WARNING, "Unable to create projection. Authority: "
+					+ authority + ", Code: " + code);
+		}
+
 	}
 
 }

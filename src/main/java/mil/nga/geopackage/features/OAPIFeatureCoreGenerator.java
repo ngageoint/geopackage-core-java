@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -19,18 +18,15 @@ import java.util.regex.Pattern;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
-import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 import mil.nga.oapi.features.json.Collection;
 import mil.nga.oapi.features.json.Crs;
 import mil.nga.oapi.features.json.FeatureCollection;
 import mil.nga.oapi.features.json.FeaturesConverter;
 import mil.nga.oapi.features.json.Link;
-import mil.nga.sf.Geometry;
 import mil.nga.sf.geojson.Feature;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionFactory;
 
 /**
  * OGC API Features Generator
@@ -86,16 +82,6 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * Download attempts per tile
 	 */
 	protected int downloadAttempts = 1;
-
-	/**
-	 * Number of rows to save in a single transaction
-	 */
-	protected int transactionLimit = 1000;
-
-	/**
-	 * Table Geometry Columns
-	 */
-	protected GeometryColumns geometryColumns;
 
 	/**
 	 * Constructor
@@ -262,25 +248,6 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
-	 * Get the single transaction limit
-	 * 
-	 * @return transaction limit
-	 */
-	public int getTransactionLimit() {
-		return transactionLimit;
-	}
-
-	/**
-	 * Set the single transaction limit
-	 * 
-	 * @param transactionLimit
-	 *            transaction limit
-	 */
-	public void setTransactionLimit(int transactionLimit) {
-		this.transactionLimit = transactionLimit;
-	}
-
-	/**
 	 * Create the feature
 	 * 
 	 * @param feature
@@ -291,58 +258,6 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	protected void createFeature(Feature feature) throws SQLException {
 		createFeature(feature.getSimpleGeometry(), feature.getProperties());
 	}
-
-	/**
-	 * Create the feature
-	 *
-	 * @param geometry
-	 *            geometry
-	 * @param properties
-	 *            properties
-	 * @throws SQLException
-	 *             upon error
-	 */
-	protected void createFeature(Geometry geometry,
-			Map<String, Object> properties) throws SQLException {
-
-		if (srs == null) {
-			createSrs();
-		}
-
-		if (geometryColumns == null) {
-			geoPackage.endTransaction();
-			geometryColumns = createTable(properties);
-			initializeTable();
-			geoPackage.beginTransaction();
-		}
-
-		Map<String, Object> values = new HashMap<>();
-
-		for (Entry<String, Object> property : properties.entrySet()) {
-			String column = property.getKey();
-			Object value = getValue(column, property.getValue());
-			values.put(column, value);
-		}
-
-		saveFeature(geometry, values);
-
-	}
-
-	/**
-	 * Initialize after the feature table is created
-	 */
-	protected abstract void initializeTable();
-
-	/**
-	 * Save the feature
-	 * 
-	 * @param geometry
-	 *            geometry
-	 * @param values
-	 *            column to value mapping
-	 */
-	protected abstract void saveFeature(Geometry geometry,
-			Map<String, Object> values);
 
 	/**
 	 * {@inheritDoc}
@@ -482,77 +397,6 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		}
 
 		return projections;
-	}
-
-	/**
-	 * Get the projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param projection
-	 *            projection
-	 * @return projection or null
-	 */
-	public Projection getProjection(
-			Map<String, Map<String, Projection>> projections,
-			Projection projection) {
-		return getProjection(projections, projection.getAuthority(),
-				projection.getCode());
-	}
-
-	/**
-	 * Get the projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param authority
-	 *            authority
-	 * @param code
-	 *            code
-	 * @return projection or null
-	 */
-	public Projection getProjection(
-			Map<String, Map<String, Projection>> projections, String authority,
-			String code) {
-		Projection projection = null;
-		Map<String, Projection> authorityProjections = projections
-				.get(authority);
-		if (authorityProjections != null) {
-			projection = authorityProjections.get(code);
-		}
-		return projection;
-	}
-
-	/**
-	 * Add a projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param authority
-	 *            authority
-	 * @param code
-	 *            code
-	 */
-	protected void addProjection(
-			Map<String, Map<String, Projection>> projections, String authority,
-			String code) {
-
-		Map<String, Projection> authorityProjections = projections
-				.get(authority);
-		if (authorityProjections == null) {
-			authorityProjections = new HashMap<>();
-			projections.put(authority, authorityProjections);
-		}
-
-		try {
-			Projection projection = ProjectionFactory.getProjection(authority,
-					code);
-			authorityProjections.put(code, projection);
-		} catch (Exception e) {
-			LOGGER.log(Level.WARNING, "Unable to create projection. Authority: "
-					+ authority + ", Code: " + code);
-		}
-
 	}
 
 	/**
