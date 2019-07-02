@@ -114,6 +114,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public abstract void commit();
 
 	/**
+	 * Determine if currently within a transaction
+	 * 
+	 * @return true if in transaction
+	 * 
+	 * @since 3.3.0
+	 */
+	public abstract boolean inTransaction();
+
+	/**
 	 * If foreign keys is disabled and there are no foreign key violations,
 	 * enables foreign key checks, else logs violations
 	 * 

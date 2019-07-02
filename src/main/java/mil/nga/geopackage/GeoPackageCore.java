@@ -846,6 +846,15 @@ public interface GeoPackageCore extends Closeable {
 	public void commit();
 
 	/**
+	 * Determine if currently within a transaction
+	 * 
+	 * @return true if in transaction
+	 * 
+	 * @since 3.3.0
+	 */
+	public boolean inTransaction();
+
+	/**
 	 * Execute the {@link Callable} class inside an ORMLite transaction
 	 * 
 	 * @param callable

@@ -585,6 +585,15 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public abstract void commit();
 
 	/**
+	 * Determine if currently within a transaction
+	 * 
+	 * @return true if in transaction
+	 * 
+	 * @since 3.3.0
+	 */
+	public abstract boolean inTransaction();
+
+	/**
 	 * Update the row
 	 * 
 	 * @param row
