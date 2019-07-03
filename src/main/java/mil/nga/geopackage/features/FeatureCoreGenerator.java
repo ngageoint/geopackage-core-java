@@ -18,7 +18,10 @@ import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
+import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.features.user.FeatureTableReader;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
+import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
@@ -55,15 +58,24 @@ public abstract class FeatureCoreGenerator {
 	protected BoundingBox boundingBox;
 
 	/**
-	 * Tiles projection
+	 * Bounding Box projection
 	 */
-	protected Projection projection = ProjectionFactory
-			.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+	protected Projection boundingBoxProjection;
+
+	/**
+	 * Features projection
+	 */
+	protected Projection projection;
 
 	/**
 	 * Number of rows to save in a single transaction
 	 */
 	protected int transactionLimit = 1000;
+
+	/**
+	 * GeoPackage progress
+	 */
+	protected GeoPackageProgress progress;
 
 	/**
 	 * Table Geometry Columns
@@ -92,6 +104,7 @@ public abstract class FeatureCoreGenerator {
 		geoPackage.verifyWritable();
 		this.geoPackage = geoPackage;
 		this.tableName = tableName;
+		setProjection(null);
 	}
 
 	/**
@@ -132,6 +145,25 @@ public abstract class FeatureCoreGenerator {
 	}
 
 	/**
+	 * Get the bounding box projection
+	 * 
+	 * @return bounding box projection
+	 */
+	public Projection getBoundingBoxProjection() {
+		return boundingBoxProjection;
+	}
+
+	/**
+	 * Set the bounding box projection
+	 * 
+	 * @param boundingBoxProjection
+	 *            bounding box projection
+	 */
+	public void setBoundingBoxProjection(Projection boundingBoxProjection) {
+		this.boundingBoxProjection = boundingBoxProjection;
+	}
+
+	/**
 	 * Get the projection
 	 * 
 	 * @return projection
@@ -147,7 +179,12 @@ public abstract class FeatureCoreGenerator {
 	 *            projection
 	 */
 	public void setProjection(Projection projection) {
-		this.projection = projection;
+		if (projection == null) {
+			this.projection = ProjectionFactory.getProjection(
+					ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+		} else {
+			this.projection = projection;
+		}
 	}
 
 	/**
@@ -167,6 +204,25 @@ public abstract class FeatureCoreGenerator {
 	 */
 	public void setTransactionLimit(int transactionLimit) {
 		this.transactionLimit = transactionLimit;
+	}
+
+	/**
+	 * Get the progress
+	 * 
+	 * @return progress
+	 */
+	public GeoPackageProgress getProgress() {
+		return progress;
+	}
+
+	/**
+	 * Set the progress
+	 * 
+	 * @param progress
+	 *            progress
+	 */
+	public void setProgress(GeoPackageProgress progress) {
+		this.progress = progress;
 	}
 
 	/**
@@ -295,12 +351,13 @@ public abstract class FeatureCoreGenerator {
 		if (geometryColumnsDao.isTableExists()) {
 			geometryColumns = geometryColumnsDao.queryForTableName(tableName);
 		}
-		if (geometryColumns == null) {
 
-			boolean inTransaction = geoPackage.inTransaction();
-			if (inTransaction) {
-				geoPackage.endTransaction();
-			}
+		boolean inTransaction = geoPackage.inTransaction();
+		if (inTransaction) {
+			geoPackage.endTransaction();
+		}
+
+		if (geometryColumns == null) {
 
 			List<FeatureColumn> featureColumns = new ArrayList<>();
 			for (Entry<String, Object> property : properties.entrySet()) {
@@ -321,11 +378,20 @@ public abstract class FeatureCoreGenerator {
 					geomColumns, tableName + "_id", featureColumns, boundingBox,
 					srs.getSrsId());
 
-			initializeTable();
-
-			if (inTransaction) {
-				geoPackage.beginTransaction();
+		} else {
+			FeatureTableReader tableReader = new FeatureTableReader(
+					geometryColumns);
+			FeatureTable featureTable = tableReader
+					.readTable(geoPackage.getDatabase());
+			for (FeatureColumn featureColumn : featureTable.getColumns()) {
+				columns.put(featureColumn.getName(), featureColumn);
 			}
+		}
+
+		initializeTable();
+
+		if (inTransaction) {
+			geoPackage.beginTransaction();
 		}
 
 	}
@@ -497,6 +563,21 @@ public abstract class FeatureCoreGenerator {
 	}
 
 	/**
+	 * Determine if the projections map has the provided projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param projection
+	 *            projection
+	 * @return true if has projection
+	 */
+	public boolean hasProjection(
+			Map<String, Map<String, Projection>> projections,
+			Projection projection) {
+		return getProjection(projections, projection) != null;
+	}
+
+	/**
 	 * Get the projection
 	 * 
 	 * @param projections
@@ -510,6 +591,23 @@ public abstract class FeatureCoreGenerator {
 			Projection projection) {
 		return getProjection(projections, projection.getAuthority(),
 				projection.getCode());
+	}
+
+	/**
+	 * Determine if the projections map has the provided projection
+	 * 
+	 * @param projections
+	 *            projections map
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @return true if has projection
+	 */
+	public boolean hasProjection(
+			Map<String, Map<String, Projection>> projections, String authority,
+			String code) {
+		return getProjection(projections, authority, code) != null;
 	}
 
 	/**

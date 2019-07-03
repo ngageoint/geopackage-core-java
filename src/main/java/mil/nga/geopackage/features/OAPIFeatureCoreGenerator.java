@@ -55,7 +55,7 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	/**
 	 * Identifier (name) of a specific collection
 	 */
-	protected final String name;
+	protected final String id;
 
 	/**
 	 * The optional limit parameter limits the number of items that are
@@ -92,14 +92,14 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 *            table name
 	 * @param server
 	 *            server url
-	 * @param name
+	 * @param id
 	 *            collection identifier
 	 */
 	public OAPIFeatureCoreGenerator(GeoPackageCore geoPackage, String tableName,
-			String server, String name) {
+			String server, String id) {
 		super(geoPackage, tableName);
 		this.server = server;
-		this.name = name;
+		this.id = id;
 	}
 
 	/**
@@ -112,12 +112,12 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
-	 * Get the name
+	 * Get the collection id
 	 * 
-	 * @return name
+	 * @return collection id
 	 */
-	public String getName() {
-		return name;
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -267,8 +267,11 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		String url = buildCollectionRequestUrl();
 
-		Map<String, Map<String, Projection>> projections = getProjections(url);
-		if (getProjection(projections, projection) == null) {
+		Collection collection = collectionRequest(url);
+
+		Map<String, Map<String, Projection>> projections = getProjections(
+				collection);
+		if (!hasProjection(projections, projection)) {
 			LOGGER.log(Level.WARNING,
 					"The projection is not advertised by the server. Authority: "
 							+ projection.getAuthority() + ", Code: "
@@ -311,6 +314,22 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 			urlBuilder.append(boundingBox.getMaxLongitude());
 			urlBuilder.append(",");
 			urlBuilder.append(boundingBox.getMaxLatitude());
+
+			if (boundingBoxProjection != null) {
+				urlBuilder.append("&bbox-crs=");
+				urlBuilder.append(getCrs(boundingBoxProjection).toString());
+			}
+		}
+
+		if (!hasProjection(getDefaultProjections(), projection)) {
+			if (params) {
+				urlBuilder.append("&");
+			} else {
+				urlBuilder.append("?");
+				params = true;
+			}
+			urlBuilder.append("crs=");
+			urlBuilder.append(getCrs(projection).toString());
 		}
 
 		String urlValue = urlBuilder.toString();
@@ -332,7 +351,7 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		}
 
 		urlBuilder.append("collections/");
-		urlBuilder.append(name);
+		urlBuilder.append(id);
 
 		return urlBuilder.toString();
 	}
@@ -384,11 +403,7 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		}
 
 		if (projections.isEmpty()) {
-			addProjection(projections, ProjectionConstants.AUTHORITY_OGC,
-					ProjectionConstants.OGC_CRS84);
-			addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
-					String.valueOf(
-							ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+			addDefaultProjections(projections);
 		} else if (getProjection(projections, ProjectionConstants.AUTHORITY_OGC,
 				ProjectionConstants.OGC_CRS84) != null) {
 			addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
@@ -397,6 +412,31 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		}
 
 		return projections;
+	}
+
+	/**
+	 * Get the default projections
+	 * 
+	 * @return map of default orgs and projections
+	 */
+	public Map<String, Map<String, Projection>> getDefaultProjections() {
+		Map<String, Map<String, Projection>> projections = new HashMap<>();
+		addDefaultProjections(projections);
+		return projections;
+	}
+
+	/**
+	 * Add the default projections
+	 * 
+	 * @param projections
+	 *            map of orgs and projections
+	 */
+	public void addDefaultProjections(
+			Map<String, Map<String, Projection>> projections) {
+		addProjection(projections, ProjectionConstants.AUTHORITY_OGC,
+				ProjectionConstants.OGC_CRS84);
+		addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
+				String.valueOf(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
 	}
 
 	/**
@@ -487,6 +527,21 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		if (features != null) {
 			FeatureCollection featureCollection = createFeatures(features);
+
+			if (currentCount == 0 && progress != null) {
+				Integer max = totalLimit;
+				Integer numberMatched = featureCollection.getNumberMatched();
+				if (numberMatched != null) {
+					if (max == null) {
+						max = numberMatched;
+					} else {
+						max = Math.min(max, numberMatched);
+					}
+				}
+				if (max != null) {
+					progress.setMax(max);
+				}
+			}
 
 			Integer numberReturned = featureCollection.getNumberReturned();
 			if (numberReturned != null) {
@@ -664,6 +719,26 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 			geoPackage.endTransaction();
 		}
 
+	}
+
+	/**
+	 * Get the CRS from the projection
+	 * 
+	 * @param projection
+	 *            projection
+	 * @return crs
+	 */
+	protected Crs getCrs(Projection projection) {
+		String version = null;
+		switch (projection.getAuthority()) {
+		case ProjectionConstants.AUTHORITY_OGC:
+
+			break;
+		default:
+			version = "0";
+		}
+		return new Crs(projection.getAuthority(), version,
+				projection.getCode());
 	}
 
 }
