@@ -17,6 +17,8 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
+import mil.nga.geopackage.property.GeoPackageProperties;
+import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.oapi.features.json.Collection;
 import mil.nga.oapi.features.json.Crs;
 import mil.nga.oapi.features.json.FeatureCollection;
@@ -105,9 +107,11 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	protected Integer totalLimit = null;
 
 	/**
-	 * Download attempts per tile
+	 * Download attempts per feature request
 	 */
-	protected int downloadAttempts = 1;
+	protected int downloadAttempts = GeoPackageProperties.getIntegerProperty(
+			PropertyConstants.FEATURE_GENERATOR,
+			PropertyConstants.FEATURE_GENERATOR_DOWNLOAD_ATTEMPTS);
 
 	/**
 	 * Constructor
