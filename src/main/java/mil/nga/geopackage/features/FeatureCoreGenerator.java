@@ -366,6 +366,7 @@ public abstract class FeatureCoreGenerator {
 	 * @param properties
 	 *            properties
 	 * @throws SQLException
+	 *             upon error
 	 */
 	protected void createTable(Map<String, Object> properties)
 			throws SQLException {
