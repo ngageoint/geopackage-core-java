@@ -7,9 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -27,6 +25,8 @@ import mil.nga.oapi.features.json.Link;
 import mil.nga.sf.geojson.Feature;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
+import mil.nga.sf.proj.Projections;
 
 /**
  * OGC API Features Generator
@@ -46,6 +46,32 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 */
 	protected static final Pattern LIMIT_PATTERN = Pattern
 			.compile("limit=\\d+");
+
+	/**
+	 * OGC CRS84 Projection
+	 */
+	protected static final Projection OGC_CRS84 = ProjectionFactory
+			.getProjection(ProjectionConstants.AUTHORITY_OGC,
+					ProjectionConstants.OGC_CRS84);
+
+	/**
+	 * OGC CRS Version
+	 */
+	protected static final String OGC_VERSION = "1.3";
+
+	/**
+	 * EPSG CRS Version
+	 */
+	protected static final String EPSG_VERSION = "0";
+
+	/**
+	 * Default projections
+	 */
+	protected static final Projections DEFAULT_PROJECTIONS = new Projections();
+	static {
+		DEFAULT_PROJECTIONS.addProjection(OGC_CRS84);
+		DEFAULT_PROJECTIONS.addProjection(EPSG_WGS84);
+	}
 
 	/**
 	 * Base server url
@@ -248,6 +274,20 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected Projection getSrsProjection() {
+		Projection srsProjection = null;
+		if (OGC_CRS84.equals(projection)) {
+			srsProjection = EPSG_WGS84;
+		} else {
+			srsProjection = super.getSrsProjection();
+		}
+		return srsProjection;
+	}
+
+	/**
 	 * Create the feature
 	 * 
 	 * @param feature
@@ -269,9 +309,8 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		Collection collection = collectionRequest(url);
 
-		Map<String, Map<String, Projection>> projections = getProjections(
-				collection);
-		if (!hasProjection(projections, projection)) {
+		Projections projections = getProjections(collection);
+		if (projection != null && !projections.hasProjection(projection)) {
 			LOGGER.log(Level.WARNING,
 					"The projection is not advertised by the server. Authority: "
 							+ projection.getAuthority() + ", Code: "
@@ -315,13 +354,13 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 			urlBuilder.append(",");
 			urlBuilder.append(boundingBox.getMaxLatitude());
 
-			if (boundingBoxProjection != null) {
+			if (requestProjection(boundingBoxProjection)) {
 				urlBuilder.append("&bbox-crs=");
 				urlBuilder.append(getCrs(boundingBoxProjection).toString());
 			}
 		}
 
-		if (!hasProjection(getDefaultProjections(), projection)) {
+		if (requestProjection(projection)) {
 			if (params) {
 				urlBuilder.append("&");
 			} else {
@@ -367,9 +406,9 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	/**
 	 * Get the supported projections
 	 * 
-	 * @return map of orgs and projections
+	 * @return projections
 	 */
-	public Map<String, Map<String, Projection>> getProjections() {
+	public Projections getProjections() {
 		return getProjections(buildCollectionRequestUrl());
 	}
 
@@ -378,9 +417,9 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * 
 	 * @param url
 	 *            URL
-	 * @return map of orgs and projections
+	 * @return projections
 	 */
-	public Map<String, Map<String, Projection>> getProjections(String url) {
+	public Projections getProjections(String url) {
 		return getProjections(collectionRequest(url));
 	}
 
@@ -389,12 +428,11 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * 
 	 * @param collection
 	 *            collection
-	 * @return map of orgs and projections
+	 * @return projections
 	 */
-	public Map<String, Map<String, Projection>> getProjections(
-			Collection collection) {
+	public Projections getProjections(Collection collection) {
 
-		Map<String, Map<String, Projection>> projections = new HashMap<>();
+		Projections projections = new Projections();
 
 		if (collection != null) {
 
@@ -411,40 +449,34 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		}
 
 		if (projections.isEmpty()) {
-			addDefaultProjections(projections);
-		} else if (getProjection(projections, ProjectionConstants.AUTHORITY_OGC,
-				ProjectionConstants.OGC_CRS84) != null) {
-			addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
-					String.valueOf(
-							ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+			projections = DEFAULT_PROJECTIONS;
+		} else if (projections.hasProjection(OGC_CRS84)) {
+			projections.addProjection(EPSG_WGS84);
 		}
 
 		return projections;
 	}
 
 	/**
-	 * Get the default projections
+	 * Determine if the projection should be requested from the server
 	 * 
-	 * @return map of default orgs and projections
+	 * @param projection
+	 *            projection
+	 * @return true to request the projection (non null and non default)
 	 */
-	public Map<String, Map<String, Projection>> getDefaultProjections() {
-		Map<String, Map<String, Projection>> projections = new HashMap<>();
-		addDefaultProjections(projections);
-		return projections;
+	public boolean requestProjection(Projection projection) {
+		return projection != null && !isDefaultProjection(projection);
 	}
 
 	/**
-	 * Add the default projections
+	 * Check if the projection is a default projection
 	 * 
-	 * @param projections
-	 *            map of orgs and projections
+	 * @param projection
+	 *            projection
+	 * @return true if default projection
 	 */
-	public void addDefaultProjections(
-			Map<String, Map<String, Projection>> projections) {
-		addProjection(projections, ProjectionConstants.AUTHORITY_OGC,
-				ProjectionConstants.OGC_CRS84);
-		addProjection(projections, ProjectionConstants.AUTHORITY_EPSG,
-				String.valueOf(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+	public boolean isDefaultProjection(Projection projection) {
+		return DEFAULT_PROJECTIONS.hasProjection(projection);
 	}
 
 	/**
@@ -766,10 +798,10 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 		String version = null;
 		switch (projection.getAuthority()) {
 		case ProjectionConstants.AUTHORITY_OGC:
-
+			version = OGC_VERSION;
 			break;
 		default:
-			version = "0";
+			version = EPSG_VERSION;
 		}
 		return new Crs(projection.getAuthority(), version,
 				projection.getCode());

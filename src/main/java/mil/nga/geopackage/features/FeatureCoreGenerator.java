@@ -28,6 +28,7 @@ import mil.nga.sf.GeometryType;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionFactory;
+import mil.nga.sf.proj.Projections;
 
 /**
  * Feature Generator
@@ -41,6 +42,12 @@ public abstract class FeatureCoreGenerator {
 	 */
 	private static final Logger LOGGER = Logger
 			.getLogger(FeatureCoreGenerator.class.getName());
+
+	/**
+	 * EPSG WGS84
+	 */
+	protected static final Projection EPSG_WGS84 = ProjectionFactory
+			.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
 
 	/**
 	 * GeoPackage
@@ -179,12 +186,7 @@ public abstract class FeatureCoreGenerator {
 	 *            projection
 	 */
 	public void setProjection(Projection projection) {
-		if (projection == null) {
-			this.projection = ProjectionFactory.getProjection(
-					ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
-		} else {
-			this.projection = projection;
-		}
+		this.projection = projection;
 	}
 
 	/**
@@ -339,9 +341,23 @@ public abstract class FeatureCoreGenerator {
 
 		SpatialReferenceSystemDao srsDao = geoPackage
 				.getSpatialReferenceSystemDao();
-		srs = srsDao.getOrCreateCode(projection.getAuthority(),
-				Long.parseLong(projection.getCode()));
+		Projection srsProjection = getSrsProjection();
+		srs = srsDao.getOrCreateCode(srsProjection.getAuthority(),
+				Long.parseLong(srsProjection.getCode()));
 
+	}
+
+	/**
+	 * Get the projection for creating the Spatial Reference System
+	 * 
+	 * @return projection
+	 */
+	protected Projection getSrsProjection() {
+		Projection srsProjection = projection;
+		if (srsProjection == null) {
+			srsProjection = EPSG_WGS84;
+		}
+		return srsProjection;
 	}
 
 	/**
@@ -572,106 +588,46 @@ public abstract class FeatureCoreGenerator {
 	}
 
 	/**
-	 * Determine if the projections map has the provided projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param projection
-	 *            projection
-	 * @return true if has projection
-	 */
-	public boolean hasProjection(
-			Map<String, Map<String, Projection>> projections,
-			Projection projection) {
-		return getProjection(projections, projection) != null;
-	}
-
-	/**
-	 * Get the projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param projection
-	 *            projection
-	 * @return projection or null
-	 */
-	public Projection getProjection(
-			Map<String, Map<String, Projection>> projections,
-			Projection projection) {
-		return getProjection(projections, projection.getAuthority(),
-				projection.getCode());
-	}
-
-	/**
-	 * Determine if the projections map has the provided projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param authority
-	 *            authority
-	 * @param code
-	 *            code
-	 * @return true if has projection
-	 */
-	public boolean hasProjection(
-			Map<String, Map<String, Projection>> projections, String authority,
-			String code) {
-		return getProjection(projections, authority, code) != null;
-	}
-
-	/**
-	 * Get the projection
-	 * 
-	 * @param projections
-	 *            projections map
-	 * @param authority
-	 *            authority
-	 * @param code
-	 *            code
-	 * @return projection or null
-	 */
-	public Projection getProjection(
-			Map<String, Map<String, Projection>> projections, String authority,
-			String code) {
-		Projection projection = null;
-		Map<String, Projection> authorityProjections = projections
-				.get(authority);
-		if (authorityProjections != null) {
-			projection = authorityProjections.get(code);
-		}
-		return projection;
-	}
-
-	/**
 	 * Add a projection
 	 * 
 	 * @param projections
-	 *            projections map
+	 *            projections
 	 * @param authority
 	 *            authority
 	 * @param code
 	 *            code
 	 */
-	protected void addProjection(
-			Map<String, Map<String, Projection>> projections, String authority,
+	protected void addProjection(Projections projections, String authority,
 			String code) {
 
-		Map<String, Projection> authorityProjections = projections
-				.get(authority);
-		if (authorityProjections == null) {
-			authorityProjections = new HashMap<>();
-			projections.put(authority, authorityProjections);
+		Projection projection = createProjection(authority, code);
+
+		if (projection != null) {
+			projections.addProjection(projection);
 		}
+	}
+
+	/**
+	 * Create a projection
+	 * 
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @return projection
+	 */
+	protected Projection createProjection(String authority, String code) {
+
+		Projection projection = null;
 
 		try {
-			Projection projection = ProjectionFactory.getProjection(authority,
-					code);
-			authorityProjections.put(code, projection);
+			projection = ProjectionFactory.getProjection(authority, code);
 		} catch (Exception e) {
 			LOGGER.log(Level.WARNING, "Unable to create projection. Authority: "
 					+ authority + ", Code: " + code);
 		}
 
+		return projection;
 	}
 
 }
