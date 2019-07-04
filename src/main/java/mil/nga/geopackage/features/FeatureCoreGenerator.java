@@ -226,6 +226,15 @@ public abstract class FeatureCoreGenerator {
 	}
 
 	/**
+	 * Determine if the feature generator should remain active
+	 * 
+	 * @return true if active
+	 */
+	public boolean isActive() {
+		return progress == null || progress.isActive();
+	}
+
+	/**
 	 * Get the geometry columns
 	 * 
 	 * @return geometry columns

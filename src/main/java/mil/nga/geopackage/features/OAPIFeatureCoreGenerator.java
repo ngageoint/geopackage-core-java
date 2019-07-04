@@ -334,7 +334,15 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 		String urlValue = urlBuilder.toString();
 
-		return generateFeatures(urlValue, 0);
+		int count = generateFeatures(urlValue, 0);
+
+		if (progress != null && !progress.isActive()
+				&& progress.cleanupOnCancel()) {
+			geoPackage.deleteTableQuietly(tableName);
+			count = 0;
+		}
+
+		return count;
 	}
 
 	/**
@@ -523,10 +531,15 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 			}
 		}
 
-		String features = urlRequest(urlBuilder.toString());
+		String features = null;
+		if (isActive()) {
+			features = urlRequest(urlBuilder.toString());
+		}
 
-		if (features != null) {
-			FeatureCollection featureCollection = createFeatures(features);
+		if (features != null && isActive()) {
+
+			FeatureCollection featureCollection = FeaturesConverter
+					.toFeatureCollection(features);
 
 			if (currentCount == 0 && progress != null) {
 				Integer max = totalLimit;
@@ -542,6 +555,8 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 					progress.setMax(max);
 				}
 			}
+
+			createFeatures(featureCollection);
 
 			Integer numberReturned = featureCollection.getNumberReturned();
 			if (numberReturned != null) {
@@ -688,8 +703,9 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 	 * 
 	 * @param featureCollection
 	 *            feature collection
+	 * @return features created
 	 */
-	protected void createFeatures(FeatureCollection featureCollection) {
+	protected int createFeatures(FeatureCollection featureCollection) {
 
 		int count = 0;
 
@@ -698,9 +714,18 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 
 			for (Feature feature : featureCollection.getFeatureCollection()
 					.getFeatures()) {
+
+				if (!isActive()) {
+					break;
+				}
+
 				try {
 					createFeature(feature);
 					count++;
+
+					if (progress != null) {
+						progress.addProgress(1);
+					}
 				} catch (Exception e) {
 					LOGGER.log(Level.WARNING,
 							"Failed to create feature: " + feature.getId(), e);
@@ -719,6 +744,15 @@ public abstract class OAPIFeatureCoreGenerator extends FeatureCoreGenerator {
 			geoPackage.endTransaction();
 		}
 
+		Integer numberReturned = featureCollection.getNumberReturned();
+		if (numberReturned != null && numberReturned != count) {
+			LOGGER.log(Level.WARNING,
+					"Feature Collection number returned does not match number of features created. Number Returned: "
+							+ numberReturned + ", Created: " + count);
+		}
+		featureCollection.setNumberReturned(count);
+
+		return count;
 	}
 
 	/**
