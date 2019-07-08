@@ -55,4 +55,5 @@ Build this repository using Eclipse and/or Maven:
 
 * [Simple Features WKB](https://github.com/ngageoint/simple-features-wkb-java) (The MIT License (MIT)) - Simple Features Well Known Binary Lib
 * [Simple Features Projection](https://github.com/ngageoint/simple-features-proj-java) (The MIT License (MIT)) - Simple Features Projection Lib
+* [OGC API Features JSON](https://github.com/ngageoint/ogc-api-features-json-java) (The MIT License (MIT)) - OGC API Features JSON Lib
 * [OrmLite](http://ormlite.com/) (Open Source License) - Object Relational Mapping (ORM) Library
