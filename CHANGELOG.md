@@ -4,11 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.3.0 (TBD)
+## [3.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.3.0) (07-09-2019)
 
 * sf-wkb version 2.0.2
 * sf-proj version 3.0.1
-* features-json version 1.0.0
+* oapi-features-json version 1.0.0
 * Alter table support: rename table, rename column, add column, drop column, alter column, copy table
 * User DAO and table alter support: add, rename, drop, alter
 * GeoPackage rename table, copy table, foreign keys, and vacuum support

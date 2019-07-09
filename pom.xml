@@ -93,6 +93,7 @@
 					<links>
 						<link>http://ngageoint.github.io/simple-features-wkb-java/docs/api/</link>
 						<link>http://ngageoint.github.io/simple-features-java/docs/api/</link>
+						<link>http://ngageoint.github.io/ogc-api-features-json-java/docs/api/</link>
 						<link>http://ormlite.com/javadoc/ormlite-core/</link>
 					</links>
 				</configuration>
