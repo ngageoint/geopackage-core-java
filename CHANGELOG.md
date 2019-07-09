@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 3.3.1 (TBD)
+
+* TBD
+
 ## [3.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.3.0) (07-09-2019)
 
 * sf-wkb version 2.0.2
