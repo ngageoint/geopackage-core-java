@@ -3,6 +3,8 @@ mil.nga.geopackage.attributes
 mil.nga.geopackage.core.contents
 mil.nga.geopackage.core.srs
 mil.nga.geopackage.db
+mil.nga.geopackage.db.master
+mil.nga.geopackage.db.table
 mil.nga.geopackage.extension
 mil.nga.geopackage.extension.contents
 mil.nga.geopackage.extension.coverage
@@ -16,6 +18,7 @@ mil.nga.geopackage.extension.related.simple
 mil.nga.geopackage.extension.scale
 mil.nga.geopackage.extension.style
 mil.nga.geopackage.factory
+mil.nga.geopackage.features
 mil.nga.geopackage.features.columns
 mil.nga.geopackage.features.user
 mil.nga.geopackage.geom
