@@ -1179,8 +1179,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void enableForeignKeys() {
-		database.enableForeignKeys();
+	public boolean enableForeignKeys() {
+		return database.enableForeignKeys();
 	}
 
 	/**

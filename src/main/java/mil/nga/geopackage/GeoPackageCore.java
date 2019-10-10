@@ -872,9 +872,11 @@ public interface GeoPackageCore extends Closeable {
 	 * If foreign keys is disabled and there are no foreign key violations,
 	 * enables foreign key checks, else logs violations
 	 * 
+	 * @return true if enabled or already enabled, false if foreign key
+	 *         violations and not enabled
 	 * @since 3.3.0
 	 */
-	public void enableForeignKeys();
+	public boolean enableForeignKeys();
 
 	/**
 	 * Query for the foreign keys value
