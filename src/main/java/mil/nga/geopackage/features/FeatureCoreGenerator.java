@@ -383,41 +383,45 @@ public abstract class FeatureCoreGenerator {
 			geoPackage.endTransaction();
 		}
 
-		if (geometryColumns == null) {
+		try {
 
-			List<FeatureColumn> featureColumns = new ArrayList<>();
-			for (Entry<String, Object> property : properties.entrySet()) {
-				String column = property.getKey();
-				FeatureColumn featureColumn = createColumn(column,
-						property.getValue());
-				featureColumns.add(featureColumn);
-				columns.put(column, featureColumn);
+			if (geometryColumns == null) {
+
+				List<FeatureColumn> featureColumns = new ArrayList<>();
+				for (Entry<String, Object> property : properties.entrySet()) {
+					String column = property.getKey();
+					FeatureColumn featureColumn = createColumn(column,
+							property.getValue());
+					featureColumns.add(featureColumn);
+					columns.put(column, featureColumn);
+				}
+
+				// Create the feature table
+				GeometryColumns geomColumns = new GeometryColumns();
+				geomColumns.setId(new TableColumnKey(tableName, "geometry"));
+				geomColumns.setGeometryType(GeometryType.GEOMETRY);
+				geomColumns.setZ((byte) 0);
+				geomColumns.setM((byte) 0);
+				geometryColumns = geoPackage.createFeatureTableWithMetadata(
+						geomColumns, tableName + "_id", featureColumns,
+						boundingBox, srs.getSrsId());
+
+			} else {
+				FeatureTableReader tableReader = new FeatureTableReader(
+						geometryColumns);
+				FeatureTable featureTable = tableReader
+						.readTable(geoPackage.getDatabase());
+				for (FeatureColumn featureColumn : featureTable.getColumns()) {
+					columns.put(featureColumn.getName(), featureColumn);
+				}
 			}
 
-			// Create the feature table
-			GeometryColumns geomColumns = new GeometryColumns();
-			geomColumns.setId(new TableColumnKey(tableName, "geometry"));
-			geomColumns.setGeometryType(GeometryType.GEOMETRY);
-			geomColumns.setZ((byte) 0);
-			geomColumns.setM((byte) 0);
-			geometryColumns = geoPackage.createFeatureTableWithMetadata(
-					geomColumns, tableName + "_id", featureColumns, boundingBox,
-					srs.getSrsId());
+			initializeTable();
 
-		} else {
-			FeatureTableReader tableReader = new FeatureTableReader(
-					geometryColumns);
-			FeatureTable featureTable = tableReader
-					.readTable(geoPackage.getDatabase());
-			for (FeatureColumn featureColumn : featureTable.getColumns()) {
-				columns.put(featureColumn.getName(), featureColumn);
+		} finally {
+			if (inTransaction) {
+				geoPackage.beginTransaction();
 			}
-		}
-
-		initializeTable();
-
-		if (inTransaction) {
-			geoPackage.beginTransaction();
 		}
 
 	}
@@ -457,11 +461,14 @@ public abstract class FeatureCoreGenerator {
 			if (inTransaction) {
 				geoPackage.endTransaction();
 			}
-			featureColumn = createColumn(column, value);
-			addColumn(featureColumn);
-			columns.put(column, featureColumn);
-			if (inTransaction) {
-				geoPackage.beginTransaction();
+			try {
+				featureColumn = createColumn(column, value);
+				addColumn(featureColumn);
+				columns.put(column, featureColumn);
+			} finally {
+				if (inTransaction) {
+					geoPackage.beginTransaction();
+				}
 			}
 		}
 
