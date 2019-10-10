@@ -669,8 +669,12 @@ public class SQLiteMaster {
 	 */
 	public static int count(GeoPackageCoreConnection db,
 			SQLiteMasterType[] types, String tableName) {
-		return count(db, types, SQLiteMasterQuery
-				.create(SQLiteMasterColumn.TBL_NAME, tableName));
+		SQLiteMasterQuery query = null;
+		if (tableName != null) {
+			query = SQLiteMasterQuery.create(SQLiteMasterColumn.TBL_NAME,
+					tableName);
+		}
+		return count(db, types, query);
 	}
 
 	/**
@@ -689,8 +693,12 @@ public class SQLiteMaster {
 	public static SQLiteMaster query(GeoPackageCoreConnection db,
 			SQLiteMasterColumn[] columns, SQLiteMasterType[] types,
 			String tableName) {
-		return query(db, columns, types, SQLiteMasterQuery
-				.create(SQLiteMasterColumn.TBL_NAME, tableName));
+		SQLiteMasterQuery query = null;
+		if (tableName != null) {
+			query = SQLiteMasterQuery.create(SQLiteMasterColumn.TBL_NAME,
+					tableName);
+		}
+		return query(db, columns, types, query);
 	}
 
 	/**
