@@ -20,16 +20,21 @@ public class ConstraintParser {
 	private static final String REGEX_PREFIX = "(?i)(?s)^";
 
 	/**
+	 * Constraint name regex suffix
+	 */
+	private static final String CONSTRAINT_NAME_REGEX_SUFFIX = "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
+
+	/**
 	 * Constraint name regex
 	 */
 	private static final String CONSTRAINT_NAME_REGEX = REGEX_PREFIX
-			+ "CONSTRAINT\\s+(\".+\"|\\S+)\\s";
+			+ CONSTRAINT_NAME_REGEX_SUFFIX;
 
 	/**
 	 * Constraint name and definition regex
 	 */
 	private static final String CONSTRAINT_REGEX = REGEX_PREFIX + "("
-			+ CONSTRAINT_NAME_REGEX + ")?(.*)";
+			+ CONSTRAINT_NAME_REGEX_SUFFIX + ")?(.*)";
 
 	/**
 	 * Constraint name pattern
