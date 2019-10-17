@@ -8,6 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * sf-proj version 3.0.2
 * oapi-features-json version 1.0.1
+* Database Result utility updates
 
 ## [3.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.3.0) (07-09-2019)
 
