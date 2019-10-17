@@ -1,6 +1,7 @@
 package mil.nga.geopackage.db;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,8 +19,8 @@ public class ResultUtils {
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = Logger.getLogger(ResultUtils.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(ResultUtils.class.getName());
 
 	/**
 	 * Integer field type
@@ -47,7 +48,12 @@ public class ResultUtils {
 	public static final int FIELD_TYPE_NULL = 0;
 
 	/**
-	 * Get the value from the cursor from the provided column
+	 * Get the value from the result from the provided column
+	 * 
+	 * Assumes {@link Result#getType(int)} returns one of:
+	 * {@link #FIELD_TYPE_INTEGER}, {@link #FIELD_TYPE_FLOAT},
+	 * {@link #FIELD_TYPE_STRING}, {@link #FIELD_TYPE_BLOB}, or
+	 * {@link #FIELD_TYPE_NULL}
 	 *
 	 * @param result
 	 *            result
@@ -60,7 +66,12 @@ public class ResultUtils {
 	}
 
 	/**
-	 * Get the value from the cursor from the provided column
+	 * Get the value from the result from the provided column
+	 * 
+	 * Assumes {@link Result#getType(int)} returns one of:
+	 * {@link #FIELD_TYPE_INTEGER}, {@link #FIELD_TYPE_FLOAT},
+	 * {@link #FIELD_TYPE_STRING}, {@link #FIELD_TYPE_BLOB}, or
+	 * {@link #FIELD_TYPE_NULL}
 	 *
 	 * @param result
 	 *            result
@@ -72,10 +83,48 @@ public class ResultUtils {
 	 */
 	public static Object getValue(Result result, int index,
 			GeoPackageDataType dataType) {
+		int type = result.getType(index);
+		return getValue(result, index, type, dataType);
+	}
+
+	/**
+	 * Get the value from the cursor from the provided column
+	 *
+	 * @param result
+	 *            result
+	 * @param index
+	 *            index
+	 * @param type
+	 *            column type: {@link #FIELD_TYPE_INTEGER},
+	 *            {@link #FIELD_TYPE_FLOAT}, {@link #FIELD_TYPE_STRING},
+	 *            {@link #FIELD_TYPE_BLOB}, or {@link #FIELD_TYPE_NULL}
+	 * @return value value
+	 * @since 3.3.1
+	 */
+	public static Object getValue(Result result, int index, int type) {
+		return getValue(result, index, type, null);
+	}
+
+	/**
+	 * Get the value from the cursor from the provided column
+	 *
+	 * @param result
+	 *            result
+	 * @param index
+	 *            index
+	 * @param type
+	 *            column type: {@link #FIELD_TYPE_INTEGER},
+	 *            {@link #FIELD_TYPE_FLOAT}, {@link #FIELD_TYPE_STRING},
+	 *            {@link #FIELD_TYPE_BLOB}, or {@link #FIELD_TYPE_NULL}
+	 * @param dataType
+	 *            data type
+	 * @return value value
+	 * @since 3.3.1
+	 */
+	public static Object getValue(Result result, int index, int type,
+			GeoPackageDataType dataType) {
 
 		Object value = null;
-
-		int type = result.getType(index);
 
 		switch (type) {
 
@@ -90,15 +139,15 @@ public class ResultUtils {
 		case FIELD_TYPE_STRING:
 			String stringValue = result.getString(index);
 
-			if (dataType != null
-					&& (dataType == GeoPackageDataType.DATE || dataType == GeoPackageDataType.DATETIME)) {
+			if (dataType != null && (dataType == GeoPackageDataType.DATE
+					|| dataType == GeoPackageDataType.DATETIME)) {
 				DateConverter converter = DateConverter.converter(dataType);
 				try {
 					value = converter.dateValue(stringValue);
 				} catch (Exception e) {
-					logger.log(Level.WARNING,
-							"Invalid " + dataType + " format: " + stringValue
-									+ ", String value used", e);
+					logger.log(Level.WARNING, "Invalid " + dataType
+							+ " format: " + stringValue + ", String value used",
+							e);
 					value = stringValue;
 				}
 			} else {
@@ -157,8 +206,8 @@ public class ResultUtils {
 			value = result.getLong(index);
 			break;
 		default:
-			throw new GeoPackageException("Data Type " + dataType
-					+ " is not an integer type");
+			throw new GeoPackageException(
+					"Data Type " + dataType + " is not an integer type");
 		}
 
 		if (result.wasNull()) {
@@ -200,12 +249,67 @@ public class ResultUtils {
 			value = result.getDouble(index);
 			break;
 		default:
-			throw new GeoPackageException("Data Type " + dataType
-					+ " is not a float type");
+			throw new GeoPackageException(
+					"Data Type " + dataType + " is not a float type");
 		}
 
 		if (result.wasNull()) {
 			value = null;
+		}
+
+		return value;
+	}
+
+	/**
+	 * Get the converted value from the value and data type
+	 * 
+	 * @param value
+	 *            object value
+	 * @param dataType
+	 *            data type
+	 * @return object
+	 * @since 3.3.1
+	 */
+	public static Object getValue(Object value, GeoPackageDataType dataType) {
+
+		if (value != null && dataType != null) {
+
+			try {
+
+				switch (dataType) {
+				case BOOLEAN:
+					if (!(value instanceof Boolean)
+							&& value instanceof Number) {
+						short booleanValue = ((Number) value).shortValue();
+						value = booleanValue == 0 ? Boolean.FALSE
+								: Boolean.TRUE;
+					}
+					break;
+				case DATE:
+				case DATETIME:
+					if (!(value instanceof Date) && value instanceof String) {
+						DateConverter converter = DateConverter
+								.converter(dataType);
+						value = converter.dateValue(value.toString());
+					}
+					break;
+				case INT:
+				case INTEGER:
+					if (!(value instanceof Long) && value instanceof Number) {
+						value = ((Number) value).longValue();
+					}
+					break;
+				default:
+					break;
+				}
+
+			} catch (Exception e) {
+				logger.log(Level.WARNING,
+						"Invalid " + dataType + " format: " + value + ", "
+								+ value.getClass().getName() + " value used",
+						e);
+			}
+
 		}
 
 		return value;
@@ -291,8 +395,8 @@ public class ResultUtils {
 			while (result.moveToNext()) {
 				List<Object> row = new ArrayList<>();
 				for (int i = 0; i < columns; i++) {
-					row.add(result.getValue(i, dataTypes != null ? dataTypes[i]
-							: null));
+					row.add(result.getValue(i,
+							dataTypes != null ? dataTypes[i] : null));
 				}
 				results.add(row);
 				if (limit != null && results.size() >= limit) {
