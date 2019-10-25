@@ -135,4 +135,99 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 			String[] columnsAs, String selection, String[] selectionArgs,
 			String groupBy, String having, String orderBy, String limit);
 
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public abstract String querySQL(String table, String[] columns,
+			String selection, String groupBy, String having, String orderBy);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public abstract String querySQL(String table, String[] columns,
+			String[] columnsAs, String selection, String groupBy, String having,
+			String orderBy);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public abstract String querySQL(String table, String[] columns,
+			String selection, String groupBy, String having, String orderBy,
+			String limit);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public abstract String querySQL(String table, String[] columns,
+			String[] columnsAs, String selection, String groupBy, String having,
+			String orderBy, String limit);
+
 }

@@ -6,6 +6,14 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
@@ -22,14 +30,6 @@ import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
-
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.GenericRawResults;
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.stmt.DeleteBuilder;
-import com.j256.ormlite.stmt.PreparedDelete;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
 
 /**
  * Abstract core Feature Table Index NGA Extension implementation. This
@@ -62,14 +62,15 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Table name
@@ -116,8 +117,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @param columnName
 	 *            column name
 	 */
-	protected FeatureTableCoreIndex(GeoPackageCore geoPackage,
-			String tableName, String columnName) {
+	protected FeatureTableCoreIndex(GeoPackageCore geoPackage, String tableName,
+			String columnName) {
 		super(geoPackage);
 		this.tableName = tableName;
 		this.columnName = columnName;
@@ -274,8 +275,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 			// Create the new index row
 			if (envelope != null) {
-				GeometryIndex geometryIndex = geometryIndexDao.populate(
-						tableIndex, geomId, envelope);
+				GeometryIndex geometryIndex = geometryIndexDao
+						.populate(tableIndex, geomId, envelope);
 				try {
 					geometryIndexDao.createOrUpdate(geometryIndex);
 					indexed = true;
@@ -283,7 +284,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 					throw new GeoPackageException(
 							"Failed to create or update Geometry Index. GeoPackage: "
 									+ geoPackage.getName() + ", Table Name: "
-									+ tableName + ", Geom Id: " + geomId, e);
+									+ tableName + ", Geom Id: " + geomId,
+							e);
 				}
 			}
 		}
@@ -306,7 +308,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to update last indexed date. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 	}
 
@@ -334,7 +337,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Table Index. GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + tableName, e);
+							+ geoPackage.getName() + ", Table: " + tableName,
+					e);
 		}
 
 		return deleted;
@@ -354,10 +358,9 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		try {
 			deleted = geometryIndexDao.deleteById(key);
 		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to delete index, GeoPackage: "
-							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Geometry Id: " + geomId, e);
+			throw new GeoPackageException("Failed to delete index, GeoPackage: "
+					+ geoPackage.getName() + ", Table Name: " + tableName
+					+ ", Geometry Id: " + geomId, e);
 		}
 		return deleted;
 	}
@@ -383,16 +386,16 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 					if (tableIndex != null) {
 						Date lastIndexed = tableIndex.getLastIndexed();
-						indexed = lastIndexed != null
-								&& lastIndexed.getTime() >= lastChange
-										.getTime();
+						indexed = lastIndexed != null && lastIndexed
+								.getTime() >= lastChange.getTime();
 					}
 				}
 			} catch (SQLException e) {
 				throw new GeoPackageException(
 						"Failed to check if table is indexed, GeoPackage: "
 								+ geoPackage.getName() + ", Table Name: "
-								+ tableName, e);
+								+ tableName,
+						e);
 			}
 		}
 		return indexed;
@@ -421,7 +424,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 				throw new GeoPackageException(
 						"Failed to create Table Index for GeoPackage: "
 								+ geoPackage.getName() + ", Table Name: "
-								+ tableName + ", Column Name: " + columnName, e);
+								+ tableName + ", Column Name: " + columnName,
+						e);
 			}
 		}
 
@@ -444,7 +448,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to query for Table Index for GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 		return tableIndex;
 	}
@@ -491,7 +496,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to clear Geometry Index rows for GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return deleted;
@@ -515,7 +521,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to create Geometry Index table for GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return created;
@@ -529,7 +536,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	private Extensions getOrCreateExtension() {
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, tableName,
-				columnName, EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+				columnName, EXTENSION_DEFINITION,
+				ExtensionScopeType.READ_WRITE);
 
 		return extension;
 	}
@@ -563,10 +571,23 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to query for all Geometry Indices. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return geometryIndices;
+	}
+
+	/**
+	 * Query SQL for all row ids
+	 * 
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryIdsSQL() {
+		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder();
+		qb.selectRaw(GeometryIndex.COLUMN_GEOM_ID);
+		return prepareStatementString(qb);
 	}
 
 	/**
@@ -584,7 +605,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to query for Geometry Index count. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return count;
@@ -601,15 +623,16 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		GenericRawResults<Object[]> results = null;
 		Object[] values = null;
 		try {
-			results = geometryIndexDao.queryRaw("SELECT MIN("
-					+ GeometryIndex.COLUMN_MIN_X + "), MIN("
-					+ GeometryIndex.COLUMN_MIN_Y + "), MAX("
-					+ GeometryIndex.COLUMN_MAX_X + "), MAX("
-					+ GeometryIndex.COLUMN_MAX_Y + ") FROM "
-					+ GeometryIndex.TABLE_NAME + " WHERE "
-					+ GeometryIndex.COLUMN_TABLE_NAME + " = ?", new DataType[] {
-					DataType.DOUBLE, DataType.DOUBLE, DataType.DOUBLE,
-					DataType.DOUBLE }, tableName);
+			results = geometryIndexDao.queryRaw(
+					"SELECT MIN(" + GeometryIndex.COLUMN_MIN_X + "), MIN("
+							+ GeometryIndex.COLUMN_MIN_Y + "), MAX("
+							+ GeometryIndex.COLUMN_MAX_X + "), MAX("
+							+ GeometryIndex.COLUMN_MAX_Y + ") FROM "
+							+ GeometryIndex.TABLE_NAME + " WHERE "
+							+ GeometryIndex.COLUMN_TABLE_NAME + " = ?",
+					new DataType[] { DataType.DOUBLE, DataType.DOUBLE,
+							DataType.DOUBLE, DataType.DOUBLE },
+					tableName);
 			values = results.getFirstResult();
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -666,7 +689,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to build query for all Geometry Indices. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return qb;
@@ -702,7 +726,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		BoundingBox featureBoundingBox = getFeatureBoundingBox(boundingBox,
 				projection);
 
-		CloseableIterator<GeometryIndex> geometryIndices = query(featureBoundingBox);
+		CloseableIterator<GeometryIndex> geometryIndices = query(
+				featureBoundingBox);
 
 		return geometryIndices;
 	}
@@ -752,14 +777,16 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 		CloseableIterator<GeometryIndex> geometryIndices = null;
 
-		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder(envelope);
+		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder(
+				envelope);
 		try {
 			geometryIndices = qb.iterator();
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Geometry Indices. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return geometryIndices;
@@ -775,14 +802,16 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	public long count(GeometryEnvelope envelope) {
 		long count = 0;
 
-		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder(envelope);
+		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder(
+				envelope);
 		try {
 			count = qb.countOf();
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Geometry Index count. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return count;
@@ -833,7 +862,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to build query for Geometry Indices. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName, e);
+							+ tableName + ", Column Name: " + columnName,
+					e);
 		}
 
 		return qb;
@@ -856,6 +886,25 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		BoundingBox featureBoundingBox = boundingBox
 				.transform(projectionTransform);
 		return featureBoundingBox;
+	}
+
+	/**
+	 * Prepare a statement string from a query builder
+	 * 
+	 * @param qb
+	 *            query builder
+	 * @return statement
+	 */
+	private String prepareStatementString(
+			QueryBuilder<GeometryIndex, GeometryIndexKey> qb) {
+		String sql = null;
+		try {
+			sql = qb.prepareStatementString();
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to prepare statement from query builder", e);
+		}
+		return sql;
 	}
 
 }

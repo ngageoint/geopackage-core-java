@@ -240,6 +240,39 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Query SQL for all rows
+	 * 
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryForAllSQL() {
+		return queryForAllSQL(table.getColumnNames());
+	}
+
+	/**
+	 * Query SQL for all row ids
+	 * 
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryForAllIdsSQL() {
+		return queryForAllSQL(new String[] { table.getPkColumn().getName() });
+	}
+
+	/**
+	 * Query SQL for all rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryForAllSQL(String[] columns) {
+		return userDb.querySQL(getTableName(), columns, null, null, null, null,
+				null, null);
+	}
+
+	/**
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param fieldName
@@ -419,6 +452,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		}
 		readCursor.close();
 		return row;
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return result
+	 */
+	public TResult queryIn(String nestedSQL) {
+		return queryIn(nestedSQL, null);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return result
+	 */
+	public TResult queryIn(String nestedSQL, String[] nestedArgs) {
+		String where = CoreSQLUtils.quoteWrap(table.getPkColumn().getName())
+				+ " IN (" + nestedSQL + ")";
+		return query(where, nestedArgs);
 	}
 
 	/**
