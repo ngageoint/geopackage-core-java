@@ -1,5 +1,6 @@
 package mil.nga.geopackage.user;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -460,9 +461,10 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return result
+	 * @since 3.3.1
 	 */
 	public TResult queryIn(String nestedSQL) {
-		return queryIn(nestedSQL, null);
+		return queryIn(nestedSQL, null, null, null);
 	}
 
 	/**
@@ -473,11 +475,131 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return result
+	 * @since 3.3.1
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs) {
-		String where = CoreSQLUtils.quoteWrap(table.getPkColumn().getName())
-				+ " IN (" + nestedSQL + ")";
-		return query(where, nestedArgs);
+		return queryIn(nestedSQL, nestedArgs, null, null);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, Map<String, Object> fieldValues) {
+		return queryIn(nestedSQL, null, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues) {
+		String where = buildWhere(fieldValues.entrySet());
+		String[] whereArgs = buildWhereArgs(fieldValues.values());
+		return queryIn(nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, String[] nestedArgs,
+			String where) {
+		return queryIn(nestedSQL, nestedArgs, where, null);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, String where) {
+		return queryIn(nestedSQL, null, where, null);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, String where, String[] whereArgs) {
+		return queryIn(nestedSQL, null, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryIn(String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs) {
+
+		String nestedWhere = CoreSQLUtils.quoteWrap(
+				table.getPkColumn().getName()) + " IN (" + nestedSQL + ")";
+
+		String whereClause;
+		if (where == null) {
+			whereClause = nestedWhere;
+		} else {
+			whereClause = "(" + where + ") AND (" + nestedWhere + ")";
+		}
+
+		String[] args = whereArgs;
+		if (args == null) {
+			args = nestedArgs;
+		} else if (nestedArgs != null) {
+			args = (String[]) Array.newInstance(String.class,
+					whereArgs.length + nestedArgs.length);
+			System.arraycopy(whereArgs, 0, args, 0, whereArgs.length);
+			System.arraycopy(nestedArgs, 0, args, whereArgs.length,
+					nestedArgs.length);
+		}
+
+		return query(whereClause, args);
 	}
 
 	/**
