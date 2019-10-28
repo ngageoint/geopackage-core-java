@@ -585,9 +585,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @since 3.3.1
 	 */
 	public String queryIdsSQL() {
-		QueryBuilder<GeometryIndex, GeometryIndexKey> qb = queryBuilder();
-		qb.selectRaw(GeometryIndex.COLUMN_GEOM_ID);
-		return prepareStatementString(qb);
+		return queryIdsSQL(queryBuilder());
 	}
 
 	/**
@@ -793,6 +791,18 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	}
 
 	/**
+	 * Query SQL for all row ids
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryIdsSQL(GeometryEnvelope envelope) {
+		return queryIdsSQL(queryBuilder(envelope));
+	}
+
+	/**
 	 * Query for Geometry Index count within the Geometry Envelope
 	 * 
 	 * @param envelope
@@ -886,6 +896,19 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		BoundingBox featureBoundingBox = boundingBox
 				.transform(projectionTransform);
 		return featureBoundingBox;
+	}
+
+	/**
+	 * Build SQL for selecting ids from the query builder
+	 * 
+	 * @param qb
+	 *            query builder
+	 * @return SQL
+	 */
+	private String queryIdsSQL(
+			QueryBuilder<GeometryIndex, GeometryIndexKey> qb) {
+		qb.selectRaw(GeometryIndex.COLUMN_GEOM_ID);
+		return prepareStatementString(qb);
 	}
 
 	/**

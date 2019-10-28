@@ -497,6 +497,45 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Query SQL for rows
+	 * 
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String querySQL(String where) {
+		return querySQL(table.getColumnNames(), where);
+	}
+
+	/**
+	 * Query SQL for row ids
+	 * 
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String queryIdsSQL(String where) {
+		return querySQL(new String[] { table.getPkColumn().getName() }, where);
+	}
+
+	/**
+	 * Query SQL for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.3.1
+	 */
+	public String querySQL(String[] columns, String where) {
+		return userDb.querySQL(getTableName(), columns, where, null, null,
+				null);
+	}
+
+	/**
 	 * Query for rows
 	 * 
 	 * @param where

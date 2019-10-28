@@ -38,6 +38,34 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	public Object getValue(TColumn column);
 
 	/**
+	 * Get the value for the column index
+	 * 
+	 * @param index
+	 *            column index
+	 * @return value
+	 * @since 3.3.1
+	 */
+	public Object getValue(int index);
+
+	/**
+	 * Get the value for the column name
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @return value
+	 * @since 3.3.1
+	 */
+	public Object getValue(String columnName);
+
+	/**
+	 * Get the primary key value
+	 * 
+	 * @return value
+	 * @since 3.3.1
+	 */
+	public long getId();
+
+	/**
 	 * Get the table
 	 * 
 	 * @return table

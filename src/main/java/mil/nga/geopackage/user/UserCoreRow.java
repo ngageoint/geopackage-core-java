@@ -332,10 +332,10 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		long id;
 		Object objectValue = getValue(getPkColumnIndex());
 		if (objectValue == null) {
-			throw new GeoPackageException("Row Id was null. Table: "
-					+ table.getTableName() + ", Column Index: "
-					+ getPkColumnIndex() + ", Column Name: "
-					+ getPkColumn().getName());
+			throw new GeoPackageException(
+					"Row Id was null. Table: " + table.getTableName()
+							+ ", Column Index: " + getPkColumnIndex()
+							+ ", Column Name: " + getPkColumn().getName());
 		}
 		if (objectValue instanceof Number) {
 			id = ((Number) objectValue).longValue();
@@ -343,7 +343,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 			throw new GeoPackageException("Row Id was not a number. Table: "
 					+ table.getTableName() + ", Column Index: "
 					+ getPkColumnIndex() + ", Column Name: "
-					+ getPkColumn().getName());
+					+ getPkColumn().getName() + ", Value: " + objectValue);
 		}
 
 		return id;
