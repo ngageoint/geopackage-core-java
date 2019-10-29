@@ -246,8 +246,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return SQL
 	 * @since 3.3.1
 	 */
-	public String queryForAllSQL() {
-		return queryForAllSQL(table.getColumnNames());
+	public String querySQL() {
+		return querySQL(table.getColumnNames());
 	}
 
 	/**
@@ -256,8 +256,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return SQL
 	 * @since 3.3.1
 	 */
-	public String queryForAllIdsSQL() {
-		return queryForAllSQL(new String[] { table.getPkColumn().getName() });
+	public String queryIdsSQL() {
+		return querySQL(new String[] { table.getPkColumn().getName() });
 	}
 
 	/**
@@ -268,7 +268,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return SQL
 	 * @since 3.3.1
 	 */
-	public String queryForAllSQL(String[] columns) {
+	public String querySQL(String[] columns) {
 		return userDb.querySQL(getTableName(), columns, null, null, null, null,
 				null, null);
 	}
@@ -468,6 +468,18 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL) {
+		return countIn(nestedSQL, null, null, null);
+	}
+
+	/**
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -482,6 +494,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String[] nestedArgs) {
+		return countIn(nestedSQL, nestedArgs, null, null);
+	}
+
+	/**
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -493,6 +519,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, Map<String, Object> fieldValues) {
 		return queryIn(nestedSQL, null, fieldValues);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, Map<String, Object> fieldValues) {
+		return countIn(nestedSQL, null, fieldValues);
 	}
 
 	/**
@@ -515,6 +555,25 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues) {
+		String where = buildWhere(fieldValues.entrySet());
+		String[] whereArgs = buildWhereArgs(fieldValues.values());
+		return countIn(nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -532,6 +591,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String[] nestedArgs, String where) {
+		return countIn(nestedSQL, nestedArgs, where, null);
+	}
+
+	/**
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -543,6 +618,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String where) {
 		return queryIn(nestedSQL, null, where, null);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String where) {
+		return countIn(nestedSQL, null, where, null);
 	}
 
 	/**
@@ -562,6 +651,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String where, String[] whereArgs) {
+		return countIn(nestedSQL, null, where, whereArgs);
+	}
+
+	/**
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -577,29 +682,42 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
-
-		String nestedWhere = CoreSQLUtils.quoteWrap(
-				table.getPkColumn().getName()) + " IN (" + nestedSQL + ")";
-
-		String whereClause;
-		if (where == null) {
-			whereClause = nestedWhere;
-		} else {
-			whereClause = "(" + where + ") AND (" + nestedWhere + ")";
-		}
-
-		String[] args = whereArgs;
-		if (args == null) {
-			args = nestedArgs;
-		} else if (nestedArgs != null) {
-			args = (String[]) Array.newInstance(String.class,
-					whereArgs.length + nestedArgs.length);
-			System.arraycopy(whereArgs, 0, args, 0, whereArgs.length);
-			System.arraycopy(nestedArgs, 0, args, whereArgs.length,
-					nestedArgs.length);
-		}
-
+		String whereClause = buildWhereIn(nestedSQL, where);
+		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
 		return query(whereClause, args);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int countIn(String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs) {
+		String whereClause = buildWhereIn(nestedSQL, where);
+		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
+		return count(whereClause, args);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult query(String where) {
+		return query(where, null);
 	}
 
 	/**
@@ -717,7 +835,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(int limit, long offset) {
-		return queryForChunk(table.getPkColumn().getName(), limit, offset);
+		return queryForChunk(null, null, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryForChunk(String where, String[] whereArgs, int limit,
+			long offset) {
+		return queryForChunk(where, whereArgs, table.getPkColumn().getName(),
+				limit, offset);
 	}
 
 	/**
@@ -734,7 +873,57 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(String orderBy, int limit, long offset) {
-		return query(null, null, null, null, orderBy,
+		return queryForChunk(null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryForChunk(String where, String[] whereArgs,
+			String orderBy, int limit, long offset) {
+		return queryForChunk(where, whereArgs, null, null, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.3.1
+	 */
+	public TResult queryForChunk(String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return query(where, whereArgs, groupBy, having, orderBy,
 				buildLimit(limit, offset));
 	}
 
@@ -1161,12 +1350,76 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Build where statement for ids in the nested SQL query
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return where clause
+	 * @since 3.3.1
+	 */
+	public String buildWhereIn(String nestedSQL, String where) {
+
+		String nestedWhere = CoreSQLUtils.quoteWrap(
+				table.getPkColumn().getName()) + " IN (" + nestedSQL + ")";
+
+		String whereClause;
+		if (where == null) {
+			whereClause = nestedWhere;
+		} else {
+			whereClause = "(" + where + ") AND (" + nestedWhere + ")";
+		}
+
+		return whereClause;
+	}
+
+	/**
+	 * Build where args for ids in the nested SQL query
+	 * 
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param whereArgs
+	 *            where arguments
+	 * @return where args
+	 * @since 3.3.1
+	 */
+	public String[] buildWhereInArgs(String[] nestedArgs, String[] whereArgs) {
+
+		String[] args = whereArgs;
+
+		if (args == null) {
+			args = nestedArgs;
+		} else if (nestedArgs != null) {
+			args = (String[]) Array.newInstance(String.class,
+					whereArgs.length + nestedArgs.length);
+			System.arraycopy(whereArgs, 0, args, 0, whereArgs.length);
+			System.arraycopy(nestedArgs, 0, args, whereArgs.length,
+					nestedArgs.length);
+		}
+
+		return args;
+	}
+
+	/**
 	 * Get the total count
 	 * 
 	 * @return count
 	 */
 	public int count() {
 		return count(null, null);
+	}
+
+	/**
+	 * Get the count
+	 * 
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.3.1
+	 */
+	public int count(String where) {
+		return count(where, null);
 	}
 
 	/**
