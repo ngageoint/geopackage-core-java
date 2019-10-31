@@ -12,6 +12,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Additional connection and DAO query and count methods
 * Additional user result get value and id methods
 * Removed default values on user tile table columns
+* Add Contents Id Extension table to Contents table for use in related tables
 
 ## [3.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.3.0) (07-09-2019)
 

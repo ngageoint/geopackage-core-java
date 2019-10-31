@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
@@ -17,9 +20,6 @@ import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-
-import com.j256.ormlite.dao.GenericRawResults;
-import com.j256.ormlite.stmt.QueryBuilder;
 
 /**
  * This extension assigns a unique integer identifier to tables defined in the
@@ -50,14 +50,15 @@ public class ContentsIdExtension extends BaseExtension {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Contents Id DAO
@@ -98,7 +99,8 @@ public class ContentsIdExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to check for contents id for GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 		return exists;
@@ -132,7 +134,8 @@ public class ContentsIdExtension extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to query contents id for GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 		return contentsId;
 	}
@@ -197,7 +200,8 @@ public class ContentsIdExtension extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to create contents id for GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 		return contentsId;
 	}
@@ -304,7 +308,8 @@ public class ContentsIdExtension extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to delete Contents Id extension table. GeoPackage: "
 							+ geoPackage.getName() + ", Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 		return deleted;
 	}
@@ -338,6 +343,8 @@ public class ContentsIdExtension extends BaseExtension {
 	 */
 	public int createIds(String type) {
 
+		getOrCreateExtension();
+
 		List<String> tables = getMissing(type);
 
 		for (String tableName : tables) {
@@ -356,13 +363,14 @@ public class ContentsIdExtension extends BaseExtension {
 		int deleted = 0;
 		try {
 			if (contentsIdDao.isTableExists()) {
-				deleted = contentsIdDao.delete(contentsIdDao.deleteBuilder()
-						.prepare());
+				deleted = contentsIdDao
+						.delete(contentsIdDao.deleteBuilder().prepare());
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete all contents ids. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 		return deleted;
 	}
@@ -395,7 +403,8 @@ public class ContentsIdExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete contents ids by type. GeoPackage: "
-							+ geoPackage.getName() + ", Type: " + type, e);
+							+ geoPackage.getName() + ", Type: " + type,
+					e);
 		}
 		return deleted;
 	}
@@ -416,7 +425,8 @@ public class ContentsIdExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for all contents ids. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 		return contentsIds;
 	}
@@ -434,7 +444,8 @@ public class ContentsIdExtension extends BaseExtension {
 			} catch (SQLException e) {
 				throw new GeoPackageException(
 						"Failed to count contents ids. GeoPackage: "
-								+ geoPackage.getName(), e);
+								+ geoPackage.getName(),
+						e);
 			}
 		}
 		return count;
@@ -473,8 +484,8 @@ public class ContentsIdExtension extends BaseExtension {
 				QueryBuilder<ContentsId, Long> contentsIdQueryBuilder = contentsIdDao
 						.queryBuilder();
 
-				contentsQueryBuilder.where()
-						.eq(Contents.COLUMN_DATA_TYPE, type);
+				contentsQueryBuilder.where().eq(Contents.COLUMN_DATA_TYPE,
+						type);
 				contentsIdQueryBuilder.join(contentsQueryBuilder);
 
 				contentsIds = contentsIdQueryBuilder.query();
@@ -485,7 +496,8 @@ public class ContentsIdExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for contents id by contents data type. GeoPackage: "
-							+ geoPackage.getName() + ", Type: " + type, e);
+							+ geoPackage.getName() + ", Type: " + type,
+					e);
 		}
 
 		return contentsIds;
@@ -568,7 +580,8 @@ public class ContentsIdExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for missing contents ids. GeoPackage: "
-							+ geoPackage.getName() + ", Type: " + type, e);
+							+ geoPackage.getName() + ", Type: " + type,
+					e);
 		} finally {
 			if (results != null) {
 				try {
@@ -576,7 +589,8 @@ public class ContentsIdExtension extends BaseExtension {
 				} catch (IOException e) {
 					logger.log(Level.WARNING,
 							"Failed to close generic raw results from missing contents ids query. type: "
-									+ type, e);
+									+ type,
+							e);
 				}
 			}
 		}
@@ -596,6 +610,27 @@ public class ContentsIdExtension extends BaseExtension {
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
 				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
+
+		ContentsDao contentsDao = geoPackage.getContentsDao();
+		try {
+
+			if (contentsDao.queryForId(ContentsId.TABLE_NAME) == null) {
+
+				Contents contents = new Contents();
+				contents.setTableName(ContentsId.TABLE_NAME);
+				contents.setDataTypeString(Extensions.TABLE_NAME);
+				contents.setIdentifier(ContentsId.TABLE_NAME);
+
+				contentsDao.create(contents);
+
+			}
+
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query create contents entry for contents id. GeoPackage: "
+							+ geoPackage.getName(),
+					e);
+		}
 
 		return extension;
 	}
@@ -624,10 +659,12 @@ public class ContentsIdExtension extends BaseExtension {
 			if (extensionsDao.isTableExists()) {
 				extensionsDao.deleteByExtension(EXTENSION_NAME);
 			}
+			geoPackage.getContentsDao().deleteById(ContentsId.TABLE_NAME);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete Contents Id extension and table. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 	}
 
