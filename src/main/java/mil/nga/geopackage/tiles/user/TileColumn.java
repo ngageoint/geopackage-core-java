@@ -52,7 +52,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createZoomLevelColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_ZOOM_LEVEL,
-				GeoPackageDataType.INTEGER, null, true, 0, false);
+				GeoPackageDataType.INTEGER, null, true, null, false);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createTileColumnColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_COLUMN,
-				GeoPackageDataType.INTEGER, null, true, 0, false);
+				GeoPackageDataType.INTEGER, null, true, null, false);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createTileRowColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_ROW,
-				GeoPackageDataType.INTEGER, null, true, 0, false);
+				GeoPackageDataType.INTEGER, null, true, null, false);
 	}
 
 	/**
