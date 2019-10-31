@@ -627,7 +627,7 @@ public class ContentsIdExtension extends BaseExtension {
 
 		} catch (SQLException e) {
 			throw new GeoPackageException(
-					"Failed to query create contents entry for contents id. GeoPackage: "
+					"Failed to create contents entry for contents id. GeoPackage: "
 							+ geoPackage.getName(),
 					e);
 		}
