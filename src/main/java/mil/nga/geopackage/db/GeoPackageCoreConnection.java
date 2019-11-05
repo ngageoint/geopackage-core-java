@@ -45,6 +45,17 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	}
 
 	/**
+	 * Copy Constructor
+	 *
+	 * @param connection
+	 *            connection
+	 * @since 3.3.1
+	 */
+	protected GeoPackageCoreConnection(GeoPackageCoreConnection connection) {
+		this(connection.connectionSource);
+	}
+
+	/**
 	 * Get a connection source
 	 * 
 	 * @return connection source
