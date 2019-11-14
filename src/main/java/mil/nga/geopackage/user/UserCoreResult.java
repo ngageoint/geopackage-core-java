@@ -43,7 +43,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * @param index
 	 *            column index
 	 * @return value
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public Object getValue(int index);
 
@@ -53,7 +53,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * @param columnName
 	 *            column name
 	 * @return value
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public Object getValue(String columnName);
 
@@ -61,7 +61,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Get the primary key value
 	 * 
 	 * @return value
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public long getId();
 

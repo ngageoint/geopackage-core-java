@@ -49,7 +49,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *
 	 * @param connection
 	 *            connection
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	protected GeoPackageCoreConnection(GeoPackageCoreConnection connection) {
 		this(connection.connectionSource);

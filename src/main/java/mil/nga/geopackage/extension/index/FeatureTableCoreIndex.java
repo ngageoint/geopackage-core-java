@@ -582,7 +582,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * Query SQL for all row ids
 	 * 
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String queryIdsSQL() {
 		return queryIdsSQL(queryBuilder());
@@ -796,7 +796,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @param envelope
 	 *            geometry envelope
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String queryIdsSQL(GeometryEnvelope envelope) {
 		return queryIdsSQL(queryBuilder(envelope));

@@ -244,7 +244,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for all rows
 	 * 
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String querySQL() {
 		return querySQL(table.getColumnNames());
@@ -254,7 +254,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for all row ids
 	 * 
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String queryIdsSQL() {
 		return querySQL(new String[] { table.getPkColumn().getName() });
@@ -266,7 +266,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columns
 	 *            columns
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String querySQL(String[] columns) {
 		return userDb.querySQL(getTableName(), columns, null, null, null, null,
@@ -461,7 +461,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL) {
 		return queryIn(nestedSQL, null, null, null);
@@ -473,7 +473,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL) {
 		return countIn(nestedSQL, null, null, null);
@@ -487,7 +487,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs) {
 		return queryIn(nestedSQL, nestedArgs, null, null);
@@ -501,7 +501,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs) {
 		return countIn(nestedSQL, nestedArgs, null, null);
@@ -515,7 +515,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, Map<String, Object> fieldValues) {
 		return queryIn(nestedSQL, null, fieldValues);
@@ -529,7 +529,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, Map<String, Object> fieldValues) {
 		return countIn(nestedSQL, null, fieldValues);
@@ -545,7 +545,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
@@ -564,7 +564,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
@@ -583,7 +583,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			String where) {
@@ -600,7 +600,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs, String where) {
 		return countIn(nestedSQL, nestedArgs, where, null);
@@ -614,7 +614,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where) {
 		return queryIn(nestedSQL, null, where, null);
@@ -628,7 +628,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String where) {
 		return countIn(nestedSQL, null, where, null);
@@ -644,7 +644,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where, String[] whereArgs) {
 		return queryIn(nestedSQL, null, where, whereArgs);
@@ -660,7 +660,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String where, String[] whereArgs) {
 		return countIn(nestedSQL, null, where, whereArgs);
@@ -678,7 +678,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
@@ -699,7 +699,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
@@ -714,7 +714,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult query(String where) {
 		return query(where, null);
@@ -742,7 +742,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String querySQL(String where) {
 		return querySQL(table.getColumnNames(), where);
@@ -754,7 +754,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String queryIdsSQL(String where) {
 		return querySQL(new String[] { table.getPkColumn().getName() }, where);
@@ -768,7 +768,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String querySQL(String[] columns, String where) {
 		return userDb.querySQL(getTableName(), columns, where, null, null,
@@ -851,7 +851,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs, int limit,
 			long offset) {
@@ -891,7 +891,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String orderBy, int limit, long offset) {
@@ -918,7 +918,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String groupBy, String having, String orderBy, int limit,
@@ -1357,7 +1357,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return where clause
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String buildWhereIn(String nestedSQL, String where) {
 
@@ -1382,7 +1382,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return where args
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public String[] buildWhereInArgs(String[] nestedArgs, String[] whereArgs) {
 
@@ -1416,7 +1416,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public int count(String where) {
 		return count(where, null);

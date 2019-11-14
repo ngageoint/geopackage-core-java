@@ -99,7 +99,7 @@ public class ResultUtils {
 	 *            {@link #FIELD_TYPE_FLOAT}, {@link #FIELD_TYPE_STRING},
 	 *            {@link #FIELD_TYPE_BLOB}, or {@link #FIELD_TYPE_NULL}
 	 * @return value value
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public static Object getValue(Result result, int index, int type) {
 		return getValue(result, index, type, null);
@@ -119,7 +119,7 @@ public class ResultUtils {
 	 * @param dataType
 	 *            data type
 	 * @return value value
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public static Object getValue(Result result, int index, int type,
 			GeoPackageDataType dataType) {
@@ -268,7 +268,7 @@ public class ResultUtils {
 	 * @param dataType
 	 *            data type
 	 * @return object
-	 * @since 3.3.1
+	 * @since 3.4.0
 	 */
 	public static Object getValue(Object value, GeoPackageDataType dataType) {
 
