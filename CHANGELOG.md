@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.3.1 (TBD)
+## [3.4.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.4.0) (11-14-2019)
 
 * sf-proj version 3.0.2
 * oapi-features-json version 1.0.1
