@@ -100,7 +100,8 @@ public class TileBoundingBoxUtils {
 		double adjustment = 0.0;
 
 		if (maxLongitude > 0) {
-			if (boundingBox.getMinLongitude() > boundingBox2.getMaxLongitude()) {
+			if (boundingBox.getMinLongitude() > boundingBox2
+					.getMaxLongitude()) {
 				adjustment = maxLongitude * 2.0;
 			} else if (boundingBox.getMaxLongitude() < boundingBox2
 					.getMinLongitude()) {
@@ -304,8 +305,7 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the tile bounding box from the Google Maps API tile coordinates and
-	 * zoom level
+	 * Get the tile bounding box from the XYZ tile coordinates and zoom level
 	 *
 	 * @param x
 	 *            x coordinate
@@ -333,8 +333,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Web Mercator tile bounding box from the Google Maps API tile
-	 * coordinates and zoom level
+	 * Get the Web Mercator tile bounding box from the XYZ tile coordinates and
+	 * zoom level
 	 *
 	 * @param x
 	 *            x coordinate
@@ -344,7 +344,8 @@ public class TileBoundingBoxUtils {
 	 *            zoom level
 	 * @return bounding box
 	 */
-	public static BoundingBox getWebMercatorBoundingBox(long x, long y, int zoom) {
+	public static BoundingBox getWebMercatorBoundingBox(long x, long y,
+			int zoom) {
 
 		double tileSize = tileSizeWithZoom(zoom);
 
@@ -363,8 +364,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Web Mercator tile bounding box from the Google Maps API tile grid
-	 * and zoom level
+	 * Get the Web Mercator tile bounding box from the XYZ tile grid and zoom
+	 * level
 	 *
 	 * @param tileGrid
 	 *            tile grid
@@ -392,8 +393,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile
-	 * coordinates and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile coordinates and
+	 * zoom level
 	 *
 	 * @param projectionEpsg
 	 *            projection epsg
@@ -412,8 +413,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile
-	 * coordinates and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile coordinates and
+	 * zoom level
 	 *
 	 * @param authority
 	 *            projection authority
@@ -434,8 +435,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
 		if (code != null) {
-			ProjectionTransform transform = webMercator.getTransformation(
-					authority, code);
+			ProjectionTransform transform = webMercator
+					.getTransformation(authority, code);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -443,8 +444,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile
-	 * coordinates and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile coordinates and
+	 * zoom level
 	 *
 	 * @param projection
 	 *            projection
@@ -471,8 +472,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile
-	 * tileGrid and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile tileGrid and zoom
+	 * level
 	 *
 	 * @param projectionEpsg
 	 *            projection epsg
@@ -489,8 +490,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile
-	 * tileGrid and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile tileGrid and zoom
+	 * level
 	 *
 	 * @param authority
 	 *            projection authority
@@ -509,8 +510,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
 		if (code != null) {
-			ProjectionTransform transform = webMercator.getTransformation(
-					authority, code);
+			ProjectionTransform transform = webMercator
+					.getTransformation(authority, code);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -518,8 +519,7 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the Google Maps API tile grid
-	 * and zoom level
+	 * Get the Projected tile bounding box from the XYZ tile grid and zoom level
 	 *
 	 * @param projection
 	 *            projection
@@ -597,16 +597,23 @@ public class TileBoundingBoxUtils {
 		int tilesPerSide = tilesPerSide(zoom);
 		double tileSize = tileSize(tilesPerSide);
 
-		int minX = (int) ((webMercatorBoundingBox.getMinLongitude() + ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize);
-		double tempMaxX = (webMercatorBoundingBox.getMaxLongitude() + ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				/ tileSize;
-		int maxX = (int) (tempMaxX - ProjectionConstants.WEB_MERCATOR_PRECISION);
+		int minX = (int) ((webMercatorBoundingBox.getMinLongitude()
+				+ ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
+				/ tileSize);
+		double tempMaxX = (webMercatorBoundingBox.getMaxLongitude()
+				+ ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize;
+		int maxX = (int) (tempMaxX
+				- ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxX = Math.min(maxX, tilesPerSide - 1);
 
-		int minY = (int) (((webMercatorBoundingBox.getMaxLatitude() - ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1) / tileSize);
-		double tempMaxY = ((webMercatorBoundingBox.getMinLatitude() - ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
+		int minY = (int) (((webMercatorBoundingBox.getMaxLatitude()
+				- ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
+				/ tileSize);
+		double tempMaxY = ((webMercatorBoundingBox.getMinLatitude()
+				- ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
 				/ tileSize;
-		int maxY = (int) (tempMaxY - ProjectionConstants.WEB_MERCATOR_PRECISION);
+		int maxY = (int) (tempMaxY
+				- ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxY = Math.min(maxY, tilesPerSide - 1);
 
 		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
@@ -633,8 +640,8 @@ public class TileBoundingBoxUtils {
 		Point upperRightPoint = new Point(false, false,
 				boundingBox.getMaxLongitude(), maxLatitude);
 
-		ProjectionTransform toWebMercator = ProjectionFactory.getProjection(
-				ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM)
+		ProjectionTransform toWebMercator = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM)
 				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
 		lowerLeftPoint = toWebMercator.transform(lowerLeftPoint);
 		upperRightPoint = toWebMercator.transform(upperRightPoint);
@@ -667,8 +674,8 @@ public class TileBoundingBoxUtils {
 	 * @since 1.2.0
 	 */
 	public static double zoomLevelOfTileSize(double tileSize) {
-		double tilesPerSide = (2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				/ tileSize;
+		double tilesPerSide = (2
+				* ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize;
 		double zoom = Math.log(tilesPerSide) / Math.log(2);
 		return zoom;
 	}
@@ -1017,7 +1024,8 @@ public class TileBoundingBoxUtils {
 	 */
 	public static int getZoomLevel(BoundingBox webMercatorBoundingBox) {
 
-		double worldLength = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH * 2;
+		double worldLength = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH
+				* 2;
 
 		double longitudeDistance = webMercatorBoundingBox.getMaxLongitude()
 				- webMercatorBoundingBox.getMinLongitude();
@@ -1056,8 +1064,9 @@ public class TileBoundingBoxUtils {
 	 */
 	public static double getPixelXSize(BoundingBox webMercatorBoundingBox,
 			long matrixWidth, int tileWidth) {
-		double pixelXSize = (webMercatorBoundingBox.getMaxLongitude() - webMercatorBoundingBox
-				.getMinLongitude()) / matrixWidth / tileWidth;
+		double pixelXSize = (webMercatorBoundingBox.getMaxLongitude()
+				- webMercatorBoundingBox.getMinLongitude()) / matrixWidth
+				/ tileWidth;
 		return pixelXSize;
 	}
 
@@ -1075,8 +1084,9 @@ public class TileBoundingBoxUtils {
 	 */
 	public static double getPixelYSize(BoundingBox webMercatorBoundingBox,
 			long matrixHeight, int tileHeight) {
-		double pixelYSize = (webMercatorBoundingBox.getMaxLatitude() - webMercatorBoundingBox
-				.getMinLatitude()) / matrixHeight / tileHeight;
+		double pixelYSize = (webMercatorBoundingBox.getMaxLatitude()
+				- webMercatorBoundingBox.getMinLatitude()) / matrixHeight
+				/ tileHeight;
 		return pixelYSize;
 	}
 
@@ -1106,17 +1116,25 @@ public class TileBoundingBoxUtils {
 	public static BoundingBox boundDegreesBoundingBoxWithWebMercatorLimits(
 			BoundingBox boundingBox) {
 		BoundingBox bounded = new BoundingBox(boundingBox);
-		if (bounded.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
-			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
+		if (bounded
+				.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
+			bounded.setMinLatitude(
+					ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
 		}
-		if (bounded.getMaxLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
-			bounded.setMaxLatitude(ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
+		if (bounded
+				.getMaxLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
+			bounded.setMaxLatitude(
+					ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE);
 		}
-		if (bounded.getMaxLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
-			bounded.setMaxLatitude(ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
+		if (bounded
+				.getMaxLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
+			bounded.setMaxLatitude(
+					ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
 		}
-		if (bounded.getMinLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
-			bounded.setMinLatitude(ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
+		if (bounded
+				.getMinLatitude() > ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE) {
+			bounded.setMinLatitude(
+					ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
 		}
 		return bounded;
 	}
@@ -1140,17 +1158,22 @@ public class TileBoundingBoxUtils {
 		double tileSizeLat = tileSizeLatPerWGS84Side(tilesPerLat);
 		double tileSizeLon = tileSizeLonPerWGS84Side(tilesPerLon);
 
-		int minX = (int) ((boundingBox.getMinLongitude() + ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH) / tileSizeLon);
-		double tempMaxX = (boundingBox.getMaxLongitude() + ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
-				/ tileSizeLon;
+		int minX = (int) ((boundingBox.getMinLongitude()
+				+ ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
+				/ tileSizeLon);
+		double tempMaxX = (boundingBox.getMaxLongitude()
+				+ ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH) / tileSizeLon;
 		int maxX = (int) tempMaxX;
 		if (tempMaxX % 1 == 0) {
 			maxX--;
 		}
 		maxX = Math.min(maxX, tilesPerLon - 1);
 
-		int minY = (int) (((boundingBox.getMaxLatitude() - ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1) / tileSizeLat);
-		double tempMaxY = ((boundingBox.getMinLatitude() - ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1)
+		int minY = (int) (((boundingBox.getMaxLatitude()
+				- ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1)
+				/ tileSizeLat);
+		double tempMaxY = ((boundingBox.getMinLatitude()
+				- ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1)
 				/ tileSizeLat;
 		int maxY = (int) tempMaxY;
 		if (tempMaxY % 1 == 0) {
