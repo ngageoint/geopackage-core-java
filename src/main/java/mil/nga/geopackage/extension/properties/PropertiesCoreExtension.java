@@ -52,14 +52,15 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Table name
@@ -108,16 +109,15 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 
 			AttributesColumn propertyColumn = AttributesColumn.createColumn(
 					COLUMN_PROPERTY, GeoPackageDataType.TEXT, true, null);
-			AttributesColumn valueColumn = AttributesColumn.createColumn(
-					COLUMN_VALUE, GeoPackageDataType.TEXT);
+			AttributesColumn valueColumn = AttributesColumn
+					.createColumn(COLUMN_VALUE, GeoPackageDataType.TEXT);
 
 			List<AttributesColumn> additionalColumns = new ArrayList<>();
 			additionalColumns.add(propertyColumn);
 			additionalColumns.add(valueColumn);
 
 			List<Constraint> constraints = new ArrayList<>();
-			constraints.add(new UniqueConstraint(
-					propertyColumn, valueColumn));
+			constraints.add(new UniqueConstraint(propertyColumn, valueColumn));
 
 			geoPackage.createAttributesTableWithId(TABLE_NAME,
 					additionalColumns, constraints);
@@ -171,9 +171,9 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	public List<String> getProperties() {
 		List<String> properties = null;
 		if (has()) {
-			properties = getDao().querySingleColumnTypedResults(
-					"SELECT DISTINCT " + COLUMN_PROPERTY + " FROM "
-							+ TABLE_NAME, null);
+			properties = getDao()
+					.querySingleColumnTypedResults("SELECT DISTINCT "
+							+ COLUMN_PROPERTY + " FROM " + TABLE_NAME, null);
 		} else {
 			properties = new ArrayList<>();
 		}
@@ -286,12 +286,7 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 		boolean hasValue = false;
 		if (has()) {
 			Map<String, Object> fieldValues = buildFieldValues(property, value);
-			TResult result = getDao().queryForFieldValues(fieldValues);
-			try {
-				hasValue = result.getCount() > 0;
-			} finally {
-				result.close();
-			}
+			hasValue = getDao().countForFieldValues(fieldValues) > 0;
 		}
 		return hasValue;
 	}
@@ -385,7 +380,8 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 *            property value
 	 * @return field values mapping
 	 */
-	private Map<String, Object> buildFieldValues(String property, String value) {
+	private Map<String, Object> buildFieldValues(String property,
+			String value) {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put(COLUMN_PROPERTY, property);
 		fieldValues.put(COLUMN_VALUE, value);

@@ -217,8 +217,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForAll() {
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				null, null, null, null, null);
+		return query();
+	}
+
+	/**
+	 * Query for all rows
+	 * 
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query() {
+		return query(table.getColumnNames());
+	}
+
+	/**
+	 * Query for all rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * 
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns) {
+		TResult result = userDb.query(getTableName(), columns, null, null, null,
+				null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -231,11 +254,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columnsAs
 	 *            columns as values
 	 * @return result
-	 * @since 2.0.0
+	 * @since 3.5.0
 	 */
-	public TResult queryForAll(String[] columnsAs) {
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				columnsAs, null, null, null, null, null);
+	public TResult queryAs(String[] columnsAs) {
+		return query(table.getColumnNames(), columnsAs);
+	}
+
+	/**
+	 * Query for all rows with "columns as" values for corresponding column
+	 * indices. Non null values in the array will be used as "as" values for the
+	 * corresponding column.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns, String[] columnsAs) {
+		TResult result = userDb.query(getTableName(), columns, columnsAs, null,
+				null, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -283,7 +322,38 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value) {
-		return queryForEq(fieldName, value, null, null, null);
+		return queryForEq(table.getColumnNames(), fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForEq(String[] columns, String fieldName,
+			Object value) {
+		return queryForEq(columns, fieldName, value, null, null, null);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForEq(String fieldName, Object value) {
+		return countForEq(fieldName, value, null, null, null);
 	}
 
 	/**
@@ -303,12 +373,59 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForEq(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
+		return queryForEq(table.getColumnNames(), fieldName, value, groupBy,
+				having, orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForEq(String[] columns, String fieldName, Object value,
+			String groupBy, String having, String orderBy) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, groupBy, having, orderBy);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForEq(String fieldName, Object value, String groupBy,
+			String having, String orderBy) {
+		String where = buildWhere(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -321,12 +438,45 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, ColumnValue value) {
+		return queryForEq(table.getColumnNames(), fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForEq(String[] columns, String fieldName,
+			ColumnValue value) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForEq(String fieldName, ColumnValue value) {
+		String where = buildWhere(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -341,7 +491,40 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 
 	public TResult queryForLike(String fieldName, Object value) {
-		return queryForLike(fieldName, value, null, null, null);
+		return queryForLike(table.getColumnNames(), fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.0
+	 */
+
+	public TResult queryForLike(String[] columns, String fieldName,
+			Object value) {
+		return queryForLike(columns, fieldName, value, null, null, null);
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.0
+	 */
+
+	public int countForLike(String fieldName, Object value) {
+		return countForLike(fieldName, value, null, null, null);
 	}
 
 	/**
@@ -362,12 +545,59 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForLike(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
+		return queryForLike(table.getColumnNames(), fieldName, value, groupBy,
+				having, orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForLike(String[] columns, String fieldName,
+			Object value, String groupBy, String having, String orderBy) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, groupBy, having, orderBy);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForLike(String fieldName, Object value, String groupBy,
+			String having, String orderBy) {
+		String where = buildWhereLike(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -381,12 +611,45 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.0.1
 	 */
 	public TResult queryForLike(String fieldName, ColumnValue value) {
+		return queryForLike(table.getColumnNames(), fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForLike(String[] columns, String fieldName,
+			ColumnValue value) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForLike(String fieldName, ColumnValue value) {
+		String where = buildWhereLike(fieldName, value);
+		String[] whereArgs = buildWhereArgs(value);
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -397,12 +660,41 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForFieldValues(Map<String, Object> fieldValues) {
+		return queryForFieldValues(table.getColumnNames(), fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForFieldValues(String[] columns,
+			Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForFieldValues(Map<String, Object> fieldValues) {
+		String where = buildWhere(fieldValues.entrySet());
+		String[] whereArgs = buildWhereArgs(fieldValues.values());
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -414,12 +706,41 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForValueFieldValues(
 			Map<String, ColumnValue> fieldValues) {
+		return queryForValueFieldValues(table.getColumnNames(), fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForValueFieldValues(String[] columns,
+			Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
 		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.0
+	 */
+	public int countForValueFieldValues(Map<String, ColumnValue> fieldValues) {
+		String where = buildValueWhere(fieldValues.entrySet());
+		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
+		return count(where, whereArgs);
 	}
 
 	/**
@@ -430,10 +751,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForId(long id) {
+		return queryForId(table.getColumnNames(), id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param id
+	 *            id
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForId(String[] columns, long id) {
 		String where = getPkWhere(id);
 		String[] whereArgs = getPkWhereArgs(id);
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -447,7 +782,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TRow queryForIdRow(long id) {
 		TRow row = null;
-		TResult readCursor = queryForId(id);
+		TResult readCursor = queryForId(id); // TODO columns version?
 		if (readCursor.moveToNext()) {
 			row = readCursor.getRow();
 		}
@@ -464,7 +799,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL) {
-		return queryIn(nestedSQL, null, null, null);
+		return queryIn(table.getColumnNames(), nestedSQL);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL) {
+		return queryIn(columns, nestedSQL, null, null, null);
 	}
 
 	/**
@@ -490,7 +839,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs) {
-		return queryIn(nestedSQL, nestedArgs, null, null);
+		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL,
+			String[] nestedArgs) {
+		return queryIn(columns, nestedSQL, nestedArgs, null, null);
 	}
 
 	/**
@@ -518,7 +884,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, Map<String, Object> fieldValues) {
-		return queryIn(nestedSQL, null, fieldValues);
+		return queryIn(table.getColumnNames(), nestedSQL, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL,
+			Map<String, Object> fieldValues) {
+		return queryIn(columns, nestedSQL, null, fieldValues);
 	}
 
 	/**
@@ -549,9 +932,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
+		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs,
+				fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		return queryIn(nestedSQL, nestedArgs, where, whereArgs);
+		return queryIn(columns, nestedSQL, nestedArgs, where, whereArgs);
 	}
 
 	/**
@@ -587,7 +990,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			String where) {
-		return queryIn(nestedSQL, nestedArgs, where, null);
+		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where) {
+		return queryIn(columns, nestedSQL, nestedArgs, where, null);
 	}
 
 	/**
@@ -617,7 +1039,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where) {
-		return queryIn(nestedSQL, null, where, null);
+		return queryIn(table.getColumnNames(), nestedSQL, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL, String where) {
+		return queryIn(columns, nestedSQL, null, where, null);
 	}
 
 	/**
@@ -647,7 +1085,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where, String[] whereArgs) {
-		return queryIn(nestedSQL, null, where, whereArgs);
+		return queryIn(table.getColumnNames(), nestedSQL, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL, String where,
+			String[] whereArgs) {
+		return queryIn(columns, nestedSQL, null, where, whereArgs);
 	}
 
 	/**
@@ -682,9 +1139,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
+		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs, where,
+				whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryIn(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs) {
 		String whereClause = buildWhereIn(nestedSQL, where);
 		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
-		return query(whereClause, args);
+		return query(columns, whereClause, args);
 	}
 
 	/**
@@ -717,7 +1196,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult query(String where) {
-		return query(where, null);
+		return query(table.getColumnNames(), where);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns, String where) {
+		return query(columns, where, null);
 	}
 
 	/**
@@ -730,8 +1223,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs) {
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, null, null, null);
+		return query(table.getColumnNames(), where, whereArgs);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns, String where, String[] whereArgs) {
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -792,8 +1301,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy) {
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, groupBy, having, orderBy);
+		return query(table.getColumnNames(), where, whereArgs, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy) {
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
 	}
@@ -817,8 +1350,34 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy, String limit) {
-		TResult result = userDb.query(getTableName(), table.getColumnNames(),
-				where, whereArgs, groupBy, having, orderBy, limit);
+		return query(table.getColumnNames(), where, whereArgs, groupBy, having,
+				orderBy, limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult query(String[] columns, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, String limit) {
+		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
+				groupBy, having, orderBy, limit);
 		prepareResult(result);
 		return result;
 	}
@@ -835,7 +1394,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(int limit, long offset) {
-		return queryForChunk(null, null, limit, offset);
+		return queryForChunk(table.getColumnNames(), limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForChunk(String[] columns, int limit, long offset) {
+		return queryForChunk(columns, null, null, limit, offset);
 	}
 
 	/**
@@ -855,8 +1431,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs, int limit,
 			long offset) {
-		return queryForChunk(where, whereArgs, table.getPkColumn().getName(),
-				limit, offset);
+		return queryForChunk(table.getColumnNames(), where, whereArgs, limit,
+				offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, int limit, long offset) {
+		return queryForChunk(columns, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
 	}
 
 	/**
@@ -873,7 +1472,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(String orderBy, int limit, long offset) {
-		return queryForChunk(null, null, orderBy, limit, offset);
+		return queryForChunk(table.getColumnNames(), orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForChunk(String[] columns, String orderBy, int limit,
+			long offset) {
+		return queryForChunk(columns, null, null, orderBy, limit, offset);
 	}
 
 	/**
@@ -895,8 +1514,33 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String orderBy, int limit, long offset) {
-		return queryForChunk(where, whereArgs, null, null, orderBy, limit,
-				offset);
+		return queryForChunk(table.getColumnNames(), where, whereArgs, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, String orderBy, int limit, long offset) {
+		return queryForChunk(columns, where, whereArgs, null, null, orderBy,
+				limit, offset);
 	}
 
 	/**
@@ -923,7 +1567,37 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String groupBy, String having, String orderBy, int limit,
 			long offset) {
-		return query(where, whereArgs, groupBy, having, orderBy,
+		return queryForChunk(table.getColumnNames(), where, whereArgs, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return query(columns, where, whereArgs, groupBy, having, orderBy,
 				buildLimit(limit, offset));
 	}
 
