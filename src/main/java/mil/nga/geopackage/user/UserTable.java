@@ -2,12 +2,9 @@ package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
@@ -26,29 +23,9 @@ import mil.nga.geopackage.db.table.ConstraintType;
 public abstract class UserTable<TColumn extends UserColumn> {
 
 	/**
-	 * Table name
+	 * Columns
 	 */
-	private String tableName;
-
-	/**
-	 * Array of column names
-	 */
-	private String[] columnNames;
-
-	/**
-	 * List of columns
-	 */
-	private final List<TColumn> columns;
-
-	/**
-	 * Mapping between column names and their index
-	 */
-	private final Map<String, Integer> nameToIndex;
-
-	/**
-	 * Primary key column index
-	 */
-	private int pkIndex;
+	private UserColumns<TColumn> columns;
 
 	/**
 	 * Constraints
@@ -74,13 +51,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 *            list of columns
 	 */
 	protected UserTable(String tableName, List<TColumn> columns) {
-		nameToIndex = new HashMap<String, Integer>();
+		this.columns = new UserColumns<TColumn>(tableName, columns);
 		constraints = new ArrayList<>();
 		typedContraints = new HashMap<>();
-		this.tableName = tableName;
-		this.columns = columns;
-
-		updateColumns();
 	}
 
 	/**
@@ -91,20 +64,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	protected UserTable(UserTable<TColumn> userTable) {
-		this.tableName = userTable.tableName;
-		this.columnNames = new String[userTable.columnNames.length];
-		System.arraycopy(userTable.columnNames, 0, this.columnNames, 0,
-				this.columnNames.length);
-		this.columns = new ArrayList<>();
-		for (TColumn column : userTable.columns) {
-			@SuppressWarnings("unchecked")
-			TColumn copiedColumn = (TColumn) column.copy();
-			this.columns.add(copiedColumn);
-		}
-		this.nameToIndex = new HashMap<String, Integer>();
-		this.nameToIndex.putAll(userTable.nameToIndex);
-		this.pkIndex = userTable.pkIndex;
-
+		this.columns = userTable.columns.copy();
 		constraints = new ArrayList<>();
 		typedContraints = new HashMap<>();
 		for (Constraint constraint : userTable.constraints) {
@@ -120,73 +80,6 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public abstract UserTable<TColumn> copy();
-
-	/**
-	 * Update the table columns
-	 * 
-	 * @since 3.3.0
-	 */
-	protected void updateColumns() {
-
-		nameToIndex.clear();
-
-		Set<Integer> indices = new HashSet<Integer>();
-
-		// Check for missing indices and duplicates
-		List<TColumn> needsIndex = new ArrayList<>();
-		for (TColumn column : columns) {
-			if (column.hasIndex()) {
-				int index = column.getIndex();
-				if (indices.contains(index)) {
-					throw new GeoPackageException("Duplicate index: " + index
-							+ ", Table Name: " + tableName);
-				} else {
-					indices.add(index);
-				}
-			} else {
-				needsIndex.add(column);
-			}
-		}
-
-		// Update columns that need an index
-		int currentIndex = -1;
-		for (TColumn column : needsIndex) {
-			while (indices.contains(++currentIndex)) {
-			}
-			column.setIndex(currentIndex);
-		}
-
-		// Sort the columns by index
-		Collections.sort(columns);
-
-		pkIndex = -1;
-		columnNames = new String[columns.size()];
-
-		for (int index = 0; index < columns.size(); index++) {
-
-			TColumn column = columns.get(index);
-
-			if (column.getIndex() != index) {
-				throw new GeoPackageException("No column found at index: "
-						+ index + ", Table Name: " + tableName);
-			}
-
-			if (column.isPrimaryKey()) {
-				if (pkIndex != -1) {
-					throw new GeoPackageException(
-							"More than one primary key column was found for table '"
-									+ tableName + "'. Index " + pkIndex
-									+ " and " + index);
-				}
-				pkIndex = index;
-			}
-
-			String columnName = column.getName();
-			columnNames[index] = columnName;
-			nameToIndex.put(columnName, index);
-		}
-
-	}
 
 	/**
 	 * Get the contents data type
@@ -210,8 +103,8 @@ public abstract class UserTable<TColumn extends UserColumn> {
 			String column) {
 		if (previousIndex != null) {
 			throw new GeoPackageException("More than one " + column
-					+ " column was found for table '" + tableName + "'. Index "
-					+ previousIndex + " and " + index);
+					+ " column was found for table '" + columns.getTableName()
+					+ "'. Index " + previousIndex + " and " + index);
 
 		}
 	}
@@ -229,9 +122,9 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		GeoPackageDataType actual = column.getDataType();
 		if (actual == null || !actual.equals(expected)) {
 			throw new GeoPackageException("Unexpected " + column.getName()
-					+ " column data type was found for table '" + tableName
-					+ "', expected: " + expected.name() + ", actual: "
-					+ (actual != null ? actual.name() : "null"));
+					+ " column data type was found for table '"
+					+ columns.getTableName() + "', expected: " + expected.name()
+					+ ", actual: " + (actual != null ? actual.name() : "null"));
 		}
 	}
 
@@ -245,9 +138,20 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected void missingCheck(Integer index, String column) {
 		if (index == null) {
-			throw new GeoPackageException("No " + column
-					+ " column was found for table '" + tableName + "'");
+			throw new GeoPackageException(
+					"No " + column + " column was found for table '"
+							+ columns.getTableName() + "'");
 		}
+	}
+
+	/**
+	 * Get the user columns
+	 * 
+	 * @return user columns
+	 * @since 3.5.0
+	 */
+	public UserColumns<TColumn> getUserColumns() {
+		return columns;
 	}
 
 	/**
@@ -258,12 +162,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
-		Integer index = nameToIndex.get(columnName);
-		if (index == null) {
-			throw new GeoPackageException("Column does not exist in table '"
-					+ tableName + "', column: " + columnName);
-		}
-		return index;
+		return columns.getColumnIndex(columnName);
 	}
 
 	/**
@@ -272,7 +171,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column names
 	 */
 	public String[] getColumnNames() {
-		return columnNames;
+		return columns.getColumnNames();
 	}
 
 	/**
@@ -283,7 +182,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column name
 	 */
 	public String getColumnName(int index) {
-		return columnNames[index];
+		return columns.getColumnName(index);
 	}
 
 	/**
@@ -292,7 +191,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return columns
 	 */
 	public List<TColumn> getColumns() {
-		return columns;
+		return columns.getColumns();
 	}
 
 	/**
@@ -303,7 +202,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column
 	 */
 	public TColumn getColumn(int index) {
-		return columns.get(index);
+		return columns.getColumn(index);
 	}
 
 	/**
@@ -314,7 +213,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column
 	 */
 	public TColumn getColumn(String columnName) {
-		return getColumn(getColumnIndex(columnName));
+		return columns.getColumn(columnName);
 	}
 
 	/**
@@ -326,7 +225,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.0.1
 	 */
 	public boolean hasColumn(String columnName) {
-		return nameToIndex.containsKey(columnName);
+		return columns.hasColumn(columnName);
 	}
 
 	/**
@@ -335,7 +234,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return column count
 	 */
 	public int columnCount() {
-		return columns.size();
+		return columns.columnCount();
 	}
 
 	/**
@@ -344,7 +243,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return table name
 	 */
 	public String getTableName() {
-		return tableName;
+		return columns.getTableName();
 	}
 
 	/**
@@ -355,7 +254,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void setTableName(String tableName) {
-		this.tableName = tableName;
+		columns.setTableName(tableName);
 	}
 
 	/**
@@ -365,7 +264,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.0.1
 	 */
 	public boolean hasPkColumn() {
-		return pkIndex >= 0;
+		return columns.hasPkColumn();
 	}
 
 	/**
@@ -374,7 +273,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return primary key column index
 	 */
 	public int getPkColumnIndex() {
-		return pkIndex;
+		return columns.getPkColumnIndex();
 	}
 
 	/**
@@ -383,11 +282,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @return primary key column
 	 */
 	public TColumn getPkColumn() {
-		TColumn column = null;
-		if (hasPkColumn()) {
-			column = columns.get(pkIndex);
-		}
-		return column;
+		return columns.getPkColumn();
 	}
 
 	/**
@@ -479,13 +374,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 2.0.0
 	 */
 	public List<TColumn> columnsOfType(GeoPackageDataType type) {
-		List<TColumn> columnsOfType = new ArrayList<>();
-		for (TColumn column : columns) {
-			if (column.getDataType() == type) {
-				columnsOfType.add(column);
-			}
-		}
-		return columnsOfType;
+		return columns.columnsOfType(type);
 	}
 
 	/**
@@ -530,8 +419,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addColumn(TColumn column) {
-		columns.add(column);
-		updateColumns();
+		columns.addColumn(column);
 	}
 
 	/**
@@ -544,8 +432,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void renameColumn(TColumn column, String newColumnName) {
-		renameColumn(column.getName(), newColumnName);
-		column.setName(newColumnName);
+		columns.renameColumn(column, newColumnName);
 	}
 
 	/**
@@ -558,7 +445,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void renameColumn(String columnName, String newColumnName) {
-		renameColumn(getColumnIndex(columnName), newColumnName);
+		columns.renameColumn(columnName, newColumnName);
 	}
 
 	/**
@@ -571,8 +458,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void renameColumn(int index, String newColumnName) {
-		columns.get(index).setName(newColumnName);
-		updateColumns();
+		columns.renameColumn(index, newColumnName);
 	}
 
 	/**
@@ -583,7 +469,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void dropColumn(TColumn column) {
-		dropColumn(column.getIndex());
+		columns.dropColumn(column);
 	}
 
 	/**
@@ -594,7 +480,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void dropColumn(String columnName) {
-		dropColumn(getColumnIndex(columnName));
+		columns.dropColumn(columnName);
 	}
 
 	/**
@@ -605,11 +491,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void dropColumn(int index) {
-		columns.remove(index);
-		for (int i = index; i < columns.size(); i++) {
-			columns.get(i).resetIndex();
-		}
-		updateColumns();
+		columns.dropColumn(index);
 	}
 
 	/**
@@ -620,9 +502,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void alterColumn(TColumn column) {
-		TColumn existingColumn = getColumn(column.getName());
-		column.setIndex(existingColumn.getIndex());
-		columns.set(column.getIndex(), column);
+		columns.alterColumn(column);
 	}
 
 }

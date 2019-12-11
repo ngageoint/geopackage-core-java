@@ -781,8 +781,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return row
 	 */
 	public TRow queryForIdRow(long id) {
+		return queryForIdRow(table.getColumnNames(), id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param id
+	 *            id
+	 * @return row
+	 * @since 3.5.0
+	 */
+	public TRow queryForIdRow(String[] columns, long id) {
 		TRow row = null;
-		TResult readCursor = queryForId(id); // TODO columns version?
+		TResult readCursor = queryForId(columns, id);
 		if (readCursor.moveToNext()) {
 			row = readCursor.getRow();
 		}

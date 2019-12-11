@@ -73,6 +73,14 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	public TTable getTable();
 
 	/**
+	 * Get the columns
+	 * 
+	 * @return columns
+	 * @since 3.5.0
+	 */
+	public UserColumns<TColumn> getColumns();
+
+	/**
 	 * Get the row at the current cursor position
 	 * 
 	 * @return row

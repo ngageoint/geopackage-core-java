@@ -28,6 +28,11 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	protected final TTable table;
 
 	/**
+	 * User columns
+	 */
+	protected final UserColumns<TColumn> columns;
+
+	/**
 	 * Cursor column types of this row, based upon the data values
 	 */
 	protected final int[] columnTypes;
@@ -48,7 +53,26 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 *            values
 	 */
 	protected UserCoreRow(TTable table, int[] columnTypes, Object[] values) {
+		this(table, table.getUserColumns(), columnTypes, values);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param table
+	 *            table
+	 * @param columns
+	 *            columns
+	 * @param columnTypes
+	 *            column types
+	 * @param values
+	 *            values
+	 * @since 3.5.0
+	 */
+	protected UserCoreRow(TTable table, UserColumns<TColumn> columns,
+			int[] columnTypes, Object[] values) {
 		this.table = table;
+		this.columns = columns;
 		this.columnTypes = columnTypes;
 		this.values = values;
 	}
@@ -61,6 +85,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 */
 	protected UserCoreRow(TTable table) {
 		this.table = table;
+		this.columns = table.getUserColumns();
 		// Default column types will all be 0 which is null
 		// (Cursor.FIELD_TYPE_NULL)
 		this.columnTypes = new int[table.columnCount()];
@@ -75,6 +100,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 */
 	protected UserCoreRow(UserCoreRow<TColumn, TTable> userCoreRow) {
 		this.table = userCoreRow.table;
+		this.columns = userCoreRow.columns;
 		this.columnTypes = userCoreRow.columnTypes;
 		this.values = new Object[userCoreRow.values.length];
 		for (int i = 0; i < this.values.length; i++) {
@@ -139,7 +165,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column count
 	 */
 	public int columnCount() {
-		return table.columnCount();
+		return columns.columnCount();
 	}
 
 	/**
@@ -164,7 +190,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column names
 	 */
 	public String[] getColumnNames() {
-		return table.getColumnNames();
+		return columns.getColumnNames();
 	}
 
 	/**
@@ -175,7 +201,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column name
 	 */
 	public String getColumnName(int index) {
-		return table.getColumnName(index);
+		return columns.getColumnName(index);
 	}
 
 	/**
@@ -186,7 +212,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
-		return table.getColumnIndex(columnName);
+		return columns.getColumnIndex(columnName);
 	}
 
 	/**
@@ -208,7 +234,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return value
 	 */
 	public Object getValue(String columnName) {
-		return values[table.getColumnIndex(columnName)];
+		return values[columns.getColumnIndex(columnName)];
 	}
 
 	/**
@@ -237,7 +263,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.2.0
 	 */
 	public String getValueString(String columnName) {
-		return getValueString(table.getColumnIndex(columnName));
+		return getValueString(columns.getColumnIndex(columnName));
 	}
 
 	/**
@@ -277,7 +303,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return row column type
 	 */
 	public int getRowColumnType(String columnName) {
-		return columnTypes[table.getColumnIndex(columnName)];
+		return columnTypes[columns.getColumnIndex(columnName)];
 	}
 
 	/**
@@ -290,6 +316,16 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the columns
+	 * 
+	 * @return columns
+	 * @since 3.5.0
+	 */
+	public UserColumns<TColumn> getColumns() {
+		return columns;
+	}
+
+	/**
 	 * Get the column at the index
 	 * 
 	 * @param index
@@ -297,7 +333,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column
 	 */
 	public TColumn getColumn(int index) {
-		return table.getColumn(index);
+		return columns.getColumn(index);
 	}
 
 	/**
@@ -308,7 +344,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return column
 	 */
 	public TColumn getColumn(String columnName) {
-		return table.getColumn(columnName);
+		return columns.getColumn(columnName);
 	}
 
 	/**
@@ -320,7 +356,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.0.1
 	 */
 	public boolean hasColumn(String columnName) {
-		return table.hasColumn(columnName);
+		return columns.hasColumn(columnName);
 	}
 
 	/**
@@ -330,20 +366,36 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 */
 	public long getId() {
 		long id;
+		int index = getPkColumnIndex();
+		if (index < 0) {
+			StringBuilder error = new StringBuilder("Id column does not exist");
+			if (columns.getTableName() != null) {
+				error.append(". Table: " + columns.getTableName());
+			}
+			throw new GeoPackageException(error.toString());
+		}
 		Object objectValue = getValue(getPkColumnIndex());
 		if (objectValue == null) {
-			throw new GeoPackageException(
-					"Row Id was null. Table: " + table.getTableName()
-							+ ", Column Index: " + getPkColumnIndex()
-							+ ", Column Name: " + getPkColumn().getName());
+			StringBuilder error = new StringBuilder("Row Id was null. ");
+			if (columns.getTableName() != null) {
+				error.append("Table: " + columns.getTableName() + ", ");
+			}
+			error.append("Column Index: " + getPkColumnIndex()
+					+ ", Column Name: " + getPkColumn().getName());
+			throw new GeoPackageException(error.toString());
 		}
 		if (objectValue instanceof Number) {
 			id = ((Number) objectValue).longValue();
 		} else {
-			throw new GeoPackageException("Row Id was not a number. Table: "
-					+ table.getTableName() + ", Column Index: "
-					+ getPkColumnIndex() + ", Column Name: "
-					+ getPkColumn().getName() + ", Value: " + objectValue);
+			StringBuilder error = new StringBuilder(
+					"Row Id was not a number. ");
+			if (columns.getTableName() != null) {
+				error.append("Table: " + columns.getTableName() + ", ");
+			}
+			error.append("Column Index: " + getPkColumnIndex()
+					+ ", Column Name: " + getPkColumn().getName() + ", Value: "
+					+ objectValue);
+			throw new GeoPackageException(error.toString());
 		}
 
 		return id;
@@ -380,7 +432,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return primary key column index
 	 */
 	public int getPkColumnIndex() {
-		return table.getPkColumnIndex();
+		return columns.getPkColumnIndex();
 	}
 
 	/**
@@ -389,7 +441,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * @return primary key column
 	 */
 	public TColumn getPkColumn() {
-		return table.getPkColumn();
+		return columns.getPkColumn();
 	}
 
 	/**
@@ -401,7 +453,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 *            value
 	 */
 	public void setValue(int index, Object value) {
-		if (index == table.getPkColumnIndex()) {
+		if (index == columns.getPkColumnIndex()) {
 			throw new GeoPackageException(
 					"Can not update the primary key of the row. Table Name: "
 							+ table.getTableName() + ", Index: " + index
