@@ -76,8 +76,8 @@ public class UserColumns<TColumn extends UserColumn> {
 	/**
 	 * Copy Constructor
 	 * 
-	 * @param userTable
-	 *            user table
+	 * @param userColumns
+	 *            user columns
 	 */
 	protected UserColumns(UserColumns<TColumn> userColumns) {
 		this.tableName = userColumns.tableName;
