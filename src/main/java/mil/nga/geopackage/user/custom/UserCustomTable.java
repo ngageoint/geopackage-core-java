@@ -37,7 +37,18 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 	 */
 	public UserCustomTable(String tableName, List<UserCustomColumn> columns,
 			Collection<String> requiredColumns) {
-		super(new UserCustomColumns(tableName, columns, requiredColumns));
+		this(new UserCustomColumns(tableName, columns, requiredColumns));
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param columns
+	 *            columns
+	 * @since 3.5.0
+	 */
+	public UserCustomTable(UserCustomColumns columns) {
+		super(columns);
 	}
 
 	/**
