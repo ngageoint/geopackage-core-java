@@ -12,7 +12,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 
 /**
- * Collection of columns from a user table
+ * Abstract collection of columns from a user table, representing a full set of
+ * table columns or a subset from a query
  * 
  * @param <TColumn>
  *            column type
@@ -20,10 +21,10 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * @author osbornb
  * @since 3.5.0
  */
-public class UserColumns<TColumn extends UserColumn> {
+public abstract class UserColumns<TColumn extends UserColumn> {
 
 	/**
-	 * Table name
+	 * Table name, null when a pre-ordered subset of columns for a query
 	 */
 	private String tableName;
 
@@ -38,7 +39,13 @@ public class UserColumns<TColumn extends UserColumn> {
 	private final List<TColumn> columns;
 
 	/**
-	 * Mapping between column names and their index
+	 * Custom column specification flag (subset of table columns or different
+	 * ordering)
+	 */
+	private boolean custom;
+
+	/**
+	 * Mapping between (lower cased) column names and their index
 	 */
 	private final Map<String, Integer> nameToIndex;
 
@@ -54,23 +61,16 @@ public class UserColumns<TColumn extends UserColumn> {
 	 *            table name
 	 * @param columns
 	 *            columns
+	 * @param custom
+	 *            custom column specification
+	 * @since 3.5.0
 	 */
-	public UserColumns(String tableName, List<TColumn> columns) {
+	protected UserColumns(String tableName, List<TColumn> columns,
+			boolean custom) {
 		this.tableName = tableName;
 		this.columns = columns;
+		this.custom = custom;
 		nameToIndex = new HashMap<String, Integer>();
-
-		updateColumns();
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param columns
-	 *            columns
-	 */
-	public UserColumns(List<TColumn> columns) {
-		this(null, columns);
 	}
 
 	/**
@@ -100,9 +100,7 @@ public class UserColumns<TColumn extends UserColumn> {
 	 * 
 	 * @return copied user columns
 	 */
-	public UserColumns<TColumn> copy() {
-		return new UserColumns<TColumn>(this);
-	}
+	public abstract UserColumns<TColumn> copy();
 
 	/**
 	 * Update the table columns
@@ -111,7 +109,7 @@ public class UserColumns<TColumn extends UserColumn> {
 
 		nameToIndex.clear();
 
-		if (tableName != null) {
+		if (!custom) {
 
 			Set<Integer> indices = new HashSet<Integer>();
 
@@ -150,27 +148,102 @@ public class UserColumns<TColumn extends UserColumn> {
 		for (int index = 0; index < columns.size(); index++) {
 
 			TColumn column = columns.get(index);
+			String columnName = column.getName();
+			String lowerCaseColumnName = columnName.toLowerCase();
 
-			if (tableName != null && column.getIndex() != index) {
-				throw new GeoPackageException("No column found at index: "
-						+ index + ", Table Name: " + tableName);
+			if (!custom) {
+
+				if (column.getIndex() != index) {
+					throw new GeoPackageException("No column found at index: "
+							+ index + ", Table Name: " + tableName);
+				}
+
+				if (nameToIndex.containsKey(lowerCaseColumnName)) {
+					throw new GeoPackageException(
+							"Duplicate column found at index: " + index
+									+ ", Table Name: " + tableName + ", Name: "
+									+ columnName);
+				}
+
 			}
 
 			if (column.isPrimaryKey()) {
 				if (pkIndex != -1) {
-					throw new GeoPackageException(
-							"More than one primary key column was found for table '"
-									+ tableName + "'. Index " + pkIndex
-									+ " and " + index);
+					StringBuilder error = new StringBuilder(
+							"More than one primary key column was found for ");
+					if (custom) {
+						error.append("custom specified table columns");
+					} else {
+						error.append("table");
+					}
+					error.append(". table: " + tableName + ", index1: "
+							+ pkIndex + ", index2: " + index);
+					if (custom) {
+						error.append(", columns: " + columnNames);
+					}
+					throw new GeoPackageException(error.toString());
 				}
 				pkIndex = index;
 			}
 
-			String columnName = column.getName();
 			columnNames[index] = columnName;
-			nameToIndex.put(columnName, index);
+			nameToIndex.put(lowerCaseColumnName, index);
 		}
 
+	}
+
+	/**
+	 * Check for duplicate column names
+	 * 
+	 * @param index
+	 *            index
+	 * @param previousIndex
+	 *            previous index
+	 * @param column
+	 *            column
+	 */
+	protected void duplicateCheck(int index, Integer previousIndex,
+			String column) {
+		if (previousIndex != null) {
+			throw new GeoPackageException("More than one " + column
+					+ " column was found for table '" + tableName + "'. Index "
+					+ previousIndex + " and " + index);
+
+		}
+	}
+
+	/**
+	 * Check for the expected data type
+	 * 
+	 * @param expected
+	 *            expected data type
+	 * @param column
+	 *            user column
+	 */
+	protected void typeCheck(GeoPackageDataType expected, TColumn column) {
+
+		GeoPackageDataType actual = column.getDataType();
+		if (actual == null || !actual.equals(expected)) {
+			throw new GeoPackageException("Unexpected " + column.getName()
+					+ " column data type was found for table '" + tableName
+					+ "', expected: " + expected.name() + ", actual: "
+					+ (actual != null ? actual.name() : "null"));
+		}
+	}
+
+	/**
+	 * Check for missing columns
+	 * 
+	 * @param index
+	 *            column index
+	 * @param column
+	 *            user column
+	 */
+	protected void missingCheck(Integer index, String column) {
+		if (index == null) {
+			throw new GeoPackageException("No " + column
+					+ " column was found for table '" + tableName + "'");
+		}
 	}
 
 	/**
@@ -181,13 +254,32 @@ public class UserColumns<TColumn extends UserColumn> {
 	 * @return column index
 	 */
 	public int getColumnIndex(String columnName) {
-		Integer index = nameToIndex.get(columnName);
-		if (index == null) {
-			StringBuilder error = new StringBuilder("Column does not exist");
-			if (tableName != null) {
-				error.append(" in table '" + tableName + "', column");
+		return getColumnIndex(columnName, true);
+	}
+
+	/**
+	 * Get the column index of the column name
+	 * 
+	 * @param columnName
+	 *            column name
+	 * @param required
+	 *            column existence is required
+	 * @return column index
+	 */
+	public Integer getColumnIndex(String columnName, boolean required) {
+		Integer index = nameToIndex.get(columnName.toLowerCase());
+		if (required && index == null) {
+			StringBuilder error = new StringBuilder(
+					"Column does not exist in ");
+			if (custom) {
+				error.append("custom specified table columns");
+			} else {
+				error.append("table");
 			}
-			error.append(": " + columnName);
+			error.append(". table: " + tableName + ", column: " + columnName);
+			if (custom) {
+				error.append(", columns: " + columnNames);
+			}
 			throw new GeoPackageException(error.toString());
 		}
 		return index;
@@ -252,7 +344,7 @@ public class UserColumns<TColumn extends UserColumn> {
 	 * @return true if has the column
 	 */
 	public boolean hasColumn(String columnName) {
-		return nameToIndex.containsKey(columnName);
+		return nameToIndex.containsKey(columnName.toLowerCase());
 	}
 
 	/**
@@ -284,6 +376,25 @@ public class UserColumns<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Is custom column specification (partial and/or ordering)
+	 * 
+	 * @return custom flag
+	 */
+	public boolean isCustom() {
+		return custom;
+	}
+
+	/**
+	 * Set the custom column specification flag
+	 * 
+	 * @param custom
+	 *            custom flag
+	 */
+	public void setCustom(boolean custom) {
+		this.custom = custom;
+	}
+
+	/**
 	 * Check if the table has a primary key column
 	 * 
 	 * @return true if has a primary key
@@ -312,6 +423,15 @@ public class UserColumns<TColumn extends UserColumn> {
 			column = columns.get(pkIndex);
 		}
 		return column;
+	}
+
+	/**
+	 * Get the primary key column name
+	 * 
+	 * @return primary key column name
+	 */
+	public String getPkColumnName() {
+		return getPkColumn().getName();
 	}
 
 	/**

@@ -254,7 +254,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public Extensions getOrCreate(FeatureTable featureTable) {
 		return getOrCreate(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -280,7 +280,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public boolean has(FeatureTable featureTable) {
 		return has(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -328,7 +328,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public boolean createFunctions(FeatureTable featureTable) {
 		return createFunctions(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -375,7 +375,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public Extensions create(FeatureTable featureTable) {
 		return create(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName(),
+				featureTable.getGeometryColumnName(),
 				featureTable.getPkColumn().getName());
 	}
 
@@ -413,7 +413,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void createRTreeIndex(FeatureTable featureTable) {
 		createRTreeIndex(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -476,7 +476,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void loadRTreeIndex(FeatureTable featureTable) {
 		loadRTreeIndex(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName(),
+				featureTable.getGeometryColumnName(),
 				featureTable.getPkColumn().getName());
 	}
 
@@ -506,7 +506,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void createAllTriggers(FeatureTable featureTable) {
 		createAllTriggers(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName(),
+				featureTable.getGeometryColumnName(),
 				featureTable.getPkColumn().getName());
 	}
 
@@ -686,7 +686,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void delete(FeatureTable featureTable) {
 		delete(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -775,8 +775,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            feature table
 	 */
 	public void drop(FeatureTable featureTable) {
-		drop(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+		drop(featureTable.getTableName(), featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -802,7 +801,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void dropRTreeIndex(FeatureTable featureTable) {
 		dropRTreeIndex(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -841,7 +840,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void dropTriggers(FeatureTable featureTable) {
 		dropTriggers(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -870,7 +869,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public void dropAllTriggers(FeatureTable featureTable) {
 		dropAllTriggers(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 	}
 
 	/**
@@ -1156,7 +1155,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 				GeoPackageDataType.FLOAT));
 
 		String rTreeTableName = getRTreeTableName(featureTable.getTableName(),
-				featureTable.getGeometryColumn().getName());
+				featureTable.getGeometryColumnName());
 
 		UserCustomTable userCustomTable = new UserCustomTable(rTreeTableName,
 				columns);

@@ -6,7 +6,6 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
-import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.user.UserTable;
 
@@ -20,47 +19,27 @@ public class TileTable extends UserTable<TileColumn> {
 	/**
 	 * Id column name, Requirement 52
 	 */
-	public static final String COLUMN_ID = "id";
+	public static final String COLUMN_ID = TileColumns.ID;
 
 	/**
 	 * Zoom level column name, Requirement 53
 	 */
-	public static final String COLUMN_ZOOM_LEVEL = "zoom_level";
+	public static final String COLUMN_ZOOM_LEVEL = TileColumns.ZOOM_LEVEL;
 
 	/**
 	 * Tile column column name, Requirement 54
 	 */
-	public static final String COLUMN_TILE_COLUMN = "tile_column";
+	public static final String COLUMN_TILE_COLUMN = TileColumns.TILE_COLUMN;
 
 	/**
 	 * Tile row column name, Requirement 55
 	 */
-	public static final String COLUMN_TILE_ROW = "tile_row";
+	public static final String COLUMN_TILE_ROW = TileColumns.TILE_ROW;
 
 	/**
 	 * Tile ID column name, implied requirement
 	 */
-	public static final String COLUMN_TILE_DATA = "tile_data";
-
-	/**
-	 * Zoom level column index
-	 */
-	private final int zoomLevelIndex;
-
-	/**
-	 * Tile column column index
-	 */
-	private final int tileColumnIndex;
-
-	/**
-	 * Tile row column index
-	 */
-	private final int tileRowIndex;
-
-	/**
-	 * Tile data column index
-	 */
-	private final int tileDataIndex;
+	public static final String COLUMN_TILE_DATA = TileColumns.TILE_DATA;
 
 	/**
 	 * Constructor
@@ -71,57 +50,13 @@ public class TileTable extends UserTable<TileColumn> {
 	 *            columns
 	 */
 	public TileTable(String tableName, List<TileColumn> columns) {
-		super(tableName, columns);
-
-		Integer zoomLevel = null;
-		Integer tileColumn = null;
-		Integer tileRow = null;
-		Integer tileData = null;
+		super(new TileColumns(tableName, columns));
 
 		// Build a unique constraint on zoom level, tile column, and tile data
 		UniqueConstraint uniqueConstraint = new UniqueConstraint();
-
-		// Find the required columns
-		for (TileColumn column : columns) {
-
-			String columnName = column.getName();
-			int columnIndex = column.getIndex();
-
-			if (columnName.equals(COLUMN_ZOOM_LEVEL)) {
-				duplicateCheck(columnIndex, zoomLevel, COLUMN_ZOOM_LEVEL);
-				typeCheck(GeoPackageDataType.INTEGER, column);
-				zoomLevel = columnIndex;
-				uniqueConstraint.add(column);
-			} else if (columnName.equals(COLUMN_TILE_COLUMN)) {
-				duplicateCheck(columnIndex, tileColumn, COLUMN_TILE_COLUMN);
-				typeCheck(GeoPackageDataType.INTEGER, column);
-				tileColumn = columnIndex;
-				uniqueConstraint.add(column);
-			} else if (columnName.equals(COLUMN_TILE_ROW)) {
-				duplicateCheck(columnIndex, tileRow, COLUMN_TILE_ROW);
-				typeCheck(GeoPackageDataType.INTEGER, column);
-				tileRow = columnIndex;
-				uniqueConstraint.add(column);
-			} else if (columnName.equals(COLUMN_TILE_DATA)) {
-				duplicateCheck(columnIndex, tileData, COLUMN_TILE_DATA);
-				typeCheck(GeoPackageDataType.BLOB, column);
-				tileData = columnIndex;
-			}
-
-		}
-
-		// Verify the required columns were found
-		missingCheck(zoomLevel, COLUMN_ZOOM_LEVEL);
-		zoomLevelIndex = zoomLevel;
-
-		missingCheck(tileColumn, COLUMN_TILE_COLUMN);
-		tileColumnIndex = tileColumn;
-
-		missingCheck(tileRow, COLUMN_TILE_ROW);
-		tileRowIndex = tileRow;
-
-		missingCheck(tileData, COLUMN_TILE_DATA);
-		tileDataIndex = tileData;
+		uniqueConstraint.add(getUserColumns().getZoomLevelColumn());
+		uniqueConstraint.add(getUserColumns().getTileColumnColumn());
+		uniqueConstraint.add(getUserColumns().getTileRowColumn());
 
 		// Add the unique constraint
 		addConstraint(uniqueConstraint);
@@ -137,10 +72,6 @@ public class TileTable extends UserTable<TileColumn> {
 	 */
 	public TileTable(TileTable tileTable) {
 		super(tileTable);
-		this.zoomLevelIndex = tileTable.zoomLevelIndex;
-		this.tileColumnIndex = tileTable.tileColumnIndex;
-		this.tileRowIndex = tileTable.tileRowIndex;
-		this.tileDataIndex = tileTable.tileDataIndex;
 	}
 
 	/**
@@ -160,12 +91,28 @@ public class TileTable extends UserTable<TileColumn> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileColumns getUserColumns() {
+		return (TileColumns) super.getUserColumns();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileColumns createUserColumns(List<TileColumn> columns) {
+		return new TileColumns(getTableName(), columns, true);
+	}
+
+	/**
 	 * Get the zoom level column index
 	 * 
 	 * @return zoom level index
 	 */
 	public int getZoomLevelColumnIndex() {
-		return zoomLevelIndex;
+		return getUserColumns().getZoomLevelIndex();
 	}
 
 	/**
@@ -174,7 +121,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile column
 	 */
 	public TileColumn getZoomLevelColumn() {
-		return getColumn(zoomLevelIndex);
+		return getUserColumns().getZoomLevelColumn();
 	}
 
 	/**
@@ -183,7 +130,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile column index
 	 */
 	public int getTileColumnColumnIndex() {
-		return tileColumnIndex;
+		return getUserColumns().getTileColumnIndex();
 	}
 
 	/**
@@ -192,7 +139,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile column
 	 */
 	public TileColumn getTileColumnColumn() {
-		return getColumn(tileColumnIndex);
+		return getUserColumns().getTileColumnColumn();
 	}
 
 	/**
@@ -201,7 +148,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile row index
 	 */
 	public int getTileRowColumnIndex() {
-		return tileRowIndex;
+		return getUserColumns().getTileRowIndex();
 	}
 
 	/**
@@ -210,7 +157,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile column
 	 */
 	public TileColumn getTileRowColumn() {
-		return getColumn(tileRowIndex);
+		return getUserColumns().getTileRowColumn();
 	}
 
 	/**
@@ -219,7 +166,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile data index
 	 */
 	public int getTileDataColumnIndex() {
-		return tileDataIndex;
+		return getUserColumns().getTileDataIndex();
 	}
 
 	/**
@@ -228,7 +175,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile column
 	 */
 	public TileColumn getTileDataColumn() {
-		return getColumn(tileDataIndex);
+		return getUserColumns().getTileDataColumn();
 	}
 
 	/**
@@ -274,14 +221,14 @@ public class TileTable extends UserTable<TileColumn> {
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have a tiles data type
 		ContentsDataType dataType = contents.getDataType();
-		if (dataType == null
-				|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.GRIDDED_COVERAGE)) {
-			throw new GeoPackageException("The "
-					+ Contents.class.getSimpleName() + " of a "
-					+ TileTable.class.getSimpleName()
-					+ " must have a data type of "
-					+ ContentsDataType.TILES.getName() + " or "
-					+ ContentsDataType.GRIDDED_COVERAGE.getName());
+		if (dataType == null || (dataType != ContentsDataType.TILES
+				&& dataType != ContentsDataType.GRIDDED_COVERAGE)) {
+			throw new GeoPackageException(
+					"The " + Contents.class.getSimpleName() + " of a "
+							+ TileTable.class.getSimpleName()
+							+ " must have a data type of "
+							+ ContentsDataType.TILES.getName() + " or "
+							+ ContentsDataType.GRIDDED_COVERAGE.getName());
 		}
 	}
 

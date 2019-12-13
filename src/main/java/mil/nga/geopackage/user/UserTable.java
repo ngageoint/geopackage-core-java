@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
@@ -45,13 +44,12 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Constructor
 	 * 
-	 * @param tableName
-	 *            table name
 	 * @param columns
-	 *            list of columns
+	 *            columns
+	 * @since 3.5.0
 	 */
-	protected UserTable(String tableName, List<TColumn> columns) {
-		this.columns = new UserColumns<TColumn>(tableName, columns);
+	protected UserTable(UserColumns<TColumn> columns) {
+		this.columns = columns;
 		constraints = new ArrayList<>();
 		typedContraints = new HashMap<>();
 	}
@@ -90,58 +88,26 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	public abstract String getDataType();
 
 	/**
-	 * Check for duplicate column names
+	 * Create user columns for a subset of table columns
 	 * 
-	 * @param index
-	 *            index
-	 * @param previousIndex
-	 *            previous index
-	 * @param column
-	 *            column
+	 * @param columns
+	 *            columns
+	 * @return user columns
+	 * @since 3.5.0
 	 */
-	protected void duplicateCheck(int index, Integer previousIndex,
-			String column) {
-		if (previousIndex != null) {
-			throw new GeoPackageException("More than one " + column
-					+ " column was found for table '" + columns.getTableName()
-					+ "'. Index " + previousIndex + " and " + index);
-
-		}
-	}
+	public abstract UserColumns<TColumn> createUserColumns(
+			List<TColumn> columns);
 
 	/**
-	 * Check for the expected data type
+	 * Create user columns for a subset of table columns
 	 * 
-	 * @param expected
-	 *            expected data type
-	 * @param column
-	 *            user column
+	 * @param columnNames
+	 *            column names
+	 * @return user columns
+	 * @since 3.5.0
 	 */
-	protected void typeCheck(GeoPackageDataType expected, TColumn column) {
-
-		GeoPackageDataType actual = column.getDataType();
-		if (actual == null || !actual.equals(expected)) {
-			throw new GeoPackageException("Unexpected " + column.getName()
-					+ " column data type was found for table '"
-					+ columns.getTableName() + "', expected: " + expected.name()
-					+ ", actual: " + (actual != null ? actual.name() : "null"));
-		}
-	}
-
-	/**
-	 * Check for missing columns
-	 * 
-	 * @param index
-	 *            column index
-	 * @param column
-	 *            user column
-	 */
-	protected void missingCheck(Integer index, String column) {
-		if (index == null) {
-			throw new GeoPackageException(
-					"No " + column + " column was found for table '"
-							+ columns.getTableName() + "'");
-		}
+	public UserColumns<TColumn> createUserColumns(String[] columnNames) {
+		return createUserColumns(getColumns(columnNames));
 	}
 
 	/**
@@ -192,6 +158,22 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	public List<TColumn> getColumns() {
 		return columns.getColumns();
+	}
+
+	/**
+	 * Get the columns from the column names
+	 * 
+	 * @param columnNames
+	 *            column names
+	 * @return columns
+	 * @since 3.5.0
+	 */
+	public List<TColumn> getColumns(String[] columnNames) {
+		List<TColumn> columns = new ArrayList<>();
+		for (String columnName : columnNames) {
+			columns.add(getColumn(columnName));
+		}
+		return columns;
 	}
 
 	/**
@@ -283,6 +265,15 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	public TColumn getPkColumn() {
 		return columns.getPkColumn();
+	}
+
+	/**
+	 * Get the primary key column name
+	 * 
+	 * @return primary key column name
+	 */
+	public String getPkColumnName() {
+		return columns.getPkColumnName();
 	}
 
 	/**

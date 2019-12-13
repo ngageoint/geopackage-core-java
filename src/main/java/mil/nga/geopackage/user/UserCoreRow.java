@@ -47,20 +47,6 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param table
 	 *            table
-	 * @param columnTypes
-	 *            column types
-	 * @param values
-	 *            values
-	 */
-	protected UserCoreRow(TTable table, int[] columnTypes, Object[] values) {
-		this(table, table.getUserColumns(), columnTypes, values);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param table
-	 *            table
 	 * @param columns
 	 *            columns
 	 * @param columnTypes
@@ -368,34 +354,30 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		long id;
 		int index = getPkColumnIndex();
 		if (index < 0) {
-			StringBuilder error = new StringBuilder("Id column does not exist");
-			if (columns.getTableName() != null) {
-				error.append(". Table: " + columns.getTableName());
+			StringBuilder error = new StringBuilder(
+					"Id column does not exist in ");
+			if (columns.isCustom()) {
+				error.append("custom specified table columns. ");
+			}
+			error.append("table: " + columns.getTableName());
+			if (columns.isCustom()) {
+				error.append(", columns: " + columns.getColumnNames());
 			}
 			throw new GeoPackageException(error.toString());
 		}
 		Object objectValue = getValue(getPkColumnIndex());
 		if (objectValue == null) {
-			StringBuilder error = new StringBuilder("Row Id was null. ");
-			if (columns.getTableName() != null) {
-				error.append("Table: " + columns.getTableName() + ", ");
-			}
-			error.append("Column Index: " + getPkColumnIndex()
-					+ ", Column Name: " + getPkColumn().getName());
-			throw new GeoPackageException(error.toString());
+			throw new GeoPackageException("Row Id was null. table: "
+					+ columns.getTableName() + ", index: " + getPkColumnIndex()
+					+ ", name: " + getPkColumn().getName());
 		}
 		if (objectValue instanceof Number) {
 			id = ((Number) objectValue).longValue();
 		} else {
-			StringBuilder error = new StringBuilder(
-					"Row Id was not a number. ");
-			if (columns.getTableName() != null) {
-				error.append("Table: " + columns.getTableName() + ", ");
-			}
-			error.append("Column Index: " + getPkColumnIndex()
-					+ ", Column Name: " + getPkColumn().getName() + ", Value: "
+			throw new GeoPackageException("Row Id was not a number. table: "
+					+ columns.getTableName() + ", index: " + getPkColumnIndex()
+					+ ", name: " + getPkColumn().getName() + ", value: "
 					+ objectValue);
-			throw new GeoPackageException(error.toString());
 		}
 
 		return id;

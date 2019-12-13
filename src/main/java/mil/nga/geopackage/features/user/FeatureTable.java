@@ -7,7 +7,6 @@ import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.user.UserTable;
-import mil.nga.sf.GeometryType;
 
 /**
  * Represents a user feature table
@@ -15,11 +14,6 @@ import mil.nga.sf.GeometryType;
  * @author osbornb
  */
 public class FeatureTable extends UserTable<FeatureColumn> {
-
-	/**
-	 * Geometry column index
-	 */
-	private final int geometryIndex;
 
 	/**
 	 * Constructor
@@ -61,32 +55,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 */
 	public FeatureTable(String tableName, String geometryColumn,
 			List<FeatureColumn> columns) {
-		super(tableName, columns);
-
-		Integer geometry = null;
-
-		// Find the geometry
-		for (FeatureColumn column : columns) {
-
-			boolean isGeometryColumn = false;
-
-			if (geometryColumn != null) {
-				isGeometryColumn = geometryColumn
-						.equalsIgnoreCase(column.getName());
-			} else if (column.isGeometry()) {
-				isGeometryColumn = column.isGeometry();
-			}
-
-			if (isGeometryColumn) {
-				geometry = column.getIndex();
-				break;
-			}
-
-		}
-
-		missingCheck(geometry, GeometryType.GEOMETRY.name());
-		geometryIndex = geometry;
-
+		super(new FeatureColumns(tableName, geometryColumn, columns));
 	}
 
 	/**
@@ -98,7 +67,6 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 */
 	public FeatureTable(FeatureTable featureTable) {
 		super(featureTable);
-		this.geometryIndex = featureTable.geometryIndex;
 	}
 
 	/**
@@ -118,12 +86,29 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public FeatureColumns getUserColumns() {
+		return (FeatureColumns) super.getUserColumns();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public FeatureColumns createUserColumns(List<FeatureColumn> columns) {
+		return new FeatureColumns(getTableName(), getGeometryColumnName(),
+				columns, true);
+	}
+
+	/**
 	 * Get the geometry column index
 	 * 
 	 * @return geometry column index
 	 */
 	public int getGeometryColumnIndex() {
-		return geometryIndex;
+		return getUserColumns().getGeometryIndex();
 	}
 
 	/**
@@ -132,7 +117,17 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 * @return geometry feature column
 	 */
 	public FeatureColumn getGeometryColumn() {
-		return getColumn(geometryIndex);
+		return getUserColumns().getGeometryColumn();
+	}
+
+	/**
+	 * Get the geometry column name
+	 * 
+	 * @return geometry column name
+	 * @since 3.5.0
+	 */
+	public String getGeometryColumnName() {
+		return getUserColumns().getGeometryColumnName();
 	}
 
 	/**
