@@ -186,6 +186,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the table column names
+	 * 
+	 * @return column names
+	 * @since 3.5.0
+	 */
+	public String[] getColumnNames() {
+		return table.getColumnNames();
+	}
+
+	/**
 	 * Get the contents
 	 * 
 	 * @return contents
