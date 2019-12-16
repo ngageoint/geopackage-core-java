@@ -131,6 +131,16 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	}
 
 	/**
+	 * Get the Id and Geometry Column names
+	 * 
+	 * @return column names
+	 * @since 3.5.0
+	 */
+	public String[] getIdAndGeometryColumnNames() {
+		return new String[] { getPkColumnName(), getGeometryColumnName() };
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
