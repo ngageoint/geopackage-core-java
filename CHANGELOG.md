@@ -6,6 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.5.0 (TBD)
 
+* Separation of columns from user tables to support custom column queries
 * User DAO methods: query for specified columns, additional counts
 
 ## [3.4.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.4.0) (11-14-2019)
