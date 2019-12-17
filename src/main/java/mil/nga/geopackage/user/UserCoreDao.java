@@ -186,6 +186,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Get the table columns
+	 * 
+	 * @return columns
+	 * @since 3.5.0
+	 */
+	public List<TColumn> getColumns() {
+		return table.getColumns();
+	}
+
+	/**
 	 * Get the table column names
 	 * 
 	 * @return column names
@@ -193,6 +203,16 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public String[] getColumnNames() {
 		return table.getColumnNames();
+	}
+
+	/**
+	 * Get the column count
+	 * 
+	 * @return column count
+	 * @since 3.5.0
+	 */
+	public int columnCount() {
+		return table.columnCount();
 	}
 
 	/**
