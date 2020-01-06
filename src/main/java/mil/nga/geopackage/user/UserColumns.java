@@ -63,7 +63,6 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 *            columns
 	 * @param custom
 	 *            custom column specification
-	 * @since 3.5.0
 	 */
 	protected UserColumns(String tableName, List<TColumn> columns,
 			boolean custom) {
