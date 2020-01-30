@@ -365,17 +365,17 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 			}
 			throw new GeoPackageException(error.toString());
 		}
-		Object objectValue = getValue(getPkColumnIndex());
+		Object objectValue = getValue(index);
 		if (objectValue == null) {
 			throw new GeoPackageException("Row Id was null. table: "
-					+ columns.getTableName() + ", index: " + getPkColumnIndex()
+					+ columns.getTableName() + ", index: " + index
 					+ ", name: " + getPkColumn().getName());
 		}
 		if (objectValue instanceof Number) {
 			id = ((Number) objectValue).longValue();
 		} else {
 			throw new GeoPackageException("Row Id was not a number. table: "
-					+ columns.getTableName() + ", index: " + getPkColumnIndex()
+					+ columns.getTableName() + ", index: " + index
 					+ ", name: " + getPkColumn().getName() + ", value: "
 					+ objectValue);
 		}
