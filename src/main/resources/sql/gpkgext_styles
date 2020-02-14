@@ -1,0 +1,6 @@
+CREATE TABLE 'gpkgext_styles' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  style TEXT NOT NULL,
+  description TEXT,
+  uri TEXT NOT NULL
+);

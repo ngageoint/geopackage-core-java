@@ -1,0 +1,5 @@
+CREATE TABLE 'gpkgext_symbol_content' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  format TEXT NOT NULL,
+  symbol BLOB NOT NULL
+);

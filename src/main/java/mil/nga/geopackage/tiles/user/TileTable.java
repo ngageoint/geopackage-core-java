@@ -43,6 +43,16 @@ public class TileTable extends UserTable<TileColumn> {
 
 	/**
 	 * Constructor
+	 *
+	 * @param tableName
+	 *            table name
+	 */
+	public TileTable(String tableName) {
+		this(tableName, createRequiredColumns());
+	}
+
+	/**
+	 * Constructor
 	 * 
 	 * @param tableName
 	 *            table name
@@ -87,7 +97,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 */
 	@Override
 	public String getDataType() {
-		return ContentsDataType.TILES.getName();
+		return getContents().getDataType().getName();
 	}
 
 	/**
@@ -221,15 +231,12 @@ public class TileTable extends UserTable<TileColumn> {
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have a tiles data type
 		ContentsDataType dataType = contents.getDataType();
-		if (dataType == null || (dataType != ContentsDataType.TILES
-				&& dataType != ContentsDataType.GRIDDED_COVERAGE)) {
+		if (dataType == null
+				|| !dataType.isTilesType()) {
 			throw new GeoPackageException(
-					"The " + Contents.class.getSimpleName() + " of a "
-							+ TileTable.class.getSimpleName()
-							+ " must have a data type of "
-							+ ContentsDataType.TILES.getName() + " or "
-							+ ContentsDataType.GRIDDED_COVERAGE.getName());
+					String.format("The %s of a %s must have a data type assigned to the \"tiles\" option.",
+					Contents.class.getSimpleName(),
+					TileTable.class.getSimpleName()));
 		}
 	}
-
 }

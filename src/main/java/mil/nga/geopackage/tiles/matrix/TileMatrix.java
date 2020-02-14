@@ -6,6 +6,7 @@ import mil.nga.geopackage.core.contents.ContentsDataType;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import mil.nga.geopackage.tiles.user.TileTable;
 
 /**
  * Tile Matrix object. Documents the structure of the tile matrix at each zoom
@@ -183,13 +184,11 @@ public class TileMatrix {
 			// Verify the Contents have a tiles data type (Spec Requirement 42)
 			ContentsDataType dataType = contents.getDataType();
 			if (dataType == null
-					|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.GRIDDED_COVERAGE)) {
-				throw new GeoPackageException("The "
-						+ Contents.class.getSimpleName() + " of a "
-						+ TileMatrix.class.getSimpleName()
-						+ " must have a data type of "
-						+ ContentsDataType.TILES.getName() + " or "
-						+ ContentsDataType.GRIDDED_COVERAGE.getName());
+					|| !dataType.isTilesType()) {
+				throw new GeoPackageException(
+						String.format("The %s of a %s must have a data type assigned to the \"tiles\" option.",
+								Contents.class.getSimpleName(),
+								TileTable.class.getSimpleName()));
 			}
 			tableName = contents.getId();
 		} else {

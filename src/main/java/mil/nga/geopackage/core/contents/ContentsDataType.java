@@ -29,7 +29,12 @@ public enum ContentsDataType {
 	 * 
 	 * @since 2.0.1
 	 */
-	GRIDDED_COVERAGE("2d-gridded-coverage");
+	GRIDDED_COVERAGE("2d-gridded-coverage"),
+
+	/**
+	 * Vector Tiles Extension
+	 */
+	VECTOR_TILES("vector-tiles");
 
 	/**
 	 * Data type name
@@ -38,16 +43,16 @@ public enum ContentsDataType {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param name
+	 *
+	 * @param name data type name
 	 */
-	private ContentsDataType(String name) {
+	ContentsDataType(final String name) {
 		this.name = name;
 	}
 
 	/**
 	 * Get the name
-	 * 
+	 *
 	 * @return name
 	 */
 	public String getName() {
@@ -74,4 +79,9 @@ public enum ContentsDataType {
 		return dataType;
 	}
 
+	public boolean isTilesType() {
+		return (this == TILES) ||
+				(this == GRIDDED_COVERAGE) ||
+				(this == VECTOR_TILES);
+	}
 }

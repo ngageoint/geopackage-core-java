@@ -122,7 +122,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has() {
-		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null);
+		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null) &&
+				geoPackage.isTable(ExtendedRelation.TABLE_NAME);
 	}
 
 	/**
@@ -1095,12 +1096,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param relatedTable
 	 *            related table name
 	 * @return extended relations
-	 * @throws SQLException
-	 *             upon failure
 	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
-			String relatedTable) throws SQLException {
+			String relatedTable) {
 		return getRelations(baseTable, null, relatedTable, null, null, null);
 	}
 
@@ -1158,12 +1157,10 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTable
 	 *            mapping table name
 	 * @return true if has relations
-	 * @throws SQLException
-	 *             upon failure
 	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String relatedTable,
-			String relation, String mappingTable) throws SQLException {
+			String relation, String mappingTable) {
 		return hasRelations(baseTable, null, relatedTable, null, relation,
 				mappingTable);
 	}
@@ -1208,13 +1205,11 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTable
 	 *            mapping table name
 	 * @return true if has relations
-	 * @throws SQLException
-	 *             upon failure
 	 * @since 3.2.0
 	 */
 	public boolean hasRelations(String baseTable, String baseColumn,
 			String relatedTable, String relatedColumn, String relation,
-			String mappingTable) throws SQLException {
+			String mappingTable) {
 		return !getRelations(baseTable, baseColumn, relatedTable, relatedColumn,
 				relation, mappingTable).isEmpty();
 	}
@@ -1235,13 +1230,11 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @param mappingTable
 	 *            mapping table name
 	 * @return extended relations
-	 * @throws SQLException
-	 *             upon failure
 	 * @since 3.2.0
 	 */
 	public List<ExtendedRelation> getRelations(String baseTable,
 			String baseColumn, String relatedTable, String relatedColumn,
-			String relation, String mappingTable) throws SQLException {
+			String relation, String mappingTable) {
 
 		List<ExtendedRelation> relations = null;
 

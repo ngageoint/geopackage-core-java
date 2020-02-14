@@ -1,0 +1,7 @@
+CREATE TABLE 'gpkgext_stylesheets' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  style_id INTEGER NOT NULL,
+  format TEXT NOT NULL,
+  stylesheet BLOB NOT NULL,
+  CONSTRAINT style_id_fk FOREIGN KEY (style_id) REFERENCES gpkgext_styles(id)
+);

@@ -1,0 +1,7 @@
+CREATE TABLE 'gpkgext_vt_fields' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  layer_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  CONSTRAINT layer_id_fk FOREIGN KEY (layer_id) REFERENCES gpkgext_vt_layers(id)
+);

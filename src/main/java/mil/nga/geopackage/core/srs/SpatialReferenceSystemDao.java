@@ -218,30 +218,32 @@ public class SpatialReferenceSystemDao
 	 */
 	public SpatialReferenceSystem createWebMercator() throws SQLException {
 
-		SpatialReferenceSystem srs = new SpatialReferenceSystem();
-		srs.setSrsName(GeoPackageProperties.getProperty(
-				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_NAME));
-		srs.setSrsId(GeoPackageProperties.getIntegerProperty(
-				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_ID));
-		srs.setOrganization(
-				GeoPackageProperties.getProperty(PropertyConstants.WEB_MERCATOR,
-						PropertyConstants.ORGANIZATION));
-		srs.setOrganizationCoordsysId(GeoPackageProperties.getIntegerProperty(
-				PropertyConstants.WEB_MERCATOR,
-				PropertyConstants.ORGANIZATION_COORDSYS_ID));
-		srs.setDefinition(GeoPackageProperties.getProperty(
-				PropertyConstants.WEB_MERCATOR, PropertyConstants.DEFINITION));
-		srs.setDescription(GeoPackageProperties.getProperty(
-				PropertyConstants.WEB_MERCATOR, PropertyConstants.DESCRIPTION));
-		create(srs);
-		if (hasDefinition_12_063()) {
-			srs.setDefinition_12_063(GeoPackageProperties.getProperty(
+		long srsID = GeoPackageProperties.getIntegerProperty(
+				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_ID);
+		SpatialReferenceSystem srs = queryForId(srsID);
+		if (srs == null) {
+			srs = new SpatialReferenceSystem();
+			srs.setSrsName(GeoPackageProperties.getProperty(
+					PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_NAME));
+			srs.setSrsId(srsID);
+			srs.setOrganization(GeoPackageProperties.getProperty(
+					PropertyConstants.WEB_MERCATOR, PropertyConstants.ORGANIZATION));
+			srs.setOrganizationCoordsysId(GeoPackageProperties.getIntegerProperty(
 					PropertyConstants.WEB_MERCATOR,
-					PropertyConstants.DEFINITION_12_063));
-			crsWktExtension.updateDefinition(srs.getSrsId(),
-					srs.getDefinition_12_063());
+					PropertyConstants.ORGANIZATION_COORDSYS_ID));
+			srs.setDefinition(GeoPackageProperties.getProperty(
+					PropertyConstants.WEB_MERCATOR, PropertyConstants.DEFINITION));
+			srs.setDescription(GeoPackageProperties.getProperty(
+					PropertyConstants.WEB_MERCATOR, PropertyConstants.DESCRIPTION));
+			create(srs);
+			if (hasDefinition_12_063()) {
+				srs.setDefinition_12_063(GeoPackageProperties.getProperty(
+						PropertyConstants.WEB_MERCATOR,
+						PropertyConstants.DEFINITION_12_063));
+				crsWktExtension.updateDefinition(srs.getSrsId(),
+						srs.getDefinition_12_063());
+			}
 		}
-
 		return srs;
 	}
 
@@ -605,7 +607,7 @@ public class SpatialReferenceSystemDao
 	 * @param id
 	 *            coordinate id
 	 * @return srs
-	 * @throws SQLException
+	 * @throws SQLException on an error
 	 */
 	private SpatialReferenceSystem createIfNeeded(SpatialReferenceSystem srs,
 			String organization, long id) throws SQLException {

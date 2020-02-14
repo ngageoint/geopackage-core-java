@@ -24,8 +24,15 @@ import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.portrayal.*;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixDao;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSetDao;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTablesDao;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidthsDao;
+import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
+import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayersDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -54,35 +61,35 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Close the GeoPackage connection
 	 */
-	public void close();
+	void close();
 
 	/**
 	 * Get the GeoPackage name
 	 * 
 	 * @return name
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Get the GeoPackage path
 	 * 
 	 * @return path
 	 */
-	public String getPath();
+	String getPath();
 
 	/**
 	 * Get the SQLite database
 	 * 
 	 * @return connection
 	 */
-	public GeoPackageCoreConnection getDatabase();
+	GeoPackageCoreConnection getDatabase();
 
 	/**
 	 * Is the GeoPackage writable
 	 * 
 	 * @return true if writable
 	 */
-	public boolean isWritable();
+	boolean isWritable();
 
 	/**
 	 * Get the application id
@@ -90,7 +97,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return application id
 	 * @since 1.2.1
 	 */
-	public String getApplicationId();
+	String getApplicationId();
 
 	/**
 	 * Get the user version
@@ -98,7 +105,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersion();
+	int getUserVersion();
 
 	/**
 	 * Get the major user version
@@ -106,7 +113,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return major user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionMajor();
+	int getUserVersionMajor();
 
 	/**
 	 * Get the minor user version
@@ -114,7 +121,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return minor user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionMinor();
+	int getUserVersionMinor();
 
 	/**
 	 * Get the patch user version
@@ -122,21 +129,21 @@ public interface GeoPackageCore extends Closeable {
 	 * @return patch user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionPatch();
+	int getUserVersionPatch();
 
 	/**
 	 * Get the feature tables
 	 * 
 	 * @return table names
 	 */
-	public List<String> getFeatureTables();
+	List<String> getFeatureTables();
 
 	/**
 	 * Get the tile tables
 	 * 
 	 * @return table names
 	 */
-	public List<String> getTileTables();
+	List<String> getTileTables();
 
 	/**
 	 * Get the attributes tables
@@ -144,7 +151,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table name
 	 * @since 1.2.1
 	 */
-	public List<String> getAttributesTables();
+	List<String> getAttributesTables();
 
 	/**
 	 * Get the tables for the contents data type
@@ -154,7 +161,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table names
 	 * @since 1.2.1
 	 */
-	public List<String> getTables(ContentsDataType type);
+	List<String> getTables(ContentsDataType type);
 
 	/**
 	 * Get the tables for the contents data type
@@ -164,7 +171,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table names
 	 * @since 3.0.1
 	 */
-	public List<String> getTables(String type);
+	List<String> getTables(String type);
 
 	/**
 	 * Get the feature and tile tables
@@ -172,7 +179,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table names
 	 * @since 1.2.1
 	 */
-	public List<String> getFeatureAndTileTables();
+	List<String> getFeatureAndTileTables();
 
 	/**
 	 * Get all tables
@@ -180,7 +187,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table names
 	 * @since 1.1.7
 	 */
-	public List<String> getTables();
+	List<String> getTables();
 
 	/**
 	 * Check if the table is a feature table
@@ -190,7 +197,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if a feature table
 	 * @since 1.1.7
 	 */
-	public boolean isFeatureTable(String table);
+	boolean isFeatureTable(String table);
 
 	/**
 	 * Check if the table is a tile table
@@ -200,7 +207,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if a tile table
 	 * @since 1.1.7
 	 */
-	public boolean isTileTable(String table);
+	boolean isTileTable(String table);
 
 	/**
 	 * Check if the table is an attribute table
@@ -210,7 +217,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if an attribute table
 	 * @since 3.3.0
 	 */
-	public boolean isAttributeTable(String table);
+	boolean isAttributeTable(String table);
 
 	/**
 	 * Check if the table is the provided type
@@ -222,7 +229,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if the type of table
 	 * @since 1.2.1
 	 */
-	public boolean isTableType(ContentsDataType type, String table);
+	boolean isTableType(ContentsDataType type, String table);
 
 	/**
 	 * Check if the table is the provided type
@@ -234,7 +241,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if the type of table
 	 * @since 3.0.1
 	 */
-	public boolean isTableType(String type, String table);
+	boolean isTableType(String type, String table);
 
 	/**
 	 * Check if the table exists as a feature or tile table
@@ -244,7 +251,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if a feature or tile table
 	 * @since 1.1.7
 	 */
-	public boolean isFeatureOrTileTable(String table);
+	boolean isFeatureOrTileTable(String table);
 
 	/**
 	 * Check if the table exists as a user contents table
@@ -254,7 +261,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if a user contents table
 	 * @since 3.2.0
 	 */
-	public boolean isContentsTable(String table);
+	boolean isContentsTable(String table);
 
 	/**
 	 * Check if the table exists
@@ -264,7 +271,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if a table
 	 * @since 1.2.1
 	 */
-	public boolean isTable(String table);
+	boolean isTable(String table);
 
 	/**
 	 * Check if the view exists
@@ -294,7 +301,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return contents
 	 * @since 3.0.1
 	 */
-	public Contents getTableContents(String table);
+	Contents getTableContents(String table);
 
 	/**
 	 * Get the contents data type of the user table
@@ -304,7 +311,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table type
 	 * @since 3.0.1
 	 */
-	public String getTableType(String table);
+	String getTableType(String table);
 
 	/**
 	 * Get the contents data type of the user table
@@ -314,7 +321,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table type or null if not an enumerated type
 	 * @since 3.3.0
 	 */
-	public ContentsDataType getTableDataType(String table);
+	ContentsDataType getTableDataType(String table);
 
 	/**
 	 * Get the bounding box for all table contents in the provided projection
@@ -325,7 +332,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getContentsBoundingBox(Projection projection);
+	BoundingBox getContentsBoundingBox(Projection projection);
 
 	/**
 	 * Get the bounding box for all tables in the provided projection, including
@@ -337,7 +344,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(Projection projection);
+	BoundingBox getBoundingBox(Projection projection);
 
 	/**
 	 * Get the bounding box for all tables in the provided projection, including
@@ -351,7 +358,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(Projection projection, boolean manual);
+	BoundingBox getBoundingBox(Projection projection, boolean manual);
 
 	/**
 	 * Get the bounding box from the contents for the table in the table's
@@ -363,7 +370,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getContentsBoundingBox(String table);
+	BoundingBox getContentsBoundingBox(String table);
 
 	/**
 	 * Get the bounding box from the contents for the table in the provided
@@ -377,7 +384,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getContentsBoundingBox(Projection projection,
+	BoundingBox getContentsBoundingBox(Projection projection,
 			String table);
 
 	/**
@@ -390,7 +397,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(String table);
+	BoundingBox getBoundingBox(String table);
 
 	/**
 	 * Get the bounding box for the table in the provided projection, including
@@ -404,7 +411,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(Projection projection, String table);
+	BoundingBox getBoundingBox(Projection projection, String table);
 
 	/**
 	 * Get the bounding box for the table in the table's projection, including
@@ -418,7 +425,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(String table, boolean manual);
+	BoundingBox getBoundingBox(String table, boolean manual);
 
 	/**
 	 * Get the bounding box for the table in the provided projection, including
@@ -434,7 +441,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return bounding box
 	 * @since 3.1.0
 	 */
-	public BoundingBox getBoundingBox(Projection projection, String table,
+	BoundingBox getBoundingBox(Projection projection, String table,
 			boolean manual);
 
 	/**
@@ -457,56 +464,56 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @return Spatial Reference System DAO
 	 */
-	public SpatialReferenceSystemDao getSpatialReferenceSystemDao();
+	SpatialReferenceSystemDao getSpatialReferenceSystemDao();
 
 	/**
 	 * Get a SQL/MM Spatial Reference System DAO
 	 * 
 	 * @return SQL/MM Spatial Reference System DAO
 	 */
-	public SpatialReferenceSystemSqlMmDao getSpatialReferenceSystemSqlMmDao();
+	SpatialReferenceSystemSqlMmDao getSpatialReferenceSystemSqlMmDao();
 
 	/**
 	 * Get a SF/SQL Spatial Reference System DAO
 	 * 
 	 * @return SF/SQL Spatial Reference System DAO
 	 */
-	public SpatialReferenceSystemSfSqlDao getSpatialReferenceSystemSfSqlDao();
+	SpatialReferenceSystemSfSqlDao getSpatialReferenceSystemSfSqlDao();
 
 	/**
 	 * Get a Contents DAO
 	 * 
 	 * @return Contents DAO
 	 */
-	public ContentsDao getContentsDao();
+	ContentsDao getContentsDao();
 
 	/**
 	 * Get a Geometry Columns DAO
 	 * 
 	 * @return Geometry Columns DAO
 	 */
-	public GeometryColumnsDao getGeometryColumnsDao();
+	GeometryColumnsDao getGeometryColumnsDao();
 
 	/**
 	 * Get a SQL/MM Geometry Columns DAO
 	 * 
 	 * @return SQL/MM Geometry Columns DAO
 	 */
-	public GeometryColumnsSqlMmDao getGeometryColumnsSqlMmDao();
+	GeometryColumnsSqlMmDao getGeometryColumnsSqlMmDao();
 
 	/**
 	 * Get a SF/SQL Geometry Columns DAO
 	 * 
 	 * @return SF/SQL Geometry Columns DAO
 	 */
-	public GeometryColumnsSfSqlDao getGeometryColumnsSfSqlDao();
+	GeometryColumnsSfSqlDao getGeometryColumnsSfSqlDao();
 
 	/**
 	 * Create the Geometry Columns table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createGeometryColumnsTable();
+	boolean createGeometryColumnsTable();
 
 	/**
 	 * Create a new feature table
@@ -514,7 +521,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            feature table
 	 */
-	public void createFeatureTable(FeatureTable table);
+	void createFeatureTable(FeatureTable table);
 
 	/**
 	 * Create a new feature table with GeoPackage metadata. Create the Geometry
@@ -532,7 +539,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            spatial reference system id
 	 * @return geometry columns
 	 */
-	public GeometryColumns createFeatureTableWithMetadata(
+	GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns, BoundingBox boundingBox,
 			long srsId);
 
@@ -556,7 +563,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry columns
 	 * @since 1.1.1
 	 */
-	public GeometryColumns createFeatureTableWithMetadata(
+	GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns, String idColumnName,
 			BoundingBox boundingBox, long srsId);
 
@@ -582,7 +589,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry columns
 	 * @since 1.1.1
 	 */
-	public GeometryColumns createFeatureTableWithMetadata(
+	GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns,
 			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
 			long srsId);
@@ -611,7 +618,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry columns
 	 * @since 1.1.1
 	 */
-	public GeometryColumns createFeatureTableWithMetadata(
+	GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns, String idColumnName,
 			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
 			long srsId);
@@ -636,7 +643,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry columns
 	 * @since 1.1.1
 	 */
-	public GeometryColumns createFeatureTableWithMetadata(
+	GeometryColumns createFeatureTableWithMetadata(
 			GeometryColumns geometryColumns, BoundingBox boundingBox,
 			long srsId, List<FeatureColumn> columns);
 
@@ -645,28 +652,28 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @return Tile Matrix Set DAO
 	 */
-	public TileMatrixSetDao getTileMatrixSetDao();
+	TileMatrixSetDao getTileMatrixSetDao();
 
 	/**
 	 * Create the Tile Matrix Set table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createTileMatrixSetTable();
+	boolean createTileMatrixSetTable();
 
 	/**
 	 * Get a Tile Matrix DAO
 	 * 
 	 * @return Tile Matrix DAO
 	 */
-	public TileMatrixDao getTileMatrixDao();
+	TileMatrixDao getTileMatrixDao();
 
 	/**
 	 * Create the Tile Matrix table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createTileMatrixTable();
+	boolean createTileMatrixTable();
 
 	/**
 	 * Create a new tile table
@@ -674,7 +681,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            tile table
 	 */
-	public void createTileTable(TileTable table);
+	void createTileTable(TileTable table);
 
 	/**
 	 * Create a new tile table and the GeoPackage metadata
@@ -691,7 +698,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            tile matrix set SRS id
 	 * @return tile matrix set
 	 */
-	public TileMatrixSet createTileTableWithMetadata(String tableName,
+	TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId);
 
@@ -713,7 +720,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return tile matrix set
 	 * @since 1.2.1
 	 */
-	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+	TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
 			String tableName, BoundingBox contentsBoundingBox,
 			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
 			long tileMatrixSetSrsId);
@@ -723,70 +730,70 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @return Data Columns DAO
 	 */
-	public DataColumnsDao getDataColumnsDao();
+	DataColumnsDao getDataColumnsDao();
 
 	/**
 	 * Create the Data Columns table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createDataColumnsTable();
+	boolean createDataColumnsTable();
 
 	/**
 	 * Get a Data Column Constraints DAO
 	 * 
 	 * @return Data Column Constraints DAO
 	 */
-	public DataColumnConstraintsDao getDataColumnConstraintsDao();
+	DataColumnConstraintsDao getDataColumnConstraintsDao();
 
 	/**
 	 * Create the Data Column Constraints table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createDataColumnConstraintsTable();
+	boolean createDataColumnConstraintsTable();
 
 	/**
 	 * Get a Metadata DAO
 	 * 
 	 * @return Metadata DAO
 	 */
-	public MetadataDao getMetadataDao();
+	MetadataDao getMetadataDao();
 
 	/**
 	 * Create the Metadata table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createMetadataTable();
+	boolean createMetadataTable();
 
 	/**
 	 * Get a Metadata Reference DAO
 	 * 
 	 * @return Metadata Reference DAO
 	 */
-	public MetadataReferenceDao getMetadataReferenceDao();
+	MetadataReferenceDao getMetadataReferenceDao();
 
 	/**
 	 * Create the Metadata Reference table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createMetadataReferenceTable();
+	boolean createMetadataReferenceTable();
 
 	/**
 	 * Get an Extensions DAO
 	 * 
 	 * @return Extensions DAO
 	 */
-	public ExtensionsDao getExtensionsDao();
+	ExtensionsDao getExtensionsDao();
 
 	/**
 	 * Create the Extensions table if it does not already exist
 	 * 
 	 * @return true if created
 	 */
-	public boolean createExtensionsTable();
+	boolean createExtensionsTable();
 
 	/**
 	 * Delete the user table (a feature or tile table) and all GeoPackage
@@ -795,7 +802,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param table
 	 *            table name
 	 */
-	public void deleteTable(String table);
+	void deleteTable(String table);
 
 	/**
 	 * Attempt to delete the user table (a feature or tile table) and all
@@ -804,12 +811,12 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tableName
 	 *            table name
 	 */
-	public void deleteTableQuietly(String tableName);
+	void deleteTableQuietly(String tableName);
 
 	/**
 	 * Verify the GeoPackage is writable and throw an exception if it is not
 	 */
-	public void verifyWritable();
+	void verifyWritable();
 
 	/**
 	 * Create a dao
@@ -823,7 +830,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return base dao implementation
 	 * @since 1.1.0
 	 */
-	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type);
+	<D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type);
 
 	/**
 	 * Execute the sql on the GeoPackage database
@@ -832,28 +839,28 @@ public interface GeoPackageCore extends Closeable {
 	 *            sql statement
 	 * @since 1.1.2
 	 */
-	public void execSQL(String sql);
+	void execSQL(String sql);
 
 	/**
 	 * Begin a transaction
 	 * 
 	 * @since 3.3.0
 	 */
-	public void beginTransaction();
+	void beginTransaction();
 
 	/**
 	 * End a transaction successfully
 	 * 
 	 * @since 3.3.0
 	 */
-	public void endTransaction();
+	void endTransaction();
 
 	/**
 	 * Fail a transaction
 	 * 
 	 * @since 3.3.0
 	 */
-	public void failTransaction();
+	void failTransaction();
 
 	/**
 	 * End a transaction
@@ -863,21 +870,21 @@ public interface GeoPackageCore extends Closeable {
 	 *            not commit
 	 * @since 3.3.0
 	 */
-	public void endTransaction(boolean successful);
+	void endTransaction(boolean successful);
 
 	/**
 	 * End a transaction as successful and begin a new transaction
 	 *
 	 * @since 3.3.0
 	 */
-	public void endAndBeginTransaction();
+	void endAndBeginTransaction();
 
 	/**
 	 * Commit changes on the connection
 	 * 
 	 * @since 3.3.0
 	 */
-	public void commit();
+	void commit();
 
 	/**
 	 * Determine if currently within a transaction
@@ -886,7 +893,7 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @since 3.3.0
 	 */
-	public boolean inTransaction();
+	boolean inTransaction();
 
 	/**
 	 * Execute the {@link Callable} class inside an ORMLite transaction
@@ -900,7 +907,7 @@ public interface GeoPackageCore extends Closeable {
 	 *             upon transaction error
 	 * @since 3.3.0
 	 */
-	public <T> T callInTransaction(Callable<T> callable) throws SQLException;
+	<T> T callInTransaction(Callable<T> callable) throws SQLException;
 
 	/**
 	 * If foreign keys is disabled and there are no foreign key violations,
@@ -910,7 +917,7 @@ public interface GeoPackageCore extends Closeable {
 	 *         violations and not enabled
 	 * @since 3.3.0
 	 */
-	public boolean enableForeignKeys();
+	boolean enableForeignKeys();
 
 	/**
 	 * Query for the foreign keys value
@@ -918,7 +925,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if enabled, false if disabled
 	 * @since 3.3.0
 	 */
-	public boolean foreignKeys();
+	boolean foreignKeys();
 
 	/**
 	 * Change the foreign keys state
@@ -928,17 +935,26 @@ public interface GeoPackageCore extends Closeable {
 	 * @return previous foreign keys value
 	 * @since 3.3.0
 	 */
-	public boolean foreignKeys(boolean on);
+	boolean foreignKeys(boolean on);
 
 	/**
 	 * Drop the table if it exists. Drops the table with the table name, not
 	 * limited to GeoPackage specific tables.
-	 * 
+	 *
 	 * @param table
 	 *            table name
 	 * @since 1.1.5
 	 */
-	public void dropTable(String table);
+	void dropTable(String table);
+
+	/**
+	 * Drop the table if it exists. Drops the table with the table name, not
+	 * limited to GeoPackage specific tables.
+	 *
+	 * @param view
+	 *            view name
+	 */
+	void dropView(String view);
 
 	/**
 	 * Rename the table
@@ -949,7 +965,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            new table name
 	 * @since 3.3.0
 	 */
-	public void renameTable(String tableName, String newTableName);
+	void renameTable(String tableName, String newTableName);
 
 	/**
 	 * Copy the table with transferred contents and extensions
@@ -960,7 +976,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            new table name
 	 * @since 3.3.0
 	 */
-	public void copyTable(String tableName, String newTableName);
+	void copyTable(String tableName, String newTableName);
 
 	/**
 	 * Copy the table with transferred contents but no extensions
@@ -971,7 +987,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            new table name
 	 * @since 3.3.0
 	 */
-	public void copyTableNoExtensions(String tableName, String newTableName);
+	void copyTableNoExtensions(String tableName, String newTableName);
 
 	/**
 	 * Copy the table but leave the user table empty and without extensions
@@ -982,14 +998,14 @@ public interface GeoPackageCore extends Closeable {
 	 *            new table name
 	 * @since 3.3.0
 	 */
-	public void copyTableAsEmpty(String tableName, String newTableName);
+	void copyTableAsEmpty(String tableName, String newTableName);
 
 	/**
 	 * Rebuild the GeoPackage, repacking it into a minimal amount of disk space
 	 * 
 	 * @since 3.3.0
 	 */
-	public void vacuum();
+	void vacuum();
 
 	/**
 	 * Get a 2D Gridded Coverage DAO
@@ -997,7 +1013,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return 2d gridded coverage dao
 	 * @since 1.2.1
 	 */
-	public GriddedCoverageDao getGriddedCoverageDao();
+	GriddedCoverageDao getGriddedCoverageDao();
 
 	/**
 	 * Create the 2D Gridded Coverage Table if it does not exist
@@ -1005,7 +1021,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 1.2.1
 	 */
-	public boolean createGriddedCoverageTable();
+	boolean createGriddedCoverageTable();
 
 	/**
 	 * Get a 2D Gridded Tile DAO
@@ -1013,7 +1029,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return 2d gridded tile dao
 	 * @since 1.2.1
 	 */
-	public GriddedTileDao getGriddedTileDao();
+	GriddedTileDao getGriddedTileDao();
 
 	/**
 	 * Create the 2D Gridded Tile Table if it does not exist
@@ -1021,7 +1037,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 1.2.1
 	 */
-	public boolean createGriddedTileTable();
+	boolean createGriddedTileTable();
 
 	/**
 	 * Get a Table Index DAO
@@ -1029,7 +1045,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return table index dao
 	 * @since 1.1.0
 	 */
-	public TableIndexDao getTableIndexDao();
+	TableIndexDao getTableIndexDao();
 
 	/**
 	 * Create the Table Index Table if it does not exist
@@ -1037,7 +1053,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 1.1.0
 	 */
-	public boolean createTableIndexTable();
+	boolean createTableIndexTable();
 
 	/**
 	 * Get a Geometry Index DAO
@@ -1045,7 +1061,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return geometry index dao
 	 * @since 1.1.0
 	 */
-	public GeometryIndexDao getGeometryIndexDao();
+	GeometryIndexDao getGeometryIndexDao();
 
 	/**
 	 * Create Geometry Index Table if it does not exist and index it
@@ -1053,7 +1069,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 1.1.0
 	 */
-	public boolean createGeometryIndexTable();
+	boolean createGeometryIndexTable();
 
 	/**
 	 * Index the Geometry Index Table if needed
@@ -1061,7 +1077,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if indexed
 	 * @since 3.1.0
 	 */
-	public boolean indexGeometryIndexTable();
+	boolean indexGeometryIndexTable();
 
 	/**
 	 * Un-index the Geometry Index Table if needed
@@ -1069,7 +1085,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if unindexed
 	 * @since 3.1.0
 	 */
-	public boolean unindexGeometryIndexTable();
+	boolean unindexGeometryIndexTable();
 
 	/**
 	 * Get a Feature Tile Link DAO
@@ -1077,7 +1093,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return feature tile link dao
 	 * @since 1.1.5
 	 */
-	public FeatureTileLinkDao getFeatureTileLinkDao();
+	FeatureTileLinkDao getFeatureTileLinkDao();
 
 	/**
 	 * Create the Feature Tile Link Table if it does not exist
@@ -1085,7 +1101,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 1.1.5
 	 */
-	public boolean createFeatureTileLinkTable();
+	boolean createFeatureTileLinkTable();
 
 	/**
 	 * Create a new attributes table (only the attributes table is created, no
@@ -1095,7 +1111,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            attributes table
 	 * @since 1.2.1
 	 */
-	public void createAttributesTable(AttributesTable table);
+	void createAttributesTable(AttributesTable table);
 
 	/**
 	 * Create a new attributes table and a new Contents
@@ -1111,7 +1127,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 1.2.1
 	 */
-	public AttributesTable createAttributesTableWithId(String tableName,
+	AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns);
 
 	/**
@@ -1130,7 +1146,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 3.3.0
 	 */
-	public AttributesTable createAttributesTableWithId(String tableName,
+	AttributesTable createAttributesTableWithId(String tableName,
 			List<AttributesColumn> additionalColumns,
 			Collection<Constraint> constraints);
 
@@ -1151,7 +1167,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 1.2.1
 	 */
-	public AttributesTable createAttributesTable(String tableName,
+	AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns);
 
 	/**
@@ -1173,7 +1189,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 3.3.0
 	 */
-	public AttributesTable createAttributesTable(String tableName,
+	AttributesTable createAttributesTable(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
 			Collection<Constraint> constraints);
 
@@ -1190,7 +1206,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 1.2.1
 	 */
-	public AttributesTable createAttributesTable(String tableName,
+	AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns);
 
 	/**
@@ -1208,7 +1224,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return attributes table
 	 * @since 3.3.0
 	 */
-	public AttributesTable createAttributesTable(String tableName,
+	AttributesTable createAttributesTable(String tableName,
 			List<AttributesColumn> columns, Collection<Constraint> constraints);
 
 	/**
@@ -1217,7 +1233,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return tile scaling dao
 	 * @since 2.0.2
 	 */
-	public TileScalingDao getTileScalingDao();
+	TileScalingDao getTileScalingDao();
 
 	/**
 	 * Create the Tile Scaling Table if it does not exist
@@ -1225,7 +1241,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 2.0.2
 	 */
-	public boolean createTileScalingTable();
+	boolean createTileScalingTable();
 
 	/**
 	 * Get a Extended Relations DAO
@@ -1233,7 +1249,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return extended relations dao
 	 * @since 3.0.1
 	 */
-	public ExtendedRelationsDao getExtendedRelationsDao();
+	ExtendedRelationsDao getExtendedRelationsDao();
 
 	/**
 	 * Create the Extended Relations Table if it does not exist
@@ -1241,7 +1257,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 3.0.1
 	 */
-	public boolean createExtendedRelationsTable();
+	boolean createExtendedRelationsTable();
 
 	/**
 	 * Get a Contents Id DAO
@@ -1249,7 +1265,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return contents id dao
 	 * @since 3.2.0
 	 */
-	public ContentsIdDao getContentsIdDao();
+	ContentsIdDao getContentsIdDao();
 
 	/**
 	 * Create the Contents Id Table if it does not exist
@@ -1257,7 +1273,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 * @since 3.2.0
 	 */
-	public boolean createContentsIdTable();
+	boolean createContentsIdTable();
 
 	/**
 	 * Create a new user table
@@ -1266,6 +1282,38 @@ public interface GeoPackageCore extends Closeable {
 	 *            user table
 	 * @since 3.0.1
 	 */
-	public void createUserTable(UserTable<? extends UserColumn> table);
+	void createUserTable(UserTable<? extends UserColumn> table);
 
+	VectorTilesLayersDao getVectorTilesLayersDao();
+	VectorTilesFieldsDao getVectorTilesFieldsDao();
+	StylesDao getStylesDao();
+	StylesheetsDao getStylesheetsDao();
+	SymbolContentDao getSymbolContentDao();
+	SymbolImagesDao getSymbolImagesDao();
+	SymbolsDao getSymbolsDao();
+	ExtTileMatrixDao getExtTileMatrixDao();
+	ExtTileMatrixSetDao getExtTileMatrixSetDao();
+	TileMatrixTablesDao getTileMatrixTablesDao();
+	TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao();
+
+	/**
+	 * Create the Vector Tiles Extension tables if they do not exist
+	 *
+	 * @return true if any table is created
+	 */
+	boolean createVectorTilesTables();
+
+	/**
+	 * Create the Portrayal Extension tables if they do not exist
+	 *
+	 * @return true if any table is created
+	 */
+	boolean createPortrayalTables();
+
+	/**
+	 * Create the Tile Matrix Set Extension tables and views if they do not exist
+	 *
+	 * @return true if any table is created
+	 */
+	boolean createTileMatrixSetExtension();
 }
