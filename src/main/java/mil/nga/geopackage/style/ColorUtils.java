@@ -16,13 +16,13 @@ public class ColorUtils {
 	/**
 	 * Hex color pattern
 	 */
-	private static Pattern hexColorPattern = Pattern
+	private static final Pattern hexColorPattern = Pattern
 			.compile("^#?((\\p{XDigit}{3}){1,2}|(\\p{XDigit}{4}){1,2})$");
 
 	/**
 	 * Hex single color pattern
 	 */
-	private static Pattern hexSingleColorPattern = Pattern
+	private static final Pattern hexSingleColorPattern = Pattern
 			.compile("^\\p{XDigit}{1,2}$");
 
 	/**
@@ -53,7 +53,8 @@ public class ColorUtils {
 	 * 
 	 * @return hex color in format #RGB or #RRGGBB
 	 */
-	public static String toColorShorthand(String red, String green, String blue) {
+	public static String toColorShorthand(String red, String green,
+			String blue) {
 		return shorthandHex(toColor(red, green, blue));
 	}
 
@@ -70,7 +71,8 @@ public class ColorUtils {
 	 * 
 	 * @return hex color in format #AARRGGBB
 	 */
-	public static String toColorWithAlpha(String red, String green, String blue) {
+	public static String toColorWithAlpha(String red, String green,
+			String blue) {
 		String defaultAlpha = "FF";
 		if (red != null && !red.isEmpty()
 				&& Character.isLowerCase(red.charAt(0))) {
@@ -111,8 +113,8 @@ public class ColorUtils {
 	 * 
 	 * @return hex color in format #AARRGGBB or #RRGGBB
 	 */
-	public static String toColorWithAlpha(String red, String green,
-			String blue, String alpha) {
+	public static String toColorWithAlpha(String red, String green, String blue,
+			String alpha) {
 		validateHexSingle(red);
 		validateHexSingle(green);
 		validateHexSingle(blue);
@@ -193,7 +195,8 @@ public class ColorUtils {
 	 * 
 	 * @return integer color
 	 */
-	public static int toColorWithAlpha(int red, int green, int blue, int alpha) {
+	public static int toColorWithAlpha(int red, int green, int blue,
+			int alpha) {
 		validateRGB(red);
 		validateRGB(green);
 		validateRGB(blue);
@@ -586,8 +589,8 @@ public class ColorUtils {
 				startIndex++;
 			}
 			for (; startIndex < color.length(); startIndex += 2) {
-				String shorthand = shorthandHexSingle(color.substring(
-						startIndex, startIndex + 2));
+				String shorthand = shorthandHexSingle(
+						color.substring(startIndex, startIndex + 2));
 				if (shorthand.length() > 1) {
 					shorthandColor = null;
 					break;
@@ -619,8 +622,8 @@ public class ColorUtils {
 				startIndex++;
 			}
 			for (; startIndex < color.length(); startIndex++) {
-				String expand = expandShorthandHexSingle(color.substring(
-						startIndex, startIndex + 1));
+				String expand = expandShorthandHexSingle(
+						color.substring(startIndex, startIndex + 1));
 				expandColor.append(expand);
 			}
 			color = expandColor.toString();
