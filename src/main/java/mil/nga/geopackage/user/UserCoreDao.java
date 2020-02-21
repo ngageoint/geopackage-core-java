@@ -242,6 +242,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Raw query
+	 * 
+	 * @param sql
+	 *            SQL
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult rawQuery(String sql) {
+		return rawQuery(sql, null);
+	}
+
+	/**
+	 * Raw query
+	 * 
+	 * @param sql
+	 *            SQL
+	 * @param selectionArgs
+	 *            selection args
+	 * @return result
+	 * @since 3.5.0
+	 */
+	public TResult rawQuery(String sql, String[] selectionArgs) {
+		return userDb.rawQuery(sql, selectionArgs);
+	}
+
+	/**
 	 * Query for all rows
 	 * 
 	 * @return result
