@@ -73,6 +73,14 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	public TTable getTable();
 
 	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 * @since 3.5.0
+	 */
+	public String getTableName();
+
+	/**
 	 * Get the columns
 	 * 
 	 * @return columns
