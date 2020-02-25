@@ -1,11 +1,11 @@
 package mil.nga.geopackage;
 
+import org.locationtech.proj4j.units.Units;
+
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionTransform;
-
-import org.locationtech.proj4j.units.Units;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -166,6 +166,26 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Get the longitude range
+	 * 
+	 * @return longitude range
+	 * @since 3.5.0
+	 */
+	public double getLongitudeRange() {
+		return getMaxLongitude() - getMinLongitude();
+	}
+
+	/**
+	 * Get the latitude range
+	 * 
+	 * @return latitude range
+	 * @since 3.5.0
+	 */
+	public double getLatitudeRange() {
+		return getMaxLatitude() - getMinLatitude();
+	}
+
+	/**
 	 * Build a Geometry Envelope from the bounding box
 	 * 
 	 * @return geometry envelope
@@ -220,10 +240,10 @@ public class BoundingBox {
 
 		if (adjust != null) {
 			complementary = new BoundingBox(this);
-			complementary.setMinLongitude(complementary.getMinLongitude()
-					+ adjust);
-			complementary.setMaxLongitude(complementary.getMaxLongitude()
-					+ adjust);
+			complementary
+					.setMinLongitude(complementary.getMinLongitude() + adjust);
+			complementary
+					.setMaxLongitude(complementary.getMaxLongitude() + adjust);
 		}
 
 		return complementary;
@@ -293,7 +313,8 @@ public class BoundingBox {
 	 * @since 2.0.0
 	 */
 	public BoundingBox boundWebMercatorCoordinates() {
-		return boundCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+		return boundCoordinates(
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
 	}
 
 	/**
@@ -314,7 +335,8 @@ public class BoundingBox {
 		double maxLongitude = getMaxLongitude();
 
 		if (minLongitude > maxLongitude) {
-			int worldWraps = 1 + (int) ((minLongitude - maxLongitude) / (2 * maxProjectionLongitude));
+			int worldWraps = 1 + (int) ((minLongitude - maxLongitude)
+					/ (2 * maxProjectionLongitude));
 			maxLongitude += (worldWraps * 2 * maxProjectionLongitude);
 			expanded.setMaxLongitude(maxLongitude);
 		}
@@ -331,7 +353,8 @@ public class BoundingBox {
 	 * @since 2.0.0
 	 */
 	public BoundingBox expandWgs84Coordinates() {
-		return expandCoordinates(ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+		return expandCoordinates(
+				ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
 	}
 
 	/**
@@ -343,7 +366,8 @@ public class BoundingBox {
 	 * @since 2.0.0
 	 */
 	public BoundingBox expandWebMercatorCoordinates() {
-		return expandCoordinates(ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+		return expandCoordinates(
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
 	}
 
 	/**
@@ -361,7 +385,8 @@ public class BoundingBox {
 		} else {
 			if (transform.getFromProjection().isUnit(Units.DEGREES)) {
 				transformed = TileBoundingBoxUtils
-						.boundDegreesBoundingBoxWithWebMercatorLimits(transformed);
+						.boundDegreesBoundingBoxWithWebMercatorLimits(
+								transformed);
 			}
 			GeometryEnvelope envelope = buildEnvelope(transformed);
 			GeometryEnvelope transformedEnvelope = transform
@@ -435,7 +460,8 @@ public class BoundingBox {
 		BoundingBox overlap = null;
 
 		if ((minLongitude < maxLongitude && minLatitude < maxLatitude)
-				|| (allowEmpty && minLongitude <= maxLongitude && minLatitude <= maxLatitude)) {
+				|| (allowEmpty && minLongitude <= maxLongitude
+						&& minLatitude <= maxLatitude)) {
 			overlap = new BoundingBox(minLongitude, minLatitude, maxLongitude,
 					maxLatitude);
 		}
@@ -485,6 +511,57 @@ public class BoundingBox {
 				&& getMaxLongitude() >= boundingBox.getMaxLongitude()
 				&& getMinLatitude() <= boundingBox.getMinLatitude()
 				&& getMaxLatitude() >= boundingBox.getMaxLatitude();
+	}
+
+	/**
+	 * Expand the bounding box to an equally sized width and height bounding box
+	 * 
+	 * @return new square expanded bounding box
+	 * @since 3.5.0
+	 */
+	public BoundingBox squareExpand() {
+		return squareExpand(0.0);
+	}
+
+	/**
+	 * Expand the bounding box to an equally sized width and height bounding box
+	 * with optional empty edge buffer
+	 * 
+	 * @param bufferPercentage
+	 *            bounding box edge buffer percentage. A value of 0.1 adds a 10%
+	 *            buffer on each side of the squared bounding box.
+	 * @return new square expanded bounding box
+	 * @since 3.5.0
+	 */
+	public BoundingBox squareExpand(double bufferPercentage) {
+
+		double lonRange = getLongitudeRange();
+		double latRange = getLatitudeRange();
+
+		BoundingBox boundingBox = new BoundingBox(this);
+
+		if (lonRange < latRange) {
+			double halfDiff = (latRange - lonRange) / 2.0;
+			boundingBox
+					.setMinLongitude(boundingBox.getMinLongitude() - halfDiff);
+			boundingBox
+					.setMaxLongitude(boundingBox.getMaxLongitude() + halfDiff);
+		} else if (latRange < lonRange) {
+			double halfDiff = (lonRange - latRange) / 2.0;
+			boundingBox.setMinLatitude(boundingBox.getMinLatitude() - halfDiff);
+			boundingBox.setMaxLatitude(boundingBox.getMaxLatitude() + halfDiff);
+		}
+
+		double range = Math.max(Math.max(lonRange, latRange), Double.MIN_VALUE);
+		double buffer = ((range / (1.0 - (2.0 * bufferPercentage))) - range)
+				/ 2.0;
+
+		boundingBox.setMinLongitude(boundingBox.getMinLongitude() - buffer);
+		boundingBox.setMinLatitude(boundingBox.getMinLatitude() - buffer);
+		boundingBox.setMaxLongitude(boundingBox.getMaxLongitude() + buffer);
+		boundingBox.setMaxLatitude(boundingBox.getMaxLatitude() + buffer);
+
+		return boundingBox;
 	}
 
 	/**
