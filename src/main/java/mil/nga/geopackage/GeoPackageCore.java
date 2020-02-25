@@ -419,6 +419,21 @@ public interface GeoPackageCore extends Closeable {
 			boolean manual);
 
 	/**
+	 * Get the feature table bounding box
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            true to manually query if not indexed
+	 * @return bounding box
+	 * @since 3.5.0
+	 */
+	public BoundingBox getFeatureBoundingBox(Projection projection,
+			String table, boolean manual);
+
+	/**
 	 * Get a Spatial Reference System DAO
 	 * 
 	 * @return Spatial Reference System DAO

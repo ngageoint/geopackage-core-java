@@ -538,20 +538,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	}
 
 	/**
-	 * Get the feature table bounding box
-	 * 
-	 * @param projection
-	 *            desired projection
-	 * @param table
-	 *            table name
-	 * @param manual
-	 *            true to manually query if not indexed
-	 * @return bounding box
-	 */
-	protected abstract BoundingBox getFeatureBoundingBox(Projection projection,
-			String table, boolean manual);
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
