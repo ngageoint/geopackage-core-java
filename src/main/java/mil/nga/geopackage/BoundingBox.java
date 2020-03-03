@@ -535,10 +535,26 @@ public class BoundingBox {
 	 */
 	public BoundingBox squareExpand(double bufferPercentage) {
 
-		double lonRange = getLongitudeRange();
-		double latRange = getLatitudeRange();
-
 		BoundingBox boundingBox = new BoundingBox(this);
+
+		if (boundingBox.isPoint() && bufferPercentage > 0.0) {
+
+			double longitudeExpand = Math.ulp(boundingBox.getMinLongitude());
+			boundingBox.setMinLongitude(
+					boundingBox.getMinLongitude() - longitudeExpand);
+			boundingBox.setMaxLongitude(
+					boundingBox.getMaxLongitude() + longitudeExpand);
+
+			double latitudeExpand = Math.ulp(boundingBox.getMinLatitude());
+			boundingBox.setMinLatitude(
+					boundingBox.getMinLatitude() - latitudeExpand);
+			boundingBox.setMaxLatitude(
+					boundingBox.getMaxLatitude() + latitudeExpand);
+
+		}
+
+		double lonRange = boundingBox.getLongitudeRange();
+		double latRange = boundingBox.getLatitudeRange();
 
 		if (lonRange < latRange) {
 			double halfDiff = (latRange - lonRange) / 2.0;
@@ -562,6 +578,17 @@ public class BoundingBox {
 		boundingBox.setMaxLatitude(boundingBox.getMaxLatitude() + buffer);
 
 		return boundingBox;
+	}
+
+	/**
+	 * Determine if the bounding box is of a single point
+	 * 
+	 * @return true if a single point bounds
+	 * @since 3.5.0
+	 */
+	public boolean isPoint() {
+		return Double.compare(minLongitude, maxLongitude) == 0
+				&& Double.compare(minLatitude, maxLatitude) == 0;
 	}
 
 	/**
