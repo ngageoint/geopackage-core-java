@@ -20,6 +20,13 @@ public class GeoPackageConstants {
 	public static final String GEOPACKAGE_EXTENDED_EXTENSION = "gpkx";
 
 	/**
+	 * GeoPackage Media Type (MIME type)
+	 * 
+	 * @since 3.5.0
+	 */
+	public static final String GEOPACKAGE_MEDIA_TYPE = "application/geopackage+sqlite3";
+
+	/**
 	 * GeoPackage application id
 	 */
 	public static final String APPLICATION_ID = "GPKG";
