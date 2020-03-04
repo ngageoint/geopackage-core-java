@@ -26,11 +26,35 @@ public class GeoPackageValidate {
 	 */
 	public static boolean hasGeoPackageExtension(File file) {
 		String extension = GeoPackageIOUtils.getFileExtension(file);
-		boolean isGeoPackage = extension != null
-				&& (extension
-						.equalsIgnoreCase(GeoPackageConstants.GEOPACKAGE_EXTENSION) || extension
-						.equalsIgnoreCase(GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION));
-		return isGeoPackage;
+		return isGeoPackageExtension(extension);
+	}
+
+	/**
+	 * Check the file name extension to see if it is a GeoPackage
+	 * 
+	 * @param name
+	 *            GeoPackage file name
+	 * @return true if GeoPackage extension
+	 * @since 3.5.0
+	 */
+	public static boolean hasGeoPackageExtension(String name) {
+		String extension = GeoPackageIOUtils.getFileExtension(name);
+		return isGeoPackageExtension(extension);
+	}
+
+	/**
+	 * Check if a GeoPackage extension
+	 * 
+	 * @param extension
+	 *            file extension
+	 * @return true if GeoPackage extension
+	 * @since 3.5.0
+	 */
+	public static boolean isGeoPackageExtension(String extension) {
+		return extension != null && (extension
+				.equalsIgnoreCase(GeoPackageConstants.GEOPACKAGE_EXTENSION)
+				|| extension.equalsIgnoreCase(
+						GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION));
 	}
 
 	/**
@@ -46,6 +70,53 @@ public class GeoPackageValidate {
 					+ GeoPackageConstants.GEOPACKAGE_EXTENSION + "' or '"
 					+ GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION + "'");
 		}
+	}
+
+	/**
+	 * Validate the extension file name as a GeoPackage
+	 * 
+	 * @param name
+	 *            GeoPackage file name
+	 * @since 3.5.0
+	 */
+	public static void validateGeoPackageExtension(String name) {
+		if (!hasGeoPackageExtension(name)) {
+			throw new GeoPackageException("GeoPackage database file name '"
+					+ name + "' does not have a valid extension of '"
+					+ GeoPackageConstants.GEOPACKAGE_EXTENSION + "' or '"
+					+ GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION + "'");
+		}
+	}
+
+	/**
+	 * Add a GeoPackage extension if one does not exist
+	 * 
+	 * @param file
+	 *            GeoPackage file
+	 * @return GeoPackage file with extension
+	 * @since 3.5.0
+	 */
+	public static File addGeoPackageExtension(File file) {
+		if (!hasGeoPackageExtension(file)) {
+			file = new File(file.getAbsolutePath() + "."
+					+ GeoPackageConstants.GEOPACKAGE_EXTENSION);
+		}
+		return file;
+	}
+
+	/**
+	 * Add a GeoPackage extension if one does not exist
+	 * 
+	 * @param name
+	 *            GeoPackage file name
+	 * @return GeoPackage name with extension
+	 * @since 3.5.0
+	 */
+	public static String addGeoPackageExtension(String name) {
+		if (!hasGeoPackageExtension(name)) {
+			name += "." + GeoPackageConstants.GEOPACKAGE_EXTENSION;
+		}
+		return name;
 	}
 
 	/**
