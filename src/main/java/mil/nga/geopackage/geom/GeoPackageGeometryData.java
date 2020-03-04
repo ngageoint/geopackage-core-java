@@ -104,25 +104,25 @@ public class GeoPackageGeometryData {
 		} catch (UnsupportedEncodingException e) {
 			throw new GeoPackageException(
 					"Unexpected GeoPackage Geometry magic number character encoding: Expected: "
-							+ GeoPackageConstants.GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER);
+							+ GeoPackageConstants.GEOMETRY_MAGIC_NUMBER);
 		}
 		if (!magic
-				.equals(GeoPackageConstants.GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER)) {
+				.equals(GeoPackageConstants.GEOMETRY_MAGIC_NUMBER)) {
 			throw new GeoPackageException(
 					"Unexpected GeoPackage Geometry magic number: "
 							+ magic
 							+ ", Expected: "
-							+ GeoPackageConstants.GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER);
+							+ GeoPackageConstants.GEOMETRY_MAGIC_NUMBER);
 		}
 
 		// Get a byte as the version and validate, value of 0 = version 1
 		byte version = reader.readByte();
-		if (version != GeoPackageConstants.GEO_PACKAGE_GEOMETRY_VERSION_1) {
+		if (version != GeoPackageConstants.GEOMETRY_VERSION_1) {
 			throw new GeoPackageException(
 					"Unexpected GeoPackage Geometry version: "
 							+ version
 							+ ", Expected: "
-							+ GeoPackageConstants.GEO_PACKAGE_GEOMETRY_VERSION_1);
+							+ GeoPackageConstants.GEOMETRY_VERSION_1);
 		}
 
 		// Get a flags byte and then read the flag values
@@ -158,10 +158,10 @@ public class GeoPackageGeometryData {
 		ByteWriter writer = new ByteWriter();
 
 		// Write GP as the 2 byte magic number
-		writer.writeString(GeoPackageConstants.GEO_PACKAGE_GEOMETRY_MAGIC_NUMBER);
+		writer.writeString(GeoPackageConstants.GEOMETRY_MAGIC_NUMBER);
 
 		// Write a byte as the version, value of 0 = version 1
-		writer.writeByte(GeoPackageConstants.GEO_PACKAGE_GEOMETRY_VERSION_1);
+		writer.writeByte(GeoPackageConstants.GEOMETRY_VERSION_1);
 
 		// Build and write a flags byte
 		byte flags = buildFlagsByte();

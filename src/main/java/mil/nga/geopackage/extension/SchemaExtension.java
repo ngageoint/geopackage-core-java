@@ -28,7 +28,7 @@ public class SchemaExtension extends BaseExtension {
 	/**
 	 * Extension name
 	 */
-	public static final String EXTENSION_NAME = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR
+	public static final String EXTENSION_NAME = GeoPackageConstants.EXTENSION_AUTHOR
 			+ Extensions.EXTENSION_NAME_DIVIDER + NAME;
 
 	/**

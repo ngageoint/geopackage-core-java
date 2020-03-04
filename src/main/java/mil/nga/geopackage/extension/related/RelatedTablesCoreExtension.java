@@ -36,7 +36,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	/**
 	 * Extension author
 	 */
-	public static final String EXTENSION_AUTHOR = GeoPackageConstants.GEO_PACKAGE_EXTENSION_AUTHOR;
+	public static final String EXTENSION_AUTHOR = GeoPackageConstants.EXTENSION_AUTHOR;
 
 	/**
 	 * Extension name without the author

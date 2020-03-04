@@ -52,9 +52,9 @@ public class GeoPackageValidate {
 	 */
 	public static boolean isGeoPackageExtension(String extension) {
 		return extension != null && (extension
-				.equalsIgnoreCase(GeoPackageConstants.GEOPACKAGE_EXTENSION)
+				.equalsIgnoreCase(GeoPackageConstants.EXTENSION)
 				|| extension.equalsIgnoreCase(
-						GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION));
+						GeoPackageConstants.EXTENDED_EXTENSION));
 	}
 
 	/**
@@ -67,8 +67,8 @@ public class GeoPackageValidate {
 		if (!hasGeoPackageExtension(file)) {
 			throw new GeoPackageException("GeoPackage database file '" + file
 					+ "' does not have a valid extension of '"
-					+ GeoPackageConstants.GEOPACKAGE_EXTENSION + "' or '"
-					+ GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION + "'");
+					+ GeoPackageConstants.EXTENSION + "' or '"
+					+ GeoPackageConstants.EXTENDED_EXTENSION + "'");
 		}
 	}
 
@@ -83,8 +83,8 @@ public class GeoPackageValidate {
 		if (!hasGeoPackageExtension(name)) {
 			throw new GeoPackageException("GeoPackage database file name '"
 					+ name + "' does not have a valid extension of '"
-					+ GeoPackageConstants.GEOPACKAGE_EXTENSION + "' or '"
-					+ GeoPackageConstants.GEOPACKAGE_EXTENDED_EXTENSION + "'");
+					+ GeoPackageConstants.EXTENSION + "' or '"
+					+ GeoPackageConstants.EXTENDED_EXTENSION + "'");
 		}
 	}
 
@@ -99,7 +99,7 @@ public class GeoPackageValidate {
 	public static File addGeoPackageExtension(File file) {
 		if (!hasGeoPackageExtension(file)) {
 			file = new File(file.getAbsolutePath() + "."
-					+ GeoPackageConstants.GEOPACKAGE_EXTENSION);
+					+ GeoPackageConstants.EXTENSION);
 		}
 		return file;
 	}
@@ -114,7 +114,7 @@ public class GeoPackageValidate {
 	 */
 	public static String addGeoPackageExtension(String name) {
 		if (!hasGeoPackageExtension(name)) {
-			name += "." + GeoPackageConstants.GEOPACKAGE_EXTENSION;
+			name += "." + GeoPackageConstants.EXTENSION;
 		}
 		return name;
 	}
