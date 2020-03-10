@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 3.5.1 (TBD)
+
+* TBD
+
 ## [3.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.5.0) (03-10-2020)
 
 * Separation of columns from user tables to support custom column queries
