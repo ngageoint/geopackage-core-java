@@ -403,6 +403,48 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	}
 
 	/**
+	 * Is the primary key modifiable
+	 * 
+	 * @return true if the primary key is modifiable
+	 * @since 3.5.1
+	 */
+	public boolean isPkModifiable() {
+		return columns.isPkModifiable();
+	}
+
+	/**
+	 * Set if the primary key can be modified
+	 * 
+	 * @param pkModifiable
+	 *            primary key modifiable flag
+	 * @since 3.5.1
+	 */
+	public void setPkModifiable(boolean pkModifiable) {
+		columns.setPkModifiable(pkModifiable);
+	}
+
+	/**
+	 * Is value validation against column types enabled
+	 * 
+	 * @return true if values are validated against column types
+	 * @since 3.5.1
+	 */
+	public boolean isValueValidation() {
+		return columns.isValueValidation();
+	}
+
+	/**
+	 * Set if values should validated against column types
+	 * 
+	 * @param valueValidation
+	 *            value validation flag
+	 * @since 3.5.1
+	 */
+	public void setValueValidation(boolean valueValidation) {
+		columns.setValueValidation(valueValidation);
+	}
+
+	/**
 	 * Add a new column
 	 * 
 	 * @param column

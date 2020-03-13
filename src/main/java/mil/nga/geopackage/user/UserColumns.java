@@ -55,6 +55,16 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	private int pkIndex;
 
 	/**
+	 * Indicates if the primary key is modifiable
+	 */
+	private boolean pkModifiable = false;
+
+	/**
+	 * Indicates if values are validated against column types
+	 */
+	private boolean valueValidation = true;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param tableName
@@ -92,6 +102,8 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 		this.nameToIndex = new HashMap<String, Integer>();
 		this.nameToIndex.putAll(userColumns.nameToIndex);
 		this.pkIndex = userColumns.pkIndex;
+		this.pkModifiable = userColumns.pkModifiable;
+		this.valueValidation = userColumns.valueValidation;
 	}
 
 	/**
@@ -448,6 +460,48 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 			}
 		}
 		return columnsOfType;
+	}
+
+	/**
+	 * Is the primary key modifiable
+	 * 
+	 * @return true if the primary key is modifiable
+	 * @since 3.5.1
+	 */
+	public boolean isPkModifiable() {
+		return pkModifiable;
+	}
+
+	/**
+	 * Set if the primary key can be modified
+	 * 
+	 * @param pkModifiable
+	 *            primary key modifiable flag
+	 * @since 3.5.1
+	 */
+	public void setPkModifiable(boolean pkModifiable) {
+		this.pkModifiable = pkModifiable;
+	}
+
+	/**
+	 * Is value validation against column types enabled
+	 * 
+	 * @return true if values are validated against column types
+	 * @since 3.5.1
+	 */
+	public boolean isValueValidation() {
+		return valueValidation;
+	}
+
+	/**
+	 * Set if values should validated against column types
+	 * 
+	 * @param valueValidation
+	 *            value validation flag
+	 * @since 3.5.1
+	 */
+	public void setValueValidation(boolean valueValidation) {
+		this.valueValidation = valueValidation;
 	}
 
 	/**

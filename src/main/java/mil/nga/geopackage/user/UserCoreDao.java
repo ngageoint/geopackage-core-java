@@ -235,6 +235,48 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Is the primary key modifiable
+	 * 
+	 * @return true if the primary key is modifiable
+	 * @since 3.5.1
+	 */
+	public boolean isPkModifiable() {
+		return table.isPkModifiable();
+	}
+
+	/**
+	 * Set if the primary key can be modified
+	 * 
+	 * @param pkModifiable
+	 *            primary key modifiable flag
+	 * @since 3.5.1
+	 */
+	public void setPkModifiable(boolean pkModifiable) {
+		table.setPkModifiable(pkModifiable);
+	}
+
+	/**
+	 * Is value validation against column types enabled
+	 * 
+	 * @return true if values are validated against column types
+	 * @since 3.5.1
+	 */
+	public boolean isValueValidation() {
+		return table.isValueValidation();
+	}
+
+	/**
+	 * Set if values should validated against column types
+	 * 
+	 * @param valueValidation
+	 *            value validation flag
+	 * @since 3.5.1
+	 */
+	public void setValueValidation(boolean valueValidation) {
+		table.setValueValidation(valueValidation);
+	}
+
+	/**
 	 * Drop the user table
 	 */
 	public void dropTable() {

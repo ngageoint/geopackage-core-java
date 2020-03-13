@@ -368,16 +368,15 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		Object objectValue = getValue(index);
 		if (objectValue == null) {
 			throw new GeoPackageException("Row Id was null. table: "
-					+ columns.getTableName() + ", index: " + index
-					+ ", name: " + getPkColumn().getName());
+					+ columns.getTableName() + ", index: " + index + ", name: "
+					+ getPkColumn().getName());
 		}
 		if (objectValue instanceof Number) {
 			id = ((Number) objectValue).longValue();
 		} else {
 			throw new GeoPackageException("Row Id was not a number. table: "
-					+ columns.getTableName() + ", index: " + index
-					+ ", name: " + getPkColumn().getName() + ", value: "
-					+ objectValue);
+					+ columns.getTableName() + ", index: " + index + ", name: "
+					+ getPkColumn().getName() + ", value: " + objectValue);
 		}
 
 		return id;
@@ -435,7 +434,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 *            value
 	 */
 	public void setValue(int index, Object value) {
-		if (index == columns.getPkColumnIndex()) {
+		if (index == columns.getPkColumnIndex() && !columns.isPkModifiable()) {
 			throw new GeoPackageException(
 					"Can not update the primary key of the row. Table Name: "
 							+ table.getTableName() + ", Index: " + index
@@ -460,10 +459,30 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * Set the id, package access only for the DAO
 	 * 
 	 * @param id
+	 *            id value
+	 * @since 3.5.1
 	 */
-	void setId(long id) {
+	public void setId(long id) {
+		setId(id, columns.isPkModifiable());
+	}
+
+	/**
+	 * Set the id and optionally validate
+	 * 
+	 * @param id
+	 *            id value
+	 * @param pkModifiable
+	 *            primary key modifiable
+	 */
+	void setId(long id, boolean pkModifiable) {
 		int index = getPkColumnIndex();
 		if (index >= 0) {
+			if (!pkModifiable) {
+				throw new GeoPackageException(
+						"Can not update the primary key of the row. Table Name: "
+								+ table.getTableName() + ", Index: " + index
+								+ ", Name: " + table.getPkColumn().getName());
+			}
 			values[index] = id;
 		}
 	}
@@ -489,22 +508,26 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	protected void validateValue(TColumn column, Object value,
 			Class<?>... valueTypes) {
 
-		GeoPackageDataType dataType = column.getDataType();
-		Class<?> dataTypeClass = dataType.getClassType();
+		if (columns.isValueValidation()) {
 
-		boolean valid = false;
-		for (Class<?> valueType : valueTypes) {
-			if (valueType.equals(dataTypeClass)) {
-				valid = true;
-				break;
+			GeoPackageDataType dataType = column.getDataType();
+			Class<?> dataTypeClass = dataType.getClassType();
+
+			boolean valid = false;
+			for (Class<?> valueType : valueTypes) {
+				if (valueType.equals(dataTypeClass)) {
+					valid = true;
+					break;
+				}
 			}
-		}
 
-		if (!valid) {
-			throw new GeoPackageException("Illegal value. Column: "
-					+ column.getName() + ", Value: " + value
-					+ ", Expected Type: " + dataTypeClass.getSimpleName()
-					+ ", Actual Type: " + valueTypes[0].getSimpleName());
+			if (!valid) {
+				throw new GeoPackageException("Illegal value. Column: "
+						+ column.getName() + ", Value: " + value
+						+ ", Expected Type: " + dataTypeClass.getSimpleName()
+						+ ", Actual Type: " + valueTypes[0].getSimpleName());
+			}
+
 		}
 
 	}
