@@ -325,7 +325,19 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult query() {
-		return query(table.getColumnNames());
+		return query(false);
+	}
+
+	/**
+	 * Query for all rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct) {
+		return query(distinct, table.getColumnNames());
 	}
 
 	/**
@@ -338,8 +350,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult query(String[] columns) {
-		TResult result = userDb.query(getTableName(), columns, null, null, null,
-				null, null);
+		return query(false, columns);
+	}
+
+	/**
+	 * Query for all rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * 
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns) {
+		TResult result = userDb.query(distinct, getTableName(), columns, null,
+				null, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -355,7 +382,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult queryAs(String[] columnsAs) {
-		return query(table.getColumnNames(), columnsAs);
+		return queryAs(false, columnsAs);
+	}
+
+	/**
+	 * Query for all rows with "columns as" values for corresponding column
+	 * indices. Non null values in the array will be used as "as" values for the
+	 * corresponding column.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columnsAs
+	 *            columns as values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryAs(boolean distinct, String[] columnsAs) {
+		return query(distinct, table.getColumnNames(), columnsAs);
 	}
 
 	/**
@@ -371,8 +414,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult query(String[] columns, String[] columnsAs) {
-		TResult result = userDb.query(getTableName(), columns, columnsAs, null,
-				null, null, null, null);
+		return query(false, columns, columnsAs);
+	}
+
+	/**
+	 * Query for all rows with "columns as" values for corresponding column
+	 * indices. Non null values in the array will be used as "as" values for the
+	 * corresponding column.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns,
+			String[] columnsAs) {
+		TResult result = userDb.query(distinct, getTableName(), columns,
+				columnsAs, null, null, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -384,7 +446,19 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String querySQL() {
-		return querySQL(table.getColumnNames());
+		return querySQL(false);
+	}
+
+	/**
+	 * Query SQL for all rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String querySQL(boolean distinct) {
+		return querySQL(distinct, table.getColumnNames());
 	}
 
 	/**
@@ -394,7 +468,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String queryIdsSQL() {
-		return querySQL(new String[] { table.getPkColumn().getName() });
+		return queryIdsSQL(false);
+	}
+
+	/**
+	 * Query SQL for all row ids
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String queryIdsSQL(boolean distinct) {
+		return querySQL(distinct,
+				new String[] { table.getPkColumn().getName() });
 	}
 
 	/**
@@ -406,8 +493,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String querySQL(String[] columns) {
-		return userDb.querySQL(getTableName(), columns, null, null, null, null,
-				null, null);
+		return querySQL(false, columns);
+	}
+
+	/**
+	 * Query SQL for all rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String querySQL(boolean distinct, String[] columns) {
+		return userDb.querySQL(distinct, getTableName(), columns, null, null,
+				null, null, null, null);
 	}
 
 	/**
@@ -420,7 +521,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, Object value) {
-		return queryForEq(table.getColumnNames(), fieldName, value);
+		return queryForEq(false, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String fieldName,
+			Object value) {
+		return queryForEq(distinct, table.getColumnNames(), fieldName, value);
 	}
 
 	/**
@@ -437,7 +555,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForEq(String[] columns, String fieldName,
 			Object value) {
-		return queryForEq(columns, fieldName, value, null, null, null);
+		return queryForEq(false, columns, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String[] columns,
+			String fieldName, Object value) {
+		return queryForEq(distinct, columns, fieldName, value, null, null,
+				null);
 	}
 
 	/**
@@ -471,8 +609,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForEq(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
-		return queryForEq(table.getColumnNames(), fieldName, value, groupBy,
-				having, orderBy);
+		return queryForEq(false, fieldName, value, groupBy, having, orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String fieldName, Object value,
+			String groupBy, String having, String orderBy) {
+		return queryForEq(distinct, table.getColumnNames(), fieldName, value,
+				groupBy, having, orderBy);
 	}
 
 	/**
@@ -495,10 +656,37 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForEq(String[] columns, String fieldName, Object value,
 			String groupBy, String having, String orderBy) {
+		return queryForEq(false, columns, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String[] columns,
+			String fieldName, Object value, String groupBy, String having,
+			String orderBy) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				groupBy, having, orderBy);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
 	}
@@ -536,7 +724,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForEq(String fieldName, ColumnValue value) {
-		return queryForEq(table.getColumnNames(), fieldName, value);
+		return queryForEq(false, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String fieldName,
+			ColumnValue value) {
+		return queryForEq(distinct, table.getColumnNames(), fieldName, value);
 	}
 
 	/**
@@ -553,10 +758,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForEq(String[] columns, String fieldName,
 			ColumnValue value) {
+		return queryForEq(false, columns, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForEq(boolean distinct, String[] columns,
+			String fieldName, ColumnValue value) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -589,7 +813,25 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 
 	public TResult queryForLike(String fieldName, Object value) {
-		return queryForLike(table.getColumnNames(), fieldName, value);
+		return queryForLike(false, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.1
+	 */
+
+	public TResult queryForLike(boolean distinct, String fieldName,
+			Object value) {
+		return queryForLike(distinct, table.getColumnNames(), fieldName, value);
 	}
 
 	/**
@@ -607,7 +849,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 
 	public TResult queryForLike(String[] columns, String fieldName,
 			Object value) {
-		return queryForLike(columns, fieldName, value, null, null, null);
+		return queryForLike(false, columns, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return result
+	 * @since 3.5.1
+	 */
+
+	public TResult queryForLike(boolean distinct, String[] columns,
+			String fieldName, Object value) {
+		return queryForLike(distinct, columns, fieldName, value, null, null,
+				null);
 	}
 
 	/**
@@ -643,8 +906,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForLike(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
-		return queryForLike(table.getColumnNames(), fieldName, value, groupBy,
-				having, orderBy);
+		return queryForLike(false, fieldName, value, groupBy, having, orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForLike(boolean distinct, String fieldName,
+			Object value, String groupBy, String having, String orderBy) {
+		return queryForLike(distinct, table.getColumnNames(), fieldName, value,
+				groupBy, having, orderBy);
 	}
 
 	/**
@@ -667,10 +953,37 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForLike(String[] columns, String fieldName,
 			Object value, String groupBy, String having, String orderBy) {
+		return queryForLike(false, columns, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Query for the row where the field equals the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForLike(boolean distinct, String[] columns,
+			String fieldName, Object value, String groupBy, String having,
+			String orderBy) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				groupBy, having, orderBy);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
 	}
@@ -709,7 +1022,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.0.1
 	 */
 	public TResult queryForLike(String fieldName, ColumnValue value) {
-		return queryForLike(table.getColumnNames(), fieldName, value);
+		return queryForLike(false, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForLike(boolean distinct, String fieldName,
+			ColumnValue value) {
+		return queryForLike(distinct, table.getColumnNames(), fieldName, value);
 	}
 
 	/**
@@ -726,10 +1056,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForLike(String[] columns, String fieldName,
 			ColumnValue value) {
+		return queryForLike(false, columns, fieldName, value);
+	}
+
+	/**
+	 * Query for the row where the field is like the value
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForLike(boolean distinct, String[] columns,
+			String fieldName, ColumnValue value) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -758,7 +1107,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForFieldValues(Map<String, Object> fieldValues) {
-		return queryForFieldValues(table.getColumnNames(), fieldValues);
+		return queryForFieldValues(false, fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForFieldValues(boolean distinct,
+			Map<String, Object> fieldValues) {
+		return queryForFieldValues(distinct, table.getColumnNames(),
+				fieldValues);
 	}
 
 	/**
@@ -773,10 +1138,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForFieldValues(String[] columns,
 			Map<String, Object> fieldValues) {
+		return queryForFieldValues(false, columns, fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForFieldValues(boolean distinct, String[] columns,
+			Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -804,7 +1186,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForValueFieldValues(
 			Map<String, ColumnValue> fieldValues) {
-		return queryForValueFieldValues(table.getColumnNames(), fieldValues);
+		return queryForValueFieldValues(false, fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForValueFieldValues(boolean distinct,
+			Map<String, ColumnValue> fieldValues) {
+		return queryForValueFieldValues(distinct, table.getColumnNames(),
+				fieldValues);
 	}
 
 	/**
@@ -819,10 +1217,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForValueFieldValues(String[] columns,
 			Map<String, ColumnValue> fieldValues) {
+		return queryForValueFieldValues(false, columns, fieldValues);
+	}
+
+	/**
+	 * Query for the row where all fields match their values
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForValueFieldValues(boolean distinct, String[] columns,
+			Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
 		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -849,7 +1264,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult queryForId(long id) {
-		return queryForId(table.getColumnNames(), id);
+		return queryForId(false, id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param id
+	 *            id
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForId(boolean distinct, long id) {
+		return queryForId(distinct, table.getColumnNames(), id);
 	}
 
 	/**
@@ -863,10 +1292,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult queryForId(String[] columns, long id) {
+		return queryForId(false, columns, id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param id
+	 *            id
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForId(boolean distinct, String[] columns, long id) {
 		String where = getPkWhere(id);
 		String[] whereArgs = getPkWhereArgs(id);
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -879,7 +1324,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return row
 	 */
 	public TRow queryForIdRow(long id) {
-		return queryForIdRow(table.getColumnNames(), id);
+		return queryForIdRow(false, id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param id
+	 *            id
+	 * @return row
+	 * @since 3.5.1
+	 */
+	public TRow queryForIdRow(boolean distinct, long id) {
+		return queryForIdRow(distinct, table.getColumnNames(), id);
 	}
 
 	/**
@@ -893,8 +1352,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TRow queryForIdRow(String[] columns, long id) {
+		return queryForIdRow(false, columns, id);
+	}
+
+	/**
+	 * Query for the row with the provided id
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param id
+	 *            id
+	 * @return row
+	 * @since 3.5.1
+	 */
+	public TRow queryForIdRow(boolean distinct, String[] columns, long id) {
 		TRow row = null;
-		TResult readCursor = queryForId(columns, id);
+		TResult readCursor = queryForId(distinct, columns, id);
 		if (readCursor.moveToNext()) {
 			row = readCursor.getRow();
 		}
@@ -911,7 +1386,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL) {
-		return queryIn(table.getColumnNames(), nestedSQL);
+		return queryIn(false, nestedSQL);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL);
 	}
 
 	/**
@@ -925,7 +1414,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL) {
-		return queryIn(columns, nestedSQL, null, null, null);
+		return queryIn(false, columns, nestedSQL);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns,
+			String nestedSQL) {
+		return queryIn(distinct, columns, nestedSQL, null, null, null);
 	}
 
 	/**
@@ -951,7 +1457,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs) {
-		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs);
+		return queryIn(false, nestedSQL, nestedArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL,
+			String[] nestedArgs) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, nestedArgs);
 	}
 
 	/**
@@ -968,7 +1491,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL,
 			String[] nestedArgs) {
-		return queryIn(columns, nestedSQL, nestedArgs, null, null);
+		return queryIn(false, columns, nestedSQL, nestedArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String[] nestedArgs) {
+		return queryIn(distinct, columns, nestedSQL, nestedArgs, null, null);
 	}
 
 	/**
@@ -982,6 +1524,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs) {
+		return countIn(false, nestedSQL, nestedArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String nestedSQL,
+			String[] nestedArgs) {
 		return countIn(nestedSQL, nestedArgs, null, null);
 	}
 
@@ -996,7 +1555,25 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, Map<String, Object> fieldValues) {
-		return queryIn(table.getColumnNames(), nestedSQL, fieldValues);
+		return queryIn(false, nestedSQL, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL,
+			Map<String, Object> fieldValues) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL,
+				fieldValues);
 	}
 
 	/**
@@ -1013,7 +1590,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL,
 			Map<String, Object> fieldValues) {
-		return queryIn(columns, nestedSQL, null, fieldValues);
+		return queryIn(false, columns, nestedSQL, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			Map<String, Object> fieldValues) {
+		return queryIn(distinct, columns, nestedSQL, null, fieldValues);
 	}
 
 	/**
@@ -1044,7 +1640,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
-		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs,
+		return queryIn(false, nestedSQL, nestedArgs, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, nestedArgs,
 				fieldValues);
 	}
 
@@ -1064,9 +1679,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL,
 			String[] nestedArgs, Map<String, Object> fieldValues) {
+		return queryIn(false, columns, nestedSQL, nestedArgs, fieldValues);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		return queryIn(columns, nestedSQL, nestedArgs, where, whereArgs);
+		return queryIn(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs);
 	}
 
 	/**
@@ -1102,7 +1739,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs,
 			String where) {
-		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs, where);
+		return queryIn(false, nestedSQL, nestedArgs, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, nestedArgs,
+				where);
 	}
 
 	/**
@@ -1121,7 +1778,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL,
 			String[] nestedArgs, String where) {
-		return queryIn(columns, nestedSQL, nestedArgs, where, null);
+		return queryIn(false, columns, nestedSQL, nestedArgs, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String[] nestedArgs, String where) {
+		return queryIn(distinct, columns, nestedSQL, nestedArgs, where, null);
 	}
 
 	/**
@@ -1151,7 +1829,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where) {
-		return queryIn(table.getColumnNames(), nestedSQL, where);
+		return queryIn(false, nestedSQL, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL, String where) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, where);
 	}
 
 	/**
@@ -1167,7 +1861,26 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL, String where) {
-		return queryIn(columns, nestedSQL, null, where, null);
+		return queryIn(false, columns, nestedSQL, where);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String where) {
+		return queryIn(distinct, columns, nestedSQL, null, where, null);
 	}
 
 	/**
@@ -1197,7 +1910,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult queryIn(String nestedSQL, String where, String[] whereArgs) {
-		return queryIn(table.getColumnNames(), nestedSQL, where, whereArgs);
+		return queryIn(false, nestedSQL, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL, String where,
+			String[] whereArgs) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, where,
+				whereArgs);
 	}
 
 	/**
@@ -1216,7 +1949,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL, String where,
 			String[] whereArgs) {
-		return queryIn(columns, nestedSQL, null, where, whereArgs);
+		return queryIn(false, columns, nestedSQL, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String where, String[] whereArgs) {
+		return queryIn(distinct, columns, nestedSQL, null, where, whereArgs);
 	}
 
 	/**
@@ -1251,8 +2005,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
-		return queryIn(table.getColumnNames(), nestedSQL, nestedArgs, where,
-				whereArgs);
+		return queryIn(false, nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs) {
+		return queryIn(distinct, table.getColumnNames(), nestedSQL, nestedArgs,
+				where, whereArgs);
 	}
 
 	/**
@@ -1273,9 +2048,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryIn(String[] columns, String nestedSQL,
 			String[] nestedArgs, String where, String[] whereArgs) {
+		return queryIn(false, columns, nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
+	 * Query for ids in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs) {
 		String whereClause = buildWhereIn(nestedSQL, where);
 		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
-		return query(columns, whereClause, args);
+		return query(distinct, columns, whereClause, args);
 	}
 
 	/**
@@ -1308,7 +2106,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public TResult query(String where) {
-		return query(table.getColumnNames(), where);
+		return query(false, where);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String where) {
+		return query(distinct, table.getColumnNames(), where);
 	}
 
 	/**
@@ -1322,7 +2134,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult query(String[] columns, String where) {
-		return query(columns, where, null);
+		return query(false, columns, where);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns, String where) {
+		return query(distinct, columns, where, null);
 	}
 
 	/**
@@ -1335,7 +2163,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 */
 	public TResult query(String where, String[] whereArgs) {
-		return query(table.getColumnNames(), where, whereArgs);
+		return query(false, where, whereArgs);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String where, String[] whereArgs) {
+		return query(distinct, table.getColumnNames(), where, whereArgs);
 	}
 
 	/**
@@ -1351,8 +2195,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult query(String[] columns, String where, String[] whereArgs) {
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				null, null, null);
+		return query(false, columns, where, whereArgs);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns, String where,
+			String[] whereArgs) {
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, null, null, null);
 		prepareResult(result);
 		return result;
 	}
@@ -1366,7 +2229,21 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String querySQL(String where) {
-		return querySQL(table.getColumnNames(), where);
+		return querySQL(false, where);
+	}
+
+	/**
+	 * Query SQL for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String querySQL(boolean distinct, String where) {
+		return querySQL(distinct, table.getColumnNames(), where);
 	}
 
 	/**
@@ -1378,7 +2255,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String queryIdsSQL(String where) {
-		return querySQL(new String[] { table.getPkColumn().getName() }, where);
+		return queryIdsSQL(false, where);
+	}
+
+	/**
+	 * Query SQL for row ids
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String queryIdsSQL(boolean distinct, String where) {
+		return querySQL(distinct,
+				new String[] { table.getPkColumn().getName() }, where);
 	}
 
 	/**
@@ -1392,8 +2284,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public String querySQL(String[] columns, String where) {
-		return userDb.querySQL(getTableName(), columns, where, null, null,
-				null);
+		return querySQL(false, columns, where);
+	}
+
+	/**
+	 * Query SQL for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public String querySQL(boolean distinct, String[] columns, String where) {
+		return userDb.querySQL(distinct, getTableName(), columns, where, null,
+				null, null);
 	}
 
 	/**
@@ -1413,8 +2321,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy) {
-		return query(table.getColumnNames(), where, whereArgs, groupBy, having,
-				orderBy);
+		return query(false, where, whereArgs, groupBy, having, orderBy);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy) {
+		return query(distinct, table.getColumnNames(), where, whereArgs,
+				groupBy, having, orderBy);
 	}
 
 	/**
@@ -1437,8 +2368,34 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String[] columns, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy) {
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				groupBy, having, orderBy);
+		return query(false, columns, where, whereArgs, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy) {
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, groupBy, having, orderBy);
 		prepareResult(result);
 		return result;
 	}
@@ -1462,8 +2419,33 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String where, String[] whereArgs, String groupBy,
 			String having, String orderBy, String limit) {
-		return query(table.getColumnNames(), where, whereArgs, groupBy, having,
-				orderBy, limit);
+		return query(false, where, whereArgs, groupBy, having, orderBy, limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, String limit) {
+		return query(distinct, table.getColumnNames(), where, whereArgs,
+				groupBy, having, orderBy, limit);
 	}
 
 	/**
@@ -1488,8 +2470,37 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult query(String[] columns, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy, String limit) {
-		TResult result = userDb.query(getTableName(), columns, where, whereArgs,
-				groupBy, having, orderBy, limit);
+		return query(false, columns, where, whereArgs, groupBy, having, orderBy,
+				limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult query(boolean distinct, String[] columns, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			String limit) {
+		TResult result = userDb.query(distinct, getTableName(), columns, where,
+				whereArgs, groupBy, having, orderBy, limit);
 		prepareResult(result);
 		return result;
 	}
@@ -1506,7 +2517,24 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(int limit, long offset) {
-		return queryForChunk(table.getColumnNames(), limit, offset);
+		return queryForChunk(false, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, int limit, long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), limit, offset);
 	}
 
 	/**
@@ -1523,7 +2551,27 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public TResult queryForChunk(String[] columns, int limit, long offset) {
-		return queryForChunk(columns, null, null, limit, offset);
+		return queryForChunk(false, columns, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns, int limit,
+			long offset) {
+		return queryForChunk(distinct, columns, null, null, limit, offset);
 	}
 
 	/**
@@ -1543,8 +2591,30 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs, int limit,
 			long offset) {
-		return queryForChunk(table.getColumnNames(), where, whereArgs, limit,
-				offset);
+		return queryForChunk(false, where, whereArgs, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String where,
+			String[] whereArgs, int limit, long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), where, whereArgs,
+				limit, offset);
 	}
 
 	/**
@@ -1566,7 +2636,31 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String[] columns, String where,
 			String[] whereArgs, int limit, long offset) {
-		return queryForChunk(columns, where, whereArgs,
+		return queryForChunk(false, columns, where, whereArgs, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows starting at the offset and returning no more
+	 * than the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, int limit, long offset) {
+		return queryForChunk(distinct, columns, where, whereArgs,
 				table.getPkColumn().getName(), limit, offset);
 	}
 
@@ -1584,7 +2678,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.1.0
 	 */
 	public TResult queryForChunk(String orderBy, int limit, long offset) {
-		return queryForChunk(table.getColumnNames(), orderBy, limit, offset);
+		return queryForChunk(false, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String orderBy, int limit,
+			long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), orderBy, limit,
+				offset);
 	}
 
 	/**
@@ -1604,7 +2719,30 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String[] columns, String orderBy, int limit,
 			long offset) {
-		return queryForChunk(columns, null, null, orderBy, limit, offset);
+		return queryForChunk(false, columns, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String orderBy, int limit, long offset) {
+		return queryForChunk(distinct, columns, null, null, orderBy, limit,
+				offset);
 	}
 
 	/**
@@ -1626,8 +2764,32 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String orderBy, int limit, long offset) {
-		return queryForChunk(table.getColumnNames(), where, whereArgs, orderBy,
-				limit, offset);
+		return queryForChunk(false, where, whereArgs, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String where,
+			String[] whereArgs, String orderBy, int limit, long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), where, whereArgs,
+				orderBy, limit, offset);
 	}
 
 	/**
@@ -1651,8 +2813,36 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(String[] columns, String where,
 			String[] whereArgs, String orderBy, int limit, long offset) {
-		return queryForChunk(columns, where, whereArgs, null, null, orderBy,
-				limit, offset);
+		return queryForChunk(false, columns, where, whereArgs, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, String orderBy, int limit,
+			long offset) {
+		return queryForChunk(distinct, columns, where, whereArgs, null, null,
+				orderBy, limit, offset);
 	}
 
 	/**
@@ -1679,8 +2869,38 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForChunk(String where, String[] whereArgs,
 			String groupBy, String having, String orderBy, int limit,
 			long offset) {
-		return queryForChunk(table.getColumnNames(), where, whereArgs, groupBy,
-				having, orderBy, limit, offset);
+		return queryForChunk(false, where, whereArgs, groupBy, having, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), where, whereArgs,
+				groupBy, having, orderBy, limit, offset);
 	}
 
 	/**
@@ -1709,8 +2929,40 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForChunk(String[] columns, String where,
 			String[] whereArgs, String groupBy, String having, String orderBy,
 			int limit, long offset) {
-		return query(columns, where, whereArgs, groupBy, having, orderBy,
-				buildLimit(limit, offset));
+		return queryForChunk(false, columns, where, whereArgs, groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return query(distinct, columns, where, whereArgs, groupBy, having,
+				orderBy, buildLimit(limit, offset));
 	}
 
 	/**

@@ -57,6 +57,33 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Query the given table, returning a {@link UserCoreResult} over the result
 	 * set.
 	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param selectionArgs
+	 *            selection arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public abstract TResult query(boolean distinct, String table,
+			String[] columns, String selection, String[] selectionArgs,
+			String groupBy, String having, String orderBy);
+
+	/**
+	 * Query the given table, returning a {@link UserCoreResult} over the result
+	 * set.
+	 * 
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -79,6 +106,36 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	public abstract TResult query(String table, String[] columns,
 			String[] columnsAs, String selection, String[] selectionArgs,
 			String groupBy, String having, String orderBy);
+
+	/**
+	 * Query the given table, returning a {@link UserCoreResult} over the result
+	 * set.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param selectionArgs
+	 *            selection arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public abstract TResult query(boolean distinct, String table,
+			String[] columns, String[] columnsAs, String selection,
+			String[] selectionArgs, String groupBy, String having,
+			String orderBy);
 
 	/**
 	 * Query the given URL, returning a {@link UserCoreResult} over the result
@@ -110,6 +167,35 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Query the given URL, returning a {@link UserCoreResult} over the result
 	 * set.
 	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param selectionArgs
+	 *            selection arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public abstract TResult query(boolean distinct, String table,
+			String[] columns, String selection, String[] selectionArgs,
+			String groupBy, String having, String orderBy, String limit);
+
+	/**
+	 * Query the given URL, returning a {@link UserCoreResult} over the result
+	 * set.
+	 * 
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -136,6 +222,38 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 			String groupBy, String having, String orderBy, String limit);
 
 	/**
+	 * Query the given URL, returning a {@link UserCoreResult} over the result
+	 * set.
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param selectionArgs
+	 *            selection arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return result
+	 * @since 3.5.1
+	 */
+	public abstract TResult query(boolean distinct, String table,
+			String[] columns, String[] columnsAs, String selection,
+			String[] selectionArgs, String groupBy, String having,
+			String orderBy, String limit);
+
+	/**
 	 * Build the query SQL
 	 * 
 	 * @param table
@@ -155,6 +273,30 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 */
 	public abstract String querySQL(String table, String[] columns,
 			String selection, String groupBy, String having, String orderBy);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public abstract String querySQL(boolean distinct, String table,
+			String[] columns, String selection, String groupBy, String having,
+			String orderBy);
 
 	/**
 	 * Build the query SQL
@@ -183,6 +325,32 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	/**
 	 * Build the query SQL
 	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public abstract String querySQL(boolean distinct, String table,
+			String[] columns, String[] columnsAs, String selection,
+			String groupBy, String having, String orderBy);
+
+	/**
+	 * Build the query SQL
+	 * 
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -203,6 +371,32 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	public abstract String querySQL(String table, String[] columns,
 			String selection, String groupBy, String having, String orderBy,
 			String limit);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public abstract String querySQL(boolean distinct, String table,
+			String[] columns, String selection, String groupBy, String having,
+			String orderBy, String limit);
 
 	/**
 	 * Build the query SQL
@@ -229,5 +423,33 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	public abstract String querySQL(String table, String[] columns,
 			String[] columnsAs, String selection, String groupBy, String having,
 			String orderBy, String limit);
+
+	/**
+	 * Build the query SQL
+	 * 
+	 * @param distinct
+	 *            true if you want each row to be unique, false otherwise
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            columns
+	 * @param columnsAs
+	 *            columns as values
+	 * @param selection
+	 *            selection
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            query limit
+	 * @return SQL
+	 * @since 3.5.1
+	 */
+	public abstract String querySQL(boolean distinct, String table,
+			String[] columns, String[] columnsAs, String selection,
+			String groupBy, String having, String orderBy, String limit);
 
 }

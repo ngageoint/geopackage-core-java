@@ -7,6 +7,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 3.5.1 (TBD)
 
 * DAO options to enable modifying row ids or disable column value type validation
+* Distinct select statement queries
 
 ## [3.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.5.0) (03-10-2020)
 
