@@ -226,13 +226,118 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * 
 	 * @param table
 	 *            table name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String table) {
+		return count(table, null, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 *            table name
 	 * @param where
 	 *            where clause
 	 * @param args
 	 *            arguments
 	 * @return count
 	 */
-	public abstract int count(String table, String where, String[] args);
+	public int count(String table, String where, String[] args) {
+		return count(table, null, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String table, String column) {
+		return count(table, false, column);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 *            table name
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String table, boolean distinct, String column) {
+		return count(table, distinct, column, null, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String table, String column, String where, String[] args) {
+		return count(table, false, column, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param table
+	 *            table name
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String table, boolean distinct, String column,
+			String where, String[] args) {
+
+		int count = 0;
+		Object value = aggregateFunction("COUNT", table, distinct, column,
+				where, args);
+		if (value != null) {
+			count = ((Number) value).intValue();
+		}
+
+		return count;
+	}
+
+	/**
+	 * Get the min result of the column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @return min or null
+	 * @since 3.5.1
+	 */
+	public Object min(String table, String column) {
+		return min(table, column, null, null);
+	}
 
 	/**
 	 * Get the min result of the column
@@ -246,10 +351,26 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            where arguments
 	 * @return min or null
-	 * @since 1.1.1
+	 * @since 3.5.1
 	 */
-	public abstract Integer min(String table, String column, String where,
-			String[] args);
+	public Object min(String table, String column, String where,
+			String[] args) {
+		return aggregateFunction("MIN", table, column, where, args);
+	}
+
+	/**
+	 * Get the max result of the column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @return max or null
+	 * @since 3.5.1
+	 */
+	public Object max(String table, String column) {
+		return max(table, column, null, null);
+	}
 
 	/**
 	 * Get the max result of the column
@@ -263,10 +384,114 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            where arguments
 	 * @return max or null
-	 * @since 1.1.1
+	 * @since 3.5.1
 	 */
-	public abstract Integer max(String table, String column, String where,
-			String[] args);
+	public Object max(String table, String column, String where,
+			String[] args) {
+		return aggregateFunction("MAX", table, column, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param function
+	 *            aggregate function
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public Object aggregateFunction(String function, String table,
+			String column) {
+		return aggregateFunction(function, table, false, column);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param function
+	 *            aggregate function
+	 * @param table
+	 *            table name
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public Object aggregateFunction(String function, String table,
+			boolean distinct, String column) {
+		return aggregateFunction(function, table, distinct, column, null, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param function
+	 *            aggregate function
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public Object aggregateFunction(String function, String table,
+			String column, String where, String[] args) {
+		return aggregateFunction(function, table, false, column, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param function
+	 *            aggregate function
+	 * @param table
+	 *            table name
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public Object aggregateFunction(String function, String table,
+			boolean distinct, String column, String where, String[] args) {
+
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT ");
+		query.append(function);
+		query.append("(");
+		if (column != null) {
+			if (distinct) {
+				query.append("DISTINCT ");
+			}
+			query.append(CoreSQLUtils.quoteWrap(column));
+		} else {
+			query.append("*");
+		}
+		query.append(") FROM ");
+		query.append(CoreSQLUtils.quoteWrap(table));
+		if (where != null) {
+			query.append(" WHERE ").append(where);
+		}
+		String sql = query.toString();
+
+		Object value = querySingleResult(sql, args);
+
+		return value;
+	}
 
 	/**
 	 * {@inheritDoc}

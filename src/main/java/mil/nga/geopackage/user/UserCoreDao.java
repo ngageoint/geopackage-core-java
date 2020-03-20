@@ -3470,7 +3470,80 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 */
 	public int count(String where, String[] args) {
-		return db.count(getTableName(), where, args);
+		return count(null, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countColumn(String column) {
+		return count(false, column);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(boolean distinct, String column) {
+		return count(distinct, column, null, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String column, String where, String[] args) {
+		return count(false, column, where, args);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param distinct
+	 *            distinct column flag
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @param args
+	 *            arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(boolean distinct, String column, String where,
+			String[] args) {
+		return db.count(getTableName(), distinct, column, where, args);
+	}
+
+	/**
+	 * Get the min result of the column
+	 * 
+	 * @param column
+	 *            column name
+	 * @return min or null
+	 * @since 3.5.1
+	 */
+	public Object min(String column) {
+		return min(column, null, null);
 	}
 
 	/**
@@ -3483,9 +3556,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            where arugments
 	 * @return min or null
+	 * @since 3.5.1
 	 */
-	public Integer min(String column, String where, String[] args) {
+	public Object min(String column, String where, String[] args) {
 		return db.min(getTableName(), column, where, args);
+	}
+
+	/**
+	 * Get the max result of the column
+	 * 
+	 * @param column
+	 *            column name
+	 * @return max or null
+	 * @since 3.5.1
+	 */
+	public Object max(String column) {
+		return max(column, null, null);
 	}
 
 	/**
@@ -3498,8 +3584,9 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            where arguments
 	 * @return max or null
+	 * @since 3.5.1
 	 */
-	public Integer max(String column, String where, String[] args) {
+	public Object max(String column, String where, String[] args) {
 		return db.max(getTableName(), column, where, args);
 	}
 
