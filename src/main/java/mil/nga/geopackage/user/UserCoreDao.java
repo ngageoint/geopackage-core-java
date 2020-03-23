@@ -3537,18 +3537,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	/**
 	 * Get the min result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param column
 	 *            column name
 	 * @return min or null
 	 * @since 3.5.1
 	 */
-	public Object min(String column) {
+	public <T> T min(String column) {
 		return min(column, null, null);
 	}
 
 	/**
 	 * Get the min result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param column
 	 *            column name
 	 * @param where
@@ -3558,25 +3562,29 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return min or null
 	 * @since 3.5.1
 	 */
-	public Object min(String column, String where, String[] args) {
+	public <T> T min(String column, String where, String[] args) {
 		return db.min(getTableName(), column, where, args);
 	}
 
 	/**
 	 * Get the max result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param column
 	 *            column name
 	 * @return max or null
 	 * @since 3.5.1
 	 */
-	public Object max(String column) {
+	public <T> T max(String column) {
 		return max(column, null, null);
 	}
 
 	/**
 	 * Get the max result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param column
 	 *            column name
 	 * @param where
@@ -3586,7 +3594,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return max or null
 	 * @since 3.5.1
 	 */
-	public Object max(String column, String where, String[] args) {
+	public <T> T max(String column, String where, String[] args) {
 		return db.max(getTableName(), column, where, args);
 	}
 

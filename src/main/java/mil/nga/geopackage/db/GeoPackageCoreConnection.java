@@ -316,10 +316,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 			String where, String[] args) {
 
 		int count = 0;
-		Object value = aggregateFunction("COUNT", table, distinct, column,
+		Number value = aggregateFunction("COUNT", table, distinct, column,
 				where, args);
 		if (value != null) {
-			count = ((Number) value).intValue();
+			count = value.intValue();
 		}
 
 		return count;
@@ -328,6 +328,8 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	/**
 	 * Get the min result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param table
 	 *            table name
 	 * @param column
@@ -335,13 +337,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return min or null
 	 * @since 3.5.1
 	 */
-	public Object min(String table, String column) {
+	public <T> T min(String table, String column) {
 		return min(table, column, null, null);
 	}
 
 	/**
 	 * Get the min result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param table
 	 *            table name
 	 * @param column
@@ -353,14 +357,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return min or null
 	 * @since 3.5.1
 	 */
-	public Object min(String table, String column, String where,
-			String[] args) {
+	public <T> T min(String table, String column, String where, String[] args) {
 		return aggregateFunction("MIN", table, column, where, args);
 	}
 
 	/**
 	 * Get the max result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param table
 	 *            table name
 	 * @param column
@@ -368,13 +373,15 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return max or null
 	 * @since 3.5.1
 	 */
-	public Object max(String table, String column) {
+	public <T> T max(String table, String column) {
 		return max(table, column, null, null);
 	}
 
 	/**
 	 * Get the max result of the column
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param table
 	 *            table name
 	 * @param column
@@ -386,31 +393,34 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return max or null
 	 * @since 3.5.1
 	 */
-	public Object max(String table, String column, String where,
-			String[] args) {
+	public <T> T max(String table, String column, String where, String[] args) {
 		return aggregateFunction("MAX", table, column, where, args);
 	}
 
 	/**
-	 * Get a count of results
+	 * Execute an aggregate function
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param function
 	 *            aggregate function
 	 * @param table
 	 *            table name
 	 * @param column
 	 *            column name
-	 * @return count
+	 * @return value or null
 	 * @since 3.5.1
 	 */
-	public Object aggregateFunction(String function, String table,
+	public <T> T aggregateFunction(String function, String table,
 			String column) {
 		return aggregateFunction(function, table, false, column);
 	}
 
 	/**
-	 * Get a count of results
+	 * Execute an aggregate function
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param function
 	 *            aggregate function
 	 * @param table
@@ -419,17 +429,19 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *            distinct column flag
 	 * @param column
 	 *            column name
-	 * @return count
+	 * @return value or null
 	 * @since 3.5.1
 	 */
-	public Object aggregateFunction(String function, String table,
+	public <T> T aggregateFunction(String function, String table,
 			boolean distinct, String column) {
 		return aggregateFunction(function, table, distinct, column, null, null);
 	}
 
 	/**
-	 * Get a count of results
+	 * Execute an aggregate function
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param function
 	 *            aggregate function
 	 * @param table
@@ -440,17 +452,19 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *            where clause
 	 * @param args
 	 *            arguments
-	 * @return count
+	 * @return value or null
 	 * @since 3.5.1
 	 */
-	public Object aggregateFunction(String function, String table,
-			String column, String where, String[] args) {
+	public <T> T aggregateFunction(String function, String table, String column,
+			String where, String[] args) {
 		return aggregateFunction(function, table, false, column, where, args);
 	}
 
 	/**
-	 * Get a count of results
+	 * Execute an aggregate function
 	 * 
+	 * @param <T>
+	 *            return type
 	 * @param function
 	 *            aggregate function
 	 * @param table
@@ -463,10 +477,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 *            where clause
 	 * @param args
 	 *            arguments
-	 * @return count
+	 * @return value or null
 	 * @since 3.5.1
 	 */
-	public Object aggregateFunction(String function, String table,
+	public <T> T aggregateFunction(String function, String table,
 			boolean distinct, String column, String where, String[] args) {
 
 		StringBuilder query = new StringBuilder();
@@ -490,7 +504,10 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 
 		Object value = querySingleResult(sql, args);
 
-		return value;
+		@SuppressWarnings("unchecked")
+		T typedValud = (T) value;
+
+		return typedValud;
 	}
 
 	/**
