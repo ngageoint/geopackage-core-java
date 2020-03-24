@@ -58,7 +58,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * set.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -112,7 +112,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * set.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -168,7 +168,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * set.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -226,7 +226,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * set.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -278,7 +278,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Build the query SQL
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -326,7 +326,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Build the query SQL
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -376,7 +376,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Build the query SQL
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns
@@ -428,7 +428,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * Build the query SQL
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param table
 	 *            table name
 	 * @param columns

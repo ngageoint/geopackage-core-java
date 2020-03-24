@@ -332,7 +332,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for all rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @return result
 	 * @since 3.5.1
 	 */
@@ -357,7 +357,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for all rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * 
@@ -391,7 +391,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * corresponding column.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columnsAs
 	 *            columns as values
 	 * @return result
@@ -423,7 +423,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * corresponding column.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param columnsAs
@@ -453,7 +453,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for all rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @return SQL
 	 * @since 3.5.1
 	 */
@@ -475,7 +475,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for all row ids
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @return SQL
 	 * @since 3.5.1
 	 */
@@ -500,7 +500,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for all rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @return SQL
@@ -528,7 +528,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -562,7 +562,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -589,7 +589,42 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public int countForEq(String fieldName, Object value) {
-		return countForEq(fieldName, value, null, null, null);
+		return countForEq(false, null, fieldName, value);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(String column, String fieldName, Object value) {
+		return countForEq(false, column, fieldName, value);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(boolean distinct, String column, String fieldName,
+			Object value) {
+		return countForEq(distinct, column, fieldName, value, null, null, null);
 	}
 
 	/**
@@ -616,7 +651,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -664,7 +699,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -709,9 +744,59 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int countForEq(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
+		return countForEq(false, null, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(String column, String fieldName, Object value,
+			String groupBy, String having, String orderBy) {
+		return countForEq(false, column, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(boolean distinct, String column, String fieldName,
+			Object value, String groupBy, String having, String orderBy) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -731,7 +816,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -765,7 +850,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -796,9 +881,44 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public int countForEq(String fieldName, ColumnValue value) {
+		return countForEq(false, null, fieldName, value);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(String column, String fieldName, ColumnValue value) {
+		return countForEq(false, column, fieldName, value);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForEq(boolean distinct, String column, String fieldName,
+			ColumnValue value) {
 		String where = buildWhere(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -820,7 +940,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field is like the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -856,7 +976,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field is like the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -885,7 +1005,45 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 
 	public int countForLike(String fieldName, Object value) {
-		return countForLike(fieldName, value, null, null, null);
+		return countForLike(false, null, fieldName, value);
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.1
+	 */
+
+	public int countForLike(String column, String fieldName, Object value) {
+		return countForLike(false, column, fieldName, value);
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @return count
+	 * @since 3.5.1
+	 */
+
+	public int countForLike(boolean distinct, String column, String fieldName,
+			Object value) {
+		return countForLike(distinct, column, fieldName, value, null, null,
+				null);
 	}
 
 	/**
@@ -913,7 +1071,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -961,7 +1119,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field equals the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -1006,9 +1164,59 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int countForLike(String fieldName, Object value, String groupBy,
 			String having, String orderBy) {
+		return countForLike(false, null, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForLike(String column, String fieldName, Object value,
+			String groupBy, String having, String orderBy) {
+		return countForLike(false, column, fieldName, value, groupBy, having,
+				orderBy);
+	}
+
+	/**
+	 * Count where the field equals the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            value
+	 * @param groupBy
+	 *            group by statement
+	 * @param having
+	 *            having statement
+	 * @param orderBy
+	 *            order by statement
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForLike(boolean distinct, String column, String fieldName,
+			Object value, String groupBy, String having, String orderBy) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -1029,7 +1237,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field is like the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldName
 	 *            field name
 	 * @param value
@@ -1063,7 +1271,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where the field is like the value
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldName
@@ -1094,9 +1302,45 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public int countForLike(String fieldName, ColumnValue value) {
+		return countForLike(false, null, fieldName, value);
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForLike(String column, String fieldName,
+			ColumnValue value) {
+		return countForLike(false, column, fieldName, value);
+	}
+
+	/**
+	 * Count where the field is like the value
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldName
+	 *            field name
+	 * @param value
+	 *            column value
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForLike(boolean distinct, String column, String fieldName,
+			ColumnValue value) {
 		String where = buildWhereLike(fieldName, value);
 		String[] whereArgs = buildWhereArgs(value);
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -1114,7 +1358,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldValues
 	 *            field values
 	 * @return result
@@ -1145,7 +1389,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldValues
@@ -1172,9 +1416,41 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public int countForFieldValues(Map<String, Object> fieldValues) {
+		return countForFieldValues(false, null, fieldValues);
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForFieldValues(String column,
+			Map<String, Object> fieldValues) {
+		return countForFieldValues(false, column, fieldValues);
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForFieldValues(boolean distinct, String column,
+			Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -1193,7 +1469,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param fieldValues
 	 *            field values
 	 * @return result
@@ -1224,7 +1500,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row where all fields match their values
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param fieldValues
@@ -1251,9 +1527,41 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.5.0
 	 */
 	public int countForValueFieldValues(Map<String, ColumnValue> fieldValues) {
+		return countForValueFieldValues(false, null, fieldValues);
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForValueFieldValues(String column,
+			Map<String, ColumnValue> fieldValues) {
+		return countForValueFieldValues(false, column, fieldValues);
+	}
+
+	/**
+	 * Count where all fields match their values
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countForValueFieldValues(boolean distinct, String column,
+			Map<String, ColumnValue> fieldValues) {
 		String where = buildValueWhere(fieldValues.entrySet());
 		String[] whereArgs = buildValueWhereArgs(fieldValues.values());
-		return count(where, whereArgs);
+		return count(distinct, column, where, whereArgs);
 	}
 
 	/**
@@ -1271,7 +1579,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param id
 	 *            id
 	 * @return result
@@ -1299,7 +1607,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param id
@@ -1331,7 +1639,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param id
 	 *            id
 	 * @return row
@@ -1359,7 +1667,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for the row with the provided id
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param id
@@ -1393,7 +1701,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return result
@@ -1421,7 +1729,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1443,7 +1751,37 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL) {
-		return countIn(nestedSQL, null, null, null);
+		return countIn(false, null, nestedSQL);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countColumnIn(String column, String nestedSQL) {
+		return countIn(false, column, nestedSQL);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL) {
+		return countIn(distinct, column, nestedSQL, null, null, null);
 	}
 
 	/**
@@ -1464,7 +1802,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param nestedArgs
@@ -1498,7 +1836,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1524,14 +1862,14 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs) {
-		return countIn(false, nestedSQL, nestedArgs);
+		return countIn(false, null, nestedSQL, nestedArgs);
 	}
 
 	/**
 	 * Get the count in the nested SQL query
 	 * 
-	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 * @param column
+	 *            count column name
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param nestedArgs
@@ -1539,9 +1877,28 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 * @since 3.5.1
 	 */
-	public int countIn(boolean distinct, String nestedSQL,
+	public int countColumnIn(String column, String nestedSQL,
 			String[] nestedArgs) {
-		return countIn(nestedSQL, nestedArgs, null, null);
+		return countIn(false, column, nestedSQL, nestedArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String[] nestedArgs) {
+		return countIn(distinct, column, nestedSQL, nestedArgs, null, null);
 	}
 
 	/**
@@ -1562,7 +1919,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param fieldValues
@@ -1597,7 +1954,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1623,7 +1980,43 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, Map<String, Object> fieldValues) {
-		return countIn(nestedSQL, null, fieldValues);
+		return countIn(false, null, nestedSQL, fieldValues);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL,
+			Map<String, Object> fieldValues) {
+		return countIn(false, column, nestedSQL, fieldValues);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			Map<String, Object> fieldValues) {
+		return countIn(distinct, column, nestedSQL, null, fieldValues);
 	}
 
 	/**
@@ -1647,7 +2040,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param nestedArgs
@@ -1686,7 +2079,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1720,9 +2113,50 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
+		return countIn(false, null, nestedSQL, nestedArgs, fieldValues);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues) {
+		return countIn(false, column, nestedSQL, nestedArgs, fieldValues);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues) {
 		String where = buildWhere(fieldValues.entrySet());
 		String[] whereArgs = buildWhereArgs(fieldValues.values());
-		return countIn(nestedSQL, nestedArgs, where, whereArgs);
+		return countIn(distinct, column, nestedSQL, nestedArgs, where,
+				whereArgs);
 	}
 
 	/**
@@ -1746,7 +2180,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param nestedArgs
@@ -1785,7 +2219,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1815,7 +2249,47 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs, String where) {
-		return countIn(nestedSQL, nestedArgs, where, null);
+		return countIn(false, null, nestedSQL, nestedArgs, where);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL, String[] nestedArgs,
+			String where) {
+		return countIn(false, column, nestedSQL, nestedArgs, where);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String[] nestedArgs, String where) {
+		return countIn(distinct, column, nestedSQL, nestedArgs, where, null);
 	}
 
 	/**
@@ -1836,7 +2310,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param where
@@ -1868,7 +2342,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1894,7 +2368,42 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String where) {
-		return countIn(nestedSQL, null, where, null);
+		return countIn(false, null, nestedSQL, where);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL, String where) {
+		return countIn(false, column, nestedSQL, where);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String where) {
+		return countIn(distinct, column, nestedSQL, null, where, null);
 	}
 
 	/**
@@ -1917,7 +2426,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param where
@@ -1956,7 +2465,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -1986,7 +2495,47 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int countIn(String nestedSQL, String where, String[] whereArgs) {
-		return countIn(nestedSQL, null, where, whereArgs);
+		return countIn(false, null, nestedSQL, where, whereArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL, String where,
+			String[] whereArgs) {
+		return countIn(false, column, nestedSQL, where, whereArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String where, String[] whereArgs) {
+		return countIn(distinct, column, nestedSQL, null, where, whereArgs);
 	}
 
 	/**
@@ -2012,7 +2561,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @param nestedArgs
@@ -2055,7 +2604,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for ids in the nested SQL query
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param nestedSQL
@@ -2092,9 +2641,53 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int countIn(String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs) {
+		return countIn(false, null, nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(String column, String nestedSQL, String[] nestedArgs,
+			String where, String[] whereArgs) {
+		return countIn(false, column, nestedSQL, nestedArgs, where, whereArgs);
+	}
+
+	/**
+	 * Get the count in the nested SQL query
+	 * 
+	 * @param distinct
+	 *            distinct column values
+	 * @param column
+	 *            count column name
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int countIn(boolean distinct, String column, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs) {
 		String whereClause = buildWhereIn(nestedSQL, where);
 		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
-		return count(whereClause, args);
+		return count(distinct, column, whereClause, args);
 	}
 
 	/**
@@ -2113,7 +2706,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @return result
@@ -2141,7 +2734,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2170,7 +2763,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2202,7 +2795,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2236,7 +2829,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @return SQL
@@ -2262,7 +2855,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for row ids
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @return SQL
@@ -2291,7 +2884,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query SQL for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2328,7 +2921,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2376,7 +2969,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2426,7 +3019,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2478,7 +3071,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Query for rows
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2525,7 +3118,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * than the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param limit
 	 *            chunk limit
 	 * @param offset
@@ -2559,7 +3152,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * than the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param limit
@@ -2599,7 +3192,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * than the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2644,7 +3237,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * than the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2686,7 +3279,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param orderBy
 	 *            order by
 	 * @param limit
@@ -2727,7 +3320,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param orderBy
@@ -2772,7 +3365,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2822,7 +3415,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -2878,7 +3471,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param where
 	 *            where clause
 	 * @param whereArgs
@@ -2938,7 +3531,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * the limit.
 	 * 
 	 * @param distinct
-	 *            true if you want each row to be unique, false otherwise
+	 *            distinct rows
 	 * @param columns
 	 *            columns
 	 * @param where
@@ -3445,7 +4038,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 */
 	public int count() {
-		return count(null, null);
+		return count(null, null, null);
 	}
 
 	/**
@@ -3457,7 +4050,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 3.4.0
 	 */
 	public int count(String where) {
-		return count(where, null);
+		return count(null, where, null);
 	}
 
 	/**
@@ -3489,7 +4082,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get a count of results
 	 * 
 	 * @param distinct
-	 *            distinct column flag
+	 *            distinct column values
 	 * @param column
 	 *            column name
 	 * @return count
@@ -3497,6 +4090,20 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public int count(boolean distinct, String column) {
 		return count(distinct, column, null, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(String column, String where) {
+		return count(column, where, null);
 	}
 
 	/**
@@ -3519,7 +4126,23 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Get a count of results
 	 * 
 	 * @param distinct
-	 *            distinct column flag
+	 *            distinct column values
+	 * @param column
+	 *            column name
+	 * @param where
+	 *            where clause
+	 * @return count
+	 * @since 3.5.1
+	 */
+	public int count(boolean distinct, String column, String where) {
+		return count(distinct, column, where, null);
+	}
+
+	/**
+	 * Get a count of results
+	 * 
+	 * @param distinct
+	 *            distinct column values
 	 * @param column
 	 *            column name
 	 * @param where
