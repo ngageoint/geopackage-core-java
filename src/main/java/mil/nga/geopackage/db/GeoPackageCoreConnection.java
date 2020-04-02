@@ -505,9 +505,9 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 		Object value = querySingleResult(sql, args);
 
 		@SuppressWarnings("unchecked")
-		T typedValud = (T) value;
+		T typedValue = (T) value;
 
-		return typedValud;
+		return typedValue;
 	}
 
 	/**
