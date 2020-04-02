@@ -98,7 +98,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	/**
 	 * Get the count of results
 	 * 
-	 * @return count
+	 * @return count, -1 if not able to determine
 	 */
 	public int getCount();
 
