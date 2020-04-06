@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.core.contents.Contents;
@@ -17,6 +15,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.contents.ContentsIdDao;
@@ -266,6 +265,26 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.2.1
 	 */
 	public boolean isTable(String table);
+
+	/**
+	 * Check if the view exists
+	 * 
+	 * @param view
+	 *            view name
+	 * @return true if a view
+	 * @since 3.5.1
+	 */
+	public boolean isView(String view);
+
+	/**
+	 * Check if the table or view exists
+	 * 
+	 * @param name
+	 *            table or view name
+	 * @return true if a table or view
+	 * @since 3.5.1
+	 */
+	public boolean isTableOrView(String name);
 
 	/**
 	 * Get the contents of the user table
@@ -797,14 +816,14 @@ public interface GeoPackageCore extends Closeable {
 	 *
 	 * @param type
 	 *            dao class type
+	 * @param <D>
+	 *            dao type
 	 * @param <T>
 	 *            class type
-	 * @param <S>
-	 *            dao type
 	 * @return base dao implementation
 	 * @since 1.1.0
 	 */
-	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type);
+	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type);
 
 	/**
 	 * Execute the sql on the GeoPackage database

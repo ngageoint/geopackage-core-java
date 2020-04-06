@@ -4,11 +4,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Extended Relations Data Access Object
@@ -17,7 +18,8 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 3.0.1
  */
-public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {
+public class ExtendedRelationsDao
+		extends GeoPackageDao<ExtendedRelation, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -160,7 +162,8 @@ public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {
 
 		if (relatedTable != null) {
 			where = addToWhere(qb, where);
-			where.like(ExtendedRelation.COLUMN_RELATED_TABLE_NAME, relatedTable);
+			where.like(ExtendedRelation.COLUMN_RELATED_TABLE_NAME,
+					relatedTable);
 		}
 
 		if (relatedColumn != null) {
@@ -176,7 +179,8 @@ public class ExtendedRelationsDao extends BaseDaoImpl<ExtendedRelation, Long> {
 
 		if (mappingTable != null) {
 			where = addToWhere(qb, where);
-			where.like(ExtendedRelation.COLUMN_MAPPING_TABLE_NAME, mappingTable);
+			where.like(ExtendedRelation.COLUMN_MAPPING_TABLE_NAME,
+					mappingTable);
 		}
 
 		PreparedQuery<ExtendedRelation> preparedQuery = qb.prepare();

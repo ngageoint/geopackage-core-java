@@ -2,8 +2,9 @@ package mil.nga.geopackage.extension.scale;
 
 import java.sql.SQLException;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Tile Scaling Data Access Object
@@ -11,7 +12,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 2.0.2
  */
-public class TileScalingDao extends BaseDaoImpl<TileScaling, String> {
+public class TileScalingDao extends GeoPackageDao<TileScaling, String> {
 
 	/**
 	 * Constructor, required by ORMLite

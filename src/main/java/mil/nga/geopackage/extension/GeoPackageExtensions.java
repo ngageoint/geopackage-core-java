@@ -622,7 +622,7 @@ public class GeoPackageExtensions {
 
 		try {
 
-			if (geoPackage.isTable(DataColumns.TABLE_NAME)) {
+			if (geoPackage.isTableOrView(DataColumns.TABLE_NAME)) {
 
 				UserCustomTable dataColumnsTable = UserCustomTableReader
 						.readTable(geoPackage.getDatabase(),
@@ -717,7 +717,7 @@ public class GeoPackageExtensions {
 
 		try {
 
-			if (geoPackage.isTable(MetadataReference.TABLE_NAME)) {
+			if (geoPackage.isTableOrView(MetadataReference.TABLE_NAME)) {
 
 				CoreSQLUtils.transferTableContent(geoPackage.getDatabase(),
 						MetadataReference.TABLE_NAME,

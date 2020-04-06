@@ -222,7 +222,8 @@ public class NGAExtensions {
 							tableIndex.setTableName(newTable);
 							tableIndexDao.create(tableIndex);
 
-							if (geoPackage.isTable(GeometryIndex.TABLE_NAME)) {
+							if (geoPackage
+									.isTableOrView(GeometryIndex.TABLE_NAME)) {
 
 								CoreSQLUtils.transferTableContent(
 										geoPackage.getDatabase(),
@@ -444,7 +445,7 @@ public class NGAExtensions {
 					extension.setTableName(newTable);
 					tileTableScaling.getExtensionsDao().create(extension);
 
-					if (geoPackage.isTable(TileScaling.TABLE_NAME)) {
+					if (geoPackage.isTableOrView(TileScaling.TABLE_NAME)) {
 
 						CoreSQLUtils.transferTableContent(
 								geoPackage.getDatabase(),

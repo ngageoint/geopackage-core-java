@@ -4,12 +4,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.PreparedUpdate;
@@ -18,13 +12,18 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.schema.columns.DataColumns;
+import mil.nga.geopackage.schema.columns.DataColumnsDao;
+
 /**
  * Data Column Constraints Data Access Object
  * 
  * @author osbornb
  */
-public class DataColumnConstraintsDao extends
-		BaseDaoImpl<DataColumnConstraints, Void> {
+public class DataColumnConstraintsDao
+		extends GeoPackageDao<DataColumnConstraints, Void> {
 
 	/**
 	 * Data Columns DAO
@@ -63,27 +62,28 @@ public class DataColumnConstraintsDao extends
 
 			// Check if the last remaining constraint with the constraint name
 			// is being deleted
-			List<DataColumnConstraints> remainingConstraints = queryByConstraintName(constraints
-					.getConstraintName());
+			List<DataColumnConstraints> remainingConstraints = queryByConstraintName(
+					constraints.getConstraintName());
 			if (remainingConstraints.size() == 1) {
 
 				DataColumnConstraints remainingConstraint = remainingConstraints
 						.get(0);
 
 				// Compare the name, type, and value
-				if (remainingConstraint.getConstraintName().equals(
-						constraints.getConstraintName())
-						&& remainingConstraint.getConstraintType().equals(
-								constraints.getConstraintType())
-						&& (remainingConstraint.getValue() == null ? constraints
-								.getValue() == null : remainingConstraint
-								.getValue().equals(constraints.getValue()))) {
+				if (remainingConstraint.getConstraintName()
+						.equals(constraints.getConstraintName())
+						&& remainingConstraint.getConstraintType()
+								.equals(constraints.getConstraintType())
+						&& (remainingConstraint.getValue() == null
+								? constraints.getValue() == null
+								: remainingConstraint.getValue()
+										.equals(constraints.getValue()))) {
 
 					// Delete Data Columns
 					DataColumnsDao dao = getDataColumnsDao();
 					List<DataColumns> dataColumnsCollection = dao
-							.queryByConstraintName(constraints
-									.getConstraintName());
+							.queryByConstraintName(
+									constraints.getConstraintName());
 					if (!dataColumnsCollection.isEmpty()) {
 						dao.delete(dataColumnsCollection);
 					}
@@ -126,7 +126,8 @@ public class DataColumnConstraintsDao extends
 	 * @throws SQLException
 	 *             upon failure
 	 */
-	public int deleteCascade(PreparedQuery<DataColumnConstraints> preparedDelete)
+	public int deleteCascade(
+			PreparedQuery<DataColumnConstraints> preparedDelete)
 			throws SQLException {
 		int count = 0;
 		if (preparedDelete != null) {
@@ -144,8 +145,7 @@ public class DataColumnConstraintsDao extends
 	 */
 	private DataColumnsDao getDataColumnsDao() throws SQLException {
 		if (dataColumnsDao == null) {
-			dataColumnsDao = DaoManager.createDao(connectionSource,
-					DataColumns.class);
+			dataColumnsDao = createDao(DataColumns.class);
 		}
 		return dataColumnsDao;
 	}
@@ -272,8 +272,7 @@ public class DataColumnConstraintsDao extends
 			String value) throws SQLException {
 
 		where.eq(DataColumnConstraints.COLUMN_CONSTRAINT_NAME, constraintName)
-				.and()
-				.eq(DataColumnConstraints.COLUMN_CONSTRAINT_TYPE,
+				.and().eq(DataColumnConstraints.COLUMN_CONSTRAINT_TYPE,
 						constraintType.getValue());
 		if (value == null) {
 			where.and().isNull(DataColumnConstraints.COLUMN_VALUE);

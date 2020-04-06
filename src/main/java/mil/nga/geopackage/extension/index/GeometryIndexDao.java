@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.GeoPackageException;
-import mil.nga.sf.GeometryEnvelope;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.sf.GeometryEnvelope;
 
 /**
  * Geometry Index Data Access Object
@@ -22,8 +22,8 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.1.0
  */
-public class GeometryIndexDao extends
-		BaseDaoImpl<GeometryIndex, GeometryIndexKey> {
+public class GeometryIndexDao
+		extends GeoPackageDao<GeometryIndex, GeometryIndexKey> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -48,8 +48,8 @@ public class GeometryIndexDao extends
 		GeometryIndex geometryIndex = null;
 		if (key != null) {
 			Map<String, Object> fieldValues = new HashMap<String, Object>();
-			fieldValues
-					.put(GeometryIndex.COLUMN_TABLE_NAME, key.getTableName());
+			fieldValues.put(GeometryIndex.COLUMN_TABLE_NAME,
+					key.getTableName());
 			fieldValues.put(GeometryIndex.COLUMN_GEOM_ID, key.getGeomId());
 			List<GeometryIndex> results = queryForFieldValues(fieldValues);
 			if (!results.isEmpty()) {
@@ -86,7 +86,8 @@ public class GeometryIndexDao extends
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GeometryIndex queryForSameId(GeometryIndex data) throws SQLException {
+	public GeometryIndex queryForSameId(GeometryIndex data)
+			throws SQLException {
 		return queryForId(data.getId());
 	}
 
@@ -178,7 +179,8 @@ public class GeometryIndexDao extends
 
 		ub.where()
 				.eq(GeometryIndex.COLUMN_TABLE_NAME,
-						geometryIndex.getTableName()).and()
+						geometryIndex.getTableName())
+				.and()
 				.eq(GeometryIndex.COLUMN_GEOM_ID, geometryIndex.getGeomId());
 
 		PreparedUpdate<GeometryIndex> update = ub.prepare();

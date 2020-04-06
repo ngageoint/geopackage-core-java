@@ -643,7 +643,7 @@ public class CoreSQLUtils {
 			String prefix, String baseName) {
 		String name = prefix + "_" + baseName;
 		int nameNumber = 0;
-		while (db.tableExists(name)) {
+		while (db.tableOrViewExists(name)) {
 			name = prefix + (++nameNumber) + "_" + baseName;
 		}
 		return name;

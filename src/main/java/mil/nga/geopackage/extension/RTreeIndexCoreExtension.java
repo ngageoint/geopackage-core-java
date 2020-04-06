@@ -294,7 +294,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public boolean has(String tableName, String columnName) {
 		return has(EXTENSION_NAME, tableName, columnName) && connection
-				.tableExists(getRTreeTableName(tableName, columnName));
+				.tableOrViewExists(getRTreeTableName(tableName, columnName));
 	}
 
 	/**

@@ -5,9 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.support.ConnectionSource;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -17,20 +23,13 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.sf.proj.ProjectionConstants;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.support.ConnectionSource;
-
 /**
  * Spatial Reference System Data Access Object
  * 
  * @author osbornb
  */
-public class SpatialReferenceSystemDao extends
-		BaseDaoImpl<SpatialReferenceSystem, Long> {
+public class SpatialReferenceSystemDao
+		extends GeoPackageDao<SpatialReferenceSystem, Long> {
 
 	/**
 	 * Contents DAO
@@ -115,9 +114,9 @@ public class SpatialReferenceSystemDao extends
 				PropertyConstants.WGS_84, PropertyConstants.DESCRIPTION));
 		create(srs);
 		if (hasDefinition_12_063()) {
-			srs.setDefinition_12_063(GeoPackageProperties.getProperty(
-					PropertyConstants.WGS_84,
-					PropertyConstants.DEFINITION_12_063));
+			srs.setDefinition_12_063(
+					GeoPackageProperties.getProperty(PropertyConstants.WGS_84,
+							PropertyConstants.DEFINITION_12_063));
 			crsWktExtension.updateDefinition(srs.getSrsId(),
 					srs.getDefinition_12_063());
 		}
@@ -140,9 +139,9 @@ public class SpatialReferenceSystemDao extends
 		srs.setSrsName(GeoPackageProperties.getProperty(
 				PropertyConstants.UNDEFINED_CARTESIAN,
 				PropertyConstants.SRS_NAME));
-		srs.setSrsId(GeoPackageProperties
-				.getIntegerProperty(PropertyConstants.UNDEFINED_CARTESIAN,
-						PropertyConstants.SRS_ID));
+		srs.setSrsId(GeoPackageProperties.getIntegerProperty(
+				PropertyConstants.UNDEFINED_CARTESIAN,
+				PropertyConstants.SRS_ID));
 		srs.setOrganization(GeoPackageProperties.getProperty(
 				PropertyConstants.UNDEFINED_CARTESIAN,
 				PropertyConstants.ORGANIZATION));
@@ -224,8 +223,9 @@ public class SpatialReferenceSystemDao extends
 				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_NAME));
 		srs.setSrsId(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_ID));
-		srs.setOrganization(GeoPackageProperties.getProperty(
-				PropertyConstants.WEB_MERCATOR, PropertyConstants.ORGANIZATION));
+		srs.setOrganization(
+				GeoPackageProperties.getProperty(PropertyConstants.WEB_MERCATOR,
+						PropertyConstants.ORGANIZATION));
 		srs.setOrganizationCoordsysId(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.WEB_MERCATOR,
 				PropertyConstants.ORGANIZATION_COORDSYS_ID));
@@ -323,7 +323,8 @@ public class SpatialReferenceSystemDao extends
 	 *            srs list
 	 * @since 1.2.1
 	 */
-	public void setDefinition_12_063(Collection<SpatialReferenceSystem> srsList) {
+	public void setDefinition_12_063(
+			Collection<SpatialReferenceSystem> srsList) {
 		for (SpatialReferenceSystem srs : srsList) {
 			setDefinition_12_063(srs);
 		}
@@ -433,8 +434,8 @@ public class SpatialReferenceSystemDao extends
 	@Override
 	public List<SpatialReferenceSystem> queryForMatchingArgs(
 			SpatialReferenceSystem matchObj) throws SQLException {
-		List<SpatialReferenceSystem> srsList = super
-				.queryForMatchingArgs(matchObj);
+		List<SpatialReferenceSystem> srsList = super.queryForMatchingArgs(
+				matchObj);
 		setDefinition_12_063(srsList);
 		return srsList;
 	}
@@ -445,8 +446,8 @@ public class SpatialReferenceSystemDao extends
 	@Override
 	public List<SpatialReferenceSystem> queryForFieldValues(
 			Map<String, Object> fieldValues) throws SQLException {
-		List<SpatialReferenceSystem> srsList = super
-				.queryForFieldValues(fieldValues);
+		List<SpatialReferenceSystem> srsList = super.queryForFieldValues(
+				fieldValues);
 		setDefinition_12_063(srsList);
 		return srsList;
 	}
@@ -457,8 +458,8 @@ public class SpatialReferenceSystemDao extends
 	@Override
 	public List<SpatialReferenceSystem> queryForFieldValuesArgs(
 			Map<String, Object> fieldValues) throws SQLException {
-		List<SpatialReferenceSystem> srsList = super
-				.queryForFieldValuesArgs(fieldValues);
+		List<SpatialReferenceSystem> srsList = super.queryForFieldValuesArgs(
+				fieldValues);
 		setDefinition_12_063(srsList);
 		return srsList;
 	}
@@ -792,8 +793,7 @@ public class SpatialReferenceSystemDao extends
 	 */
 	private ContentsDao getContentsDao() throws SQLException {
 		if (contentsDao == null) {
-			contentsDao = DaoManager
-					.createDao(connectionSource, Contents.class);
+			contentsDao = createDao(Contents.class);
 		}
 		return contentsDao;
 	}
@@ -807,8 +807,7 @@ public class SpatialReferenceSystemDao extends
 	 */
 	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
 		if (geometryColumnsDao == null) {
-			geometryColumnsDao = DaoManager.createDao(connectionSource,
-					GeometryColumns.class);
+			geometryColumnsDao = createDao(GeometryColumns.class);
 		}
 		return geometryColumnsDao;
 	}
@@ -822,8 +821,7 @@ public class SpatialReferenceSystemDao extends
 	 */
 	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
 		if (tileMatrixSetDao == null) {
-			tileMatrixSetDao = DaoManager.createDao(connectionSource,
-					TileMatrixSet.class);
+			tileMatrixSetDao = createDao(TileMatrixSet.class);
 		}
 		return tileMatrixSetDao;
 	}

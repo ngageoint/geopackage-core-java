@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.support.ConnectionSource;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.db.CoreSQLUtils;
-import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
@@ -17,23 +20,12 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.sf.proj.Projection;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.support.ConnectionSource;
-
 /**
  * Contents Data Access Object
  * 
  * @author osbornb
  */
-public class ContentsDao extends BaseDaoImpl<Contents, String> {
-
-	/**
-	 * Database connection
-	 */
-	private GeoPackageCoreConnection db;
+public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 	/**
 	 * Geometry Columns DAO
@@ -63,16 +55,6 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	public ContentsDao(ConnectionSource connectionSource,
 			Class<Contents> dataClass) throws SQLException {
 		super(connectionSource, dataClass);
-	}
-
-	/**
-	 * Set the database
-	 * 
-	 * @param db
-	 *            database connection
-	 */
-	public void setDatabase(GeoPackageCoreConnection db) {
-		this.db = db;
 	}
 
 	/**
@@ -208,8 +190,8 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		try {
 			tables = getTables();
 		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to query for contents tables", e);
+			throw new GeoPackageException("Failed to query for contents tables",
+					e);
 		}
 
 		for (String table : tables) {
@@ -521,18 +503,9 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		try {
 			deleteByIdCascade(table, true);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to delete table: " + table, e);
+			throw new GeoPackageException("Failed to delete table: " + table,
+					e);
 		}
-	}
-
-	/**
-	 * Drop the table
-	 * 
-	 * @param table
-	 *            table name
-	 */
-	private void dropTable(String table) {
-		CoreSQLUtils.dropTable(db, table);
 	}
 
 	/**
@@ -552,12 +525,10 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				// Features require Geometry Columns table (Spec Requirement 21)
 				GeometryColumnsDao geometryColumnsDao = getGeometryColumnsDao();
 				if (!geometryColumnsDao.isTableExists()) {
-					throw new GeoPackageException(
-							"A data type of "
-									+ dataType.getName()
-									+ " requires the "
-									+ GeometryColumns.class.getSimpleName()
-									+ " table to first be created using the GeoPackage.");
+					throw new GeoPackageException("A data type of "
+							+ dataType.getName() + " requires the "
+							+ GeometryColumns.class.getSimpleName()
+							+ " table to first be created using the GeoPackage.");
 				}
 
 				break;
@@ -574,15 +545,15 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 				break;
 
 			default:
-				throw new GeoPackageException("Unsupported data type: "
-						+ dataType);
+				throw new GeoPackageException(
+						"Unsupported data type: " + dataType);
 			}
 		}
 
 		// Verify the feature or tile table exists
-		if (!db.tableExists(contents.getTableName())) {
+		if (!tableOrViewExists(contents.getTableName())) {
 			throw new GeoPackageException(
-					"No table exists for Content Table Name: "
+					"No table or view exists for Content Table Name: "
 							+ contents.getTableName()
 							+ ". Table must first be created.");
 		}
@@ -600,18 +571,16 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 		// Tiles require Tile Matrix Set table (Spec Requirement 37)
 		TileMatrixSetDao tileMatrixSetDao = getTileMatrixSetDao();
 		if (!tileMatrixSetDao.isTableExists()) {
-			throw new GeoPackageException("A data type of "
-					+ dataType.getName() + " requires the "
-					+ TileMatrixSet.class.getSimpleName()
+			throw new GeoPackageException("A data type of " + dataType.getName()
+					+ " requires the " + TileMatrixSet.class.getSimpleName()
 					+ " table to first be created using the GeoPackage.");
 		}
 
 		// Tiles require Tile Matrix table (Spec Requirement 41)
 		TileMatrixDao tileMatrixDao = getTileMatrixDao();
 		if (!tileMatrixDao.isTableExists()) {
-			throw new GeoPackageException("A data type of "
-					+ dataType.getName() + " requires the "
-					+ TileMatrix.class.getSimpleName()
+			throw new GeoPackageException("A data type of " + dataType.getName()
+					+ " requires the " + TileMatrix.class.getSimpleName()
 					+ " table to first be created using the GeoPackage.");
 		}
 	}
@@ -625,8 +594,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 */
 	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
 		if (geometryColumnsDao == null) {
-			geometryColumnsDao = DaoManager.createDao(connectionSource,
-					GeometryColumns.class);
+			geometryColumnsDao = createDao(GeometryColumns.class);
 		}
 		return geometryColumnsDao;
 	}
@@ -640,8 +608,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 */
 	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
 		if (tileMatrixSetDao == null) {
-			tileMatrixSetDao = DaoManager.createDao(connectionSource,
-					TileMatrixSet.class);
+			tileMatrixSetDao = createDao(TileMatrixSet.class);
 		}
 		return tileMatrixSetDao;
 	}
@@ -655,8 +622,7 @@ public class ContentsDao extends BaseDaoImpl<Contents, String> {
 	 */
 	private TileMatrixDao getTileMatrixDao() throws SQLException {
 		if (tileMatrixDao == null) {
-			tileMatrixDao = DaoManager.createDao(connectionSource,
-					TileMatrix.class);
+			tileMatrixDao = createDao(TileMatrix.class);
 		}
 		return tileMatrixDao;
 	}

@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.schema.TableColumnKey;
 
 /**
@@ -20,7 +20,7 @@ import mil.nga.geopackage.schema.TableColumnKey;
  * 
  * @author osbornb
  */
-public class DataColumnsDao extends BaseDaoImpl<DataColumns, TableColumnKey> {
+public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 
 	/**
 	 * Constructor, required by ORMLite

@@ -105,7 +105,7 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	public Extensions getOrCreate() {
 
 		// Create the attributes table
-		if (!geoPackage.isTable(TABLE_NAME)) {
+		if (!geoPackage.isTableOrView(TABLE_NAME)) {
 
 			AttributesColumn propertyColumn = AttributesColumn.createColumn(
 					COLUMN_PROPERTY, GeoPackageDataType.TEXT, true, null);
@@ -136,7 +136,7 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 */
 	public boolean has() {
 		return has(EXTENSION_NAME, TABLE_NAME, null)
-				&& geoPackage.isTable(TABLE_NAME);
+				&& geoPackage.isTableOrView(TABLE_NAME);
 	}
 
 	/**

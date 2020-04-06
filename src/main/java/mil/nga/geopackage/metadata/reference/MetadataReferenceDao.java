@@ -3,7 +3,6 @@ package mil.nga.geopackage.metadata.reference;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
@@ -12,12 +11,15 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.db.GeoPackageDao;
+
 /**
  * Metadata Reference Data Access Object
  * 
  * @author osbornb
  */
-public class MetadataReferenceDao extends BaseDaoImpl<MetadataReference, Void> {
+public class MetadataReferenceDao
+		extends GeoPackageDao<MetadataReference, Void> {
 
 	/**
 	 * Constructor, required by ORMLite

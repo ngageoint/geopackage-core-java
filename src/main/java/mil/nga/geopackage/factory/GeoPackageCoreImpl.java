@@ -6,8 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 
 import mil.nga.geopackage.BoundingBox;
@@ -27,6 +26,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.CrsWktExtension;
@@ -365,6 +365,22 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean isView(String view) {
+		return database.viewExists(view);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTableOrView(String name) {
+		return database.tableOrViewExists(name);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Contents getTableContents(String table) {
 		ContentsDao contentDao = getContentsDao();
 		Contents contents = null;
@@ -578,9 +594,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public ContentsDao getContentsDao() {
-		ContentsDao dao = createDao(Contents.class);
-		dao.setDatabase(database);
-		return dao;
+		return createDao(Contents.class);
 	}
 
 	/**
@@ -1116,10 +1130,10 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public <T, S extends BaseDaoImpl<T, ?>> S createDao(Class<T> type) {
-		S dao;
+	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type) {
+		D dao;
 		try {
-			dao = DaoManager.createDao(database.getConnectionSource(), type);
+			dao = GeoPackageDao.createDao(database, type);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to create " + type.getSimpleName() + " dao", e);
@@ -1190,7 +1204,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *
 	 * @param dao
 	 */
-	private void verifyTableExists(BaseDaoImpl<?, ?> dao) {
+	private void verifyTableExists(Dao<?, ?> dao) {
 		try {
 			if (!dao.isTableExists()) {
 				throw new GeoPackageException(

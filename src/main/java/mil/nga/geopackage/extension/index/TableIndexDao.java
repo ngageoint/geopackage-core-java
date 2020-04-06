@@ -4,14 +4,13 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import mil.nga.geopackage.GeoPackageException;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Table Index Data Access Object
@@ -19,7 +18,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.1.0
  */
-public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
+public class TableIndexDao extends GeoPackageDao<TableIndex, String> {
 
 	/**
 	 * Geometry Index DAO
@@ -160,7 +159,8 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 		try {
 			deleteByIdCascade(table);
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to delete table: " + table, e);
+			throw new GeoPackageException("Failed to delete table: " + table,
+					e);
 		}
 	}
 
@@ -172,8 +172,7 @@ public class TableIndexDao extends BaseDaoImpl<TableIndex, String> {
 	 */
 	private GeometryIndexDao getGeometryIndexDao() throws SQLException {
 		if (geometryIndexDao == null) {
-			geometryIndexDao = DaoManager.createDao(connectionSource,
-					GeometryIndex.class);
+			geometryIndexDao = createDao(GeometryIndex.class);
 		}
 		return geometryIndexDao;
 	}

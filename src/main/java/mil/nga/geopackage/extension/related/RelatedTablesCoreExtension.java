@@ -771,12 +771,12 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 			String relatedTableName, String relationName) {
 
 		// Verify the base and related tables exist
-		if (!geoPackage.isTable(baseTableName)) {
+		if (!geoPackage.isTableOrView(baseTableName)) {
 			throw new GeoPackageException(
 					"Base Relationship table does not exist: " + baseTableName
 							+ ", Relation: " + relationName);
 		}
-		if (!geoPackage.isTable(relatedTableName)) {
+		if (!geoPackage.isTableOrView(relatedTableName)) {
 			throw new GeoPackageException(
 					"Related Relationship table does not exist: "
 							+ relatedTableName + ", Relation: " + relationName);
@@ -851,7 +851,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		String userMappingTableName = userMappingTable.getTableName();
 		getOrCreate(userMappingTableName);
 
-		if (!geoPackage.isTable(userMappingTableName)) {
+		if (!geoPackage.isTableOrView(userMappingTableName)) {
 
 			geoPackage.createUserTable(userMappingTable);
 
@@ -877,7 +877,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		boolean created = false;
 
 		String relatedTableName = relatedTable.getTableName();
-		if (!geoPackage.isTable(relatedTableName)) {
+		if (!geoPackage.isTableOrView(relatedTableName)) {
 
 			geoPackage.createUserTable(relatedTable);
 

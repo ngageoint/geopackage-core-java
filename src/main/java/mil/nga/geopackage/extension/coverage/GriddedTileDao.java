@@ -3,15 +3,15 @@ package mil.nga.geopackage.extension.coverage;
 import java.sql.SQLException;
 import java.util.List;
 
-import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Gridded Tile Data Access Object
@@ -19,7 +19,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.2.1
  */
-public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
+public class GriddedTileDao extends GeoPackageDao<GriddedTile, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -61,7 +61,8 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Gridded Tile objects by Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 		return results;
 	}
@@ -86,7 +87,8 @@ public class GriddedTileDao extends BaseDaoImpl<GriddedTile, Long> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Gridded Tile objects by Table Name: "
-							+ tableName + ", Tile Id: " + tileId, e);
+							+ tableName + ", Tile Id: " + tileId,
+					e);
 		}
 		return griddedTile;
 	}

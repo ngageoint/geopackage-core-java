@@ -6,22 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.schema.TableColumnKey;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.schema.TableColumnKey;
+
 /**
  * SF/SQL Geometry Columns Data Access Object
  * 
  * @author osbornb
  */
-public class GeometryColumnsSfSqlDao extends
-		BaseDaoImpl<GeometryColumnsSfSql, TableColumnKey> {
+public class GeometryColumnsSfSqlDao
+		extends GeoPackageDao<GeometryColumnsSfSql, TableColumnKey> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -51,7 +51,8 @@ public class GeometryColumnsSfSqlDao extends
 					key.getTableName());
 			fieldValues.put(GeometryColumnsSfSql.COLUMN_F_GEOMETRY_COLUMN,
 					key.getColumnName());
-			List<GeometryColumnsSfSql> results = queryForFieldValues(fieldValues);
+			List<GeometryColumnsSfSql> results = queryForFieldValues(
+					fieldValues);
 			if (!results.isEmpty()) {
 				if (results.size() > 1) {
 					throw new SQLException("More than one "
@@ -117,8 +118,7 @@ public class GeometryColumnsSfSqlDao extends
 		db.where()
 				.eq(GeometryColumnsSfSql.COLUMN_F_TABLE_NAME,
 						data.getFTableName())
-				.and()
-				.eq(GeometryColumnsSfSql.COLUMN_F_GEOMETRY_COLUMN,
+				.and().eq(GeometryColumnsSfSql.COLUMN_F_GEOMETRY_COLUMN,
 						data.getFGeometryColumn());
 
 		PreparedDelete<GeometryColumnsSfSql> deleteQuery = db.prepare();
@@ -162,7 +162,8 @@ public class GeometryColumnsSfSqlDao extends
 	 * Update using the complex key
 	 */
 	@Override
-	public int update(GeometryColumnsSfSql geometryColumns) throws SQLException {
+	public int update(GeometryColumnsSfSql geometryColumns)
+			throws SQLException {
 
 		UpdateBuilder<GeometryColumnsSfSql, TableColumnKey> ub = updateBuilder();
 		ub.updateColumnValue(GeometryColumnsSfSql.COLUMN_GEOMETRY_TYPE,
@@ -175,8 +176,7 @@ public class GeometryColumnsSfSqlDao extends
 		ub.where()
 				.eq(GeometryColumnsSfSql.COLUMN_F_TABLE_NAME,
 						geometryColumns.getFTableName())
-				.and()
-				.eq(GeometryColumnsSfSql.COLUMN_F_GEOMETRY_COLUMN,
+				.and().eq(GeometryColumnsSfSql.COLUMN_F_GEOMETRY_COLUMN,
 						geometryColumns.getFGeometryColumn());
 
 		PreparedUpdate<GeometryColumnsSfSql> update = ub.prepare();

@@ -3,8 +3,6 @@ package mil.nga.geopackage.db;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.j256.ormlite.dao.DaoManager;
-
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
@@ -438,9 +436,9 @@ public class GeoPackageTableCreator {
 			UserTable<TColumn> table) {
 
 		// Verify the table does not already exist
-		if (db.tableExists(table.getTableName())) {
+		if (db.tableOrViewExists(table.getTableName())) {
 			throw new GeoPackageException(
-					"Table already exists and can not be created: "
+					"Table or view already exists and can not be created: "
 							+ table.getTableName());
 		}
 
@@ -465,8 +463,8 @@ public class GeoPackageTableCreator {
 		// Create the required Spatial Reference Systems (spec Requirement
 		// 11)
 		try {
-			SpatialReferenceSystemDao dao = DaoManager.createDao(
-					db.getConnectionSource(), SpatialReferenceSystem.class);
+			SpatialReferenceSystemDao dao = GeoPackageDao.createDao(db,
+					SpatialReferenceSystem.class);
 			dao.createWgs84();
 			dao.createUndefinedCartesian();
 			dao.createUndefinedGeographic();

@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.GeoPackageException;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Feature Tile Link Data Access Object
@@ -21,8 +21,8 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 1.1.5
  */
-public class FeatureTileLinkDao extends
-		BaseDaoImpl<FeatureTileLink, FeatureTileLinkKey> {
+public class FeatureTileLinkDao
+		extends GeoPackageDao<FeatureTileLink, FeatureTileLinkKey> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -118,8 +118,7 @@ public class FeatureTileLinkDao extends
 		db.where()
 				.eq(FeatureTileLink.COLUMN_FEATURE_TABLE_NAME,
 						data.getFeatureTableName())
-				.and()
-				.eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME,
+				.and().eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME,
 						data.getTileTableName());
 
 		PreparedDelete<FeatureTileLink> deleteQuery = db.prepare();
@@ -171,8 +170,7 @@ public class FeatureTileLinkDao extends
 		ub.where()
 				.eq(FeatureTileLink.COLUMN_FEATURE_TABLE_NAME,
 						data.getFeatureTableName())
-				.and()
-				.eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME,
+				.and().eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME,
 						data.getTileTableName());
 
 		PreparedUpdate<FeatureTileLink> update = ub.prepare();
@@ -234,8 +232,8 @@ public class FeatureTileLinkDao extends
 	public int deleteByTableName(String tableName) throws SQLException {
 		DeleteBuilder<FeatureTileLink, FeatureTileLinkKey> db = deleteBuilder();
 
-		db.where().eq(FeatureTileLink.COLUMN_FEATURE_TABLE_NAME, tableName)
-				.or().eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME, tableName);
+		db.where().eq(FeatureTileLink.COLUMN_FEATURE_TABLE_NAME, tableName).or()
+				.eq(FeatureTileLink.COLUMN_TILE_TABLE_NAME, tableName);
 
 		PreparedDelete<FeatureTileLink> deleteQuery = db.prepare();
 		int deleted = delete(deleteQuery);

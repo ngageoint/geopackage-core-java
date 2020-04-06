@@ -4,15 +4,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Tile Matrix Set Data Access Object
  * 
  * @author osbornb
  */
-public class TileMatrixSetDao extends BaseDaoImpl<TileMatrixSet, String> {
+public class TileMatrixSetDao extends GeoPackageDao<TileMatrixSet, String> {
 
 	/**
 	 * Constructor, required by ORMLite

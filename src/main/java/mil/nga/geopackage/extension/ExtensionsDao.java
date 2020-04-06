@@ -3,9 +3,6 @@ package mil.nga.geopackage.extension;
 import java.sql.SQLException;
 import java.util.List;
 
-import mil.nga.geopackage.GeoPackageException;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -13,12 +10,15 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
+
 /**
  * Extensions Data Access Object
  * 
  * @author osbornb
  */
-public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
+public class ExtensionsDao extends GeoPackageDao<Extensions, Void> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -46,8 +46,8 @@ public class ExtensionsDao extends BaseDaoImpl<Extensions, Void> {
 		UpdateBuilder<Extensions, Void> ub = updateBuilder();
 		ub.updateColumnValue(Extensions.COLUMN_DEFINITION,
 				extensions.getDefinition());
-		ub.updateColumnValue(Extensions.COLUMN_SCOPE, extensions.getScope()
-				.getValue());
+		ub.updateColumnValue(Extensions.COLUMN_SCOPE,
+				extensions.getScope().getValue());
 
 		setUniqueWhere(ub.where(), extensions.getExtensionName(), true,
 				extensions.getTableName(), true, extensions.getColumnName());

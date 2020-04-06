@@ -6,19 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.db.GeoPackageDao;
+
 /**
  * Tile Matrix Data Access Object
  * 
  * @author osbornb
  */
-public class TileMatrixDao extends BaseDaoImpl<TileMatrix, TileMatrixKey> {
+public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 
 	/**
 	 * Constructor, required by ORMLite

@@ -531,6 +531,31 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	}
 
 	/**
+	 * Check if the view exists
+	 * 
+	 * @param viewName
+	 *            view name
+	 * @return true if exists
+	 * @since 3.5.1
+	 */
+	public boolean viewExists(String viewName) {
+		return SQLiteMaster.count(this, SQLiteMasterType.VIEW, viewName) > 0;
+	}
+
+	/**
+	 * Check if a table or view exists with the name
+	 * 
+	 * @param name
+	 *            table or view name
+	 * @return true if exists
+	 * @since 3.5.1
+	 */
+	public boolean tableOrViewExists(String name) {
+		return SQLiteMaster.count(this, new SQLiteMasterType[] {
+				SQLiteMasterType.TABLE, SQLiteMasterType.VIEW }, name) > 0;
+	}
+
+	/**
 	 * Check if the table column exists
 	 * 
 	 * @param tableName

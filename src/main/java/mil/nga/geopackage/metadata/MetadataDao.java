@@ -4,20 +4,19 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import mil.nga.geopackage.metadata.reference.MetadataReference;
-import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.metadata.reference.MetadataReference;
+import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 
 /**
  * Metadata Data Access Object
  * 
  * @author osbornb
  */
-public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
+public class MetadataDao extends GeoPackageDao<Metadata, Long> {
 
 	/**
 	 * Metadata Reference DAO
@@ -151,8 +150,7 @@ public class MetadataDao extends BaseDaoImpl<Metadata, Long> {
 	 */
 	private MetadataReferenceDao getMetadataReferenceDao() throws SQLException {
 		if (metadataReferenceDao == null) {
-			metadataReferenceDao = DaoManager.createDao(connectionSource,
-					MetadataReference.class);
+			metadataReferenceDao = createDao(MetadataReference.class);
 		}
 		return metadataReferenceDao;
 	}

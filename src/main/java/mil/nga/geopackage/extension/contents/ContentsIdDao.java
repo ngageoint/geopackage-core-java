@@ -2,14 +2,14 @@ package mil.nga.geopackage.extension.contents;
 
 import java.sql.SQLException;
 
-import mil.nga.geopackage.GeoPackageException;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Contents Id Data Access Object
@@ -17,7 +17,7 @@ import com.j256.ormlite.support.ConnectionSource;
  * @author osbornb
  * @since 3.2.0
  */
-public class ContentsIdDao extends BaseDaoImpl<ContentsId, Long> {
+public class ContentsIdDao extends GeoPackageDao<ContentsId, Long> {
 
 	/**
 	 * Constructor, required by ORMLite
@@ -51,7 +51,8 @@ public class ContentsIdDao extends BaseDaoImpl<ContentsId, Long> {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for Contents Id by Table Name: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 		return contentsId;
 	}
