@@ -10,5 +10,6 @@ CREATE TABLE 'gpkgext_tile_matrix' (
   pixel_y_size DOUBLE NOT NULL,
   left DOUBLE NOT NULL,
   top DOUBLE NOT NULL,
+  scale_denominator DOUBLE DEFAULT NULL,
   CONSTRAINT fk_etm_etms FOREIGN KEY (tms_id) REFERENCES gpkgext_tile_matrix_set(id)
 );

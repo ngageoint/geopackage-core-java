@@ -22,6 +22,7 @@ public class ExtTileMatrix {
     public static final String COLUMN_PIXEL_Y_SIZE = "pixel_y_size";
     public static final String COLUMN_TOP = "top";
     public static final String COLUMN_LEFT = "left";
+    public static final String COLUMN_SCALE_DENOMINATOR = "scale_denominator";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true, canBeNull = false)
     private long id;
@@ -58,6 +59,9 @@ public class ExtTileMatrix {
 
     @DatabaseField(columnName = COLUMN_LEFT, canBeNull = false)
     private double left;
+
+    @DatabaseField(columnName = COLUMN_SCALE_DENOMINATOR)
+    private Double scaleDenominator;
 
     public long getId() {
         return id;
@@ -150,5 +154,13 @@ public class ExtTileMatrix {
 
     public void setLeft(double left) {
         this.left = left;
+    }
+
+    public Double getScaleDenominator() {
+        return scaleDenominator;
+    }
+
+    public void setScaleDenominator(Double scaleDenominator) {
+        this.scaleDenominator = scaleDenominator;
     }
 }
