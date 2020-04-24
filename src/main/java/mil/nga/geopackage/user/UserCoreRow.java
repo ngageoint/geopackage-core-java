@@ -456,7 +456,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Set the id, package access only for the DAO
+	 * Set the id
 	 * 
 	 * @param id
 	 *            id value

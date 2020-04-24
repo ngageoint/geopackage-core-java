@@ -53,6 +53,7 @@ public class VectorTilesExtension extends BaseExtension {
 
     /**
      * @param tableName user tiles table name
+     * @param vtee vector tiles encoding extension
      * @return true if table was created, false if the table already existed
      */
     public boolean createUserVectorTilesTable(String tableName, VectorTilesEncodingExtension vtee) {
@@ -94,6 +95,7 @@ public class VectorTilesExtension extends BaseExtension {
      * Get or create the extension
      *
      * @param tilesTable tiles table name
+     * @param vtee vector tiles encoding extension
      * @return extensions
      */
     public List<Extensions> getOrCreate(String tilesTable, VectorTilesEncodingExtension vtee) {
