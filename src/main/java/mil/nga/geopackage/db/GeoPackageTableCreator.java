@@ -14,7 +14,7 @@ import mil.nga.geopackage.user.UserTable;
 
 /**
  * Executes database scripts to create GeoPackage tables
- * 
+ *
  * @author osbornb
  */
 public class GeoPackageTableCreator {
@@ -26,7 +26,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param db
 	 *            db connection
 	 */
@@ -36,20 +36,20 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Get the database script name for the property
-	 * 
+	 *
 	 * @param property
 	 *            property name
 	 * @return script name
 	 * @since 3.3.0
 	 */
-	public static final String getScript(String property) {
+	public static String getScript(String property) {
 		return GeoPackageProperties.getProperty(PropertyConstants.SQL,
 				property);
 	}
 
 	/**
 	 * Spatial Reference System script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String SPATIAL_REFERENCE_SYSTEM = getScript(
@@ -57,42 +57,42 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Contents script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String CONTENTS = getScript("contents");
 
 	/**
 	 * Geometry Columns script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String GEOMETRY_COLUMNS = getScript("geometry_columns");
 
 	/**
 	 * Tile Matrix Set script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String TILE_MATRIX_SET = getScript("tile_matrix_set");
 
 	/**
 	 * Tile Matrix script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String TILE_MATRIX = getScript("tile_matrix");
 
 	/**
 	 * Data Columns script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String DATA_COLUMNS = getScript("data_columns");
 
 	/**
 	 * Data Column Constraints script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String DATA_COLUMN_CONSTRAINTS = getScript(
@@ -100,14 +100,14 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Metadata script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String METADATA = getScript("metadata");
 
 	/**
 	 * Metadata Reference script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String METADATA_REFERENCE = getScript(
@@ -115,14 +115,14 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Extensions script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String EXTENSIONS = getScript("extensions");
 
 	/**
 	 * Tiled Gridded Coverage Data Coverage extension script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String GRIDDED_COVERAGE = getScript(
@@ -130,36 +130,110 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Tiled Gridded Coverage Data Tile extension script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String GRIDDED_TILE = getScript("2d_gridded_tile");
 
 	/**
 	 * Extended Relations script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String EXTENDED_RELATIONS = getScript(
 			"extended_relations");
 
 	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String STYLES = getScript(
+			"styles");
+
+	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String STYLESHEETS = getScript(
+			"stylesheets");
+
+	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String SYMBOL_CONTENT = getScript("symbol_content");
+
+	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String SYMBOL_IMAGES = getScript("symbol_images");
+
+	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String SYMBOLS = getScript("symbols");
+
+	/**
+	 * Vector Tiles Fields script
+	 *
+	 */
+	public static final String VT_FIELDS = getScript("vt_fields");
+
+	/**
+	 * Vector Tiles Layers script
+	 *
+	 */
+	public static final String VT_LAYERS = getScript("vt_layers");
+
+	/**
+	 * gpkgext_tile_matrix_set script
+	 *
+	 */
+	public static final String EXT_TMS_CREATE = getScript("ext_tms_create");
+
+	/**
+	 * gpkgext_tile_matrix_set script
+	 *
+	 */
+	public static final String EXT_TMS = getScript("ext_tms");
+
+	/**
+	 * gpkgext_tile_matrix script
+	 *
+	 */
+	public static final String EXT_TM = getScript("ext_tm");
+
+	/**
+	 * gpkgext_tile_matrix_set_tables script
+	 *
+	 */
+	public static final String EXT_TM_TABLES = getScript("ext_tm_tables");
+
+	/**
+	 * gpkgext_tile_matrix_variable_widths script
+	 *
+	 */
+	public static final String EXT_TM_VW = getScript("ext_tm_vw");
+
+	/**
 	 * Table Index script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String TABLE_INDEX = getScript("table_index");
 
 	/**
 	 * Geometry Index script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String GEOMETRY_INDEX = getScript("geometry_index");
 
 	/**
 	 * Index Geometry Index script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String INDEX_GEOMETRY_INDEX = GeoPackageProperties
@@ -169,7 +243,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Unindex Geometry Index script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String UNINDEX_GEOMETRY_INDEX = GeoPackageProperties
@@ -179,7 +253,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Feature Tile Link script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String FEATURE_TILE_LINK = getScript(
@@ -187,21 +261,21 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Tile Scaling script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String TILE_SCALING = getScript("tile_scaling");
 
 	/**
 	 * Contents Id script
-	 * 
+	 *
 	 * @since 3.3.0
 	 */
 	public static final String CONTENTS_ID = getScript("contents_id");
 
 	/**
 	 * Create Spatial Reference System table and views
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createSpatialReferenceSystem() {
@@ -210,7 +284,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Contents table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createContents() {
@@ -219,7 +293,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Geometry Columns table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createGeometryColumns() {
@@ -228,7 +302,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Tile Matrix Set table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createTileMatrixSet() {
@@ -237,7 +311,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Tile Matrix table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createTileMatrix() {
@@ -246,7 +320,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Data Columns table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createDataColumns() {
@@ -255,7 +329,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Data Column Constraints table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createDataColumnConstraints() {
@@ -264,7 +338,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Metadata table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createMetadata() {
@@ -273,7 +347,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Metadata Reference table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createMetadataReference() {
@@ -282,7 +356,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Extensions table
-	 * 
+	 *
 	 * @return executed statements
 	 */
 	public int createExtensions() {
@@ -291,7 +365,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create the Tiled Gridded Coverage Data Coverage extension table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 1.2.1
 	 */
@@ -301,7 +375,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create the Tiled Gridded Coverage Data Tile extension table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 1.2.1
 	 */
@@ -311,7 +385,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create the Extended Relations table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 3.0.1
 	 */
@@ -320,8 +394,71 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create the Vector Tiles Layers table
+	 *
+	 * @return executed statements
+	 */
+	public int createVectorTilesLayers() {
+		return execSQLScript(VT_LAYERS);
+	}
+
+	/**
+	 * Create the Vector Tiles Fields table
+	 *
+	 * @return executed statements
+	 */
+	public int createVectorTilesFields() {
+		return execSQLScript(VT_FIELDS);
+	}
+
+	/**
+	 * Create the Styles table
+	 *
+	 * @return executed statements
+	 */
+	public int createStyles() {
+		return execSQLScript(STYLES);
+	}
+
+	/**
+	 * Create the Stylesheets table
+	 *
+	 * @return executed statements
+	 */
+	public int createStylesheets() {
+		return execSQLScript(STYLESHEETS);
+	}
+
+	/**
+	 * Create the Symbols table
+	 *
+	 * @return executed statements
+	 */
+	public int createSymbols() {
+		return execSQLScript(SYMBOLS);
+	}
+
+	/**
+	 * Create the Symbol Images table
+	 *
+	 * @return executed statements
+	 */
+	public int createSymbolImages() {
+		return execSQLScript(SYMBOL_IMAGES);
+	}
+
+	/**
+	 * Create the Symbol Content table
+	 *
+	 * @return executed statements
+	 */
+	public int createSymbolContent() {
+		return execSQLScript(SYMBOL_CONTENT);
+	}
+
+	/**
 	 * Create Table Index table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 1.1.0
 	 */
@@ -331,7 +468,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Geometry Index table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 1.1.0
 	 */
@@ -341,7 +478,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Geometry Index table column indexes
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 3.1.0
 	 */
@@ -351,7 +488,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Un-index (drop) Geometry Index table column indexes
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 3.1.0
 	 */
@@ -361,7 +498,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Feature Tile Link table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 1.1.5
 	 */
@@ -371,7 +508,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Tile Scaling table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 2.0.2
 	 */
@@ -381,7 +518,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Create Contents Id table
-	 * 
+	 *
 	 * @return executed statements
 	 * @since 3.2.0
 	 */
@@ -391,7 +528,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Execute the SQL Script
-	 * 
+	 *
 	 * @param sqlScript
 	 *            SQL script property file name
 	 * @return executed statements
@@ -410,7 +547,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Read the SQL Script and parse the statements
-	 * 
+	 *
 	 * @param sqlScript
 	 *            SQL script property file name
 	 * @return statements
@@ -419,14 +556,12 @@ public class GeoPackageTableCreator {
 	public static List<String> readSQLScript(String sqlScript) {
 		String path = GeoPackageProperties.getProperty(PropertyConstants.SQL,
 				"directory");
-		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
-				sqlScript);
-		return statements;
+		return ResourceIOUtils.parseSQLStatements(path, sqlScript);
 	}
 
 	/**
 	 * Create the user defined table
-	 * 
+	 *
 	 * @param table
 	 *            user table
 	 * @param <TColumn>
@@ -477,7 +612,7 @@ public class GeoPackageTableCreator {
 
 	/**
 	 * Drop the table if it exists
-	 * 
+	 *
 	 * @param table
 	 *            table name
 	 * @since 1.1.5
@@ -486,4 +621,49 @@ public class GeoPackageTableCreator {
 		CoreSQLUtils.dropTable(db, table);
 	}
 
+	/**
+	 * Drop the view if it exists
+	 *
+	 * @param view
+	 *            view name
+	 */
+	public void dropView(String view) {
+		CoreSQLUtils.dropView(db, view);
+	}
+
+	/**
+	 * Create the Extended Tile Matrix Set table
+	 *
+	 * @return executed statements
+	 */
+	public int createExtTileMatrixSet() {
+		return execSQLScript(EXT_TMS);
+	}
+
+	/**
+	 * Create the Extended Tile Matrix table
+	 *
+	 * @return executed statements
+	 */
+	public int createExtTileMatrix() {
+		return execSQLScript(EXT_TM);
+	}
+
+	/**
+	 * Create the Extended Tile Matrix Tables table
+	 *
+	 * @return executed statements
+	 */
+	public int createExtTileMatrixTables() {
+		return execSQLScript(EXT_TM_TABLES);
+	}
+
+	/**
+	 * Create the Extended Tile Matrix Set table
+	 *
+	 * @return executed statements
+	 */
+	public int createExtTileMatrixVariableWidths() {
+		return execSQLScript(EXT_TM_VW);
+	}
 }

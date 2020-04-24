@@ -5,6 +5,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
 
@@ -152,13 +153,11 @@ public class TileMatrixSet {
 			// Verify the Contents have a tiles data type (Spec Requirement 33)
 			ContentsDataType dataType = contents.getDataType();
 			if (dataType == null
-					|| (dataType != ContentsDataType.TILES && dataType != ContentsDataType.GRIDDED_COVERAGE)) {
-				throw new GeoPackageException("The "
-						+ Contents.class.getSimpleName() + " of a "
-						+ TileMatrixSet.class.getSimpleName()
-						+ " must have a data type of "
-						+ ContentsDataType.TILES.getName() + " or "
-						+ ContentsDataType.GRIDDED_COVERAGE.getName());
+					|| !dataType.isTilesType()) {
+				throw new GeoPackageException(
+						String.format("The %s of a %s must have a data type assigned to the \"tiles\" option.",
+								Contents.class.getSimpleName(),
+								TileTable.class.getSimpleName()));
 			}
 			tableName = contents.getId();
 		} else {

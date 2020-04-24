@@ -1,0 +1,9 @@
+CREATE TABLE 'gpkgext_vt_layers' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  table_name TEXT NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  minzoom INTEGER,
+  maxzoom INTEGER,
+  attributes_table_name TEXT
+ );

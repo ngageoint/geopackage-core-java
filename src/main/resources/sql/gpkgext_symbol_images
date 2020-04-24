@@ -1,0 +1,12 @@
+CREATE TABLE 'gpkgext_symbol_images' (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  symbol_id INTEGER NOT NULL,
+  content_id INTEGER NOT NULL,
+  width INTEGER,
+  height INTEGER,
+  offset_x INTEGER,
+  offset_y INTEGER,
+  pixel_ratio INTEGER,
+  CONSTRAINT symbol_id_fk FOREIGN KEY (symbol_id) REFERENCES gpkgext_symbols(id),
+  CONSTRAINT content_id_fk FOREIGN KEY (content_id) REFERENCES gpkgext_symbol_content(id)
+);

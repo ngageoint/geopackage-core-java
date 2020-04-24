@@ -63,7 +63,10 @@ public enum MetadataScopeType {
 			"Information applies to non-geographic data"),
 
 	DIMENSION_GROUP("dimensionGroup", "008",
-			"Information applies to a dimension group");
+			"Information applies to a dimension group"),
+
+	STYLE("style", "NA",
+			"Information applies to a specific style");
 
 	/**
 	 * Name
