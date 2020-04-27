@@ -47,7 +47,7 @@ public enum ContentsDataType {
 	 * @param name
 	 *            data type name
 	 */
-	private ContentsDataType(final String name) {
+	private ContentsDataType(String name) {
 		this.name = name;
 	}
 
