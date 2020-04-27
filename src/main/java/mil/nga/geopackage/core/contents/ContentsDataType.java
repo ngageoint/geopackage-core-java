@@ -44,9 +44,10 @@ public enum ContentsDataType {
 	/**
 	 * Constructor
 	 *
-	 * @param name data type name
+	 * @param name
+	 *            data type name
 	 */
-	ContentsDataType(final String name) {
+	private ContentsDataType(final String name) {
 		this.name = name;
 	}
 
@@ -79,9 +80,15 @@ public enum ContentsDataType {
 		return dataType;
 	}
 
+	/**
+	 * Is the data type a tiles type
+	 * 
+	 * @return true if a tiles type
+	 * @since 3.5.1
+	 */
 	public boolean isTilesType() {
-		return (this == TILES) ||
-				(this == GRIDDED_COVERAGE) ||
-				(this == VECTOR_TILES);
+		return (this == TILES) || (this == GRIDDED_COVERAGE)
+				|| (this == VECTOR_TILES);
 	}
+
 }

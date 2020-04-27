@@ -47,12 +47,28 @@ import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
-import mil.nga.geopackage.extension.portrayal.*;
+import mil.nga.geopackage.extension.portrayal.Styles;
+import mil.nga.geopackage.extension.portrayal.StylesDao;
+import mil.nga.geopackage.extension.portrayal.Stylesheets;
+import mil.nga.geopackage.extension.portrayal.StylesheetsDao;
+import mil.nga.geopackage.extension.portrayal.SymbolContent;
+import mil.nga.geopackage.extension.portrayal.SymbolContentDao;
+import mil.nga.geopackage.extension.portrayal.SymbolImages;
+import mil.nga.geopackage.extension.portrayal.SymbolImagesDao;
+import mil.nga.geopackage.extension.portrayal.Symbols;
+import mil.nga.geopackage.extension.portrayal.SymbolsDao;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
-import mil.nga.geopackage.extension.tile_matrix_set.*;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrix;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixDao;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSet;
+import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSetDao;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTable;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTablesDao;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidths;
+import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidthsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesFields;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayers;
@@ -69,8 +85,6 @@ import mil.nga.geopackage.metadata.Metadata;
 import mil.nga.geopackage.metadata.MetadataDao;
 import mil.nga.geopackage.metadata.reference.MetadataReference;
 import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
-import mil.nga.geopackage.property.GeoPackageProperties;
-import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
@@ -110,7 +124,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	/**
 	 * Table creator
 	 */
-	protected final GeoPackageTableCreator tableCreator;
+	private final GeoPackageTableCreator tableCreator;
 
 	/**
 	 * Writable GeoPackage flag
@@ -1094,8 +1108,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		ExtensionsDao dao = getExtensionsDao();
 		try {
-			if (!getExtensionsDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createExtensions() > 0;
 			}
 		} catch (SQLException e) {
@@ -1595,8 +1610,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		GriddedTileDao dao = getGriddedTileDao();
 		try {
-			if (!getGriddedTileDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createGriddedTile() > 0;
 			}
 		} catch (SQLException e) {
@@ -1654,8 +1670,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		GeometryIndexDao dao = getGeometryIndexDao();
 		try {
-			if (!getGeometryIndexDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createGeometryIndex() > 0;
 			}
 		} catch (SQLException e) {
@@ -1727,8 +1744,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		FeatureTileLinkDao dao = getFeatureTileLinkDao();
 		try {
-			if (!getFeatureTileLinkDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createFeatureTileLink() > 0;
 			}
 		} catch (SQLException e) {
@@ -1866,8 +1884,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		TileScalingDao dao = getTileScalingDao();
 		try {
-			if (!getTileScalingDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createTileScaling() > 0;
 			}
 		} catch (SQLException e) {
@@ -1895,8 +1914,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		ExtendedRelationsDao dao = getExtendedRelationsDao();
 		try {
-			if (!getExtendedRelationsDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createExtendedRelations() > 0;
 			}
 		} catch (SQLException e) {
@@ -1923,8 +1943,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		ContentsIdDao dao = getContentsIdDao();
 		try {
-			if (!getContentsIdDao().isTableExists()) {
+			if (!dao.isTableExists()) {
 				created = tableCreator.createContentsId() > 0;
 			}
 		} catch (SQLException e) {
@@ -1945,7 +1966,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 		tableCreator.createTable(table);
 	}
-
 
 	@Override
 	public VectorTilesLayersDao getVectorTilesLayersDao() {
@@ -1999,7 +2019,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 	@Override
 	public TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao() {
-		return (TileMatrixVariableWidthsDao) this.createDao(TileMatrixVariableWidths.class);
+		return (TileMatrixVariableWidthsDao) this
+				.createDao(TileMatrixVariableWidths.class);
 	}
 
 	@Override
@@ -2007,23 +2028,28 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		VectorTilesFieldsDao fieldsDao = getVectorTilesFieldsDao();
 		try {
-			if (!getVectorTilesFieldsDao().isTableExists()) {
+			if (!fieldsDao.isTableExists()) {
 				created = tableCreator.createVectorTilesFields() > 0;
 			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ VectorTilesFields.TABLE_NAME
-					+ " table exists and create it", e);
+			throw new GeoPackageException(
+					"Failed to check if " + VectorTilesFields.TABLE_NAME
+							+ " table exists and create it",
+					e);
 		}
+		VectorTilesLayersDao layersDao = getVectorTilesLayersDao();
 		try {
-			if (!getVectorTilesLayersDao().isTableExists()) {
-				created = (tableCreator.createVectorTilesLayers() > 0) || created;
+			if (!layersDao.isTableExists()) {
+				created = (tableCreator.createVectorTilesLayers() > 0)
+						|| created;
 			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ VectorTilesLayers.TABLE_NAME
-					+ " table exists and create it", e);
+			throw new GeoPackageException(
+					"Failed to check if " + VectorTilesLayers.TABLE_NAME
+							+ " table exists and create it",
+					e);
 		}
 		return created;
 	}
@@ -2033,102 +2059,116 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		boolean created = false;
+		StylesDao stylesDao = getStylesDao();
 		try {
-			if (!getStylesDao().isTableExists()) {
+			if (!stylesDao.isTableExists()) {
 				created = tableCreator.createStyles() > 0;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ Styles.TABLE_NAME
-					+ " table exists and create it", e);
+					+ Styles.TABLE_NAME + " table exists and create it", e);
 		}
+		StylesheetsDao stylesheetsDao = getStylesheetsDao();
 		try {
-			if (!getStylesheetsDao().isTableExists()) {
+			if (!stylesheetsDao.isTableExists()) {
 				created = (tableCreator.createStylesheets() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ Stylesheets.TABLE_NAME
-					+ " table exists and create it", e);
+					+ Stylesheets.TABLE_NAME + " table exists and create it",
+					e);
 		}
+		SymbolsDao symbolsDao = getSymbolsDao();
 		try {
-			if (!getSymbolsDao().isTableExists()) {
+			if (!symbolsDao.isTableExists()) {
 				created = (tableCreator.createSymbols() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ Stylesheets.TABLE_NAME
-					+ " table exists and create it", e);
+					+ Stylesheets.TABLE_NAME + " table exists and create it",
+					e);
 		}
+		SymbolContentDao symbolContentDao = getSymbolContentDao();
 		try {
-			if (!getSymbolContentDao().isTableExists()) {
+			if (!symbolContentDao.isTableExists()) {
 				created = (tableCreator.createSymbolContent() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ SymbolContent.TABLE_NAME
-					+ " table exists and create it", e);
+					+ SymbolContent.TABLE_NAME + " table exists and create it",
+					e);
 		}
+		SymbolImagesDao symbolImagesDao = getSymbolImagesDao();
 		try {
-			if (!getSymbolImagesDao().isTableExists()) {
+			if (!symbolImagesDao.isTableExists()) {
 				created = (tableCreator.createSymbolImages() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ SymbolImages.TABLE_NAME
-					+ " table exists and create it", e);
+					+ SymbolImages.TABLE_NAME + " table exists and create it",
+					e);
 		}
 		return created;
 	}
 
 	@Override
-	public boolean createTileMatrixSetExtension(){
+	public boolean createTileMatrixSetExtension() {
 		verifyWritable();
 
 		boolean created = false;
 
+		ExtTileMatrixSetDao tileMatrixSetDao = getExtTileMatrixSetDao();
 		try {
-			if (!getExtTileMatrixSetDao().isTableExists()) {
+			if (!tileMatrixSetDao.isTableExists()) {
 				created = tableCreator.createExtTileMatrixSet() > 0;
 			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ ExtTileMatrixSet.TABLE_NAME
-					+ " table exists and create it", e);
+			throw new GeoPackageException(
+					"Failed to check if " + ExtTileMatrixSet.TABLE_NAME
+							+ " table exists and create it",
+					e);
 		}
 
+		ExtTileMatrixDao tileMatrixDao = getExtTileMatrixDao();
 		try {
-			if (!getExtTileMatrixDao().isTableExists()) {
+			if (!tileMatrixDao.isTableExists()) {
 				created = (tableCreator.createExtTileMatrix() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
-					+ ExtTileMatrix.TABLE_NAME
-					+ " table exists and create it", e);
+					+ ExtTileMatrix.TABLE_NAME + " table exists and create it",
+					e);
 		}
 
+		TileMatrixTablesDao tablesDao = getTileMatrixTablesDao();
 		try {
-			if (!getTileMatrixTablesDao().isTableExists()) {
-				created = (tableCreator.createExtTileMatrixTables() > 0) || created;
+			if (!tablesDao.isTableExists()) {
+				created = (tableCreator.createExtTileMatrixTables() > 0)
+						|| created;
 			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ TileMatrixTable.TABLE_NAME
-					+ " table exists and create it", e);
+			throw new GeoPackageException(
+					"Failed to check if " + TileMatrixTable.TABLE_NAME
+							+ " table exists and create it",
+					e);
 		}
 
+		TileMatrixVariableWidthsDao variableWidthsDao = getTileMatrixVariableWidthsDao();
 		try {
-			if (!getTileMatrixVariableWidthsDao().isTableExists()) {
-				created = (tableCreator.createExtTileMatrixVariableWidths() > 0) || created;
+			if (!variableWidthsDao.isTableExists()) {
+				created = (tableCreator.createExtTileMatrixVariableWidths() > 0)
+						|| created;
 			}
 		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ TileMatrixVariableWidths.TABLE_NAME
-					+ " table exists and create it", e);
+			throw new GeoPackageException(
+					"Failed to check if " + TileMatrixVariableWidths.TABLE_NAME
+							+ " table exists and create it",
+					e);
 		}
 
 		tableCreator.execSQLScript("ecere_tms_create.sql");
 
 		return created;
 	}
+
 }

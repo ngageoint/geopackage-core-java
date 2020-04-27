@@ -111,9 +111,13 @@ public class Metadata {
 		this.scope = metadataScope.getName();
 	}
 
-	public String getMetadataScopeString() { return scope; }
+	public String getMetadataScopeString() {
+		return scope;
+	}
 
-	public void setMetadataScope(String metadataScope) { this.scope = metadataScope; }
+	public void setMetadataScope(String metadataScope) {
+		this.scope = metadataScope;
+	}
 
 	public String getStandardUri() {
 		return standardUri;
@@ -138,4 +142,5 @@ public class Metadata {
 	public void setMetadata(String metadata) {
 		this.metadata = metadata;
 	}
+
 }

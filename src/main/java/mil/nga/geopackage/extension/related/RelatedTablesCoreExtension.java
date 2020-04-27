@@ -122,8 +122,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 * @return true if has extension
 	 */
 	public boolean has() {
-		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null) &&
-				geoPackage.isTable(ExtendedRelation.TABLE_NAME);
+		return has(EXTENSION_NAME, ExtendedRelation.TABLE_NAME, null)
+				&& geoPackage.isTable(ExtendedRelation.TABLE_NAME);
 	}
 
 	/**

@@ -46,6 +46,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 *
 	 * @param tableName
 	 *            table name
+	 * @since 3.5.1
 	 */
 	public TileTable(String tableName) {
 		this(tableName, createRequiredColumns());
@@ -231,12 +232,12 @@ public class TileTable extends UserTable<TileColumn> {
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have a tiles data type
 		ContentsDataType dataType = contents.getDataType();
-		if (dataType == null
-				|| !dataType.isTilesType()) {
-			throw new GeoPackageException(
-					String.format("The %s of a %s must have a data type assigned to the \"tiles\" option.",
+		if (dataType == null || !dataType.isTilesType()) {
+			throw new GeoPackageException(String.format(
+					"The %s of a %s must have a data type assigned to the \"tiles\" option.",
 					Contents.class.getSimpleName(),
 					TileTable.class.getSimpleName()));
 		}
 	}
+
 }
