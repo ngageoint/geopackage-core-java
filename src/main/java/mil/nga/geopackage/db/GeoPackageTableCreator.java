@@ -249,7 +249,7 @@ public class GeoPackageTableCreator {
 	public static final String VT_LAYERS = getScript("vt_layers");
 
 	/**
-	 * gpkgext_tile_matrix_set script
+	 * ecere_tms_create script
 	 *
 	 * @since 3.5.1
 	 */
@@ -581,6 +581,19 @@ public class GeoPackageTableCreator {
 	 */
 	public int createExtTileMatrixVariableWidths() {
 		return execSQLScript(EXT_TM_VW);
+	}
+
+	/**
+	 * Execute the database script name for the property
+	 *
+	 * @param property
+	 *            property name
+	 * @return executed statements
+	 * @since 3.5.1
+	 */
+	public int execScript(String property) {
+		String sqlScript = getScript(property);
+		return execSQLScript(sqlScript);
 	}
 
 	/**

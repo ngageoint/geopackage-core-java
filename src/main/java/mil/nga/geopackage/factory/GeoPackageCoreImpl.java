@@ -2166,7 +2166,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					e);
 		}
 
-		tableCreator.execSQLScript("ecere_tms_create");
+		tableCreator.execSQLScript(GeoPackageTableCreator.EXT_TMS_CREATE);
 
 		return created;
 	}
