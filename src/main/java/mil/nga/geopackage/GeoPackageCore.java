@@ -31,10 +31,6 @@ import mil.nga.geopackage.extension.portrayal.SymbolImagesDao;
 import mil.nga.geopackage.extension.portrayal.SymbolsDao;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixDao;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSetDao;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTablesDao;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidthsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayersDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -1346,38 +1342,6 @@ public interface GeoPackageCore extends Closeable {
 	public SymbolsDao getSymbolsDao();
 
 	/**
-	 * Get the Tile Matrix Set Extension Tile Matrix DAO
-	 * 
-	 * @return tile matrix dao
-	 * @since 3.5.1
-	 */
-	public ExtTileMatrixDao getExtTileMatrixDao();
-
-	/**
-	 * Get the Tile Matrix Set Extension Tile Matrix Set DAO
-	 * 
-	 * @return tile matrix set dao
-	 * @since 3.5.1
-	 */
-	public ExtTileMatrixSetDao getExtTileMatrixSetDao();
-
-	/**
-	 * Get the Tile Matrix Set Extension Tile Matrix Tables DAO
-	 * 
-	 * @return tile matrix tables dao
-	 * @since 3.5.1
-	 */
-	public TileMatrixTablesDao getTileMatrixTablesDao();
-
-	/**
-	 * Get the Tile Matrix Set Extension Tile Matrix Tables DAO
-	 * 
-	 * @return tile matrix tables dao
-	 * @since 3.5.1
-	 */
-	public TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao();
-
-	/**
 	 * Create the Vector Tiles Extension tables if they do not exist
 	 *
 	 * @return true if any table is created
@@ -1392,14 +1356,5 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.5.1
 	 */
 	public boolean createPortrayalTables();
-
-	/**
-	 * Create the Tile Matrix Set Extension tables and views if they do not
-	 * exist
-	 *
-	 * @return true if any table is created
-	 * @since 3.5.1
-	 */
-	public boolean createTileMatrixSetExtension();
 
 }

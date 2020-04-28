@@ -5,6 +5,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
  * Abstract base GeoPackage extension
@@ -69,7 +70,8 @@ public abstract class BaseExtension {
 	 * @return extension
 	 */
 	protected Extensions getOrCreate(String extensionName, String tableName,
-			String columnName, String definition, ExtensionScopeType scopeType) {
+			String columnName, String definition,
+			ExtensionScopeType scopeType) {
 
 		Extensions extension = get(extensionName, tableName, columnName);
 
@@ -88,10 +90,12 @@ public abstract class BaseExtension {
 
 				extensionsDao.create(extension);
 			} catch (SQLException e) {
-				throw new GeoPackageException("Failed to create '"
-						+ extensionName + "' extension for GeoPackage: "
-						+ geoPackage.getName() + ", Table Name: " + tableName
-						+ ", Column Name: " + columnName, e);
+				throw new GeoPackageException(
+						"Failed to create '" + extensionName
+								+ "' extension for GeoPackage: "
+								+ geoPackage.getName() + ", Table Name: "
+								+ tableName + ", Column Name: " + columnName,
+						e);
 			}
 		}
 
@@ -216,6 +220,31 @@ public abstract class BaseExtension {
 	protected boolean has(String extensionName) {
 		List<Extensions> extensions = getExtensions(extensionName);
 		return extensions != null && !extensions.isEmpty();
+	}
+
+	/**
+	 * Verify the GeoPackage is writable and throw an exception if it is not
+	 * 
+	 * @since 3.5.1
+	 */
+	public void verifyWritable() {
+		geoPackage.verifyWritable();
+	}
+
+	/**
+	 * Create a dao
+	 *
+	 * @param type
+	 *            dao class type
+	 * @param <D>
+	 *            dao type
+	 * @param <T>
+	 *            class type
+	 * @return base dao implementation
+	 * @since 3.5.1
+	 */
+	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type) {
+		return geoPackage.createDao(type);
 	}
 
 }

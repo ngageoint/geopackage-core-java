@@ -249,41 +249,6 @@ public class GeoPackageTableCreator {
 	public static final String VT_LAYERS = getScript("vt_layers");
 
 	/**
-	 * ecere_tms_create script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String EXT_TMS_CREATE = getScript("ext_tms_create");
-
-	/**
-	 * gpkgext_tile_matrix_set script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String EXT_TMS = getScript("ext_tms");
-
-	/**
-	 * gpkgext_tile_matrix script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String EXT_TM = getScript("ext_tm");
-
-	/**
-	 * gpkgext_tile_matrix_set_tables script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String EXT_TM_TABLES = getScript("ext_tm_tables");
-
-	/**
-	 * gpkgext_tile_matrix_variable_widths script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String EXT_TM_VW = getScript("ext_tm_vw");
-
-	/**
 	 * Create Spatial Reference System table and views
 	 *
 	 * @return executed statements
@@ -541,46 +506,6 @@ public class GeoPackageTableCreator {
 	 */
 	public int createSymbolContent() {
 		return execSQLScript(SYMBOL_CONTENT);
-	}
-
-	/**
-	 * Create the Extended Tile Matrix Set table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createExtTileMatrixSet() {
-		return execSQLScript(EXT_TMS);
-	}
-
-	/**
-	 * Create the Extended Tile Matrix table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createExtTileMatrix() {
-		return execSQLScript(EXT_TM);
-	}
-
-	/**
-	 * Create the Extended Tile Matrix Tables table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createExtTileMatrixTables() {
-		return execSQLScript(EXT_TM_TABLES);
-	}
-
-	/**
-	 * Create the Extended Tile Matrix Set table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createExtTileMatrixVariableWidths() {
-		return execSQLScript(EXT_TM_VW);
 	}
 
 	/**

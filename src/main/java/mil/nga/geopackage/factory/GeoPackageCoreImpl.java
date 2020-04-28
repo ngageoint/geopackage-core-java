@@ -61,14 +61,6 @@ import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrix;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixDao;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSet;
-import mil.nga.geopackage.extension.tile_matrix_set.ExtTileMatrixSetDao;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTable;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixTablesDao;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidths;
-import mil.nga.geopackage.extension.tile_matrix_set.TileMatrixVariableWidthsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesFields;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
 import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayers;
@@ -140,18 +132,34 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            path
 	 * @param database
 	 *            database
-	 * @param tableCreator
-	 *            table creator
 	 * @param writable
 	 *            true if writable
+	 * @since 3.5.1
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
-			GeoPackageCoreConnection database,
-			GeoPackageTableCreator tableCreator, boolean writable) {
+			GeoPackageCoreConnection database) {
+		this(name, path, database, true);
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param name
+	 *            name
+	 * @param path
+	 *            path
+	 * @param database
+	 *            database
+	 * @param writable
+	 *            true if writable
+	 * @since 3.5.1
+	 */
+	protected GeoPackageCoreImpl(String name, String path,
+			GeoPackageCoreConnection database, boolean writable) {
 		this.name = name;
 		this.path = path;
 		this.database = database;
-		this.tableCreator = tableCreator;
+		this.tableCreator = new GeoPackageTableCreator(database);
 		this.writable = writable;
 	}
 
@@ -2003,27 +2011,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	}
 
 	@Override
-	public ExtTileMatrixDao getExtTileMatrixDao() {
-		return (ExtTileMatrixDao) this.createDao(ExtTileMatrix.class);
-	}
-
-	@Override
-	public ExtTileMatrixSetDao getExtTileMatrixSetDao() {
-		return (ExtTileMatrixSetDao) this.createDao(ExtTileMatrixSet.class);
-	}
-
-	@Override
-	public TileMatrixTablesDao getTileMatrixTablesDao() {
-		return (TileMatrixTablesDao) this.createDao(TileMatrixTable.class);
-	}
-
-	@Override
-	public TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao() {
-		return (TileMatrixVariableWidthsDao) this
-				.createDao(TileMatrixVariableWidths.class);
-	}
-
-	@Override
 	public boolean createVectorTilesTables() {
 		verifyWritable();
 
@@ -2108,66 +2095,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ SymbolImages.TABLE_NAME + " table exists and create it",
 					e);
 		}
-		return created;
-	}
-
-	@Override
-	public boolean createTileMatrixSetExtension() {
-		verifyWritable();
-
-		boolean created = false;
-
-		ExtTileMatrixSetDao tileMatrixSetDao = getExtTileMatrixSetDao();
-		try {
-			if (!tileMatrixSetDao.isTableExists()) {
-				created = tableCreator.createExtTileMatrixSet() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + ExtTileMatrixSet.TABLE_NAME
-							+ " table exists and create it",
-					e);
-		}
-
-		ExtTileMatrixDao tileMatrixDao = getExtTileMatrixDao();
-		try {
-			if (!tileMatrixDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrix() > 0) || created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ ExtTileMatrix.TABLE_NAME + " table exists and create it",
-					e);
-		}
-
-		TileMatrixTablesDao tablesDao = getTileMatrixTablesDao();
-		try {
-			if (!tablesDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrixTables() > 0)
-						|| created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + TileMatrixTable.TABLE_NAME
-							+ " table exists and create it",
-					e);
-		}
-
-		TileMatrixVariableWidthsDao variableWidthsDao = getTileMatrixVariableWidthsDao();
-		try {
-			if (!variableWidthsDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrixVariableWidths() > 0)
-						|| created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + TileMatrixVariableWidths.TABLE_NAME
-							+ " table exists and create it",
-					e);
-		}
-
-		tableCreator.execSQLScript(GeoPackageTableCreator.EXT_TMS_CREATE);
-
 		return created;
 	}
 
