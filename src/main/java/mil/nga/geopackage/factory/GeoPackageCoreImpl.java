@@ -132,8 +132,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            path
 	 * @param database
 	 *            database
-	 * @param writable
-	 *            true if writable
 	 * @since 3.5.1
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
