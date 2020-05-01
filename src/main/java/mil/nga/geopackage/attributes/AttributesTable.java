@@ -51,7 +51,7 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 	 */
 	@Override
 	public String getDataType() {
-		return ContentsDataType.ATTRIBUTES.getName();
+		return getDataType(ContentsDataType.ATTRIBUTES.getName());
 	}
 
 	/**
@@ -76,13 +76,13 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 	@Override
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have an attributes data type
-		ContentsDataType dataType = contents.getDataType();
-		if (dataType == null || dataType != ContentsDataType.ATTRIBUTES) {
+		if (!contents.isAttributesTypeOrUnknown()) {
 			throw new GeoPackageException(
-					"The " + Contents.class.getSimpleName() + " of a "
+					"The " + Contents.class.getSimpleName() + " of an "
 							+ AttributesTable.class.getSimpleName()
 							+ " must have a data type of "
-							+ ContentsDataType.ATTRIBUTES.getName());
+							+ ContentsDataType.ATTRIBUTES.getName()
+							+ ". actual type: " + contents.getDataTypeString());
 		}
 	}
 

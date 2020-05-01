@@ -82,7 +82,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	 */
 	@Override
 	public String getDataType() {
-		return ContentsDataType.FEATURES.getName();
+		return getDataType(ContentsDataType.FEATURES.getName());
 	}
 
 	/**
@@ -146,13 +146,13 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 	@Override
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have a features data type
-		ContentsDataType dataType = contents.getDataType();
-		if (dataType == null || dataType != ContentsDataType.FEATURES) {
+		if (!contents.isFeaturesTypeOrUnknown()) {
 			throw new GeoPackageException(
 					"The " + Contents.class.getSimpleName() + " of a "
 							+ FeatureTable.class.getSimpleName()
 							+ " must have a data type of "
-							+ ContentsDataType.FEATURES.getName());
+							+ ContentsDataType.FEATURES.getName()
+							+ ". actual type: " + contents.getDataTypeString());
 		}
 	}
 

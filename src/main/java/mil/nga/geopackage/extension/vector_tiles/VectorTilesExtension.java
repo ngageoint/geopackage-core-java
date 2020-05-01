@@ -22,6 +22,11 @@ public class VectorTilesExtension extends BaseExtension {
 			.getProperty(PropertyConstants.EXTENSIONS,
 					EXTENSION_NAME_NO_AUTHOR);
 
+	/**
+	 * Contents Data Type
+	 */
+	public static final String VECTOR_TILES = "vector-tiles";
+
 	private final VectorTilesLayersDao vectorTilesLayersDao;
 	private final VectorTilesFieldsDao vectorTilesFieldsDao;
 

@@ -1,12 +1,11 @@
 package mil.nga.geopackage.tiles.matrix;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-import mil.nga.geopackage.tiles.user.TileTable;
 
 /**
  * Tile Matrix object. Documents the structure of the tile matrix at each zoom
@@ -182,13 +181,13 @@ public class TileMatrix {
 		this.contents = contents;
 		if (contents != null) {
 			// Verify the Contents have a tiles data type (Spec Requirement 42)
-			ContentsDataType dataType = contents.getDataType();
-			if (dataType == null
-					|| !dataType.isTilesType()) {
-				throw new GeoPackageException(
-						String.format("The %s of a %s must have a data type assigned to the \"tiles\" option.",
-								Contents.class.getSimpleName(),
-								TileTable.class.getSimpleName()));
+			if (!contents.isTilesTypeOrUnknown()) {
+				throw new GeoPackageException("The "
+						+ Contents.class.getSimpleName() + " of a "
+						+ TileMatrix.class.getSimpleName()
+						+ " must have a data type of "
+						+ ContentsDataType.TILES.getName() + ". actual type: "
+						+ contents.getDataTypeString());
 			}
 			tableName = contents.getId();
 		} else {
@@ -291,8 +290,8 @@ public class TileMatrix {
 	 */
 	private void validateValues(String column, double value) {
 		if (value <= 0.0) {
-			throw new GeoPackageException(column
-					+ " value must be greater than 0: " + value);
+			throw new GeoPackageException(
+					column + " value must be greater than 0: " + value);
 		}
 	}
 

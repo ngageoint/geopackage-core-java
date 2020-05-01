@@ -3,6 +3,12 @@ package mil.nga.geopackage.core.contents;
 import java.io.IOException;
 import java.util.Date;
 
+import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
@@ -13,12 +19,6 @@ import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
-
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Contents object. Provides identifying and descriptive information that an
@@ -284,6 +284,69 @@ public class Contents {
 	}
 
 	/**
+	 * Determine if the contents data type is features
+	 * 
+	 * @return true if features type
+	 * @since 3.5.1
+	 */
+	public boolean isFeaturesType() {
+		return ContentsDataType.isFeaturesType(dataType);
+	}
+
+	/**
+	 * Determine if the contents data type is features or unknown
+	 * 
+	 * @return true if features type or unknown
+	 * @since 3.5.1
+	 */
+	public boolean isFeaturesTypeOrUnknown() {
+		return ContentsDataType.isFeaturesType(dataType, true);
+	}
+
+	/**
+	 * Determine if the contents data type is tiles
+	 * 
+	 * @return true if tiles type
+	 * @since 3.5.1
+	 */
+	public boolean isTilesType() {
+		return ContentsDataType.isTilesType(dataType);
+	}
+
+	/**
+	 * Determine if the contents data type is tiles or unknown
+	 * 
+	 * @return true if tiles type or unknown
+	 * @since 3.5.1
+	 */
+	public boolean isTilesTypeOrUnknown() {
+		return ContentsDataType.isTilesType(dataType, true)
+				|| ContentsDataType.GRIDDED_COVERAGE.getName()
+						.equals(getDataTypeString()); // TODO temp gridded
+														// coverage
+	}
+
+	/**
+	 * Determine if the contents data type is attributes
+	 * 
+	 * @return true if attributes type
+	 * @since 3.5.1
+	 */
+	public boolean isAttributesType() {
+		return ContentsDataType.isAttributesType(dataType);
+	}
+
+	/**
+	 * Determine if the contents data type is attributes or unknown
+	 * 
+	 * @return true if attributes type or unknown
+	 * @since 3.5.1
+	 */
+	public boolean isAttributesTypeOrUnknown() {
+		return ContentsDataType.isAttributesType(dataType, true);
+	}
+
+	/**
 	 * Get the identifier
 	 * 
 	 * @return identifier
@@ -540,8 +603,8 @@ public class Contents {
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
 		if (boundingBox != null && projection != null) {
-			ProjectionTransform transform = getProjection().getTransformation(
-					projection);
+			ProjectionTransform transform = getProjection()
+					.getTransformation(projection);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}

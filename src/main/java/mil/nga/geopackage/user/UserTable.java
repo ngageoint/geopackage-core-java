@@ -88,6 +88,25 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	public abstract String getDataType();
 
 	/**
+	 * Get the contents data type from the contents or use the default
+	 * 
+	 * @param defaultType
+	 *            default data type
+	 * @return contents or default data type
+	 * @since 3.5.1
+	 */
+	protected String getDataType(String defaultType) {
+		String dataType = null;
+		if (contents != null) {
+			dataType = contents.getDataTypeString();
+		}
+		if (dataType == null) {
+			dataType = defaultType;
+		}
+		return dataType;
+	}
+
+	/**
 	 * Create user columns for a subset of table columns
 	 * 
 	 * @param columns

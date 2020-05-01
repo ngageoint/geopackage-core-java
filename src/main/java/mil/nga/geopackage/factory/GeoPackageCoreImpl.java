@@ -540,7 +540,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 				break;
 			case TILES:
 			case GRIDDED_COVERAGE:
-			case VECTOR_TILES:
 				try {
 					TileMatrixSet tileMatrixSet = getTileMatrixSetDao()
 							.queryForId(table);
@@ -1328,7 +1327,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 			case TILES:
 			case GRIDDED_COVERAGE:
-			case VECTOR_TILES:
 				copyTileTable(tableName, newTableName, transferContent);
 				break;
 

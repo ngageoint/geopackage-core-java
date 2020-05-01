@@ -179,13 +179,13 @@ public class GeometryColumns {
 		if (contents != null) {
 			// Verify the Contents have a features data type (Spec Requirement
 			// 23)
-			ContentsDataType dataType = contents.getDataType();
-			if (dataType == null || dataType != ContentsDataType.FEATURES) {
-				throw new GeoPackageException(
-						"The " + Contents.class.getSimpleName() + " of a "
-								+ GeometryColumns.class.getSimpleName()
-								+ " must have a data type of "
-								+ ContentsDataType.FEATURES.getName());
+			if (!contents.isFeaturesTypeOrUnknown()) {
+				throw new GeoPackageException("The "
+						+ Contents.class.getSimpleName() + " of a "
+						+ GeometryColumns.class.getSimpleName()
+						+ " must have a data type of "
+						+ ContentsDataType.FEATURES.getName()
+						+ ". actual type: " + contents.getDataTypeString());
 			}
 			tableName = contents.getId();
 		} else {

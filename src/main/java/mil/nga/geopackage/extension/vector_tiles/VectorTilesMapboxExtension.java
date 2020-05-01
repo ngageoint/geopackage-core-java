@@ -1,7 +1,6 @@
 package mil.nga.geopackage.extension.vector_tiles;
 
 import mil.nga.geopackage.GeoPackageCore;
-import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;

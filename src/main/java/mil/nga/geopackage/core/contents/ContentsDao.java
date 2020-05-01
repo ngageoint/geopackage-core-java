@@ -282,7 +282,6 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 				case TILES:
 				case GRIDDED_COVERAGE:
-				case VECTOR_TILES:
 
 					// Delete Tile Matrix collection
 					TileMatrixDao tileMatrixDao = getTileMatrixDao();
@@ -536,7 +535,6 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 			case TILES:
 			case GRIDDED_COVERAGE:
-			case VECTOR_TILES:
 				verifyTiles(dataType);
 				break;
 

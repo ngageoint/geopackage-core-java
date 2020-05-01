@@ -1,5 +1,8 @@
 package mil.nga.geopackage.features.columns;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -7,9 +10,6 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.proj.Projection;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * SQL/MM Geometry Columns object. Identifies the geometry columns in tables
@@ -161,13 +161,13 @@ public class GeometryColumnsSqlMm {
 		if (contents != null) {
 			// Verify the Contents have a features data type (Spec Requirement
 			// 23)
-			ContentsDataType dataType = contents.getDataType();
-			if (dataType == null || dataType != ContentsDataType.FEATURES) {
+			if (!contents.isFeaturesTypeOrUnknown()) {
 				throw new GeoPackageException("The "
 						+ Contents.class.getSimpleName() + " of a "
 						+ GeometryColumnsSqlMm.class.getSimpleName()
 						+ " must have a data type of "
-						+ ContentsDataType.FEATURES.getName());
+						+ ContentsDataType.FEATURES.getName()
+						+ ". actual type: " + contents.getDataTypeString());
 			}
 			tableName = contents.getId();
 		}

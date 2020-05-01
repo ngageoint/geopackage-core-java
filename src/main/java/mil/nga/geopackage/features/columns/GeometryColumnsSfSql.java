@@ -1,5 +1,8 @@
 package mil.nga.geopackage.features.columns;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
@@ -8,9 +11,6 @@ import mil.nga.geopackage.schema.TableColumnKey;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.wkb.GeometryCodes;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * SF/SQL Geometry Columns object. Identifies the geometry columns in tables
@@ -157,13 +157,13 @@ public class GeometryColumnsSfSql {
 		if (contents != null) {
 			// Verify the Contents have a features data type (Spec Requirement
 			// 23)
-			ContentsDataType dataType = contents.getDataType();
-			if (dataType == null || dataType != ContentsDataType.FEATURES) {
+			if (!contents.isFeaturesTypeOrUnknown()) {
 				throw new GeoPackageException("The "
 						+ Contents.class.getSimpleName() + " of a "
 						+ GeometryColumnsSfSql.class.getSimpleName()
 						+ " must have a data type of "
-						+ ContentsDataType.FEATURES.getName());
+						+ ContentsDataType.FEATURES.getName()
+						+ ". actual type: " + contents.getDataTypeString());
 			}
 			fTableName = contents.getId();
 		}
@@ -235,8 +235,8 @@ public class GeometryColumnsSfSql {
 	 */
 	private void validateCoordDimension(String column, byte value) {
 		if (value < 2 || value > 5) {
-			throw new GeoPackageException(column
-					+ " value must be between 2 and 5");
+			throw new GeoPackageException(
+					column + " value must be between 2 and 5");
 		}
 	}
 

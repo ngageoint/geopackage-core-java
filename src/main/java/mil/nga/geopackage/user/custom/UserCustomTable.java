@@ -74,7 +74,7 @@ public class UserCustomTable extends UserTable<UserCustomColumn> {
 	 */
 	@Override
 	public String getDataType() {
-		return null;
+		return getDataType(null);
 	}
 
 	/**

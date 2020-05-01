@@ -59,10 +59,15 @@ public class PropertyConstants {
 	public static final String EXTENSIONS = GEO_PACKAGE + PROPERTY_DIVIDER
 			+ "extensions";
 
-	public static final String FEATURE_GENERATOR = GEO_PACKAGE + PROPERTY_DIVIDER
-			+ "feature_generator";
+	/**
+	 * 3.5.1
+	 */
+	public static final String CONTENTS_DATA_TYPE = EXTENSIONS
+			+ PROPERTY_DIVIDER + "contents" + PROPERTY_DIVIDER + "data_type";
+
+	public static final String FEATURE_GENERATOR = GEO_PACKAGE
+			+ PROPERTY_DIVIDER + "feature_generator";
 
 	public static final String FEATURE_GENERATOR_DOWNLOAD_ATTEMPTS = "downloadAttempts";
-	
-	
+
 }
