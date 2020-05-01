@@ -47,24 +47,10 @@ import mil.nga.geopackage.extension.index.TableIndex;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLink;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
-import mil.nga.geopackage.extension.portrayal.Styles;
-import mil.nga.geopackage.extension.portrayal.StylesDao;
-import mil.nga.geopackage.extension.portrayal.Stylesheets;
-import mil.nga.geopackage.extension.portrayal.StylesheetsDao;
-import mil.nga.geopackage.extension.portrayal.SymbolContent;
-import mil.nga.geopackage.extension.portrayal.SymbolContentDao;
-import mil.nga.geopackage.extension.portrayal.SymbolImages;
-import mil.nga.geopackage.extension.portrayal.SymbolImagesDao;
-import mil.nga.geopackage.extension.portrayal.Symbols;
-import mil.nga.geopackage.extension.portrayal.SymbolsDao;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesFields;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayers;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayersDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
@@ -1971,129 +1957,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		tableCreator.createTable(table);
-	}
-
-	@Override
-	public VectorTilesLayersDao getVectorTilesLayersDao() {
-		return (VectorTilesLayersDao) this.createDao(VectorTilesLayers.class);
-	}
-
-	@Override
-	public VectorTilesFieldsDao getVectorTilesFieldsDao() {
-		return (VectorTilesFieldsDao) this.createDao(VectorTilesFields.class);
-	}
-
-	@Override
-	public StylesDao getStylesDao() {
-		return (StylesDao) this.createDao(Styles.class);
-	}
-
-	@Override
-	public StylesheetsDao getStylesheetsDao() {
-		return (StylesheetsDao) this.createDao(Stylesheets.class);
-	}
-
-	@Override
-	public SymbolContentDao getSymbolContentDao() {
-		return (SymbolContentDao) this.createDao(SymbolContent.class);
-	}
-
-	@Override
-	public SymbolImagesDao getSymbolImagesDao() {
-		return (SymbolImagesDao) this.createDao(SymbolImages.class);
-	}
-
-	@Override
-	public SymbolsDao getSymbolsDao() {
-		return (SymbolsDao) this.createDao(Symbols.class);
-	}
-
-	@Override
-	public boolean createVectorTilesTables() {
-		verifyWritable();
-
-		boolean created = false;
-		VectorTilesFieldsDao fieldsDao = getVectorTilesFieldsDao();
-		try {
-			if (!fieldsDao.isTableExists()) {
-				created = tableCreator.createVectorTilesFields() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + VectorTilesFields.TABLE_NAME
-							+ " table exists and create it",
-					e);
-		}
-		VectorTilesLayersDao layersDao = getVectorTilesLayersDao();
-		try {
-			if (!layersDao.isTableExists()) {
-				created = (tableCreator.createVectorTilesLayers() > 0)
-						|| created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + VectorTilesLayers.TABLE_NAME
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	@Override
-	public boolean createPortrayalTables() {
-		verifyWritable();
-
-		boolean created = false;
-		StylesDao stylesDao = getStylesDao();
-		try {
-			if (!stylesDao.isTableExists()) {
-				created = tableCreator.createStyles() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ Styles.TABLE_NAME + " table exists and create it", e);
-		}
-		StylesheetsDao stylesheetsDao = getStylesheetsDao();
-		try {
-			if (!stylesheetsDao.isTableExists()) {
-				created = (tableCreator.createStylesheets() > 0) || created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ Stylesheets.TABLE_NAME + " table exists and create it",
-					e);
-		}
-		SymbolsDao symbolsDao = getSymbolsDao();
-		try {
-			if (!symbolsDao.isTableExists()) {
-				created = (tableCreator.createSymbols() > 0) || created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ Stylesheets.TABLE_NAME + " table exists and create it",
-					e);
-		}
-		SymbolContentDao symbolContentDao = getSymbolContentDao();
-		try {
-			if (!symbolContentDao.isTableExists()) {
-				created = (tableCreator.createSymbolContent() > 0) || created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ SymbolContent.TABLE_NAME + " table exists and create it",
-					e);
-		}
-		SymbolImagesDao symbolImagesDao = getSymbolImagesDao();
-		try {
-			if (!symbolImagesDao.isTableExists()) {
-				created = (tableCreator.createSymbolImages() > 0) || created;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ SymbolImages.TABLE_NAME + " table exists and create it",
-					e);
-		}
-		return created;
 	}
 
 }

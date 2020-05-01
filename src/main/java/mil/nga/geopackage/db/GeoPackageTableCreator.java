@@ -3,6 +3,7 @@ package mil.nga.geopackage.db;
 import java.sql.SQLException;
 import java.util.List;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
@@ -32,6 +33,17 @@ public class GeoPackageTableCreator {
 	 */
 	public GeoPackageTableCreator(GeoPackageCoreConnection db) {
 		this.db = db;
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @since 3.5.1
+	 */
+	public GeoPackageTableCreator(GeoPackageCore geoPackage) {
+		this(geoPackage.getDatabase());
 	}
 
 	/**
@@ -198,55 +210,6 @@ public class GeoPackageTableCreator {
 	 * @since 3.3.0
 	 */
 	public static final String CONTENTS_ID = getScript("contents_id");
-
-	/**
-	 * Vector Tiles Fields script
-	 * 
-	 * @since 3.5.1
-	 */
-	public static final String STYLES = getScript("styles");
-
-	/**
-	 * Vector Tiles Fields script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String STYLESHEETS = getScript("stylesheets");
-
-	/**
-	 * Vector Tiles Fields script
-	 * 
-	 * @since 3.5.1
-	 */
-	public static final String SYMBOL_CONTENT = getScript("symbol_content");
-
-	/**
-	 * Vector Tiles Fields script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String SYMBOL_IMAGES = getScript("symbol_images");
-
-	/**
-	 * Vector Tiles Fields script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String SYMBOLS = getScript("symbols");
-
-	/**
-	 * Vector Tiles Fields script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String VT_FIELDS = getScript("vt_fields");
-
-	/**
-	 * Vector Tiles Layers script
-	 *
-	 * @since 3.5.1
-	 */
-	public static final String VT_LAYERS = getScript("vt_layers");
 
 	/**
 	 * Create Spatial Reference System table and views
@@ -439,76 +402,6 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create the Vector Tiles Layers table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createVectorTilesLayers() {
-		return execSQLScript(VT_LAYERS);
-	}
-
-	/**
-	 * Create the Vector Tiles Fields table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createVectorTilesFields() {
-		return execSQLScript(VT_FIELDS);
-	}
-
-	/**
-	 * Create the Styles table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createStyles() {
-		return execSQLScript(STYLES);
-	}
-
-	/**
-	 * Create the Stylesheets table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createStylesheets() {
-		return execSQLScript(STYLESHEETS);
-	}
-
-	/**
-	 * Create the Symbols table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createSymbols() {
-		return execSQLScript(SYMBOLS);
-	}
-
-	/**
-	 * Create the Symbol Images table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createSymbolImages() {
-		return execSQLScript(SYMBOL_IMAGES);
-	}
-
-	/**
-	 * Create the Symbol Content table
-	 *
-	 * @return executed statements
-	 * @since 3.5.1
-	 */
-	public int createSymbolContent() {
-		return execSQLScript(SYMBOL_CONTENT);
-	}
-
-	/**
 	 * Execute the database script name for the property
 	 *
 	 * @param property
@@ -517,6 +410,11 @@ public class GeoPackageTableCreator {
 	 * @since 3.5.1
 	 */
 	public int execScript(String property) {
+		String propertyPath = getProperty();
+		if (propertyPath != null) {
+			property = propertyPath + PropertyConstants.PROPERTY_DIVIDER
+					+ property;
+		}
 		String sqlScript = getScript(property);
 		return execSQLScript(sqlScript);
 	}
@@ -531,13 +429,54 @@ public class GeoPackageTableCreator {
 	 */
 	public int execSQLScript(String sqlScript) {
 
-		List<String> statements = readSQLScript(sqlScript);
+		String property = getProperty();
+
+		List<String> statements = readSQLScript(property, sqlScript);
 
 		for (String statement : statements) {
 			db.execSQL(statement);
 		}
 
 		return statements.size();
+	}
+
+	/**
+	 * Get the table creator property path
+	 * 
+	 * @return property path or null
+	 * @since 3.5.1
+	 */
+	public String getProperty() {
+		String property = getAuthor();
+		String name = getName();
+		if (name != null) {
+			if (property == null) {
+				property = name;
+			} else {
+				property += PropertyConstants.PROPERTY_DIVIDER + name;
+			}
+		}
+		return property;
+	}
+
+	/**
+	 * Get the table creator author
+	 * 
+	 * @return author or null
+	 * @since 3.5.1
+	 */
+	public String getAuthor() {
+		return null;
+	}
+
+	/**
+	 * Get the table creator name
+	 * 
+	 * @return name or null
+	 * @since 3.5.1
+	 */
+	public String getName() {
+		return null;
 	}
 
 	/**
@@ -549,8 +488,26 @@ public class GeoPackageTableCreator {
 	 * @since 3.3.0
 	 */
 	public static List<String> readSQLScript(String sqlScript) {
-		String path = GeoPackageProperties.getProperty(PropertyConstants.SQL,
-				"directory");
+		return readSQLScript(null, sqlScript);
+	}
+
+	/**
+	 * Read the SQL Script and parse the statements
+	 *
+	 * @param property
+	 *            property path
+	 * @param sqlScript
+	 *            SQL script property file name
+	 * @return statements
+	 * @since 3.5.1
+	 */
+	public static List<String> readSQLScript(String property,
+			String sqlScript) {
+		String base = PropertyConstants.SQL;
+		if (property != null) {
+			base += PropertyConstants.PROPERTY_DIVIDER + property;
+		}
+		String path = GeoPackageProperties.getProperty(base, "directory");
 		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
 				sqlScript);
 		return statements;

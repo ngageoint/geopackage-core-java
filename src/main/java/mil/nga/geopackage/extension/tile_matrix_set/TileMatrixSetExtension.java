@@ -15,11 +15,11 @@ import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
 public class TileMatrixSetExtension extends BaseExtension {
-	private static final String EXTENSION_AUTHOR = "ecere";
-	private static final String EXTENSION_NAME_NO_AUTHOR = "tms";
-	private static final String EXTENSION_NAME = Extensions
+	public static final String EXTENSION_AUTHOR = "ecere";
+	public static final String EXTENSION_NAME_NO_AUTHOR = "tms";
+	public static final String EXTENSION_NAME = Extensions
 			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
-	private static final String EXTENSION_DEFINITION = GeoPackageProperties
+	public static final String EXTENSION_DEFINITION = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS,
 					EXTENSION_NAME_NO_AUTHOR);
 
@@ -37,8 +37,8 @@ public class TileMatrixSetExtension extends BaseExtension {
 	public TileMatrixSetExtension(GeoPackageCore geoPackage) {
 
 		super(geoPackage);
-		tileMatrixDao = getExtTileMatrixDao();
-		tileMatrixSetDao = getExtTileMatrixSetDao();
+		tileMatrixDao = getTileMatrixDao();
+		tileMatrixSetDao = getTileMatrixSetDao();
 		tileMatrixTablesDao = getTileMatrixTablesDao();
 		tileMatrixVariableWidthsDao = getTileMatrixVariableWidthsDao();
 	}
@@ -63,7 +63,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 */
 	public List<Extensions> getOrCreate() {
 
-		createTileMatrixSetExtension();
+		createTileMatrixSetTables();
 
 		List<Extensions> extensions = new ArrayList<>();
 
@@ -130,7 +130,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * 
 	 * @return tile matrix dao
 	 */
-	public ExtTileMatrixDao getExtTileMatrixDao() {
+	public ExtTileMatrixDao getTileMatrixDao() {
 		return (ExtTileMatrixDao) createDao(ExtTileMatrix.class);
 	}
 
@@ -139,7 +139,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * 
 	 * @return tile matrix set dao
 	 */
-	public ExtTileMatrixSetDao getExtTileMatrixSetDao() {
+	public ExtTileMatrixSetDao getTileMatrixSetDao() {
 		return (ExtTileMatrixSetDao) createDao(ExtTileMatrixSet.class);
 	}
 
@@ -167,18 +167,17 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * 
 	 * @return true if created
 	 */
-	public boolean createTileMatrixSetExtension() {
+	public boolean createTileMatrixSetTables() {
 		verifyWritable();
 
 		boolean created = false;
 
-		TileMatrixSetExtensionTableCreator tableCreator = new TileMatrixSetExtensionTableCreator(
-				geoPackage.getDatabase());
+		TileMatrixSetTableCreator tableCreator = new TileMatrixSetTableCreator(
+				geoPackage);
 
-		ExtTileMatrixSetDao tileMatrixSetDao = getExtTileMatrixSetDao();
 		try {
 			if (!tileMatrixSetDao.isTableExists()) {
-				created = tableCreator.createExtTileMatrixSet() > 0;
+				created = tableCreator.createTileMatrixSet() > 0;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -187,10 +186,9 @@ public class TileMatrixSetExtension extends BaseExtension {
 					e);
 		}
 
-		ExtTileMatrixDao tileMatrixDao = getExtTileMatrixDao();
 		try {
 			if (!tileMatrixDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrix() > 0) || created;
+				created = (tableCreator.createTileMatrix() > 0) || created;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
@@ -198,10 +196,9 @@ public class TileMatrixSetExtension extends BaseExtension {
 					e);
 		}
 
-		TileMatrixTablesDao tablesDao = getTileMatrixTablesDao();
 		try {
-			if (!tablesDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrixTables() > 0)
+			if (!tileMatrixTablesDao.isTableExists()) {
+				created = (tableCreator.createTileMatrixTables() > 0)
 						|| created;
 			}
 		} catch (SQLException e) {
@@ -211,10 +208,9 @@ public class TileMatrixSetExtension extends BaseExtension {
 					e);
 		}
 
-		TileMatrixVariableWidthsDao variableWidthsDao = getTileMatrixVariableWidthsDao();
 		try {
-			if (!variableWidthsDao.isTableExists()) {
-				created = (tableCreator.createExtTileMatrixVariableWidths() > 0)
+			if (!tileMatrixVariableWidthsDao.isTableExists()) {
+				created = (tableCreator.createTileMatrixVariableWidths() > 0)
 						|| created;
 			}
 		} catch (SQLException e) {
@@ -224,8 +220,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 					e);
 		}
 
-		tableCreator.execSQLScript(
-				TileMatrixSetExtensionTableCreator.EXT_TMS_CREATE);
+		tableCreator.createScript();
 
 		return created;
 	}

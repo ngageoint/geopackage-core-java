@@ -24,15 +24,8 @@ import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.index.TableIndexDao;
 import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
-import mil.nga.geopackage.extension.portrayal.StylesDao;
-import mil.nga.geopackage.extension.portrayal.StylesheetsDao;
-import mil.nga.geopackage.extension.portrayal.SymbolContentDao;
-import mil.nga.geopackage.extension.portrayal.SymbolImagesDao;
-import mil.nga.geopackage.extension.portrayal.SymbolsDao;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.extension.scale.TileScalingDao;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesFieldsDao;
-import mil.nga.geopackage.extension.vector_tiles.VectorTilesLayersDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -1284,77 +1277,5 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public void createUserTable(UserTable<? extends UserColumn> table);
-
-	/**
-	 * Get the Vector Tiles Layers DAO
-	 * 
-	 * @return vector tiles layers dao
-	 * @since 3.5.1
-	 */
-	public VectorTilesLayersDao getVectorTilesLayersDao();
-
-	/**
-	 * Get the Vector Tiles Fields DAO
-	 * 
-	 * @return vector tiles fields dao
-	 * @since 3.5.1
-	 */
-	public VectorTilesFieldsDao getVectorTilesFieldsDao();
-
-	/**
-	 * Get the Portrayal Extension Styles DAO
-	 * 
-	 * @return styles dao
-	 * @since 3.5.1
-	 */
-	public StylesDao getStylesDao();
-
-	/**
-	 * Get the Portrayal Extension Stylesheets DAO
-	 * 
-	 * @return stylesheets dao
-	 * @since 3.5.1
-	 */
-	public StylesheetsDao getStylesheetsDao();
-
-	/**
-	 * Get the Portrayal Extension Symbol Content DAO
-	 * 
-	 * @return symbol content dao
-	 * @since 3.5.1
-	 */
-	public SymbolContentDao getSymbolContentDao();
-
-	/**
-	 * Get the Portrayal Extension Symbol Images DAO
-	 * 
-	 * @return symbol images dao
-	 * @since 3.5.1
-	 */
-	public SymbolImagesDao getSymbolImagesDao();
-
-	/**
-	 * Get the Portrayal Extension Symbols DAO
-	 * 
-	 * @return symbols dao
-	 * @since 3.5.1
-	 */
-	public SymbolsDao getSymbolsDao();
-
-	/**
-	 * Create the Vector Tiles Extension tables if they do not exist
-	 *
-	 * @return true if any table is created
-	 * @since 3.5.1
-	 */
-	public boolean createVectorTilesTables();
-
-	/**
-	 * Create the Portrayal Extension tables if they do not exist
-	 *
-	 * @return true if any table is created
-	 * @since 3.5.1
-	 */
-	public boolean createPortrayalTables();
 
 }
