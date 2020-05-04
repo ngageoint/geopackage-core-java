@@ -156,7 +156,7 @@ public class TileMatrixSet {
 						+ TileMatrixSet.class.getSimpleName()
 						+ " must have a data type of "
 						+ ContentsDataType.TILES.getName() + ". actual type: "
-						+ contents.getDataTypeString());
+						+ contents.getDataTypeName());
 			}
 			tableName = contents.getId();
 		} else {

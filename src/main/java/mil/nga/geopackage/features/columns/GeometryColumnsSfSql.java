@@ -163,7 +163,7 @@ public class GeometryColumnsSfSql {
 						+ GeometryColumnsSfSql.class.getSimpleName()
 						+ " must have a data type of "
 						+ ContentsDataType.FEATURES.getName()
-						+ ". actual type: " + contents.getDataTypeString());
+						+ ". actual type: " + contents.getDataTypeName());
 			}
 			fTableName = contents.getId();
 		}

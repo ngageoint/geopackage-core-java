@@ -427,7 +427,7 @@ public class GeoPackageExtensions {
 	public static void deleteGriddedCoverage(GeoPackageCore geoPackage,
 			String table) {
 
-		if (geoPackage.isTableType(ContentsDataType.GRIDDED_COVERAGE, table)) {
+		if (geoPackage.isTableType(CoverageDataCore.GRIDDED_COVERAGE, table)) {
 
 			GriddedTileDao griddedTileDao = geoPackage.getGriddedTileDao();
 			GriddedCoverageDao griddedCoverageDao = geoPackage
@@ -466,7 +466,7 @@ public class GeoPackageExtensions {
 			GeoPackageCore geoPackage) {
 
 		List<String> coverageTables = geoPackage
-				.getTables(ContentsDataType.GRIDDED_COVERAGE);
+				.getTables(CoverageDataCore.GRIDDED_COVERAGE);
 		for (String table : coverageTables) {
 			geoPackage.deleteTable(table);
 		}
@@ -512,7 +512,7 @@ public class GeoPackageExtensions {
 
 		try {
 
-			if (geoPackage.isTableType(ContentsDataType.GRIDDED_COVERAGE,
+			if (geoPackage.isTableType(CoverageDataCore.GRIDDED_COVERAGE,
 					table)) {
 
 				ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();

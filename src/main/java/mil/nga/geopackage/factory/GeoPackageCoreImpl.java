@@ -415,7 +415,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		String tableType = null;
 		Contents contents = getTableContents(table);
 		if (contents != null) {
-			tableType = contents.getDataTypeString();
+			tableType = contents.getDataTypeName();
 		}
 		return tableType;
 	}
@@ -539,7 +539,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 						manual);
 				break;
 			case TILES:
-			case GRIDDED_COVERAGE:
 				try {
 					TileMatrixSet tileMatrixSet = getTileMatrixSetDao()
 							.queryForId(table);
@@ -714,6 +713,65 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			GeometryColumns geometryColumns, String idColumnName,
 			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
 			long srsId) {
+		return createFeatureTypedTableWithMetadata(
+				ContentsDataType.FEATURES.getName(), geometryColumns,
+				idColumnName, additionalColumns, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTableWithMetadata(
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId, List<FeatureColumn> columns) {
+		return createFeatureTypedTableWithMetadata(
+				ContentsDataType.FEATURES.getName(), geometryColumns,
+				boundingBox, srsId, columns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId) {
+		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
+				null, null, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			BoundingBox boundingBox, long srsId) {
+		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
+				idColumnName, null, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId) {
+		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
+				null, additionalColumns, boundingBox, srsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId) {
 
 		if (idColumnName == null) {
 			idColumnName = "id";
@@ -729,15 +787,15 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			columns.addAll(additionalColumns);
 		}
 
-		return createFeatureTableWithMetadata(geometryColumns, boundingBox,
-				srsId, columns);
+		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
+				boundingBox, srsId, columns);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns, BoundingBox boundingBox,
 			long srsId, List<FeatureColumn> columns) {
 
@@ -755,7 +813,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(geometryColumns.getTableName());
-			contents.setDataType(ContentsDataType.FEATURES);
+			contents.setDataTypeName(dataType, ContentsDataType.FEATURES);
 			contents.setIdentifier(geometryColumns.getTableName());
 			// contents.setLastChange(new Date());
 			if (boundingBox != null) {
@@ -861,9 +919,21 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public TileMatrixSet createTileTableWithMetadata(String tableName,
+			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
+		return createTileTableWithMetadata(tableName, tileMatrixSetBoundingBox,
+				tileMatrixSetSrsId, tileMatrixSetBoundingBox,
+				tileMatrixSetSrsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
-		return createTileTableWithMetadata(ContentsDataType.TILES, tableName,
+		return createTileTypedTableWithMetadata(
+				ContentsDataType.TILES.getName(), tableName,
 				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
 				tileMatrixSetSrsId);
 	}
@@ -872,7 +942,19 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
+			String tableName, BoundingBox tileMatrixSetBoundingBox,
+			long tileMatrixSetSrsId) {
+		return createTileTypedTableWithMetadata(dataType, tableName,
+				tileMatrixSetBoundingBox, tileMatrixSetSrsId,
+				tileMatrixSetBoundingBox, tileMatrixSetSrsId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
 			String tableName, BoundingBox contentsBoundingBox,
 			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
 			long tileMatrixSetSrsId) {
@@ -896,7 +978,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(tableName);
-			contents.setDataType(dataType);
+			contents.setDataTypeName(dataType, ContentsDataType.TILES);
 			contents.setIdentifier(tableName);
 			// contents.setLastChange(new Date());
 			contents.setMinX(contentsBoundingBox.getMinLongitude());
@@ -952,6 +1034,182 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 							+ srsId);
 		}
 		return srs;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void createAttributesTable(AttributesTable table) {
+		createUserTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns) {
+		return createAttributesTable(tableName, null, additionalColumns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints) {
+		return createAttributesTable(tableName, null, additionalColumns,
+				constraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns) {
+		return createAttributesTable(tableName, idColumnName, additionalColumns,
+				null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints) {
+		return createAttributesTypedTable(ContentsDataType.ATTRIBUTES.getName(),
+				tableName, idColumnName, additionalColumns, constraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns) {
+		return createAttributesTable(tableName, columns, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns,
+			Collection<Constraint> constraints) {
+		return createAttributesTypedTable(ContentsDataType.ATTRIBUTES.getName(),
+				tableName, columns, constraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTableWithId(String dataType,
+			String tableName, List<AttributesColumn> additionalColumns) {
+		return createAttributesTypedTable(dataType, tableName, null,
+				additionalColumns);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTableWithId(String dataType,
+			String tableName, List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints) {
+		return createAttributesTypedTable(dataType, tableName, null,
+				additionalColumns, constraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, String idColumnName,
+			List<AttributesColumn> additionalColumns) {
+		return createAttributesTypedTable(dataType, tableName, idColumnName,
+				additionalColumns, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, String idColumnName,
+			List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints) {
+
+		if (idColumnName == null) {
+			idColumnName = "id";
+		}
+
+		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
+		columns.add(AttributesColumn.createPrimaryKeyColumn(idColumnName));
+
+		if (additionalColumns != null) {
+			columns.addAll(additionalColumns);
+		}
+
+		return createAttributesTypedTable(dataType, tableName, columns,
+				constraints);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, List<AttributesColumn> columns) {
+		return createAttributesTypedTable(dataType, tableName, columns, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, List<AttributesColumn> columns,
+			Collection<Constraint> constraints) {
+
+		// Build the user attributes table
+		AttributesTable table = new AttributesTable(tableName, columns);
+
+		// Add unique constraints
+		if (constraints != null) {
+			table.addConstraints(constraints);
+		}
+
+		// Create the user attributes table
+		createAttributesTable(table);
+
+		try {
+			// Create the contents
+			Contents contents = new Contents();
+			contents.setTableName(tableName);
+			contents.setDataTypeName(dataType, ContentsDataType.ATTRIBUTES);
+			contents.setIdentifier(tableName);
+			// contents.setLastChange(new Date());
+			getContentsDao().create(contents);
+
+			table.setContents(contents);
+
+		} catch (RuntimeException e) {
+			deleteTableQuietly(tableName);
+			throw e;
+		} catch (SQLException e) {
+			deleteTableQuietly(tableName);
+			throw new GeoPackageException(
+					"Failed to create table and metadata: " + tableName, e);
+		}
+
+		return table;
 	}
 
 	/**
@@ -1326,7 +1584,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 				break;
 
 			case TILES:
-			case GRIDDED_COVERAGE:
 				copyTileTable(tableName, newTableName, transferContent);
 				break;
 
@@ -1745,117 +2002,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					+ " table exists and create it", e);
 		}
 		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void createAttributesTable(AttributesTable table) {
-		createUserTable(table);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns) {
-		return createAttributesTable(tableName, null, additionalColumns);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-		return createAttributesTable(tableName, null, additionalColumns,
-				constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns) {
-		return createAttributesTable(tableName, idColumnName, additionalColumns,
-				null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-
-		if (idColumnName == null) {
-			idColumnName = "id";
-		}
-
-		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
-		columns.add(AttributesColumn.createPrimaryKeyColumn(idColumnName));
-
-		if (additionalColumns != null) {
-			columns.addAll(additionalColumns);
-		}
-
-		return createAttributesTable(tableName, columns, constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns) {
-		return createAttributesTable(tableName, columns, null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns,
-			Collection<Constraint> constraints) {
-
-		// Build the user attributes table
-		AttributesTable table = new AttributesTable(tableName, columns);
-
-		// Add unique constraints
-		if (constraints != null) {
-			table.addConstraints(constraints);
-		}
-
-		// Create the user attributes table
-		createAttributesTable(table);
-
-		try {
-			// Create the contents
-			Contents contents = new Contents();
-			contents.setTableName(tableName);
-			contents.setDataType(ContentsDataType.ATTRIBUTES);
-			contents.setIdentifier(tableName);
-			// contents.setLastChange(new Date());
-			getContentsDao().create(contents);
-
-			table.setContents(contents);
-
-		} catch (RuntimeException e) {
-			deleteTableQuietly(tableName);
-			throw e;
-		} catch (SQLException e) {
-			deleteTableQuietly(tableName);
-			throw new GeoPackageException(
-					"Failed to create table and metadata: " + tableName, e);
-		}
-
-		return table;
 	}
 
 	/**

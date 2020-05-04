@@ -266,21 +266,34 @@ public class Contents {
 	 * Get the data type string value
 	 * 
 	 * @return data type
-	 * @since 1.2.1
+	 * @since 3.5.1
 	 */
-	public String getDataTypeString() {
+	public String getDataTypeName() {
 		return dataType;
 	}
 
 	/**
-	 * Set the data type string value
+	 * Set the data type name
 	 * 
-	 * @param dataType
-	 *            data type
-	 * @since 1.2.1
+	 * @param name
+	 *            data type name
+	 * @since 3.5.1
 	 */
-	public void setDataTypeString(String dataType) {
-		this.dataType = dataType;
+	public void setDataTypeName(String name) {
+		this.dataType = name;
+	}
+
+	/**
+	 * Set the data type name and register the core data type
+	 * 
+	 * @param name
+	 *            data type name
+	 * @param dataType
+	 *            core data type
+	 */
+	public void setDataTypeName(String name, ContentsDataType dataType) {
+		setDataTypeName(name);
+		ContentsDataType.setType(name, dataType);
 	}
 
 	/**
@@ -320,10 +333,7 @@ public class Contents {
 	 * @since 3.5.1
 	 */
 	public boolean isTilesTypeOrUnknown() {
-		return ContentsDataType.isTilesType(dataType, true)
-				|| ContentsDataType.GRIDDED_COVERAGE.getName()
-						.equals(getDataTypeString()); // TODO temp gridded
-														// coverage
+		return ContentsDataType.isTilesType(dataType, true);
 	}
 
 	/**

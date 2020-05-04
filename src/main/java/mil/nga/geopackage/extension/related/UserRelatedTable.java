@@ -108,7 +108,7 @@ public class UserRelatedTable extends UserCustomTable {
 	@Override
 	protected void validateContents(Contents contents) {
 		// Verify the Contents have a relation name data type
-		String contentsDataType = contents.getDataTypeString();
+		String contentsDataType = contents.getDataTypeName();
 		if (contentsDataType == null || !contentsDataType.equals(dataType)) {
 			throw new GeoPackageException("The "
 					+ Contents.class.getSimpleName() + " of a "

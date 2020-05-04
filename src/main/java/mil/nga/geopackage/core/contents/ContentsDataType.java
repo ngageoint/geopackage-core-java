@@ -1,10 +1,13 @@
 package mil.nga.geopackage.core.contents;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
@@ -18,26 +21,36 @@ public enum ContentsDataType {
 	/**
 	 * Features
 	 */
-	FEATURES("features"),
+	FEATURES,
 
 	/**
 	 * Tiles
 	 */
-	TILES("tiles"),
+	TILES,
 
 	/**
 	 * Attributes
 	 * 
 	 * @since 1.2.1
 	 */
-	ATTRIBUTES("attributes"),
+	ATTRIBUTES;
 
 	/**
-	 * Tiled Gridded Coverage Data Extension
-	 * 
-	 * @since 2.0.1
+	 * Get the name
+	 *
+	 * @return name
 	 */
-	GRIDDED_COVERAGE("2d-gridded-coverage"); // TODO remove
+	public String getName() {
+		return toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return name().toLowerCase();
+	}
 
 	/**
 	 * Logger
@@ -46,32 +59,24 @@ public enum ContentsDataType {
 			.getLogger(ContentsDataType.class.getName());
 
 	/**
+	 * Set of core data types
+	 */
+	private static final Set<String> coreTypes = new HashSet<>();
+
+	/**
 	 * Mapping between data type values and the type of data
 	 */
 	private static final Map<String, ContentsDataType> types = new HashMap<>();
 
 	/**
-	 * Data type name
+	 * Initialize core data types
 	 */
-	private final String name;
-
-	/**
-	 * Constructor
-	 *
-	 * @param name
-	 *            data type name
-	 */
-	private ContentsDataType(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Get the name
-	 *
-	 * @return name
-	 */
-	public String getName() {
-		return name;
+	static {
+		for (ContentsDataType dataType : ContentsDataType.values()) {
+			String name = dataType.getName();
+			coreTypes.add(name);
+			types.put(name, dataType);
+		}
 	}
 
 	/**
@@ -92,29 +97,23 @@ public enum ContentsDataType {
 
 			if (dataType == null && !types.containsKey(lowerName)) {
 
-				dataType = fromCoreName(name);
+				String value = GeoPackageProperties.getProperty(
+						PropertyConstants.CONTENTS_DATA_TYPE, name, false);
+				if (value != null) {
 
-				if (dataType == null) {
+					dataType = types.get(value.toLowerCase());
 
-					String value = GeoPackageProperties.getProperty(
-							PropertyConstants.CONTENTS_DATA_TYPE, name, false);
-					if (value != null) {
-
-						dataType = fromCoreName(value);
-
-						if (dataType == null) {
-							log.log(Level.WARNING,
-									"Unsupported configured core data type: "
-											+ value
-											+ ", for contents data type: "
-											+ name);
-						}
-
-					} else {
-						log.log(Level.INFO,
-								"Unknown core data type for contents data type: "
+					if (dataType == null) {
+						log.log(Level.WARNING,
+								"Unsupported configured data type: " + value
+										+ ", for contents data type name: "
 										+ name);
 					}
+
+				} else {
+					log.log(Level.INFO,
+							"Unknown data type for contents data type name: "
+									+ name);
 				}
 
 				types.put(lowerName, dataType);
@@ -125,22 +124,44 @@ public enum ContentsDataType {
 	}
 
 	/**
-	 * Find the core or base contents data type from the name
+	 * Set the type for the contents data type name
 	 * 
 	 * @param name
 	 *            contents data type name
-	 * @return contents data type or null
+	 * @param type
+	 *            contents data type
 	 * @since 3.5.1
 	 */
-	public static ContentsDataType fromCoreName(String name) {
-		ContentsDataType dataType = null;
-		for (ContentsDataType type : ContentsDataType.values()) {
-			if (name.equalsIgnoreCase(type.getName())) {
-				dataType = type;
-				break;
+	public static void setType(String name, ContentsDataType type) {
+
+		if (name != null) {
+
+			String lowerName = name.toLowerCase();
+			ContentsDataType dataType = types.get(lowerName);
+
+			if (dataType == null) {
+
+				types.put(lowerName, type);
+
+			} else if (dataType != type) {
+
+				if (coreTypes.contains(lowerName)) {
+					throw new GeoPackageException(
+							"Core contents data type name '" + name
+									+ "' can not be changed to type '"
+									+ type.getName() + "'");
+				}
+
+				log.log(Level.WARNING,
+						"Changed contents data type name '" + name
+								+ "' from type '" + dataType.getName()
+								+ "' to type '" + type.getName() + "'");
+
+				types.put(lowerName, type);
 			}
+
 		}
-		return dataType;
+
 	}
 
 	/**

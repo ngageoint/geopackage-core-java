@@ -237,7 +237,7 @@ public class TileTable extends UserTable<TileColumn> {
 							+ TileTable.class.getSimpleName()
 							+ " must have a data type of "
 							+ ContentsDataType.TILES.getName()
-							+ ". actual type: " + contents.getDataTypeString());
+							+ ". actual type: " + contents.getDataTypeName());
 		}
 	}
 

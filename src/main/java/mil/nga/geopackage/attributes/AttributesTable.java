@@ -82,7 +82,7 @@ public class AttributesTable extends UserTable<AttributesColumn> {
 							+ AttributesTable.class.getSimpleName()
 							+ " must have a data type of "
 							+ ContentsDataType.ATTRIBUTES.getName()
-							+ ". actual type: " + contents.getDataTypeString());
+							+ ". actual type: " + contents.getDataTypeName());
 		}
 	}
 

@@ -641,6 +641,141 @@ public interface GeoPackageCore extends Closeable {
 			long srsId, List<FeatureColumn> columns);
 
 	/**
+	 * Create a new feature typed table with GeoPackage metadata. Create the
+	 * Geometry Columns table if needed, create a user feature table, create a
+	 * new Contents, insert the new Geometry Columns.
+	 * 
+	 * The user feature table will be created with 2 columns, an id column named
+	 * "id" and a geometry column using {@link GeometryColumns#getColumnName()}.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param geometryColumns
+	 *            geometry columns to create
+	 * @param boundingBox
+	 *            contents bounding box
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return geometry columns
+	 * @since 3.5.1
+	 */
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId);
+
+	/**
+	 * Create a new feature typed table with GeoPackage metadata. Create the
+	 * Geometry Columns table if needed, create a user feature table, create a
+	 * new Contents, insert the new Geometry Columns.
+	 * 
+	 * The user feature table will be created with 2 columns, an id column with
+	 * the provided name and a geometry column using
+	 * {@link GeometryColumns#getColumnName()}.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param geometryColumns
+	 *            geometry columns to create
+	 * @param idColumnName
+	 *            id column name
+	 * @param boundingBox
+	 *            contents bounding box
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return geometry columns
+	 * @since 3.5.1
+	 */
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			BoundingBox boundingBox, long srsId);
+
+	/**
+	 * Create a new feature typed table with GeoPackage metadata. Create the
+	 * Geometry Columns table if needed, create a user feature table, create a
+	 * new Contents, insert the new Geometry Columns.
+	 * 
+	 * The user feature table will be created with 2 + additionalColumns.size()
+	 * columns, an id column named "id", a geometry column using
+	 * {@link GeometryColumns#getColumnName()}, and the provided additional
+	 * columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param geometryColumns
+	 *            geometry columns to create
+	 * @param additionalColumns
+	 *            additional user feature table columns to create in addition to
+	 *            id and geometry columns
+	 * @param boundingBox
+	 *            contents bounding box
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return geometry columns
+	 * @since 3.5.1
+	 */
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId);
+
+	/**
+	 * Create a new feature typed table with GeoPackage metadata. Create the
+	 * Geometry Columns table if needed, create a user feature table, create a
+	 * new Contents, insert the new Geometry Columns.
+	 * 
+	 * The user feature table will be created with 2 + additionalColumns.size()
+	 * columns, an id column with the provided name, a geometry column using
+	 * {@link GeometryColumns#getColumnName()}, and the provided additional
+	 * columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param geometryColumns
+	 *            geometry columns to create
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional user feature table columns to create in addition to
+	 *            id and geometry columns
+	 * @param boundingBox
+	 *            contents bounding box
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return geometry columns
+	 * @since 3.5.1
+	 */
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
+			long srsId);
+
+	/**
+	 * Create a new feature typed table with GeoPackage metadata. Create the
+	 * Geometry Columns table if needed, create a user feature table, create a
+	 * new Contents, insert the new Geometry Columns.
+	 * 
+	 * The user feature table will be created using only the provided columns.
+	 * These should include the id column and the geometry column defined in
+	 * {@link GeometryColumns#getColumnName()}
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param geometryColumns
+	 *            geometry columns to create
+	 * @param boundingBox
+	 *            contents bounding box
+	 * @param srsId
+	 *            spatial reference system id
+	 * @param columns
+	 *            user feature table columns to create
+	 * @return geometry columns
+	 * @since 3.5.1
+	 */
+	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			long srsId, List<FeatureColumn> columns);
+
+	/**
 	 * Get a Tile Matrix Set DAO
 	 * 
 	 * @return Tile Matrix Set DAO
@@ -681,6 +816,21 @@ public interface GeoPackageCore extends Closeable {
 	 * 
 	 * @param tableName
 	 *            table name
+	 * @param tileMatrixSetBoundingBox
+	 *            tile matrix set bounding box
+	 * @param tileMatrixSetSrsId
+	 *            tile matrix set SRS id
+	 * @return tile matrix set
+	 * @since 3.5.1
+	 */
+	public TileMatrixSet createTileTableWithMetadata(String tableName,
+			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId);
+
+	/**
+	 * Create a new tile table and the GeoPackage metadata
+	 * 
+	 * @param tableName
+	 *            table name
 	 * @param contentsBoundingBox
 	 *            contents bounding box
 	 * @param contentsSrsId
@@ -696,7 +846,27 @@ public interface GeoPackageCore extends Closeable {
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId);
 
 	/**
-	 * Create a new tile table of the specified type and the GeoPackage metadata
+	 * Create a new tile typed table of the specified type and the GeoPackage
+	 * metadata
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param tileMatrixSetBoundingBox
+	 *            tile matrix set bounding box
+	 * @param tileMatrixSetSrsId
+	 *            tile matrix set SRS id
+	 * @return tile matrix set
+	 * @since 3.5.1
+	 */
+	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
+			String tableName, BoundingBox tileMatrixSetBoundingBox,
+			long tileMatrixSetSrsId);
+
+	/**
+	 * Create a new tile typed table of the specified type and the GeoPackage
+	 * metadata
 	 * 
 	 * @param dataType
 	 *            contents data type
@@ -711,12 +881,265 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tileMatrixSetSrsId
 	 *            tile matrix set SRS id
 	 * @return tile matrix set
-	 * @since 1.2.1
+	 * @since 3.5.1
 	 */
-	public TileMatrixSet createTileTableWithMetadata(ContentsDataType dataType,
+	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
 			String tableName, BoundingBox contentsBoundingBox,
 			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
 			long tileMatrixSetSrsId);
+
+	/**
+	 * Create a new attributes table (only the attributes table is created, no
+	 * Contents entry is created)
+	 * 
+	 * @param table
+	 *            attributes table
+	 * @since 1.2.1
+	 */
+	public void createAttributesTable(AttributesTable table);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.3.0
+	 */
+	public AttributesTable createAttributesTableWithId(String tableName,
+			List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.3.0
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			String idColumnName, List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @return attributes table
+	 * @since 1.2.1
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns);
+
+	/**
+	 * Create a new attributes table and a new Contents
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.3.0
+	 */
+	public AttributesTable createAttributesTable(String tableName,
+			List<AttributesColumn> columns, Collection<Constraint> constraints);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTableWithId(String dataType,
+			String tableName, List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column named "id" and the provided additional columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTableWithId(String dataType,
+			String tableName, List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, String idColumnName,
+			List<AttributesColumn> additionalColumns);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with 1 + additionalColumns.size()
+	 * columns, an id column with the provided name and the provided additional
+	 * columns.
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param idColumnName
+	 *            id column name
+	 * @param additionalColumns
+	 *            additional attributes table columns to create in addition to
+	 *            id
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, String idColumnName,
+			List<AttributesColumn> additionalColumns,
+			Collection<Constraint> constraints);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, List<AttributesColumn> columns);
+
+	/**
+	 * Create a new attributes typed table and a new Contents
+	 * 
+	 * The attributes table will be created with columns.size() columns and must
+	 * include an integer id column
+	 * 
+	 * @param dataType
+	 *            contents data type
+	 * @param tableName
+	 *            table name
+	 * @param columns
+	 *            table columns to create
+	 * @param constraints
+	 *            constraints
+	 * @return attributes table
+	 * @since 3.5.1
+	 */
+	public AttributesTable createAttributesTypedTable(String dataType,
+			String tableName, List<AttributesColumn> columns,
+			Collection<Constraint> constraints);
 
 	/**
 	 * Get a Data Columns DAO
@@ -1096,130 +1519,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.1.5
 	 */
 	public boolean createFeatureTileLinkTable();
-
-	/**
-	 * Create a new attributes table (only the attributes table is created, no
-	 * Contents entry is created)
-	 * 
-	 * @param table
-	 *            attributes table
-	 * @since 1.2.1
-	 */
-	public void createAttributesTable(AttributesTable table);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with 1 + additionalColumns.size()
-	 * columns, an id column named "id" and the provided additional columns.
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param additionalColumns
-	 *            additional attributes table columns to create in addition to
-	 *            id
-	 * @return attributes table
-	 * @since 1.2.1
-	 */
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with 1 + additionalColumns.size()
-	 * columns, an id column named "id" and the provided additional columns.
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param additionalColumns
-	 *            additional attributes table columns to create in addition to
-	 *            id
-	 * @param constraints
-	 *            constraints
-	 * @return attributes table
-	 * @since 3.3.0
-	 */
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with 1 + additionalColumns.size()
-	 * columns, an id column with the provided name and the provided additional
-	 * columns.
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param idColumnName
-	 *            id column name
-	 * @param additionalColumns
-	 *            additional attributes table columns to create in addition to
-	 *            id
-	 * @return attributes table
-	 * @since 1.2.1
-	 */
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with 1 + additionalColumns.size()
-	 * columns, an id column with the provided name and the provided additional
-	 * columns.
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param idColumnName
-	 *            id column name
-	 * @param additionalColumns
-	 *            additional attributes table columns to create in addition to
-	 *            id
-	 * @param constraints
-	 *            constraints
-	 * @return attributes table
-	 * @since 3.3.0
-	 */
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with columns.size() columns and must
-	 * include an integer id column
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param columns
-	 *            table columns to create
-	 * @return attributes table
-	 * @since 1.2.1
-	 */
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns);
-
-	/**
-	 * Create a new attributes table and a new Contents
-	 * 
-	 * The attributes table will be created with columns.size() columns and must
-	 * include an integer id column
-	 * 
-	 * @param tableName
-	 *            table name
-	 * @param columns
-	 *            table columns to create
-	 * @param constraints
-	 *            constraints
-	 * @return attributes table
-	 * @since 3.3.0
-	 */
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns, Collection<Constraint> constraints);
 
 	/**
 	 * Get a Tile Scaling DAO

@@ -98,7 +98,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	protected String getDataType(String defaultType) {
 		String dataType = null;
 		if (contents != null) {
-			dataType = contents.getDataTypeString();
+			dataType = contents.getDataTypeName();
 		}
 		if (dataType == null) {
 			dataType = defaultType;

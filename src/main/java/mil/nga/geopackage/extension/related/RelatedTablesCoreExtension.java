@@ -886,7 +886,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 				// Create the contents
 				Contents contents = new Contents();
 				contents.setTableName(relatedTableName);
-				contents.setDataTypeString(relatedTable.getDataType());
+				contents.setDataTypeName(relatedTable.getDataType());
 				contents.setIdentifier(relatedTableName);
 				ContentsDao contentsDao = geoPackage.getContentsDao();
 				contentsDao.create(contents);

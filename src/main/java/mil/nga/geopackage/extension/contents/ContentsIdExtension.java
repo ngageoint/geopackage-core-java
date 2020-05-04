@@ -618,7 +618,7 @@ public class ContentsIdExtension extends BaseExtension {
 
 				Contents contents = new Contents();
 				contents.setTableName(ContentsId.TABLE_NAME);
-				contents.setDataTypeString(Extensions.TABLE_NAME);
+				contents.setDataTypeName(Extensions.TABLE_NAME);
 				contents.setIdentifier(ContentsId.TABLE_NAME);
 
 				contentsDao.create(contents);

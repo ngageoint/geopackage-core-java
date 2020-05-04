@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.locationtech.proj4j.ProjCoordinate;
+
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -20,8 +21,6 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
-
-import org.locationtech.proj4j.ProjCoordinate;
 
 /**
  * Tiled Gridded Coverage Core Data Extension
@@ -48,14 +47,22 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
+
+	/**
+	 * Contents Data Type
+	 * 
+	 * @since 3.5.1
+	 */
+	public static final String GRIDDED_COVERAGE = "2d-gridded-coverage";
 
 	/**
 	 * Tile Matrix Set
@@ -501,7 +508,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to get Gridded Coverage for table name: "
-							+ tileMatrixSet.getTableName(), e);
+							+ tileMatrixSet.getTableName(),
+					e);
 		}
 		return griddedCoverage;
 	}
@@ -521,7 +529,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to get Gridded Tile for table name: "
-							+ tileMatrixSet.getTableName(), e);
+							+ tileMatrixSet.getTableName(),
+					e);
 		}
 		return griddedTile;
 	}
@@ -537,14 +546,15 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		GriddedTile griddedTile = null;
 		try {
 			if (griddedTileDao.isTableExists()) {
-				griddedTile = griddedTileDao.query(
-						tileMatrixSet.getTableName(), tileId);
+				griddedTile = griddedTileDao.query(tileMatrixSet.getTableName(),
+						tileId);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to get Gridded Tile for table name: "
 							+ tileMatrixSet.getTableName() + ", tile id: "
-							+ tileId, e);
+							+ tileId,
+					e);
 		}
 		return griddedTile;
 	}
@@ -585,7 +595,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 * @return table names
 	 */
 	public static List<String> getTables(GeoPackageCore geoPackage) {
-		return geoPackage.getTables(ContentsDataType.GRIDDED_COVERAGE);
+		return geoPackage.getTables(GRIDDED_COVERAGE);
 	}
 
 	/**
@@ -643,12 +653,12 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 				double projectedLongitude = toCoord.x;
 				double projectedLatitude = toCoord.y;
 
-				int xPixel = (int) Math
-						.round(((projectedLongitude - coverageBoundingBox
-								.getMinLongitude()) / tilesDistanceWidth)
-								* width);
+				int xPixel = (int) Math.round(((projectedLongitude
+						- coverageBoundingBox.getMinLongitude())
+						/ tilesDistanceWidth) * width);
 				int yPixel = (int) Math
-						.round(((coverageBoundingBox.getMaxLatitude() - projectedLatitude) / tilesDistanceHeight)
+						.round(((coverageBoundingBox.getMaxLatitude()
+								- projectedLatitude) / tilesDistanceHeight)
 								* height);
 
 				xPixel = Math.max(0, xPixel);
@@ -739,9 +749,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 					long row = rows.getKey();
 					int baseRow = 0;
 					if (minRow < row) {
-						baseRow = firstHeight
-								+ (int) ((row - minRow - 1) * tileMatrix
-										.getTileHeight());
+						baseRow = firstHeight + (int) ((row - minRow - 1)
+								* tileMatrix.getTileHeight());
 					}
 
 					// Get the row's columns map
@@ -755,8 +764,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 						int baseColumn = 0;
 						if (minColumn < column) {
 							baseColumn = firstWidth
-									+ (int) ((column - minColumn - 1) * tileMatrix
-											.getTileWidth());
+									+ (int) ((column - minColumn - 1)
+											* tileMatrix.getTileWidth());
 						}
 
 						// Get the tiles coverage data values
@@ -839,7 +848,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            source over destination length ratio
 	 * @return source pixel
 	 */
-	private float getSource(float dest, float destMin, float srcMin, float ratio) {
+	private float getSource(float dest, float destMin, float srcMin,
+			float ratio) {
 
 		float destDistance = dest - destMin;
 		float srcDistance = destDistance * ratio;
@@ -870,8 +880,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		case CORNER:
 			break;
 		default:
-			throw new GeoPackageException("Unsupported Encoding Type: "
-					+ encodingType);
+			throw new GeoPackageException(
+					"Unsupported Encoding Type: " + encodingType);
 		}
 
 		return xLocation;
@@ -900,8 +910,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			yLocation += 1.0f;
 			break;
 		default:
-			throw new GeoPackageException("Unsupported Encoding Type: "
-					+ encodingType);
+			throw new GeoPackageException(
+					"Unsupported Encoding Type: " + encodingType);
 		}
 
 		return yLocation;
@@ -1091,9 +1101,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            2 x 2 coverage data values as [y][x]
 	 * @return coverage data value
 	 */
-	protected Double getBilinearInterpolationValue(float offsetX,
-			float offsetY, float minX, float maxX, float minY, float maxY,
-			Double[][] values) {
+	protected Double getBilinearInterpolationValue(float offsetX, float offsetY,
+			float minX, float maxX, float minY, float maxY, Double[][] values) {
 
 		Double value = null;
 
@@ -1131,10 +1140,9 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            bottom right coverage value
 	 * @return coverage data value
 	 */
-	protected Double getBilinearInterpolationValue(float offsetX,
-			float offsetY, float minX, float maxX, float minY, float maxY,
-			Double topLeft, Double topRight, Double bottomLeft,
-			Double bottomRight) {
+	protected Double getBilinearInterpolationValue(float offsetX, float offsetY,
+			float minX, float maxX, float minY, float maxY, Double topLeft,
+			Double topRight, Double bottomLeft, Double bottomRight) {
 
 		Double value = null;
 
@@ -1240,7 +1248,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            offset between the middle two pixels
 	 * @return value coverage data value
 	 */
-	protected Double getCubicInterpolationValue(Double[] values, double offset) {
+	protected Double getCubicInterpolationValue(Double[] values,
+			double offset) {
 		Double value = null;
 		if (values != null) {
 			value = getCubicInterpolationValue(values[0], values[1], values[2],
@@ -1276,8 +1285,9 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			double coefficient1 = value2 - value0;
 			double coefficient2 = 2 * value0 - 5 * value1 + 4 * value2 - value3;
 			double coefficient3 = -value0 + 3 * value1 - 3 * value2 + value3;
-			value = (coefficient3 * offset * offset * offset + coefficient2
-					* offset * offset + coefficient1 * offset + coefficient0) / 2;
+			value = (coefficient3 * offset * offset * offset
+					+ coefficient2 * offset * offset + coefficient1 * offset
+					+ coefficient0) / 2;
 		}
 
 		return value;
@@ -1433,8 +1443,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 
 		Double value = null;
 		if (!isDataNull(unsignedPixelValue)) {
-			value = pixelValueToValue(griddedTile, new Double(
-					unsignedPixelValue));
+			value = pixelValueToValue(griddedTile,
+					new Double(unsignedPixelValue));
 		}
 
 		return value;
@@ -1450,12 +1460,13 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            pixel value
 	 * @return coverage data value
 	 */
-	private Double pixelValueToValue(GriddedTile griddedTile, Double pixelValue) {
+	private Double pixelValueToValue(GriddedTile griddedTile,
+			Double pixelValue) {
 
 		Double value = pixelValue;
 
-		if (griddedCoverage != null
-				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
+		if (griddedCoverage != null && griddedCoverage
+				.getDataType() == GriddedCoverageDataType.INTEGER) {
 
 			if (griddedTile != null) {
 				value *= griddedTile.getScale();
@@ -1495,7 +1506,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            pixel values as 16 bit integers
 	 * @return coverage data values
 	 */
-	public Double[] getValues(GriddedTile griddedTile, int[] unsignedPixelValues) {
+	public Double[] getValues(GriddedTile griddedTile,
+			int[] unsignedPixelValues) {
 		Double[] values = new Double[unsignedPixelValues.length];
 		for (int i = 0; i < unsignedPixelValues.length; i++) {
 			values[i] = getValue(griddedTile, unsignedPixelValues[i]);
@@ -1525,10 +1537,10 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
 
-		TileMatrixSet tileMatrixSet = geoPackage.createTileTableWithMetadata(
-				ContentsDataType.GRIDDED_COVERAGE, tableName,
-				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
-				tileMatrixSetSrsId);
+		TileMatrixSet tileMatrixSet = geoPackage
+				.createTileTypedTableWithMetadata(GRIDDED_COVERAGE, tableName,
+						contentsBoundingBox, contentsSrsId,
+						tileMatrixSetBoundingBox, tileMatrixSetSrsId);
 		return tileMatrixSet;
 	}
 
@@ -1571,8 +1583,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 
 		double pixelValue = value;
 
-		if (griddedCoverage != null
-				&& griddedCoverage.getDataType() == GriddedCoverageDataType.INTEGER) {
+		if (griddedCoverage != null && griddedCoverage
+				.getDataType() == GriddedCoverageDataType.INTEGER) {
 
 			pixelValue -= griddedCoverage.getOffset();
 			pixelValue /= griddedCoverage.getScale();
@@ -1754,7 +1766,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 *            request bounding box
 	 * @return coverage data results
 	 */
-	public CoverageDataResults getValuesUnbounded(BoundingBox requestBoundingBox) {
+	public CoverageDataResults getValuesUnbounded(
+			BoundingBox requestBoundingBox) {
 		CoverageDataRequest request = new CoverageDataRequest(
 				requestBoundingBox);
 		return getValuesUnbounded(request);
@@ -1940,7 +1953,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			Double[][] topRows, int minX, int maxX, int minY, int maxY,
 			Double[][] values) {
 
-		for (int yLocation = maxY; values != null && yLocation >= minY; yLocation--) {
+		for (int yLocation = maxY; values != null
+				&& yLocation >= minY; yLocation--) {
 			for (int xLocation = maxX; xLocation >= minX; xLocation--) {
 				Double value = getValueOverBorders(griddedTile, image,
 						leftLastColumns, topLeftRows, topRows, xLocation,

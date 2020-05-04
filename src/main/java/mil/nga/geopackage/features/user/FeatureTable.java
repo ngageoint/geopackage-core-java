@@ -152,7 +152,7 @@ public class FeatureTable extends UserTable<FeatureColumn> {
 							+ FeatureTable.class.getSimpleName()
 							+ " must have a data type of "
 							+ ContentsDataType.FEATURES.getName()
-							+ ". actual type: " + contents.getDataTypeString());
+							+ ". actual type: " + contents.getDataTypeName());
 		}
 	}
 
