@@ -95,50 +95,118 @@ public class Metadata {
 		metadata = meta.metadata;
 	}
 
+	/**
+	 * Get the id
+	 * 
+	 * @return id
+	 */
 	public long getId() {
 		return id;
 	}
 
+	/**
+	 * Set the id
+	 * 
+	 * @param id
+	 *            id
+	 */
 	public void setId(long id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get the metadata scope
+	 * 
+	 * @return metadata scope type
+	 */
 	public MetadataScopeType getMetadataScope() {
 		return MetadataScopeType.fromName(scope);
 	}
 
+	/**
+	 * Set the metadata scope
+	 * 
+	 * @param metadataScope
+	 *            metadata scope type
+	 */
 	public void setMetadataScope(MetadataScopeType metadataScope) {
 		this.scope = metadataScope.getName();
 	}
 
-	public String getMetadataScopeString() {
+	/**
+	 * Get the metadata scope name
+	 * 
+	 * @return metadata scope name
+	 * @since 3.5.1
+	 */
+	public String getMetadataScopeName() {
 		return scope;
 	}
 
+	/**
+	 * Set the metadata scope
+	 * 
+	 * @param metadataScope
+	 *            metadata scope name
+	 * @since 3.5.1
+	 */
 	public void setMetadataScope(String metadataScope) {
 		this.scope = metadataScope;
 	}
 
+	/**
+	 * Get the standard URI
+	 * 
+	 * @return standard URI
+	 */
 	public String getStandardUri() {
 		return standardUri;
 	}
 
+	/**
+	 * Set the standard URI
+	 * 
+	 * @param standardUri
+	 *            standard URI
+	 */
 	public void setStandardUri(String standardUri) {
 		this.standardUri = standardUri;
 	}
 
+	/**
+	 * Get the MIME type
+	 * 
+	 * @return MIME type
+	 */
 	public String getMimeType() {
 		return mimeType;
 	}
 
+	/**
+	 * Set the MIME type
+	 * 
+	 * @param mimeType
+	 *            MIME type
+	 */
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
 
+	/**
+	 * Get the metadata
+	 * 
+	 * @return metadata
+	 */
 	public String getMetadata() {
 		return metadata;
 	}
 
+	/**
+	 * Set the metadata
+	 * 
+	 * @param metadata
+	 *            metadata
+	 */
 	public void setMetadata(String metadata) {
 		this.metadata = metadata;
 	}
