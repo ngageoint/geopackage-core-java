@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
+import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
+import mil.nga.geopackage.property.PropertyConstants;
 
 /**
  * Table constraint test
@@ -57,7 +59,11 @@ public class ConstraintTest {
 				createNames("pk_nftl"));
 		testSQLScript(GeoPackageTableCreator.TILE_SCALING, 0, 0, 1, 1,
 				createNames("fk_nts_gtms_tn", null));
-		testSQLScript(GeoPackageTableCreator.CONTENTS_ID, 0, 1, 0, 1,
+		testSQLScript(
+				ContentsIdExtension.EXTENSION_AUTHOR
+						+ PropertyConstants.PROPERTY_DIVIDER
+						+ ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR,
+				"nga_contents_id", 0, 1, 0, 1,
 				createNames("uk_nci_table_name", "fk_nci_gc_tn"));
 
 	}
@@ -206,6 +212,30 @@ public class ConstraintTest {
 	 */
 	private void testSQLScript(String script, int primaryKey, int unique,
 			int check, int foreignKey, List<String> names) {
+		testSQLScript(null, script, primaryKey, unique, check, foreignKey,
+				names);
+	}
+
+	/**
+	 * Test the database script for constraint parsing
+	 * 
+	 * @param property
+	 *            property path
+	 * @param script
+	 *            database script
+	 * @param primaryKey
+	 *            expected primary key count
+	 * @param unique
+	 *            expected unique count
+	 * @param check
+	 *            expected check count
+	 * @param foreignKey
+	 *            expected foreign key count
+	 * @param names
+	 *            expected constraint names
+	 */
+	private void testSQLScript(String property, String script, int primaryKey,
+			int unique, int check, int foreignKey, List<String> names) {
 
 		int count = 0;
 		int primaryKeyCount = 0;
@@ -213,7 +243,8 @@ public class ConstraintTest {
 		int checkCount = 0;
 		int foreignKeyCount = 0;
 
-		List<String> statements = GeoPackageTableCreator.readSQLScript(script);
+		List<String> statements = GeoPackageTableCreator.readSQLScript(property,
+				script);
 		for (String sql : statements) {
 
 			ConstraintTestResult constraintResult = testConstraint(sql, names);

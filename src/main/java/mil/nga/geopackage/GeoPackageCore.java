@@ -20,7 +20,6 @@ import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.nga.index.TableIndexDao;
 import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
@@ -1551,22 +1550,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public boolean createExtendedRelationsTable();
-
-	/**
-	 * Get a Contents Id DAO
-	 * 
-	 * @return contents id dao
-	 * @since 3.2.0
-	 */
-	public ContentsIdDao getContentsIdDao();
-
-	/**
-	 * Create the Contents Id Table if it does not exist
-	 * 
-	 * @return true if created
-	 * @since 3.2.0
-	 */
-	public boolean createContentsIdTable();
 
 	/**
 	 * Create a new user table

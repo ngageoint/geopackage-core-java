@@ -39,8 +39,6 @@ import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.contents.ContentsId;
-import mil.nga.geopackage.extension.nga.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.nga.index.GeometryIndex;
 import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
 import mil.nga.geopackage.extension.nga.index.TableIndex;
@@ -2059,36 +2057,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			throw new GeoPackageException("Failed to check if "
 					+ ExtendedRelation.class.getSimpleName()
 					+ " table exists and create it", e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ContentsIdDao getContentsIdDao() {
-		return createDao(ContentsId.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createContentsIdTable() {
-		verifyWritable();
-
-		boolean created = false;
-		ContentsIdDao dao = getContentsIdDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createContentsId() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + ContentsId.class.getSimpleName()
-							+ " table exists and create it",
-					e);
 		}
 		return created;
 	}

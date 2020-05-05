@@ -74,7 +74,7 @@ public class ContentsIdExtension extends BaseExtension {
 	 */
 	public ContentsIdExtension(GeoPackageCore geoPackage) {
 		super(geoPackage);
-		contentsIdDao = geoPackage.getContentsIdDao();
+		contentsIdDao = getContentsIdDao();
 	}
 
 	/**
@@ -607,7 +607,7 @@ public class ContentsIdExtension extends BaseExtension {
 	public Extensions getOrCreateExtension() {
 
 		// Create table
-		geoPackage.createContentsIdTable();
+		createContentsIdTable();
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
 				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
@@ -667,6 +667,44 @@ public class ContentsIdExtension extends BaseExtension {
 							+ geoPackage.getName(),
 					e);
 		}
+	}
+
+	/**
+	 * Get a Contents Id DAO
+	 * 
+	 * @return contents id dao
+	 * @since 4.0.0
+	 */
+	public ContentsIdDao getContentsIdDao() {
+		return createDao(ContentsId.class);
+	}
+
+	/**
+	 * Create the Contents Id Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createContentsIdTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		ContentsIdTableCreator tableCreator = new ContentsIdTableCreator(
+				geoPackage);
+
+		try {
+			if (!contentsIdDao.isTableExists()) {
+				created = tableCreator.createContentsId() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + ContentsId.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+
+		return created;
 	}
 
 }

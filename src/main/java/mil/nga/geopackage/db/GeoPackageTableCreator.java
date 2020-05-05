@@ -205,13 +205,6 @@ public class GeoPackageTableCreator {
 	public static final String TILE_SCALING = getScript("tile_scaling");
 
 	/**
-	 * Contents Id script
-	 *
-	 * @since 3.3.0
-	 */
-	public static final String CONTENTS_ID = getScript("contents_id");
-
-	/**
 	 * Create Spatial Reference System table and views
 	 *
 	 * @return executed statements
@@ -392,13 +385,13 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create Contents Id table
+	 * Execute the database script name
 	 *
 	 * @return executed statements
-	 * @since 3.2.0
+	 * @since 4.0.0
 	 */
-	public int createContentsId() {
-		return execSQLScript(CONTENTS_ID);
+	public int execScript() {
+		return execScript(null);
 	}
 
 	/**
@@ -411,11 +404,12 @@ public class GeoPackageTableCreator {
 	 */
 	public int execScript(String property) {
 		String propertyPath = getProperty();
-		if (propertyPath != null) {
-			property = propertyPath + PropertyConstants.PROPERTY_DIVIDER
-					+ property;
+		if (propertyPath == null) {
+			propertyPath = property;
+		} else if (property != null) {
+			propertyPath += PropertyConstants.PROPERTY_DIVIDER + property;
 		}
-		String sqlScript = getScript(property);
+		String sqlScript = getScript(propertyPath);
 		return execSQLScript(sqlScript);
 	}
 
