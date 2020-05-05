@@ -20,8 +20,6 @@ import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
-import mil.nga.geopackage.extension.nga.index.TableIndexDao;
 import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.nga.scale.TileScalingDao;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
@@ -1454,54 +1452,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 1.2.1
 	 */
 	public boolean createGriddedTileTable();
-
-	/**
-	 * Get a Table Index DAO
-	 * 
-	 * @return table index dao
-	 * @since 1.1.0
-	 */
-	public TableIndexDao getTableIndexDao();
-
-	/**
-	 * Create the Table Index Table if it does not exist
-	 * 
-	 * @return true if created
-	 * @since 1.1.0
-	 */
-	public boolean createTableIndexTable();
-
-	/**
-	 * Get a Geometry Index DAO
-	 * 
-	 * @return geometry index dao
-	 * @since 1.1.0
-	 */
-	public GeometryIndexDao getGeometryIndexDao();
-
-	/**
-	 * Create Geometry Index Table if it does not exist and index it
-	 * 
-	 * @return true if created
-	 * @since 1.1.0
-	 */
-	public boolean createGeometryIndexTable();
-
-	/**
-	 * Index the Geometry Index Table if needed
-	 * 
-	 * @return true if indexed
-	 * @since 3.1.0
-	 */
-	public boolean indexGeometryIndexTable();
-
-	/**
-	 * Un-index the Geometry Index Table if needed
-	 * 
-	 * @return true if unindexed
-	 * @since 3.1.0
-	 */
-	public boolean unindexGeometryIndexTable();
 
 	/**
 	 * Get a Feature Tile Link DAO

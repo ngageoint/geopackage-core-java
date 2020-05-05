@@ -44,7 +44,8 @@ public class GeoPackageProperties {
 	 *            true if required
 	 * @return value
 	 */
-	public static synchronized String getProperty(String key, boolean required) {
+	public static synchronized String getProperty(String key,
+			boolean required) {
 		if (mProperties == null) {
 			mProperties = initializeConfigurationProperties();
 		}
@@ -81,8 +82,8 @@ public class GeoPackageProperties {
 	 */
 	public static synchronized String getProperty(String base, String property,
 			boolean required) {
-		return getProperty(
-				base + PropertyConstants.PROPERTY_DIVIDER + property, required);
+		return getProperty(base + PropertyConstants.PROPERTY_DIVIDER + property,
+				required);
 	}
 
 	/**
@@ -140,8 +141,8 @@ public class GeoPackageProperties {
 	 */
 	public static Integer getIntegerProperty(String base, String property,
 			boolean required) {
-		return getIntegerProperty(base + PropertyConstants.PROPERTY_DIVIDER
-				+ property, required);
+		return getIntegerProperty(
+				base + PropertyConstants.PROPERTY_DIVIDER + property, required);
 	}
 
 	/**
@@ -210,8 +211,8 @@ public class GeoPackageProperties {
 	private static Properties initializeConfigurationProperties() {
 		Properties properties = new Properties();
 
-		InputStream in = GeoPackageProperties.class.getResourceAsStream("/"
-				+ PropertyConstants.PROPERTIES_FILE);
+		InputStream in = GeoPackageProperties.class
+				.getResourceAsStream("/" + PropertyConstants.PROPERTIES_FILE);
 		if (in != null) {
 			try {
 				properties.load(in);
@@ -233,4 +234,55 @@ public class GeoPackageProperties {
 
 		return properties;
 	}
+
+	/**
+	 * Create a combined property separated by
+	 * {@link PropertyConstants#PROPERTY_DIVIDER}
+	 * 
+	 * @param properties
+	 *            property parts
+	 * 
+	 * @return combined property
+	 * @since 4.0.0
+	 */
+	public static String createProperty(String... properties) {
+		StringBuilder property = new StringBuilder();
+		for (int i = 0; i < properties.length; i++) {
+			if (i > 0) {
+				property.append(PropertyConstants.PROPERTY_DIVIDER);
+			}
+			property.append(properties[i]);
+		}
+		return property.toString();
+	}
+
+	/**
+	 * Append to a base property separated by
+	 * {@link PropertyConstants#PROPERTY_DIVIDER}
+	 * 
+	 * @param property
+	 *            base property
+	 * @param properties
+	 *            properties to append
+	 * 
+	 * @return appended property
+	 * @since 4.0.0
+	 */
+	public static String appendToProperty(String property,
+			String... properties) {
+		StringBuilder appended = new StringBuilder();
+		if (property != null) {
+			appended.append(property);
+		}
+		if (properties != null) {
+			for (String part : properties) {
+				if (appended.length() > 0) {
+					appended.append(PropertyConstants.PROPERTY_DIVIDER);
+				}
+				appended.append(part);
+			}
+		}
+		return appended.toString();
+	}
+
 }

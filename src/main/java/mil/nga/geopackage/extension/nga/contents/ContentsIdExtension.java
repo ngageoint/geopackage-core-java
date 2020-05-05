@@ -680,6 +680,18 @@ public class ContentsIdExtension extends BaseExtension {
 	}
 
 	/**
+	 * Get a Contents Id DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return contents id dao
+	 * @since 4.0.0
+	 */
+	public static ContentsIdDao getContentsIdDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(ContentsId.class);
+	}
+
+	/**
 	 * Create the Contents Id Table if it does not exist
 	 * 
 	 * @return true if created
@@ -690,11 +702,10 @@ public class ContentsIdExtension extends BaseExtension {
 
 		boolean created = false;
 
-		ContentsIdTableCreator tableCreator = new ContentsIdTableCreator(
-				geoPackage);
-
 		try {
 			if (!contentsIdDao.isTableExists()) {
+				ContentsIdTableCreator tableCreator = new ContentsIdTableCreator(
+						geoPackage);
 				created = tableCreator.createContentsId() > 0;
 			}
 		} catch (SQLException e) {

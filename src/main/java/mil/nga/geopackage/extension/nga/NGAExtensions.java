@@ -139,7 +139,8 @@ public class NGAExtensions {
 	public static void deleteGeometryIndex(GeoPackageCore geoPackage,
 			String table) {
 
-		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
+		TableIndexDao tableIndexDao = FeatureTableCoreIndex
+				.getTableIndexDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 		try {
@@ -168,8 +169,10 @@ public class NGAExtensions {
 	 */
 	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage) {
 
-		GeometryIndexDao geometryIndexDao = geoPackage.getGeometryIndexDao();
-		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
+		GeometryIndexDao geometryIndexDao = FeatureTableCoreIndex
+				.getGeometryIndexDao(geoPackage);
+		TableIndexDao tableIndexDao = FeatureTableCoreIndex
+				.getTableIndexDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 		try {
@@ -221,7 +224,8 @@ public class NGAExtensions {
 					extension.setTableName(newTable);
 					extensionsDao.create(extension);
 
-					TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
+					TableIndexDao tableIndexDao = FeatureTableCoreIndex
+							.getTableIndexDao(geoPackage);
 					if (tableIndexDao.isTableExists()) {
 
 						TableIndex tableIndex = tableIndexDao.queryForId(table);

@@ -22,7 +22,6 @@ import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
-import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.nga.NGAExtensions;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.GeoPackageProgress;
@@ -123,8 +122,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		super(geoPackage);
 		this.tableName = tableName;
 		this.columnName = columnName;
-		tableIndexDao = geoPackage.getTableIndexDao();
-		geometryIndexDao = geoPackage.getGeometryIndexDao();
+		tableIndexDao = getTableIndexDao();
+		geometryIndexDao = getGeometryIndexDao();
 	}
 
 	/**
@@ -236,9 +235,9 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			getOrCreateExtension();
 			TableIndex tableIndex = getOrCreateTableIndex();
 			createOrClearGeometryIndices();
-			geoPackage.unindexGeometryIndexTable();
+			unindexGeometryIndexTable();
 			count = indexTable(tableIndex);
-			geoPackage.indexGeometryIndexTable();
+			indexGeometryIndexTable();
 		}
 		return count;
 	}
@@ -323,8 +322,6 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 		boolean deleted = false;
 
-		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
-		TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
 		try {
 			// Delete geometry indices and table index
 			if (tableIndexDao.isTableExists()) {
@@ -382,7 +379,6 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 				if (contents != null) {
 					Date lastChange = contents.getLastChange();
 
-					TableIndexDao tableIndexDao = geoPackage.getTableIndexDao();
 					TableIndex tableIndex = tableIndexDao.queryForId(tableName);
 
 					if (tableIndex != null) {
@@ -413,7 +409,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		if (tableIndex == null) {
 			try {
 				if (!tableIndexDao.isTableExists()) {
-					geoPackage.createTableIndexTable();
+					createTableIndexTable();
 				}
 
 				tableIndex = new TableIndex();
@@ -505,42 +501,13 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	}
 
 	/**
-	 * Create the Geometry Index Table if needed
-	 * 
-	 * @return true if created
-	 */
-	private boolean createGeometryIndexTable() {
-
-		boolean created = false;
-
-		// Create the geometry index table if needed as well
-		try {
-			if (!geometryIndexDao.isTableExists()) {
-				created = geoPackage.createGeometryIndexTable();
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to create Geometry Index table for GeoPackage: "
-							+ geoPackage.getName() + ", Table Name: "
-							+ tableName + ", Column Name: " + columnName,
-					e);
-		}
-
-		return created;
-	}
-
-	/**
 	 * Get or create if needed the extension
 	 * 
 	 * @return extensions object
 	 */
 	private Extensions getOrCreateExtension() {
-
-		Extensions extension = getOrCreate(EXTENSION_NAME, tableName,
-				columnName, EXTENSION_DEFINITION,
-				ExtensionScopeType.READ_WRITE);
-
-		return extension;
+		return getOrCreate(EXTENSION_NAME, tableName, columnName,
+				EXTENSION_DEFINITION, ExtensionScopeType.READ_WRITE);
 	}
 
 	/**
@@ -549,10 +516,156 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @return extensions object or null if one does not exist
 	 */
 	public Extensions getExtension() {
+		return get(EXTENSION_NAME, tableName, columnName);
+	}
 
-		Extensions extension = get(EXTENSION_NAME, tableName, columnName);
+	/**
+	 * Get a Table Index DAO
+	 * 
+	 * @return table index dao
+	 * @since 4.0.0
+	 */
+	public TableIndexDao getTableIndexDao() {
+		return createDao(TableIndex.class);
+	}
 
-		return extension;
+	/**
+	 * Get a Table Index DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return table index dao
+	 * @since 4.0.0
+	 */
+	public static TableIndexDao getTableIndexDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(TableIndex.class);
+	}
+
+	/**
+	 * Create the Table Index Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createTableIndexTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!geometryIndexDao.isTableExists()) {
+				GeometryIndexTableCreator tableCreator = new GeometryIndexTableCreator(
+						geoPackage);
+				created = tableCreator.createTableIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + TableIndex.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+		return created;
+	}
+
+	/**
+	 * Get a Geometry Index DAO
+	 * 
+	 * @return geometry index dao
+	 * @since 4.0.0
+	 */
+	public GeometryIndexDao getGeometryIndexDao() {
+		return createDao(GeometryIndex.class);
+	}
+
+	/**
+	 * Get a Geometry Index DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return geometry index dao
+	 * @since 4.0.0
+	 */
+	public static GeometryIndexDao getGeometryIndexDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(GeometryIndex.class);
+	}
+
+	/**
+	 * Create Geometry Index Table if it does not exist and index it
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createGeometryIndexTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!geometryIndexDao.isTableExists()) {
+				GeometryIndexTableCreator tableCreator = new GeometryIndexTableCreator(
+						geoPackage);
+				created = tableCreator.createGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + GeometryIndex.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+		return created;
+	}
+
+	/**
+	 * Index the Geometry Index Table if needed
+	 * 
+	 * @return true if indexed
+	 * @since 4.0.0
+	 */
+	public boolean indexGeometryIndexTable() {
+		verifyWritable();
+
+		boolean indexed = false;
+
+		try {
+			if (geometryIndexDao.isTableExists()) {
+				GeometryIndexTableCreator tableCreator = new GeometryIndexTableCreator(
+						geoPackage);
+				indexed = tableCreator.indexGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + GeometryIndex.class.getSimpleName()
+							+ " table exists to index",
+					e);
+		}
+		return indexed;
+	}
+
+	/**
+	 * Un-index the Geometry Index Table if needed
+	 * 
+	 * @return true if unindexed
+	 * @since 4.0.0
+	 */
+	public boolean unindexGeometryIndexTable() {
+		verifyWritable();
+
+		boolean unindexed = false;
+
+		try {
+			if (geometryIndexDao.isTableExists()) {
+				GeometryIndexTableCreator tableCreator = new GeometryIndexTableCreator(
+						geoPackage);
+				unindexed = tableCreator.unindexGeometryIndex() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + GeometryIndex.class.getSimpleName()
+							+ " table exists to unindex",
+					e);
+		}
+		return unindexed;
 	}
 
 	/**

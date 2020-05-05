@@ -39,10 +39,6 @@ import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.index.GeometryIndex;
-import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
-import mil.nga.geopackage.extension.nga.index.TableIndex;
-import mil.nga.geopackage.extension.nga.index.TableIndexDao;
 import mil.nga.geopackage.extension.nga.link.FeatureTileLink;
 import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.nga.scale.TileScaling;
@@ -1867,110 +1863,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					e);
 		}
 		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TableIndexDao getTableIndexDao() {
-		return createDao(TableIndex.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createTableIndexTable() {
-		verifyWritable();
-
-		boolean created = false;
-		TableIndexDao dao = getTableIndexDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createTableIndex() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + TableIndex.class.getSimpleName()
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryIndexDao getGeometryIndexDao() {
-		return createDao(GeometryIndex.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createGeometryIndexTable() {
-		verifyWritable();
-
-		boolean created = false;
-		GeometryIndexDao dao = getGeometryIndexDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createGeometryIndex() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + GeometryIndex.class.getSimpleName()
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean indexGeometryIndexTable() {
-		verifyWritable();
-
-		boolean indexed = false;
-		GeometryIndexDao dao = getGeometryIndexDao();
-		try {
-			if (dao.isTableExists()) {
-				indexed = tableCreator.indexGeometryIndex() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + GeometryIndex.class.getSimpleName()
-							+ " table exists to index",
-					e);
-		}
-		return indexed;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean unindexGeometryIndexTable() {
-		verifyWritable();
-
-		boolean unindexed = false;
-		GeometryIndexDao dao = getGeometryIndexDao();
-		try {
-			if (dao.isTableExists()) {
-				unindexed = tableCreator.unindexGeometryIndex() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + GeometryIndex.class.getSimpleName()
-							+ " table exists to unindex",
-					e);
-		}
-		return unindexed;
 	}
 
 	/**

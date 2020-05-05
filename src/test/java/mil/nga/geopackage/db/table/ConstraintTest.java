@@ -9,7 +9,9 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
-import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.extension.nga.index.FeatureTableCoreIndex;
+import mil.nga.geopackage.extension.nga.index.GeometryIndexTableCreator;
+import mil.nga.geopackage.property.GeoPackageProperties;
 
 /**
  * Table constraint test
@@ -51,19 +53,27 @@ public class ConstraintTest {
 				createNames("fk_g2dgtat_name", null));
 		testSQLScript(GeoPackageTableCreator.EXTENDED_RELATIONS, 0, 0, 0, 0,
 				createNames());
-		testSQLScript(GeoPackageTableCreator.TABLE_INDEX, 0, 0, 0, 0,
+		testSQLScript(
+				GeoPackageProperties.createProperty(
+						FeatureTableCoreIndex.EXTENSION_AUTHOR,
+						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
+				GeometryIndexTableCreator.TABLE_INDEX, 0, 0, 0, 0,
 				createNames());
-		testSQLScript(GeoPackageTableCreator.GEOMETRY_INDEX, 1, 0, 0, 1,
+		testSQLScript(
+				GeoPackageProperties.createProperty(
+						FeatureTableCoreIndex.EXTENSION_AUTHOR,
+						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
+				GeometryIndexTableCreator.GEOMETRY_INDEX, 1, 0, 0, 1,
 				createNames("pk_ngi", "fk_ngi_nti_tn"));
 		testSQLScript(GeoPackageTableCreator.FEATURE_TILE_LINK, 1, 0, 0, 0,
 				createNames("pk_nftl"));
 		testSQLScript(GeoPackageTableCreator.TILE_SCALING, 0, 0, 1, 1,
 				createNames("fk_nts_gtms_tn", null));
 		testSQLScript(
-				ContentsIdExtension.EXTENSION_AUTHOR
-						+ PropertyConstants.PROPERTY_DIVIDER
-						+ ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR,
-				"nga_contents_id", 0, 1, 0, 1,
+				GeoPackageProperties.createProperty(
+						ContentsIdExtension.EXTENSION_AUTHOR,
+						ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR),
+				null, 0, 1, 0, 1,
 				createNames("uk_nci_table_name", "fk_nci_gc_tn"));
 
 	}
@@ -197,8 +207,8 @@ public class ConstraintTest {
 	/**
 	 * Test the database script for constraint parsing
 	 * 
-	 * @param script
-	 *            database script
+	 * @param property
+	 *            property
 	 * @param primaryKey
 	 *            expected primary key count
 	 * @param unique
@@ -210,19 +220,19 @@ public class ConstraintTest {
 	 * @param names
 	 *            expected constraint names
 	 */
-	private void testSQLScript(String script, int primaryKey, int unique,
+	private void testSQLScript(String property, int primaryKey, int unique,
 			int check, int foreignKey, List<String> names) {
-		testSQLScript(null, script, primaryKey, unique, check, foreignKey,
+		testSQLScript(null, property, primaryKey, unique, check, foreignKey,
 				names);
 	}
 
 	/**
 	 * Test the database script for constraint parsing
 	 * 
+	 * @param pathProperty
+	 *            path property
 	 * @param property
-	 *            property path
-	 * @param script
-	 *            database script
+	 *            property
 	 * @param primaryKey
 	 *            expected primary key count
 	 * @param unique
@@ -234,8 +244,9 @@ public class ConstraintTest {
 	 * @param names
 	 *            expected constraint names
 	 */
-	private void testSQLScript(String property, String script, int primaryKey,
-			int unique, int check, int foreignKey, List<String> names) {
+	private void testSQLScript(String pathProperty, String property,
+			int primaryKey, int unique, int check, int foreignKey,
+			List<String> names) {
 
 		int count = 0;
 		int primaryKeyCount = 0;
@@ -243,8 +254,8 @@ public class ConstraintTest {
 		int checkCount = 0;
 		int foreignKeyCount = 0;
 
-		List<String> statements = GeoPackageTableCreator.readSQLScript(property,
-				script);
+		List<String> statements = GeoPackageTableCreator
+				.readScript(pathProperty, property);
 		for (String sql : statements) {
 
 			ConstraintTestResult constraintResult = testConstraint(sql, names);

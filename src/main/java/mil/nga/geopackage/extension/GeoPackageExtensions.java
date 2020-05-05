@@ -636,7 +636,7 @@ public class GeoPackageExtensions {
 					if (dataColumnsTable.hasConstraints()) {
 						dataColumnsTable.clearConstraints();
 						String constraintSql = GeoPackageTableCreator
-								.readSQLScript(
+								.readScript(
 										GeoPackageTableCreator.DATA_COLUMNS)
 								.get(0);
 						TableConstraints constraints = ConstraintParser

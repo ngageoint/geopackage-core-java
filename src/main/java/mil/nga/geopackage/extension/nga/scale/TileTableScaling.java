@@ -2,20 +2,19 @@ package mil.nga.geopackage.extension.nga.scale;
 
 import java.sql.SQLException;
 
+import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
+
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
-import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.nga.NGAExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.user.UserCoreDao;
-
-import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 
 /**
  * Abstract Tile Table Scaling, for scaling tiles from nearby zoom levels for
@@ -244,7 +243,6 @@ public class TileTableScaling extends BaseExtension {
 
 		boolean deleted = false;
 
-		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 		try {
 			if (tileScalingDao.isTableExists()) {
 				deleted = tileScalingDao.deleteById(tableName) > 0;
