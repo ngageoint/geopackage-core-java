@@ -460,7 +460,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param id
 	 *            id value
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setId(long id) {
 		setId(id, columns.isPkModifiable());

@@ -21,7 +21,7 @@ import mil.nga.geopackage.db.master.SQLiteMasterType;
  *            The class of the ID column associated with the class. The T class
  *            does not require an ID field. The class needs an ID parameter
  *            however so you can use Void or Object to satisfy the compiler.
- * @since 3.5.1
+ * @since 4.0.0
  */
 public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 

@@ -60,7 +60,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	/**
 	 * Contents Data Type
 	 * 
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static final String GRIDDED_COVERAGE = "2d-gridded-coverage";
 

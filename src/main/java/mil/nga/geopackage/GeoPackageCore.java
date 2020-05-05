@@ -18,14 +18,14 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.index.GeometryIndexDao;
-import mil.nga.geopackage.extension.index.TableIndexDao;
-import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.nga.contents.ContentsIdDao;
+import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
+import mil.nga.geopackage.extension.nga.index.TableIndexDao;
+import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.nga.scale.TileScalingDao;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
-import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
@@ -272,7 +272,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param view
 	 *            view name
 	 * @return true if a view
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isView(String view);
 
@@ -282,7 +282,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param name
 	 *            table or view name
 	 * @return true if a table or view
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isTableOrView(String name);
 
@@ -657,7 +657,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param srsId
 	 *            spatial reference system id
 	 * @return geometry columns
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns, BoundingBox boundingBox,
@@ -683,7 +683,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param srsId
 	 *            spatial reference system id
 	 * @return geometry columns
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns, String idColumnName,
@@ -711,7 +711,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param srsId
 	 *            spatial reference system id
 	 * @return geometry columns
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns,
@@ -742,7 +742,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param srsId
 	 *            spatial reference system id
 	 * @return geometry columns
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns, String idColumnName,
@@ -769,7 +769,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param columns
 	 *            user feature table columns to create
 	 * @return geometry columns
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
 			GeometryColumns geometryColumns, BoundingBox boundingBox,
@@ -821,7 +821,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tileMatrixSetSrsId
 	 *            tile matrix set SRS id
 	 * @return tile matrix set
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TileMatrixSet createTileTableWithMetadata(String tableName,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId);
@@ -858,7 +858,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tileMatrixSetSrsId
 	 *            tile matrix set SRS id
 	 * @return tile matrix set
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
 			String tableName, BoundingBox tileMatrixSetBoundingBox,
@@ -881,7 +881,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param tileMatrixSetSrsId
 	 *            tile matrix set SRS id
 	 * @return tile matrix set
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
 			String tableName, BoundingBox contentsBoundingBox,
@@ -1026,7 +1026,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            additional attributes table columns to create in addition to
 	 *            id
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTableWithId(String dataType,
 			String tableName, List<AttributesColumn> additionalColumns);
@@ -1047,7 +1047,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTableWithId(String dataType,
 			String tableName, List<AttributesColumn> additionalColumns,
@@ -1070,7 +1070,7 @@ public interface GeoPackageCore extends Closeable {
 	 *            additional attributes table columns to create in addition to
 	 *            id
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTable(String dataType,
 			String tableName, String idColumnName,
@@ -1095,7 +1095,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTable(String dataType,
 			String tableName, String idColumnName,
@@ -1115,7 +1115,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param columns
 	 *            table columns to create
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTable(String dataType,
 			String tableName, List<AttributesColumn> columns);
@@ -1135,7 +1135,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @param constraints
 	 *            constraints
 	 * @return attributes table
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public AttributesTable createAttributesTypedTable(String dataType,
 			String tableName, List<AttributesColumn> columns,
@@ -1369,7 +1369,7 @@ public interface GeoPackageCore extends Closeable {
 	 *
 	 * @param view
 	 *            view name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void dropView(String view);
 

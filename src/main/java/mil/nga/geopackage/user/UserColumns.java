@@ -466,7 +466,7 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 * Is the primary key modifiable
 	 * 
 	 * @return true if the primary key is modifiable
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isPkModifiable() {
 		return pkModifiable;
@@ -477,7 +477,7 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 * 
 	 * @param pkModifiable
 	 *            primary key modifiable flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setPkModifiable(boolean pkModifiable) {
 		this.pkModifiable = pkModifiable;
@@ -487,7 +487,7 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 * Is value validation against column types enabled
 	 * 
 	 * @return true if values are validated against column types
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isValueValidation() {
 		return valueValidation;
@@ -498,7 +498,7 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 * 
 	 * @param valueValidation
 	 *            value validation flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setValueValidation(boolean valueValidation) {
 		this.valueValidation = valueValidation;

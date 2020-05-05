@@ -93,7 +93,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param defaultType
 	 *            default data type
 	 * @return contents or default data type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	protected String getDataType(String defaultType) {
 		String dataType = null;
@@ -425,7 +425,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Is the primary key modifiable
 	 * 
 	 * @return true if the primary key is modifiable
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isPkModifiable() {
 		return columns.isPkModifiable();
@@ -436,7 +436,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param pkModifiable
 	 *            primary key modifiable flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setPkModifiable(boolean pkModifiable) {
 		columns.setPkModifiable(pkModifiable);
@@ -446,7 +446,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Is value validation against column types enabled
 	 * 
 	 * @return true if values are validated against column types
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isValueValidation() {
 		return columns.isValueValidation();
@@ -457,7 +457,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param valueValidation
 	 *            value validation flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setValueValidation(boolean valueValidation) {
 		columns.setValueValidation(valueValidation);

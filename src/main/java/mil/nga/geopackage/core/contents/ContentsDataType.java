@@ -130,7 +130,7 @@ public enum ContentsDataType {
 	 *            contents data type name
 	 * @param type
 	 *            contents data type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static void setType(String name, ContentsDataType type) {
 
@@ -172,7 +172,7 @@ public enum ContentsDataType {
 	 * @param type
 	 *            comparison contents data type
 	 * @return true if matching core types
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isType(String name, ContentsDataType type) {
 		return isType(name, type, false);
@@ -188,7 +188,7 @@ public enum ContentsDataType {
 	 * @param matchUnknown
 	 *            true to match unknown data types
 	 * @return true if matching core types or matched unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isType(String name, ContentsDataType type,
 			boolean matchUnknown) {
@@ -208,7 +208,7 @@ public enum ContentsDataType {
 	 * @param name
 	 *            contents data type name
 	 * @return true if a features type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isFeaturesType(String name) {
 		return isFeaturesType(name, false);
@@ -222,7 +222,7 @@ public enum ContentsDataType {
 	 * @param matchUnknown
 	 *            true to match unknown data types
 	 * @return true if a features type or matched unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isFeaturesType(String name, boolean matchUnknown) {
 		return isType(name, ContentsDataType.FEATURES, matchUnknown);
@@ -234,7 +234,7 @@ public enum ContentsDataType {
 	 * @param name
 	 *            contents data type name
 	 * @return true if a tiles type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isTilesType(String name) {
 		return isTilesType(name, false);
@@ -248,7 +248,7 @@ public enum ContentsDataType {
 	 * @param matchUnknown
 	 *            true to match unknown data types
 	 * @return true if a tiles type or matched unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isTilesType(String name, boolean matchUnknown) {
 		return isType(name, ContentsDataType.TILES, matchUnknown);
@@ -260,7 +260,7 @@ public enum ContentsDataType {
 	 * @param name
 	 *            contents data type name
 	 * @return true if an attributes type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isAttributesType(String name) {
 		return isAttributesType(name, false);
@@ -274,7 +274,7 @@ public enum ContentsDataType {
 	 * @param matchUnknown
 	 *            true to match unknown data types
 	 * @return true if an attributes type or matched unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static boolean isAttributesType(String name, boolean matchUnknown) {
 		return isType(name, ContentsDataType.ATTRIBUTES, matchUnknown);

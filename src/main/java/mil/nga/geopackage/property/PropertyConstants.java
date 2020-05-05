@@ -108,7 +108,7 @@ public class PropertyConstants {
 	/**
 	 * Custom data types
 	 * 
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static final String CONTENTS_DATA_TYPE = EXTENSIONS
 			+ PROPERTY_DIVIDER + "contents" + PROPERTY_DIVIDER + "data_type";

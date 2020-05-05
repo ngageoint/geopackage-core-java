@@ -137,7 +137,7 @@ public class Metadata {
 	 * Get the metadata scope name
 	 * 
 	 * @return metadata scope name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String getMetadataScopeName() {
 		return scope;
@@ -148,7 +148,7 @@ public class Metadata {
 	 * 
 	 * @param metadataScope
 	 *            metadata scope name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setMetadataScope(String metadataScope) {
 		this.scope = metadataScope;

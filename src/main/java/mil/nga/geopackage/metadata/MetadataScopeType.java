@@ -124,7 +124,7 @@ public enum MetadataScopeType {
 	/**
 	 * Information applies to a specific style
 	 * 
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	STYLE("style", "NA", "Information applies to a specific style");
 

@@ -35,22 +35,22 @@ import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
-import mil.nga.geopackage.extension.contents.ContentsId;
-import mil.nga.geopackage.extension.contents.ContentsIdDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.index.GeometryIndex;
-import mil.nga.geopackage.extension.index.GeometryIndexDao;
-import mil.nga.geopackage.extension.index.TableIndex;
-import mil.nga.geopackage.extension.index.TableIndexDao;
-import mil.nga.geopackage.extension.link.FeatureTileLink;
-import mil.nga.geopackage.extension.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.nga.contents.ContentsId;
+import mil.nga.geopackage.extension.nga.contents.ContentsIdDao;
+import mil.nga.geopackage.extension.nga.index.GeometryIndex;
+import mil.nga.geopackage.extension.nga.index.GeometryIndexDao;
+import mil.nga.geopackage.extension.nga.index.TableIndex;
+import mil.nga.geopackage.extension.nga.index.TableIndexDao;
+import mil.nga.geopackage.extension.nga.link.FeatureTileLink;
+import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
+import mil.nga.geopackage.extension.nga.scale.TileScaling;
+import mil.nga.geopackage.extension.nga.scale.TileScalingDao;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
-import mil.nga.geopackage.extension.scale.TileScaling;
-import mil.nga.geopackage.extension.scale.TileScalingDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
@@ -118,7 +118,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            path
 	 * @param database
 	 *            database
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
 			GeoPackageCoreConnection database) {
@@ -136,7 +136,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 *            database
 	 * @param writable
 	 *            true if writable
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	protected GeoPackageCoreImpl(String name, String path,
 			GeoPackageCoreConnection database, boolean writable) {

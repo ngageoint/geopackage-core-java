@@ -74,7 +74,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract TResult query(boolean distinct, String table,
 			String[] columns, String selection, String[] selectionArgs,
@@ -130,7 +130,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract TResult query(boolean distinct, String table,
 			String[] columns, String[] columnsAs, String selection,
@@ -186,7 +186,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param limit
 	 *            query limit
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract TResult query(boolean distinct, String table,
 			String[] columns, String selection, String[] selectionArgs,
@@ -246,7 +246,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param limit
 	 *            query limit
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract TResult query(boolean distinct, String table,
 			String[] columns, String[] columnsAs, String selection,
@@ -292,7 +292,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param orderBy
 	 *            order by
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract String querySQL(boolean distinct, String table,
 			String[] columns, String selection, String groupBy, String having,
@@ -342,7 +342,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param orderBy
 	 *            order by
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract String querySQL(boolean distinct, String table,
 			String[] columns, String[] columnsAs, String selection,
@@ -392,7 +392,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param limit
 	 *            query limit
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract String querySQL(boolean distinct, String table,
 			String[] columns, String selection, String groupBy, String having,
@@ -446,7 +446,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param limit
 	 *            query limit
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public abstract String querySQL(boolean distinct, String table,
 			String[] columns, String[] columnsAs, String selection,

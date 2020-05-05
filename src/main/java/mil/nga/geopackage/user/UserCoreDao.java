@@ -238,7 +238,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Is the primary key modifiable
 	 * 
 	 * @return true if the primary key is modifiable
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isPkModifiable() {
 		return table.isPkModifiable();
@@ -249,7 +249,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param pkModifiable
 	 *            primary key modifiable flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setPkModifiable(boolean pkModifiable) {
 		table.setPkModifiable(pkModifiable);
@@ -259,7 +259,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * Is value validation against column types enabled
 	 * 
 	 * @return true if values are validated against column types
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isValueValidation() {
 		return table.isValueValidation();
@@ -270,7 +270,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param valueValidation
 	 *            value validation flag
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setValueValidation(boolean valueValidation) {
 		table.setValueValidation(valueValidation);
@@ -334,7 +334,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param distinct
 	 *            distinct rows
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct) {
 		return query(distinct, table.getColumnNames());
@@ -362,7 +362,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 *            columns
 	 * 
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns) {
 		TResult result = userDb.query(distinct, getTableName(), columns, null,
@@ -395,7 +395,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columnsAs
 	 *            columns as values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryAs(boolean distinct, String[] columnsAs) {
 		return query(distinct, table.getColumnNames(), columnsAs);
@@ -429,7 +429,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columnsAs
 	 *            columns as values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns,
 			String[] columnsAs) {
@@ -455,7 +455,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param distinct
 	 *            distinct rows
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String querySQL(boolean distinct) {
 		return querySQL(distinct, table.getColumnNames());
@@ -477,7 +477,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param distinct
 	 *            distinct rows
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String queryIdsSQL(boolean distinct) {
 		return querySQL(distinct,
@@ -504,7 +504,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param columns
 	 *            columns
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String querySQL(boolean distinct, String[] columns) {
 		return userDb.querySQL(distinct, getTableName(), columns, null, null,
@@ -534,7 +534,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String fieldName,
 			Object value) {
@@ -570,7 +570,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String[] columns,
 			String fieldName, Object value) {
@@ -602,7 +602,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(String column, String fieldName, Object value) {
 		return countForEq(false, column, fieldName, value);
@@ -620,7 +620,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(boolean distinct, String column, String fieldName,
 			Object value) {
@@ -663,7 +663,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String fieldName, Object value,
 			String groupBy, String having, String orderBy) {
@@ -713,7 +713,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String[] columns,
 			String fieldName, Object value, String groupBy, String having,
@@ -764,7 +764,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(String column, String fieldName, Object value,
 			String groupBy, String having, String orderBy) {
@@ -790,7 +790,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(boolean distinct, String column, String fieldName,
 			Object value, String groupBy, String having, String orderBy) {
@@ -822,7 +822,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String fieldName,
 			ColumnValue value) {
@@ -858,7 +858,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForEq(boolean distinct, String[] columns,
 			String fieldName, ColumnValue value) {
@@ -894,7 +894,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(String column, String fieldName, ColumnValue value) {
 		return countForEq(false, column, fieldName, value);
@@ -912,7 +912,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForEq(boolean distinct, String column, String fieldName,
 			ColumnValue value) {
@@ -946,7 +946,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 
 	public TResult queryForLike(boolean distinct, String fieldName,
@@ -984,7 +984,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 
 	public TResult queryForLike(boolean distinct, String[] columns,
@@ -1018,7 +1018,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 
 	public int countForLike(String column, String fieldName, Object value) {
@@ -1037,7 +1037,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 
 	public int countForLike(boolean distinct, String column, String fieldName,
@@ -1083,7 +1083,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by statement
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForLike(boolean distinct, String fieldName,
 			Object value, String groupBy, String having, String orderBy) {
@@ -1133,7 +1133,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by statement
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForLike(boolean distinct, String[] columns,
 			String fieldName, Object value, String groupBy, String having,
@@ -1184,7 +1184,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by statement
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForLike(String column, String fieldName, Object value,
 			String groupBy, String having, String orderBy) {
@@ -1210,7 +1210,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by statement
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForLike(boolean distinct, String column, String fieldName,
 			Object value, String groupBy, String having, String orderBy) {
@@ -1243,7 +1243,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForLike(boolean distinct, String fieldName,
 			ColumnValue value) {
@@ -1279,7 +1279,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForLike(boolean distinct, String[] columns,
 			String fieldName, ColumnValue value) {
@@ -1315,7 +1315,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForLike(String column, String fieldName,
 			ColumnValue value) {
@@ -1334,7 +1334,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param value
 	 *            column value
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForLike(boolean distinct, String column, String fieldName,
 			ColumnValue value) {
@@ -1362,7 +1362,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForFieldValues(boolean distinct,
 			Map<String, Object> fieldValues) {
@@ -1395,7 +1395,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForFieldValues(boolean distinct, String[] columns,
 			Map<String, Object> fieldValues) {
@@ -1427,7 +1427,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForFieldValues(String column,
 			Map<String, Object> fieldValues) {
@@ -1444,7 +1444,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForFieldValues(boolean distinct, String column,
 			Map<String, Object> fieldValues) {
@@ -1473,7 +1473,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForValueFieldValues(boolean distinct,
 			Map<String, ColumnValue> fieldValues) {
@@ -1506,7 +1506,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForValueFieldValues(boolean distinct, String[] columns,
 			Map<String, ColumnValue> fieldValues) {
@@ -1538,7 +1538,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForValueFieldValues(String column,
 			Map<String, ColumnValue> fieldValues) {
@@ -1555,7 +1555,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countForValueFieldValues(boolean distinct, String column,
 			Map<String, ColumnValue> fieldValues) {
@@ -1583,7 +1583,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param id
 	 *            id
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForId(boolean distinct, long id) {
 		return queryForId(distinct, table.getColumnNames(), id);
@@ -1613,7 +1613,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param id
 	 *            id
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForId(boolean distinct, String[] columns, long id) {
 		String where = getPkWhere(id);
@@ -1643,7 +1643,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param id
 	 *            id
 	 * @return row
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TRow queryForIdRow(boolean distinct, long id) {
 		return queryForIdRow(distinct, table.getColumnNames(), id);
@@ -1673,7 +1673,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param id
 	 *            id
 	 * @return row
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TRow queryForIdRow(boolean distinct, String[] columns, long id) {
 		TRow row = null;
@@ -1705,7 +1705,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL) {
 		return queryIn(distinct, table.getColumnNames(), nestedSQL);
@@ -1735,7 +1735,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns,
 			String nestedSQL) {
@@ -1762,7 +1762,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countColumnIn(String column, String nestedSQL) {
 		return countIn(false, column, nestedSQL);
@@ -1778,7 +1778,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedSQL
 	 *            nested SQL
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL) {
 		return countIn(distinct, column, nestedSQL, null, null, null);
@@ -1808,7 +1808,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL,
 			String[] nestedArgs) {
@@ -1844,7 +1844,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String[] nestedArgs) {
@@ -1875,7 +1875,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countColumnIn(String column, String nestedSQL,
 			String[] nestedArgs) {
@@ -1894,7 +1894,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param nestedArgs
 	 *            nested SQL args
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String[] nestedArgs) {
@@ -1925,7 +1925,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL,
 			Map<String, Object> fieldValues) {
@@ -1962,7 +1962,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			Map<String, Object> fieldValues) {
@@ -1993,7 +1993,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL,
 			Map<String, Object> fieldValues) {
@@ -2012,7 +2012,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			Map<String, Object> fieldValues) {
@@ -2048,7 +2048,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL,
 			String[] nestedArgs, Map<String, Object> fieldValues) {
@@ -2089,7 +2089,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String[] nestedArgs, Map<String, Object> fieldValues) {
@@ -2128,7 +2128,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues) {
@@ -2149,7 +2149,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param fieldValues
 	 *            field values
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String[] nestedArgs, Map<String, Object> fieldValues) {
@@ -2188,7 +2188,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL,
 			String[] nestedArgs, String where) {
@@ -2229,7 +2229,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String[] nestedArgs, String where) {
@@ -2264,7 +2264,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL, String[] nestedArgs,
 			String where) {
@@ -2285,7 +2285,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String[] nestedArgs, String where) {
@@ -2316,7 +2316,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL, String where) {
 		return queryIn(distinct, table.getColumnNames(), nestedSQL, where);
@@ -2350,7 +2350,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String where) {
@@ -2381,7 +2381,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL, String where) {
 		return countIn(false, column, nestedSQL, where);
@@ -2399,7 +2399,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String where) {
@@ -2434,7 +2434,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL, String where,
 			String[] whereArgs) {
@@ -2475,7 +2475,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String where, String[] whereArgs) {
@@ -2510,7 +2510,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL, String where,
 			String[] whereArgs) {
@@ -2531,7 +2531,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String where, String[] whereArgs) {
@@ -2571,7 +2571,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String nestedSQL,
 			String[] nestedArgs, String where, String[] whereArgs) {
@@ -2616,7 +2616,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryIn(boolean distinct, String[] columns, String nestedSQL,
 			String[] nestedArgs, String where, String[] whereArgs) {
@@ -2658,7 +2658,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(String column, String nestedSQL, String[] nestedArgs,
 			String where, String[] whereArgs) {
@@ -2681,7 +2681,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countIn(boolean distinct, String column, String nestedSQL,
 			String[] nestedArgs, String where, String[] whereArgs) {
@@ -2710,7 +2710,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String where) {
 		return query(distinct, table.getColumnNames(), where);
@@ -2740,7 +2740,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns, String where) {
 		return query(distinct, columns, where, null);
@@ -2769,7 +2769,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String where, String[] whereArgs) {
 		return query(distinct, table.getColumnNames(), where, whereArgs);
@@ -2803,7 +2803,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param whereArgs
 	 *            where arguments
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns, String where,
 			String[] whereArgs) {
@@ -2833,7 +2833,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String querySQL(boolean distinct, String where) {
 		return querySQL(distinct, table.getColumnNames(), where);
@@ -2859,7 +2859,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String queryIdsSQL(boolean distinct, String where) {
 		return querySQL(distinct,
@@ -2890,7 +2890,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return SQL
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String querySQL(boolean distinct, String[] columns, String where) {
 		return userDb.querySQL(distinct, getTableName(), columns, where, null,
@@ -2933,7 +2933,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy) {
@@ -2983,7 +2983,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param orderBy
 	 *            order by
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns, String where,
 			String[] whereArgs, String groupBy, String having, String orderBy) {
@@ -3033,7 +3033,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            limit
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String where, String[] whereArgs,
 			String groupBy, String having, String orderBy, String limit) {
@@ -3087,7 +3087,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param limit
 	 *            limit
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns, String where,
 			String[] whereArgs, String groupBy, String having, String orderBy,
@@ -3124,7 +3124,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, int limit, long offset) {
 		return queryForChunk(distinct, table.getColumnNames(), limit, offset);
@@ -3160,7 +3160,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns, int limit,
 			long offset) {
@@ -3202,7 +3202,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String where,
 			String[] whereArgs, int limit, long offset) {
@@ -3249,7 +3249,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String where, String[] whereArgs, int limit, long offset) {
@@ -3287,7 +3287,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String orderBy, int limit,
 			long offset) {
@@ -3330,7 +3330,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String orderBy, int limit, long offset) {
@@ -3377,7 +3377,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String where,
 			String[] whereArgs, String orderBy, int limit, long offset) {
@@ -3429,7 +3429,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String where, String[] whereArgs, String orderBy, int limit,
@@ -3487,7 +3487,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String where,
 			String[] whereArgs, String groupBy, String having, String orderBy,
@@ -3549,7 +3549,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param offset
 	 *            chunk query offset
 	 * @return result
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String where, String[] whereArgs, String groupBy, String having,
@@ -4072,7 +4072,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column name
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int countColumn(String column) {
 		return count(false, column);
@@ -4086,7 +4086,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column name
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(boolean distinct, String column) {
 		return count(distinct, column, null, null);
@@ -4100,7 +4100,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String column, String where) {
 		return count(column, where, null);
@@ -4116,7 +4116,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String column, String where, String[] args) {
 		return count(false, column, where, args);
@@ -4132,7 +4132,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param where
 	 *            where clause
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(boolean distinct, String column, String where) {
 		return count(distinct, column, where, null);
@@ -4150,7 +4150,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(boolean distinct, String column, String where,
 			String[] args) {
@@ -4165,7 +4165,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column name
 	 * @return min or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T min(String column) {
 		return min(column, null, null);
@@ -4183,7 +4183,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            where arugments
 	 * @return min or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T min(String column, String where, String[] args) {
 		return db.min(getTableName(), column, where, args);
@@ -4197,7 +4197,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param column
 	 *            column name
 	 * @return max or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T max(String column) {
 		return max(column, null, null);
@@ -4215,7 +4215,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @param args
 	 *            where arguments
 	 * @return max or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T max(String column, String where, String[] args) {
 		return db.max(getTableName(), column, where, args);

@@ -227,7 +227,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param table
 	 *            table name
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String table) {
 		return count(table, null, null);
@@ -256,7 +256,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String table, String column) {
 		return count(table, false, column);
@@ -272,7 +272,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String table, boolean distinct, String column) {
 		return count(table, distinct, column, null, null);
@@ -290,7 +290,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String table, String column, String where, String[] args) {
 		return count(table, false, column, where, args);
@@ -310,7 +310,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return count
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int count(String table, boolean distinct, String column,
 			String where, String[] args) {
@@ -335,7 +335,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return min or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T min(String table, String column) {
 		return min(table, column, null, null);
@@ -355,7 +355,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            where arguments
 	 * @return min or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T min(String table, String column, String where, String[] args) {
 		return aggregateFunction("MIN", table, column, where, args);
@@ -371,7 +371,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return max or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T max(String table, String column) {
 		return max(table, column, null, null);
@@ -391,7 +391,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            where arguments
 	 * @return max or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T max(String table, String column, String where, String[] args) {
 		return aggregateFunction("MAX", table, column, where, args);
@@ -409,7 +409,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return value or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T aggregateFunction(String function, String table,
 			String column) {
@@ -430,7 +430,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param column
 	 *            column name
 	 * @return value or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T aggregateFunction(String function, String table,
 			boolean distinct, String column) {
@@ -453,7 +453,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return value or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T aggregateFunction(String function, String table, String column,
 			String where, String[] args) {
@@ -478,7 +478,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param args
 	 *            arguments
 	 * @return value or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <T> T aggregateFunction(String function, String table,
 			boolean distinct, String column, String where, String[] args) {
@@ -536,7 +536,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param viewName
 	 *            view name
 	 * @return true if exists
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean viewExists(String viewName) {
 		return SQLiteMaster.count(this, SQLiteMasterType.VIEW, viewName) > 0;
@@ -548,7 +548,7 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @param name
 	 *            table or view name
 	 * @return true if exists
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean tableOrViewExists(String name) {
 		return SQLiteMaster.count(this, new SQLiteMasterType[] {

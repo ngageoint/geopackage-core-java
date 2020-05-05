@@ -266,7 +266,7 @@ public class Contents {
 	 * Get the data type string value
 	 * 
 	 * @return data type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String getDataTypeName() {
 		return dataType;
@@ -277,7 +277,7 @@ public class Contents {
 	 * 
 	 * @param name
 	 *            data type name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void setDataTypeName(String name) {
 		this.dataType = name;
@@ -300,7 +300,7 @@ public class Contents {
 	 * Determine if the contents data type is features
 	 * 
 	 * @return true if features type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isFeaturesType() {
 		return ContentsDataType.isFeaturesType(dataType);
@@ -310,7 +310,7 @@ public class Contents {
 	 * Determine if the contents data type is features or unknown
 	 * 
 	 * @return true if features type or unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isFeaturesTypeOrUnknown() {
 		return ContentsDataType.isFeaturesType(dataType, true);
@@ -320,7 +320,7 @@ public class Contents {
 	 * Determine if the contents data type is tiles
 	 * 
 	 * @return true if tiles type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isTilesType() {
 		return ContentsDataType.isTilesType(dataType);
@@ -330,7 +330,7 @@ public class Contents {
 	 * Determine if the contents data type is tiles or unknown
 	 * 
 	 * @return true if tiles type or unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isTilesTypeOrUnknown() {
 		return ContentsDataType.isTilesType(dataType, true);
@@ -340,7 +340,7 @@ public class Contents {
 	 * Determine if the contents data type is attributes
 	 * 
 	 * @return true if attributes type
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isAttributesType() {
 		return ContentsDataType.isAttributesType(dataType);
@@ -350,7 +350,7 @@ public class Contents {
 	 * Determine if the contents data type is attributes or unknown
 	 * 
 	 * @return true if attributes type or unknown
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public boolean isAttributesTypeOrUnknown() {
 		return ContentsDataType.isAttributesType(dataType, true);

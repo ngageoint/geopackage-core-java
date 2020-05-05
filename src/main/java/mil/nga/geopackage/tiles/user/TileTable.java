@@ -46,7 +46,7 @@ public class TileTable extends UserTable<TileColumn> {
 	 *
 	 * @param tableName
 	 *            table name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public TileTable(String tableName) {
 		this(tableName, createRequiredColumns());

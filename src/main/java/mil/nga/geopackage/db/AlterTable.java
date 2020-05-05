@@ -12,7 +12,7 @@ import mil.nga.geopackage.db.master.SQLiteMasterColumn;
 import mil.nga.geopackage.db.master.SQLiteMasterType;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.RawConstraint;
-import mil.nga.geopackage.extension.RTreeIndexCoreExtension;
+import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.geopackage.user.custom.UserCustomColumn;

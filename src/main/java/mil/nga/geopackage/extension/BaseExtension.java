@@ -225,7 +225,7 @@ public abstract class BaseExtension {
 	/**
 	 * Verify the GeoPackage is writable and throw an exception if it is not
 	 * 
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void verifyWritable() {
 		geoPackage.verifyWritable();
@@ -241,7 +241,7 @@ public abstract class BaseExtension {
 	 * @param <T>
 	 *            class type
 	 * @return base dao implementation
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type) {
 		return geoPackage.createDao(type);

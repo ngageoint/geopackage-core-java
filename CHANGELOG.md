@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.5.1 (TBD)
+## 4.0.0 (TBD)
 
 * DAO options to enable modifying row ids or disable column value type validation
 * Distinct select statement queries and counts

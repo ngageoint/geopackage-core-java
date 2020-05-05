@@ -40,7 +40,7 @@ public class GeoPackageTableCreator {
 	 *
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public GeoPackageTableCreator(GeoPackageCore geoPackage) {
 		this(geoPackage.getDatabase());
@@ -407,7 +407,7 @@ public class GeoPackageTableCreator {
 	 * @param property
 	 *            property name
 	 * @return executed statements
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public int execScript(String property) {
 		String propertyPath = getProperty();
@@ -444,7 +444,7 @@ public class GeoPackageTableCreator {
 	 * Get the table creator property path
 	 * 
 	 * @return property path or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String getProperty() {
 		String property = getAuthor();
@@ -463,7 +463,7 @@ public class GeoPackageTableCreator {
 	 * Get the table creator author
 	 * 
 	 * @return author or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String getAuthor() {
 		return null;
@@ -473,7 +473,7 @@ public class GeoPackageTableCreator {
 	 * Get the table creator name
 	 * 
 	 * @return name or null
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public String getName() {
 		return null;
@@ -499,7 +499,7 @@ public class GeoPackageTableCreator {
 	 * @param sqlScript
 	 *            SQL script property file name
 	 * @return statements
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public static List<String> readSQLScript(String property,
 			String sqlScript) {
@@ -580,7 +580,7 @@ public class GeoPackageTableCreator {
 	 *
 	 * @param view
 	 *            view name
-	 * @since 3.5.1
+	 * @since 4.0.0
 	 */
 	public void dropView(String view) {
 		CoreSQLUtils.dropView(db, view);
