@@ -112,13 +112,6 @@ public class GeoPackageTableCreator {
 	public static final String EXTENDED_RELATIONS = "extended_relations";
 
 	/**
-	 * Tile Scaling property
-	 *
-	 * @since 4.0.0
-	 */
-	public static final String TILE_SCALING = "tile_scaling";
-
-	/**
 	 * Get the database script name for the property
 	 *
 	 * @param property
@@ -337,16 +330,6 @@ public class GeoPackageTableCreator {
 	 */
 	public int createExtendedRelations() {
 		return execScript(EXTENDED_RELATIONS);
-	}
-
-	/**
-	 * Create Tile Scaling table
-	 *
-	 * @return executed statements
-	 * @since 2.0.2
-	 */
-	public int createTileScaling() {
-		return execScript(TILE_SCALING);
 	}
 
 	/**

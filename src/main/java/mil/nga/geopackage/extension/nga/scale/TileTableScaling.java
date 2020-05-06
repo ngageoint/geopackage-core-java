@@ -38,14 +38,15 @@ public class TileTableScaling extends BaseExtension {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Table name
@@ -106,7 +107,7 @@ public class TileTableScaling extends BaseExtension {
 	public TileTableScaling(GeoPackageCore geoPackage, String tableName) {
 		super(geoPackage);
 		this.tableName = tableName;
-		tileScalingDao = geoPackage.getTileScalingDao();
+		tileScalingDao = getTileScalingDao();
 	}
 
 	/**
@@ -152,7 +153,8 @@ public class TileTableScaling extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to check for tile scaling for GeoPackage: "
 							+ geoPackage.getName() + ", Tile Table: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 
 		return exists;
@@ -172,7 +174,8 @@ public class TileTableScaling extends BaseExtension {
 				throw new GeoPackageException(
 						"Failed to query for tile scaling for GeoPackage: "
 								+ geoPackage.getName() + ", Tile Table: "
-								+ tableName, e);
+								+ tableName,
+						e);
 			}
 		}
 		return tileScaling;
@@ -217,7 +220,7 @@ public class TileTableScaling extends BaseExtension {
 		getOrCreateExtension();
 		try {
 			if (!tileScalingDao.isTableExists()) {
-				geoPackage.createTileScalingTable();
+				createTileScalingTable();
 			}
 
 			CreateOrUpdateStatus status = tileScalingDao
@@ -228,7 +231,8 @@ public class TileTableScaling extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to create or update tile scaling for GeoPackage: "
 							+ geoPackage.getName() + ", Tile Table: "
-							+ tableName, e);
+							+ tableName,
+					e);
 		}
 
 		return success;
@@ -254,7 +258,8 @@ public class TileTableScaling extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete tile table scaling for GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + tableName, e);
+							+ geoPackage.getName() + ", Table: " + tableName,
+					e);
 		}
 
 		return deleted;
@@ -283,6 +288,55 @@ public class TileTableScaling extends BaseExtension {
 		Extensions extension = get(EXTENSION_NAME, tableName, null);
 
 		return extension;
+	}
+
+	/**
+	 * Get a Tile Scaling DAO
+	 * 
+	 * @return tile scaling dao
+	 * @since 4.0.0
+	 */
+	public TileScalingDao getTileScalingDao() {
+		return createDao(TileScaling.class);
+	}
+
+	/**
+	 * Get a Tile Scaling DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return tile scaling dao
+	 * @since 4.0.0
+	 */
+	public static TileScalingDao getTileScalingDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(TileScaling.class);
+	}
+
+	/**
+	 * Create the Tile Scaling Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createTileScalingTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!tileScalingDao.isTableExists()) {
+				TileScalingTableCreator tableCreator = new TileScalingTableCreator(
+						geoPackage);
+				created = tableCreator.createTileScaling() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + TileScaling.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+
+		return created;
 	}
 
 }

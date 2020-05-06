@@ -382,7 +382,8 @@ public class NGAExtensions {
 	public static void deleteTileScaling(GeoPackageCore geoPackage,
 			String table) {
 
-		TileScalingDao tileScalingDao = geoPackage.getTileScalingDao();
+		TileScalingDao tileScalingDao = TileTableScaling
+				.getTileScalingDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 		try {
@@ -411,7 +412,8 @@ public class NGAExtensions {
 	 */
 	public static void deleteTileScalingExtension(GeoPackageCore geoPackage) {
 
-		TileScalingDao tileScalingDao = geoPackage.getTileScalingDao();
+		TileScalingDao tileScalingDao = TileTableScaling
+				.getTileScalingDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 		try {
 			if (tileScalingDao.isTableExists()) {

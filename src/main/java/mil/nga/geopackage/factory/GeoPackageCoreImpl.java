@@ -39,8 +39,6 @@ import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.scale.TileScaling;
-import mil.nga.geopackage.extension.nga.scale.TileScalingDao;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -1857,36 +1855,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to check if " + GriddedTile.class.getSimpleName()
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TileScalingDao getTileScalingDao() {
-		return createDao(TileScaling.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createTileScalingTable() {
-		verifyWritable();
-
-		boolean created = false;
-		TileScalingDao dao = getTileScalingDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createTileScaling() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + TileScaling.class.getSimpleName()
 							+ " table exists and create it",
 					e);
 		}
