@@ -97,8 +97,8 @@ public enum ContentsDataType {
 
 			if (dataType == null && !types.containsKey(lowerName)) {
 
-				String value = GeoPackageProperties.getProperty(
-						PropertyConstants.CONTENTS_DATA_TYPE, name, false);
+				String value = GeoPackageProperties.getProperty(false,
+						PropertyConstants.CONTENTS_DATA_TYPE, name);
 				if (value != null) {
 
 					dataType = types.get(value.toLowerCase());

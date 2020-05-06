@@ -54,13 +54,13 @@ public class ConstraintTest {
 		testSQLScript(GeoPackageTableCreator.EXTENDED_RELATIONS, 0, 0, 0, 0,
 				createNames());
 		testSQLScript(
-				GeoPackageProperties.createProperty(
+				GeoPackageProperties.buildProperty(
 						FeatureTableCoreIndex.EXTENSION_AUTHOR,
 						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
 				GeometryIndexTableCreator.TABLE_INDEX, 0, 0, 0, 0,
 				createNames());
 		testSQLScript(
-				GeoPackageProperties.createProperty(
+				GeoPackageProperties.buildProperty(
 						FeatureTableCoreIndex.EXTENSION_AUTHOR,
 						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
 				GeometryIndexTableCreator.GEOMETRY_INDEX, 1, 0, 0, 1,
@@ -70,7 +70,7 @@ public class ConstraintTest {
 		testSQLScript(GeoPackageTableCreator.TILE_SCALING, 0, 0, 1, 1,
 				createNames("fk_nts_gtms_tn", null));
 		testSQLScript(
-				GeoPackageProperties.createProperty(
+				GeoPackageProperties.buildProperty(
 						ContentsIdExtension.EXTENSION_AUTHOR,
 						ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR),
 				null, 0, 1, 0, 1,

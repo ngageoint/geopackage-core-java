@@ -33,22 +33,20 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Extension definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS, NAME);
+	public static final String DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME);
 
 	/**
 	 * Extension new column name
 	 */
-	public static final String COLUMN_NAME = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS + PropertyConstants.PROPERTY_DIVIDER
-					+ NAME, "column_name");
+	public static final String COLUMN_NAME = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "column_name");
 
 	/**
 	 * Extension new column definition
 	 */
-	public static final String COLUMN_DEF = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS + PropertyConstants.PROPERTY_DIVIDER
-					+ NAME, "column_def");
+	public static final String COLUMN_DEF = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "column_def");
 
 	/**
 	 * Connection
@@ -122,9 +120,10 @@ public class CrsWktExtension extends BaseExtension {
 	 * @return definition
 	 */
 	public String getDefinition(long srsId) {
-		String definition = connection.querySingleTypedResult("SELECT "
-				+ COLUMN_NAME + " FROM " + SpatialReferenceSystem.TABLE_NAME
-				+ " WHERE " + SpatialReferenceSystem.COLUMN_SRS_ID + " = ?",
+		String definition = connection.querySingleTypedResult(
+				"SELECT " + COLUMN_NAME + " FROM "
+						+ SpatialReferenceSystem.TABLE_NAME + " WHERE "
+						+ SpatialReferenceSystem.COLUMN_SRS_ID + " = ?",
 				new String[] { String.valueOf(srsId) });
 		return definition;
 	}
@@ -138,8 +137,9 @@ public class CrsWktExtension extends BaseExtension {
 				COLUMN_NAME, COLUMN_DEF);
 
 		// Update the existing known SRS values
-		updateDefinition(GeoPackageProperties.getIntegerProperty(
-				PropertyConstants.WGS_84, PropertyConstants.SRS_ID),
+		updateDefinition(
+				GeoPackageProperties.getIntegerProperty(
+						PropertyConstants.WGS_84, PropertyConstants.SRS_ID),
 				GeoPackageProperties.getProperty(PropertyConstants.WGS_84,
 						PropertyConstants.DEFINITION_12_063));
 		updateDefinition(
@@ -149,15 +149,16 @@ public class CrsWktExtension extends BaseExtension {
 				GeoPackageProperties.getProperty(
 						PropertyConstants.UNDEFINED_CARTESIAN,
 						PropertyConstants.DEFINITION_12_063));
-		updateDefinition(GeoPackageProperties.getIntegerProperty(
-				PropertyConstants.UNDEFINED_GEOGRAPHIC,
-				PropertyConstants.SRS_ID), GeoPackageProperties.getProperty(
-				PropertyConstants.UNDEFINED_GEOGRAPHIC,
-				PropertyConstants.DEFINITION_12_063));
+		updateDefinition(
+				GeoPackageProperties.getIntegerProperty(
+						PropertyConstants.UNDEFINED_GEOGRAPHIC,
+						PropertyConstants.SRS_ID),
+				GeoPackageProperties.getProperty(
+						PropertyConstants.UNDEFINED_GEOGRAPHIC,
+						PropertyConstants.DEFINITION_12_063));
 		updateDefinition(GeoPackageProperties.getIntegerProperty(
 				PropertyConstants.WEB_MERCATOR, PropertyConstants.SRS_ID),
-				GeoPackageProperties.getProperty(
-						PropertyConstants.WEB_MERCATOR,
+				GeoPackageProperties.getProperty(PropertyConstants.WEB_MERCATOR,
 						PropertyConstants.DEFINITION_12_063));
 	}
 
@@ -167,8 +168,8 @@ public class CrsWktExtension extends BaseExtension {
 	 * @return
 	 */
 	private boolean hasColumn() {
-		boolean exists = connection.columnExists(
-				SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME);
+		boolean exists = connection
+				.columnExists(SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME);
 		return exists;
 	}
 
@@ -186,7 +187,8 @@ public class CrsWktExtension extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete CRS WKT extension. GeoPackage: "
-							+ geoPackage.getName(), e);
+							+ geoPackage.getName(),
+					e);
 		}
 
 	}

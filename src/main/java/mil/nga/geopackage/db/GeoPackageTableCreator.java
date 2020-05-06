@@ -163,7 +163,7 @@ public class GeoPackageTableCreator {
 	public static List<String> readScript(String pathProperty,
 			String property) {
 		return readSQLScript(pathProperty, getScript(
-				GeoPackageProperties.appendToProperty(pathProperty, property)));
+				GeoPackageProperties.buildProperty(pathProperty, property)));
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class GeoPackageTableCreator {
 			String sqlScript) {
 		String base = PropertyConstants.SQL;
 		if (property != null) {
-			base = GeoPackageProperties.appendToProperty(base, property);
+			base = GeoPackageProperties.buildProperty(base, property);
 		}
 		String path = GeoPackageProperties.getProperty(base, "directory");
 		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
@@ -389,7 +389,7 @@ public class GeoPackageTableCreator {
 		if (propertyPath == null) {
 			propertyPath = property;
 		} else if (property != null) {
-			propertyPath = GeoPackageProperties.appendToProperty(propertyPath,
+			propertyPath = GeoPackageProperties.buildProperty(propertyPath,
 					property);
 		}
 		String sqlScript = getScript(propertyPath);
@@ -430,8 +430,7 @@ public class GeoPackageTableCreator {
 			if (property == null) {
 				property = name;
 			} else {
-				property = GeoPackageProperties.appendToProperty(property,
-						name);
+				property = GeoPackageProperties.buildProperty(property, name);
 			}
 		}
 		return property;

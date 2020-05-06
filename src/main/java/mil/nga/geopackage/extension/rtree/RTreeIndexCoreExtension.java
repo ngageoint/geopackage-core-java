@@ -174,8 +174,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * Base extension property
 	 */
-	private static final String EXTENSION_PROPERTY = PropertyConstants.EXTENSIONS
-			+ PropertyConstants.PROPERTY_DIVIDER + NAME;
+	private static final String EXTENSION_PROPERTY = GeoPackageProperties
+			.buildProperty(PropertyConstants.EXTENSIONS, NAME);
 
 	/**
 	 * Extension definition URL
@@ -186,20 +186,20 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	/**
 	 * SQL base property
 	 */
-	private static final String SQL_PROPERTY = EXTENSION_PROPERTY
-			+ PropertyConstants.PROPERTY_DIVIDER + PropertyConstants.SQL;
+	private static final String SQL_PROPERTY = GeoPackageProperties
+			.buildProperty(EXTENSION_PROPERTY, PropertyConstants.SQL);
 
 	/**
 	 * SQL substitute base property
 	 */
-	private static final String SUBSTITUTE_PROPERTY = SQL_PROPERTY
-			+ PropertyConstants.PROPERTY_DIVIDER + "substitute";
+	private static final String SUBSTITUTE_PROPERTY = GeoPackageProperties
+			.buildProperty(SQL_PROPERTY, "substitute");
 
 	/**
 	 * SQL trigger base property
 	 */
-	private static final String TRIGGER_PROPERTY = SQL_PROPERTY
-			+ PropertyConstants.PROPERTY_DIVIDER + "trigger";
+	private static final String TRIGGER_PROPERTY = GeoPackageProperties
+			.buildProperty(SQL_PROPERTY, "trigger");
 
 	/**
 	 * Table substitute value
