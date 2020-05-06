@@ -11,6 +11,7 @@ import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.nga.index.FeatureTableCoreIndex;
 import mil.nga.geopackage.extension.nga.index.GeometryIndexTableCreator;
+import mil.nga.geopackage.extension.nga.link.FeatureTileTableCoreLinker;
 import mil.nga.geopackage.property.GeoPackageProperties;
 
 /**
@@ -65,8 +66,11 @@ public class ConstraintTest {
 						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
 				GeometryIndexTableCreator.GEOMETRY_INDEX, 1, 0, 0, 1,
 				createNames("pk_ngi", "fk_ngi_nti_tn"));
-		testSQLScript(GeoPackageTableCreator.FEATURE_TILE_LINK, 1, 0, 0, 0,
-				createNames("pk_nftl"));
+		testSQLScript(
+				GeoPackageProperties.buildProperty(
+						FeatureTileTableCoreLinker.EXTENSION_AUTHOR,
+						FeatureTileTableCoreLinker.EXTENSION_NAME_NO_AUTHOR),
+				null, 1, 0, 0, 0, createNames("pk_nftl"));
 		testSQLScript(GeoPackageTableCreator.TILE_SCALING, 0, 0, 1, 1,
 				createNames("fk_nts_gtms_tn", null));
 		testSQLScript(

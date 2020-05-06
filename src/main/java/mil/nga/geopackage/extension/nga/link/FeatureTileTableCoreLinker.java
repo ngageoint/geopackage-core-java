@@ -35,14 +35,15 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	/**
 	 * Extension, with author and name
 	 */
-	public static final String EXTENSION_NAME = Extensions.buildExtensionName(
-			EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
+	public static final String EXTENSION_NAME = Extensions
+			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Extension definition URL
 	 */
 	public static final String EXTENSION_DEFINITION = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, EXTENSION_NAME_NO_AUTHOR);
+			.getProperty(PropertyConstants.EXTENSIONS,
+					EXTENSION_NAME_NO_AUTHOR);
 
 	/**
 	 * Feature Tile Link DAO
@@ -57,7 +58,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 */
 	protected FeatureTileTableCoreLinker(GeoPackageCore geoPackage) {
 		super(geoPackage);
-		featureTileLinkDao = geoPackage.getFeatureTileLinkDao();
+		featureTileLinkDao = getFeatureTileLinkDao();
 	}
 
 	/**
@@ -93,7 +94,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 
 			try {
 				if (!featureTileLinkDao.isTableExists()) {
-					geoPackage.createFeatureTileLinkTable();
+					createFeatureTileLinkTable();
 				}
 
 				FeatureTileLink link = new FeatureTileLink();
@@ -217,7 +218,8 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 			throw new GeoPackageException(
 					"Failed to delete feature tile link for GeoPackage: "
 							+ geoPackage.getName() + ", Feature Table: "
-							+ featureTable + ", Tile Table: " + tileTable, e);
+							+ featureTable + ", Tile Table: " + tileTable,
+					e);
 		}
 
 		return deleted;
@@ -241,7 +243,8 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to delete feature tile links for GeoPackage: "
-							+ geoPackage.getName() + ", Table: " + table, e);
+							+ geoPackage.getName() + ", Table: " + table,
+					e);
 		}
 
 		return deleted;
@@ -283,6 +286,54 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	}
 
 	/**
+	 * Get a Feature Tile Link DAO
+	 * 
+	 * @return feature tile link dao
+	 * @since 4.0.0
+	 */
+	public FeatureTileLinkDao getFeatureTileLinkDao() {
+		return createDao(FeatureTileLink.class);
+	}
+
+	/**
+	 * Get a Feature Tile Link DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return feature tile link dao
+	 * @since 4.0.0
+	 */
+	public static FeatureTileLinkDao getFeatureTileLinkDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(FeatureTileLink.class);
+	}
+
+	/**
+	 * Create the Feature Tile Link Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createFeatureTileLinkTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!featureTileLinkDao.isTableExists()) {
+				FeatureTileLinkTableCreator tableCreator = new FeatureTileLinkTableCreator(
+						geoPackage);
+				created = tableCreator.createFeatureTileLink() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ FeatureTileLink.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
+	}
+
+	/**
 	 * Determine if the feature tile link extension and table exists
 	 * 
 	 * @return
@@ -297,7 +348,8 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 			} catch (SQLException e) {
 				throw new GeoPackageException(
 						"Failed to check if the feature tile link table exists for GeoPackage: "
-								+ geoPackage.getName(), e);
+								+ geoPackage.getName(),
+						e);
 			}
 		}
 

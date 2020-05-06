@@ -112,13 +112,6 @@ public class GeoPackageTableCreator {
 	public static final String EXTENDED_RELATIONS = "extended_relations";
 
 	/**
-	 * Feature Tile Link property
-	 *
-	 * @since 4.0.0
-	 */
-	public static final String FEATURE_TILE_LINK = "feature_tile_link";
-
-	/**
 	 * Tile Scaling property
 	 *
 	 * @since 4.0.0
@@ -344,16 +337,6 @@ public class GeoPackageTableCreator {
 	 */
 	public int createExtendedRelations() {
 		return execScript(EXTENDED_RELATIONS);
-	}
-
-	/**
-	 * Create Feature Tile Link table
-	 *
-	 * @return executed statements
-	 * @since 1.1.5
-	 */
-	public int createFeatureTileLink() {
-		return execScript(FEATURE_TILE_LINK);
 	}
 
 	/**

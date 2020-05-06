@@ -39,8 +39,6 @@ import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
-import mil.nga.geopackage.extension.nga.link.FeatureTileLink;
-import mil.nga.geopackage.extension.nga.link.FeatureTileLinkDao;
 import mil.nga.geopackage.extension.nga.scale.TileScaling;
 import mil.nga.geopackage.extension.nga.scale.TileScalingDao;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
@@ -1861,35 +1859,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"Failed to check if " + GriddedTile.class.getSimpleName()
 							+ " table exists and create it",
 					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public FeatureTileLinkDao getFeatureTileLinkDao() {
-		return createDao(FeatureTileLink.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createFeatureTileLinkTable() {
-		verifyWritable();
-
-		boolean created = false;
-		FeatureTileLinkDao dao = getFeatureTileLinkDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createFeatureTileLink() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ FeatureTileLink.class.getSimpleName()
-					+ " table exists and create it", e);
 		}
 		return created;
 	}

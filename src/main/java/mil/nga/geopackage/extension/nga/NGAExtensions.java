@@ -270,8 +270,8 @@ public class NGAExtensions {
 	public static void deleteFeatureTileLink(GeoPackageCore geoPackage,
 			String table) {
 
-		FeatureTileLinkDao featureTileLinkDao = geoPackage
-				.getFeatureTileLinkDao();
+		FeatureTileLinkDao featureTileLinkDao = FeatureTileTableCoreLinker
+				.getFeatureTileLinkDao(geoPackage);
 		try {
 			if (featureTileLinkDao.isTableExists()) {
 				featureTileLinkDao.deleteByTableName(table);
@@ -295,8 +295,8 @@ public class NGAExtensions {
 	public static void deleteFeatureTileLinkExtension(
 			GeoPackageCore geoPackage) {
 
-		FeatureTileLinkDao featureTileLinkDao = geoPackage
-				.getFeatureTileLinkDao();
+		FeatureTileLinkDao featureTileLinkDao = FeatureTileTableCoreLinker
+				.getFeatureTileLinkDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 		try {
 			if (featureTileLinkDao.isTableExists()) {
@@ -340,8 +340,8 @@ public class NGAExtensions {
 
 				if (!extensions.isEmpty()) {
 
-					FeatureTileLinkDao featureTileLinkDao = geoPackage
-							.getFeatureTileLinkDao();
+					FeatureTileLinkDao featureTileLinkDao = FeatureTileTableCoreLinker
+							.getFeatureTileLinkDao(geoPackage);
 					if (featureTileLinkDao.isTableExists()) {
 
 						for (FeatureTileLink featureTileLink : featureTileLinkDao

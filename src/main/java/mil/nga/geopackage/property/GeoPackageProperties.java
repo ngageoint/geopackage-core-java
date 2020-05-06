@@ -295,10 +295,12 @@ public class GeoPackageProperties {
 	public static String buildProperty(String... properties) {
 		StringBuilder combined = new StringBuilder();
 		for (String property : properties) {
-			if (combined.length() > 0) {
-				combined.append(PropertyConstants.PROPERTY_DIVIDER);
+			if (property != null) {
+				if (combined.length() > 0) {
+					combined.append(PropertyConstants.PROPERTY_DIVIDER);
+				}
+				combined.append(property);
 			}
-			combined.append(property);
 		}
 		return combined.toString();
 	}
