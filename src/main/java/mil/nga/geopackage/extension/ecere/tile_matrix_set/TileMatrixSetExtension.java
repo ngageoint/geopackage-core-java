@@ -131,7 +131,18 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix dao
 	 */
 	public ExtTileMatrixDao getTileMatrixDao() {
-		return (ExtTileMatrixDao) createDao(ExtTileMatrix.class);
+		return createDao(ExtTileMatrix.class);
+	}
+
+	/**
+	 * Get the Tile Matrix DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return tile matrix dao
+	 */
+	public static ExtTileMatrixDao getTileMatrixDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(ExtTileMatrix.class);
 	}
 
 	/**
@@ -140,7 +151,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix set dao
 	 */
 	public ExtTileMatrixSetDao getTileMatrixSetDao() {
-		return (ExtTileMatrixSetDao) createDao(ExtTileMatrixSet.class);
+		return createDao(ExtTileMatrixSet.class);
+	}
+
+	/**
+	 * Get the Tile Matrix Set DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return tile matrix set dao
+	 */
+	public static ExtTileMatrixSetDao getTileMatrixSetDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(ExtTileMatrixSet.class);
 	}
 
 	/**
@@ -149,7 +172,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix tables dao
 	 */
 	public TileMatrixTablesDao getTileMatrixTablesDao() {
-		return (TileMatrixTablesDao) createDao(TileMatrixTable.class);
+		return createDao(TileMatrixTable.class);
+	}
+
+	/**
+	 * Get the Tile Matrix Tables DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return tile matrix tables dao
+	 */
+	public static TileMatrixTablesDao getTileMatrixTablesDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(TileMatrixTable.class);
 	}
 
 	/**
@@ -158,8 +193,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix variable widths dao
 	 */
 	public TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao() {
-		return (TileMatrixVariableWidthsDao) createDao(
-				TileMatrixVariableWidths.class);
+		return createDao(TileMatrixVariableWidths.class);
+	}
+
+	/**
+	 * Get the Tile Matrix Variable Widths DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return tile matrix variable widths dao
+	 */
+	public static TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(TileMatrixVariableWidths.class);
 	}
 
 	/**

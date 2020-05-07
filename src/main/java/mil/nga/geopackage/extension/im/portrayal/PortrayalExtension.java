@@ -110,7 +110,18 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return styles dao
 	 */
 	public StylesDao getStylesDao() {
-		return (StylesDao) createDao(Styles.class);
+		return createDao(Styles.class);
+	}
+
+	/**
+	 * Get the Styles DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return styles dao
+	 */
+	public static StylesDao getStylesDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(Styles.class);
 	}
 
 	/**
@@ -119,7 +130,18 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return stylesheets dao
 	 */
 	public StylesheetsDao getStylesheetsDao() {
-		return (StylesheetsDao) createDao(Stylesheets.class);
+		return createDao(Stylesheets.class);
+	}
+
+	/**
+	 * Get the Stylesheets DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return stylesheets dao
+	 */
+	public static StylesheetsDao getStylesheetsDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(Stylesheets.class);
 	}
 
 	/**
@@ -128,7 +150,19 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbol content dao
 	 */
 	public SymbolContentDao getSymbolContentDao() {
-		return (SymbolContentDao) createDao(SymbolContent.class);
+		return createDao(SymbolContent.class);
+	}
+
+	/**
+	 * Get the Symbol Content DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return symbol content dao
+	 */
+	public static SymbolContentDao getSymbolContentDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(SymbolContent.class);
 	}
 
 	/**
@@ -137,7 +171,19 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbol images dao
 	 */
 	public SymbolImagesDao getSymbolImagesDao() {
-		return (SymbolImagesDao) createDao(SymbolImages.class);
+		return createDao(SymbolImages.class);
+	}
+
+	/**
+	 * Get the Symbol Images DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return symbol images dao
+	 */
+	public static SymbolImagesDao getSymbolImagesDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(SymbolImages.class);
 	}
 
 	/**
@@ -146,7 +192,18 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbols dao
 	 */
 	public SymbolsDao getSymbolsDao() {
-		return (SymbolsDao) createDao(Symbols.class);
+		return createDao(Symbols.class);
+	}
+
+	/**
+	 * Get the Symbols DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return symbols dao
+	 */
+	public static SymbolsDao getSymbolsDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(Symbols.class);
 	}
 
 	/**

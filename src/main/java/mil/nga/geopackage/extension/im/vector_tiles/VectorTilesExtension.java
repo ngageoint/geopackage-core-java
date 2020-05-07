@@ -156,7 +156,19 @@ public class VectorTilesExtension extends BaseExtension {
 	 * @return layers dao
 	 */
 	public VectorTilesLayersDao getVectorTilesLayersDao() {
-		return (VectorTilesLayersDao) createDao(VectorTilesLayers.class);
+		return createDao(VectorTilesLayers.class);
+	}
+
+	/**
+	 * Get the Layers DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return layers dao
+	 */
+	public static VectorTilesLayersDao getVectorTilesLayersDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(VectorTilesLayers.class);
 	}
 
 	/**
@@ -165,7 +177,19 @@ public class VectorTilesExtension extends BaseExtension {
 	 * @return fields dao
 	 */
 	public VectorTilesFieldsDao getVectorTilesFieldsDao() {
-		return (VectorTilesFieldsDao) createDao(VectorTilesFields.class);
+		return createDao(VectorTilesFields.class);
+	}
+
+	/**
+	 * Get the Fields DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return fields dao
+	 */
+	public static VectorTilesFieldsDao getVectorTilesFieldsDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(VectorTilesFields.class);
 	}
 
 	/**
