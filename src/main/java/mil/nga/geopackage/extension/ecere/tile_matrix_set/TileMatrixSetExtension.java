@@ -9,13 +9,22 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.ecere.EcereExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
+/**
+ * Tile Matrix Set Extension
+ * 
+ * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/14-tile-matrix-set.adoc
+ * 
+ * @author jyutzler
+ * @since 4.0.0
+ */
 public class TileMatrixSetExtension extends BaseExtension {
-	public static final String EXTENSION_AUTHOR = "ecere";
+	public static final String EXTENSION_AUTHOR = EcereExtensions.EXTENSION_AUTHOR;
 	public static final String EXTENSION_NAME_NO_AUTHOR = "tms";
 	public static final String EXTENSION_NAME = Extensions
 			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);

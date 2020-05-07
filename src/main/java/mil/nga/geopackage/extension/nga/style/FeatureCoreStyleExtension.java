@@ -19,6 +19,8 @@ import mil.nga.geopackage.property.PropertyConstants;
 /**
  * Feature Core Style extension
  * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/feature-style.html
+ * 
  * @author osbornb
  * @since 3.2.0
  */

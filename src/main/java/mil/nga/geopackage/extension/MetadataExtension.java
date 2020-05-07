@@ -15,6 +15,8 @@ import mil.nga.geopackage.property.PropertyConstants;
 /**
  * Metadata extension
  * 
+ * https://www.geopackage.org/spec/#extension_metadata
+ * 
  * @author osbornb
  * @since 1.1.8
  */

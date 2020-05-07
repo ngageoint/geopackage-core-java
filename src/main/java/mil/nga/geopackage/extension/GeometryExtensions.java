@@ -11,6 +11,8 @@ import mil.nga.sf.wkb.GeometryCodes;
 /**
  * Geometry Extensions utility methods and constants
  * 
+ * https://www.geopackage.org/spec121/#extension_geometry_types
+ * 
  * @author osbornb
  */
 public class GeometryExtensions extends BaseExtension {

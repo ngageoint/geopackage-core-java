@@ -17,6 +17,7 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
 import mil.nga.geopackage.extension.coverage.GriddedTileDao;
@@ -1418,6 +1419,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.3.0
 	 */
 	public void vacuum();
+
+	/**
+	 * Get an extension manager on the GeoPackage
+	 * 
+	 * @return extension manager
+	 * @since 4.0.0
+	 */
+	public ExtensionManager getExtensionManager();
 
 	/**
 	 * Get a 2D Gridded Coverage DAO

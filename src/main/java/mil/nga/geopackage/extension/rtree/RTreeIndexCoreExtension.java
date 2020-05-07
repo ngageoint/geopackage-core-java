@@ -24,6 +24,8 @@ import mil.nga.sf.GeometryEnvelope;
 /**
  * RTree Index abstract core extension
  * 
+ * https://www.geopackage.org/spec/#extension_rtree
+ * 
  * @author osbornb
  * @since 2.0.1
  */

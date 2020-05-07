@@ -15,6 +15,8 @@ import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
 /**
  * Schema extension
  * 
+ * https://www.geopackage.org/spec/#extension_schema
+ * 
  * @author osbornb
  * @since 1.1.8
  */

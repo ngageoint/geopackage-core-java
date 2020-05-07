@@ -30,9 +30,9 @@ import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.CrsWktExtension;
+import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
@@ -1368,7 +1368,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public void deleteTable(String table) {
 		verifyWritable();
 
-		GeoPackageExtensions.deleteTableExtensions(this, table);
+		getExtensionManager().deleteTableExtensions(table);
 
 		ContentsDao contentsDao = getContentsDao();
 		contentsDao.deleteTable(table);
@@ -1587,8 +1587,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 		// Copy extensions
 		if (extensions) {
-			GeoPackageExtensions.copyTableExtensions(this, tableName,
-					newTableName);
+			getExtensionManager().copyTableExtensions(tableName, newTableName);
 		}
 	}
 
@@ -1800,6 +1799,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public void vacuum() {
 		CoreSQLUtils.vacuum(database);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtensionManager getExtensionManager() {
+		return new ExtensionManager(this);
 	}
 
 	/**

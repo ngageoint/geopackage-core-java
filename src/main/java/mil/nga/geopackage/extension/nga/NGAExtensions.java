@@ -7,14 +7,14 @@ import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.MappedColumn;
 import mil.nga.geopackage.db.TableMapping;
+import mil.nga.geopackage.extension.ExtensionManagement;
+import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.GeoPackageExtensions;
 import mil.nga.geopackage.extension.nga.contents.ContentsId;
 import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
 import mil.nga.geopackage.extension.nga.index.FeatureTableCoreIndex;
@@ -33,17 +33,20 @@ import mil.nga.geopackage.extension.nga.style.FeatureCoreStyleExtension;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.extension.related.UserMappingTable;
+import mil.nga.geopackage.user.UserCoreDao;
+import mil.nga.geopackage.user.UserCoreRow;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
- * NGA extension management class for deleting extensions for a table or in a
- * GeoPackage
+ * NGA Extensions
+ * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/
  * 
  * @author osbornb
- * @since 1.1.0
+ * @since 4.0.0
  */
-public class NGAExtensions {
+public class NGAExtensions extends ExtensionManagement {
 
 	/**
 	 * Logger
@@ -57,87 +60,77 @@ public class NGAExtensions {
 	public static final String EXTENSION_AUTHOR = "nga";
 
 	/**
-	 * Delete all NGA table extensions for the table within the GeoPackage
+	 * Constructor
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param table
-	 *            table name
 	 */
-	public static void deleteTableExtensions(GeoPackageCore geoPackage,
-			String table) {
+	public NGAExtensions(GeoPackageCore geoPackage) {
+		super(geoPackage);
+	}
 
-		deleteGeometryIndex(geoPackage, table);
-		deleteFeatureTileLink(geoPackage, table);
-		deleteTileScaling(geoPackage, table);
-		deleteProperties(geoPackage, table);
-		deleteFeatureStyle(geoPackage, table);
-		deleteContentsId(geoPackage, table);
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getAuthor() {
+		return EXTENSION_AUTHOR;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteTableExtensions(String table) {
+
+		deleteGeometryIndex(table);
+		deleteFeatureTileLink(table);
+		deleteTileScaling(table);
+		deleteProperties(table);
+		deleteFeatureStyle(table);
+		deleteContentsId(table);
 
 		// Delete future extensions for the table here
 	}
 
 	/**
-	 * Delete all NGA extensions including custom extension tables for the
-	 * GeoPackage
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
+	 * {@inheritDoc}
 	 */
-	public static void deleteExtensions(GeoPackageCore geoPackage) {
+	@Override
+	public void deleteExtensions() {
 
-		deleteGeometryIndexExtension(geoPackage);
-		deleteFeatureTileLinkExtension(geoPackage);
-		deleteTileScalingExtension(geoPackage);
-		deletePropertiesExtension(geoPackage);
-		deleteFeatureStyleExtension(geoPackage);
-		deleteContentsIdExtension(geoPackage);
+		deleteGeometryIndexExtension();
+		deleteFeatureTileLinkExtension();
+		deleteTileScalingExtension();
+		deletePropertiesExtension();
+		deleteFeatureStyleExtension();
+		deleteContentsIdExtension();
 
 		// Delete future extension tables here
 	}
 
 	/**
-	 * Copy all NGA table extensions for the table within the GeoPackage
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @param table
-	 *            table name
-	 * @param newTable
-	 *            new table name
-	 * @since 3.3.0
+	 * {@inheritDoc}
 	 */
-	public static void copyTableExtensions(GeoPackageCore geoPackage,
-			String table, String newTable) {
+	@Override
+	public void copyTableExtensions(String table, String newTable) {
 
-		try {
+		copyContentsId(table, newTable);
+		copyFeatureStyle(table, newTable);
+		copyTileScaling(table, newTable);
+		copyFeatureTileLink(table, newTable);
+		copyGeometryIndex(table, newTable);
 
-			copyContentsId(geoPackage, table, newTable);
-			copyFeatureStyle(geoPackage, table, newTable);
-			copyTileScaling(geoPackage, table, newTable);
-			copyFeatureTileLink(geoPackage, table, newTable);
-			copyGeometryIndex(geoPackage, table, newTable);
-
-			// Copy future extensions for the table here
-
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Failed to copy extensions for table: "
-					+ newTable + ", copied from table: " + table, e);
-		}
-
+		// Copy future extensions for the table here
 	}
 
 	/**
 	 * Delete the Geometry Index extension for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 1.1.5
 	 */
-	public static void deleteGeometryIndex(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteGeometryIndex(String table) {
 
 		TableIndexDao tableIndexDao = FeatureTableCoreIndex
 				.getTableIndexDao(geoPackage);
@@ -162,12 +155,8 @@ public class NGAExtensions {
 	/**
 	 * Delete the Geometry Index extension including the extension entries and
 	 * custom tables
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.2.0
 	 */
-	public static void deleteGeometryIndexExtension(GeoPackageCore geoPackage) {
+	public void deleteGeometryIndexExtension() {
 
 		GeometryIndexDao geometryIndexDao = FeatureTableCoreIndex
 				.getGeometryIndexDao(geoPackage);
@@ -198,16 +187,12 @@ public class NGAExtensions {
 	/**
 	 * Copy the Geometry Index extension for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.3.0
 	 */
-	public static void copyGeometryIndex(GeoPackageCore geoPackage,
-			String table, String newTable) {
+	public void copyGeometryIndex(String table, String newTable) {
 
 		try {
 
@@ -261,14 +246,10 @@ public class NGAExtensions {
 	/**
 	 * Delete the Feature Tile Link extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 1.1.5
 	 */
-	public static void deleteFeatureTileLink(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteFeatureTileLink(String table) {
 
 		FeatureTileLinkDao featureTileLinkDao = FeatureTileTableCoreLinker
 				.getFeatureTileLinkDao(geoPackage);
@@ -287,13 +268,8 @@ public class NGAExtensions {
 	/**
 	 * Delete the Feature Tile Link extension including the extension entries
 	 * and custom tables
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.2.0
 	 */
-	public static void deleteFeatureTileLinkExtension(
-			GeoPackageCore geoPackage) {
+	public void deleteFeatureTileLinkExtension() {
 
 		FeatureTileLinkDao featureTileLinkDao = FeatureTileTableCoreLinker
 				.getFeatureTileLinkDao(geoPackage);
@@ -318,16 +294,12 @@ public class NGAExtensions {
 	/**
 	 * Copy the Feature Tile Link extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.3.0
 	 */
-	public static void copyFeatureTileLink(GeoPackageCore geoPackage,
-			String table, String newTable) {
+	public void copyFeatureTileLink(String table, String newTable) {
 
 		try {
 
@@ -373,14 +345,10 @@ public class NGAExtensions {
 	/**
 	 * Delete the Tile Scaling extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 2.0.2
 	 */
-	public static void deleteTileScaling(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteTileScaling(String table) {
 
 		TileScalingDao tileScalingDao = TileTableScaling
 				.getTileScalingDao(geoPackage);
@@ -405,12 +373,8 @@ public class NGAExtensions {
 	/**
 	 * Delete the Tile Scaling extension including the extension entries and
 	 * custom tables
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.2.0
 	 */
-	public static void deleteTileScalingExtension(GeoPackageCore geoPackage) {
+	public void deleteTileScalingExtension() {
 
 		TileScalingDao tileScalingDao = TileTableScaling
 				.getTileScalingDao(geoPackage);
@@ -435,16 +399,12 @@ public class NGAExtensions {
 	/**
 	 * Copy the Tile Scaling extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.3.0
 	 */
-	public static void copyTileScaling(GeoPackageCore geoPackage, String table,
-			String newTable) {
+	public void copyTileScaling(String table, String newTable) {
 
 		try {
 
@@ -483,66 +443,54 @@ public class NGAExtensions {
 	 * Delete the Properties extension if the deleted table is the properties
 	 * table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.2.0
 	 */
-	public static void deleteProperties(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteProperties(String table) {
 
 		if (table.equalsIgnoreCase(PropertiesCoreExtension.TABLE_NAME)) {
-			deletePropertiesExtension(geoPackage);
+			deletePropertiesExtension();
 		}
 
 	}
 
 	/**
 	 * Delete the properties extension from the GeoPackage
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.0.2
 	 */
-	public static void deletePropertiesExtension(GeoPackageCore geoPackage) {
+	public void deletePropertiesExtension() {
+		getPropertiesExtension().removeExtension();
+	}
 
-		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+	/**
+	 * Get a Properties Extension used only for deletions
+	 * 
+	 * @return Feature Style Extension
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private PropertiesCoreExtension getPropertiesExtension() {
+		return new PropertiesCoreExtension(geoPackage) {
 
-		if (geoPackage.isTable(PropertiesCoreExtension.TABLE_NAME)) {
-			ContentsDao contentsDao = geoPackage.getContentsDao();
-			contentsDao.deleteTable(PropertiesCoreExtension.TABLE_NAME);
-		}
-
-		try {
-			if (extensionsDao.isTableExists()) {
-				extensionsDao.deleteByExtension(
-						PropertiesCoreExtension.EXTENSION_NAME,
-						PropertiesCoreExtension.TABLE_NAME);
+			@Override
+			protected UserCoreDao getDao() {
+				return null;
 			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to delete Properties extension. GeoPackage: "
-							+ geoPackage.getName(),
-					e);
-		}
 
+			@Override
+			protected UserCoreRow newRow() {
+				return null;
+			}
+		};
 	}
 
 	/**
 	 * Delete the Feature Style extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.2.0
 	 */
-	public static void deleteFeatureStyle(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteFeatureStyle(String table) {
 
-		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
-				geoPackage);
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension();
 		if (featureStyleExtension.has(table)) {
 			featureStyleExtension.deleteRelationships(table);
 		}
@@ -552,15 +500,10 @@ public class NGAExtensions {
 	/**
 	 * Delete the Feature Style extension including the extension entries and
 	 * custom tables
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.2.0
 	 */
-	public static void deleteFeatureStyleExtension(GeoPackageCore geoPackage) {
+	public void deleteFeatureStyleExtension() {
 
-		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
-				geoPackage);
+		FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension();
 		if (featureStyleExtension.has()) {
 			featureStyleExtension.removeExtension();
 		}
@@ -569,24 +512,19 @@ public class NGAExtensions {
 
 	/**
 	 * Copy the Feature Style extensions for the table. Relies on
-	 * {@link GeoPackageExtensions#copyRelatedTables(GeoPackageCore, String, String)}
-	 * to be called first.
+	 * {@link ExtensionManager#copyRelatedTables(String, String)} to be called
+	 * first.
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.3.0
 	 */
-	public static void copyFeatureStyle(GeoPackageCore geoPackage, String table,
-			String newTable) {
+	public void copyFeatureStyle(String table, String newTable) {
 
 		try {
 
-			FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension(
-					geoPackage);
+			FeatureCoreStyleExtension featureStyleExtension = getFeatureStyleExtension();
 			if (featureStyleExtension.hasRelationship(table)) {
 
 				Extensions extension = featureStyleExtension.get(table);
@@ -651,7 +589,7 @@ public class NGAExtensions {
 	 * @param newContentsId
 	 *            new contents id
 	 */
-	private static void copyFeatureTableStyle(
+	private void copyFeatureTableStyle(
 			FeatureCoreStyleExtension featureStyleExtension,
 			String mappingTablePrefix, String table, String newTable,
 			long contentsId, long newContentsId) throws SQLException {
@@ -709,12 +647,9 @@ public class NGAExtensions {
 	/**
 	 * Get a Feature Style Extension used only for deletions
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @return Feature Style Extension
 	 */
-	private static FeatureCoreStyleExtension getFeatureStyleExtension(
-			GeoPackageCore geoPackage) {
+	private FeatureCoreStyleExtension getFeatureStyleExtension() {
 
 		RelatedTablesCoreExtension relatedTables = new RelatedTablesCoreExtension(
 				geoPackage) {
@@ -727,14 +662,10 @@ public class NGAExtensions {
 	/**
 	 * Delete the Contents Id extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
-	 * @since 3.2.0
 	 */
-	public static void deleteContentsId(GeoPackageCore geoPackage,
-			String table) {
+	public void deleteContentsId(String table) {
 
 		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
 				geoPackage);
@@ -747,12 +678,8 @@ public class NGAExtensions {
 	/**
 	 * Delete the Contents Id extension including the extension entries and
 	 * custom tables
-	 * 
-	 * @param geoPackage
-	 *            GeoPackage
-	 * @since 3.2.0
 	 */
-	public static void deleteContentsIdExtension(GeoPackageCore geoPackage) {
+	public void deleteContentsIdExtension() {
 
 		ContentsIdExtension contentsIdExtension = new ContentsIdExtension(
 				geoPackage);
@@ -765,16 +692,12 @@ public class NGAExtensions {
 	/**
 	 * Copy the Contents Id extensions for the table
 	 * 
-	 * @param geoPackage
-	 *            GeoPackage
 	 * @param table
 	 *            table name
 	 * @param newTable
 	 *            new table name
-	 * @since 3.3.0
 	 */
-	public static void copyContentsId(GeoPackageCore geoPackage, String table,
-			String newTable) {
+	public void copyContentsId(String table, String newTable) {
 
 		try {
 

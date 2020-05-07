@@ -27,6 +27,8 @@ import mil.nga.geopackage.property.PropertyConstants;
  * contents. Allows foreign key referencing to a contents (text based primary
  * key) by an integer identifier.
  * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/contents-id.html
+ * 
  * @author osbornb
  * @since 3.2.0
  */

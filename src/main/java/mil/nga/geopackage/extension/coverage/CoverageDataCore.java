@@ -25,6 +25,8 @@ import mil.nga.sf.proj.ProjectionTransform;
 /**
  * Tiled Gridded Coverage Core Data Extension
  * 
+ * http://docs.opengeospatial.org/is/17-066r1/17-066r1.html
+ * 
  * @param <TImage>
  *            image type
  * 

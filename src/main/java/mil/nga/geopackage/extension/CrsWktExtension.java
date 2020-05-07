@@ -14,6 +14,8 @@ import mil.nga.geopackage.property.PropertyConstants;
 /**
  * OGC Well known text representation of Coordinate Reference Systems extension
  * 
+ * http://www.geopackage.org/spec/#extension_crs_wkt
+ * 
  * @author osbornb
  * @since 1.1.8
  */

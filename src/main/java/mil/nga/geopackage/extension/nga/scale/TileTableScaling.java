@@ -20,6 +20,8 @@ import mil.nga.geopackage.user.UserCoreDao;
  * Abstract Tile Table Scaling, for scaling tiles from nearby zoom levels for
  * missing tiles
  * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/tile-scaling.html
+ * 
  * @author osbornb
  * @since 2.0.2
  */

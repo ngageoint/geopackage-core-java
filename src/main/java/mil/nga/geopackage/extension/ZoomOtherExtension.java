@@ -9,6 +9,8 @@ import mil.nga.geopackage.tiles.user.TileTable;
 /**
  * Zoom Other Intervals extension
  * 
+ * https://www.geopackage.org/spec/#extension_zoom_other_intervals
+ * 
  * @author osbornb
  * @since 1.1.8
  */

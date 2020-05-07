@@ -9,12 +9,21 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.im.ImageMattersExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.user.TileTable;
 
+/**
+ * Vector Tiles Extension
+ * 
+ * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/1-vte.adoc
+ * 
+ * @author jyutzler
+ * @since 4.0.0
+ */
 public class VectorTilesExtension extends BaseExtension {
-	public static final String EXTENSION_AUTHOR = "im";
+	public static final String EXTENSION_AUTHOR = ImageMattersExtensions.EXTENSION_AUTHOR;
 	public static final String EXTENSION_NAME_NO_AUTHOR = "vector_tiles";
 	public static final String EXTENSION_NAME = Extensions
 			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);

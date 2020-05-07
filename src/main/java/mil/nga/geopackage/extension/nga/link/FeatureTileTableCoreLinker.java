@@ -17,6 +17,8 @@ import mil.nga.geopackage.property.PropertyConstants;
  * Abstract Feature Tile Table linker, used to link feature and tile tables
  * together when the tiles represent the feature data
  * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/feature-tile-link.html
+ * 
  * @author osbornb
  * @since 1.1.6
  */

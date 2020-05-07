@@ -1,18 +1,22 @@
 package mil.nga.geopackage.extension.nga.properties;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.core.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.extension.nga.NGAExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
@@ -23,6 +27,8 @@ import mil.nga.geopackage.user.UserCoreRow;
 /**
  * GeoPackage properties core extension for defining GeoPackage specific
  * properties, attributes, and metadata
+ * 
+ * http://ngageoint.github.io/GeoPackage/docs/extensions/properties.html
  * 
  * @param <TGeoPackage>
  *            GeoPackage type
@@ -368,7 +374,26 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 	 * Remove the extension
 	 */
 	public void removeExtension() {
-		NGAExtensions.deletePropertiesExtension(geoPackage);
+
+		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
+
+		if (geoPackage.isTable(PropertiesCoreExtension.TABLE_NAME)) {
+			ContentsDao contentsDao = geoPackage.getContentsDao();
+			contentsDao.deleteTable(PropertiesCoreExtension.TABLE_NAME);
+		}
+
+		try {
+			if (extensionsDao.isTableExists()) {
+				extensionsDao.deleteByExtension(
+						PropertiesCoreExtension.EXTENSION_NAME,
+						PropertiesCoreExtension.TABLE_NAME);
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to delete Properties extension. GeoPackage: "
+							+ geoPackage.getName(),
+					e);
+		}
 	}
 
 	/**

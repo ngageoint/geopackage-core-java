@@ -7,51 +7,57 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.tiles.user.TileTable;
 
 /**
- * The Vector Tiles extension requires an additional encoding extension
- * for a particular vector tileset
+ * The Vector Tiles extension requires an additional encoding extension for a
+ * particular vector tileset
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 public abstract class VectorTilesEncodingExtension extends BaseExtension {
-    /**
-     * Constructor
-     *
-     * @param geoPackage GeoPackage
-     */
-    protected VectorTilesEncodingExtension(GeoPackageCore geoPackage) {
-        super(geoPackage);
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param geoPackage
+	 *            GeoPackage
+	 */
+	protected VectorTilesEncodingExtension(GeoPackageCore geoPackage) {
+		super(geoPackage);
+	}
 
-    /**
-     * Get or create the extension
-     *
-     * @param tilesTable tiles table name
-     * @return Extensions
-     */
-    public Extensions getOrCreate(String tilesTable) {
+	/**
+	 * Get or create the extension
+	 *
+	 * @param tilesTable
+	 *            tiles table name
+	 * @return Extensions
+	 */
+	public Extensions getOrCreate(String tilesTable) {
 
-        return getOrCreate(getName(), tilesTable, TileTable.COLUMN_TILE_DATA,
-                getDefinition(), ExtensionScopeType.READ_WRITE);
-    }
+		return getOrCreate(getName(), tilesTable, TileTable.COLUMN_TILE_DATA,
+				getDefinition(), ExtensionScopeType.READ_WRITE);
+	}
 
-    public boolean has() {
-        return this.has(getName());
-    }
+	public boolean has() {
+		return this.has(getName());
+	}
 
-    /**
-     *
-     * @return the extension name - this goes in gpkg_extensions.extension_name
-     */
-    abstract public String getName();
+	/**
+	 *
+	 * @return the extension name - this goes in gpkg_extensions.extension_name
+	 */
+	abstract public String getName();
 
-    /**
-     *
-     * @return the extension definition - this goes in gpkg_extensions.definition
-     */
-    abstract public String getDefinition();
+	/**
+	 *
+	 * @return the extension definition - this goes in
+	 *         gpkg_extensions.definition
+	 */
+	abstract public String getDefinition();
 
-    /**
-     *
-     * @return The format type - this is used when requesting from a tiles server
-     */
-    abstract public String getType();
+	/**
+	 *
+	 * @return The format type - this is used when requesting from a tiles
+	 *         server
+	 */
+	abstract public String getType();
 }

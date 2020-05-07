@@ -9,6 +9,8 @@ import mil.nga.geopackage.tiles.user.TileTable;
 /**
  * WebP extension
  * 
+ * https://www.geopackage.org/spec/#extension_tiles_webp
+ * 
  * @author osbornb
  * @since 1.1.8
  */

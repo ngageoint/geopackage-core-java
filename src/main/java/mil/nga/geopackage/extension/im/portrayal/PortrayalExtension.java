@@ -9,11 +9,20 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.im.ImageMattersExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
+/**
+ * Portrayal Extension
+ * 
+ * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/5-portrayal.adoc
+ * 
+ * @author jyutzler
+ * @since 4.0.0
+ */
 public class PortrayalExtension extends BaseExtension {
-	public static final String EXTENSION_AUTHOR = "im";
+	public static final String EXTENSION_AUTHOR = ImageMattersExtensions.EXTENSION_AUTHOR;;
 	public static final String EXTENSION_NAME_NO_AUTHOR = "portrayal";
 	public static final String EXTENSION_NAME = Extensions
 			.buildExtensionName(EXTENSION_AUTHOR, EXTENSION_NAME_NO_AUTHOR);
