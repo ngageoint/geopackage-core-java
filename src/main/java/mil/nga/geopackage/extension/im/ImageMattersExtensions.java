@@ -2,6 +2,7 @@ package mil.nga.geopackage.extension.im;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.extension.ExtensionManagement;
+import mil.nga.geopackage.extension.im.portrayal.PortrayalExtension;
 
 /**
  * Image Matters Extensions
@@ -42,6 +43,9 @@ public class ImageMattersExtensions extends ExtensionManagement {
 	@Override
 	public void deleteTableExtensions(String table) {
 
+		deleteVectorTiles(table);
+
+		// Delete future extensions for the table here
 	}
 
 	/**
@@ -50,6 +54,11 @@ public class ImageMattersExtensions extends ExtensionManagement {
 	@Override
 	public void deleteExtensions() {
 
+		deleteVectorTilesExtension();
+		deletePortrayalExtension();
+
+		// Delete future extension tables here
+
 	}
 
 	/**
@@ -57,6 +66,51 @@ public class ImageMattersExtensions extends ExtensionManagement {
 	 */
 	@Override
 	public void copyTableExtensions(String table, String newTable) {
+
+		copyVectorTiles(table, newTable);
+
+		// Copy future extensions for the table here
+	}
+
+	/**
+	 * Delete the Vector Tiles extensions for the table
+	 * 
+	 * @param table
+	 *            table name
+	 */
+	public void deleteVectorTiles(String table) {
+		// TODO delete vector tiles for the table
+	}
+
+	/**
+	 * Delete the Vector Tiles extension
+	 */
+	public void deleteVectorTilesExtension() {
+		// TODO delete the vector tiles extension
+	}
+
+	/**
+	 * Copy the Vector Tiles extensions for the table
+	 * 
+	 * @param table
+	 *            table name
+	 * @param newTable
+	 *            new table name
+	 */
+	public void copyVectorTiles(String table, String newTable) {
+		// TODO copy vector tiles to the new table
+	}
+
+	/**
+	 * Delete the Portrayal Extension
+	 */
+	public void deletePortrayalExtension() {
+
+		PortrayalExtension portrayalExtension = new PortrayalExtension(
+				geoPackage);
+		if (portrayalExtension.has()) {
+			portrayalExtension.removeExtension();
+		}
 
 	}
 
