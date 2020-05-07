@@ -5,8 +5,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the styles
- *
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = "gpkgext_styles", daoClass = StylesDao.class)
 public class Styles {

@@ -6,8 +6,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the fields in a vector tiles set
- *
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = "gpkgext_vt_fields", daoClass = VectorTilesFieldsDao.class)
 public class VectorTilesFields {

@@ -6,6 +6,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the tables using a particular tile matrix
+ * 
+ * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = TileMatrixVariableWidths.TABLE_NAME, daoClass = TileMatrixVariableWidthsDao.class)
 public class TileMatrixVariableWidths {

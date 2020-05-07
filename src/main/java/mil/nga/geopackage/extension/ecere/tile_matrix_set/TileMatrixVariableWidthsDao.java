@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 /**
  * @author jyutzler
+ * @since 4.0.0
  */
 public class TileMatrixVariableWidthsDao extends GeoPackageDao<TileMatrixVariableWidths, Long> {
 

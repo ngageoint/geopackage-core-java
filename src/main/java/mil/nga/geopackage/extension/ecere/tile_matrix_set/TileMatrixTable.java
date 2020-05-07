@@ -4,8 +4,10 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * @author jyutzler
  * Describes the tables using a particular tile matrix
+ * 
+ * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = TileMatrixTable.TABLE_NAME, daoClass = TileMatrixTablesDao.class)
 public class TileMatrixTable {

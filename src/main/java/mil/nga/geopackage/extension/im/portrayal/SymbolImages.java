@@ -5,8 +5,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the symbol images, i.e., a manifestation of a symbol
- *
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = "gpkgext_symbol_images", daoClass = SymbolImagesDao.class)
 public class SymbolImages {

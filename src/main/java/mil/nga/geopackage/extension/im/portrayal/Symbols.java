@@ -5,8 +5,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the symbols
- *
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = "gpkgext_symbols", daoClass = SymbolsDao.class)
 public class Symbols {

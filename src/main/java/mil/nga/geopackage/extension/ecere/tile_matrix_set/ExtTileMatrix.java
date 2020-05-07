@@ -7,6 +7,9 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * Describes a tile matrix
  * and is used to populate the `gpkg_tile_matrix` view
+ * 
+ * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = ExtTileMatrix.TABLE_NAME, daoClass = ExtTileMatrixDao.class)
 public class ExtTileMatrix {

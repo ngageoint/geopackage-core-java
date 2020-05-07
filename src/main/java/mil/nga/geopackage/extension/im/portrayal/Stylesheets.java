@@ -6,8 +6,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Describes the stylesheets
- *
+ * 
  * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = "gpkgext_stylesheets", daoClass = StylesheetsDao.class)
 public class Stylesheets {

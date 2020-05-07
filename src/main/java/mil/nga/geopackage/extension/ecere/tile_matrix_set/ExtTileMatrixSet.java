@@ -7,6 +7,9 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 /**
  * Describes a tile matrix set
  * and is used to populate the `gpkg_tile_matrix_set` view
+ * 
+ * @author jyutzler
+ * @since 4.0.0
  */
 @DatabaseTable(tableName = ExtTileMatrixSet.TABLE_NAME, daoClass = ExtTileMatrixSetDao.class)
 public class ExtTileMatrixSet {
