@@ -6,10 +6,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 4.0.0 (TBD)
 
+* Community extensions decoupling and management, including class repackaging
+* Contents Data Type refactor, core data types and expanded custom data type support
+* Wider support for views in place of tables, including a new GeoPackageDao
 * DAO options to enable modifying row ids or disable column value type validation
 * Distinct select statement queries and counts
 * Aggregate functions (count, max, min) refactor
-* Wider support for views in place of tables, including a new GeoPackageDao
+* Image Matters Portrayal and Vector Tiles extensions
+* Ecere Tile Matrix Set extension
 
 ## [3.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/3.5.0) (03-10-2020)
 
