@@ -49,9 +49,11 @@ public class ConstraintTest {
 				createNames("crmr_mfi_fk", "crmr_mpi_fk"));
 		testSQLScript(GeoPackageTableCreator.EXTENSIONS, 0, 1, 0, 0,
 				createNames("ge_tce"));
-		testSQLScript(GeoPackageTableCreator.GRIDDED_COVERAGE, 0, 0, 1, 1,
+		testSQLScript(GeoPackageTableCreator.EXTENSION, null,
+				GeoPackageTableCreator.GRIDDED_COVERAGE, 0, 0, 1, 1,
 				createNames("fk_g2dgtct_name", null));
-		testSQLScript(GeoPackageTableCreator.GRIDDED_TILE, 0, 1, 0, 1,
+		testSQLScript(GeoPackageTableCreator.EXTENSION, null,
+				GeoPackageTableCreator.GRIDDED_TILE, 0, 1, 0, 1,
 				createNames("fk_g2dgtat_name", null));
 		testSQLScript(GeoPackageTableCreator.EXTENDED_RELATIONS, 0, 0, 0, 0,
 				createNames());
@@ -255,6 +257,31 @@ public class ConstraintTest {
 	private void testSQLScript(String pathProperty, String property,
 			int primaryKey, int unique, int check, int foreignKey,
 			List<String> names) {
+		testSQLScript(pathProperty, pathProperty, property, primaryKey, unique,
+				check, foreignKey, names);
+	}
+
+	/**
+	 * Test the database script for constraint parsing
+	 * 
+	 * @param pathProperty
+	 *            path property
+	 * @param property
+	 *            property
+	 * @param primaryKey
+	 *            expected primary key count
+	 * @param unique
+	 *            expected unique count
+	 * @param check
+	 *            expected check count
+	 * @param foreignKey
+	 *            expected foreign key count
+	 * @param names
+	 *            expected constraint names
+	 */
+	private void testSQLScript(String directoryProperty, String pathProperty,
+			String property, int primaryKey, int unique, int check,
+			int foreignKey, List<String> names) {
 
 		int count = 0;
 		int primaryKeyCount = 0;
@@ -262,8 +289,13 @@ public class ConstraintTest {
 		int checkCount = 0;
 		int foreignKeyCount = 0;
 
+		String script = GeoPackageTableCreator.getScript(
+				GeoPackageProperties.buildProperty(pathProperty, property));
 		List<String> statements = GeoPackageTableCreator
-				.readScript(pathProperty, property);
+				.readSQLScript(directoryProperty, script);
+
+		// List<String> statements = GeoPackageTableCreator
+		// .readScript(pathProperty, property);
 		for (String sql : statements) {
 
 			ConstraintTestResult constraintResult = testConstraint(sql, names);

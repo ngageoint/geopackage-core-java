@@ -74,12 +74,12 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	/**
 	 * Gridded Coverage DAO
 	 */
-	private final GriddedCoverageDao griddedCoverageDao;
+	private GriddedCoverageDao griddedCoverageDao;
 
 	/**
 	 * Gridded Tile DAO
 	 */
-	private final GriddedTileDao griddedTileDao;
+	private GriddedTileDao griddedTileDao;
 
 	/**
 	 * Gridded coverage
@@ -163,8 +163,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		super(geoPackage);
 
 		this.tileMatrixSet = tileMatrixSet;
-		griddedCoverageDao = geoPackage.getGriddedCoverageDao();
-		griddedTileDao = geoPackage.getGriddedTileDao();
+		griddedCoverageDao = getGriddedCoverageDao();
+		griddedTileDao = getGriddedTileDao();
 		queryGriddedCoverage();
 
 		this.width = width;
@@ -246,24 +246,6 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 */
 	public TileMatrixSet getTileMatrixSet() {
 		return tileMatrixSet;
-	}
-
-	/**
-	 * Get the Gridded Coverage DAO
-	 * 
-	 * @return Gridded Coverage DAO
-	 */
-	public GriddedCoverageDao getGriddedCoverageDao() {
-		return griddedCoverageDao;
-	}
-
-	/**
-	 * Get the Gridded Tile DAO
-	 * 
-	 * @return Gridded Tile DAO
-	 */
-	public GriddedTileDao getGriddedTileDao() {
-		return griddedTileDao;
 	}
 
 	/**
@@ -454,8 +436,8 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	public List<Extensions> getOrCreate() {
 
 		// Create tables
-		geoPackage.createGriddedCoverageTable();
-		geoPackage.createGriddedTileTable();
+		createGriddedCoverageTable();
+		createGriddedTileTable();
 
 		List<Extensions> extensionList = new ArrayList<>();
 
@@ -486,6 +468,105 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 				TileTable.COLUMN_TILE_DATA);
 
 		return exists;
+	}
+
+	/**
+	 * Get a 2D Gridded Coverage DAO
+	 * 
+	 * @return 2d gridded coverage dao
+	 */
+	public GriddedCoverageDao getGriddedCoverageDao() {
+		if (griddedCoverageDao == null) {
+			griddedCoverageDao = createDao(GriddedCoverage.class);
+		}
+		return griddedCoverageDao;
+	}
+
+	/**
+	 * Get a 2D Gridded Coverage DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return 2d gridded coverage dao
+	 * @since 4.0.0
+	 */
+	public static GriddedCoverageDao getGriddedCoverageDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(GriddedCoverage.class);
+	}
+
+	/**
+	 * Create the 2D Gridded Coverage Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createGriddedCoverageTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!griddedCoverageDao.isTableExists()) {
+				created = geoPackage.getTableCreator()
+						.createGriddedCoverage() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ GriddedCoverage.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+
+		return created;
+	}
+
+	/**
+	 * Get a 2D Gridded Tile DAO
+	 * 
+	 * @return 2d gridded tile dao
+	 */
+	public GriddedTileDao getGriddedTileDao() {
+		if (griddedTileDao == null) {
+			griddedTileDao = createDao(GriddedTile.class);
+		}
+		return griddedTileDao;
+	}
+
+	/**
+	 * Get a 2D Gridded Tile DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return 2d gridded tile dao
+	 * @since 4.0.0
+	 */
+	public static GriddedTileDao getGriddedTileDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(GriddedTile.class);
+	}
+
+	/**
+	 * Create the 2D Gridded Tile Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createGriddedTileTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!griddedTileDao.isTableExists()) {
+				created = geoPackage.getTableCreator().createGriddedTile() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + GriddedTile.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+
+		return created;
 	}
 
 	/**

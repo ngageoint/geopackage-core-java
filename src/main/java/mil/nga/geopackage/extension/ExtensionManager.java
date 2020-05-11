@@ -415,9 +415,10 @@ public class ExtensionManager extends ExtensionManagement {
 
 		if (geoPackage.isTableType(CoverageDataCore.GRIDDED_COVERAGE, table)) {
 
-			GriddedTileDao griddedTileDao = geoPackage.getGriddedTileDao();
-			GriddedCoverageDao griddedCoverageDao = geoPackage
-					.getGriddedCoverageDao();
+			GriddedTileDao griddedTileDao = CoverageDataCore
+					.getGriddedTileDao(geoPackage);
+			GriddedCoverageDao griddedCoverageDao = CoverageDataCore
+					.getGriddedCoverageDao(geoPackage);
 			ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 			try {
@@ -452,9 +453,10 @@ public class ExtensionManager extends ExtensionManagement {
 			geoPackage.deleteTable(table);
 		}
 
-		GriddedTileDao griddedTileDao = geoPackage.getGriddedTileDao();
-		GriddedCoverageDao griddedCoverageDao = geoPackage
-				.getGriddedCoverageDao();
+		GriddedTileDao griddedTileDao = CoverageDataCore
+				.getGriddedTileDao(geoPackage);
+		GriddedCoverageDao griddedCoverageDao = CoverageDataCore
+				.getGriddedCoverageDao(geoPackage);
 		ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 		try {
@@ -506,8 +508,8 @@ public class ExtensionManager extends ExtensionManagement {
 						extension.setTableName(newTable);
 						extensionsDao.create(extension);
 
-						GriddedCoverageDao griddedCoverageDao = geoPackage
-								.getGriddedCoverageDao();
+						GriddedCoverageDao griddedCoverageDao = CoverageDataCore
+								.getGriddedCoverageDao(geoPackage);
 						if (griddedCoverageDao.isTableExists()) {
 
 							CoreSQLUtils.transferTableContent(
@@ -518,8 +520,8 @@ public class ExtensionManager extends ExtensionManagement {
 
 						}
 
-						GriddedTileDao griddedTileDao = geoPackage
-								.getGriddedTileDao();
+						GriddedTileDao griddedTileDao = CoverageDataCore
+								.getGriddedTileDao(geoPackage);
 						if (griddedTileDao.isTableExists()) {
 
 							CoreSQLUtils.transferTableContent(

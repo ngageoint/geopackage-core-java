@@ -21,6 +21,13 @@ import mil.nga.geopackage.user.UserTable;
 public class GeoPackageTableCreator {
 
 	/**
+	 * Extension property
+	 * 
+	 * @since 4.0.0
+	 */
+	public static final String EXTENSION = "extension";
+
+	/**
 	 * Spatial Reference System property
 	 *
 	 * @since 4.0.0
@@ -309,7 +316,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.2.1
 	 */
 	public int createGriddedCoverage() {
-		return execScript(GRIDDED_COVERAGE);
+		return execScript(EXTENSION, GRIDDED_COVERAGE);
 	}
 
 	/**
@@ -319,7 +326,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.2.1
 	 */
 	public int createGriddedTile() {
-		return execScript(GRIDDED_TILE);
+		return execScript(EXTENSION, GRIDDED_TILE);
 	}
 
 	/**
@@ -363,6 +370,21 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Execute the database script name for the property
+	 *
+	 * @param propertyPath
+	 *            table creator property path
+	 * @param property
+	 *            property name
+	 * @return executed statements
+	 * @since 4.0.0
+	 */
+	public int execScript(String propertyPath, String property) {
+		String sqlScript = getScript(property);
+		return execSQLScript(propertyPath, sqlScript);
+	}
+
+	/**
 	 * Execute the SQL Script
 	 *
 	 * @param sqlScript
@@ -371,9 +393,20 @@ public class GeoPackageTableCreator {
 	 * @since 3.3.0
 	 */
 	public int execSQLScript(String sqlScript) {
+		return execSQLScript(getProperty(), sqlScript);
+	}
 
-		String property = getProperty();
-
+	/**
+	 * Execute the SQL Script
+	 *
+	 * @param property
+	 *            table creator property path
+	 * @param sqlScript
+	 *            SQL script property file name
+	 * @return executed statements
+	 * @since 4.0.0
+	 */
+	public int execSQLScript(String property, String sqlScript) {
 		List<String> statements = readSQLScript(property, sqlScript);
 
 		for (String statement : statements) {

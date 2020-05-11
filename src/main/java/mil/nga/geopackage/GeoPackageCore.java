@@ -16,11 +16,10 @@ import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.coverage.GriddedCoverageDao;
-import mil.nga.geopackage.extension.coverage.GriddedTileDao;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -72,6 +71,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @return connection
 	 */
 	public GeoPackageCoreConnection getDatabase();
+
+	/**
+	 * Get the Table Creator
+	 * 
+	 * @return table creator
+	 * @since 4.0.0
+	 */
+	public GeoPackageTableCreator getTableCreator();
 
 	/**
 	 * Is the GeoPackage writable
@@ -1427,38 +1434,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 4.0.0
 	 */
 	public ExtensionManager getExtensionManager();
-
-	/**
-	 * Get a 2D Gridded Coverage DAO
-	 * 
-	 * @return 2d gridded coverage dao
-	 * @since 1.2.1
-	 */
-	public GriddedCoverageDao getGriddedCoverageDao();
-
-	/**
-	 * Create the 2D Gridded Coverage Table if it does not exist
-	 * 
-	 * @return true if created
-	 * @since 1.2.1
-	 */
-	public boolean createGriddedCoverageTable();
-
-	/**
-	 * Get a 2D Gridded Tile DAO
-	 * 
-	 * @return 2d gridded tile dao
-	 * @since 1.2.1
-	 */
-	public GriddedTileDao getGriddedTileDao();
-
-	/**
-	 * Create the 2D Gridded Tile Table if it does not exist
-	 * 
-	 * @return true if created
-	 * @since 1.2.1
-	 */
-	public boolean createGriddedTileTable();
 
 	/**
 	 * Get a Extended Relations DAO
