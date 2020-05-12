@@ -21,11 +21,11 @@ import mil.nga.geopackage.user.UserTable;
 public class GeoPackageTableCreator {
 
 	/**
-	 * Extension property
+	 * Directory property
 	 * 
 	 * @since 4.0.0
 	 */
-	public static final String EXTENSION = "extension";
+	public static final String DIRECTORY = "directory";
 
 	/**
 	 * Spatial Reference System property
@@ -63,6 +63,20 @@ public class GeoPackageTableCreator {
 	public static final String TILE_MATRIX = "tile_matrix";
 
 	/**
+	 * Extensions property
+	 *
+	 * @since 4.0.0
+	 */
+	public static final String EXTENSIONS = "extensions";
+
+	/**
+	 * Schema (Data Columns) path property
+	 *
+	 * @since 4.0.0
+	 */
+	public static final String SCHEMA_PATH = "schema";
+
+	/**
 	 * Data Columns property
 	 *
 	 * @since 4.0.0
@@ -75,6 +89,13 @@ public class GeoPackageTableCreator {
 	 * @since 4.0.0
 	 */
 	public static final String DATA_COLUMN_CONSTRAINTS = "data_column_constraints";
+
+	/**
+	 * Metadata path property
+	 *
+	 * @since 4.0.0
+	 */
+	public static final String METADATA_PATH = "metadata";
 
 	/**
 	 * Metadata property
@@ -91,11 +112,11 @@ public class GeoPackageTableCreator {
 	public static final String METADATA_REFERENCE = "metadata_reference";
 
 	/**
-	 * Extensions property
+	 * Tiled Gridded Coverage Data path property
 	 *
 	 * @since 4.0.0
 	 */
-	public static final String EXTENSIONS = "extensions";
+	public static final String GRIDDED_PATH = "gridded";
 
 	/**
 	 * Tiled Gridded Coverage Data Coverage extension property
@@ -110,6 +131,13 @@ public class GeoPackageTableCreator {
 	 * @since 4.0.0
 	 */
 	public static final String GRIDDED_TILE = "2d_gridded_tile";
+
+	/**
+	 * Extended Relations property
+	 *
+	 * @since 4.0.0
+	 */
+	public static final String RELATED_PATH = "related";
 
 	/**
 	 * Extended Relations property
@@ -155,8 +183,7 @@ public class GeoPackageTableCreator {
 	 */
 	public static List<String> readScript(String pathProperty,
 			String property) {
-		return readSQLScript(pathProperty, getScript(
-				GeoPackageProperties.buildProperty(pathProperty, property)));
+		return readSQLScript(pathProperty, getScript(property));
 	}
 
 	/**
@@ -187,7 +214,7 @@ public class GeoPackageTableCreator {
 		if (property != null) {
 			base = GeoPackageProperties.buildProperty(base, property);
 		}
-		String path = GeoPackageProperties.getProperty(base, "directory");
+		String path = GeoPackageProperties.getProperty(base, DIRECTORY);
 		List<String> statements = ResourceIOUtils.parseSQLStatements(path,
 				sqlScript);
 		return statements;
@@ -265,42 +292,6 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
-	 * Create Data Columns table
-	 *
-	 * @return executed statements
-	 */
-	public int createDataColumns() {
-		return execScript(DATA_COLUMNS);
-	}
-
-	/**
-	 * Create Data Column Constraints table
-	 *
-	 * @return executed statements
-	 */
-	public int createDataColumnConstraints() {
-		return execScript(DATA_COLUMN_CONSTRAINTS);
-	}
-
-	/**
-	 * Create Metadata table
-	 *
-	 * @return executed statements
-	 */
-	public int createMetadata() {
-		return execScript(METADATA);
-	}
-
-	/**
-	 * Create Metadata Reference table
-	 *
-	 * @return executed statements
-	 */
-	public int createMetadataReference() {
-		return execScript(METADATA_REFERENCE);
-	}
-
-	/**
 	 * Create Extensions table
 	 *
 	 * @return executed statements
@@ -310,13 +301,49 @@ public class GeoPackageTableCreator {
 	}
 
 	/**
+	 * Create Data Columns table
+	 *
+	 * @return executed statements
+	 */
+	public int createDataColumns() {
+		return execScript(SCHEMA_PATH, DATA_COLUMNS);
+	}
+
+	/**
+	 * Create Data Column Constraints table
+	 *
+	 * @return executed statements
+	 */
+	public int createDataColumnConstraints() {
+		return execScript(SCHEMA_PATH, DATA_COLUMN_CONSTRAINTS);
+	}
+
+	/**
+	 * Create Metadata table
+	 *
+	 * @return executed statements
+	 */
+	public int createMetadata() {
+		return execScript(METADATA_PATH, METADATA);
+	}
+
+	/**
+	 * Create Metadata Reference table
+	 *
+	 * @return executed statements
+	 */
+	public int createMetadataReference() {
+		return execScript(METADATA_PATH, METADATA_REFERENCE);
+	}
+
+	/**
 	 * Create the Tiled Gridded Coverage Data Coverage extension table
 	 *
 	 * @return executed statements
 	 * @since 1.2.1
 	 */
 	public int createGriddedCoverage() {
-		return execScript(EXTENSION, GRIDDED_COVERAGE);
+		return execScript(GRIDDED_PATH, GRIDDED_COVERAGE);
 	}
 
 	/**
@@ -326,7 +353,7 @@ public class GeoPackageTableCreator {
 	 * @since 1.2.1
 	 */
 	public int createGriddedTile() {
-		return execScript(EXTENSION, GRIDDED_TILE);
+		return execScript(GRIDDED_PATH, GRIDDED_TILE);
 	}
 
 	/**
@@ -336,7 +363,7 @@ public class GeoPackageTableCreator {
 	 * @since 3.0.1
 	 */
 	public int createExtendedRelations() {
-		return execScript(EXTENDED_RELATIONS);
+		return execScript(RELATED_PATH, EXTENDED_RELATIONS);
 	}
 
 	/**

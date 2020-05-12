@@ -33,7 +33,6 @@ import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.MetadataExtension;
 import mil.nga.geopackage.extension.SchemaExtension;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
@@ -45,10 +44,6 @@ import mil.nga.geopackage.features.columns.GeometryColumnsSqlMm;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
-import mil.nga.geopackage.metadata.Metadata;
-import mil.nga.geopackage.metadata.MetadataDao;
-import mil.nga.geopackage.metadata.reference.MetadataReference;
-import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
@@ -172,7 +167,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public GeoPackageTableCreator getTableCreator() {
 		return tableCreator;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1265,71 +1260,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "
 					+ DataColumnConstraints.class.getSimpleName()
-					+ " table exists and create it", e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public MetadataDao getMetadataDao() {
-		return createDao(Metadata.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createMetadataTable() {
-		verifyWritable();
-
-		boolean created = false;
-		MetadataDao dao = getMetadataDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createMetadata() > 0;
-				if (created) {
-					// Create the metadata extension record
-					MetadataExtension metadataExtension = new MetadataExtension(
-							this);
-					metadataExtension.getOrCreate();
-				}
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + Metadata.class.getSimpleName()
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public MetadataReferenceDao getMetadataReferenceDao() {
-		return createDao(MetadataReference.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createMetadataReferenceTable() {
-		verifyWritable();
-
-		boolean created = false;
-		MetadataReferenceDao dao = getMetadataReferenceDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createMetadataReference() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ MetadataReference.class.getSimpleName()
 					+ " table exists and create it", e);
 		}
 		return created;

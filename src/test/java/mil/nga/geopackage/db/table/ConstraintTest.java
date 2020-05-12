@@ -39,51 +39,45 @@ public class ConstraintTest {
 				createNames("fk_gtms_table_name", "fk_gtms_srs"));
 		testSQLScript(GeoPackageTableCreator.TILE_MATRIX, 1, 0, 0, 1,
 				createNames("pk_ttm", "fk_tmm_table_name"));
-		testSQLScript(GeoPackageTableCreator.DATA_COLUMNS, 1, 1, 0, 0,
-				createNames("pk_gdc", "gdc_tn"));
-		testSQLScript(GeoPackageTableCreator.DATA_COLUMN_CONSTRAINTS, 0, 1, 0,
-				0, createNames("gdcc_ntv"));
-		testSQLScript(GeoPackageTableCreator.METADATA, 0, 0, 0, 0,
-				createNames("m_pk"));
-		testSQLScript(GeoPackageTableCreator.METADATA_REFERENCE, 0, 0, 0, 2,
-				createNames("crmr_mfi_fk", "crmr_mpi_fk"));
 		testSQLScript(GeoPackageTableCreator.EXTENSIONS, 0, 1, 0, 0,
 				createNames("ge_tce"));
-		testSQLScript(GeoPackageTableCreator.EXTENSION, null,
+		testSQLScript(GeoPackageTableCreator.SCHEMA_PATH,
+				GeoPackageTableCreator.DATA_COLUMNS, 1, 1, 0, 0,
+				createNames("pk_gdc", "gdc_tn"));
+		testSQLScript(GeoPackageTableCreator.SCHEMA_PATH,
+				GeoPackageTableCreator.DATA_COLUMN_CONSTRAINTS, 0, 1, 0, 0,
+				createNames("gdcc_ntv"));
+		testSQLScript(GeoPackageTableCreator.METADATA_PATH,
+				GeoPackageTableCreator.METADATA, 0, 0, 0, 0,
+				createNames("m_pk"));
+		testSQLScript(GeoPackageTableCreator.METADATA_PATH,
+				GeoPackageTableCreator.METADATA_REFERENCE, 0, 0, 0, 2,
+				createNames("crmr_mfi_fk", "crmr_mpi_fk"));
+		testSQLScript(GeoPackageTableCreator.GRIDDED_PATH,
 				GeoPackageTableCreator.GRIDDED_COVERAGE, 0, 0, 1, 1,
 				createNames("fk_g2dgtct_name", null));
-		testSQLScript(GeoPackageTableCreator.EXTENSION, null,
+		testSQLScript(GeoPackageTableCreator.GRIDDED_PATH,
 				GeoPackageTableCreator.GRIDDED_TILE, 0, 1, 0, 1,
 				createNames("fk_g2dgtat_name", null));
-		testSQLScript(GeoPackageTableCreator.EXTENDED_RELATIONS, 0, 0, 0, 0,
+		testSQLScript(GeoPackageTableCreator.RELATED_PATH,
+				GeoPackageTableCreator.EXTENDED_RELATIONS, 0, 0, 0, 0,
 				createNames());
-		testSQLScript(
-				GeoPackageProperties.buildProperty(
-						FeatureTableCoreIndex.EXTENSION_AUTHOR,
-						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
+		testCommunitySQLScript(FeatureTableCoreIndex.EXTENSION_AUTHOR,
+				FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR,
 				GeometryIndexTableCreator.TABLE_INDEX, 0, 0, 0, 0,
 				createNames());
-		testSQLScript(
-				GeoPackageProperties.buildProperty(
-						FeatureTableCoreIndex.EXTENSION_AUTHOR,
-						FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR),
+		testCommunitySQLScript(FeatureTableCoreIndex.EXTENSION_AUTHOR,
+				FeatureTableCoreIndex.EXTENSION_NAME_NO_AUTHOR,
 				GeometryIndexTableCreator.GEOMETRY_INDEX, 1, 0, 0, 1,
 				createNames("pk_ngi", "fk_ngi_nti_tn"));
-		testSQLScript(
-				GeoPackageProperties.buildProperty(
-						FeatureTileTableCoreLinker.EXTENSION_AUTHOR,
-						FeatureTileTableCoreLinker.EXTENSION_NAME_NO_AUTHOR),
-				null, 1, 0, 0, 0, createNames("pk_nftl"));
-		testSQLScript(
-				GeoPackageProperties.buildProperty(
-						TileTableScaling.EXTENSION_AUTHOR,
-						TileTableScaling.EXTENSION_NAME_NO_AUTHOR),
-				null, 0, 0, 1, 1, createNames("fk_nts_gtms_tn", null));
-		testSQLScript(
-				GeoPackageProperties.buildProperty(
-						ContentsIdExtension.EXTENSION_AUTHOR,
-						ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR),
-				null, 0, 1, 0, 1,
+		testCommunitySQLScript(FeatureTileTableCoreLinker.EXTENSION_AUTHOR,
+				FeatureTileTableCoreLinker.EXTENSION_NAME_NO_AUTHOR, null, 1, 0,
+				0, 0, createNames("pk_nftl"));
+		testCommunitySQLScript(TileTableScaling.EXTENSION_AUTHOR,
+				TileTableScaling.EXTENSION_NAME_NO_AUTHOR, null, 0, 0, 1, 1,
+				createNames("fk_nts_gtms_tn", null));
+		testCommunitySQLScript(ContentsIdExtension.EXTENSION_AUTHOR,
+				ContentsIdExtension.EXTENSION_NAME_NO_AUTHOR, null, 0, 1, 0, 1,
 				createNames("uk_nci_table_name", "fk_nci_gc_tn"));
 
 	}
@@ -232,15 +226,15 @@ public class ConstraintTest {
 	 */
 	private void testSQLScript(String property, int primaryKey, int unique,
 			int check, int foreignKey, List<String> names) {
-		testSQLScript(null, property, primaryKey, unique, check, foreignKey,
-				names);
+		testSQLScript(null, null, property, primaryKey, unique, check,
+				foreignKey, names);
 	}
 
 	/**
 	 * Test the database script for constraint parsing
 	 * 
-	 * @param pathProperty
-	 *            path property
+	 * @param propertyPath
+	 *            property path
 	 * @param property
 	 *            property
 	 * @param primaryKey
@@ -254,18 +248,18 @@ public class ConstraintTest {
 	 * @param names
 	 *            expected constraint names
 	 */
-	private void testSQLScript(String pathProperty, String property,
+	private void testSQLScript(String propertyPath, String property,
 			int primaryKey, int unique, int check, int foreignKey,
 			List<String> names) {
-		testSQLScript(pathProperty, pathProperty, property, primaryKey, unique,
-				check, foreignKey, names);
+		testSQLScript(propertyPath, null, property, primaryKey, unique, check,
+				foreignKey, names);
 	}
 
 	/**
 	 * Test the database script for constraint parsing
 	 * 
-	 * @param pathProperty
-	 *            path property
+	 * @param communityPath
+	 *            community extension path
 	 * @param property
 	 *            property
 	 * @param primaryKey
@@ -279,7 +273,35 @@ public class ConstraintTest {
 	 * @param names
 	 *            expected constraint names
 	 */
-	private void testSQLScript(String directoryProperty, String pathProperty,
+	private void testCommunitySQLScript(String author, String name,
+			String property, int primaryKey, int unique, int check,
+			int foreignKey, List<String> names) {
+		String communityPath = GeoPackageProperties.buildProperty(author, name);
+		testSQLScript(communityPath, communityPath, property, primaryKey,
+				unique, check, foreignKey, names);
+	}
+
+	/**
+	 * Test the database script for constraint parsing
+	 * 
+	 * @param propertyPath
+	 *            property path
+	 * @param communityPath
+	 *            community extension path
+	 * @param property
+	 *            property
+	 * @param primaryKey
+	 *            expected primary key count
+	 * @param unique
+	 *            expected unique count
+	 * @param check
+	 *            expected check count
+	 * @param foreignKey
+	 *            expected foreign key count
+	 * @param names
+	 *            expected constraint names
+	 */
+	private void testSQLScript(String propertyPath, String communityPath,
 			String property, int primaryKey, int unique, int check,
 			int foreignKey, List<String> names) {
 
@@ -290,9 +312,9 @@ public class ConstraintTest {
 		int foreignKeyCount = 0;
 
 		String script = GeoPackageTableCreator.getScript(
-				GeoPackageProperties.buildProperty(pathProperty, property));
+				GeoPackageProperties.buildProperty(communityPath, property));
 		List<String> statements = GeoPackageTableCreator
-				.readSQLScript(directoryProperty, script);
+				.readSQLScript(propertyPath, script);
 
 		// List<String> statements = GeoPackageTableCreator
 		// .readScript(pathProperty, property);

@@ -27,8 +27,6 @@ import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
-import mil.nga.geopackage.metadata.MetadataDao;
-import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
@@ -1171,34 +1169,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @return true if created
 	 */
 	public boolean createDataColumnConstraintsTable();
-
-	/**
-	 * Get a Metadata DAO
-	 * 
-	 * @return Metadata DAO
-	 */
-	public MetadataDao getMetadataDao();
-
-	/**
-	 * Create the Metadata table if it does not already exist
-	 * 
-	 * @return true if created
-	 */
-	public boolean createMetadataTable();
-
-	/**
-	 * Get a Metadata Reference DAO
-	 * 
-	 * @return Metadata Reference DAO
-	 */
-	public MetadataReferenceDao getMetadataReferenceDao();
-
-	/**
-	 * Create the Metadata Reference table if it does not already exist
-	 * 
-	 * @return true if created
-	 */
-	public boolean createMetadataReferenceTable();
 
 	/**
 	 * Get an Extensions DAO

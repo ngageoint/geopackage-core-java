@@ -8,7 +8,9 @@ import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.metadata.Metadata;
+import mil.nga.geopackage.metadata.MetadataDao;
 import mil.nga.geopackage.metadata.reference.MetadataReference;
+import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
@@ -105,6 +107,104 @@ public class MetadataExtension extends BaseExtension {
 					e);
 		}
 
+	}
+
+	/**
+	 * Get a Metadata DAO
+	 * 
+	 * @return Metadata DAO
+	 * @since 4.0.0
+	 */
+	public MetadataDao getMetadataDao() {
+		return createDao(Metadata.class);
+	}
+
+	/**
+	 * Get a Metadata DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return Metadata DAO
+	 * @since 4.0.0
+	 */
+	public static MetadataDao getMetadataDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(Metadata.class);
+	}
+
+	/**
+	 * Create the Metadata table if it does not already exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createMetadataTable() {
+		verifyWritable();
+
+		boolean created = false;
+		MetadataDao dao = getMetadataDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = geoPackage.getTableCreator().createMetadata() > 0;
+				if (created) {
+					// Create the metadata extension record
+					MetadataExtension metadataExtension = new MetadataExtension(
+							geoPackage);
+					metadataExtension.getOrCreate();
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + Metadata.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+		return created;
+	}
+
+	/**
+	 * Get a Metadata Reference DAO
+	 * 
+	 * @return Metadata Reference DAO
+	 * @since 4.0.0
+	 */
+	public MetadataReferenceDao getMetadataReferenceDao() {
+		return createDao(MetadataReference.class);
+	}
+
+	/**
+	 * Get a Metadata Reference DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return Metadata Reference DAO
+	 * @since 4.0.0
+	 */
+	public static MetadataReferenceDao getMetadataReferenceDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(MetadataReference.class);
+	}
+
+	/**
+	 * Create the Metadata Reference table if it does not already exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createMetadataReferenceTable() {
+		verifyWritable();
+
+		boolean created = false;
+		MetadataReferenceDao dao = getMetadataReferenceDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = geoPackage.getTableCreator().createMetadataReference() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ MetadataReference.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
 	}
 
 }

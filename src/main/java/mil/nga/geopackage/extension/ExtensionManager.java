@@ -602,7 +602,8 @@ public class ExtensionManager extends ExtensionManagement {
 					if (dataColumnsTable.hasConstraints()) {
 						dataColumnsTable.clearConstraints();
 						String constraintSql = GeoPackageTableCreator
-								.readScript(GeoPackageTableCreator.DATA_COLUMNS)
+								.readScript(GeoPackageTableCreator.SCHEMA_PATH,
+										GeoPackageTableCreator.DATA_COLUMNS)
 								.get(0);
 						TableConstraints constraints = ConstraintParser
 								.getConstraints(constraintSql);
@@ -634,8 +635,8 @@ public class ExtensionManager extends ExtensionManagement {
 	 */
 	public void deleteMetadata(String table) {
 
-		MetadataReferenceDao metadataReferenceDao = geoPackage
-				.getMetadataReferenceDao();
+		MetadataReferenceDao metadataReferenceDao = MetadataExtension
+				.getMetadataReferenceDao(geoPackage);
 		try {
 			if (metadataReferenceDao.isTableExists()) {
 				metadataReferenceDao.deleteByTableName(table);
