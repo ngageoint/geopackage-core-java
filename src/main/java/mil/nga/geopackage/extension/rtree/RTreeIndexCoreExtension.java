@@ -9,12 +9,12 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.features.user.FeatureTable;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
-import mil.nga.geopackage.io.ResourceIOUtils;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
@@ -226,12 +226,6 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 */
 	public static final String TRIGGER_SUBSTITUTE = GeoPackageProperties
 			.getProperty(SUBSTITUTE_PROPERTY, "trigger");
-
-	/**
-	 * SQL resource directory
-	 */
-	public static final String SQL_DIRECTORY = GeoPackageProperties
-			.getProperty(SQL_PROPERTY, "directory");
 
 	/**
 	 * Connection
@@ -1043,8 +1037,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 			String geometryColumnName, String idColumnName,
 			String triggerName) {
 
-		List<String> statements = ResourceIOUtils
-				.parseSQLStatements(SQL_DIRECTORY, sqlName);
+		List<String> statements = GeoPackageTableCreator
+				.readSQLScript(GeoPackageTableCreator.RTREE, sqlName);
 
 		for (String statement : statements) {
 			String sql = substituteSqlArguments(statement, tableName,

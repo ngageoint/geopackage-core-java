@@ -147,6 +147,13 @@ public class GeoPackageTableCreator {
 	public static final String EXTENDED_RELATIONS = "extended_relations";
 
 	/**
+	 * RTree property
+	 *
+	 * @since 4.0.0
+	 */
+	public static final String RTREE = "rtree";
+
+	/**
 	 * Get the database script name for the property
 	 *
 	 * @param property
