@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension;
+package mil.nga.geopackage.extension.metadata;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,10 +7,11 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.metadata.Metadata;
-import mil.nga.geopackage.metadata.MetadataDao;
-import mil.nga.geopackage.metadata.reference.MetadataReference;
-import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
+import mil.nga.geopackage.extension.BaseExtension;
+import mil.nga.geopackage.extension.ExtensionScopeType;
+import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.metadata.reference.MetadataReference;
+import mil.nga.geopackage.extension.metadata.reference.MetadataReferenceDao;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 

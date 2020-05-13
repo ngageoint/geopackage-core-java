@@ -1,4 +1,4 @@
-package mil.nga.geopackage.schema.constraints;
+package mil.nga.geopackage.extension.schema.constraints;
 
 import java.util.Locale;
 

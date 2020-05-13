@@ -1,10 +1,10 @@
-package mil.nga.geopackage.metadata.reference;
+package mil.nga.geopackage.extension.metadata.reference;
 
 import java.util.Date;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
-import mil.nga.geopackage.metadata.Metadata;
+import mil.nga.geopackage.extension.metadata.Metadata;
 import mil.nga.geopackage.persister.DatePersister;
 
 import com.j256.ormlite.field.DatabaseField;

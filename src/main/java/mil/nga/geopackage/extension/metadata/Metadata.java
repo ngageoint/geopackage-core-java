@@ -1,4 +1,4 @@
-package mil.nga.geopackage.metadata;
+package mil.nga.geopackage.extension.metadata;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

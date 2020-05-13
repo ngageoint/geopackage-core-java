@@ -1,4 +1,4 @@
-package mil.nga.geopackage.schema;
+package mil.nga.geopackage.db;
 
 /**
  * Table and column name complex primary key

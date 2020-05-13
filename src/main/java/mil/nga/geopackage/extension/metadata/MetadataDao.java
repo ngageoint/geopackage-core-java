@@ -1,4 +1,4 @@
-package mil.nga.geopackage.metadata;
+package mil.nga.geopackage.extension.metadata;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -8,8 +8,8 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.db.GeoPackageDao;
-import mil.nga.geopackage.metadata.reference.MetadataReference;
-import mil.nga.geopackage.metadata.reference.MetadataReferenceDao;
+import mil.nga.geopackage.extension.metadata.reference.MetadataReference;
+import mil.nga.geopackage.extension.metadata.reference.MetadataReferenceDao;
 
 /**
  * Metadata Data Access Object

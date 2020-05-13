@@ -1,4 +1,4 @@
-package mil.nga.geopackage.schema.constraints;
+package mil.nga.geopackage.extension.schema.constraints;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -14,8 +14,8 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDao;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.extension.schema.columns.DataColumns;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 
 /**
  * Data Column Constraints Data Access Object

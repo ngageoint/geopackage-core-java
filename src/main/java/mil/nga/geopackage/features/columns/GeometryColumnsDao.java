@@ -14,7 +14,7 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.db.GeoPackageDao;
-import mil.nga.geopackage.schema.TableColumnKey;
+import mil.nga.geopackage.db.TableColumnKey;
 
 /**
  * Geometry Columns Data Access Object

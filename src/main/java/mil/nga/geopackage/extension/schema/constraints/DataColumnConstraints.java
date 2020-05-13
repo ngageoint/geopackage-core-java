@@ -1,12 +1,12 @@
-package mil.nga.geopackage.schema.constraints;
+package mil.nga.geopackage.extension.schema.constraints;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.extension.schema.columns.DataColumns;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

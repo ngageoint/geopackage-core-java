@@ -1,12 +1,12 @@
-package mil.nga.geopackage.schema.columns;
+package mil.nga.geopackage.extension.schema.columns;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.schema.TableColumnKey;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
+import mil.nga.geopackage.db.TableColumnKey;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraints;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraintsDao;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

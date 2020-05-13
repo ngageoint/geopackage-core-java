@@ -7,7 +7,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.contents.Contents;
 import mil.nga.geopackage.core.contents.ContentsDataType;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
-import mil.nga.geopackage.schema.TableColumnKey;
+import mil.nga.geopackage.db.TableColumnKey;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.proj.Projection;
 

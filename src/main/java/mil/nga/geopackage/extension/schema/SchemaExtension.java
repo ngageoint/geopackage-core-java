@@ -1,4 +1,4 @@
-package mil.nga.geopackage.extension;
+package mil.nga.geopackage.extension.schema;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,12 +7,15 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.extension.BaseExtension;
+import mil.nga.geopackage.extension.ExtensionScopeType;
+import mil.nga.geopackage.extension.Extensions;
+import mil.nga.geopackage.extension.schema.columns.DataColumns;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraints;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 
 /**
  * Schema extension

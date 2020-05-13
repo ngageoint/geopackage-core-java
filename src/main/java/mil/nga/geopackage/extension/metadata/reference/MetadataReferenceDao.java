@@ -1,4 +1,4 @@
-package mil.nga.geopackage.metadata.reference;
+package mil.nga.geopackage.extension.metadata.reference;
 
 import java.sql.SQLException;
 import java.util.List;
