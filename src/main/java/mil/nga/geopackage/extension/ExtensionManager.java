@@ -552,7 +552,8 @@ public class ExtensionManager extends ExtensionManagement {
 	 */
 	public void deleteSchema(String table) {
 
-		DataColumnsDao dataColumnsDao = geoPackage.getDataColumnsDao();
+		DataColumnsDao dataColumnsDao = SchemaExtension
+				.getDataColumnsDao(geoPackage);
 		try {
 			if (dataColumnsDao.isTableExists()) {
 				dataColumnsDao.deleteByTableName(table);

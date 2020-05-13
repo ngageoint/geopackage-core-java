@@ -33,7 +33,6 @@ import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.SchemaExtension;
 import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -44,10 +43,6 @@ import mil.nga.geopackage.features.columns.GeometryColumnsSqlMm;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
@@ -1199,70 +1194,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		return table;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public DataColumnsDao getDataColumnsDao() {
-		return createDao(DataColumns.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createDataColumnsTable() {
-		verifyWritable();
-
-		boolean created = false;
-		DataColumnsDao dao = getDataColumnsDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createDataColumns() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to check if " + DataColumns.class.getSimpleName()
-							+ " table exists and create it",
-					e);
-		}
-		return created;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public DataColumnConstraintsDao getDataColumnConstraintsDao() {
-		return createDao(DataColumnConstraints.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createDataColumnConstraintsTable() {
-		verifyWritable();
-
-		boolean created = false;
-		DataColumnConstraintsDao dao = getDataColumnConstraintsDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createDataColumnConstraints() > 0;
-				if (created) {
-					// Create the schema extension record
-					SchemaExtension schemaExtension = new SchemaExtension(this);
-					schemaExtension.getOrCreate();
-				}
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ DataColumnConstraints.class.getSimpleName()
-					+ " table exists and create it", e);
-		}
-		return created;
 	}
 
 	/**

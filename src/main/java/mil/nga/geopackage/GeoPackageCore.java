@@ -27,8 +27,6 @@ import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
@@ -1141,34 +1139,6 @@ public interface GeoPackageCore extends Closeable {
 	public AttributesTable createAttributesTypedTable(String dataType,
 			String tableName, List<AttributesColumn> columns,
 			Collection<Constraint> constraints);
-
-	/**
-	 * Get a Data Columns DAO
-	 * 
-	 * @return Data Columns DAO
-	 */
-	public DataColumnsDao getDataColumnsDao();
-
-	/**
-	 * Create the Data Columns table if it does not already exist
-	 * 
-	 * @return true if created
-	 */
-	public boolean createDataColumnsTable();
-
-	/**
-	 * Get a Data Column Constraints DAO
-	 * 
-	 * @return Data Column Constraints DAO
-	 */
-	public DataColumnConstraintsDao getDataColumnConstraintsDao();
-
-	/**
-	 * Create the Data Column Constraints table if it does not already exist
-	 * 
-	 * @return true if created
-	 */
-	public boolean createDataColumnConstraintsTable();
 
 	/**
 	 * Get an Extensions DAO

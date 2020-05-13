@@ -10,7 +10,9 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.schema.columns.DataColumns;
+import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
+import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 
 /**
  * Schema extension
@@ -106,6 +108,107 @@ public class SchemaExtension extends BaseExtension {
 					e);
 		}
 
+	}
+
+	/**
+	 * Get a Data Columns DAO
+	 * 
+	 * @return Data Columns DAO
+	 * @since 4.0.0
+	 */
+	public DataColumnsDao getDataColumnsDao() {
+		return createDao(DataColumns.class);
+	}
+
+	/**
+	 * Get a Data Columns DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * 
+	 * @return Data Columns DAO
+	 * @since 4.0.0
+	 */
+	public static DataColumnsDao getDataColumnsDao(GeoPackageCore geoPackage) {
+		return geoPackage.createDao(DataColumns.class);
+	}
+
+	/**
+	 * Create the Data Columns table if it does not already exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createDataColumnsTable() {
+		verifyWritable();
+
+		boolean created = false;
+		DataColumnsDao dao = getDataColumnsDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = geoPackage.getTableCreator().createDataColumns() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to check if " + DataColumns.class.getSimpleName()
+							+ " table exists and create it",
+					e);
+		}
+		return created;
+	}
+
+	/**
+	 * Get a Data Column Constraints DAO
+	 * 
+	 * @return Data Column Constraints DAO
+	 * @since 4.0.0
+	 */
+	public DataColumnConstraintsDao getDataColumnConstraintsDao() {
+		return createDao(DataColumnConstraints.class);
+	}
+
+	/**
+	 * Get a Data Column Constraints DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * 
+	 * @return Data Column Constraints DAO
+	 * @since 4.0.0
+	 */
+	public static DataColumnConstraintsDao getDataColumnConstraintsDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(DataColumnConstraints.class);
+	}
+
+	/**
+	 * Create the Data Column Constraints table if it does not already exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createDataColumnConstraintsTable() {
+		verifyWritable();
+
+		boolean created = false;
+		DataColumnConstraintsDao dao = getDataColumnConstraintsDao();
+		try {
+			if (!dao.isTableExists()) {
+				created = geoPackage.getTableCreator()
+						.createDataColumnConstraints() > 0;
+				if (created) {
+					// Create the schema extension record
+					SchemaExtension schemaExtension = new SchemaExtension(
+							geoPackage);
+					schemaExtension.getOrCreate();
+				}
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ DataColumnConstraints.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+		return created;
 	}
 
 }
