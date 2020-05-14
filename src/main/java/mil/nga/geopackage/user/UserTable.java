@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.ConstraintType;

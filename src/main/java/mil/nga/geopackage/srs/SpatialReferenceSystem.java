@@ -1,6 +1,6 @@
-package mil.nga.geopackage.core.srs;
+package mil.nga.geopackage.srs;
 
-import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.sf.proj.Projection;

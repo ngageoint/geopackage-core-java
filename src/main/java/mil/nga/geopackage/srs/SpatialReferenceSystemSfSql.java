@@ -1,4 +1,4 @@
-package mil.nga.geopackage.core.srs;
+package mil.nga.geopackage.srs;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

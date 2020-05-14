@@ -3,8 +3,8 @@ package mil.nga.geopackage.features.user;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.user.UserTable;
 

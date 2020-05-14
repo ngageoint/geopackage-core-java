@@ -1,4 +1,4 @@
-package mil.nga.geopackage.core.contents;
+package mil.nga.geopackage.contents;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -12,9 +12,9 @@ import com.j256.ormlite.stmt.QueryBuilder;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDao;
-import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;

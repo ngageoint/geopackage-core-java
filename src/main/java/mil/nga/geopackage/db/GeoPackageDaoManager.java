@@ -4,10 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSql;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.coverage.GriddedCoverage;
 import mil.nga.geopackage.extension.coverage.GriddedTile;
@@ -35,6 +32,9 @@ import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraints;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
 import mil.nga.geopackage.features.columns.GeometryColumnsSqlMm;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.srs.SpatialReferenceSystemSfSql;
+import mil.nga.geopackage.srs.SpatialReferenceSystemSqlMm;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 

@@ -9,7 +9,7 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
-import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.UniqueConstraint;

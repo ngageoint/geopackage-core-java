@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.user.UserTable;
 

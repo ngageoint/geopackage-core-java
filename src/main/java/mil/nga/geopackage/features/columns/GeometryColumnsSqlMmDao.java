@@ -12,6 +12,7 @@ import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.TableColumnKey;
 
@@ -22,6 +23,21 @@ import mil.nga.geopackage.db.TableColumnKey;
  */
 public class GeometryColumnsSqlMmDao
 		extends GeoPackageDao<GeometryColumnsSqlMm, TableColumnKey> {
+
+	/**
+	 * Get a DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return DAO
+	 * @since 4.0.0
+	 */
+	public static GeometryColumnsSqlMmDao getDao(GeoPackageCore geoPackage) {
+		GeometryColumnsSqlMmDao dao = geoPackage
+				.createDao(GeometryColumnsSqlMm.class);
+		dao.verifyExists();
+		return dao;
+	}
 
 	/**
 	 * Constructor, required by ORMLite

@@ -415,7 +415,7 @@ public class ExtensionManager extends ExtensionManagement {
 	 */
 	public void deleteGriddedCoverage(String table) {
 
-		if (geoPackage.isTableType(CoverageDataCore.GRIDDED_COVERAGE, table)) {
+		if (geoPackage.isTableType(table, CoverageDataCore.GRIDDED_COVERAGE)) {
 
 			GriddedTileDao griddedTileDao = CoverageDataCore
 					.getGriddedTileDao(geoPackage);
@@ -493,8 +493,8 @@ public class ExtensionManager extends ExtensionManagement {
 
 		try {
 
-			if (geoPackage.isTableType(CoverageDataCore.GRIDDED_COVERAGE,
-					table)) {
+			if (geoPackage.isTableType(table,
+					CoverageDataCore.GRIDDED_COVERAGE)) {
 
 				ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 

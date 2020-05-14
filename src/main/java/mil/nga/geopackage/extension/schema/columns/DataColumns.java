@@ -3,7 +3,7 @@ package mil.nga.geopackage.extension.schema.columns;
 import java.sql.SQLException;
 import java.util.List;
 
-import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.TableColumnKey;
 import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraints;
 import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraintsDao;

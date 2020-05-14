@@ -1,28 +1,21 @@
-package mil.nga.geopackage.factory;
+package mil.nga.geopackage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 
-import mil.nga.geopackage.BoundingBox;
-import mil.nga.geopackage.GeoPackageCore;
-import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDao;
-import mil.nga.geopackage.core.contents.ContentsDataType;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSql;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMm;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
@@ -33,16 +26,12 @@ import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.related.ExtendedRelation;
-import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
-import mil.nga.geopackage.features.columns.GeometryColumnsSfSql;
-import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
-import mil.nga.geopackage.features.columns.GeometryColumnsSqlMm;
-import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
@@ -216,8 +205,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getFeatureTables() {
-		List<String> tableNames = getTables(ContentsDataType.FEATURES);
-		return tableNames;
+		return getTables(ContentsDataType.FEATURES);
 	}
 
 	/**
@@ -225,8 +213,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getTileTables() {
-		List<String> tableNames = getTables(ContentsDataType.TILES);
-		return tableNames;
+		return getTables(ContentsDataType.TILES);
 	}
 
 	/**
@@ -234,8 +221,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getAttributesTables() {
-		List<String> tableNames = getTables(ContentsDataType.ATTRIBUTES);
-		return tableNames;
+		return getTables(ContentsDataType.ATTRIBUTES);
 	}
 
 	/**
@@ -243,18 +229,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public List<String> getTables(ContentsDataType type) {
-		return getTables(type.getName());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<String> getTables(String type) {
-		ContentsDao contentDao = getContentsDao();
 		List<String> tableNames;
 		try {
-			tableNames = contentDao.getTables(type);
+			tableNames = getContentsDao().getTables(type);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to retrieve " + type + " tables", e);
@@ -266,11 +243,105 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getFeatureAndTileTables() {
-		List<String> tables = new ArrayList<String>();
-		tables.addAll(getFeatureTables());
-		tables.addAll(getTileTables());
-		return tables;
+	public List<String> getTables(ContentsDataType... types) {
+		List<String> tableNames;
+		try {
+			tableNames = getContentsDao().getTables(types);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve tables of types: " + types, e);
+		}
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables(String type) {
+		List<String> tableNames;
+		try {
+			tableNames = getContentsDao().getTables(type);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve " + type + " tables", e);
+		}
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getTables(String... types) {
+		List<String> tableNames;
+		try {
+			tableNames = getContentsDao().getTables(types);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve tables of types: " + types, e);
+		}
+		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Contents> getTypeContents(ContentsDataType type) {
+		List<Contents> contents;
+		try {
+			contents = getContentsDao().getContents(type);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve " + type + " contents", e);
+		}
+		return contents;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Contents> getTypeContents(ContentsDataType... types) {
+		List<Contents> contents;
+		try {
+			contents = getContentsDao().getContents(types);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve contents of types: " + types, e);
+		}
+		return contents;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Contents> getTypeContents(String type) {
+		List<Contents> contents;
+		try {
+			contents = getContentsDao().getContents(type);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve " + type + " contents", e);
+		}
+		return contents;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Contents> getTypeContents(String... types) {
+		List<Contents> contents;
+		try {
+			contents = getContentsDao().getContents(types);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to retrieve contents of types: " + types, e);
+		}
+		return contents;
 	}
 
 	/**
@@ -293,7 +364,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isFeatureTable(String table) {
-		return isTableType(ContentsDataType.FEATURES, table);
+		return isTableType(table, ContentsDataType.FEATURES);
 	}
 
 	/**
@@ -301,7 +372,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTileTable(String table) {
-		return isTableType(ContentsDataType.TILES, table);
+		return isTableType(table, ContentsDataType.TILES);
 	}
 
 	/**
@@ -309,22 +380,34 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isAttributeTable(String table) {
-		return isTableType(ContentsDataType.ATTRIBUTES, table);
+		return isTableType(table, ContentsDataType.ATTRIBUTES);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isTableType(ContentsDataType type, String table) {
-		return isTableType(type.getName(), table);
+	public boolean isTableType(String table, ContentsDataType type) {
+		return isTableType(table, type.getName());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isTableType(String type, String table) {
+	public boolean isTableType(String table, ContentsDataType... types) {
+		Set<String> typeSet = new HashSet<>();
+		for (ContentsDataType type : types) {
+			typeSet.add(type.getName());
+		}
+		return typeSet.contains(getTableType(table));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTableType(String table, String type) {
 		return type.equals(getTableType(table));
 	}
 
@@ -332,15 +415,9 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isFeatureOrTileTable(String table) {
-		boolean isType = false;
-		Contents contents = getTableContents(table);
-		if (contents != null) {
-			ContentsDataType dataType = contents.getDataType();
-			isType = dataType != null && (dataType == ContentsDataType.FEATURES
-					|| dataType == ContentsDataType.TILES);
-		}
-		return isType;
+	public boolean isTableType(String table, String... types) {
+		Set<String> typeSet = new HashSet<>(Arrays.asList(types));
+		return typeSet.contains(getTableType(table));
 	}
 
 	/**
@@ -564,32 +641,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public SpatialReferenceSystemSqlMmDao getSpatialReferenceSystemSqlMmDao() {
-
-		SpatialReferenceSystemSqlMmDao dao = createDao(
-				SpatialReferenceSystemSqlMm.class);
-		verifyTableExists(dao);
-
-		return dao;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SpatialReferenceSystemSfSqlDao getSpatialReferenceSystemSfSqlDao() {
-
-		SpatialReferenceSystemSfSqlDao dao = createDao(
-				SpatialReferenceSystemSfSql.class);
-		verifyTableExists(dao);
-
-		return dao;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public ContentsDao getContentsDao() {
 		return createDao(Contents.class);
 	}
@@ -600,30 +651,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public GeometryColumnsDao getGeometryColumnsDao() {
 		return createDao(GeometryColumns.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumnsSqlMmDao getGeometryColumnsSqlMmDao() {
-
-		GeometryColumnsSqlMmDao dao = createDao(GeometryColumnsSqlMm.class);
-		verifyTableExists(dao);
-
-		return dao;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumnsSfSqlDao getGeometryColumnsSfSqlDao() {
-
-		GeometryColumnsSfSqlDao dao = createDao(GeometryColumnsSfSql.class);
-		verifyTableExists(dao);
-
-		return dao;
 	}
 
 	/**
@@ -1327,26 +1354,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	}
 
 	/**
-	 * Verify table or view exists
-	 *
-	 * @param dao
-	 */
-	private void verifyTableExists(Dao<?, ?> dao) {
-		try {
-			if (!dao.isTableExists()) {
-				throw new GeoPackageException(
-						"Table or view does not exist for: "
-								+ dao.getDataClass().getSimpleName());
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to detect if table or view exists for dao: "
-							+ dao.getDataClass().getSimpleName(),
-					e);
-		}
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -1672,35 +1679,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public ExtensionManager getExtensionManager() {
 		return new ExtensionManager(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedRelationsDao getExtendedRelationsDao() {
-		return createDao(ExtendedRelation.class);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean createExtendedRelationsTable() {
-		verifyWritable();
-
-		boolean created = false;
-		ExtendedRelationsDao dao = getExtendedRelationsDao();
-		try {
-			if (!dao.isTableExists()) {
-				created = tableCreator.createExtendedRelations() > 0;
-			}
-		} catch (SQLException e) {
-			throw new GeoPackageException("Failed to check if "
-					+ ExtendedRelation.class.getSimpleName()
-					+ " table exists and create it", e);
-		}
-		return created;
 	}
 
 	/**

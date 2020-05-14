@@ -5,9 +5,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDataType;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
 

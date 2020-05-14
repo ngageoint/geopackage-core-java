@@ -1,6 +1,6 @@
 package mil.nga.geopackage.extension.related;
 
-import mil.nga.geopackage.core.contents.ContentsDataType;
+import mil.nga.geopackage.contents.ContentsDataType;
 
 /**
  * Spec supported User-Defined Related Data Tables

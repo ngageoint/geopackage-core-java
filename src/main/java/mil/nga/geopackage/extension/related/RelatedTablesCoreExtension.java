@@ -8,8 +8,8 @@ import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesTable;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -61,7 +61,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	/**
 	 * Extended Relations DAO
 	 */
-	private final ExtendedRelationsDao extendedRelationsDao;
+	private ExtendedRelationsDao extendedRelationsDao;
 
 	/**
 	 * Constructor
@@ -72,16 +72,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	protected RelatedTablesCoreExtension(GeoPackageCore geoPackage) {
 		super(geoPackage);
-		extendedRelationsDao = geoPackage.getExtendedRelationsDao();
-	}
-
-	/**
-	 * Get the extended relations DAO
-	 * 
-	 * @return extended relations DAO
-	 */
-	public ExtendedRelationsDao getExtendedRelationsDao() {
-		return extendedRelationsDao;
+		extendedRelationsDao = getExtendedRelationsDao();
 	}
 
 	/**
@@ -92,7 +83,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	private Extensions getOrCreate() {
 
 		// Create table
-		geoPackage.createExtendedRelationsTable();
+		createExtendedRelationsTable();
 
 		Extensions extension = getOrCreate(EXTENSION_NAME,
 				ExtendedRelation.TABLE_NAME, null, EXTENSION_DEFINITION,
@@ -137,6 +128,56 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public boolean has(String mappingTable) {
 		return has() && has(EXTENSION_NAME, mappingTable, null);
+	}
+
+	/**
+	 * Get a Extended Relations DAO
+	 * 
+	 * @return extended relations dao
+	 */
+	public ExtendedRelationsDao getExtendedRelationsDao() {
+		if (extendedRelationsDao == null) {
+			extendedRelationsDao = createDao(ExtendedRelation.class);
+		}
+		return extendedRelationsDao;
+	}
+
+	/**
+	 * Get a Extended Relations DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return extended relations dao
+	 * @since 4.0.0
+	 */
+	public static ExtendedRelationsDao getExtendedRelationsDao(
+			GeoPackageCore geoPackage) {
+		return geoPackage.createDao(ExtendedRelation.class);
+	}
+
+	/**
+	 * Create the Extended Relations Table if it does not exist
+	 * 
+	 * @return true if created
+	 * @since 4.0.0
+	 */
+	public boolean createExtendedRelationsTable() {
+		verifyWritable();
+
+		boolean created = false;
+
+		try {
+			if (!extendedRelationsDao.isTableExists()) {
+				created = geoPackage.getTableCreator()
+						.createExtendedRelations() > 0;
+			}
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to check if "
+					+ ExtendedRelation.class.getSimpleName()
+					+ " table exists and create it", e);
+		}
+
+		return created;
 	}
 
 	/**
@@ -809,8 +850,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 		if (relationType != null) {
 
-			if (!geoPackage.isTableType(relationType.getDataType(),
-					relatedTableName)) {
+			if (!geoPackage.isTableType(relatedTableName,
+					relationType.getDataType())) {
 				throw new GeoPackageException("The related table must be a "
 						+ relationType.getDataType() + " table. Related Table: "
 						+ relatedTableName + ", Type: "

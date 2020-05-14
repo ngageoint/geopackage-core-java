@@ -8,25 +8,20 @@ import java.util.concurrent.Callable;
 
 import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDao;
-import mil.nga.geopackage.core.contents.ContentsDataType;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSfSqlDao;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemSqlMmDao;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.extension.related.ExtendedRelationsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
-import mil.nga.geopackage.features.columns.GeometryColumnsSfSqlDao;
-import mil.nga.geopackage.features.columns.GeometryColumnsSqlMmDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
@@ -156,6 +151,16 @@ public interface GeoPackageCore extends Closeable {
 	public List<String> getTables(ContentsDataType type);
 
 	/**
+	 * Get the tables for the contents data types
+	 * 
+	 * @param types
+	 *            data types
+	 * @return table names
+	 * @since 4.0.0
+	 */
+	public List<String> getTables(ContentsDataType... types);
+
+	/**
 	 * Get the tables for the contents data type
 	 * 
 	 * @param type
@@ -166,12 +171,54 @@ public interface GeoPackageCore extends Closeable {
 	public List<String> getTables(String type);
 
 	/**
-	 * Get the feature and tile tables
+	 * Get the tables for the contents data types
 	 * 
+	 * @param types
+	 *            data types
 	 * @return table names
-	 * @since 1.2.1
+	 * @since 4.0.0
 	 */
-	public List<String> getFeatureAndTileTables();
+	public List<String> getTables(String... types);
+
+	/**
+	 * Get the contents for the data type
+	 * 
+	 * @param type
+	 *            data type
+	 * @return contents
+	 * @since 4.0.0
+	 */
+	public List<Contents> getTypeContents(ContentsDataType type);
+
+	/**
+	 * Get the contents for the data types
+	 * 
+	 * @param types
+	 *            data types
+	 * @return contents
+	 * @since 4.0.0
+	 */
+	public List<Contents> getTypeContents(ContentsDataType... types);
+
+	/**
+	 * Get the contents for the data type
+	 * 
+	 * @param type
+	 *            data type
+	 * @return contents
+	 * @since 3.0.1
+	 */
+	public List<Contents> getTypeContents(String type);
+
+	/**
+	 * Get the contents for the data types
+	 * 
+	 * @param types
+	 *            data types
+	 * @return contents
+	 * @since 4.0.0
+	 */
+	public List<Contents> getTypeContents(String... types);
 
 	/**
 	 * Get all tables
@@ -214,36 +261,50 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Check if the table is the provided type
 	 * 
-	 * @param type
-	 *            data type
 	 * @param table
 	 *            table name
+	 * @param type
+	 *            data type
 	 * @return true if the type of table
-	 * @since 1.2.1
+	 * @since 4.0.0
 	 */
-	public boolean isTableType(ContentsDataType type, String table);
+	public boolean isTableType(String table, ContentsDataType type);
+
+	/**
+	 * Check if the table is one the provided types
+	 * 
+	 * @param table
+	 *            table name
+	 * @param types
+	 *            data types
+	 * @return true if the type of table
+	 * @since 4.0.0
+	 */
+	public boolean isTableType(String table, ContentsDataType... types);
 
 	/**
 	 * Check if the table is the provided type
 	 * 
-	 * @param type
-	 *            data type
 	 * @param table
 	 *            table name
+	 * @param type
+	 *            data type
 	 * @return true if the type of table
-	 * @since 3.0.1
+	 * @since 4.0.0
 	 */
-	public boolean isTableType(String type, String table);
+	public boolean isTableType(String table, String type);
 
 	/**
-	 * Check if the table exists as a feature or tile table
+	 * Check if the table is one the provided types
 	 * 
 	 * @param table
 	 *            table name
-	 * @return true if a feature or tile table
-	 * @since 1.1.7
+	 * @param types
+	 *            data types
+	 * @return true if the type of table
+	 * @since 4.0.0
 	 */
-	public boolean isFeatureOrTileTable(String table);
+	public boolean isTableType(String table, String... types);
 
 	/**
 	 * Check if the table exists as a user contents table
@@ -459,20 +520,6 @@ public interface GeoPackageCore extends Closeable {
 	public SpatialReferenceSystemDao getSpatialReferenceSystemDao();
 
 	/**
-	 * Get a SQL/MM Spatial Reference System DAO
-	 * 
-	 * @return SQL/MM Spatial Reference System DAO
-	 */
-	public SpatialReferenceSystemSqlMmDao getSpatialReferenceSystemSqlMmDao();
-
-	/**
-	 * Get a SF/SQL Spatial Reference System DAO
-	 * 
-	 * @return SF/SQL Spatial Reference System DAO
-	 */
-	public SpatialReferenceSystemSfSqlDao getSpatialReferenceSystemSfSqlDao();
-
-	/**
 	 * Get a Contents DAO
 	 * 
 	 * @return Contents DAO
@@ -485,20 +532,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @return Geometry Columns DAO
 	 */
 	public GeometryColumnsDao getGeometryColumnsDao();
-
-	/**
-	 * Get a SQL/MM Geometry Columns DAO
-	 * 
-	 * @return SQL/MM Geometry Columns DAO
-	 */
-	public GeometryColumnsSqlMmDao getGeometryColumnsSqlMmDao();
-
-	/**
-	 * Get a SF/SQL Geometry Columns DAO
-	 * 
-	 * @return SF/SQL Geometry Columns DAO
-	 */
-	public GeometryColumnsSfSqlDao getGeometryColumnsSfSqlDao();
 
 	/**
 	 * Create the Geometry Columns table if it does not already exist
@@ -1374,22 +1407,6 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 4.0.0
 	 */
 	public ExtensionManager getExtensionManager();
-
-	/**
-	 * Get a Extended Relations DAO
-	 * 
-	 * @return extended relations dao
-	 * @since 3.0.1
-	 */
-	public ExtendedRelationsDao getExtendedRelationsDao();
-
-	/**
-	 * Create the Extended Relations Table if it does not exist
-	 * 
-	 * @return true if created
-	 * @since 3.0.1
-	 */
-	public boolean createExtendedRelationsTable();
 
 	/**
 	 * Create a new user table

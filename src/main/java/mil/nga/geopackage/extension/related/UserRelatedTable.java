@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
 

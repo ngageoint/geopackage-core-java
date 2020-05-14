@@ -1,4 +1,4 @@
-package mil.nga.geopackage.core.srs;
+package mil.nga.geopackage.srs;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -11,8 +11,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.contents.ContentsDao;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;

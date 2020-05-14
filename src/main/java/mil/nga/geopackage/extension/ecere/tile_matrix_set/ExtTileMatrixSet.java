@@ -2,7 +2,8 @@ package mil.nga.geopackage.extension.ecere.tile_matrix_set;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 
 /**
  * Describes a tile matrix set

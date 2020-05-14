@@ -93,6 +93,18 @@ public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 	}
 
 	/**
+	 * Verify the DAO is backed by a table or view
+	 * 
+	 * @since 4.0.0
+	 */
+	public void verifyExists() {
+		if (!isTableOrView()) {
+			throw new GeoPackageException("Table or view does not exist for: "
+					+ getDataClass().getSimpleName());
+		}
+	}
+
+	/**
 	 * Set the database
 	 * 
 	 * @param db

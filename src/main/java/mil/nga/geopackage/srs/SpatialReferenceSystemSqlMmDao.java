@@ -1,9 +1,10 @@
-package mil.nga.geopackage.core.srs;
+package mil.nga.geopackage.srs;
 
 import java.sql.SQLException;
 
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -13,6 +14,22 @@ import mil.nga.geopackage.db.GeoPackageDao;
  */
 public class SpatialReferenceSystemSqlMmDao
 		extends GeoPackageDao<SpatialReferenceSystemSqlMm, Integer> {
+
+	/**
+	 * Get a DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return DAO
+	 * @since 4.0.0
+	 */
+	public static SpatialReferenceSystemSqlMmDao getDao(
+			GeoPackageCore geoPackage) {
+		SpatialReferenceSystemSqlMmDao dao = geoPackage
+				.createDao(SpatialReferenceSystemSqlMm.class);
+		dao.verifyExists();
+		return dao;
+	}
 
 	/**
 	 * Constructor, required by ORMLite

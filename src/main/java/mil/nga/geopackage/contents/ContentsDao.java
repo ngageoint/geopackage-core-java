@@ -1,4 +1,4 @@
-package mil.nga.geopackage.core.contents;
+package mil.nga.geopackage.contents;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.BoundingBox;
@@ -107,6 +109,21 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	}
 
 	/**
+	 * Get table names by data types
+	 * 
+	 * @param dataTypes
+	 *            data types
+	 * @return table names
+	 * @throws SQLException
+	 *             upon query error
+	 * @since 4.0.0
+	 */
+	public List<String> getTables(ContentsDataType... dataTypes)
+			throws SQLException {
+		return getTables(dataTypeNames(dataTypes));
+	}
+
+	/**
 	 * Get table names by data type
 	 * 
 	 * @param dataType
@@ -117,12 +134,21 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * @since 3.0.1
 	 */
 	public List<String> getTables(String dataType) throws SQLException {
-		List<Contents> contents = getContents(dataType);
-		List<String> tableNames = new ArrayList<String>();
-		for (Contents content : contents) {
-			tableNames.add(content.getTableName());
-		}
-		return tableNames;
+		return getTables(new String[] { dataType });
+	}
+
+	/**
+	 * Get table names by data types
+	 * 
+	 * @param dataTypes
+	 *            data types
+	 * @return table names
+	 * @throws SQLException
+	 *             upon query error
+	 * @since 4.0.0
+	 */
+	public List<String> getTables(String... dataTypes) throws SQLException {
+		return tableNames(getContents(Contents.COLUMN_TABLE_NAME, dataTypes));
 	}
 
 	/**
@@ -141,6 +167,21 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	}
 
 	/**
+	 * Get contents by data types
+	 * 
+	 * @param dataTypes
+	 *            data types
+	 * @return list of contents
+	 * @throws SQLException
+	 *             upon query error
+	 * @since 4.0.0
+	 */
+	public List<Contents> getContents(ContentsDataType... dataTypes)
+			throws SQLException {
+		return getContents(dataTypeNames(dataTypes));
+	}
+
+	/**
 	 * Get contents by data type
 	 * 
 	 * @param dataType
@@ -151,9 +192,21 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * @since 3.0.1
 	 */
 	public List<Contents> getContents(String dataType) throws SQLException {
-		List<Contents> contents = queryForEq(Contents.COLUMN_DATA_TYPE,
-				dataType);
-		return contents;
+		return queryForEq(Contents.COLUMN_DATA_TYPE, dataType);
+	}
+
+	/**
+	 * Get contents by data types
+	 * 
+	 * @param dataTypes
+	 *            data types
+	 * @return list of contents
+	 * @throws SQLException
+	 *             upon query error
+	 * @since 4.0.0
+	 */
+	public List<Contents> getContents(String... dataTypes) throws SQLException {
+		return getContents(null, dataTypes);
 	}
 
 	/**
@@ -165,12 +218,8 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * @since 1.2.1
 	 */
 	public List<String> getTables() throws SQLException {
-		List<Contents> contents = queryForAll();
-		List<String> tableNames = new ArrayList<String>();
-		for (Contents content : contents) {
-			tableNames.add(content.getTableName());
-		}
-		return tableNames;
+		return tableNames(
+				getContents(Contents.COLUMN_TABLE_NAME, new String[] {}));
 	}
 
 	/**
@@ -505,6 +554,70 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 			throw new GeoPackageException("Failed to delete table: " + table,
 					e);
 		}
+	}
+
+	/**
+	 * Get the contents
+	 * 
+	 * @param column
+	 *            select column
+	 * @param dataTypes
+	 *            data types
+	 * @return contents
+	 * @throws SQLException
+	 *             upon query error
+	 */
+	private List<Contents> getContents(String column, String... dataTypes)
+			throws SQLException {
+		QueryBuilder<Contents, String> qb = queryBuilder();
+		if (column != null) {
+			qb.selectColumns(column);
+		}
+		if (dataTypes != null && dataTypes.length > 0) {
+			Where<Contents, String> where = qb.where();
+			for (int i = 0; i < dataTypes.length; i++) {
+				if (i > 0) {
+					where.or();
+				}
+				where.eq(Contents.COLUMN_DATA_TYPE, dataTypes[i]);
+			}
+		}
+		PreparedQuery<Contents> query = qb.prepare();
+		return query(query);
+	}
+
+	/**
+	 * Get the data type names from the data types
+	 * 
+	 * @param dataTypes
+	 *            data types
+	 * @return data type names
+	 */
+	private String[] dataTypeNames(ContentsDataType... dataTypes) {
+		String[] types = new String[dataTypes.length];
+		if (dataTypes != null) {
+			for (int i = 0; i < dataTypes.length; i++) {
+				types[i] = dataTypes[i].getName();
+			}
+		}
+		return types;
+	}
+
+	/**
+	 * Get the tables names from the contents
+	 * 
+	 * @param contents
+	 *            contents
+	 * @return table names
+	 */
+	private List<String> tableNames(List<Contents> contents) {
+		List<String> tableNames = new ArrayList<String>();
+		if (contents != null) {
+			for (Contents content : contents) {
+				tableNames.add(content.getTableName());
+			}
+		}
+		return tableNames;
 	}
 
 	/**

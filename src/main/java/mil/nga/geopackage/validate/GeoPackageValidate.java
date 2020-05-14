@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 
 /**
  * Performs GeoPackage validations

@@ -1,9 +1,9 @@
 package mil.nga.geopackage.extension.coverage;
 
-import mil.nga.geopackage.core.contents.Contents;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import mil.nga.geopackage.contents.Contents;
 
 /**
  * Gridded Tile object, for indexing data within user tables

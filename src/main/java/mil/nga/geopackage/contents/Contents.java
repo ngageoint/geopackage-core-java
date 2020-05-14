@@ -1,4 +1,4 @@
-package mil.nga.geopackage.core.contents;
+package mil.nga.geopackage.contents;
 
 import java.io.IOException;
 import java.util.Date;
@@ -11,10 +11,10 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.persister.DatePersister;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.sf.proj.Projection;
