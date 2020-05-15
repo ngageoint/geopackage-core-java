@@ -388,7 +388,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTableType(String table, ContentsDataType type) {
-		return isTableType(table, type.getName());
+		return isTableType(table, new ContentsDataType[] { type });
 	}
 
 	/**
@@ -396,11 +396,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTableType(String table, ContentsDataType... types) {
-		Set<String> typeSet = new HashSet<>();
-		for (ContentsDataType type : types) {
-			typeSet.add(type.getName());
-		}
-		return typeSet.contains(getTableType(table));
+		Set<ContentsDataType> typeSet = new HashSet<>(Arrays.asList(types));
+		return typeSet.contains(getTableDataType(table));
 	}
 
 	/**
@@ -408,7 +405,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public boolean isTableType(String table, String type) {
-		return type.equals(getTableType(table));
+		return isTableType(table, new String[] { type });
 	}
 
 	/**
@@ -417,7 +414,14 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public boolean isTableType(String table, String... types) {
 		Set<String> typeSet = new HashSet<>(Arrays.asList(types));
-		return typeSet.contains(getTableType(table));
+		boolean isType = typeSet.contains(getTableType(table));
+		if (!isType) {
+			ContentsDataType dataType = getTableDataType(table);
+			if (dataType != null) {
+				isType = typeSet.contains(dataType.getName());
+			}
+		}
+		return isType;
 	}
 
 	/**

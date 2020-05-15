@@ -124,6 +124,50 @@ public enum ContentsDataType {
 	}
 
 	/**
+	 * Determine if the type name is a registered data type
+	 * 
+	 * @param name
+	 *            type name
+	 * @return true if a core contents data type
+	 * @since 4.0.0
+	 */
+	public static boolean isType(String name) {
+		return fromName(name) != null;
+	}
+
+	/**
+	 * Get the contents data type from a core type name
+	 * 
+	 * @param name
+	 *            type name
+	 * @return contents data type if core, null if not
+	 * @since 4.0.0
+	 */
+	public static ContentsDataType fromCoreName(String name) {
+		ContentsDataType dataType = null;
+		if (isCoreType(name)) {
+			dataType = types.get(name.toLowerCase());
+		}
+		return dataType;
+	}
+
+	/**
+	 * Determine if the type name is a core contents data type
+	 * 
+	 * @param name
+	 *            type name
+	 * @return true if a core contents data type
+	 * @since 4.0.0
+	 */
+	public static boolean isCoreType(String name) {
+		boolean coreType = false;
+		if (name != null) {
+			coreType = coreTypes.contains(name.toLowerCase());
+		}
+		return coreType;
+	}
+
+	/**
 	 * Set the type for the contents data type name
 	 * 
 	 * @param name
