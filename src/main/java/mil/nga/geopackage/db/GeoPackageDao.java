@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.master.SQLiteMaster;
@@ -202,6 +203,30 @@ public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 	public static <D extends GeoPackageDao<O, ?>, O> D createDao(
 			GeoPackageCoreConnection db, Class<O> clazz) throws SQLException {
 		D dao = DaoManager.createDao(db.getConnectionSource(), clazz);
+		dao.setDatabase(db);
+		return dao;
+	}
+
+	/**
+	 * Create a GeoPackage DAO
+	 * 
+	 * @param <D>
+	 *            DAO type
+	 * @param <O>
+	 *            DAO object type
+	 * @param db
+	 *            database connection
+	 * @param tableConfig
+	 *            table config
+	 * @return GeoPackage DAO
+	 * @throws SQLException
+	 *             upon error
+	 * @since 4.0.0
+	 */
+	public static <D extends GeoPackageDao<O, ?>, O> D createDao(
+			GeoPackageCoreConnection db, DatabaseTableConfig<O> tableConfig)
+			throws SQLException {
+		D dao = DaoManager.createDao(db.getConnectionSource(), tableConfig);
 		dao.setDatabase(db);
 		return dao;
 	}
