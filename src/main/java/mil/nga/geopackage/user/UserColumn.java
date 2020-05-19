@@ -125,7 +125,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.max = max;
 		this.notNull = notNull;
 		this.defaultValue = defaultValue;
-		this.primaryKey = primaryKey;
+		setPrimaryKey(primaryKey);
 		this.type = type;
 		this.dataType = dataType;
 
@@ -162,7 +162,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.max = userColumn.max;
 		this.notNull = userColumn.notNull;
 		this.defaultValue = userColumn.defaultValue;
-		this.primaryKey = userColumn.primaryKey;
+		setPrimaryKey(userColumn.primaryKey);
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
 	}
@@ -380,6 +380,9 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public void setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
+		if (primaryKey) {
+			setNotNull(true);
+		}
 	}
 
 	/**

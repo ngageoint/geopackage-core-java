@@ -8,6 +8,7 @@ import mil.nga.geopackage.db.master.SQLiteMaster;
 import mil.nga.geopackage.db.master.SQLiteMasterColumn;
 import mil.nga.geopackage.db.master.SQLiteMasterQuery;
 import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.ConstraintType;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 
@@ -196,8 +197,11 @@ public class CoreSQLUtils {
 		}
 
 		for (Constraint constraint : column.getConstraints()) {
-			sql.append(" ");
-			sql.append(constraint.buildSql());
+			if (!column.isPrimaryKey()
+					|| constraint.getType() != ConstraintType.NOT_NULL) {
+				sql.append(" ");
+				sql.append(constraint.buildSql());
+			}
 		}
 
 		return sql.toString();
