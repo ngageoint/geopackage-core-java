@@ -1143,7 +1143,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	protected UserCustomTable getRTreeTable(FeatureTable featureTable) {
 
 		List<UserCustomColumn> columns = new ArrayList<>();
-		columns.add(UserCustomColumn.createPrimaryKeyColumn(COLUMN_ID));
+		columns.add(UserCustomColumn.createPrimaryKeyColumn(COLUMN_ID, false));
 		columns.add(UserCustomColumn.createColumn(COLUMN_MIN_X,
 				GeoPackageDataType.FLOAT));
 		columns.add(UserCustomColumn.createColumn(COLUMN_MAX_X,

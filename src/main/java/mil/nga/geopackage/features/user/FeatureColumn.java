@@ -4,6 +4,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 import mil.nga.sf.GeometryType;
 
 /**
@@ -27,7 +28,22 @@ public class FeatureColumn extends UserColumn {
 	 * @since 3.3.0
 	 */
 	public static FeatureColumn createPrimaryKeyColumn(String name) {
-		return createPrimaryKeyColumn(NO_INDEX, name);
+		return createPrimaryKeyColumn(name, UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create a new primary key column
+	 * 
+	 * @param name
+	 *            name
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return feature column
+	 * @since 4.0.0
+	 */
+	public static FeatureColumn createPrimaryKeyColumn(String name,
+			boolean autoincrement) {
+		return createPrimaryKeyColumn(NO_INDEX, name, autoincrement);
 	}
 
 	/**
@@ -40,8 +56,26 @@ public class FeatureColumn extends UserColumn {
 	 * @return feature column
 	 */
 	public static FeatureColumn createPrimaryKeyColumn(int index, String name) {
+		return createPrimaryKeyColumn(index, name,
+				UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create a new primary key column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return feature column
+	 * @since 4.0.0
+	 */
+	public static FeatureColumn createPrimaryKeyColumn(int index, String name,
+			boolean autoincrement) {
 		return new FeatureColumn(index, name, GeoPackageDataType.INTEGER, null,
-				true, null, true, null);
+				true, null, true, autoincrement, null);
 	}
 
 	/**
@@ -118,7 +152,7 @@ public class FeatureColumn extends UserColumn {
 							+ name);
 		}
 		return new FeatureColumn(index, name, GeoPackageDataType.BLOB, null,
-				notNull, defaultValue, false, type);
+				notNull, defaultValue, false, false, type);
 	}
 
 	/**
@@ -307,7 +341,7 @@ public class FeatureColumn extends UserColumn {
 			GeoPackageDataType type, Long max, boolean notNull,
 			Object defaultValue) {
 		return new FeatureColumn(index, name, type, max, notNull, defaultValue,
-				false, null);
+				false, false, null);
 	}
 
 	/**
@@ -339,14 +373,16 @@ public class FeatureColumn extends UserColumn {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key flag
+	 * @param autoincrement
+	 *            autoincrement flag
 	 * @param geometryType
 	 *            geometry type
 	 */
 	private FeatureColumn(int index, String name, GeoPackageDataType dataType,
 			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
-			GeometryType geometryType) {
+			boolean autoincrement, GeometryType geometryType) {
 		super(index, name, getTypeName(name, dataType, geometryType), dataType,
-				max, notNull, defaultValue, primaryKey);
+				max, notNull, defaultValue, primaryKey, autoincrement);
 		this.geometryType = geometryType;
 	}
 

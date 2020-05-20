@@ -28,8 +28,8 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
-import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.features.user.FeatureTableMetadata;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
@@ -690,147 +690,39 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId) {
-		return createFeatureTableWithMetadata(geometryColumns, null, null,
-				boundingBox, srsId);
-	}
+	public void createFeatureTable(FeatureTableMetadata metadata) {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, String idColumnName,
-			BoundingBox boundingBox, long srsId) {
-		return createFeatureTableWithMetadata(geometryColumns, idColumnName,
-				null, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId) {
-		return createFeatureTableWithMetadata(geometryColumns, null,
-				additionalColumns, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId) {
-		return createFeatureTypedTableWithMetadata(
-				ContentsDataType.FEATURES.getName(), geometryColumns,
-				idColumnName, additionalColumns, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId, List<FeatureColumn> columns) {
-		return createFeatureTypedTableWithMetadata(
-				ContentsDataType.FEATURES.getName(), geometryColumns,
-				boundingBox, srsId, columns);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId) {
-		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
-				null, null, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			BoundingBox boundingBox, long srsId) {
-		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
-				idColumnName, null, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId) {
-		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
-				null, additionalColumns, boundingBox, srsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId) {
-
-		if (idColumnName == null) {
-			idColumnName = "id";
+		GeometryColumns geometryColumns = metadata.getGeometryColumns();
+		if (geometryColumns == null) {
+			throw new GeoPackageException(
+					"Geometry Columns are required to create a feature table");
 		}
-
-		List<FeatureColumn> columns = new ArrayList<FeatureColumn>();
-		columns.add(FeatureColumn.createPrimaryKeyColumn(idColumnName));
-		columns.add(FeatureColumn.createGeometryColumn(
-				geometryColumns.getColumnName(),
-				geometryColumns.getGeometryType()));
-
-		if (additionalColumns != null) {
-			columns.addAll(additionalColumns);
-		}
-
-		return createFeatureTypedTableWithMetadata(dataType, geometryColumns,
-				boundingBox, srsId, columns);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId, List<FeatureColumn> columns) {
 
 		// Get the SRS
-		SpatialReferenceSystem srs = getSrs(srsId);
+		SpatialReferenceSystem srs = geometryColumns.getSrs();
+		if (srs == null) {
+			srs = getSrs(geometryColumns.getSrsId());
+			geometryColumns.setSrs(srs);
+		}
 
 		// Create the Geometry Columns table
 		createGeometryColumnsTable();
 
 		// Create the user feature table
-		FeatureTable table = new FeatureTable(geometryColumns, columns);
+		String tableName = metadata.getTableName();
+		FeatureTable table = new FeatureTable(tableName,
+				metadata.getColumnName(), metadata.buildColumns());
 		createFeatureTable(table);
 
 		try {
 			// Create the contents
 			Contents contents = new Contents();
-			contents.setTableName(geometryColumns.getTableName());
-			contents.setDataTypeName(dataType, ContentsDataType.FEATURES);
-			contents.setIdentifier(geometryColumns.getTableName());
+			contents.setTableName(tableName);
+			contents.setDataTypeName(metadata.getDataType(),
+					ContentsDataType.FEATURES);
+			contents.setIdentifier(tableName);
 			// contents.setLastChange(new Date());
+			BoundingBox boundingBox = metadata.getBoundingBox();
 			if (boundingBox != null) {
 				contents.setMinX(boundingBox.getMinLongitude());
 				contents.setMinY(boundingBox.getMinLatitude());
@@ -844,21 +736,17 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 
 			// Create new geometry columns
 			geometryColumns.setContents(contents);
-			geometryColumns.setSrs(contents.getSrs());
 			getGeometryColumnsDao().create(geometryColumns);
 
 		} catch (RuntimeException e) {
-			deleteTableQuietly(geometryColumns.getTableName());
+			deleteTableQuietly(tableName);
 			throw e;
 		} catch (SQLException e) {
-			deleteTableQuietly(geometryColumns.getTableName());
+			deleteTableQuietly(tableName);
 			throw new GeoPackageException(
-					"Failed to create table and metadata: "
-							+ geometryColumns.getTableName(),
-					e);
+					"Failed to create table and metadata: " + tableName, e);
 		}
 
-		return geometryColumns;
 	}
 
 	/**

@@ -18,6 +18,7 @@ import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.features.user.FeatureTableMetadata;
 import mil.nga.geopackage.features.user.FeatureTableReader;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.GeoPackageProgress;
@@ -397,14 +398,16 @@ public abstract class FeatureCoreGenerator {
 				}
 
 				// Create the feature table
-				GeometryColumns geomColumns = new GeometryColumns();
-				geomColumns.setId(new TableColumnKey(tableName, "geometry"));
-				geomColumns.setGeometryType(GeometryType.GEOMETRY);
-				geomColumns.setZ((byte) 0);
-				geomColumns.setM((byte) 0);
-				geometryColumns = geoPackage.createFeatureTableWithMetadata(
-						geomColumns, tableName + "_id", featureColumns,
-						boundingBox, srs.getSrsId());
+				geometryColumns = new GeometryColumns();
+				geometryColumns
+						.setId(new TableColumnKey(tableName, "geometry"));
+				geometryColumns.setGeometryType(GeometryType.GEOMETRY);
+				geometryColumns.setZ((byte) 0);
+				geometryColumns.setM((byte) 0);
+				geometryColumns.setSrs(srs);
+				geoPackage.createFeatureTable(new FeatureTableMetadata(
+						geometryColumns, tableName + "_id", featureColumns,
+						boundingBox));
 
 			} else {
 				FeatureTableReader tableReader = new FeatureTableReader(

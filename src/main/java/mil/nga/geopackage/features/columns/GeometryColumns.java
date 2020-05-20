@@ -203,6 +203,17 @@ public class GeometryColumns {
 	}
 
 	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @since 4.0.0
+	 */
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	/**
 	 * Get the column name
 	 * 
 	 * @return column name
@@ -276,6 +287,17 @@ public class GeometryColumns {
 	 */
 	public long getSrsId() {
 		return srsId;
+	}
+
+	/**
+	 * Set the srs id
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @since 4.0.0
+	 */
+	public void setSrsId(long srsId) {
+		this.srsId = srsId;
 	}
 
 	/**

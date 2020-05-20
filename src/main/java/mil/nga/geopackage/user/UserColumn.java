@@ -57,6 +57,11 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	private boolean primaryKey;
 
 	/**
+	 * True if primary key is autoincrement
+	 */
+	private boolean autoincrement;
+
+	/**
 	 * Type
 	 */
 	private String type;
@@ -88,12 +93,15 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key flag
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @since 4.0.0
 	 */
 	protected UserColumn(int index, String name, GeoPackageDataType dataType,
-			Long max, boolean notNull, Object defaultValue,
-			boolean primaryKey) {
+			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
+			boolean autoincrement) {
 		this(index, name, getTypeName(name, dataType), dataType, max, notNull,
-				defaultValue, primaryKey);
+				defaultValue, primaryKey, autoincrement);
 	}
 
 	/**
@@ -115,17 +123,20 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key flag
-	 * @since 3.3.0
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @since 4.0.0
 	 */
 	protected UserColumn(int index, String name, String type,
 			GeoPackageDataType dataType, Long max, boolean notNull,
-			Object defaultValue, boolean primaryKey) {
+			Object defaultValue, boolean primaryKey, boolean autoincrement) {
 		this.index = index;
 		this.name = name;
 		this.max = max;
 		this.notNull = notNull;
 		this.defaultValue = defaultValue;
-		setPrimaryKey(primaryKey);
+		this.primaryKey = primaryKey;
+		this.autoincrement = autoincrement;
 		this.type = type;
 		this.dataType = dataType;
 
@@ -145,8 +156,10 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	protected UserColumn(TableColumn tableColumn) {
 		this(tableColumn.getIndex(), tableColumn.getName(),
 				tableColumn.getType(), tableColumn.getDataType(),
-				tableColumn.getMax(), tableColumn.isNotNull(),
-				tableColumn.getDefaultValue(), tableColumn.isPrimarykey());
+				tableColumn.getMax(),
+				tableColumn.isNotNull() || tableColumn.isPrimarykey(),
+				tableColumn.getDefaultValue(), tableColumn.isPrimarykey(),
+				tableColumn.isPrimarykey() && UserTable.DEFAULT_AUTOINCREMENT);
 	}
 
 	/**
@@ -162,7 +175,8 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.max = userColumn.max;
 		this.notNull = userColumn.notNull;
 		this.defaultValue = userColumn.defaultValue;
-		setPrimaryKey(userColumn.primaryKey);
+		this.primaryKey = userColumn.primaryKey;
+		this.autoincrement = userColumn.autoincrement;
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
 	}
@@ -380,9 +394,6 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public void setPrimaryKey(boolean primaryKey) {
 		this.primaryKey = primaryKey;
-		if (primaryKey) {
-			setNotNull(true);
-		}
 	}
 
 	/**
@@ -392,6 +403,27 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public boolean isPrimaryKey() {
 		return primaryKey;
+	}
+
+	/**
+	 * Set the autoincrement flag
+	 * 
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @since 4.0.0
+	 */
+	public void setAutoincrement(boolean autoincrement) {
+		this.autoincrement = autoincrement;
+	}
+
+	/**
+	 * Get the autoincrement flag
+	 * 
+	 * @return autoincrement flag
+	 * @since 4.0.0
+	 */
+	public boolean isAutoincrement() {
+		return autoincrement;
 	}
 
 	/**
@@ -482,6 +514,9 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		if (isPrimaryKey()) {
 			addPrimaryKeyConstraint();
 		}
+		if (isAutoincrement()) {
+			addAutoincrementConstraint();
+		}
 	}
 
 	/**
@@ -560,7 +595,17 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public void addPrimaryKeyConstraint() {
 		setPrimaryKey(true);
-		addConstraint("PRIMARY KEY AUTOINCREMENT");
+		addConstraint("PRIMARY KEY");
+	}
+
+	/**
+	 * Add an autoincrement constraint
+	 * 
+	 * @since 4.0.0
+	 */
+	public void addAutoincrementConstraint() {
+		setAutoincrement(true);
+		addConstraint("AUTOINCREMENT");
 	}
 
 	/**

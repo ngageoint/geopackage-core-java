@@ -17,10 +17,9 @@ import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.ExtensionsDao;
-import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
-import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.features.user.FeatureTableMetadata;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
@@ -541,7 +540,7 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createGeometryColumnsTable();
 
 	/**
-	 * Create a new feature table
+	 * Create a new feature table without any additional GeoPackage metadata
 	 * 
 	 * @param table
 	 *            feature table
@@ -549,263 +548,14 @@ public interface GeoPackageCore extends Closeable {
 	public void createFeatureTable(FeatureTable table);
 
 	/**
-	 * Create a new feature table with GeoPackage metadata. Create the Geometry
-	 * Columns table if needed, create a user feature table, create a new
-	 * Contents, insert the new Geometry Columns.
+	 * Create a new feature table with GeoPackage metadata including: geometry
+	 * columns table and row, user feature table, and contents row.
 	 * 
-	 * The user feature table will be created with 2 columns, an id column named
-	 * "id" and a geometry column using {@link GeometryColumns#getColumnName()}.
-	 * 
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 */
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature table with GeoPackage metadata. Create the Geometry
-	 * Columns table if needed, create a user feature table, create a new
-	 * Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 columns, an id column with
-	 * the provided name and a geometry column using
-	 * {@link GeometryColumns#getColumnName()}.
-	 * 
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param idColumnName
-	 *            id column name
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 1.1.1
-	 */
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, String idColumnName,
-			BoundingBox boundingBox, long srsId);
-
-	/**
-	 * Create a new feature table with GeoPackage metadata. Create the Geometry
-	 * Columns table if needed, create a user feature table, create a new
-	 * Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 + additionalColumns.size()
-	 * columns, an id column named "id", a geometry column using
-	 * {@link GeometryColumns#getColumnName()}, and the provided additional
-	 * columns.
-	 * 
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param additionalColumns
-	 *            additional user feature table columns to create in addition to
-	 *            id and geometry columns
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 1.1.1
-	 */
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature table with GeoPackage metadata. Create the Geometry
-	 * Columns table if needed, create a user feature table, create a new
-	 * Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 + additionalColumns.size()
-	 * columns, an id column with the provided name, a geometry column using
-	 * {@link GeometryColumns#getColumnName()}, and the provided additional
-	 * columns.
-	 * 
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param idColumnName
-	 *            id column name
-	 * @param additionalColumns
-	 *            additional user feature table columns to create in addition to
-	 *            id and geometry columns
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 1.1.1
-	 */
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature table with GeoPackage metadata. Create the Geometry
-	 * Columns table if needed, create a user feature table, create a new
-	 * Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created using only the provided columns.
-	 * These should include the id column and the geometry column defined in
-	 * {@link GeometryColumns#getColumnName()}
-	 * 
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @param columns
-	 *            user feature table columns to create
-	 * @return geometry columns
-	 * @since 1.1.1
-	 */
-	public GeometryColumns createFeatureTableWithMetadata(
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId, List<FeatureColumn> columns);
-
-	/**
-	 * Create a new feature typed table with GeoPackage metadata. Create the
-	 * Geometry Columns table if needed, create a user feature table, create a
-	 * new Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 columns, an id column named
-	 * "id" and a geometry column using {@link GeometryColumns#getColumnName()}.
-	 * 
-	 * @param dataType
-	 *            contents data type
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
+	 * @param metadata
+	 *            feature table metadata
 	 * @since 4.0.0
 	 */
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature typed table with GeoPackage metadata. Create the
-	 * Geometry Columns table if needed, create a user feature table, create a
-	 * new Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 columns, an id column with
-	 * the provided name and a geometry column using
-	 * {@link GeometryColumns#getColumnName()}.
-	 * 
-	 * @param dataType
-	 *            contents data type
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param idColumnName
-	 *            id column name
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 4.0.0
-	 */
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			BoundingBox boundingBox, long srsId);
-
-	/**
-	 * Create a new feature typed table with GeoPackage metadata. Create the
-	 * Geometry Columns table if needed, create a user feature table, create a
-	 * new Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 + additionalColumns.size()
-	 * columns, an id column named "id", a geometry column using
-	 * {@link GeometryColumns#getColumnName()}, and the provided additional
-	 * columns.
-	 * 
-	 * @param dataType
-	 *            contents data type
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param additionalColumns
-	 *            additional user feature table columns to create in addition to
-	 *            id and geometry columns
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 4.0.0
-	 */
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature typed table with GeoPackage metadata. Create the
-	 * Geometry Columns table if needed, create a user feature table, create a
-	 * new Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created with 2 + additionalColumns.size()
-	 * columns, an id column with the provided name, a geometry column using
-	 * {@link GeometryColumns#getColumnName()}, and the provided additional
-	 * columns.
-	 * 
-	 * @param dataType
-	 *            contents data type
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param idColumnName
-	 *            id column name
-	 * @param additionalColumns
-	 *            additional user feature table columns to create in addition to
-	 *            id and geometry columns
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @return geometry columns
-	 * @since 4.0.0
-	 */
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox,
-			long srsId);
-
-	/**
-	 * Create a new feature typed table with GeoPackage metadata. Create the
-	 * Geometry Columns table if needed, create a user feature table, create a
-	 * new Contents, insert the new Geometry Columns.
-	 * 
-	 * The user feature table will be created using only the provided columns.
-	 * These should include the id column and the geometry column defined in
-	 * {@link GeometryColumns#getColumnName()}
-	 * 
-	 * @param dataType
-	 *            contents data type
-	 * @param geometryColumns
-	 *            geometry columns to create
-	 * @param boundingBox
-	 *            contents bounding box
-	 * @param srsId
-	 *            spatial reference system id
-	 * @param columns
-	 *            user feature table columns to create
-	 * @return geometry columns
-	 * @since 4.0.0
-	 */
-	public GeometryColumns createFeatureTypedTableWithMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			long srsId, List<FeatureColumn> columns);
+	public void createFeatureTable(FeatureTableMetadata metadata);
 
 	/**
 	 * Get a Tile Matrix Set DAO

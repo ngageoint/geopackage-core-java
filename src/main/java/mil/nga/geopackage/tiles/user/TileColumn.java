@@ -3,6 +3,7 @@ package mil.nga.geopackage.tiles.user;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * Tile column
@@ -18,7 +19,19 @@ public class TileColumn extends UserColumn {
 	 * @since 3.3.0
 	 */
 	public static TileColumn createIdColumn() {
-		return createIdColumn(NO_INDEX);
+		return createIdColumn(UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create an id column
+	 * 
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return tile column
+	 * @since 4.0.0
+	 */
+	public static TileColumn createIdColumn(boolean autoincrement) {
+		return createIdColumn(NO_INDEX, autoincrement);
 	}
 
 	/**
@@ -29,8 +42,23 @@ public class TileColumn extends UserColumn {
 	 * @return tile column
 	 */
 	public static TileColumn createIdColumn(int index) {
+		return createIdColumn(index, UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create an id column
+	 * 
+	 * @param index
+	 *            index
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return tile column
+	 * @since 4.0.0
+	 */
+	public static TileColumn createIdColumn(int index, boolean autoincrement) {
 		return new TileColumn(index, TileTable.COLUMN_ID,
-				GeoPackageDataType.INTEGER, null, false, null, true);
+				GeoPackageDataType.INTEGER, null, false, null, true,
+				autoincrement);
 	}
 
 	/**
@@ -52,7 +80,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createZoomLevelColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_ZOOM_LEVEL,
-				GeoPackageDataType.INTEGER, null, true, null, false);
+				GeoPackageDataType.INTEGER, null, true, null, false, false);
 	}
 
 	/**
@@ -74,7 +102,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createTileColumnColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_COLUMN,
-				GeoPackageDataType.INTEGER, null, true, null, false);
+				GeoPackageDataType.INTEGER, null, true, null, false, false);
 	}
 
 	/**
@@ -96,7 +124,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createTileRowColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_ROW,
-				GeoPackageDataType.INTEGER, null, true, null, false);
+				GeoPackageDataType.INTEGER, null, true, null, false, false);
 	}
 
 	/**
@@ -118,7 +146,7 @@ public class TileColumn extends UserColumn {
 	 */
 	public static TileColumn createTileDataColumn(int index) {
 		return new TileColumn(index, TileTable.COLUMN_TILE_DATA,
-				GeoPackageDataType.BLOB, null, true, null, false);
+				GeoPackageDataType.BLOB, null, true, null, false, false);
 	}
 
 	/**
@@ -306,7 +334,7 @@ public class TileColumn extends UserColumn {
 			GeoPackageDataType type, Long max, boolean notNull,
 			Object defaultValue) {
 		return new TileColumn(index, name, type, max, notNull, defaultValue,
-				false);
+				false, false);
 	}
 
 	/**
@@ -338,11 +366,14 @@ public class TileColumn extends UserColumn {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key
+	 * @param autoincrement
+	 *            autoincrement flag
 	 */
 	private TileColumn(int index, String name, GeoPackageDataType dataType,
-			Long max, boolean notNull, Object defaultValue,
-			boolean primaryKey) {
-		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
+			Long max, boolean notNull, Object defaultValue, boolean primaryKey,
+			boolean autoincrement) {
+		super(index, name, dataType, max, notNull, defaultValue, primaryKey,
+				autoincrement);
 	}
 
 	/**

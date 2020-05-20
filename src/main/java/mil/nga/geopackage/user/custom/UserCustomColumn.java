@@ -3,6 +3,7 @@ package mil.nga.geopackage.user.custom;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * User Custom column
@@ -21,7 +22,22 @@ public class UserCustomColumn extends UserColumn {
 	 * @since 3.3.0
 	 */
 	public static UserCustomColumn createPrimaryKeyColumn(String name) {
-		return createPrimaryKeyColumn(NO_INDEX, name);
+		return createPrimaryKeyColumn(name, UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create a new primary key column
+	 * 
+	 * @param name
+	 *            name
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return user custom column
+	 * @since 4.0.0
+	 */
+	public static UserCustomColumn createPrimaryKeyColumn(String name,
+			boolean autoincrement) {
+		return createPrimaryKeyColumn(NO_INDEX, name, autoincrement);
 	}
 
 	/**
@@ -35,8 +51,26 @@ public class UserCustomColumn extends UserColumn {
 	 */
 	public static UserCustomColumn createPrimaryKeyColumn(int index,
 			String name) {
+		return createPrimaryKeyColumn(index, name,
+				UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create a new primary key column
+	 * 
+	 * @param index
+	 *            index
+	 * @param name
+	 *            name
+	 * @param autoincrement
+	 *            autoincrement flag
+	 * @return user custom column
+	 * @since 4.0.0
+	 */
+	public static UserCustomColumn createPrimaryKeyColumn(int index,
+			String name, boolean autoincrement) {
 		return new UserCustomColumn(index, name, GeoPackageDataType.INTEGER,
-				null, true, null, true);
+				null, true, null, true, autoincrement);
 	}
 
 	/**
@@ -225,7 +259,7 @@ public class UserCustomColumn extends UserColumn {
 			GeoPackageDataType type, Long max, boolean notNull,
 			Object defaultValue) {
 		return new UserCustomColumn(index, name, type, max, notNull,
-				defaultValue, false);
+				defaultValue, false, false);
 	}
 
 	/**
@@ -257,11 +291,14 @@ public class UserCustomColumn extends UserColumn {
 	 *            default value
 	 * @param primaryKey
 	 *            primary key
+	 * @param autoincrement
+	 *            autoincrement flag
 	 */
 	private UserCustomColumn(int index, String name,
 			GeoPackageDataType dataType, Long max, boolean notNull,
-			Object defaultValue, boolean primaryKey) {
-		super(index, name, dataType, max, notNull, defaultValue, primaryKey);
+			Object defaultValue, boolean primaryKey, boolean autoincrement) {
+		super(index, name, dataType, max, notNull, defaultValue, primaryKey,
+				autoincrement);
 	}
 
 	/**

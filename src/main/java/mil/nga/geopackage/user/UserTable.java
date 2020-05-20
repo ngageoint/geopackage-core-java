@@ -22,6 +22,13 @@ import mil.nga.geopackage.db.table.ConstraintType;
 public abstract class UserTable<TColumn extends UserColumn> {
 
 	/**
+	 * Default id autoincrement setting
+	 * 
+	 * @since 4.0.0
+	 */
+	public static boolean DEFAULT_AUTOINCREMENT = true;
+
+	/**
 	 * Columns
 	 */
 	private UserColumns<TColumn> columns;
