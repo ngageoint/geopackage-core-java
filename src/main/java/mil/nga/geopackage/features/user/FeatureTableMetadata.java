@@ -19,112 +19,301 @@ public class FeatureTableMetadata extends UserTableMetadata<FeatureColumn> {
 
 	public static final GeometryType DEFAULT_GEOMETRY_TYPE = GeometryType.GEOMETRY;
 
-	private GeometryColumns geometryColumns;
+	public static FeatureTableMetadata create() {
+		return new FeatureTableMetadata();
+	}
+
+	public static FeatureTableMetadata create(boolean autoincrement) {
+		return new FeatureTableMetadata(null, null, autoincrement, null, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns) {
+		return new FeatureTableMetadata(geometryColumns, null, null, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			boolean autoincrement) {
+		return new FeatureTableMetadata(geometryColumns, null, autoincrement,
+				null, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, null, null,
+				boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			boolean autoincrement, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, null, autoincrement,
+				null, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName, null,
+				null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, boolean autoincrement) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				autoincrement, null, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName, null,
+				boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, boolean autoincrement,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				autoincrement, null, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(geometryColumns, null,
+				additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			boolean autoincrement, List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(geometryColumns, null, autoincrement,
+				additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, null,
+				additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			boolean autoincrement, List<FeatureColumn> additionalColumns,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, null, autoincrement,
+				additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, boolean autoincrement,
+			List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				autoincrement, additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, List<FeatureColumn> additionalColumns,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			String idColumnName, boolean autoincrement,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(geometryColumns, idColumnName,
+				autoincrement, additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			FeatureColumns columns) {
+		return new FeatureTableMetadata(geometryColumns, null,
+				columns.getColumns());
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			BoundingBox boundingBox, FeatureColumns columns) {
+		return new FeatureTableMetadata(geometryColumns, boundingBox,
+				columns.getColumns());
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			FeatureTable table) {
+		return new FeatureTableMetadata(geometryColumns, null,
+				table.getColumns());
+	}
+
+	public static FeatureTableMetadata create(GeometryColumns geometryColumns,
+			BoundingBox boundingBox, FeatureTable table) {
+		return new FeatureTableMetadata(geometryColumns, boundingBox,
+				table.getColumns());
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType) {
+		return new FeatureTableMetadata(dataType, null, null, null, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			boolean autoincrement) {
+		return new FeatureTableMetadata(dataType, null, null, autoincrement,
+				null, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null, null,
+				null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, boolean autoincrement) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				autoincrement, null, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null, null,
+				boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, boolean autoincrement,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				autoincrement, null, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				null, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			boolean autoincrement) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				autoincrement, null, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				null, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			boolean autoincrement, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				autoincrement, null, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, boolean autoincrement,
+			List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				autoincrement, additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, boolean autoincrement,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				autoincrement, additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			boolean autoincrement, List<FeatureColumn> additionalColumns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				autoincrement, additionalColumns, null);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			boolean autoincrement, List<FeatureColumn> additionalColumns,
+			BoundingBox boundingBox) {
+		return new FeatureTableMetadata(dataType, geometryColumns, idColumnName,
+				autoincrement, additionalColumns, boundingBox);
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, FeatureColumns columns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				columns.getColumns());
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			FeatureColumns columns) {
+		return new FeatureTableMetadata(dataType, geometryColumns, boundingBox,
+				columns.getColumns());
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, FeatureTable table) {
+		return new FeatureTableMetadata(dataType, geometryColumns, null,
+				table.getColumns());
+	}
+
+	public static FeatureTableMetadata createTyped(String dataType,
+			GeometryColumns geometryColumns, BoundingBox boundingBox,
+			FeatureTable table) {
+		return new FeatureTableMetadata(dataType, geometryColumns, boundingBox,
+				table.getColumns());
+	}
+
+	protected BoundingBox boundingBox;
+
+	protected GeometryColumns geometryColumns;
 
 	public FeatureTableMetadata() {
 
 	}
 
-	public FeatureTableMetadata(GeometryColumns geometryColumns) {
-		this.geometryColumns = geometryColumns;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			boolean autoincrement) {
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			boolean autoincrement, BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName, boolean autoincrement) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName, BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName, boolean autoincrement,
-			BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns) {
-		this.geometryColumns = geometryColumns;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			boolean autoincrement, List<FeatureColumn> additionalColumns) {
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			boolean autoincrement, List<FeatureColumn> additionalColumns,
-			BoundingBox boundingBox) {
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName, List<FeatureColumn> additionalColumns) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			String idColumnName, boolean autoincrement,
-			List<FeatureColumn> additionalColumns) {
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-	}
-
 	public FeatureTableMetadata(GeometryColumns geometryColumns,
 			String idColumnName, List<FeatureColumn> additionalColumns,
 			BoundingBox boundingBox) {
+		this(null, geometryColumns, idColumnName, additionalColumns,
+				boundingBox);
+	}
+
+	public FeatureTableMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		this.dataType = dataType;
 		this.geometryColumns = geometryColumns;
 		this.idColumnName = idColumnName;
 		this.additionalColumns = additionalColumns;
@@ -134,6 +323,15 @@ public class FeatureTableMetadata extends UserTableMetadata<FeatureColumn> {
 	public FeatureTableMetadata(GeometryColumns geometryColumns,
 			String idColumnName, boolean autoincrement,
 			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
+		this(null, geometryColumns, idColumnName, autoincrement,
+				additionalColumns, boundingBox);
+	}
+
+	public FeatureTableMetadata(String dataType,
+			GeometryColumns geometryColumns, String idColumnName,
+			boolean autoincrement, List<FeatureColumn> additionalColumns,
+			BoundingBox boundingBox) {
+		this.dataType = dataType;
 		this.geometryColumns = geometryColumns;
 		this.idColumnName = idColumnName;
 		this.autoincrement = autoincrement;
@@ -143,167 +341,7 @@ public class FeatureTableMetadata extends UserTableMetadata<FeatureColumn> {
 
 	public FeatureTableMetadata(GeometryColumns geometryColumns,
 			BoundingBox boundingBox, List<FeatureColumn> columns) {
-		this.geometryColumns = geometryColumns;
-		this.boundingBox = boundingBox;
-		this.columns = columns;
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			FeatureTable table) {
-		this.geometryColumns = geometryColumns;
-		this.columns = table.getColumns();
-	}
-
-	public FeatureTableMetadata(GeometryColumns geometryColumns,
-			BoundingBox boundingBox, FeatureTable table) {
-		this.geometryColumns = geometryColumns;
-		this.boundingBox = boundingBox;
-		this.columns = table.getColumns();
-	}
-
-	public FeatureTableMetadata(String dataType) {
-		this.dataType = dataType;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, boolean autoincrement) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, boolean autoincrement,
-			BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			boolean autoincrement) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			boolean autoincrement, BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, boolean autoincrement,
-			List<FeatureColumn> additionalColumns) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, boolean autoincrement,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			boolean autoincrement, List<FeatureColumn> additionalColumns) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			List<FeatureColumn> additionalColumns, BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, String idColumnName,
-			boolean autoincrement, List<FeatureColumn> additionalColumns,
-			BoundingBox boundingBox) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-		this.boundingBox = boundingBox;
+		this(null, geometryColumns, boundingBox, columns);
 	}
 
 	public FeatureTableMetadata(String dataType,
@@ -313,22 +351,6 @@ public class FeatureTableMetadata extends UserTableMetadata<FeatureColumn> {
 		this.geometryColumns = geometryColumns;
 		this.boundingBox = boundingBox;
 		this.columns = columns;
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, FeatureTable table) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.columns = table.getColumns();
-	}
-
-	public FeatureTableMetadata(String dataType,
-			GeometryColumns geometryColumns, BoundingBox boundingBox,
-			FeatureTable table) {
-		this.dataType = dataType;
-		this.geometryColumns = geometryColumns;
-		this.boundingBox = boundingBox;
-		this.columns = table.getColumns();
 	}
 
 	/**
@@ -381,6 +403,14 @@ public class FeatureTableMetadata extends UserTableMetadata<FeatureColumn> {
 			}
 		}
 		return tableName;
+	}
+
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
 	}
 
 	public GeometryColumns getGeometryColumns() {

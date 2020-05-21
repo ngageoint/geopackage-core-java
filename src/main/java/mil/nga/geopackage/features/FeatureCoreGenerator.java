@@ -405,7 +405,7 @@ public abstract class FeatureCoreGenerator {
 				geometryColumns.setZ((byte) 0);
 				geometryColumns.setM((byte) 0);
 				geometryColumns.setSrs(srs);
-				geoPackage.createFeatureTable(new FeatureTableMetadata(
+				geoPackage.createFeatureTable(FeatureTableMetadata.create(
 						geometryColumns, tableName + "_id", featureColumns,
 						boundingBox));
 

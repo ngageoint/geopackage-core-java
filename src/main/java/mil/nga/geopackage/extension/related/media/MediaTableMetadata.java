@@ -9,42 +9,56 @@ import mil.nga.geopackage.user.custom.UserCustomColumn;
 // TODO
 public class MediaTableMetadata extends UserTableMetadata<UserCustomColumn> {
 
+	public static MediaTableMetadata create() {
+		return new MediaTableMetadata();
+	}
+
+	public static MediaTableMetadata create(String tableName) {
+		return new MediaTableMetadata(tableName, null, null);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			boolean autoincrement) {
+		return new MediaTableMetadata(tableName, null, autoincrement, null);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			List<UserCustomColumn> additionalColumns) {
+		return new MediaTableMetadata(tableName, null, additionalColumns);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			boolean autoincrement, List<UserCustomColumn> additionalColumns) {
+		return new MediaTableMetadata(tableName, null, autoincrement,
+				additionalColumns);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			String idColumnName) {
+		return new MediaTableMetadata(tableName, idColumnName, null);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			String idColumnName, boolean autoincrement) {
+		return new MediaTableMetadata(tableName, idColumnName, autoincrement,
+				null);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			String idColumnName, List<UserCustomColumn> additionalColumns) {
+		return new MediaTableMetadata(tableName, idColumnName,
+				additionalColumns);
+	}
+
+	public static MediaTableMetadata create(String tableName,
+			String idColumnName, boolean autoincrement,
+			List<UserCustomColumn> additionalColumns) {
+		return new MediaTableMetadata(tableName, idColumnName, autoincrement,
+				additionalColumns);
+	}
+
 	public MediaTableMetadata() {
 
-	}
-
-	public MediaTableMetadata(String tableName) {
-		this.tableName = tableName;
-	}
-
-	public MediaTableMetadata(String tableName, boolean autoincrement) {
-		this.tableName = tableName;
-		this.autoincrement = autoincrement;
-	}
-
-	public MediaTableMetadata(String tableName,
-			List<UserCustomColumn> additionalColumns) {
-		this.tableName = tableName;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public MediaTableMetadata(String tableName, boolean autoincrement,
-			List<UserCustomColumn> additionalColumns) {
-		this.tableName = tableName;
-		this.autoincrement = autoincrement;
-		this.additionalColumns = additionalColumns;
-	}
-
-	public MediaTableMetadata(String tableName, String idColumnName) {
-		this.tableName = tableName;
-		this.idColumnName = idColumnName;
-	}
-
-	public MediaTableMetadata(String tableName, String idColumnName,
-			boolean autoincrement) {
-		this.tableName = tableName;
-		this.idColumnName = idColumnName;
-		this.autoincrement = autoincrement;
 	}
 
 	public MediaTableMetadata(String tableName, String idColumnName,

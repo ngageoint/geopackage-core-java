@@ -9,6 +9,7 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesColumn;
+import mil.nga.geopackage.attributes.AttributesTableMetadata;
 import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
@@ -125,8 +126,8 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 			List<Constraint> constraints = new ArrayList<>();
 			constraints.add(new UniqueConstraint(propertyColumn, valueColumn));
 
-			geoPackage.createAttributesTableWithId(TABLE_NAME,
-					additionalColumns, constraints);
+			geoPackage.createAttributesTable(AttributesTableMetadata
+					.create(TABLE_NAME, additionalColumns, constraints));
 		}
 
 		Extensions extension = getOrCreate(EXTENSION_NAME, TABLE_NAME, null,

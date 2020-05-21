@@ -2,8 +2,6 @@ package mil.nga.geopackage.user;
 
 import java.util.List;
 
-import mil.nga.geopackage.BoundingBox;
-
 // TODO
 public abstract class UserTableMetadata<TColumn extends UserColumn> {
 
@@ -12,8 +10,6 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	protected String tableName;
 
 	protected String dataType;
-
-	protected BoundingBox boundingBox;
 
 	protected String idColumnName;
 
@@ -45,14 +41,6 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
-	}
-
-	public BoundingBox getBoundingBox() {
-		return boundingBox;
-	}
-
-	public void setBoundingBox(BoundingBox boundingBox) {
-		this.boundingBox = boundingBox;
 	}
 
 	public String getIdColumnName() {

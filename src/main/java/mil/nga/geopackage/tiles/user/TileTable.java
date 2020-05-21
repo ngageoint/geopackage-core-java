@@ -195,9 +195,23 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile columns
 	 */
 	public static List<TileColumn> createRequiredColumns() {
+		return createRequiredColumns(UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create the required table columns
+	 * 
+	 * @param autoincrement
+	 *            autoincrement id values
+	 * 
+	 * @return tile columns
+	 * @since 4.0.0
+	 */
+	public static List<TileColumn> createRequiredColumns(
+			boolean autoincrement) {
 
 		List<TileColumn> columns = new ArrayList<TileColumn>();
-		columns.add(TileColumn.createIdColumn());
+		columns.add(TileColumn.createIdColumn(autoincrement));
 		columns.add(TileColumn.createZoomLevelColumn());
 		columns.add(TileColumn.createTileColumnColumn());
 		columns.add(TileColumn.createTileRowColumn());
@@ -214,9 +228,25 @@ public class TileTable extends UserTable<TileColumn> {
 	 * @return tile columns
 	 */
 	public static List<TileColumn> createRequiredColumns(int startingIndex) {
+		return createRequiredColumns(startingIndex,
+				UserTable.DEFAULT_AUTOINCREMENT);
+	}
+
+	/**
+	 * Create the required table columns, starting at the provided index
+	 * 
+	 * @param startingIndex
+	 *            starting index
+	 * @param autoincrement
+	 *            autoincrement id values
+	 * @return tile columns
+	 * @since 4.0.0
+	 */
+	public static List<TileColumn> createRequiredColumns(int startingIndex,
+			boolean autoincrement) {
 
 		List<TileColumn> columns = new ArrayList<TileColumn>();
-		columns.add(TileColumn.createIdColumn(startingIndex++));
+		columns.add(TileColumn.createIdColumn(startingIndex++, autoincrement));
 		columns.add(TileColumn.createZoomLevelColumn(startingIndex++));
 		columns.add(TileColumn.createTileColumnColumn(startingIndex++));
 		columns.add(TileColumn.createTileRowColumn(startingIndex++));

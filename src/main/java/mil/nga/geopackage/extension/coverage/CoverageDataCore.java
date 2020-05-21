@@ -19,6 +19,7 @@ import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.tiles.user.TileTableMetadata;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
 
@@ -1620,10 +1621,20 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			BoundingBox contentsBoundingBox, long contentsSrsId,
 			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
 
-		TileMatrixSet tileMatrixSet = geoPackage
-				.createTileTypedTableWithMetadata(GRIDDED_COVERAGE, tableName,
-						contentsBoundingBox, contentsSrsId,
-						tileMatrixSetBoundingBox, tileMatrixSetSrsId);
+		TileTable tileTable = geoPackage
+				.createTileTable(TileTableMetadata.createTyped(GRIDDED_COVERAGE,
+						tableName, contentsBoundingBox, contentsSrsId,
+						tileMatrixSetBoundingBox, tileMatrixSetSrsId));
+		TileMatrixSet tileMatrixSet;
+		try {
+			tileMatrixSet = geoPackage.getTileMatrixSetDao()
+					.queryForId(tileTable.getTableName());
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to query for Tile Matrix Set: "
+							+ tileTable.getTableName(),
+					e);
+		}
 		return tileMatrixSet;
 	}
 

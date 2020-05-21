@@ -332,7 +332,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param columns
 	 *            list of columns
 	 */
-	protected MediaTable(String tableName, List<UserCustomColumn> columns) {
+	public MediaTable(String tableName, List<UserCustomColumn> columns) {
 		this(tableName, columns, null);
 	}
 
@@ -346,7 +346,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param idColumnName
 	 *            id column name
 	 */
-	protected MediaTable(String tableName, List<UserCustomColumn> columns,
+	public MediaTable(String tableName, List<UserCustomColumn> columns,
 			String idColumnName) {
 		super(tableName, RELATION_TYPE.getName(), RELATION_TYPE.getDataType(),
 				columns, requiredColumns(idColumnName));
@@ -358,7 +358,7 @@ public class MediaTable extends UserRelatedTable {
 	 * @param table
 	 *            user custom table
 	 */
-	protected MediaTable(UserCustomTable table) {
+	public MediaTable(UserCustomTable table) {
 		super(RELATION_TYPE.getName(), RELATION_TYPE.getDataType(), table);
 	}
 

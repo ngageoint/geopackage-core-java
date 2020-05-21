@@ -1,7 +1,6 @@
 package mil.nga.geopackage;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,8 +10,8 @@ import java.util.concurrent.Callable;
 
 import com.j256.ormlite.misc.TransactionManager;
 
-import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTable;
+import mil.nga.geopackage.attributes.AttributesTableMetadata;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.contents.ContentsDataType;
@@ -38,6 +37,7 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.tiles.user.TileTableMetadata;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
 import mil.nga.sf.proj.Projection;
@@ -690,7 +690,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createFeatureTable(FeatureTableMetadata metadata) {
+	public FeatureTable createFeatureTable(FeatureTableMetadata metadata) {
 
 		GeometryColumns geometryColumns = metadata.getGeometryColumns();
 		if (geometryColumns == null) {
@@ -747,6 +747,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"Failed to create table and metadata: " + tableName, e);
 		}
 
+		return table;
 	}
 
 	/**
@@ -821,59 +822,23 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileMatrixSet createTileTableWithMetadata(String tableName,
-			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
-		return createTileTableWithMetadata(tableName, tileMatrixSetBoundingBox,
-				tileMatrixSetSrsId, tileMatrixSetBoundingBox,
-				tileMatrixSetSrsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TileMatrixSet createTileTableWithMetadata(String tableName,
-			BoundingBox contentsBoundingBox, long contentsSrsId,
-			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
-		return createTileTypedTableWithMetadata(
-				ContentsDataType.TILES.getName(), tableName,
-				contentsBoundingBox, contentsSrsId, tileMatrixSetBoundingBox,
-				tileMatrixSetSrsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
-			String tableName, BoundingBox tileMatrixSetBoundingBox,
-			long tileMatrixSetSrsId) {
-		return createTileTypedTableWithMetadata(dataType, tableName,
-				tileMatrixSetBoundingBox, tileMatrixSetSrsId,
-				tileMatrixSetBoundingBox, tileMatrixSetSrsId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TileMatrixSet createTileTypedTableWithMetadata(String dataType,
-			String tableName, BoundingBox contentsBoundingBox,
-			long contentsSrsId, BoundingBox tileMatrixSetBoundingBox,
-			long tileMatrixSetSrsId) {
+	public TileTable createTileTable(TileTableMetadata metadata) {
 
 		TileMatrixSet tileMatrixSet = null;
 
 		// Get the SRS
-		SpatialReferenceSystem contentsSrs = getSrs(contentsSrsId);
-		SpatialReferenceSystem tileMatrixSetSrs = getSrs(tileMatrixSetSrsId);
+		SpatialReferenceSystem contentsSrs = getSrs(
+				metadata.getContentsSrsId());
+		SpatialReferenceSystem tileMatrixSetSrs = getSrs(
+				metadata.getTileSrsId());
 
 		// Create the Tile Matrix Set and Tile Matrix tables
 		createTileMatrixSetTable();
 		createTileMatrixTable();
 
 		// Create the user tile table
-		List<TileColumn> columns = TileTable.createRequiredColumns();
+		String tableName = metadata.getTableName();
+		List<TileColumn> columns = metadata.buildColumns();
 		TileTable table = new TileTable(tableName, columns);
 		createTileTable(table);
 
@@ -881,9 +846,11 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(tableName);
-			contents.setDataTypeName(dataType, ContentsDataType.TILES);
+			contents.setDataTypeName(metadata.getDataType(),
+					ContentsDataType.TILES);
 			contents.setIdentifier(tableName);
 			// contents.setLastChange(new Date());
+			BoundingBox contentsBoundingBox = metadata.getContentsBoundingBox();
 			contents.setMinX(contentsBoundingBox.getMinLongitude());
 			contents.setMinY(contentsBoundingBox.getMinLatitude());
 			contents.setMaxX(contentsBoundingBox.getMaxLongitude());
@@ -897,6 +864,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			tileMatrixSet = new TileMatrixSet();
 			tileMatrixSet.setContents(contents);
 			tileMatrixSet.setSrs(tileMatrixSetSrs);
+			BoundingBox tileMatrixSetBoundingBox = metadata
+					.getTileBoundingBox();
 			tileMatrixSet.setMinX(tileMatrixSetBoundingBox.getMinLongitude());
 			tileMatrixSet.setMinY(tileMatrixSetBoundingBox.getMinLatitude());
 			tileMatrixSet.setMaxX(tileMatrixSetBoundingBox.getMaxLongitude());
@@ -912,7 +881,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 					"Failed to create table and metadata: " + tableName, e);
 		}
 
-		return tileMatrixSet;
+		return table;
 	}
 
 	/**
@@ -951,140 +920,16 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns) {
-		return createAttributesTable(tableName, null, additionalColumns);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTableWithId(String tableName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-		return createAttributesTable(tableName, null, additionalColumns,
-				constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns) {
-		return createAttributesTable(tableName, idColumnName, additionalColumns,
-				null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-		return createAttributesTypedTable(ContentsDataType.ATTRIBUTES.getName(),
-				tableName, idColumnName, additionalColumns, constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns) {
-		return createAttributesTable(tableName, columns, null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTable(String tableName,
-			List<AttributesColumn> columns,
-			Collection<Constraint> constraints) {
-		return createAttributesTypedTable(ContentsDataType.ATTRIBUTES.getName(),
-				tableName, columns, constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTableWithId(String dataType,
-			String tableName, List<AttributesColumn> additionalColumns) {
-		return createAttributesTypedTable(dataType, tableName, null,
-				additionalColumns);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTableWithId(String dataType,
-			String tableName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-		return createAttributesTypedTable(dataType, tableName, null,
-				additionalColumns, constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTable(String dataType,
-			String tableName, String idColumnName,
-			List<AttributesColumn> additionalColumns) {
-		return createAttributesTypedTable(dataType, tableName, idColumnName,
-				additionalColumns, null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTable(String dataType,
-			String tableName, String idColumnName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
-
-		if (idColumnName == null) {
-			idColumnName = "id";
-		}
-
-		List<AttributesColumn> columns = new ArrayList<AttributesColumn>();
-		columns.add(AttributesColumn.createPrimaryKeyColumn(idColumnName));
-
-		if (additionalColumns != null) {
-			columns.addAll(additionalColumns);
-		}
-
-		return createAttributesTypedTable(dataType, tableName, columns,
-				constraints);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTable(String dataType,
-			String tableName, List<AttributesColumn> columns) {
-		return createAttributesTypedTable(dataType, tableName, columns, null);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AttributesTable createAttributesTypedTable(String dataType,
-			String tableName, List<AttributesColumn> columns,
-			Collection<Constraint> constraints) {
+	public AttributesTable createAttributesTable(
+			AttributesTableMetadata metadata) {
 
 		// Build the user attributes table
-		AttributesTable table = new AttributesTable(tableName, columns);
+		String tableName = metadata.getTableName();
+		AttributesTable table = new AttributesTable(tableName,
+				metadata.buildColumns());
 
 		// Add unique constraints
+		Collection<Constraint> constraints = metadata.getConstraints();
 		if (constraints != null) {
 			table.addConstraints(constraints);
 		}
@@ -1096,7 +941,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			// Create the contents
 			Contents contents = new Contents();
 			contents.setTableName(tableName);
-			contents.setDataTypeName(dataType, ContentsDataType.ATTRIBUTES);
+			contents.setDataTypeName(metadata.getDataType(),
+					ContentsDataType.ATTRIBUTES);
 			contents.setIdentifier(tableName);
 			// contents.setLastChange(new Date());
 			getContentsDao().create(contents);
