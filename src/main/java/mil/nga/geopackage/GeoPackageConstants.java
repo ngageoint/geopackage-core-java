@@ -36,7 +36,7 @@ public class GeoPackageConstants {
 	 * 
 	 * @since 1.2.1
 	 */
-	public static final int USER_VERSION = 10201;
+	public static final int USER_VERSION = 10300;
 
 	/**
 	 * Expected magic number
