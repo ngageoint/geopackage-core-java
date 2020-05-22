@@ -538,7 +538,11 @@ public interface GeoPackageCore extends Closeable {
 	public boolean createGeometryColumnsTable();
 
 	/**
-	 * Create a new feature table without any additional GeoPackage metadata
+	 * Create a new feature table
+	 * 
+	 * WARNING: only creates the feature table, call
+	 * {@link #createFeatureTable(FeatureTableMetadata)}) instead to create both
+	 * the table and required GeoPackage metadata
 	 * 
 	 * @param table
 	 *            feature table
@@ -587,6 +591,10 @@ public interface GeoPackageCore extends Closeable {
 	/**
 	 * Create a new tile table
 	 * 
+	 * WARNING: only creates the tile table, call
+	 * {@link #createTileTable(TileTableMetadata)}) instead to create both the
+	 * table and required GeoPackage metadata
+	 * 
 	 * @param table
 	 *            tile table
 	 */
@@ -604,8 +612,11 @@ public interface GeoPackageCore extends Closeable {
 	public TileTable createTileTable(TileTableMetadata metadata);
 
 	/**
-	 * Create a new attributes table (only the attributes table is created, no
-	 * Contents entry is created)
+	 * Create a new attributes table
+	 * 
+	 * WARNING: only creates the attributes table, call
+	 * {@link #createAttributesTable(AttributesTableMetadata)}) instead to
+	 * create both the table and required GeoPackage metadata
 	 * 
 	 * @param table
 	 *            attributes table
