@@ -1600,42 +1600,19 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	}
 
 	/**
-	 * Create the coverage data tile table with metadata
+	 * Create the coverage data tile table
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @param tableName
-	 *            table name
-	 * @param contentsBoundingBox
-	 *            contents bounding box
-	 * @param contentsSrsId
-	 *            contents srs id
-	 * @param tileMatrixSetBoundingBox
-	 *            tile matrix set bounding box
-	 * @param tileMatrixSetSrsId
-	 *            tile matrix set srs id
-	 * @return tile matrix set
+	 * @param metadata
+	 *            tile table metadata
+	 * @return tile table
+	 * @since 4.0.0
 	 */
-	public static TileMatrixSet createTileTableWithMetadata(
-			GeoPackageCore geoPackage, String tableName,
-			BoundingBox contentsBoundingBox, long contentsSrsId,
-			BoundingBox tileMatrixSetBoundingBox, long tileMatrixSetSrsId) {
-
-		TileTable tileTable = geoPackage
-				.createTileTable(TileTableMetadata.createTyped(GRIDDED_COVERAGE,
-						tableName, contentsBoundingBox, contentsSrsId,
-						tileMatrixSetBoundingBox, tileMatrixSetSrsId));
-		TileMatrixSet tileMatrixSet;
-		try {
-			tileMatrixSet = geoPackage.getTileMatrixSetDao()
-					.queryForId(tileTable.getTableName());
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to query for Tile Matrix Set: "
-							+ tileTable.getTableName(),
-					e);
-		}
-		return tileMatrixSet;
+	public static TileTable createTileTable(GeoPackageCore geoPackage,
+			TileTableMetadata metadata) {
+		metadata.setDataType(GRIDDED_COVERAGE);
+		return geoPackage.createTileTable(metadata);
 	}
 
 	/**

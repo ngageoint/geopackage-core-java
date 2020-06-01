@@ -824,8 +824,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	@Override
 	public TileTable createTileTable(TileTableMetadata metadata) {
 
-		TileMatrixSet tileMatrixSet = null;
-
 		// Get the SRS
 		SpatialReferenceSystem contentsSrs = getSrs(
 				metadata.getContentsSrsId());
@@ -861,7 +859,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			table.setContents(contents);
 
 			// Create new matrix tile set
-			tileMatrixSet = new TileMatrixSet();
+			TileMatrixSet tileMatrixSet = new TileMatrixSet();
 			tileMatrixSet.setContents(contents);
 			tileMatrixSet.setSrs(tileMatrixSetSrs);
 			BoundingBox tileMatrixSetBoundingBox = metadata
