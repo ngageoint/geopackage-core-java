@@ -1238,19 +1238,58 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @since 1.2.1
 	 */
 	public String getApplicationId() {
-		String applicationId = null;
-		Integer applicationIdObject = querySingleTypedResult(
-				"PRAGMA application_id", null, GeoPackageDataType.MEDIUMINT);
-		if (applicationIdObject != null) {
+		return getApplicationId(getApplicationIdInteger());
+	}
+
+	/**
+	 * Get the application id integer
+	 * 
+	 * @return application id integer
+	 * @since 4.0.0
+	 */
+	public Integer getApplicationIdInteger() {
+		return querySingleTypedResult("PRAGMA application_id", null,
+				GeoPackageDataType.MEDIUMINT);
+	}
+
+	/**
+	 * Get the application id as a hex string prefixed with 0x
+	 * 
+	 * @return application id hex string
+	 * @since 4.0.0
+	 */
+	public String getApplicationIdHex() {
+		String hex = null;
+		Integer applicationId = getApplicationIdInteger();
+		if (applicationId != null) {
+			hex = "0x" + Integer.toHexString(applicationId);
+		}
+		return hex;
+	}
+
+	/**
+	 * Get the application id string value for the application id integer
+	 * 
+	 * @param applicationId
+	 *            application id integer
+	 * @return application id
+	 * @since 4.0.0
+	 */
+	public static String getApplicationId(Integer applicationId) {
+		String id = null;
+		if (applicationId != null) {
 			try {
-				applicationId = new String(ByteBuffer.allocate(4)
-						.putInt(applicationIdObject).array(), "UTF-8");
+				id = new String(
+						ByteBuffer.allocate(4).putInt(applicationId).array(),
+						"UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				throw new GeoPackageException(
-						"Unexpected application id character encoding", e);
+						"Unexpected application id character encoding: "
+								+ applicationId,
+						e);
 			}
 		}
-		return applicationId;
+		return id;
 	}
 
 	/**
@@ -1279,14 +1318,54 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	 * @return user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersion() {
-		int userVersion = -1;
-		Integer userVersionObject = querySingleTypedResult(
-				"PRAGMA user_version", null, GeoPackageDataType.MEDIUMINT);
-		if (userVersionObject != null) {
-			userVersion = userVersionObject;
+	public Integer getUserVersion() {
+		return querySingleTypedResult("PRAGMA user_version", null,
+				GeoPackageDataType.MEDIUMINT);
+	}
+
+	/**
+	 * Get the user version major
+	 *
+	 * @return user version major
+	 * @since 4.0.0
+	 */
+	public Integer getUserVersionMajor() {
+		Integer major = null;
+		Integer userVersion = getUserVersion();
+		if (userVersion != null) {
+			major = userVersion / 10000;
 		}
-		return userVersion;
+		return major;
+	}
+
+	/**
+	 * Get the user version minor
+	 *
+	 * @return user version minor
+	 * @since 4.0.0
+	 */
+	public Integer getUserVersionMinor() {
+		Integer minor = null;
+		Integer userVersion = getUserVersion();
+		if (userVersion != null) {
+			minor = (userVersion % 10000) / 100;
+		}
+		return minor;
+	}
+
+	/**
+	 * Get the user version patch
+	 *
+	 * @return user version patch
+	 * @since 4.0.0
+	 */
+	public Integer getUserVersionPatch() {
+		Integer patch = null;
+		Integer userVersion = getUserVersion();
+		if (userVersion != null) {
+			patch = userVersion % 100;
+		}
+		return patch;
 	}
 
 }

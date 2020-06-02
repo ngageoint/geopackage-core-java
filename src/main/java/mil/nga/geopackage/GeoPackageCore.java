@@ -84,12 +84,28 @@ public interface GeoPackageCore extends Closeable {
 	public String getApplicationId();
 
 	/**
+	 * Get the application id integer
+	 * 
+	 * @return application id integer
+	 * @since 4.0.0
+	 */
+	public Integer getApplicationIdInteger();
+
+	/**
+	 * Get the application id as a hex string prefixed with 0x
+	 * 
+	 * @return application id hex string
+	 * @since 4.0.0
+	 */
+	public String getApplicationIdHex();
+
+	/**
 	 * Get the user version
 	 *
 	 * @return user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersion();
+	public Integer getUserVersion();
 
 	/**
 	 * Get the major user version
@@ -97,7 +113,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return major user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionMajor();
+	public Integer getUserVersionMajor();
 
 	/**
 	 * Get the minor user version
@@ -105,7 +121,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return minor user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionMinor();
+	public Integer getUserVersionMinor();
 
 	/**
 	 * Get the patch user version
@@ -113,7 +129,7 @@ public interface GeoPackageCore extends Closeable {
 	 * @return patch user version
 	 * @since 1.2.1
 	 */
-	public int getUserVersionPatch();
+	public Integer getUserVersionPatch();
 
 	/**
 	 * Get the feature tables

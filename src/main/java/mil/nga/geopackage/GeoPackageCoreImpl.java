@@ -172,7 +172,23 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getUserVersion() {
+	public Integer getApplicationIdInteger() {
+		return database.getApplicationIdInteger();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getApplicationIdHex() {
+		return database.getApplicationIdHex();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Integer getUserVersion() {
 		return database.getUserVersion();
 	}
 
@@ -180,24 +196,24 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getUserVersionMajor() {
-		return getUserVersion() / 10000;
+	public Integer getUserVersionMajor() {
+		return database.getUserVersionMajor();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getUserVersionMinor() {
-		return (getUserVersion() % 10000) / 100;
+	public Integer getUserVersionMinor() {
+		return database.getUserVersionMinor();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getUserVersionPatch() {
-		return getUserVersion() % 100;
+	public Integer getUserVersionPatch() {
+		return database.getUserVersionPatch();
 	}
 
 	/**

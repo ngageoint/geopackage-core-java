@@ -110,10 +110,6 @@ public enum ContentsDataType {
 										+ name);
 					}
 
-				} else {
-					log.log(Level.INFO,
-							"Unknown data type for contents data type name: "
-									+ name);
 				}
 
 				types.put(lowerName, dataType);
