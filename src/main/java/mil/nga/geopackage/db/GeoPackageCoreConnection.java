@@ -1278,15 +1278,18 @@ public abstract class GeoPackageCoreConnection implements Closeable {
 	public static String getApplicationId(Integer applicationId) {
 		String id = null;
 		if (applicationId != null) {
-			try {
-				id = new String(
-						ByteBuffer.allocate(4).putInt(applicationId).array(),
-						"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				throw new GeoPackageException(
-						"Unexpected application id character encoding: "
-								+ applicationId,
-						e);
+			if (applicationId == 0) {
+				id = GeoPackageConstants.SQLITE_APPLICATION_ID;
+			} else {
+				try {
+					id = new String(ByteBuffer.allocate(4).putInt(applicationId)
+							.array(), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					throw new GeoPackageException(
+							"Unexpected application id character encoding: "
+									+ applicationId,
+							e);
+				}
 			}
 		}
 		return id;

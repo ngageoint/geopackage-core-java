@@ -54,6 +54,13 @@ public class GeoPackageConstants {
 	public static final String SQLITE_HEADER_PREFIX = "SQLite format 3";
 
 	/**
+	 * SQLite default application id
+	 * 
+	 * @since 4.0.0
+	 */
+	public static final String SQLITE_APPLICATION_ID = "SQLite";
+
+	/**
 	 * GeoPackage author
 	 */
 	public static final String EXTENSION_AUTHOR = EXTENSION;
