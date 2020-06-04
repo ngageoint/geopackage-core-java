@@ -511,6 +511,26 @@ public interface GeoPackageCore extends Closeable {
 			boolean manual);
 
 	/**
+	 * Get the projection of the table contents
+	 * 
+	 * @param table
+	 *            table name
+	 * @return projection
+	 * @since 4.0.0
+	 */
+	public Projection getContentsProjection(String table);
+
+	/**
+	 * Get the projection of the table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return projection
+	 * @since 4.0.0
+	 */
+	public Projection getProjection(String table);
+
+	/**
 	 * Get the feature table bounding box
 	 * 
 	 * @param projection

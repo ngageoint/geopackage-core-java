@@ -608,8 +608,6 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public BoundingBox getBoundingBox(Projection projection, String table,
 			boolean manual) {
 
-		BoundingBox boundingBox = getContentsBoundingBox(projection, table);
-
 		BoundingBox tableBoundingBox = null;
 		String tableType = getTableType(table);
 		ContentsDataType dataType = ContentsDataType.fromName(tableType);
@@ -620,21 +618,27 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 						manual);
 				break;
 			case TILES:
+				TileMatrixSet tileMatrixSet = null;
 				try {
-					TileMatrixSet tileMatrixSet = getTileMatrixSetDao()
-							.queryForId(table);
-					tableBoundingBox = tileMatrixSet.getBoundingBox(projection);
+					tileMatrixSet = getTileMatrixSetDao().queryForId(table);
 				} catch (SQLException e) {
 					throw new GeoPackageException(
 							"Failed to retrieve tile matrix set for table: "
 									+ table,
 							e);
 				}
+				tableBoundingBox = tileMatrixSet.getBoundingBox(projection);
 				break;
 			default:
 
 			}
 		}
+
+		if (tableBoundingBox != null && projection == null) {
+			projection = getProjection(table);
+		}
+
+		BoundingBox boundingBox = getContentsBoundingBox(projection, table);
 
 		if (tableBoundingBox != null) {
 			if (boundingBox == null) {
@@ -645,6 +649,68 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		}
 
 		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Projection getContentsProjection(String table) {
+		Contents contents = getTableContents(table);
+		if (contents == null) {
+			throw new GeoPackageException(
+					"Failed to retrieve contents for table: " + table);
+		}
+		return contents.getProjection();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Projection getProjection(String table) {
+
+		Projection projection = null;
+
+		String tableType = getTableType(table);
+		ContentsDataType dataType = ContentsDataType.fromName(tableType);
+		if (dataType != null) {
+			switch (dataType) {
+			case FEATURES:
+				GeometryColumns geometryColumns = null;
+				try {
+					geometryColumns = getGeometryColumnsDao()
+							.queryForTableName(table);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to retrieve geometry columns for table: "
+									+ table,
+							e);
+				}
+				projection = geometryColumns.getProjection();
+				break;
+			case TILES:
+				TileMatrixSet tileMatrixSet = null;
+				try {
+					tileMatrixSet = getTileMatrixSetDao().queryForId(table);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to retrieve tile matrix set for table: "
+									+ table,
+							e);
+				}
+				projection = tileMatrixSet.getProjection();
+				break;
+			default:
+
+			}
+		}
+
+		if (projection == null) {
+			projection = getContentsProjection(table);
+		}
+
+		return projection;
 	}
 
 	/**

@@ -285,13 +285,19 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 		BoundingBox boundingBox = null;
 
+		Contents contents = null;
 		try {
-			Contents contents = queryForId(table);
-			boundingBox = contents.getBoundingBox(projection);
+			contents = queryForId(table);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to query for contents of table: " + table, e);
 		}
+
+		if (contents == null) {
+			throw new GeoPackageException("No contents for table: " + table);
+		}
+
+		boundingBox = contents.getBoundingBox(projection);
 
 		return boundingBox;
 	}

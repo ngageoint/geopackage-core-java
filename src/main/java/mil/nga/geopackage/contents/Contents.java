@@ -642,7 +642,12 @@ public class Contents {
 	 * @since 3.1.0
 	 */
 	public Projection getProjection() {
-		return getSrs().getProjection();
+		Projection projection = null;
+		SpatialReferenceSystem srs = getSrs();
+		if (srs != null) {
+			projection = srs.getProjection();
+		}
+		return projection;
 	}
 
 }
