@@ -427,6 +427,33 @@ public interface GeoPackageCore extends Closeable {
 	public BoundingBox getBoundingBox(Projection projection, boolean manual);
 
 	/**
+	 * Get the bounding box for all tables in the provided projection, using
+	 * only table metadata
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(Projection projection);
+
+	/**
+	 * Get the bounding box for all tables in the provided projection, using
+	 * only table metadata and manual queries if enabled
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(Projection projection,
+			boolean manual);
+
+	/**
 	 * Get the bounding box from the contents for the table in the table's
 	 * projection
 	 * 
@@ -508,6 +535,63 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.1.0
 	 */
 	public BoundingBox getBoundingBox(Projection projection, String table,
+			boolean manual);
+
+	/**
+	 * Get the bounding box for the table in the table's projection, using only
+	 * table metadata
+	 * 
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(String table);
+
+	/**
+	 * Get the bounding box for the table in the provided projection, using only
+	 * table metadata
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(Projection projection, String table);
+
+	/**
+	 * Get the bounding box for the table in the table's projection, using only
+	 * table metadata and manual queries if enabled
+	 * 
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(String table, boolean manual);
+
+	/**
+	 * Get the bounding box for the table in the provided projection, using only
+	 * table metadata and manual queries if enabled
+	 * 
+	 * @param projection
+	 *            desired bounding box projection
+	 * @param table
+	 *            table name
+	 * @param manual
+	 *            manual query flag, true to determine missing bounds manually
+	 * 
+	 * @return bounding box
+	 * @since 4.0.0
+	 */
+	public BoundingBox getTableBoundingBox(Projection projection, String table,
 			boolean manual);
 
 	/**

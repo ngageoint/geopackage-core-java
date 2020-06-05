@@ -519,9 +519,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public BoundingBox getContentsBoundingBox(Projection projection) {
-		ContentsDao contentsDao = getContentsDao();
-		BoundingBox boundingBox = contentsDao.getBoundingBox(projection);
-		return boundingBox;
+		return getContentsDao().getBoundingBox(projection);
 	}
 
 	/**
@@ -539,6 +537,36 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public BoundingBox getBoundingBox(Projection projection, boolean manual) {
 
 		BoundingBox boundingBox = getContentsBoundingBox(projection);
+
+		BoundingBox tableBoundingBox = getTableBoundingBox(projection, manual);
+
+		if (tableBoundingBox != null) {
+			if (boundingBox != null) {
+				boundingBox = boundingBox.union(tableBoundingBox);
+			} else {
+				boundingBox = tableBoundingBox;
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(Projection projection) {
+		return getTableBoundingBox(projection, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(Projection projection,
+			boolean manual) {
+
+		BoundingBox boundingBox = null;
 
 		List<String> tables = getTables();
 		for (String table : tables) {
@@ -608,31 +636,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	public BoundingBox getBoundingBox(Projection projection, String table,
 			boolean manual) {
 
-		BoundingBox tableBoundingBox = null;
-		String tableType = getTableType(table);
-		ContentsDataType dataType = ContentsDataType.fromName(tableType);
-		if (dataType != null) {
-			switch (dataType) {
-			case FEATURES:
-				tableBoundingBox = getFeatureBoundingBox(projection, table,
-						manual);
-				break;
-			case TILES:
-				TileMatrixSet tileMatrixSet = null;
-				try {
-					tileMatrixSet = getTileMatrixSetDao().queryForId(table);
-				} catch (SQLException e) {
-					throw new GeoPackageException(
-							"Failed to retrieve tile matrix set for table: "
-									+ table,
-							e);
-				}
-				tableBoundingBox = tileMatrixSet.getBoundingBox(projection);
-				break;
-			default:
-
-			}
-		}
+		BoundingBox tableBoundingBox = getTableBoundingBox(projection, table,
+				manual);
 
 		if (tableBoundingBox != null && projection == null) {
 			projection = getProjection(table);
@@ -645,6 +650,67 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 				boundingBox = tableBoundingBox;
 			} else {
 				boundingBox = boundingBox.union(tableBoundingBox);
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(String table) {
+		return getTableBoundingBox(null, table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(Projection projection,
+			String table) {
+		return getTableBoundingBox(projection, table, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(String table, boolean manual) {
+		return getTableBoundingBox(null, table, manual);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public BoundingBox getTableBoundingBox(Projection projection, String table,
+			boolean manual) {
+
+		BoundingBox boundingBox = null;
+
+		String tableType = getTableType(table);
+		ContentsDataType dataType = ContentsDataType.fromName(tableType);
+		if (dataType != null) {
+			switch (dataType) {
+			case FEATURES:
+				boundingBox = getFeatureBoundingBox(projection, table, manual);
+				break;
+			case TILES:
+				TileMatrixSet tileMatrixSet = null;
+				try {
+					tileMatrixSet = getTileMatrixSetDao().queryForId(table);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to retrieve tile matrix set for table: "
+									+ table,
+							e);
+				}
+				boundingBox = tileMatrixSet.getBoundingBox(projection);
+				break;
+			default:
+
 			}
 		}
 
