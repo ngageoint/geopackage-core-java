@@ -179,6 +179,9 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.autoincrement = userColumn.autoincrement;
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
+		for (Constraint constraint : userColumn.constraints) {
+			addConstraint(constraint.copy());
+		}
 	}
 
 	/**
