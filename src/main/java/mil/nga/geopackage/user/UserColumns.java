@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageDataType;
@@ -22,6 +24,12 @@ import mil.nga.geopackage.db.GeoPackageDataType;
  * @since 3.5.0
  */
 public abstract class UserColumns<TColumn extends UserColumn> {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger
+			.getLogger(UserColumns.class.getName());
 
 	/**
 	 * Table name, null when a pre-ordered subset of columns for a query
@@ -216,10 +224,10 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	protected void duplicateCheck(int index, Integer previousIndex,
 			String column) {
 		if (previousIndex != null) {
-			throw new GeoPackageException("More than one " + column
-					+ " column was found for table '" + tableName + "'. Index "
-					+ previousIndex + " and " + index);
-
+			log.log(Level.SEVERE,
+					"More than one " + column + " column was found for table '"
+							+ tableName + "'. Index " + previousIndex + " and "
+							+ index);
 		}
 	}
 
@@ -232,10 +240,9 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 *            user column
 	 */
 	protected void typeCheck(GeoPackageDataType expected, TColumn column) {
-
 		GeoPackageDataType actual = column.getDataType();
 		if (actual == null || !actual.equals(expected)) {
-			throw new GeoPackageException("Unexpected " + column.getName()
+			log.log(Level.SEVERE, "Unexpected " + column.getName()
 					+ " column data type was found for table '" + tableName
 					+ "', expected: " + expected.name() + ", actual: "
 					+ (actual != null ? actual.name() : "null"));
@@ -252,7 +259,7 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 */
 	protected void missingCheck(Integer index, String column) {
 		if (index == null) {
-			throw new GeoPackageException("No " + column
+			log.log(Level.SEVERE, "No " + column
 					+ " column was found for table '" + tableName + "'");
 		}
 	}
@@ -442,7 +449,12 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 	 * @return primary key column name
 	 */
 	public String getPkColumnName() {
-		return getPkColumn().getName();
+		String name = null;
+		TColumn pkColumn = getPkColumn();
+		if (pkColumn != null) {
+			name = pkColumn.getName();
+		}
+		return name;
 	}
 
 	/**

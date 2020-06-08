@@ -438,7 +438,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 			throw new GeoPackageException(
 					"Can not update the primary key of the row. Table Name: "
 							+ table.getTableName() + ", Index: " + index
-							+ ", Name: " + table.getPkColumn().getName());
+							+ ", Name: " + table.getPkColumnName());
 		}
 		values[index] = value;
 	}
@@ -511,6 +511,15 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 		if (columns.isValueValidation()) {
 
 			GeoPackageDataType dataType = column.getDataType();
+			if (dataType == null) {
+				throw new GeoPackageException(
+						"Column is missing a data type. Column: "
+								+ column.getName() + ", Value: " + value
+								+ ", Type: '" + column.getType()
+								+ "', Actual Type: "
+								+ valueTypes[0].getSimpleName());
+			}
+
 			Class<?> dataTypeClass = dataType.getClassType();
 
 			boolean valid = false;

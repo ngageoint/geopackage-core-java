@@ -2,6 +2,8 @@ package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
@@ -22,6 +24,12 @@ import mil.nga.geopackage.db.table.TableInfo;
  * @author osbornb
  */
 public abstract class UserTableReader<TColumn extends UserColumn, TTable extends UserTable<TColumn>> {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger
+			.getLogger(UserTableReader.class.getName());
 
 	/**
 	 * Table name
@@ -80,8 +88,9 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 
 		for (TableColumn tableColumn : tableInfo.getColumns()) {
 			if (tableColumn.getDataType() == null) {
-				throw new GeoPackageException("Unsupported column data type "
-						+ tableColumn.getType());
+				log.log(Level.SEVERE,
+						"Unexpected column data type: '" + tableColumn.getType()
+								+ "', column: " + tableColumn.getName());
 			}
 			TColumn column = createColumn(tableColumn);
 

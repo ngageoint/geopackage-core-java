@@ -3,6 +3,8 @@ package mil.nga.geopackage.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.CoreSQLUtils;
@@ -18,6 +20,12 @@ import mil.nga.geopackage.db.table.TableColumn;
  * @author osbornb
  */
 public abstract class UserColumn implements Comparable<UserColumn> {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger
+			.getLogger(UserColumn.class.getName());
 
 	/**
 	 * User Column index value
@@ -213,8 +221,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	protected static void validateDataType(String name,
 			GeoPackageDataType dataType) {
 		if (dataType == null) {
-			throw new GeoPackageException(
-					"Data Type is required to create column: " + name);
+			log.log(Level.SEVERE, "Column is missing a data type: " + name);
 		}
 	}
 
@@ -637,8 +644,8 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 
 		if (max != null) {
 			if (dataType == null) {
-				throw new GeoPackageException(
-						"Column max is only supported for data typed columns. column: "
+				log.log(Level.SEVERE,
+						"Column max set on a column without a data type. column: "
 								+ name + ", max: " + max);
 			} else if (dataType != GeoPackageDataType.TEXT
 					&& dataType != GeoPackageDataType.BLOB) {
