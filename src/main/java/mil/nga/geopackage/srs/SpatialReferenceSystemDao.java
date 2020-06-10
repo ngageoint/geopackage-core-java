@@ -10,9 +10,11 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -30,6 +32,31 @@ import mil.nga.sf.proj.ProjectionConstants;
  */
 public class SpatialReferenceSystemDao
 		extends GeoPackageDao<SpatialReferenceSystem, Long> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static SpatialReferenceSystemDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static SpatialReferenceSystemDao create(
+			GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, SpatialReferenceSystem.class);
+	}
 
 	/**
 	 * Contents DAO
@@ -789,12 +816,10 @@ public class SpatialReferenceSystemDao
 	 * Get or create a Contents DAO
 	 * 
 	 * @return contents dao
-	 * @throws SQLException
-	 *             upon creation failure
 	 */
-	private ContentsDao getContentsDao() throws SQLException {
+	private ContentsDao getContentsDao() {
 		if (contentsDao == null) {
-			contentsDao = createDao(Contents.class);
+			contentsDao = ContentsDao.create(db);
 		}
 		return contentsDao;
 	}
@@ -803,12 +828,10 @@ public class SpatialReferenceSystemDao
 	 * Get or create a Geometry Columns DAO
 	 * 
 	 * @return geometry columns dao
-	 * @throws SQLException
-	 *             upon creation failure
 	 */
-	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
+	private GeometryColumnsDao getGeometryColumnsDao() {
 		if (geometryColumnsDao == null) {
-			geometryColumnsDao = createDao(GeometryColumns.class);
+			geometryColumnsDao = GeometryColumnsDao.create(db);
 		}
 		return geometryColumnsDao;
 	}
@@ -817,12 +840,10 @@ public class SpatialReferenceSystemDao
 	 * Get or create a Tile Matrix Set DAO
 	 * 
 	 * @return tile matrix set dao
-	 * @throws SQLException
-	 *             upon creation failure
 	 */
-	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
+	private TileMatrixSetDao getTileMatrixSetDao() {
 		if (tileMatrixSetDao == null) {
-			tileMatrixSetDao = createDao(TileMatrixSet.class);
+			tileMatrixSetDao = TileMatrixSetDao.create(db);
 		}
 		return tileMatrixSetDao;
 	}

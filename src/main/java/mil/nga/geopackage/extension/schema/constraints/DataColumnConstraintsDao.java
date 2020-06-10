@@ -12,7 +12,9 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.extension.schema.columns.DataColumns;
 import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
@@ -24,6 +26,30 @@ import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
  */
 public class DataColumnConstraintsDao
 		extends GeoPackageDao<DataColumnConstraints, Void> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static DataColumnConstraintsDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static DataColumnConstraintsDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, DataColumnConstraints.class);
+	}
 
 	/**
 	 * Data Columns DAO
@@ -141,11 +167,10 @@ public class DataColumnConstraintsDao
 	 * Get or create a Data Columns DAO
 	 * 
 	 * @return data columns dao
-	 * @throws SQLException
 	 */
-	private DataColumnsDao getDataColumnsDao() throws SQLException {
+	private DataColumnsDao getDataColumnsDao() {
 		if (dataColumnsDao == null) {
-			dataColumnsDao = createDao(DataColumns.class);
+			dataColumnsDao = DataColumnsDao.create(db);
 		}
 		return dataColumnsDao;
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -14,6 +16,30 @@ import mil.nga.geopackage.db.GeoPackageDao;
  * @author osbornb
  */
 public class TileMatrixSetDao extends GeoPackageDao<TileMatrixSet, String> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static TileMatrixSetDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static TileMatrixSetDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, TileMatrixSet.class);
+	}
 
 	/**
 	 * Constructor, required by ORMLite

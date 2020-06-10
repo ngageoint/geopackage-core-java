@@ -19,6 +19,7 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -528,7 +529,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public TableIndexDao getTableIndexDao() {
-		return createDao(TableIndex.class);
+		return getTableIndexDao(geoPackage);
 	}
 
 	/**
@@ -540,7 +541,19 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public static TableIndexDao getTableIndexDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(TableIndex.class);
+		return TableIndexDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Table Index DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return table index dao
+	 * @since 4.0.0
+	 */
+	public static TableIndexDao getTableIndexDao(GeoPackageCoreConnection db) {
+		return TableIndexDao.create(db);
 	}
 
 	/**
@@ -576,7 +589,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public GeometryIndexDao getGeometryIndexDao() {
-		return createDao(GeometryIndex.class);
+		return getGeometryIndexDao(geoPackage);
 	}
 
 	/**
@@ -589,7 +602,20 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	public static GeometryIndexDao getGeometryIndexDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(GeometryIndex.class);
+		return GeometryIndexDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Geometry Index DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return geometry index dao
+	 * @since 4.0.0
+	 */
+	public static GeometryIndexDao getGeometryIndexDao(
+			GeoPackageCoreConnection db) {
+		return GeometryIndexDao.create(db);
 	}
 
 	/**

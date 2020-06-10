@@ -7,6 +7,7 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -117,7 +118,7 @@ public class MetadataExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public MetadataDao getMetadataDao() {
-		return createDao(Metadata.class);
+		return getMetadataDao(geoPackage);
 	}
 
 	/**
@@ -129,7 +130,19 @@ public class MetadataExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public static MetadataDao getMetadataDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(Metadata.class);
+		return MetadataDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Metadata DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return Metadata DAO
+	 * @since 4.0.0
+	 */
+	public static MetadataDao getMetadataDao(GeoPackageCoreConnection db) {
+		return MetadataDao.create(db);
 	}
 
 	/**
@@ -169,7 +182,7 @@ public class MetadataExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public MetadataReferenceDao getMetadataReferenceDao() {
-		return createDao(MetadataReference.class);
+		return getMetadataReferenceDao(geoPackage);
 	}
 
 	/**
@@ -182,7 +195,20 @@ public class MetadataExtension extends BaseExtension {
 	 */
 	public static MetadataReferenceDao getMetadataReferenceDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(MetadataReference.class);
+		return MetadataReferenceDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Metadata Reference DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return Metadata Reference DAO
+	 * @since 4.0.0
+	 */
+	public static MetadataReferenceDao getMetadataReferenceDao(
+			GeoPackageCoreConnection db) {
+		return MetadataReferenceDao.create(db);
 	}
 
 	/**
@@ -198,7 +224,8 @@ public class MetadataExtension extends BaseExtension {
 		MetadataReferenceDao dao = getMetadataReferenceDao();
 		try {
 			if (!dao.isTableExists()) {
-				created = geoPackage.getTableCreator().createMetadataReference() > 0;
+				created = geoPackage.getTableCreator()
+						.createMetadataReference() > 0;
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException("Failed to check if "

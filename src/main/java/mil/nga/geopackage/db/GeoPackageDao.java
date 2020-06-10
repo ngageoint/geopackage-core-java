@@ -177,11 +177,8 @@ public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 	 * @param clazz
 	 *            DAO class type
 	 * @return GeoPackage DAO
-	 * @throws SQLException
-	 *             upon error
 	 */
-	public <D extends GeoPackageDao<O, ?>, O> D createDao(Class<O> clazz)
-			throws SQLException {
+	public <D extends GeoPackageDao<O, ?>, O> D createDao(Class<O> clazz) {
 		return createDao(db, clazz);
 	}
 
@@ -197,12 +194,16 @@ public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 	 * @param clazz
 	 *            DAO class type
 	 * @return GeoPackage DAO
-	 * @throws SQLException
-	 *             upon error
 	 */
 	public static <D extends GeoPackageDao<O, ?>, O> D createDao(
-			GeoPackageCoreConnection db, Class<O> clazz) throws SQLException {
-		D dao = DaoManager.createDao(db.getConnectionSource(), clazz);
+			GeoPackageCoreConnection db, Class<O> clazz) {
+		D dao;
+		try {
+			dao = DaoManager.createDao(db.getConnectionSource(), clazz);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to create " + clazz.getSimpleName() + " dao", e);
+		}
 		dao.setDatabase(db);
 		return dao;
 	}

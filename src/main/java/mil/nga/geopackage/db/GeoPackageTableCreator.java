@@ -8,7 +8,6 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.io.ResourceIOUtils;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
-import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserTable;
@@ -525,11 +524,10 @@ public class GeoPackageTableCreator {
 		// Create the Contents table (spec Requirement 13)
 		createContents();
 
+		SpatialReferenceSystemDao dao = SpatialReferenceSystemDao.create(db);
 		// Create the required Spatial Reference Systems (spec Requirement
 		// 11)
 		try {
-			SpatialReferenceSystemDao dao = GeoPackageDao.createDao(db,
-					SpatialReferenceSystem.class);
 			dao.createWgs84();
 			dao.createUndefinedCartesian();
 			dao.createUndefinedGeographic();

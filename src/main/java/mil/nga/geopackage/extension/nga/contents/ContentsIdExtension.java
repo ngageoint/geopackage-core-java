@@ -15,6 +15,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -678,7 +679,7 @@ public class ContentsIdExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public ContentsIdDao getContentsIdDao() {
-		return createDao(ContentsId.class);
+		return getContentsIdDao(geoPackage);
 	}
 
 	/**
@@ -690,7 +691,19 @@ public class ContentsIdExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public static ContentsIdDao getContentsIdDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(ContentsId.class);
+		return ContentsIdDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Contents Id DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return contents id dao
+	 * @since 4.0.0
+	 */
+	public static ContentsIdDao getContentsIdDao(GeoPackageCoreConnection db) {
+		return ContentsIdDao.create(db);
 	}
 
 	/**

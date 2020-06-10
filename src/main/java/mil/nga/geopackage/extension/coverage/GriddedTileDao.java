@@ -9,8 +9,10 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -20,6 +22,30 @@ import mil.nga.geopackage.db.GeoPackageDao;
  * @since 1.2.1
  */
 public class GriddedTileDao extends GeoPackageDao<GriddedTile, Long> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static GriddedTileDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static GriddedTileDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, GriddedTile.class);
+	}
 
 	/**
 	 * Constructor, required by ORMLite

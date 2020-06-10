@@ -6,6 +6,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -140,7 +141,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix dao
 	 */
 	public ExtTileMatrixDao getTileMatrixDao() {
-		return createDao(ExtTileMatrix.class);
+		return getTileMatrixDao(geoPackage);
 	}
 
 	/**
@@ -151,7 +152,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix dao
 	 */
 	public static ExtTileMatrixDao getTileMatrixDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(ExtTileMatrix.class);
+		return ExtTileMatrixDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Tile Matrix DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return tile matrix dao
+	 */
+	public static ExtTileMatrixDao getTileMatrixDao(
+			GeoPackageCoreConnection db) {
+		return ExtTileMatrixDao.create(db);
 	}
 
 	/**
@@ -160,7 +173,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix set dao
 	 */
 	public ExtTileMatrixSetDao getTileMatrixSetDao() {
-		return createDao(ExtTileMatrixSet.class);
+		return getTileMatrixSetDao(geoPackage);
 	}
 
 	/**
@@ -172,7 +185,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 */
 	public static ExtTileMatrixSetDao getTileMatrixSetDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(ExtTileMatrixSet.class);
+		return ExtTileMatrixSetDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Tile Matrix Set DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return tile matrix set dao
+	 */
+	public static ExtTileMatrixSetDao getTileMatrixSetDao(
+			GeoPackageCoreConnection db) {
+		return ExtTileMatrixSetDao.create(db);
 	}
 
 	/**
@@ -181,7 +206,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix tables dao
 	 */
 	public TileMatrixTablesDao getTileMatrixTablesDao() {
-		return createDao(TileMatrixTable.class);
+		return getTileMatrixTablesDao(geoPackage);
 	}
 
 	/**
@@ -193,7 +218,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 */
 	public static TileMatrixTablesDao getTileMatrixTablesDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(TileMatrixTable.class);
+		return TileMatrixTablesDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Tile Matrix Tables DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return tile matrix tables dao
+	 */
+	public static TileMatrixTablesDao getTileMatrixTablesDao(
+			GeoPackageCoreConnection db) {
+		return TileMatrixTablesDao.create(db);
 	}
 
 	/**
@@ -202,7 +239,7 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 * @return tile matrix variable widths dao
 	 */
 	public TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao() {
-		return createDao(TileMatrixVariableWidths.class);
+		return getTileMatrixVariableWidthsDao(geoPackage);
 	}
 
 	/**
@@ -214,7 +251,19 @@ public class TileMatrixSetExtension extends BaseExtension {
 	 */
 	public static TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(TileMatrixVariableWidths.class);
+		return TileMatrixVariableWidthsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Tile Matrix Variable Widths DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return tile matrix variable widths dao
+	 */
+	public static TileMatrixVariableWidthsDao getTileMatrixVariableWidthsDao(
+			GeoPackageCoreConnection db) {
+		return TileMatrixVariableWidthsDao.create(db);
 	}
 
 	/**

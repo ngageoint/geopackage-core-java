@@ -7,6 +7,7 @@ import java.util.List;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -120,7 +121,7 @@ public class SchemaExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public DataColumnsDao getDataColumnsDao() {
-		return createDao(DataColumns.class);
+		return getDataColumnsDao(geoPackage);
 	}
 
 	/**
@@ -133,7 +134,21 @@ public class SchemaExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public static DataColumnsDao getDataColumnsDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(DataColumns.class);
+		return DataColumnsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Data Columns DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * 
+	 * @return Data Columns DAO
+	 * @since 4.0.0
+	 */
+	public static DataColumnsDao getDataColumnsDao(
+			GeoPackageCoreConnection db) {
+		return DataColumnsDao.create(db);
 	}
 
 	/**
@@ -167,7 +182,7 @@ public class SchemaExtension extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public DataColumnConstraintsDao getDataColumnConstraintsDao() {
-		return createDao(DataColumnConstraints.class);
+		return getDataColumnConstraintsDao(geoPackage);
 	}
 
 	/**
@@ -181,7 +196,21 @@ public class SchemaExtension extends BaseExtension {
 	 */
 	public static DataColumnConstraintsDao getDataColumnConstraintsDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(DataColumnConstraints.class);
+		return DataColumnConstraintsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Data Column Constraints DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * 
+	 * @return Data Column Constraints DAO
+	 * @since 4.0.0
+	 */
+	public static DataColumnConstraintsDao getDataColumnConstraintsDao(
+			GeoPackageCoreConnection db) {
+		return DataColumnConstraintsDao.create(db);
 	}
 
 	/**

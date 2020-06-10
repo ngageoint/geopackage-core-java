@@ -12,7 +12,9 @@ import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.sf.GeometryEnvelope;
 
@@ -24,6 +26,30 @@ import mil.nga.sf.GeometryEnvelope;
  */
 public class GeometryIndexDao
 		extends GeoPackageDao<GeometryIndex, GeometryIndexKey> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static GeometryIndexDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static GeometryIndexDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, GeometryIndex.class);
+	}
 
 	/**
 	 * Constructor, required by ORMLite

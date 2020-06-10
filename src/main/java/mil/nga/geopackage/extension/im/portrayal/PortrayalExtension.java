@@ -6,6 +6,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -119,7 +120,7 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return styles dao
 	 */
 	public StylesDao getStylesDao() {
-		return createDao(Styles.class);
+		return getStylesDao(geoPackage);
 	}
 
 	/**
@@ -130,7 +131,18 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return styles dao
 	 */
 	public static StylesDao getStylesDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(Styles.class);
+		return StylesDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Styles DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return styles dao
+	 */
+	public static StylesDao getStylesDao(GeoPackageCoreConnection db) {
+		return StylesDao.create(db);
 	}
 
 	/**
@@ -139,7 +151,7 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return stylesheets dao
 	 */
 	public StylesheetsDao getStylesheetsDao() {
-		return createDao(Stylesheets.class);
+		return getStylesheetsDao(geoPackage);
 	}
 
 	/**
@@ -150,7 +162,19 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return stylesheets dao
 	 */
 	public static StylesheetsDao getStylesheetsDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(Stylesheets.class);
+		return StylesheetsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Stylesheets DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return stylesheets dao
+	 */
+	public static StylesheetsDao getStylesheetsDao(
+			GeoPackageCoreConnection db) {
+		return StylesheetsDao.create(db);
 	}
 
 	/**
@@ -159,7 +183,7 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbol content dao
 	 */
 	public SymbolContentDao getSymbolContentDao() {
-		return createDao(SymbolContent.class);
+		return getSymbolContentDao(geoPackage);
 	}
 
 	/**
@@ -171,7 +195,19 @@ public class PortrayalExtension extends BaseExtension {
 	 */
 	public static SymbolContentDao getSymbolContentDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(SymbolContent.class);
+		return SymbolContentDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Symbol Content DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return symbol content dao
+	 */
+	public static SymbolContentDao getSymbolContentDao(
+			GeoPackageCoreConnection db) {
+		return SymbolContentDao.create(db);
 	}
 
 	/**
@@ -180,7 +216,7 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbol images dao
 	 */
 	public SymbolImagesDao getSymbolImagesDao() {
-		return createDao(SymbolImages.class);
+		return getSymbolImagesDao(geoPackage);
 	}
 
 	/**
@@ -192,7 +228,19 @@ public class PortrayalExtension extends BaseExtension {
 	 */
 	public static SymbolImagesDao getSymbolImagesDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(SymbolImages.class);
+		return SymbolImagesDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Symbol Images DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return symbol images dao
+	 */
+	public static SymbolImagesDao getSymbolImagesDao(
+			GeoPackageCoreConnection db) {
+		return SymbolImagesDao.create(db);
 	}
 
 	/**
@@ -201,7 +249,7 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbols dao
 	 */
 	public SymbolsDao getSymbolsDao() {
-		return createDao(Symbols.class);
+		return getSymbolsDao(geoPackage);
 	}
 
 	/**
@@ -212,7 +260,18 @@ public class PortrayalExtension extends BaseExtension {
 	 * @return symbols dao
 	 */
 	public static SymbolsDao getSymbolsDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(Symbols.class);
+		return SymbolsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Symbols DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return symbols dao
+	 */
+	public static SymbolsDao getSymbolsDao(GeoPackageCoreConnection db) {
+		return SymbolsDao.create(db);
 	}
 
 	/**

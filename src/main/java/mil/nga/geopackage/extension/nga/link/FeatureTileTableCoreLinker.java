@@ -6,6 +6,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -294,7 +295,7 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public FeatureTileLinkDao getFeatureTileLinkDao() {
-		return createDao(FeatureTileLink.class);
+		return getFeatureTileLinkDao(geoPackage);
 	}
 
 	/**
@@ -307,7 +308,20 @@ public abstract class FeatureTileTableCoreLinker extends BaseExtension {
 	 */
 	public static FeatureTileLinkDao getFeatureTileLinkDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(FeatureTileLink.class);
+		return FeatureTileLinkDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Feature Tile Link DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return feature tile link dao
+	 * @since 4.0.0
+	 */
+	public static FeatureTileLinkDao getFeatureTileLinkDao(
+			GeoPackageCoreConnection db) {
+		return FeatureTileLinkDao.create(db);
 	}
 
 	/**

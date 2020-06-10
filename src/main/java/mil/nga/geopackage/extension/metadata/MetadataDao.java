@@ -7,8 +7,9 @@ import java.util.List;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
-import mil.nga.geopackage.extension.metadata.reference.MetadataReference;
 import mil.nga.geopackage.extension.metadata.reference.MetadataReferenceDao;
 
 /**
@@ -17,6 +18,30 @@ import mil.nga.geopackage.extension.metadata.reference.MetadataReferenceDao;
  * @author osbornb
  */
 public class MetadataDao extends GeoPackageDao<Metadata, Long> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static MetadataDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static MetadataDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, Metadata.class);
+	}
 
 	/**
 	 * Metadata Reference DAO
@@ -146,11 +171,10 @@ public class MetadataDao extends GeoPackageDao<Metadata, Long> {
 	 * Get or create a Metadata Reference DAO
 	 * 
 	 * @return metadata reference dao
-	 * @throws SQLException
 	 */
-	private MetadataReferenceDao getMetadataReferenceDao() throws SQLException {
+	private MetadataReferenceDao getMetadataReferenceDao() {
 		if (metadataReferenceDao == null) {
-			metadataReferenceDao = createDao(MetadataReference.class);
+			metadataReferenceDao = MetadataReferenceDao.create(db);
 		}
 		return metadataReferenceDao;
 	}

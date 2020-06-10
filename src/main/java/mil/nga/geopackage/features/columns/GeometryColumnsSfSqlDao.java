@@ -13,6 +13,7 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.TableColumnKey;
 
@@ -25,16 +26,28 @@ public class GeometryColumnsSfSqlDao
 		extends GeoPackageDao<GeometryColumnsSfSql, TableColumnKey> {
 
 	/**
-	 * Get a DAO
+	 * Create the DAO
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @return DAO
+	 * @return dao
 	 * @since 4.0.0
 	 */
-	public static GeometryColumnsSfSqlDao getDao(GeoPackageCore geoPackage) {
-		GeometryColumnsSfSqlDao dao = geoPackage
-				.createDao(GeometryColumnsSfSql.class);
+	public static GeometryColumnsSfSqlDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static GeometryColumnsSfSqlDao create(GeoPackageCoreConnection db) {
+		GeometryColumnsSfSqlDao dao = GeoPackageDao.createDao(db,
+				GeometryColumnsSfSql.class);
 		dao.verifyExists();
 		return dao;
 	}

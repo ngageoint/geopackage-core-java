@@ -12,7 +12,9 @@ import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
@@ -28,6 +30,30 @@ import mil.nga.sf.proj.Projection;
  * @author osbornb
  */
 public class ContentsDao extends GeoPackageDao<Contents, String> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static ContentsDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static ContentsDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, Contents.class);
+	}
 
 	/**
 	 * Geometry Columns DAO
@@ -703,12 +729,10 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * Get or create a Geometry Columns DAO
 	 * 
 	 * @return geometry columns dao
-	 * @throws SQLException
-	 *             upon dao creation failure
 	 */
-	private GeometryColumnsDao getGeometryColumnsDao() throws SQLException {
+	private GeometryColumnsDao getGeometryColumnsDao() {
 		if (geometryColumnsDao == null) {
-			geometryColumnsDao = createDao(GeometryColumns.class);
+			geometryColumnsDao = GeometryColumnsDao.create(db);
 		}
 		return geometryColumnsDao;
 	}
@@ -717,12 +741,10 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * Get or create a Tile Matrix Set DAO
 	 * 
 	 * @return tile matrix set dao
-	 * @throws SQLException
-	 *             upon dao creation failure
 	 */
-	private TileMatrixSetDao getTileMatrixSetDao() throws SQLException {
+	private TileMatrixSetDao getTileMatrixSetDao() {
 		if (tileMatrixSetDao == null) {
-			tileMatrixSetDao = createDao(TileMatrixSet.class);
+			tileMatrixSetDao = TileMatrixSetDao.create(db);
 		}
 		return tileMatrixSetDao;
 	}
@@ -731,12 +753,10 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 	 * Get or create a Tile Matrix DAO
 	 * 
 	 * @return tile matrix dao
-	 * @throws SQLException
-	 *             upon dao creation failure
 	 */
-	private TileMatrixDao getTileMatrixDao() throws SQLException {
+	private TileMatrixDao getTileMatrixDao() {
 		if (tileMatrixDao == null) {
-			tileMatrixDao = createDao(TileMatrix.class);
+			tileMatrixDao = TileMatrixDao.create(db);
 		}
 		return tileMatrixDao;
 	}

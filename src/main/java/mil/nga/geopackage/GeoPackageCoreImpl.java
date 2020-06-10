@@ -784,7 +784,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public SpatialReferenceSystemDao getSpatialReferenceSystemDao() {
-		SpatialReferenceSystemDao dao = createDao(SpatialReferenceSystem.class);
+		SpatialReferenceSystemDao dao = SpatialReferenceSystemDao.create(this);
 		dao.setCrsWktExtension(new CrsWktExtension(this));
 		return dao;
 	}
@@ -794,7 +794,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public ContentsDao getContentsDao() {
-		return createDao(Contents.class);
+		return ContentsDao.create(this);
 	}
 
 	/**
@@ -802,7 +802,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public GeometryColumnsDao getGeometryColumnsDao() {
-		return createDao(GeometryColumns.class);
+		return GeometryColumnsDao.create(this);
 	}
 
 	/**
@@ -903,7 +903,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public TileMatrixSetDao getTileMatrixSetDao() {
-		return createDao(TileMatrixSet.class);
+		return TileMatrixSetDao.create(this);
 	}
 
 	/**
@@ -933,7 +933,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public TileMatrixDao getTileMatrixDao() {
-		return createDao(TileMatrix.class);
+		return TileMatrixDao.create(this);
 	}
 
 	/**
@@ -1112,7 +1112,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public ExtensionsDao getExtensionsDao() {
-		return createDao(Extensions.class);
+		return ExtensionsDao.create(this);
 	}
 
 	/**
@@ -1169,14 +1169,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public <D extends GeoPackageDao<T, ?>, T> D createDao(Class<T> type) {
-		D dao;
-		try {
-			dao = GeoPackageDao.createDao(database, type);
-		} catch (SQLException e) {
-			throw new GeoPackageException(
-					"Failed to create " + type.getSimpleName() + " dao", e);
-		}
-		return dao;
+		return GeoPackageDao.createDao(database, type);
 	}
 
 	/**

@@ -11,6 +11,8 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -20,6 +22,30 @@ import mil.nga.geopackage.db.GeoPackageDao;
  */
 public class MetadataReferenceDao
 		extends GeoPackageDao<MetadataReference, Void> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static MetadataReferenceDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static MetadataReferenceDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, MetadataReference.class);
+	}
 
 	/**
 	 * Constructor, required by ORMLite

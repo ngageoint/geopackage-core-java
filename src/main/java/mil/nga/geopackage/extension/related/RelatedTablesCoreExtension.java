@@ -10,6 +10,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.attributes.AttributesTable;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -137,7 +138,7 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public ExtendedRelationsDao getExtendedRelationsDao() {
 		if (extendedRelationsDao == null) {
-			extendedRelationsDao = createDao(ExtendedRelation.class);
+			extendedRelationsDao = getExtendedRelationsDao(geoPackage);
 		}
 		return extendedRelationsDao;
 	}
@@ -152,7 +153,20 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 	 */
 	public static ExtendedRelationsDao getExtendedRelationsDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(ExtendedRelation.class);
+		return ExtendedRelationsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Extended Relations DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return extended relations dao
+	 * @since 4.0.0
+	 */
+	public static ExtendedRelationsDao getExtendedRelationsDao(
+			GeoPackageCoreConnection db) {
+		return ExtendedRelationsDao.create(db);
 	}
 
 	/**

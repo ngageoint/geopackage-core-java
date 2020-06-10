@@ -9,7 +9,9 @@ import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 
+import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -19,6 +21,30 @@ import mil.nga.geopackage.db.GeoPackageDao;
  * @since 1.1.0
  */
 public class TableIndexDao extends GeoPackageDao<TableIndex, String> {
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static TableIndexDao create(GeoPackageCore geoPackage) {
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static TableIndexDao create(GeoPackageCoreConnection db) {
+		return GeoPackageDao.createDao(db, TableIndex.class);
+	}
 
 	/**
 	 * Geometry Index DAO
@@ -168,11 +194,10 @@ public class TableIndexDao extends GeoPackageDao<TableIndex, String> {
 	 * Get or create a Geometry Index DAO
 	 * 
 	 * @return geometry index dao
-	 * @throws SQLException
 	 */
-	private GeometryIndexDao getGeometryIndexDao() throws SQLException {
+	private GeometryIndexDao getGeometryIndexDao() {
 		if (geometryIndexDao == null) {
-			geometryIndexDao = createDao(GeometryIndex.class);
+			geometryIndexDao = GeometryIndexDao.create(db);
 		}
 		return geometryIndexDao;
 	}

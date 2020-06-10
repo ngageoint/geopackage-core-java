@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 
 /**
@@ -16,17 +17,30 @@ public class SpatialReferenceSystemSqlMmDao
 		extends GeoPackageDao<SpatialReferenceSystemSqlMm, Integer> {
 
 	/**
-	 * Get a DAO
+	 * Create the DAO
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
-	 * @return DAO
+	 * @return dao
 	 * @since 4.0.0
 	 */
-	public static SpatialReferenceSystemSqlMmDao getDao(
+	public static SpatialReferenceSystemSqlMmDao create(
 			GeoPackageCore geoPackage) {
-		SpatialReferenceSystemSqlMmDao dao = geoPackage
-				.createDao(SpatialReferenceSystemSqlMm.class);
+		return create(geoPackage.getDatabase());
+	}
+
+	/**
+	 * Create the DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return dao
+	 * @since 4.0.0
+	 */
+	public static SpatialReferenceSystemSqlMmDao create(
+			GeoPackageCoreConnection db) {
+		SpatialReferenceSystemSqlMmDao dao = GeoPackageDao.createDao(db,
+				SpatialReferenceSystemSqlMm.class);
 		dao.verifyExists();
 		return dao;
 	}

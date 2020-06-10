@@ -11,6 +11,7 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -478,7 +479,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 */
 	public GriddedCoverageDao getGriddedCoverageDao() {
 		if (griddedCoverageDao == null) {
-			griddedCoverageDao = createDao(GriddedCoverage.class);
+			griddedCoverageDao = GriddedCoverageDao.create(geoPackage);
 		}
 		return griddedCoverageDao;
 	}
@@ -493,7 +494,20 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 */
 	public static GriddedCoverageDao getGriddedCoverageDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(GriddedCoverage.class);
+		return GriddedCoverageDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a 2D Gridded Coverage DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return 2d gridded coverage dao
+	 * @since 4.0.0
+	 */
+	public static GriddedCoverageDao getGriddedCoverageDao(
+			GeoPackageCoreConnection db) {
+		return GriddedCoverageDao.create(db);
 	}
 
 	/**
@@ -528,7 +542,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 */
 	public GriddedTileDao getGriddedTileDao() {
 		if (griddedTileDao == null) {
-			griddedTileDao = createDao(GriddedTile.class);
+			griddedTileDao = getGriddedTileDao(geoPackage);
 		}
 		return griddedTileDao;
 	}
@@ -542,7 +556,20 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 	 * @since 4.0.0
 	 */
 	public static GriddedTileDao getGriddedTileDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(GriddedTile.class);
+		return GriddedTileDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a 2D Gridded Tile DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return 2d gridded tile dao
+	 * @since 4.0.0
+	 */
+	public static GriddedTileDao getGriddedTileDao(
+			GeoPackageCoreConnection db) {
+		return GriddedTileDao.create(db);
 	}
 
 	/**

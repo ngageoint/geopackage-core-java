@@ -6,6 +6,7 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -165,7 +166,7 @@ public class VectorTilesExtension extends BaseExtension {
 	 * @return layers dao
 	 */
 	public VectorTilesLayersDao getVectorTilesLayersDao() {
-		return createDao(VectorTilesLayers.class);
+		return getVectorTilesLayersDao(geoPackage);
 	}
 
 	/**
@@ -177,7 +178,19 @@ public class VectorTilesExtension extends BaseExtension {
 	 */
 	public static VectorTilesLayersDao getVectorTilesLayersDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(VectorTilesLayers.class);
+		return VectorTilesLayersDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Layers DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return layers dao
+	 */
+	public static VectorTilesLayersDao getVectorTilesLayersDao(
+			GeoPackageCoreConnection db) {
+		return VectorTilesLayersDao.create(db);
 	}
 
 	/**
@@ -186,7 +199,7 @@ public class VectorTilesExtension extends BaseExtension {
 	 * @return fields dao
 	 */
 	public VectorTilesFieldsDao getVectorTilesFieldsDao() {
-		return createDao(VectorTilesFields.class);
+		return getVectorTilesFieldsDao(geoPackage);
 	}
 
 	/**
@@ -198,7 +211,19 @@ public class VectorTilesExtension extends BaseExtension {
 	 */
 	public static VectorTilesFieldsDao getVectorTilesFieldsDao(
 			GeoPackageCore geoPackage) {
-		return geoPackage.createDao(VectorTilesFields.class);
+		return VectorTilesFieldsDao.create(geoPackage);
+	}
+
+	/**
+	 * Get the Fields DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return fields dao
+	 */
+	public static VectorTilesFieldsDao getVectorTilesFieldsDao(
+			GeoPackageCoreConnection db) {
+		return VectorTilesFieldsDao.create(db);
 	}
 
 	/**

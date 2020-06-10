@@ -6,6 +6,7 @@ import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
 import mil.nga.geopackage.extension.Extensions;
@@ -299,7 +300,7 @@ public class TileTableScaling extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public TileScalingDao getTileScalingDao() {
-		return createDao(TileScaling.class);
+		return getTileScalingDao(geoPackage);
 	}
 
 	/**
@@ -311,7 +312,20 @@ public class TileTableScaling extends BaseExtension {
 	 * @since 4.0.0
 	 */
 	public static TileScalingDao getTileScalingDao(GeoPackageCore geoPackage) {
-		return geoPackage.createDao(TileScaling.class);
+		return TileScalingDao.create(geoPackage);
+	}
+
+	/**
+	 * Get a Tile Scaling DAO
+	 * 
+	 * @param db
+	 *            database connection
+	 * @return tile scaling dao
+	 * @since 4.0.0
+	 */
+	public static TileScalingDao getTileScalingDao(
+			GeoPackageCoreConnection db) {
+		return TileScalingDao.create(db);
 	}
 
 	/**

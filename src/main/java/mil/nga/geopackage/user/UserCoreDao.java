@@ -16,6 +16,7 @@ import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.AlterTable;
 import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
+import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.proj.Projection;
@@ -165,6 +166,22 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public UserCoreConnection<TColumn, TTable, TRow, TResult> getUserDb() {
 		return userDb;
+	}
+
+	/**
+	 * Create a GeoPackage DAO
+	 * 
+	 * @param <D>
+	 *            DAO type
+	 * @param <O>
+	 *            DAO object type
+	 * @param clazz
+	 *            DAO class type
+	 * @return GeoPackage DAO
+	 * @since 4.0.0
+	 */
+	public <D extends GeoPackageDao<O, ?>, O> D createDao(Class<O> clazz) {
+		return GeoPackageDao.createDao(db, clazz);
 	}
 
 	/**
