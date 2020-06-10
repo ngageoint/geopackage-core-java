@@ -29,6 +29,13 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	public static boolean DEFAULT_AUTOINCREMENT = true;
 
 	/**
+	 * Default primary key not null setting
+	 * 
+	 * @since 4.0.0
+	 */
+	public static boolean DEFAULT_PK_NOT_NULL = true;
+
+	/**
 	 * Columns
 	 */
 	private UserColumns<TColumn> columns;

@@ -11,6 +11,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.ColumnConstraints;
 import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.ConstraintType;
 import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.db.table.TableColumn;
 
@@ -625,6 +626,23 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public void addUniqueConstraint() {
 		addConstraint("UNIQUE");
+	}
+
+	/**
+	 * Build the SQL for the constraint
+	 * 
+	 * @param constraint
+	 *            constraint
+	 * @return SQL or null
+	 * @since 4.0.0
+	 */
+	public String buildConstraintSql(Constraint constraint) {
+		String sql = null;
+		if (UserTable.DEFAULT_PK_NOT_NULL || !isPrimaryKey()
+				|| constraint.getType() != ConstraintType.NOT_NULL) {
+			sql = constraint.buildSql();
+		}
+		return sql;
 	}
 
 	/**
