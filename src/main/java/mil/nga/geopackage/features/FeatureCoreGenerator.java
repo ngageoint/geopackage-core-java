@@ -500,10 +500,7 @@ public abstract class FeatureCoreGenerator {
 	 * @return geometry data
 	 */
 	protected GeoPackageGeometryData createGeometryData(Geometry geometry) {
-		GeoPackageGeometryData geometryData = new GeoPackageGeometryData(
-				srs.getSrsId());
-		geometryData.setGeometry(geometry);
-		return geometryData;
+		return GeoPackageGeometryData.create(srs.getSrsId(), geometry);
 	}
 
 	/**
