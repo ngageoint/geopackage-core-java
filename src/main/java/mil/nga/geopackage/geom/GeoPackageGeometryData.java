@@ -168,6 +168,20 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create geometry data and build the envelope, default SRS Id of
+	 * {@link #getDefaultSrsId}
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @return geometry data
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createAndBuildEnvelope(
+			Geometry geometry) {
+		return new GeoPackageGeometryData(geometry, true);
+	}
+
+	/**
 	 * Create geometry data
 	 * 
 	 * @param srsId
@@ -194,6 +208,21 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create geometry data and build the envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @return geometry data
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createAndBuildEnvelope(long srsId,
+			Geometry geometry) {
+		return new GeoPackageGeometryData(srsId, geometry, true);
+	}
+
+	/**
 	 * Create geometry data and write the GeoPackage geometry bytes, default SRS
 	 * Id of {@link #getDefaultSrsId()}
 	 * 
@@ -207,6 +236,22 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createAndWrite(Geometry geometry)
 			throws IOException {
 		return writeBytes(create(geometry));
+	}
+
+	/**
+	 * Create geometry data, build the envelope, and write the GeoPackage
+	 * geometry bytes, default SRS Id of {@link #getDefaultSrsId()}
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createBuildEnvelopeAndWrite(
+			Geometry geometry) throws IOException {
+		return writeBytes(createAndBuildEnvelope(geometry));
 	}
 
 	/**
@@ -224,6 +269,24 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createAndWrite(long srsId,
 			Geometry geometry) throws IOException {
 		return writeBytes(create(srsId, geometry));
+	}
+
+	/**
+	 * Create geometry data, build the envelope, and write the GeoPackage
+	 * geometry bytes
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createBuildEnvelopeAndWrite(long srsId,
+			Geometry geometry) throws IOException {
+		return writeBytes(createAndBuildEnvelope(srsId, geometry));
 	}
 
 	/**
@@ -255,6 +318,22 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create the geometry data from Well-Known Bytes and build the envelope,
+	 * default SRS Id of {@link #getDefaultSrsId}
+	 * 
+	 * @param bytes
+	 *            well-known bytes
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWkbAndBuildEnvelope(
+			byte[] bytes) throws IOException {
+		return createFromWkbAndBuildEnvelope(defaultSrsId, bytes);
+	}
+
+	/**
 	 * Create the geometry data from Well-Known Bytes
 	 * 
 	 * @param srsId
@@ -269,6 +348,23 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createFromWkb(long srsId, byte[] bytes)
 			throws IOException {
 		return create(srsId, createGeometryFromWkb(bytes));
+	}
+
+	/**
+	 * Create the geometry data from Well-Known Bytes and build the envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param bytes
+	 *            well-known bytes
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWkbAndBuildEnvelope(
+			long srsId, byte[] bytes) throws IOException {
+		return createAndBuildEnvelope(srsId, createGeometryFromWkb(bytes));
 	}
 
 	/**
@@ -288,6 +384,23 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create the geometry data from Well-Known Bytes, build the envelope, and
+	 * write the GeoPackage geometry bytes, default SRS Id of
+	 * {@link #getDefaultSrsId}
+	 * 
+	 * @param bytes
+	 *            well-known bytes
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read or write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWkbBuildEnvelopeAndWrite(
+			byte[] bytes) throws IOException {
+		return writeBytes(createFromWkbAndBuildEnvelope(bytes));
+	}
+
+	/**
 	 * Create the geometry data from Well-Known Bytes and write the GeoPackage
 	 * geometry bytes
 	 * 
@@ -303,6 +416,24 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createFromWkbAndWrite(long srsId,
 			byte[] bytes) throws IOException {
 		return writeBytes(createFromWkb(srsId, bytes));
+	}
+
+	/**
+	 * Create the geometry data from Well-Known Bytes, build the envelope, and
+	 * write the GeoPackage geometry bytes
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param bytes
+	 *            well-known bytes
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read or write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWkbBuildEnvelopeAndWrite(
+			long srsId, byte[] bytes) throws IOException {
+		return writeBytes(createFromWkbAndBuildEnvelope(srsId, bytes));
 	}
 
 	/**
@@ -337,6 +468,22 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create the geometry data from Well-Known Text and build the envelope,
+	 * default SRS Id of {@link #getDefaultSrsId}
+	 * 
+	 * @param text
+	 *            well-known text
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read text
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWktAndBuildEnvelope(
+			String text) throws IOException {
+		return createFromWktAndBuildEnvelope(defaultSrsId, text);
+	}
+
+	/**
 	 * Create the geometry data from Well-Known Text
 	 * 
 	 * @param srsId
@@ -351,6 +498,23 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createFromWkt(long srsId, String text)
 			throws IOException {
 		return create(srsId, createGeometryFromWkt(text));
+	}
+
+	/**
+	 * Create the geometry data from Well-Known Text and build the envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param text
+	 *            well-known text
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read text
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWktAndBuildEnvelope(
+			long srsId, String text) throws IOException {
+		return createAndBuildEnvelope(srsId, createGeometryFromWkt(text));
 	}
 
 	/**
@@ -370,6 +534,23 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Create the geometry data from Well-Known Text, build the envelope, and
+	 * write the GeoPackage geometry bytes, default SRS Id of
+	 * {@link #getDefaultSrsId}
+	 * 
+	 * @param text
+	 *            well-known text
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read text or write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWktBuildEnvelopeAndWrite(
+			String text) throws IOException {
+		return writeBytes(createFromWktAndBuildEnvelope(text));
+	}
+
+	/**
 	 * Create the geometry data from Well-Known Text and write the GeoPackage
 	 * geometry bytes
 	 * 
@@ -385,6 +566,24 @@ public class GeoPackageGeometryData {
 	public static GeoPackageGeometryData createFromWktAndWrite(long srsId,
 			String text) throws IOException {
 		return writeBytes(createFromWkt(srsId, text));
+	}
+
+	/**
+	 * Create the geometry data from Well-Known Text, build the envelope, and
+	 * write the GeoPackage geometry bytes
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param text
+	 *            well-known text
+	 * @return geometry data
+	 * @throws IOException
+	 *             upon failure to read text or write bytes
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData createFromWktBuildEnvelopeAndWrite(
+			long srsId, String text) throws IOException {
+		return writeBytes(createFromWktAndBuildEnvelope(srsId, text));
 	}
 
 	/**
@@ -418,6 +617,22 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * GeoPackage geometry bytes from the geometry with built envelope, default
+	 * SRS Id of {@link #getDefaultSrsId()}
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesAndBuildEnvelope(Geometry geometry)
+			throws IOException {
+		return createBuildEnvelopeAndWrite(geometry).getBytes();
+	}
+
+	/**
 	 * GeoPackage geometry bytes from the geometry
 	 * 
 	 * @param srsId
@@ -435,6 +650,23 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * GeoPackage geometry bytes from the geometry with built envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesAndBuildEnvelope(long srsId, Geometry geometry)
+			throws IOException {
+		return createBuildEnvelopeAndWrite(srsId, geometry).getBytes();
+	}
+
+	/**
 	 * GeoPackage geometry bytes from Well-Known bytes, default SRS Id of
 	 * {@link #getDefaultSrsId}
 	 * 
@@ -447,6 +679,22 @@ public class GeoPackageGeometryData {
 	 */
 	public static byte[] bytesFromWkb(byte[] bytes) throws IOException {
 		return createFromWkbAndWrite(bytes).getBytes();
+	}
+
+	/**
+	 * GeoPackage geometry bytes from Well-Known bytes with built envelope,
+	 * default SRS Id of {@link #getDefaultSrsId}
+	 * 
+	 * @param bytes
+	 *            well-known bytes
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to read or write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesFromWkbAndBuildEnvelope(byte[] bytes)
+			throws IOException {
+		return createFromWkbBuildEnvelopeAndWrite(bytes).getBytes();
 	}
 
 	/**
@@ -467,6 +715,23 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * GeoPackage geometry bytes from Well-Known bytes with built envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param bytes
+	 *            well-known bytes
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to read or write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesFromWkbAndBuildEnvelope(long srsId, byte[] bytes)
+			throws IOException {
+		return createFromWkbBuildEnvelopeAndWrite(srsId, bytes).getBytes();
+	}
+
+	/**
 	 * GeoPackage geometry bytes from Well-Known text, default SRS Id of
 	 * {@link #getDefaultSrsId}
 	 * 
@@ -479,6 +744,22 @@ public class GeoPackageGeometryData {
 	 */
 	public static byte[] bytesFromWkt(String text) throws IOException {
 		return createFromWktAndWrite(text).getBytes();
+	}
+
+	/**
+	 * GeoPackage geometry bytes from Well-Known text with built envelope,
+	 * default SRS Id of {@link #getDefaultSrsId}
+	 * 
+	 * @param text
+	 *            well-known text
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to read text or write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesFromWktAndBuildEnvelope(String text)
+			throws IOException {
+		return createFromWktBuildEnvelopeAndWrite(text).getBytes();
 	}
 
 	/**
@@ -496,6 +777,23 @@ public class GeoPackageGeometryData {
 	public static byte[] bytesFromWkt(long srsId, String text)
 			throws IOException {
 		return createFromWktAndWrite(srsId, text).getBytes();
+	}
+
+	/**
+	 * GeoPackage geometry bytes from Well-Known text with built envelope
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param text
+	 *            well-known text
+	 * @return GeoPackage geometry bytes
+	 * @throws IOException
+	 *             upon failure to read text or write bytes
+	 * @since 4.0.0
+	 */
+	public static byte[] bytesFromWktAndBuildEnvelope(long srsId, String text)
+			throws IOException {
+		return createFromWktBuildEnvelopeAndWrite(srsId, text).getBytes();
 	}
 
 	/**
@@ -632,8 +930,24 @@ public class GeoPackageGeometryData {
 	 * @since 4.0.0
 	 */
 	public GeoPackageGeometryData(Geometry geometry) {
+		this(geometry, false);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param buildEnvelope
+	 *            true to build and set the envelope
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData(Geometry geometry, boolean buildEnvelope) {
 		this();
 		setGeometry(geometry);
+		if (buildEnvelope) {
+			buildEnvelope();
+		}
 	}
 
 	/**
@@ -658,8 +972,27 @@ public class GeoPackageGeometryData {
 	 * @since 4.0.0
 	 */
 	public GeoPackageGeometryData(long srsId, Geometry geometry) {
+		this(srsId, geometry, false);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @param buildEnvelope
+	 *            true to build and set the envelope
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData(long srsId, Geometry geometry,
+			boolean buildEnvelope) {
 		this(srsId);
 		setGeometry(geometry);
+		if (buildEnvelope) {
+			buildEnvelope();
+		}
 	}
 
 	/**
@@ -1071,7 +1404,8 @@ public class GeoPackageGeometryData {
 	 * Set the geometry. Updates the empty flag and if the geometry is not null,
 	 * the extended flag. Following invoking this method and upon setting the
 	 * SRS id, call {@link #toBytes()} to convert the geometry to bytes.
-	 * Alternatively call {@link #setGeometryToBytes(Geometry)} to perform both
+	 * Alternatively call {@link #setGeometryToBytes(Geometry)} or
+	 * {@link #setGeometryAndBuildEnvelopeToBytes(Geometry)} to perform both
 	 * operations.
 	 * 
 	 * @param geometry
@@ -1097,7 +1431,42 @@ public class GeoPackageGeometryData {
 	 * @since 4.0.0
 	 */
 	public byte[] setGeometryToBytes(Geometry geometry) throws IOException {
+		return setGeometryToBytes(geometry, false);
+	}
+
+	/**
+	 * Set the geometry, build the envelope, and write to bytes
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @return geometry bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	public byte[] setGeometryAndBuildEnvelopeToBytes(Geometry geometry)
+			throws IOException {
+		return setGeometryToBytes(geometry, true);
+	}
+
+	/**
+	 * Set the geometry, optionally build the envelope, and write to bytes
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param buildEnvelope
+	 *            true to build and set the envelope
+	 * @return geometry bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 * @since 4.0.0
+	 */
+	private byte[] setGeometryToBytes(Geometry geometry, boolean buildEnvelope)
+			throws IOException {
 		setGeometry(geometry);
+		if (buildEnvelope) {
+			buildEnvelope();
+		}
 		return toBytes();
 	}
 
@@ -1225,7 +1594,8 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
-	 * Get the envelope if it exists or build it from the geometry if not null
+	 * Get the envelope if it exists or build, set, and retrieve it from the
+	 * geometry
 	 * 
 	 * @return geometry envelope
 	 * @since 3.1.0
@@ -1233,11 +1603,24 @@ public class GeoPackageGeometryData {
 	public GeometryEnvelope getOrBuildEnvelope() {
 		GeometryEnvelope envelope = getEnvelope();
 		if (envelope == null) {
-			Geometry geometry = getGeometry();
-			if (geometry != null) {
-				envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
-			}
+			envelope = buildEnvelope();
 		}
+		return envelope;
+	}
+
+	/**
+	 * Build, set, and retrieve the envelope from the geometry
+	 * 
+	 * @return geometry envelope
+	 * @since 4.0.0
+	 */
+	public GeometryEnvelope buildEnvelope() {
+		GeometryEnvelope envelope = null;
+		Geometry geometry = getGeometry();
+		if (geometry != null) {
+			envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
+		}
+		setEnvelope(envelope);
 		return envelope;
 	}
 
