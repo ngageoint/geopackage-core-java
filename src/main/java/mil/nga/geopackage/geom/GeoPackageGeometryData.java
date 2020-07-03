@@ -3,6 +3,7 @@ package mil.nga.geopackage.geom;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
@@ -11,6 +12,7 @@ import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.proj.ProjectionTransform;
 import mil.nga.sf.util.ByteReader;
 import mil.nga.sf.util.ByteWriter;
 import mil.nga.sf.util.GeometryEnvelopeBuilder;
@@ -299,6 +301,51 @@ public class GeoPackageGeometryData {
 	 */
 	public static GeoPackageGeometryData create(byte[] bytes) {
 		return new GeoPackageGeometryData(bytes);
+	}
+
+	/**
+	 * Create the geometry data, default SRS Id of {@link #getDefaultSrsId()}
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param envelope
+	 *            geometry envelope
+	 * @return geometry data
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData create(Geometry geometry,
+			GeometryEnvelope envelope) {
+		return new GeoPackageGeometryData(geometry, envelope);
+	}
+
+	/**
+	 * Create the geometry data
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @param envelope
+	 *            geometry envelope
+	 * @return geometry data
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData create(long srsId, Geometry geometry,
+			GeometryEnvelope envelope) {
+		return new GeoPackageGeometryData(srsId, geometry, envelope);
+	}
+
+	/**
+	 * Copy the geometry data and create
+	 * 
+	 * @param geometryData
+	 *            geometry data
+	 * @return geometry data
+	 * @since 4.0.0
+	 */
+	public static GeoPackageGeometryData create(
+			GeoPackageGeometryData geometryData) {
+		return new GeoPackageGeometryData(geometryData);
 	}
 
 	/**
@@ -996,6 +1043,68 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Constructor, default SRS Id of {@link #getDefaultSrsId}
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @param envelope
+	 *            geometry envelope
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData(Geometry geometry,
+			GeometryEnvelope envelope) {
+		this();
+		setGeometry(geometry);
+		setEnvelope(envelope);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param srsId
+	 *            SRS id
+	 * @param geometry
+	 *            geometry
+	 * @param envelope
+	 *            geometry envelope
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData(long srsId, Geometry geometry,
+			GeometryEnvelope envelope) {
+		this(srsId);
+		setGeometry(geometry);
+		setEnvelope(envelope);
+	}
+
+	/**
+	 * Copy Constructor
+	 * 
+	 * @param geometryData
+	 *            geometry data
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData(GeoPackageGeometryData geometryData) {
+		setSrsId(geometryData.getSrsId());
+		Geometry geometry = geometryData.getGeometry();
+		if (geometry != null) {
+			geometry = geometry.copy();
+		}
+		setGeometry(geometry);
+		GeometryEnvelope envelope = geometryData.getEnvelope();
+		if (envelope != null) {
+			envelope = envelope.copy();
+		}
+		setEnvelope(envelope);
+		byte[] bytes = geometryData.getBytes();
+		if (bytes != null) {
+			bytes = Arrays.copyOf(bytes, bytes.length);
+		}
+		this.bytes = bytes;
+		this.wkbGeometryIndex = geometryData.wkbGeometryIndex;
+		setByteOrder(geometryData.getByteOrder());
+	}
+
+	/**
 	 * Constructor
 	 * 
 	 * @param bytes
@@ -1643,6 +1752,33 @@ public class GeoPackageGeometryData {
 			indicator += 2;
 		}
 		return indicator;
+	}
+
+	/**
+	 * Transform the geometry data using the provided projection transform
+	 * 
+	 * @param transform
+	 *            projection transform
+	 * @return transformed geometry data
+	 * @since 4.0.0
+	 */
+	public GeoPackageGeometryData transform(ProjectionTransform transform) {
+		GeoPackageGeometryData transformed = this;
+		if (transform.isSameProjection()) {
+			transformed = new GeoPackageGeometryData(transformed);
+		} else {
+			Geometry geometry = getGeometry();
+			if (geometry != null) {
+				geometry = transform.transform(geometry);
+			}
+			GeometryEnvelope envelope = getEnvelope();
+			if (envelope != null) {
+				envelope = transform.transform(envelope);
+			}
+			transformed = new GeoPackageGeometryData(getSrsId(), geometry,
+					envelope);
+		}
+		return transformed;
 	}
 
 	/**
