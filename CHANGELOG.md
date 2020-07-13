@@ -7,17 +7,23 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 4.0.0 (TBD)
 
 * GeoPackage spec version 1.3.0
+* sf-wkb version 2.0.3
+* sf-wkt version 1.0.0
+* sf-proj version 3.0.3
+* oapi-features-json version 1.0.2
 * Community extensions decoupling and management, including class repackaging
 * Contents Data Type refactor, core data types and expanded custom data type support
 * Wider support for views in place of tables, including a new GeoPackageDao
 * User table creation refactor with metadata objects
 * GeoPackage application id, user version, contents type, and bounding box enhancements
 * DAO options to enable modifying row ids or disable column value type validation
+* DAO creation methods
 * Distinct select statement queries and counts
 * Aggregate functions (count, max, min) refactor
 * Optional autoincrement support
 * Columns constraints copy fix, resolving alter table schema information losses
 * More lenient checks, logging errors in place of throwing exceptions and continuing
+* Geometry Data build envelope, creation, byte, Well-Known Text, and transform methods
 * Image Matters Portrayal and Vector Tiles extensions
 * Ecere Tile Matrix Set extension
 
