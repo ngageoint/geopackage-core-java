@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 4.0.0 (TBD)
+## [4.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/4.0.0) (07-14-2020)
 
 * GeoPackage spec version 1.3.0
 * sf-wkb version 2.0.3
