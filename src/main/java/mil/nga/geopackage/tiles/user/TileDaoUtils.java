@@ -3,8 +3,13 @@ package mil.nga.geopackage.tiles.user;
 import java.util.Arrays;
 import java.util.List;
 
+import org.locationtech.proj4j.units.Units;
+
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
 
 /**
  * Tile Data Access Object utilities
@@ -30,10 +35,11 @@ public class TileDaoUtils {
 		double tileMatrixHeight = tileMatrixSet.getMaxY()
 				- tileMatrixSet.getMinY();
 		for (TileMatrix tileMatrix : tileMatrices) {
-			int tempMatrixWidth = (int) (tileMatrixWidth / (tileMatrix
-					.getPixelXSize() * tileMatrix.getTileWidth()));
-			int tempMatrixHeight = (int) (tileMatrixHeight / (tileMatrix
-					.getPixelYSize() * tileMatrix.getTileHeight()));
+			int tempMatrixWidth = (int) (tileMatrixWidth
+					/ (tileMatrix.getPixelXSize() * tileMatrix.getTileWidth()));
+			int tempMatrixHeight = (int) (tileMatrixHeight
+					/ (tileMatrix.getPixelYSize()
+							* tileMatrix.getTileHeight()));
 			if (tempMatrixWidth > tileMatrix.getMatrixWidth()) {
 				tileMatrix.setMatrixWidth(tempMatrixWidth);
 			}
@@ -121,7 +127,8 @@ public class TileDaoUtils {
 	 */
 	public static Long getClosestZoomLevel(double[] widths, double[] heights,
 			List<TileMatrix> tileMatrices, double width, double height) {
-		return getZoomLevel(widths, heights, tileMatrices, width, height, false);
+		return getZoomLevel(widths, heights, tileMatrices, width, height,
+				false);
 	}
 
 	/**
@@ -141,7 +148,8 @@ public class TileDaoUtils {
 	 * @return tile matrix zoom level
 	 */
 	private static Long getZoomLevel(double[] widths, double[] heights,
-			List<TileMatrix> tileMatrices, double length, boolean lengthChecks) {
+			List<TileMatrix> tileMatrices, double length,
+			boolean lengthChecks) {
 		return getZoomLevel(widths, heights, tileMatrices, length, length,
 				lengthChecks);
 	}
@@ -456,6 +464,101 @@ public class TileDaoUtils {
 	 */
 	private static double getMinLength(double[] lengths) {
 		return lengths[0] * .51;
+	}
+
+	/**
+	 * Get the map zoom level range
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @return map zoom level range, min at index 0, max at index 1
+	 * @since 4.0.1
+	 */
+	public static long[] getMapZoomRange(TileMatrixSet tileMatrixSet,
+			List<TileMatrix> tileMatrices) {
+		long min = getMapMinZoom(tileMatrixSet, tileMatrices);
+		long max = getMapMaxZoom(tileMatrixSet, tileMatrices);
+		return new long[] { min, max };
+	}
+
+	/**
+	 * Get the map min zoom level
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @return map min zoom level
+	 * @since 4.0.1
+	 */
+	public static long getMapMinZoom(TileMatrixSet tileMatrixSet,
+			List<TileMatrix> tileMatrices) {
+		return getMapZoom(tileMatrixSet, tileMatrices.get(0));
+	}
+
+	/**
+	 * Get the map max zoom level
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 * @param tileMatrices
+	 *            tile matrices
+	 * @return map max zoom level
+	 * @since 4.0.1
+	 */
+	public static long getMapMaxZoom(TileMatrixSet tileMatrixSet,
+			List<TileMatrix> tileMatrices) {
+		return getMapZoom(tileMatrixSet,
+				tileMatrices.get(tileMatrices.size() - 1));
+	}
+
+	/**
+	 * Get the map zoom level
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @return map zoom level
+	 * @since 4.0.1
+	 */
+	public static long getMapZoom(TileMatrixSet tileMatrixSet,
+			TileMatrix tileMatrix) {
+
+		BoundingBox boundingBox = tileMatrixSet.getBoundingBox(ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR));
+
+		long zoom = getMapZoom(boundingBox.getMinLongitude(),
+				boundingBox.getMaxLongitude(), tileMatrix.getMatrixWidth());
+
+		if (!tileMatrixSet.getProjection().isUnit(Units.DEGREES)) {
+			zoom = Math.min(zoom,
+					getMapZoom(boundingBox.getMinLatitude(),
+							boundingBox.getMaxLatitude(),
+							tileMatrix.getMatrixHeight()));
+		}
+
+		return zoom;
+	}
+
+	/**
+	 * Get the map zoom level
+	 * 
+	 * @param min
+	 *            min bounds
+	 * @param max
+	 *            max bounds
+	 * @param matrixLength
+	 *            matrix length
+	 * @return zoom level
+	 */
+	private static long getMapZoom(double min, double max,
+			double matrixLength) {
+		return Math.round(
+				Math.log((2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
+						/ ((max - min) / matrixLength)) / Math.log(2));
 	}
 
 }
