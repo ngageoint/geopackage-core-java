@@ -1,8 +1,6 @@
 package mil.nga.geopackage.db.table;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Column Constraints
@@ -20,7 +18,7 @@ public class ColumnConstraints {
 	/**
 	 * Column constraints
 	 */
-	private List<Constraint> constraints = new ArrayList<>();
+	private Constraints constraints = new Constraints();
 
 	/**
 	 * Constructor
@@ -68,15 +66,27 @@ public class ColumnConstraints {
 	 *            constraints
 	 */
 	public void addConstraints(Collection<Constraint> constraints) {
-		this.constraints.addAll(constraints);
+		this.constraints.add(constraints);
+	}
+
+	/**
+	 * Add constraints
+	 * 
+	 * @param constraints
+	 *            constraints
+	 * @since 4.0.1
+	 */
+	public void addConstraints(Constraints constraints) {
+		this.constraints.add(constraints);
 	}
 
 	/**
 	 * Get the constraints
 	 * 
 	 * @return constraints
+	 * @since 4.0.1
 	 */
-	public List<Constraint> getConstraints() {
+	public Constraints getConstraints() {
 		return constraints;
 	}
 
@@ -118,7 +128,7 @@ public class ColumnConstraints {
 	 * @return true if has constraints
 	 */
 	public boolean hasConstraints() {
-		return !constraints.isEmpty();
+		return constraints.has();
 	}
 
 }

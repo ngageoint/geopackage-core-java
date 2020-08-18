@@ -43,6 +43,30 @@ public class UniqueConstraint extends Constraint {
 	/**
 	 * Constructor
 	 * 
+	 * @param order
+	 *            constraint order
+	 * @since 4.0.1
+	 */
+	public UniqueConstraint(Integer order) {
+		super(ConstraintType.UNIQUE, order);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 *            constraint name
+	 * @param order
+	 *            constraint order
+	 * @since 4.0.1
+	 */
+	public UniqueConstraint(String name, Integer order) {
+		super(ConstraintType.UNIQUE, name, order);
+	}
+
+	/**
+	 * Constructor
+	 * 
 	 * @param columns
 	 *            columns
 	 */

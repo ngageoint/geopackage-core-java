@@ -46,7 +46,53 @@ public class RawConstraint extends Constraint {
 	 *            constraint SQL
 	 */
 	public RawConstraint(ConstraintType type, String name, String sql) {
-		super(type, name);
+		this(type, name, null, sql);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param order
+	 *            constraint order
+	 * @param sql
+	 *            constraint SQL
+	 * @since 4.0.1
+	 */
+	public RawConstraint(Integer order, String sql) {
+		this(ConstraintParser.getType(sql), order, sql);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param order
+	 *            constraint order
+	 * @param sql
+	 *            constraint SQL
+	 * @since 4.0.1
+	 */
+	public RawConstraint(ConstraintType type, Integer order, String sql) {
+		this(type, null, order, sql);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param name
+	 *            constraint name
+	 * @param order
+	 *            constraint order
+	 * @param sql
+	 *            constraint SQL
+	 * @since 4.0.1
+	 */
+	public RawConstraint(ConstraintType type, String name, Integer order,
+			String sql) {
+		super(type, name, order);
 		this.sql = sql;
 	}
 

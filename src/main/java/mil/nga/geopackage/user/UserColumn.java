@@ -1,6 +1,5 @@
 package mil.nga.geopackage.user;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,6 +11,7 @@ import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.ColumnConstraints;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.ConstraintType;
+import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.db.table.TableColumn;
 
@@ -34,6 +34,31 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public static final int NO_INDEX = -1;
+
+	/**
+	 * Not Null Constraint Order
+	 */
+	public static final int NOT_NULL_CONSTRAINT_ORDER = 1;
+
+	/**
+	 * Default Value Constraint Order
+	 */
+	public static final int DEFAULT_VALUE_CONSTRAINT_ORDER = 2;
+
+	/**
+	 * Primary Key Constraint Order
+	 */
+	public static final int PRIMARY_KEY_CONSTRAINT_ORDER = 3;
+
+	/**
+	 * Autoincrement Constraint Order
+	 */
+	public static final int AUTOINCREMENT_CONSTRAINT_ORDER = 4;
+
+	/**
+	 * Unique Constraint Order
+	 */
+	public static final int UNIQUE_CONSTRAINT_ORDER = 5;
 
 	/**
 	 * Column index
@@ -71,6 +96,11 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	private boolean autoincrement;
 
 	/**
+	 * True if unique column
+	 */
+	private boolean unique;
+
+	/**
 	 * Type
 	 */
 	private String type;
@@ -83,7 +113,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * List of column constraints
 	 */
-	private final List<Constraint> constraints = new ArrayList<>();
+	private final Constraints constraints;
 
 	/**
 	 * Constructor
@@ -148,6 +178,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.autoincrement = autoincrement;
 		this.type = type;
 		this.dataType = dataType;
+		this.constraints = new Constraints();
 
 		validateDataType(name, dataType);
 		validateMax();
@@ -188,9 +219,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.autoincrement = userColumn.autoincrement;
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
-		for (Constraint constraint : userColumn.constraints) {
-			addConstraint(constraint.copy());
-		}
+		this.constraints = userColumn.constraints.copy();
 	}
 
 	/**
@@ -354,6 +383,13 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void setNotNull(boolean notNull) {
+		if (this.notNull != notNull) {
+			if (notNull) {
+				addNotNullConstraint();
+			} else {
+				removeNotNullConstraint();
+			}
+		}
 		this.notNull = notNull;
 	}
 
@@ -384,6 +420,10 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void setDefaultValue(Object defaultValue) {
+		removeDefaultValueConstraint();
+		if (defaultValue != null) {
+			addDefaultValueConstraint(defaultValue);
+		}
 		this.defaultValue = defaultValue;
 	}
 
@@ -404,6 +444,14 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void setPrimaryKey(boolean primaryKey) {
+		if (this.primaryKey != primaryKey) {
+			if (primaryKey) {
+				addPrimaryKeyConstraint();
+			} else {
+				removeAutoincrementConstraint();
+				removePrimaryKeyConstraint();
+			}
+		}
 		this.primaryKey = primaryKey;
 	}
 
@@ -424,6 +472,13 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 4.0.0
 	 */
 	public void setAutoincrement(boolean autoincrement) {
+		if (this.autoincrement != autoincrement) {
+			if (autoincrement) {
+				addAutoincrementConstraint();
+			} else {
+				removeAutoincrementConstraint();
+			}
+		}
 		this.autoincrement = autoincrement;
 	}
 
@@ -435,6 +490,34 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 */
 	public boolean isAutoincrement() {
 		return autoincrement;
+	}
+
+	/**
+	 * Set the unique flag
+	 * 
+	 * @param unique
+	 *            unique flag
+	 * @since 4.0.1
+	 */
+	public void setUnique(boolean unique) {
+		if (this.unique != unique) {
+			if (unique) {
+				addUniqueConstraint();
+			} else {
+				removeUniqueConstraint();
+			}
+		}
+		this.unique = unique;
+	}
+
+	/**
+	 * Get the unique flag
+	 * 
+	 * @return unique flag
+	 * @since 4.0.1
+	 */
+	public boolean isUnique() {
+		return unique;
 	}
 
 	/**
@@ -484,17 +567,41 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public boolean hasConstraints() {
-		return !constraints.isEmpty();
+		return constraints.has();
+	}
+
+	/**
+	 * Check if has constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return true if has constraints
+	 * @since 4.0.1
+	 */
+	public boolean hasConstraints(ConstraintType type) {
+		return constraints.has(type);
 	}
 
 	/**
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 3.3.0
+	 * @since 4.0.1
 	 */
-	public List<Constraint> getConstraints() {
+	public Constraints getConstraints() {
 		return constraints;
+	}
+
+	/**
+	 * Get the constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return constraints
+	 * @since 4.0.1
+	 */
+	public List<Constraint> getConstraints(ConstraintType type) {
+		return constraints.get(type);
 	}
 
 	/**
@@ -504,9 +611,61 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public List<Constraint> clearConstraints() {
-		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
-		constraints.clear();
-		return constraintsCopy;
+		return clearConstraints(true);
+	}
+
+	/**
+	 * Clear the constraints
+	 * 
+	 * @param reset
+	 *            true to reset constraint settings
+	 * @return cleared constraints
+	 * @since 3.3.0
+	 */
+	public List<Constraint> clearConstraints(boolean reset) {
+
+		if (reset) {
+			primaryKey = false;
+			unique = false;
+			notNull = false;
+			defaultValue = null;
+			autoincrement = false;
+		}
+
+		return constraints.clear();
+	}
+
+	/**
+	 * Clear the constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return cleared constraints
+	 * @since 4.0.1
+	 */
+	public List<Constraint> clearConstraints(ConstraintType type) {
+
+		switch (type) {
+		case PRIMARY_KEY:
+			primaryKey = false;
+			break;
+		case UNIQUE:
+			unique = false;
+			break;
+		case NOT_NULL:
+			notNull = false;
+			break;
+		case DEFAULT:
+			defaultValue = null;
+			break;
+		case AUTOINCREMENT:
+			autoincrement = false;
+			break;
+		default:
+
+		}
+
+		return constraints.clear(type);
 	}
 
 	/**
@@ -538,7 +697,65 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addConstraint(Constraint constraint) {
+
+		if (constraint.getOrder() == null) {
+			setConstraintOrder(constraint);
+		}
+
 		constraints.add(constraint);
+
+		switch (constraint.getType()) {
+		case PRIMARY_KEY:
+			primaryKey = true;
+			break;
+		case UNIQUE:
+			unique = true;
+			break;
+		case NOT_NULL:
+			notNull = true;
+			break;
+		case DEFAULT:
+			break;
+		case AUTOINCREMENT:
+			autoincrement = true;
+			break;
+		default:
+
+		}
+
+	}
+
+	/**
+	 * Set the constraint order by constraint type
+	 * 
+	 * @param constraint
+	 *            constraint
+	 */
+	public void setConstraintOrder(Constraint constraint) {
+
+		Integer order = null;
+
+		switch (constraint.getType()) {
+		case PRIMARY_KEY:
+			order = PRIMARY_KEY_CONSTRAINT_ORDER;
+			break;
+		case UNIQUE:
+			order = UNIQUE_CONSTRAINT_ORDER;
+			break;
+		case NOT_NULL:
+			order = NOT_NULL_CONSTRAINT_ORDER;
+			break;
+		case DEFAULT:
+			order = DEFAULT_VALUE_CONSTRAINT_ORDER;
+			break;
+		case AUTOINCREMENT:
+			order = AUTOINCREMENT_CONSTRAINT_ORDER;
+			break;
+		default:
+
+		}
+
+		constraint.setOrder(order);
 	}
 
 	/**
@@ -549,7 +766,36 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addConstraint(String constraint) {
-		constraints.add(new RawConstraint(constraint));
+		addConstraint(new RawConstraint(constraint));
+	}
+
+	/**
+	 * Add a constraint
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param constraint
+	 *            constraint
+	 * @since 4.0.1
+	 */
+	public void addConstraint(ConstraintType type, String constraint) {
+		addConstraint(type, null, constraint);
+	}
+
+	/**
+	 * Add a constraint
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @param order
+	 *            constraint order
+	 * @param constraint
+	 *            constraint
+	 * @since 4.0.1
+	 */
+	public void addConstraint(ConstraintType type, Integer order,
+			String constraint) {
+		addConstraint(new RawConstraint(type, order, constraint));
 	}
 
 	/**
@@ -577,13 +823,33 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
+	 * Add constraints
+	 * 
+	 * @param constraints
+	 *            constraints
+	 * @since 4.0.1
+	 */
+	public void addConstraints(Constraints constraints) {
+		addConstraints(constraints.all());
+	}
+
+	/**
 	 * Add a not null constraint
 	 * 
 	 * @since 3.3.0
 	 */
 	public void addNotNullConstraint() {
-		setNotNull(true);
-		addConstraint("NOT NULL");
+		addConstraint(ConstraintType.NOT_NULL, NOT_NULL_CONSTRAINT_ORDER,
+				"NOT NULL");
+	}
+
+	/**
+	 * Remove a not null constraint
+	 * 
+	 * @since 4.0.1
+	 */
+	public void removeNotNullConstraint() {
+		clearConstraints(ConstraintType.NOT_NULL);
 	}
 
 	/**
@@ -595,8 +861,18 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addDefaultValueConstraint(Object defaultValue) {
-		setDefaultValue(defaultValue);
-		addConstraint("DEFAULT " + CoreSQLUtils.columnDefaultValue(this));
+		addConstraint(ConstraintType.DEFAULT, DEFAULT_VALUE_CONSTRAINT_ORDER,
+				"DEFAULT " + CoreSQLUtils.columnDefaultValue(defaultValue,
+						getDataType()));
+	}
+
+	/**
+	 * Remove a default value constraint
+	 * 
+	 * @since 4.0.1
+	 */
+	public void removeDefaultValueConstraint() {
+		clearConstraints(ConstraintType.DEFAULT);
 	}
 
 	/**
@@ -605,8 +881,17 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addPrimaryKeyConstraint() {
-		setPrimaryKey(true);
-		addConstraint("PRIMARY KEY");
+		addConstraint(ConstraintType.PRIMARY_KEY, PRIMARY_KEY_CONSTRAINT_ORDER,
+				"PRIMARY KEY");
+	}
+
+	/**
+	 * Remove a primary key constraint
+	 * 
+	 * @since 4.0.1
+	 */
+	public void removePrimaryKeyConstraint() {
+		clearConstraints(ConstraintType.PRIMARY_KEY);
 	}
 
 	/**
@@ -615,8 +900,17 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 4.0.0
 	 */
 	public void addAutoincrementConstraint() {
-		setAutoincrement(true);
-		addConstraint("AUTOINCREMENT");
+		addConstraint(ConstraintType.AUTOINCREMENT,
+				AUTOINCREMENT_CONSTRAINT_ORDER, "AUTOINCREMENT");
+	}
+
+	/**
+	 * Remove an autoincrement constraint
+	 * 
+	 * @since 4.0.1
+	 */
+	public void removeAutoincrementConstraint() {
+		clearConstraints(ConstraintType.AUTOINCREMENT);
 	}
 
 	/**
@@ -625,7 +919,16 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addUniqueConstraint() {
-		addConstraint("UNIQUE");
+		addConstraint(ConstraintType.UNIQUE, UNIQUE_CONSTRAINT_ORDER, "UNIQUE");
+	}
+
+	/**
+	 * Remove a unique constraint
+	 * 
+	 * @since 4.0.1
+	 */
+	public void removeUniqueConstraint() {
+		clearConstraints(ConstraintType.UNIQUE);
 	}
 
 	/**

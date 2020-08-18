@@ -150,7 +150,7 @@ public class CoreSQLUtils {
 		}
 
 		// Add unique constraints
-		for (Constraint constraint : table.getConstraints()) {
+		for (Constraint constraint : table.getConstraints().all()) {
 			sql.append(",\n  ");
 			sql.append(constraint.buildSql());
 		}
@@ -195,7 +195,7 @@ public class CoreSQLUtils {
 			sql.append("(").append(column.getMax()).append(")");
 		}
 
-		for (Constraint constraint : column.getConstraints()) {
+		for (Constraint constraint : column.getConstraints().all()) {
 			String constraintSql = column.buildConstraintSql(constraint);
 			if (constraintSql != null) {
 				sql.append(" ");

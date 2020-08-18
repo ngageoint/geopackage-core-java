@@ -93,12 +93,13 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 								+ "', column: " + tableColumn.getName());
 			}
 			TColumn column = createColumn(tableColumn);
+			column.setAutoincrement(false);
 
 			ColumnConstraints columnConstraints = constraints
 					.getColumnConstraints(column.getName());
 			if (columnConstraints != null
 					&& columnConstraints.hasConstraints()) {
-				column.clearConstraints();
+				column.clearConstraints(false);
 				column.addConstraints(columnConstraints);
 			}
 

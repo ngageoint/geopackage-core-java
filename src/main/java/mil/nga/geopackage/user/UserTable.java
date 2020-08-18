@@ -2,14 +2,13 @@ package mil.nga.geopackage.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.db.table.Constraint;
 import mil.nga.geopackage.db.table.ConstraintType;
+import mil.nga.geopackage.db.table.Constraints;
 
 /**
  * Abstract user table
@@ -43,12 +42,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	/**
 	 * Constraints
 	 */
-	private final List<Constraint> constraints;
-
-	/**
-	 * Type Constraints
-	 */
-	private final Map<ConstraintType, List<Constraint>> typedContraints;
+	private final Constraints constraints;
 
 	/**
 	 * Foreign key to Contents
@@ -64,8 +58,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected UserTable(UserColumns<TColumn> columns) {
 		this.columns = columns;
-		constraints = new ArrayList<>();
-		typedContraints = new HashMap<>();
+		constraints = new Constraints();
 	}
 
 	/**
@@ -77,11 +70,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	protected UserTable(UserTable<TColumn> userTable) {
 		this.columns = userTable.columns.copy();
-		constraints = new ArrayList<>();
-		typedContraints = new HashMap<>();
-		for (Constraint constraint : userTable.constraints) {
-			addConstraint(constraint.copy());
-		}
+		this.constraints = userTable.constraints.copy();
 		this.contents = userTable.contents;
 	}
 
@@ -318,13 +307,6 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 */
 	public void addConstraint(Constraint constraint) {
 		constraints.add(constraint);
-		List<Constraint> typeConstraints = typedContraints
-				.get(constraint.getType());
-		if (typeConstraints == null) {
-			typeConstraints = new ArrayList<>();
-			typedContraints.put(constraint.getType(), typeConstraints);
-		}
-		typeConstraints.add(constraint);
 	}
 
 	/**
@@ -335,9 +317,18 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public void addConstraints(Collection<Constraint> constraints) {
-		for (Constraint constraint : constraints) {
-			addConstraint(constraint);
-		}
+		this.constraints.add(constraints);
+	}
+
+	/**
+	 * Add constraints
+	 * 
+	 * @param constraints
+	 *            constraints
+	 * @since 4.0.1
+	 */
+	public void addConstraints(Constraints constraints) {
+		addConstraints(constraints.all());
 	}
 
 	/**
@@ -347,16 +338,28 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public boolean hasConstraints() {
-		return !constraints.isEmpty();
+		return constraints.has();
+	}
+
+	/**
+	 * Check if has constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return true if has constraints
+	 * @since 4.0.1
+	 */
+	public boolean hasConstraints(ConstraintType type) {
+		return constraints.has(type);
 	}
 
 	/**
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 3.3.0
+	 * @since 4.0.1
 	 */
-	public List<Constraint> getConstraints() {
+	public Constraints getConstraints() {
 		return constraints;
 	}
 
@@ -369,11 +372,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public List<Constraint> getConstraints(ConstraintType type) {
-		List<Constraint> constraints = typedContraints.get(type);
-		if (constraints == null) {
-			constraints = new ArrayList<>();
-		}
-		return constraints;
+		return constraints.get(type);
 	}
 
 	/**
@@ -383,10 +382,19 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @since 3.3.0
 	 */
 	public List<Constraint> clearConstraints() {
-		List<Constraint> constraintsCopy = new ArrayList<>(constraints);
-		constraints.clear();
-		typedContraints.clear();
-		return constraintsCopy;
+		return constraints.clear();
+	}
+
+	/**
+	 * Clear the constraints of the provided type
+	 * 
+	 * @param type
+	 *            constraint type
+	 * @return cleared constraints
+	 * @since 4.0.1
+	 */
+	public List<Constraint> clearConstraints(ConstraintType type) {
+		return constraints.clear(type);
 	}
 
 	/**

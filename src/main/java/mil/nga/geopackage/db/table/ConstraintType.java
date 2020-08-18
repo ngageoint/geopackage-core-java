@@ -47,7 +47,12 @@ public enum ConstraintType {
 	/**
 	 * Collate column constraint
 	 */
-	COLLATE;
+	COLLATE,
+
+	/**
+	 * Autoincrement column constraint
+	 */
+	AUTOINCREMENT;
 
 	/**
 	 * Table constraints
@@ -72,6 +77,7 @@ public enum ConstraintType {
 		COLUMN_CONSTRAINTS.add(DEFAULT);
 		COLUMN_CONSTRAINTS.add(COLLATE);
 		COLUMN_CONSTRAINTS.add(FOREIGN_KEY);
+		COLUMN_CONSTRAINTS.add(AUTOINCREMENT);
 	}
 
 	/**

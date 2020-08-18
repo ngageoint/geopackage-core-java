@@ -2,7 +2,6 @@ package mil.nga.geopackage;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +19,7 @@ import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
-import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
@@ -1075,7 +1074,7 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 				metadata.buildColumns());
 
 		// Add unique constraints
-		Collection<Constraint> constraints = metadata.getConstraints();
+		Constraints constraints = metadata.getConstraints();
 		if (constraints != null) {
 			table.addConstraints(constraints);
 		}

@@ -1,11 +1,10 @@
 package mil.nga.geopackage.attributes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.contents.ContentsDataType;
-import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.user.UserTableMetadata;
 
 /**
@@ -112,10 +111,10 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata create(String tableName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		return new AttributesTableMetadata(tableName, null, additionalColumns,
 				constraints);
 	}
@@ -132,10 +131,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata create(String tableName,
 			boolean autoincrement, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		return new AttributesTableMetadata(tableName, null, autoincrement,
 				additionalColumns, constraints);
 	}
@@ -189,10 +189,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata create(String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		return new AttributesTableMetadata(tableName, idColumnName,
 				additionalColumns, constraints);
 	}
@@ -211,11 +212,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata create(String tableName,
 			String idColumnName, boolean autoincrement,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		return new AttributesTableMetadata(tableName, idColumnName,
 				autoincrement, additionalColumns, constraints);
 	}
@@ -240,9 +241,10 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata create(AttributesColumns columns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		return new AttributesTableMetadata(columns.getTableName(),
 				columns.getColumns(), constraints);
 	}
@@ -340,10 +342,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata createTyped(String dataType,
 			String tableName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		return new AttributesTableMetadata(dataType, tableName, null,
 				additionalColumns, constraints);
 	}
@@ -362,11 +365,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata createTyped(String dataType,
 			String tableName, boolean autoincrement,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		return new AttributesTableMetadata(dataType, tableName, null,
 				autoincrement, additionalColumns, constraints);
 	}
@@ -427,11 +430,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata createTyped(String dataType,
 			String tableName, String idColumnName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		return new AttributesTableMetadata(dataType, tableName, idColumnName,
 				additionalColumns, constraints);
 	}
@@ -452,11 +455,11 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata createTyped(String dataType,
 			String tableName, String idColumnName, boolean autoincrement,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		return new AttributesTableMetadata(dataType, tableName, idColumnName,
 				autoincrement, additionalColumns, constraints);
 	}
@@ -486,9 +489,10 @@ public class AttributesTableMetadata
 	 * @param constraints
 	 *            constraints
 	 * @return metadata
+	 * @since 4.0.1
 	 */
 	public static AttributesTableMetadata createTyped(String dataType,
-			AttributesColumns columns, Collection<Constraint> constraints) {
+			AttributesColumns columns, Constraints constraints) {
 		return new AttributesTableMetadata(dataType, columns.getTableName(),
 				columns.getColumns(), constraints, false);
 	}
@@ -511,7 +515,7 @@ public class AttributesTableMetadata
 	/**
 	 * Constraints
 	 */
-	protected Collection<Constraint> constraints;
+	protected Constraints constraints;
 
 	/**
 	 * Constructor
@@ -531,10 +535,10 @@ public class AttributesTableMetadata
 	 *            additional columns
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String tableName, String idColumnName,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		this(null, tableName, idColumnName, additionalColumns, constraints);
 	}
 
@@ -551,10 +555,11 @@ public class AttributesTableMetadata
 	 *            additional columns
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String dataType, String tableName,
 			String idColumnName, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		this.dataType = dataType;
 		this.tableName = tableName;
 		this.idColumnName = idColumnName;
@@ -575,10 +580,11 @@ public class AttributesTableMetadata
 	 *            additional columns
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String tableName, String idColumnName,
 			boolean autoincrement, List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			Constraints constraints) {
 		this(null, tableName, idColumnName, autoincrement, additionalColumns,
 				constraints);
 	}
@@ -598,11 +604,11 @@ public class AttributesTableMetadata
 	 *            additional columns
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String dataType, String tableName,
 			String idColumnName, boolean autoincrement,
-			List<AttributesColumn> additionalColumns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> additionalColumns, Constraints constraints) {
 		this.dataType = dataType;
 		this.tableName = tableName;
 		this.idColumnName = idColumnName;
@@ -620,10 +626,10 @@ public class AttributesTableMetadata
 	 *            columns
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String tableName,
-			List<AttributesColumn> columns,
-			Collection<Constraint> constraints) {
+			List<AttributesColumn> columns, Constraints constraints) {
 		this(null, tableName, columns, constraints, false);
 	}
 
@@ -640,9 +646,10 @@ public class AttributesTableMetadata
 	 *            constraints
 	 * @param extra
 	 *            unused extra parameter for method overloading
+	 * @since 4.0.1
 	 */
 	public AttributesTableMetadata(String dataType, String tableName,
-			List<AttributesColumn> columns, Collection<Constraint> constraints,
+			List<AttributesColumn> columns, Constraints constraints,
 			boolean extra) {
 		this.dataType = dataType;
 		this.tableName = tableName;
@@ -686,8 +693,9 @@ public class AttributesTableMetadata
 	 * Get the constraints
 	 * 
 	 * @return constraints
+	 * @since 4.0.1
 	 */
-	public Collection<Constraint> getConstraints() {
+	public Constraints getConstraints() {
 		return constraints;
 	}
 
@@ -696,8 +704,9 @@ public class AttributesTableMetadata
 	 * 
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
-	public void setConstraints(Collection<Constraint> constraints) {
+	public void setConstraints(Constraints constraints) {
 		this.constraints = constraints;
 	}
 

@@ -12,7 +12,7 @@ import mil.nga.geopackage.attributes.AttributesColumn;
 import mil.nga.geopackage.attributes.AttributesTableMetadata;
 import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
-import mil.nga.geopackage.db.table.Constraint;
+import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.db.table.UniqueConstraint;
 import mil.nga.geopackage.extension.BaseExtension;
 import mil.nga.geopackage.extension.ExtensionScopeType;
@@ -123,7 +123,7 @@ public abstract class PropertiesCoreExtension<TGeoPackage extends GeoPackageCore
 			additionalColumns.add(propertyColumn);
 			additionalColumns.add(valueColumn);
 
-			List<Constraint> constraints = new ArrayList<>();
+			Constraints constraints = new Constraints();
 			constraints.add(new UniqueConstraint(propertyColumn, valueColumn));
 
 			geoPackage.createAttributesTable(AttributesTableMetadata

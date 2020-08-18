@@ -1,9 +1,7 @@
 package mil.nga.geopackage.db.table;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,7 +16,7 @@ public class TableConstraints {
 	/**
 	 * Table constraints
 	 */
-	private List<Constraint> constraints = new ArrayList<>();
+	private Constraints constraints = new Constraints();
 
 	/**
 	 * Column constraints
@@ -47,17 +45,19 @@ public class TableConstraints {
 	 * 
 	 * @param constraints
 	 *            constraints
+	 * @since 4.0.1
 	 */
-	public void addTableConstraints(Collection<Constraint> constraints) {
-		this.constraints.addAll(constraints);
+	public void addTableConstraints(Constraints constraints) {
+		this.constraints.add(constraints);
 	}
 
 	/**
 	 * Get the table constraints
 	 * 
 	 * @return table constraints
+	 * @since 4.0.1
 	 */
-	public List<Constraint> getTableConstraints() {
+	public Constraints getTableConstraints() {
 		return constraints;
 	}
 
@@ -248,7 +248,7 @@ public class TableConstraints {
 	 * @return true if has table constraints
 	 */
 	public boolean hasTableConstraints() {
-		return !constraints.isEmpty();
+		return constraints.has();
 	}
 
 	/**
