@@ -6,7 +6,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 4.0.1 (TBD)
 
-* TBD
+* ormlite-core version 5.3
+* sf-wkb version 2.0.4
+* sf-wkt version 1.0.1
+* sf-proj version 3.0.4
+* oapi-features-json version 1.0.3
 
 ## [4.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/4.0.0) (07-14-2020)
 
