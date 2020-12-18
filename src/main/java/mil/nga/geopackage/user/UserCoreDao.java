@@ -948,7 +948,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 * @since 3.0.1
 	 */
-
 	public TResult queryForLike(String fieldName, Object value) {
 		return queryForLike(false, fieldName, value);
 	}
@@ -965,7 +964,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 * @since 4.0.0
 	 */
-
 	public TResult queryForLike(boolean distinct, String fieldName,
 			Object value) {
 		return queryForLike(distinct, table.getColumnNames(), fieldName, value);
@@ -983,7 +981,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 * @since 3.5.0
 	 */
-
 	public TResult queryForLike(String[] columns, String fieldName,
 			Object value) {
 		return queryForLike(false, columns, fieldName, value);
@@ -1003,7 +1000,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return result
 	 * @since 4.0.0
 	 */
-
 	public TResult queryForLike(boolean distinct, String[] columns,
 			String fieldName, Object value) {
 		return queryForLike(distinct, columns, fieldName, value, null, null,
@@ -1020,7 +1016,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 * @since 3.5.0
 	 */
-
 	public int countForLike(String fieldName, Object value) {
 		return countForLike(false, null, fieldName, value);
 	}
@@ -1037,7 +1032,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 * @since 4.0.0
 	 */
-
 	public int countForLike(String column, String fieldName, Object value) {
 		return countForLike(false, column, fieldName, value);
 	}
@@ -1056,7 +1050,6 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return count
 	 * @since 4.0.0
 	 */
-
 	public int countForLike(boolean distinct, String column, String fieldName,
 			Object value) {
 		return countForLike(distinct, column, fieldName, value, null, null,

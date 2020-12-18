@@ -284,7 +284,7 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isTableType(String table, ContentsDataType type);
 
 	/**
-	 * Check if the table is one the provided types
+	 * Check if the table is one of the provided types
 	 * 
 	 * @param table
 	 *            table name
@@ -308,7 +308,7 @@ public interface GeoPackageCore extends Closeable {
 	public boolean isTableType(String table, String type);
 
 	/**
-	 * Check if the table is one the provided types
+	 * Check if the table is one of the provided types
 	 * 
 	 * @param table
 	 *            table name
@@ -923,7 +923,7 @@ public interface GeoPackageCore extends Closeable {
 	public void dropTable(String table);
 
 	/**
-	 * Drop the table if it exists. Drops the table with the table name, not
+	 * Drop the view if it exists. Drops the view with the view name, not
 	 * limited to GeoPackage specific tables.
 	 *
 	 * @param view
