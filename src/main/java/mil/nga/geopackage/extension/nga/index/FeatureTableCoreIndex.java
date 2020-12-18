@@ -568,7 +568,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 		boolean created = false;
 
 		try {
-			if (!geometryIndexDao.isTableExists()) {
+			if (!tableIndexDao.isTableExists()) {
 				GeometryIndexTableCreator tableCreator = new GeometryIndexTableCreator(
 						geoPackage);
 				created = tableCreator.createTableIndex() > 0;

@@ -161,9 +161,7 @@ public class MetadataExtension extends BaseExtension {
 				created = geoPackage.getTableCreator().createMetadata() > 0;
 				if (created) {
 					// Create the metadata extension record
-					MetadataExtension metadataExtension = new MetadataExtension(
-							geoPackage);
-					metadataExtension.getOrCreate();
+					getOrCreate();
 				}
 			}
 		} catch (SQLException e) {

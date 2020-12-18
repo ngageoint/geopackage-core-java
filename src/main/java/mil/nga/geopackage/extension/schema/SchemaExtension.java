@@ -230,9 +230,7 @@ public class SchemaExtension extends BaseExtension {
 						.createDataColumnConstraints() > 0;
 				if (created) {
 					// Create the schema extension record
-					SchemaExtension schemaExtension = new SchemaExtension(
-							geoPackage);
-					schemaExtension.getOrCreate();
+					getOrCreate();
 				}
 			}
 		} catch (SQLException e) {
