@@ -542,7 +542,8 @@ public class AlterTable {
 			}
 
 			// 4. Create the new table
-			sql = sql.replaceFirst(tableName, transferTable);
+			sql = sql.replaceFirst(CoreSQLUtils.quoteWrap(tableName),
+					CoreSQLUtils.quoteWrap(transferTable));
 			db.execSQL(sql);
 
 			// If transferring content
