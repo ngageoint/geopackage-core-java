@@ -27,12 +27,12 @@ public interface GeoPackageProgress {
 	/**
 	 * Is the process still active
 	 * 
-	 * @return true if active, false if cancelled
+	 * @return true if active, false if canceled
 	 */
 	public boolean isActive();
 
 	/**
-	 * Should the progress so far be deleted when cancelled ({@link #isActive()}
+	 * Should the progress so far be deleted when canceled ({@link #isActive()}
 	 * becomes false)
 	 * 
 	 * @return true to cleanup progress
