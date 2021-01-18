@@ -14,7 +14,7 @@ import mil.nga.sf.proj.Projection;
  * @author osbornb
  * @since 4.0.1
  */
-public class TileReprojectionCore {
+public abstract class TileReprojectionCore {
 
 	/**
 	 * Optional optimization
@@ -75,7 +75,31 @@ public class TileReprojectionCore {
 	/**
 	 * Optimization zoom
 	 */
-	private int optimizeZoom;
+	private long optimizeZoom;
+
+	/**
+	 * Default Constructor
+	 */
+	protected TileReprojectionCore() {
+
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param projection
+	 *            projection
+	 */
+	protected TileReprojectionCore(GeoPackageCore geoPackage, String table,
+			Projection projection) {
+		this.geoPackage = geoPackage;
+		this.table = table;
+		this.projection = projection;
+	}
 
 	/**
 	 * Get the optimization
@@ -179,6 +203,199 @@ public class TileReprojectionCore {
 	 */
 	public Map<Long, TileReprojectionZoom> getZoomConfigs() {
 		return zoomConfigs;
+	}
+
+	/**
+	 * Get the zoom level configuration for a zoom level
+	 *
+	 * @param zoom
+	 *            from zoom level
+	 * @return zoom config
+	 */
+	public TileReprojectionZoom getConfig(long zoom) {
+		return zoomConfigs.get(zoom);
+	}
+
+	/**
+	 * Get the zoom level configuration or create new configuration for a zoom
+	 * level
+	 *
+	 * @param zoom
+	 *            from zoom level
+	 * @return zoom config
+	 */
+	public TileReprojectionZoom getConfigOrCreate(long zoom) {
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config == null) {
+			config = new TileReprojectionZoom(zoom);
+			setConfig(config);
+		}
+		return config;
+	}
+
+	/**
+	 * Set a zoom level configuration for a zoom level
+	 *
+	 * @param config
+	 *            zoom configuration
+	 */
+	public void setConfig(TileReprojectionZoom config) {
+		zoomConfigs.put(config.getZoom(), config);
+	}
+
+	/**
+	 * Set a reprojected to zoom level for a zoom level
+	 * 
+	 * @param zoom
+	 *            zoom level
+	 * @param toZoom
+	 *            reprojected zoom level
+	 */
+	public void setToZoom(long zoom, long toZoom) {
+		getConfigOrCreate(zoom).setToZoom(toZoom);
+	}
+
+	/**
+	 * Get a reprojected to zoom level from a zoom level, defaults as the zoom
+	 * level if not set
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return reprojected to zoom level
+	 */
+	public long getToZoom(long zoom) {
+		long toZoom = zoom;
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config != null && config.hasToZoom()) {
+			toZoom = config.getToZoom();
+		}
+		return toZoom;
+	}
+
+	/**
+	 * Set a reprojected tile width for a zoom level
+	 *
+	 * @param tileWidth
+	 *            reprojected tile width
+	 * @param zoom
+	 *            zoom level
+	 */
+	public void setTileWidth(long zoom, long tileWidth) {
+		getConfigOrCreate(zoom).setTileWidth(tileWidth);
+	}
+
+	/**
+	 * Get a reprojected tile width from a zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return reprojected tile width
+	 */
+	public Long getTileWidth(long zoom) {
+		Long tileWidth = this.tileWidth;
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config != null && config.hasTileWidth()) {
+			tileWidth = config.getTileWidth();
+		}
+		return tileWidth;
+	}
+
+	/**
+	 * Set a reprojected tile height for a zoom level
+	 * 
+	 * @param zoom
+	 *            zoom level
+	 * @param tileHeight
+	 *            reprojected tile height
+	 */
+	public void setTileHeight(long zoom, long tileHeight) {
+		getConfigOrCreate(zoom).setTileHeight(tileHeight);
+	}
+
+	/**
+	 * Get a reprojected tile height from a zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return reprojected tile height
+	 */
+	public Long getTileHeight(long zoom) {
+		Long tileHeight = this.tileHeight;
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config != null && config.hasTileHeight()) {
+			tileHeight = config.getTileHeight();
+		}
+		return tileHeight;
+	}
+
+	/**
+	 * Set a reprojected matrix width for a zoom level
+	 *
+	 * @param matrixWidth
+	 *            reprojected matrix width
+	 * @param zoom
+	 *            zoom level
+	 */
+	public void setMatrixWidth(long zoom, long matrixWidth) {
+		getConfigOrCreate(zoom).setMatrixWidth(matrixWidth);
+	}
+
+	/**
+	 * Get a reprojected matrix width from a zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return reprojected matrix width
+	 */
+	public Long getMatrixWidth(long zoom) {
+		Long matrixWidth = null;
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config != null && config.hasMatrixWidth()) {
+			matrixWidth = config.getMatrixWidth();
+		}
+		return matrixWidth;
+	}
+
+	/**
+	 * Set a reprojected matrix height for a zoom level
+	 *
+	 * @param matrixHeight
+	 *            reprojected matrix height
+	 * @param zoom
+	 *            zoom level
+	 */
+	public void setMatrixHeight(long zoom, long matrixHeight) {
+		getConfigOrCreate(zoom).setMatrixHeight(matrixHeight);
+	}
+
+	/**
+	 * Get a reprojected matrix height from a zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return reprojected matrix height
+	 */
+	public Long getMatrixHeight(long zoom) {
+		Long matrixHeight = null;
+		TileReprojectionZoom config = getConfig(zoom);
+		if (config != null && config.hasMatrixHeight()) {
+			matrixHeight = config.getMatrixHeight();
+		}
+		return matrixHeight;
+	}
+
+	/**
+	 * Initialize the reprojection
+	 */
+	protected void initialize() {
+
+	}
+
+	/**
+	 * Finish the reprojection
+	 */
+	protected void finish() {
+
 	}
 
 }
