@@ -3,10 +3,15 @@ package mil.nga.geopackage.tiles.reproject;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.tiles.TileGrid;
+import mil.nga.geopackage.tiles.user.TileColumn;
+import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.user.UserCoreDao;
 import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 
 /**
  * Tile Reprojection for reprojecting an existing tile table
@@ -19,74 +24,79 @@ public abstract class TileReprojectionCore {
 	/**
 	 * Optional optimization
 	 */
-	private TileReprojectionOptimize optimize;
+	protected TileReprojectionOptimize optimize;
 
 	/**
 	 * Overwrite existing tiles at a zoom level when geographic calculations
 	 * differ
 	 */
-	private boolean overwrite = false;
+	protected boolean overwrite = false;
 
 	/**
 	 * Tile width in pixels
 	 */
-	private Long tileWidth;
+	protected Long tileWidth;
 
 	/**
 	 * Tile height in pixels
 	 */
-	private Long tileHeight;
+	protected Long tileHeight;
 
 	/**
 	 * Progress callbacks
 	 */
-	private GeoPackageProgress progress;
+	protected GeoPackageProgress progress;
+
+	/**
+	 * Tile DAO
+	 */
+	protected UserCoreDao<TileColumn, TileTable, ?, ?> tileDao;
 
 	/**
 	 * GeoPackage
 	 */
-	private GeoPackageCore geoPackage;
+	protected GeoPackageCore geoPackage;
 
 	/**
 	 * Table name
 	 */
-	private String table;
+	protected String table;
 
 	/**
 	 * Projection
 	 */
-	private Projection projection;
+	protected Projection projection;
+
+	/**
+	 * Tile DAO
+	 */
+	protected UserCoreDao<TileColumn, TileTable, ?, ?> reprojectTileDao;
 
 	/**
 	 * Replace flag
 	 */
-	private boolean replace = false;
+	protected boolean replace = false;
 
 	/**
 	 * Zoom level configuration map
 	 */
-	private Map<Long, TileReprojectionZoom> zoomConfigs = new HashMap<>();
+	protected Map<Long, TileReprojectionZoom> zoomConfigs = new HashMap<>();
 
 	/**
 	 * Optimization tile grid
 	 */
-	private TileGrid optimizeTileGrid;
+	protected TileGrid optimizeTileGrid;
 
 	/**
 	 * Optimization zoom
 	 */
-	private long optimizeZoom;
-
-	/**
-	 * Default Constructor
-	 */
-	protected TileReprojectionCore() {
-
-	}
+	protected long optimizeZoom;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param tileDao
+	 *            tile DAO
 	 * @param geoPackage
 	 *            GeoPackage
 	 * @param table
@@ -94,12 +104,36 @@ public abstract class TileReprojectionCore {
 	 * @param projection
 	 *            projection
 	 */
-	protected TileReprojectionCore(GeoPackageCore geoPackage, String table,
-			Projection projection) {
+	protected TileReprojectionCore(
+			UserCoreDao<TileColumn, TileTable, ?, ?> tileDao,
+			GeoPackageCore geoPackage, String table, Projection projection) {
+		this.tileDao = tileDao;
 		this.geoPackage = geoPackage;
 		this.table = table;
 		this.projection = projection;
 	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tileDao
+	 *            tile DAO
+	 * @param reprojectTileDao
+	 *            reprojection tile DAO
+	 */
+	protected TileReprojectionCore(
+			UserCoreDao<TileColumn, TileTable, ?, ?> tileDao,
+			UserCoreDao<TileColumn, TileTable, ?, ?> reprojectTileDao) {
+		this.tileDao = tileDao;
+		this.reprojectTileDao = reprojectTileDao;
+	}
+
+	/**
+	 * Get the optimization minimum zoom level
+	 * 
+	 * @return zoom level
+	 */
+	protected abstract long getOptimizeZoom();
 
 	/**
 	 * Get the optimization
@@ -389,13 +423,74 @@ public abstract class TileReprojectionCore {
 	 */
 	protected void initialize() {
 
+		// TODO
+		
 	}
 
 	/**
 	 * Finish the reprojection
 	 */
 	protected void finish() {
+		boolean active = isActive();
+		if (replace) {
+			if (active) {
+				geoPackage.deleteTable(tileDao.getTableName());
+				geoPackage.copyTable(reprojectTileDao.getTableName(),
+						tileDao.getTableName());
+				geoPackage.deleteTable(reprojectTileDao.getTableName());
+				reprojectTileDao = null;
+			}
+			table = tileDao.getTableName();
+			replace = false;
+		}
+		if (progress != null && !active && progress.cleanupOnCancel()) {
+			geoPackage.deleteTable(reprojectTileDao.getTableName());
+		}
+	}
 
+	/**
+	 * Optimize the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @return optimized bounding box
+	 */
+	protected BoundingBox optimize(BoundingBox boundingBox) {
+
+		if (optimize.isWorld()) {
+			optimizeZoom = 0;
+			optimizeTileGrid = optimize.tileGrid();
+			boundingBox = optimize.boundingBox();
+			ProjectionTransform transform = optimize.projection()
+					.getTransformation(projection);
+			if (!transform.isSameProjection()) {
+				boundingBox = boundingBox.transform(transform);
+			}
+		} else {
+			optimizeZoom = getOptimizeZoom();
+			ProjectionTransform transform = projection
+					.getTransformation(optimize.projection());
+			if (!transform.isSameProjection()) {
+				boundingBox = boundingBox.transform(transform);
+			}
+			optimizeTileGrid = optimize.tileGrid(boundingBox, optimizeZoom);
+			boundingBox = optimize.boundingBox(optimizeTileGrid, optimizeZoom);
+			if (!transform.isSameProjection()) {
+				boundingBox = boundingBox
+						.transform(transform.getInverseTransformation());
+			}
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Check if currently active
+	 * 
+	 * @return true if active
+	 */
+	protected boolean isActive() {
+		return progress == null || progress.isActive();
 	}
 
 }

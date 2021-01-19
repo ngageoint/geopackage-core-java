@@ -125,7 +125,7 @@ public abstract class TileReprojectionOptimize {
 	 *
 	 * @return tile grid
 	 */
-	public abstract TileGrid tileGrid(BoundingBox boundingBox, int zoom);
+	public abstract TileGrid tileGrid(BoundingBox boundingBox, long zoom);
 
 	/**
 	 * Get the bounding box of the tile grid at the zoom
@@ -137,6 +137,6 @@ public abstract class TileReprojectionOptimize {
 	 *
 	 * @return bounding box
 	 */
-	public abstract BoundingBox boundingBox(TileGrid tileGrid, int zoom);
+	public abstract BoundingBox boundingBox(TileGrid tileGrid, long zoom);
 
 }

@@ -79,16 +79,16 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid(BoundingBox boundingBox, int zoom) {
-		return TileBoundingBoxUtils.getTileGridWGS84(boundingBox, zoom);
+	public TileGrid tileGrid(BoundingBox boundingBox, long zoom) {
+		return TileBoundingBoxUtils.getTileGridWGS84(boundingBox, (int) zoom);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox(TileGrid tileGrid, int zoom) {
-		return TileBoundingBoxUtils.getWGS84BoundingBox(tileGrid, zoom);
+	public BoundingBox boundingBox(TileGrid tileGrid, long zoom) {
+		return TileBoundingBoxUtils.getWGS84BoundingBox(tileGrid, (int) zoom);
 	}
 
 }

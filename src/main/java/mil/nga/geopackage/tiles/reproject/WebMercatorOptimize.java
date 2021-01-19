@@ -83,16 +83,17 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid(BoundingBox boundingBox, int zoom) {
-		return TileBoundingBoxUtils.getTileGrid(boundingBox, zoom);
+	public TileGrid tileGrid(BoundingBox boundingBox, long zoom) {
+		return TileBoundingBoxUtils.getTileGrid(boundingBox, (int) zoom);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox(TileGrid tileGrid, int zoom) {
-		return TileBoundingBoxUtils.getWebMercatorBoundingBox(tileGrid, zoom);
+	public BoundingBox boundingBox(TileGrid tileGrid, long zoom) {
+		return TileBoundingBoxUtils.getWebMercatorBoundingBox(tileGrid,
+				(int) zoom);
 	}
 
 }
