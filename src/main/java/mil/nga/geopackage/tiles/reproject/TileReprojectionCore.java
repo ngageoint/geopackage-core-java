@@ -1,14 +1,25 @@
 package mil.nga.geopackage.tiles.reproject;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.db.master.SQLiteMaster;
+import mil.nga.geopackage.db.master.SQLiteMasterColumn;
+import mil.nga.geopackage.db.master.SQLiteMasterQuery;
 import mil.nga.geopackage.io.GeoPackageProgress;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.TileGrid;
+import mil.nga.geopackage.tiles.matrix.TileMatrix;
+import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.tiles.user.TileTableMetadata;
 import mil.nga.geopackage.user.UserCoreDao;
 import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionTransform;
@@ -129,11 +140,61 @@ public abstract class TileReprojectionCore {
 	}
 
 	/**
+	 * Constructor
+	 * 
+	 * @param tileDao
+	 *            tile DAO
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param reprojectTileDao
+	 *            reprojection tile DAO
+	 */
+	protected TileReprojectionCore(
+			UserCoreDao<TileColumn, TileTable, ?, ?> tileDao,
+			GeoPackageCore geoPackage,
+			UserCoreDao<TileColumn, TileTable, ?, ?> reprojectTileDao) {
+		this(tileDao, reprojectTileDao);
+		this.geoPackage = geoPackage;
+	}
+
+	/**
 	 * Get the optimization minimum zoom level
 	 * 
 	 * @return zoom level
 	 */
 	protected abstract long getOptimizeZoom();
+
+	/**
+	 * Create the reprojection tile DAO
+	 * 
+	 * @param table
+	 *            table name
+	 * @return reprojection tile DAO
+	 */
+	protected abstract UserCoreDao<TileColumn, TileTable, ?, ?> createReprojectTileDao(
+			String table);
+
+	/**
+	 * Get the reprojection tile matrix set
+	 * 
+	 * @return tile matrix set
+	 */
+	protected abstract TileMatrixSet getTileMatrixSet();
+
+	/**
+	 * Get the reprojection tile matrices
+	 * 
+	 * @return tile matrix matrices
+	 */
+	protected abstract List<TileMatrix> getTileMatrices();
+
+	/**
+	 * Delete the table tile matrices
+	 * 
+	 * @param table
+	 *            table name
+	 */
+	protected abstract void deleteTileMatrices(String table);
 
 	/**
 	 * Get the optimization
@@ -423,8 +484,133 @@ public abstract class TileReprojectionCore {
 	 */
 	protected void initialize() {
 
-		// TODO
-		
+		if (reprojectTileDao == null) {
+
+			BoundingBox boundingBox = tileDao.getBoundingBox(projection);
+			BoundingBox contentsBoundingBox = boundingBox;
+			SpatialReferenceSystem srs;
+			try {
+				srs = geoPackage.getSpatialReferenceSystemDao()
+						.getOrCreate(projection);
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to create Spatial Reference System for projection. Authority: "
+								+ projection.getAuthority() + ", Code: "
+								+ projection.getCode());
+			}
+
+			if (tileDao.getDatabase().equals(geoPackage.getName())
+					&& tileDao.getTableName().equalsIgnoreCase(table)) {
+				// Replacing source table, find a temp table name for the
+				// reprojections
+				int count = 1;
+				String tempTable = table + "_" + (++count);
+				while (SQLiteMaster.count(tileDao.getDb(), SQLiteMasterQuery
+						.create(SQLiteMasterColumn.NAME, tempTable)) > 0) {
+					tempTable = table + "_" + (++count);
+				}
+				table = tempTable;
+				replace = true;
+			}
+
+			if (optimize != null) {
+				boundingBox = optimize(boundingBox);
+			}
+
+			TileTable tileTable = null;
+			if (geoPackage.isTable(table)) {
+
+				if (!geoPackage.isTileTable(table)) {
+					throw new GeoPackageException(
+							"Table exists and is not a tile table: " + table);
+				}
+
+				reprojectTileDao = createReprojectTileDao(table);
+
+				if (!reprojectTileDao.getProjection().equals(projection)) {
+					throw new GeoPackageException(
+							"Existing tile table projection differs from the reprojection. Table: "
+									+ table + ", Projection: " + projection
+									+ ", Reprojection: "
+									+ reprojectTileDao.getProjection());
+				}
+
+				TileMatrixSet tileMatrixSet = getTileMatrixSet();
+				List<TileMatrix> tileMatrices = getTileMatrices();
+
+				if (tileMatrices.size() > 0) {
+
+					TileMatrix tileMatrix = tileMatrices.get(0);
+
+					if (Math.abs(tileMatrixSet.getMinX()
+							- boundingBox.getMinLongitude()) > tileMatrix
+									.getPixelXSize()
+							|| Math.abs(tileMatrixSet.getMinY()
+									- boundingBox.getMinLatitude()) > tileMatrix
+											.getPixelYSize()
+							|| Math.abs(tileMatrixSet.getMaxX() - boundingBox
+									.getMaxLongitude()) > tileMatrix
+											.getPixelXSize()
+							|| Math.abs(tileMatrixSet.getMaxY()
+									- boundingBox.getMaxLatitude()) > tileMatrix
+											.getPixelYSize()) {
+
+						if (!overwrite) {
+							throw new GeoPackageException(
+									"Existing Tile Matrix Set Geographic Properties differ. Enable 'overwrite' to replace all tiles. GeoPackage: "
+											+ reprojectTileDao.getDatabase()
+											+ ", Tile Table: "
+											+ reprojectTileDao.getTableName());
+						}
+
+						deleteTileMatrices(table);
+						reprojectTileDao.deleteAll();
+
+					}
+
+				}
+
+				Contents contents = reprojectTileDao.getContents();
+				contents.setSrs(srs);
+				contents.setMinX(contentsBoundingBox.getMinLongitude());
+				contents.setMinY(contentsBoundingBox.getMinLatitude());
+				contents.setMaxX(contentsBoundingBox.getMaxLongitude());
+				contents.setMaxY(contentsBoundingBox.getMaxLatitude());
+				try {
+					geoPackage.getContentsDao().update(contents);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to update reprojection tile table contents. GeoPackage: "
+									+ reprojectTileDao.getDatabase()
+									+ ", Table: "
+									+ reprojectTileDao.getTableName());
+				}
+
+				tileMatrixSet.setSrs(srs);
+				tileMatrixSet.setMinX(boundingBox.getMinLongitude());
+				tileMatrixSet.setMinY(boundingBox.getMinLatitude());
+				tileMatrixSet.setMaxX(boundingBox.getMaxLongitude());
+				tileMatrixSet.setMaxY(boundingBox.getMaxLatitude());
+				try {
+					geoPackage.getTileMatrixSetDao().update(tileMatrixSet);
+				} catch (SQLException e) {
+					throw new GeoPackageException(
+							"Failed to update reprojection tile matrix set. GeoPackage: "
+									+ reprojectTileDao.getDatabase()
+									+ ", Table: "
+									+ reprojectTileDao.getTableName());
+				}
+
+			} else {
+				tileTable = geoPackage.createTileTable(
+						TileTableMetadata.create(table, contentsBoundingBox,
+								boundingBox, srs.getSrsId()));
+				reprojectTileDao = createReprojectTileDao(
+						tileTable.getTableName());
+			}
+
+		}
+
 	}
 
 	/**
@@ -444,6 +630,13 @@ public abstract class TileReprojectionCore {
 			replace = false;
 		}
 		if (progress != null && !active && progress.cleanupOnCancel()) {
+			if (geoPackage == null) {
+				throw new GeoPackageException(
+						"Reprojeciton cleanup not supported when constructed without the GeoPackage. GeoPackage:"
+								+ reprojectTileDao.getDatabase()
+								+ ", Tile Table: "
+								+ reprojectTileDao.getTableName());
+			}
 			geoPackage.deleteTable(reprojectTileDao.getTableName());
 		}
 	}
