@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
@@ -366,11 +365,8 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 					// Delete Tile Matrix collection
 					TileMatrixDao tileMatrixDao = getTileMatrixDao();
 					if (tileMatrixDao.isTableExists()) {
-						ForeignCollection<TileMatrix> tileMatrixCollection = contents
-								.getTileMatrix();
-						if (!tileMatrixCollection.isEmpty()) {
-							tileMatrixDao.delete(tileMatrixCollection);
-						}
+						tileMatrixDao
+								.deleteByTableName(contents.getTableName());
 					}
 
 					// Delete Tile Matrix Set

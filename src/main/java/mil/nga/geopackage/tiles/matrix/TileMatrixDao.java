@@ -171,6 +171,23 @@ public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 	}
 
 	/**
+	 * Delete Tile Matrices for a table name
+	 *
+	 * @param table
+	 *            table name
+	 *
+	 * @return rows deleted
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 4.0.1
+	 */
+	public int deleteByTableName(String table) throws SQLException {
+		DeleteBuilder<TileMatrix, TileMatrixKey> db = deleteBuilder();
+		db.where().eq(TileMatrix.COLUMN_TABLE_NAME, table);
+		return delete(db.prepare());
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * Update using the complex key
