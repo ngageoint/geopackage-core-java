@@ -343,8 +343,7 @@ public abstract class FeatureCoreGenerator {
 		SpatialReferenceSystemDao srsDao = geoPackage
 				.getSpatialReferenceSystemDao();
 		Projection srsProjection = getSrsProjection();
-		srs = srsDao.getOrCreateCode(srsProjection.getAuthority(),
-				Long.parseLong(srsProjection.getCode()));
+		srs = srsDao.getOrCreate(srsProjection);
 
 	}
 

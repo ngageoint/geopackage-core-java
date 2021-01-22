@@ -23,6 +23,7 @@ import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
+import mil.nga.sf.proj.Projection;
 import mil.nga.sf.proj.ProjectionConstants;
 
 /**
@@ -584,6 +585,22 @@ public class SpatialReferenceSystemDao
 	}
 
 	/**
+	 * Get or Create the Spatial Reference System from the projection
+	 * 
+	 * @param projection
+	 *            projection
+	 * @return srs
+	 * @throws SQLException
+	 *             upon query or creation failure
+	 * @since 4.0.1
+	 */
+	public SpatialReferenceSystem getOrCreate(Projection projection)
+			throws SQLException {
+		return getOrCreateCode(projection.getAuthority(),
+				Long.parseLong(projection.getCode()));
+	}
+
+	/**
 	 * Query for the organization coordsys id
 	 * 
 	 * @param organization
@@ -620,6 +637,22 @@ public class SpatialReferenceSystemDao
 			srs = results.get(0);
 		}
 		return srs;
+	}
+
+	/**
+	 * Query for the projection
+	 * 
+	 * @param projection
+	 *            projection
+	 * @return srs
+	 * @throws SQLException
+	 *             upon query failure
+	 * @since 4.0.1
+	 */
+	public SpatialReferenceSystem query(Projection projection)
+			throws SQLException {
+		return queryForOrganizationCoordsysId(projection.getAuthority(),
+				Long.parseLong(projection.getCode()));
 	}
 
 	/**
