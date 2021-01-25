@@ -315,7 +315,7 @@ public class TileBoundingBoxUtils {
 	 *            zoom level
 	 * @return bounding box
 	 */
-	public static BoundingBox getBoundingBox(int x, int y, int zoom) {
+	public static BoundingBox getBoundingBox(int x, int y, long zoom) {
 
 		int tilesPerSide = tilesPerSide(zoom);
 		double tileWidthDegrees = tileWidthDegrees(tilesPerSide);
@@ -345,7 +345,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(long x, long y,
-			int zoom) {
+			long zoom) {
 
 		double tileSize = tileSizeWithZoom(zoom);
 
@@ -374,7 +374,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(TileGrid tileGrid,
-			int zoom) {
+			long zoom) {
 
 		double tileSize = tileSizeWithZoom(zoom);
 
@@ -407,7 +407,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
-			int x, int y, int zoom) {
+			int x, int y, long zoom) {
 		return getProjectedBoundingBox(ProjectionConstants.AUTHORITY_EPSG,
 				projectionEpsg, x, y, zoom);
 	}
@@ -430,7 +430,7 @@ public class TileBoundingBoxUtils {
 	 * @since 1.3.0
 	 */
 	public static BoundingBox getProjectedBoundingBox(String authority,
-			Long code, int x, int y, int zoom) {
+			Long code, int x, int y, long zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
@@ -458,7 +458,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Projection projection,
-			long x, long y, int zoom) {
+			long x, long y, long zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
@@ -484,7 +484,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Long projectionEpsg,
-			TileGrid tileGrid, int zoom) {
+			TileGrid tileGrid, long zoom) {
 		return getProjectedBoundingBox(ProjectionConstants.AUTHORITY_EPSG,
 				projectionEpsg, tileGrid, zoom);
 	}
@@ -505,7 +505,7 @@ public class TileBoundingBoxUtils {
 	 * @since 1.3.0
 	 */
 	public static BoundingBox getProjectedBoundingBox(String authority,
-			Long code, TileGrid tileGrid, int zoom) {
+			Long code, TileGrid tileGrid, long zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
@@ -530,7 +530,7 @@ public class TileBoundingBoxUtils {
 	 * @return bounding box
 	 */
 	public static BoundingBox getProjectedBoundingBox(Projection projection,
-			TileGrid tileGrid, int zoom) {
+			TileGrid tileGrid, long zoom) {
 
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
@@ -553,7 +553,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid
 	 * @since 1.1.0
 	 */
-	public static TileGrid getTileGridFromWGS84(Point point, int zoom) {
+	public static TileGrid getTileGridFromWGS84(Point point, long zoom) {
 		Projection projection = ProjectionFactory
 				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
 		return getTileGrid(point, zoom, projection);
@@ -571,7 +571,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid
 	 * @since 1.1.0
 	 */
-	public static TileGrid getTileGrid(Point point, int zoom,
+	public static TileGrid getTileGrid(Point point, long zoom,
 			Projection projection) {
 		ProjectionTransform toWebMercator = projection
 				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
@@ -592,7 +592,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid
 	 */
 	public static TileGrid getTileGrid(BoundingBox webMercatorBoundingBox,
-			int zoom) {
+			long zoom) {
 
 		int tilesPerSide = tilesPerSide(zoom);
 		double tileSize = tileSize(tilesPerSide);
@@ -709,7 +709,7 @@ public class TileBoundingBoxUtils {
 	 *            zoom level
 	 * @return tiles per side
 	 */
-	public static int tilesPerSide(int zoom) {
+	public static int tilesPerSide(long zoom) {
 		return (int) Math.pow(2, zoom);
 	}
 
@@ -722,7 +722,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile size in meters
 	 * @since 2.0.0
 	 */
-	public static double tileSizeWithZoom(int zoom) {
+	public static double tileSizeWithZoom(long zoom) {
 		int tilesPerSide = tilesPerSide(zoom);
 		double tileSize = tileSize(tilesPerSide);
 		return tileSize;
@@ -739,7 +739,7 @@ public class TileBoundingBoxUtils {
 	 * @return tolerance distance in meters
 	 * @since 2.0.0
 	 */
-	public static double toleranceDistance(int zoom, int pixels) {
+	public static double toleranceDistance(long zoom, int pixels) {
 		double tileSize = tileSizeWithZoom(zoom);
 		double tolerance = tileSize / pixels;
 		return tolerance;
@@ -758,7 +758,7 @@ public class TileBoundingBoxUtils {
 	 * @return tolerance distance in meters
 	 * @since 2.0.0
 	 */
-	public static double toleranceDistance(int zoom, int pixelWidth,
+	public static double toleranceDistance(long zoom, int pixelWidth,
 			int pixelHeight) {
 		return toleranceDistance(zoom, Math.max(pixelWidth, pixelHeight));
 	}
@@ -772,7 +772,7 @@ public class TileBoundingBoxUtils {
 	 *            y coordinate
 	 * @return opposite tile format y
 	 */
-	public static int getYAsOppositeTileFormat(int zoom, int y) {
+	public static int getYAsOppositeTileFormat(long zoom, int y) {
 		int tilesPerSide = tilesPerSide(zoom);
 		int oppositeY = tilesPerSide - y - 1;
 		return oppositeY;
@@ -1172,7 +1172,8 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid
 	 * @since 1.2.0
 	 */
-	public static TileGrid getTileGridWGS84(BoundingBox boundingBox, int zoom) {
+	public static TileGrid getTileGridWGS84(BoundingBox boundingBox,
+			long zoom) {
 
 		int tilesPerLat = tilesPerWGS84LatSide(zoom);
 		int tilesPerLon = tilesPerWGS84LonSide(zoom);
@@ -1219,7 +1220,8 @@ public class TileBoundingBoxUtils {
 	 * @return wgs84 bounding box
 	 * @since 1.2.0
 	 */
-	public static BoundingBox getWGS84BoundingBox(TileGrid tileGrid, int zoom) {
+	public static BoundingBox getWGS84BoundingBox(TileGrid tileGrid,
+			long zoom) {
 
 		int tilesPerLat = tilesPerWGS84LatSide(zoom);
 		int tilesPerLon = tilesPerWGS84LonSide(zoom);
@@ -1250,7 +1252,7 @@ public class TileBoundingBoxUtils {
 	 * @return tiles per latitude side
 	 * @since 1.2.0
 	 */
-	public static int tilesPerWGS84LatSide(int zoom) {
+	public static int tilesPerWGS84LatSide(long zoom) {
 		return tilesPerSide(zoom);
 	}
 
@@ -1263,7 +1265,7 @@ public class TileBoundingBoxUtils {
 	 * @return tiles per longitude side
 	 * @since 1.2.0
 	 */
-	public static int tilesPerWGS84LonSide(int zoom) {
+	public static int tilesPerWGS84LonSide(long zoom) {
 		return 2 * tilesPerSide(zoom);
 	}
 
@@ -1308,12 +1310,12 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid at new zoom level
 	 * @since 2.0.1
 	 */
-	public static TileGrid tileGridZoom(TileGrid tileGrid, int fromZoom,
-			int toZoom) {
+	public static TileGrid tileGridZoom(TileGrid tileGrid, long fromZoom,
+			long toZoom) {
 
 		TileGrid newTileGrid = null;
 
-		int zoomChange = toZoom - fromZoom;
+		long zoomChange = toZoom - fromZoom;
 		if (zoomChange > 0) {
 			newTileGrid = tileGridZoomIncrease(tileGrid, zoomChange);
 		} else if (zoomChange < 0) {
@@ -1338,7 +1340,7 @@ public class TileBoundingBoxUtils {
 	 * @since 2.0.1
 	 */
 	public static TileGrid tileGridZoomIncrease(TileGrid tileGrid,
-			int zoomLevels) {
+			long zoomLevels) {
 		long minX = tileGridMinZoomIncrease(tileGrid.getMinX(), zoomLevels);
 		long maxX = tileGridMaxZoomIncrease(tileGrid.getMaxX(), zoomLevels);
 		long minY = tileGridMinZoomIncrease(tileGrid.getMinY(), zoomLevels);
@@ -1359,7 +1361,7 @@ public class TileBoundingBoxUtils {
 	 * @since 2.0.1
 	 */
 	public static TileGrid tileGridZoomDecrease(TileGrid tileGrid,
-			int zoomLevels) {
+			long zoomLevels) {
 		long minX = tileGridMinZoomDecrease(tileGrid.getMinX(), zoomLevels);
 		long maxX = tileGridMaxZoomDecrease(tileGrid.getMaxX(), zoomLevels);
 		long minY = tileGridMinZoomDecrease(tileGrid.getMinY(), zoomLevels);
@@ -1379,7 +1381,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid min value at new zoom level
 	 * @since 2.0.1
 	 */
-	public static long tileGridMinZoomIncrease(long min, int zoomLevels) {
+	public static long tileGridMinZoomIncrease(long min, long zoomLevels) {
 		return min * (long) Math.pow(2, zoomLevels);
 	}
 
@@ -1394,7 +1396,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid max value at new zoom level
 	 * @since 2.0.1
 	 */
-	public static long tileGridMaxZoomIncrease(long max, int zoomLevels) {
+	public static long tileGridMaxZoomIncrease(long max, long zoomLevels) {
 		return (max + 1) * (long) Math.pow(2, zoomLevels) - 1;
 	}
 
@@ -1409,7 +1411,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid min value at new zoom level
 	 * @since 2.0.1
 	 */
-	public static long tileGridMinZoomDecrease(long min, int zoomLevels) {
+	public static long tileGridMinZoomDecrease(long min, long zoomLevels) {
 		return (long) Math.floor(min / Math.pow(2, zoomLevels));
 	}
 
@@ -1424,7 +1426,7 @@ public class TileBoundingBoxUtils {
 	 * @return tile grid max value at new zoom level
 	 * @since 2.0.1
 	 */
-	public static long tileGridMaxZoomDecrease(long max, int zoomLevels) {
+	public static long tileGridMaxZoomDecrease(long max, long zoomLevels) {
 		return (long) Math.ceil((max + 1) / Math.pow(2, zoomLevels) - 1);
 	}
 

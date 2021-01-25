@@ -14,10 +14,12 @@ import mil.nga.geopackage.db.master.SQLiteMasterColumn;
 import mil.nga.geopackage.db.master.SQLiteMasterQuery;
 import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
+import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.TileGrid;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileColumn;
+import mil.nga.geopackage.tiles.user.TileColumns;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.tiles.user.TileTableMetadata;
 import mil.nga.geopackage.user.UserCoreDao;
@@ -31,6 +33,11 @@ import mil.nga.sf.proj.ProjectionTransform;
  * @since 4.0.1
  */
 public abstract class TileReprojectionCore {
+
+	/**
+	 * Delta for comparisons between same pixel sizes
+	 */
+	private static final double PIXEL_SIZE_DELTA = .00000000001;
 
 	/**
 	 * Optional optimization
@@ -175,26 +182,73 @@ public abstract class TileReprojectionCore {
 			String table);
 
 	/**
-	 * Get the reprojection tile matrix set
+	 * Get the tile matrix set
 	 * 
+	 * @param reproject
+	 *            true for reprojection tile dao
 	 * @return tile matrix set
 	 */
-	protected abstract TileMatrixSet getTileMatrixSet();
+	protected abstract TileMatrixSet getTileMatrixSet(boolean reproject);
 
 	/**
-	 * Get the reprojection tile matrices
+	 * Get the tile matrices
 	 * 
+	 * @param reproject
+	 *            true for reprojection tile dao
 	 * @return tile matrix matrices
 	 */
-	protected abstract List<TileMatrix> getTileMatrices();
+	protected abstract List<TileMatrix> getTileMatrices(boolean reproject);
+
+	/**
+	 * Get the tile matrix
+	 * 
+	 * @param reproject
+	 *            true for reprojection tile dao
+	 * @param zoom
+	 *            zoom level
+	 * @return tile matrix
+	 */
+	protected abstract TileMatrix getTileMatrix(boolean reproject, long zoom);
 
 	/**
 	 * Delete the table tile matrices
 	 * 
+	 * @param reproject
+	 *            true for reprojection tile dao
 	 * @param table
 	 *            table name
 	 */
-	protected abstract void deleteTileMatrices(String table);
+	protected abstract void deleteTileMatrices(boolean reproject, String table);
+
+	/**
+	 * Get the map zoom of the tile matrix
+	 * 
+	 * @param reproject
+	 *            true for reprojection tile dao
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @return map zoom level
+	 */
+	protected abstract long getMapZoom(boolean reproject,
+			TileMatrix tileMatrix);
+
+	/**
+	 * Create the tile matrix
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix
+	 */
+	protected abstract void createTileMatrix(TileMatrix tileMatrix);
+
+	/**
+	 * Reproject the tiles
+	 * 
+	 * @param zoom
+	 *            zoom level
+	 * 
+	 * @return reprojected tiles
+	 */
+	protected abstract int reproject(long zoom);
 
 	/**
 	 * Get the optimization
@@ -496,7 +550,8 @@ public abstract class TileReprojectionCore {
 				throw new GeoPackageException(
 						"Failed to create Spatial Reference System for projection. Authority: "
 								+ projection.getAuthority() + ", Code: "
-								+ projection.getCode());
+								+ projection.getCode(),
+						e);
 			}
 
 			if (tileDao.getDatabase().equals(geoPackage.getName())
@@ -535,8 +590,8 @@ public abstract class TileReprojectionCore {
 									+ reprojectTileDao.getProjection());
 				}
 
-				TileMatrixSet tileMatrixSet = getTileMatrixSet();
-				List<TileMatrix> tileMatrices = getTileMatrices();
+				TileMatrixSet tileMatrixSet = getTileMatrixSet(true);
+				List<TileMatrix> tileMatrices = getTileMatrices(true);
 
 				if (tileMatrices.size() > 0) {
 
@@ -563,7 +618,7 @@ public abstract class TileReprojectionCore {
 											+ reprojectTileDao.getTableName());
 						}
 
-						deleteTileMatrices(table);
+						deleteTileMatrices(true, table);
 						reprojectTileDao.deleteAll();
 
 					}
@@ -583,7 +638,8 @@ public abstract class TileReprojectionCore {
 							"Failed to update reprojection tile table contents. GeoPackage: "
 									+ reprojectTileDao.getDatabase()
 									+ ", Table: "
-									+ reprojectTileDao.getTableName());
+									+ reprojectTileDao.getTableName(),
+							e);
 				}
 
 				tileMatrixSet.setSrs(srs);
@@ -598,7 +654,8 @@ public abstract class TileReprojectionCore {
 							"Failed to update reprojection tile matrix set. GeoPackage: "
 									+ reprojectTileDao.getDatabase()
 									+ ", Table: "
-									+ reprojectTileDao.getTableName());
+									+ reprojectTileDao.getTableName(),
+							e);
 				}
 
 			} else {
@@ -639,6 +696,212 @@ public abstract class TileReprojectionCore {
 			}
 			geoPackage.deleteTable(reprojectTileDao.getTableName());
 		}
+	}
+
+	/**
+	 * Reproject the tile table
+	 *
+	 * @return created tiles
+	 */
+	public int reproject() {
+		initialize();
+
+		int tiles = 0;
+
+		for (TileMatrix tileMatrix : getTileMatrices(false)) {
+
+			if (!isActive()) {
+				break;
+			}
+
+			tiles += reprojectIfExists(tileMatrix.getZoomLevel());
+
+		}
+
+		finish();
+		return tiles;
+	}
+
+	/**
+	 * Reproject the tile table within the zoom range
+	 *
+	 * @param minZoom
+	 *            min zoom
+	 * @param maxZoom
+	 *            max zoom
+	 * @return created tiles
+	 */
+	public int reproject(long minZoom, long maxZoom) {
+		initialize();
+
+		int tiles = 0;
+
+		for (long zoom = minZoom; zoom <= maxZoom; zoom++) {
+
+			if (!isActive()) {
+				break;
+			}
+
+			tiles += reprojectIfExists(zoom);
+		}
+
+		finish();
+		return tiles;
+	}
+
+	/**
+	 * Reproject the tile table for the zoom levels, ordered numerically lowest
+	 * to highest
+	 *
+	 * @param zooms
+	 *            zoom levels, ordered lowest to highest
+	 * @return created tiles
+	 */
+	public int reproject(List<Long> zooms) {
+		initialize();
+
+		int tiles = 0;
+
+		for (long zoom : zooms) {
+
+			if (!isActive()) {
+				break;
+			}
+
+			tiles += reprojectIfExists(zoom);
+		}
+
+		finish();
+		return tiles;
+	}
+
+	/**
+	 * Reproject the tile table for the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @return created tiles
+	 */
+	public int reproject(int zoom) {
+		initialize();
+
+		int tiles = reprojectIfExists(zoom);
+
+		finish();
+		return tiles;
+	}
+
+	private int reprojectIfExists(long zoom) {
+
+		int tiles = 0;
+
+		TileMatrix tileMatrix = getTileMatrix(false, zoom);
+
+		if (tileMatrix != null) {
+			tiles = reproject(tileMatrix);
+		}
+
+		return tiles;
+	}
+
+	private int reproject(TileMatrix tileMatrix) {
+
+		long zoom = tileMatrix.getZoomLevel();
+		long toZoom = getToZoom(zoom);
+
+		Long tileWidth = getTileWidth(zoom);
+		if (tileWidth == null) {
+			tileWidth = tileMatrix.getTileWidth();
+		}
+
+		Long tileHeight = getTileHeight(zoom);
+		if (tileHeight == null) {
+			tileHeight = tileMatrix.getTileHeight();
+		}
+
+		Long matrixWidth = getMatrixWidth(zoom);
+		if (matrixWidth == null) {
+			matrixWidth = tileMatrix.getMatrixWidth();
+		}
+
+		Long matrixHeight = getMatrixHeight(zoom);
+		if (matrixHeight == null) {
+			matrixHeight = tileMatrix.getMatrixHeight();
+		}
+
+		BoundingBox boundingBox = reprojectTileDao.getBoundingBox();
+
+		if (optimizeTileGrid != null) {
+
+			toZoom = getMapZoom(false, tileMatrix);
+
+			TileGrid tileGrid = TileBoundingBoxUtils
+					.tileGridZoom(optimizeTileGrid, optimizeZoom, toZoom);
+			matrixWidth = tileGrid.getWidth();
+			matrixHeight = tileGrid.getHeight();
+
+		}
+
+		double minLongitude = boundingBox.getMinLongitude();
+		double maxLatitude = boundingBox.getMaxLatitude();
+
+		double longitudeRange = boundingBox.getLongitudeRange();
+		double latitudeRange = boundingBox.getLatitudeRange();
+
+		double pixelXSize = longitudeRange / matrixWidth / tileWidth;
+		double pixelYSize = latitudeRange / matrixHeight / tileHeight;
+
+		boolean saveTileMatrix = true;
+
+		TileMatrix toTileMatrix = getTileMatrix(true, toZoom);
+		if (toTileMatrix == null) {
+
+			toTileMatrix = new TileMatrix();
+			toTileMatrix.setTableName(reprojectTileDao.getTableName());
+			toTileMatrix.setZoomLevel(toZoom);
+
+		} else if (toTileMatrix.getMatrixHeight() != matrixHeight
+				|| toTileMatrix.getMatrixWidth() != matrixWidth
+				|| toTileMatrix.getTileHeight() != tileHeight
+				|| toTileMatrix.getTileWidth() != tileWidth
+				|| Math.abs(toTileMatrix.getPixelXSize()
+						- pixelXSize) <= PIXEL_SIZE_DELTA
+				|| Math.abs(toTileMatrix.getPixelYSize()
+						- pixelYSize) <= PIXEL_SIZE_DELTA) {
+
+			if (!overwrite) {
+				throw new GeoPackageException(
+						"Existing Tile Matrix Geographic Properties differ. Enable 'overwrite' to replace existing tiles at zoom level "
+								+ toZoom + ". GeoPackage: "
+								+ reprojectTileDao.getDatabase()
+								+ ", Tile Table: "
+								+ reprojectTileDao.getTableName());
+			}
+
+			// Delete the existing tiles at the zoom level
+			Map<String, Object> fieldValues = new HashMap<String, Object>();
+			fieldValues.put(TileColumns.ZOOM_LEVEL,
+					toTileMatrix.getZoomLevel());
+			reprojectTileDao.delete(fieldValues);
+
+		} else {
+			saveTileMatrix = false;
+		}
+
+		if (saveTileMatrix) {
+			// Create or update the tile matrix
+			toTileMatrix.setMatrixHeight(matrixHeight);
+			toTileMatrix.setMatrixWidth(matrixWidth);
+			toTileMatrix.setTileHeight(tileHeight);
+			toTileMatrix.setTileWidth(tileWidth);
+			toTileMatrix.setPixelXSize(pixelXSize);
+			toTileMatrix.setPixelYSize(pixelYSize);
+			createTileMatrix(toTileMatrix);
+		}
+
+		int tiles = reproject(zoom);
+
+		return tiles;
 	}
 
 	/**
