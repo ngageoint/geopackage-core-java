@@ -8,7 +8,7 @@ import mil.nga.sf.proj.ProjectionConstants;
 import mil.nga.sf.proj.ProjectionFactory;
 
 /**
- * Web Meractor XYZ tiling optimizations
+ * Web Mercator XYZ tiling optimizations
  * 
  * @author osbornb
  * @since 4.0.1
