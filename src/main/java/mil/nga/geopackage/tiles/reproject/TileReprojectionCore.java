@@ -245,10 +245,24 @@ public abstract class TileReprojectionCore {
 	 * 
 	 * @param zoom
 	 *            zoom level
+	 * @param toZoom
+	 *            reprojection zoom level
+	 * @param boundingBox
+	 *            bounding box
+	 * @param matrixWidth
+	 *            matrix width
+	 * @param matrixHeight
+	 *            matrix height
+	 * @param tileWidth
+	 *            tile width
+	 * @param tileHeight
+	 *            tile height
 	 * 
 	 * @return reprojected tiles
 	 */
-	protected abstract int reproject(long zoom);
+	protected abstract int reproject(long zoom, long toZoom,
+			BoundingBox boundingBox, long matrixWidth, long matrixHeight,
+			long tileWidth, long tileHeight);
 
 	/**
 	 * Get the optimization
@@ -842,14 +856,10 @@ public abstract class TileReprojectionCore {
 
 		}
 
-		double minLongitude = boundingBox.getMinLongitude();
-		double maxLatitude = boundingBox.getMaxLatitude();
-
-		double longitudeRange = boundingBox.getLongitudeRange();
-		double latitudeRange = boundingBox.getLatitudeRange();
-
-		double pixelXSize = longitudeRange / matrixWidth / tileWidth;
-		double pixelYSize = latitudeRange / matrixHeight / tileHeight;
+		double pixelXSize = boundingBox.getLongitudeRange() / matrixWidth
+				/ tileWidth;
+		double pixelYSize = boundingBox.getLatitudeRange() / matrixHeight
+				/ tileHeight;
 
 		boolean saveTileMatrix = true;
 
@@ -899,7 +909,8 @@ public abstract class TileReprojectionCore {
 			createTileMatrix(toTileMatrix);
 		}
 
-		int tiles = reproject(zoom);
+		int tiles = reproject(zoom, toZoom, boundingBox, matrixWidth,
+				matrixHeight, tileWidth, tileHeight);
 
 		return tiles;
 	}
