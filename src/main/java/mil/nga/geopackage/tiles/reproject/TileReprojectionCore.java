@@ -867,7 +867,7 @@ public abstract class TileReprojectionCore {
 		if (toTileMatrix == null) {
 
 			toTileMatrix = new TileMatrix();
-			toTileMatrix.setTableName(reprojectTileDao.getTableName());
+			toTileMatrix.setContents(reprojectTileDao.getContents());
 			toTileMatrix.setZoomLevel(toZoom);
 
 		} else if (toTileMatrix.getMatrixHeight() != matrixHeight
@@ -926,9 +926,9 @@ public abstract class TileReprojectionCore {
 
 		if (optimize.isWorld()) {
 			optimizeZoom = 0;
-			optimizeTileGrid = optimize.tileGrid();
-			boundingBox = optimize.boundingBox();
-			ProjectionTransform transform = optimize.projection()
+			optimizeTileGrid = optimize.getTileGrid();
+			boundingBox = optimize.getBoundingBox();
+			ProjectionTransform transform = optimize.getProjection()
 					.getTransformation(projection);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
@@ -936,12 +936,13 @@ public abstract class TileReprojectionCore {
 		} else {
 			optimizeZoom = getOptimizeZoom();
 			ProjectionTransform transform = projection
-					.getTransformation(optimize.projection());
+					.getTransformation(optimize.getProjection());
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}
-			optimizeTileGrid = optimize.tileGrid(boundingBox, optimizeZoom);
-			boundingBox = optimize.boundingBox(optimizeTileGrid, optimizeZoom);
+			optimizeTileGrid = optimize.getTileGrid(boundingBox, optimizeZoom);
+			boundingBox = optimize.getBoundingBox(optimizeTileGrid,
+					optimizeZoom);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox
 						.transform(transform.getInverseTransformation());

@@ -99,21 +99,21 @@ public abstract class TileReprojectionOptimize {
 	 *
 	 * @return projection
 	 */
-	public abstract Projection projection();
+	public abstract Projection getProjection();
 
 	/**
 	 * Get the world tile grid of the optimization projection
 	 *
 	 * @return tile grid
 	 */
-	public abstract TileGrid tileGrid();
+	public abstract TileGrid getTileGrid();
 
 	/**
 	 * Get the world bounding box of the optimization projection
 	 *
 	 * @return bounding box
 	 */
-	public abstract BoundingBox boundingBox();
+	public abstract BoundingBox getBoundingBox();
 
 	/**
 	 * Get the tile grid of the bounding box at the zoom
@@ -125,7 +125,7 @@ public abstract class TileReprojectionOptimize {
 	 *
 	 * @return tile grid
 	 */
-	public abstract TileGrid tileGrid(BoundingBox boundingBox, long zoom);
+	public abstract TileGrid getTileGrid(BoundingBox boundingBox, long zoom);
 
 	/**
 	 * Get the bounding box of the tile grid at the zoom
@@ -137,6 +137,6 @@ public abstract class TileReprojectionOptimize {
 	 *
 	 * @return bounding box
 	 */
-	public abstract BoundingBox boundingBox(TileGrid tileGrid, long zoom);
+	public abstract BoundingBox getBoundingBox(TileGrid tileGrid, long zoom);
 
 }

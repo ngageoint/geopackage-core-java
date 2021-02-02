@@ -54,7 +54,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Projection projection() {
+	public Projection getProjection() {
 		return ProjectionFactory
 				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
 	}
@@ -63,7 +63,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid() {
+	public TileGrid getTileGrid() {
 		return new TileGrid(0, 0, 1, 0);
 	}
 
@@ -71,7 +71,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox() {
+	public BoundingBox getBoundingBox() {
 		return new BoundingBox();
 	}
 
@@ -79,7 +79,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid(BoundingBox boundingBox, long zoom) {
+	public TileGrid getTileGrid(BoundingBox boundingBox, long zoom) {
 		return TileBoundingBoxUtils.getTileGridWGS84(boundingBox, (int) zoom);
 	}
 
@@ -87,7 +87,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox(TileGrid tileGrid, long zoom) {
+	public BoundingBox getBoundingBox(TileGrid tileGrid, long zoom) {
 		return TileBoundingBoxUtils.getWGS84BoundingBox(tileGrid, (int) zoom);
 	}
 

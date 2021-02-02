@@ -54,7 +54,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Projection projection() {
+	public Projection getProjection() {
 		return ProjectionFactory
 				.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
 	}
@@ -63,7 +63,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid() {
+	public TileGrid getTileGrid() {
 		return new TileGrid(0, 0, 0, 0);
 	}
 
@@ -71,7 +71,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox() {
+	public BoundingBox getBoundingBox() {
 		return new BoundingBox(
 				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
 				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
@@ -83,7 +83,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TileGrid tileGrid(BoundingBox boundingBox, long zoom) {
+	public TileGrid getTileGrid(BoundingBox boundingBox, long zoom) {
 		return TileBoundingBoxUtils.getTileGrid(boundingBox, (int) zoom);
 	}
 
@@ -91,7 +91,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public BoundingBox boundingBox(TileGrid tileGrid, long zoom) {
+	public BoundingBox getBoundingBox(TileGrid tileGrid, long zoom) {
 		return TileBoundingBoxUtils.getWebMercatorBoundingBox(tileGrid,
 				(int) zoom);
 	}
