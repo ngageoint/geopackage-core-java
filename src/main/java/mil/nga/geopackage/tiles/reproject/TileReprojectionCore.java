@@ -796,7 +796,7 @@ public abstract class TileReprojectionCore {
 	 *            zoom level
 	 * @return created tiles
 	 */
-	public int reproject(int zoom) {
+	public int reproject(long zoom) {
 		initialize();
 
 		int tiles = reprojectIfExists(zoom);
