@@ -875,9 +875,9 @@ public abstract class TileReprojectionCore {
 				|| toTileMatrix.getTileHeight() != tileHeight
 				|| toTileMatrix.getTileWidth() != tileWidth
 				|| Math.abs(toTileMatrix.getPixelXSize()
-						- pixelXSize) <= PIXEL_SIZE_DELTA
+						- pixelXSize) > PIXEL_SIZE_DELTA
 				|| Math.abs(toTileMatrix.getPixelYSize()
-						- pixelYSize) <= PIXEL_SIZE_DELTA) {
+						- pixelYSize) > PIXEL_SIZE_DELTA) {
 
 			if (!overwrite) {
 				throw new GeoPackageException(
