@@ -155,11 +155,63 @@ public class GeoPackageIOUtils {
 	 *             upon failure
 	 */
 	public static void copyFile(File copyFrom, File copyTo) throws IOException {
+		copyFile(copyFrom, copyTo, null);
+	}
+
+	/**
+	 * Copy a file to a file location
+	 * 
+	 * @param copyFrom
+	 *            from file
+	 * @param copyTo
+	 *            to file
+	 * @param progress
+	 *            progress tracker
+	 * @throws IOException
+	 *             upon failure
+	 * @since 4.0.1
+	 */
+	public static void copyFile(File copyFrom, File copyTo,
+			GeoPackageProgress progress) throws IOException {
+		OutputStream to = new FileOutputStream(copyTo);
+		copyFile(copyFrom, to, progress);
+	}
+
+	/**
+	 * Copy a file to an output stream
+	 * 
+	 * @param copyFrom
+	 *            from file
+	 * @param copyTo
+	 *            to stream
+	 * @throws IOException
+	 *             upon failure
+	 * @since 4.0.1
+	 */
+	public static void copyFile(File copyFrom, OutputStream copyTo)
+			throws IOException {
+		copyFile(copyFrom, copyTo, null);
+	}
+
+	/**
+	 * Copy a file to an output stream
+	 * 
+	 * @param copyFrom
+	 *            from file
+	 * @param copyTo
+	 *            to stream
+	 * @param progress
+	 *            progress tracker
+	 * @throws IOException
+	 *             upon failure
+	 * @since 4.0.1
+	 */
+	public static void copyFile(File copyFrom, OutputStream copyTo,
+			GeoPackageProgress progress) throws IOException {
 
 		InputStream from = new FileInputStream(copyFrom);
-		OutputStream to = new FileOutputStream(copyTo);
 
-		copyStream(from, to);
+		copyStream(from, copyTo, progress);
 	}
 
 	/**
