@@ -11,7 +11,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * sf-wkt version 1.0.1
 * sf-proj version 3.0.4
 * oapi-features-json version 1.0.3
+* Tile table reprojections
 * Alter Table fix for table names matching SQL prefixes
+* Table and column constraints refactor
+* st_geometry_columns view single quote fix
 
 ## [4.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/4.0.0) (07-14-2020)
 
