@@ -805,6 +805,13 @@ public abstract class TileReprojectionCore {
 		return tiles;
 	}
 
+	/**
+	 * Reproject the zoom level if it exists
+	 * 
+	 * @param zoom
+	 *            zoom level
+	 * @return created tiles
+	 */
 	private int reprojectIfExists(long zoom) {
 
 		int tiles = 0;
@@ -818,6 +825,13 @@ public abstract class TileReprojectionCore {
 		return tiles;
 	}
 
+	/**
+	 * Rerpoject the tile matrix
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @return created tiles
+	 */
 	private int reproject(TileMatrix tileMatrix) {
 
 		long zoom = tileMatrix.getZoomLevel();
