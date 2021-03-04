@@ -45,7 +45,7 @@ public class UniqueConstraint extends Constraint {
 	 * 
 	 * @param order
 	 *            constraint order
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public UniqueConstraint(Integer order) {
 		super(ConstraintType.UNIQUE, order);
@@ -58,7 +58,7 @@ public class UniqueConstraint extends Constraint {
 	 *            constraint name
 	 * @param order
 	 *            constraint order
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public UniqueConstraint(String name, Integer order) {
 		super(ConstraintType.UNIQUE, name, order);

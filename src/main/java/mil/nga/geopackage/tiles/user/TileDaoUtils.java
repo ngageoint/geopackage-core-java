@@ -474,7 +474,7 @@ public class TileDaoUtils {
 	 * @param tileMatrices
 	 *            tile matrices
 	 * @return map zoom level range, min at index 0, max at index 1
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static long[] getMapZoomRange(TileMatrixSet tileMatrixSet,
 			List<TileMatrix> tileMatrices) {
@@ -491,7 +491,7 @@ public class TileDaoUtils {
 	 * @param tileMatrices
 	 *            tile matrices
 	 * @return map min zoom level
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static long getMapMinZoom(TileMatrixSet tileMatrixSet,
 			List<TileMatrix> tileMatrices) {
@@ -506,7 +506,7 @@ public class TileDaoUtils {
 	 * @param tileMatrices
 	 *            tile matrices
 	 * @return map max zoom level
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static long getMapMaxZoom(TileMatrixSet tileMatrixSet,
 			List<TileMatrix> tileMatrices) {
@@ -522,7 +522,7 @@ public class TileDaoUtils {
 	 * @param tileMatrix
 	 *            tile matrix
 	 * @return map zoom level
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static long getMapZoom(TileMatrixSet tileMatrixSet,
 			TileMatrix tileMatrix) {

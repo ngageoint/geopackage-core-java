@@ -4,7 +4,7 @@ package mil.nga.geopackage.tiles.reproject;
  * Optional Tile Reprojection configuration for a zoom level
  * 
  * @author osbornb
- * @since 4.0.1
+ * @since 5.0.0
  */
 public class TileReprojectionZoom {
 

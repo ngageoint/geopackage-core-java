@@ -325,7 +325,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addConstraints(Constraints constraints) {
 		addConstraints(constraints.all());
@@ -347,7 +347,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return true if has constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public boolean hasConstraints(ConstraintType type) {
 		return constraints.has(type);
@@ -357,7 +357,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public Constraints getConstraints() {
 		return constraints;
@@ -391,7 +391,7 @@ public abstract class UserTable<TColumn extends UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return cleared constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public List<Constraint> clearConstraints(ConstraintType type) {
 		return constraints.clear(type);

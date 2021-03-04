@@ -45,7 +45,7 @@ public class TableConstraints {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addTableConstraints(Constraints constraints) {
 		this.constraints.add(constraints);
@@ -55,7 +55,7 @@ public class TableConstraints {
 	 * Get the table constraints
 	 * 
 	 * @return table constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public Constraints getTableConstraints() {
 		return constraints;

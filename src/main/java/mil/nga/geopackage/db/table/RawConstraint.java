@@ -56,7 +56,7 @@ public class RawConstraint extends Constraint {
 	 *            constraint order
 	 * @param sql
 	 *            constraint SQL
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public RawConstraint(Integer order, String sql) {
 		this(ConstraintParser.getType(sql), order, sql);
@@ -71,7 +71,7 @@ public class RawConstraint extends Constraint {
 	 *            constraint order
 	 * @param sql
 	 *            constraint SQL
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public RawConstraint(ConstraintType type, Integer order, String sql) {
 		this(type, null, order, sql);
@@ -88,7 +88,7 @@ public class RawConstraint extends Constraint {
 	 *            constraint order
 	 * @param sql
 	 *            constraint SQL
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public RawConstraint(ConstraintType type, String name, Integer order,
 			String sql) {

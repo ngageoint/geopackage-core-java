@@ -497,7 +497,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param unique
 	 *            unique flag
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void setUnique(boolean unique) {
 		if (this.unique != unique) {
@@ -514,7 +514,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Get the unique flag
 	 * 
 	 * @return unique flag
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public boolean isUnique() {
 		return unique;
@@ -576,7 +576,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return true if has constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public boolean hasConstraints(ConstraintType type) {
 		return constraints.has(type);
@@ -586,7 +586,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public Constraints getConstraints() {
 		return constraints;
@@ -598,7 +598,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public List<Constraint> getConstraints(ConstraintType type) {
 		return constraints.get(type);
@@ -641,7 +641,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * @param type
 	 *            constraint type
 	 * @return cleared constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public List<Constraint> clearConstraints(ConstraintType type) {
 
@@ -776,7 +776,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            constraint type
 	 * @param constraint
 	 *            constraint
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addConstraint(ConstraintType type, String constraint) {
 		addConstraint(type, null, constraint);
@@ -791,7 +791,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 *            constraint order
 	 * @param constraint
 	 *            constraint
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addConstraint(ConstraintType type, Integer order,
 			String constraint) {
@@ -827,7 +827,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addConstraints(Constraints constraints) {
 		addConstraints(constraints.all());
@@ -846,7 +846,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Remove a not null constraint
 	 * 
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void removeNotNullConstraint() {
 		clearConstraints(ConstraintType.NOT_NULL);
@@ -869,7 +869,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Remove a default value constraint
 	 * 
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void removeDefaultValueConstraint() {
 		clearConstraints(ConstraintType.DEFAULT);
@@ -888,7 +888,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Remove a primary key constraint
 	 * 
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void removePrimaryKeyConstraint() {
 		clearConstraints(ConstraintType.PRIMARY_KEY);
@@ -907,7 +907,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Remove an autoincrement constraint
 	 * 
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void removeAutoincrementConstraint() {
 		clearConstraints(ConstraintType.AUTOINCREMENT);
@@ -925,7 +925,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	/**
 	 * Remove a unique constraint
 	 * 
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void removeUniqueConstraint() {
 		clearConstraints(ConstraintType.UNIQUE);

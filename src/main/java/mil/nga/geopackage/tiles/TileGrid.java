@@ -135,7 +135,7 @@ public class TileGrid {
 	 * Get the grid width
 	 *
 	 * @return width
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public long getWidth() {
 		return maxX + 1 - minX;
@@ -145,7 +145,7 @@ public class TileGrid {
 	 * Get the grid height
 	 *
 	 * @return height
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public long getHeight() {
 		return maxY + 1 - minY;

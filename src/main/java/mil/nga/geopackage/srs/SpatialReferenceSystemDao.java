@@ -592,7 +592,7 @@ public class SpatialReferenceSystemDao
 	 * @return srs
 	 * @throws SQLException
 	 *             upon query or creation failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public SpatialReferenceSystem getOrCreate(Projection projection)
 			throws SQLException {
@@ -647,7 +647,7 @@ public class SpatialReferenceSystemDao
 	 * @return srs
 	 * @throws SQLException
 	 *             upon query failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public SpatialReferenceSystem query(Projection projection)
 			throws SQLException {

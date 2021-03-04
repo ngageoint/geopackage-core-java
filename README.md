@@ -37,17 +37,17 @@ The [GeoPackage Java](https://github.com/ngageoint/geopackage-java) library is a
 
 ### Installation ###
 
-Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|4.0.0|jar) (JAR, POM, Source, Javadoc)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage|geopackage-core|5.0.0|jar) (JAR, POM, Source, Javadoc)
 
     <dependency>
         <groupId>mil.nga.geopackage</groupId>
         <artifactId>geopackage-core</artifactId>
-        <version>4.0.0</version>
+        <version>5.0.0</version>
     </dependency>
 
 ### Build ###
 
-[![Build & Test](https://github.com/ngageoint/geopackage-core-java/workflows/Build%20&%20Test/badge.svg)](https://github.com/ngageoint/geopackage-core-java/actions?query=workflow%3A%22Build+%26+Test%22)
+[![Build & Test](https://github.com/ngageoint/geopackage-core-java/workflows/Build%20&%20Test/badge.svg)](https://github.com/ngageoint/geopackage-core-java/actions/workflows/build-test.yml)
 
 Build this repository using Eclipse and/or Maven:
 

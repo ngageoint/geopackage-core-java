@@ -179,7 +179,7 @@ public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 	 * @return rows deleted
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public int deleteByTableName(String table) throws SQLException {
 		DeleteBuilder<TileMatrix, TileMatrixKey> db = deleteBuilder();

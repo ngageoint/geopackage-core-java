@@ -122,7 +122,7 @@ public abstract class Constraint implements Comparable<Constraint> {
 	 * Get the order
 	 * 
 	 * @return order number or null
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public Integer getOrder() {
 		return order;
@@ -133,7 +133,7 @@ public abstract class Constraint implements Comparable<Constraint> {
 	 * 
 	 * @param order
 	 *            order number
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void setOrder(Integer order) {
 		this.order = order;

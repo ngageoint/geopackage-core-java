@@ -11,7 +11,7 @@ import mil.nga.sf.proj.ProjectionFactory;
  * Platte Carre (WGS84) XYZ tiling optimizations
  * 
  * @author osbornb
- * @since 4.0.1
+ * @since 5.0.0
  */
 public class PlatteCarreOptimize extends TileReprojectionOptimize {
 

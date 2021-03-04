@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 4.0.1 (TBD)
+## [5.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/5.0.0) (TBD)
 
 * ormlite-core version 5.3
 * sf-wkb version 2.0.4

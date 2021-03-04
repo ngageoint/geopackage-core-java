@@ -169,7 +169,7 @@ public class GeoPackageIOUtils {
 	 *            progress tracker
 	 * @throws IOException
 	 *             upon failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static void copyFile(File copyFrom, File copyTo,
 			GeoPackageProgress progress) throws IOException {
@@ -186,7 +186,7 @@ public class GeoPackageIOUtils {
 	 *            to stream
 	 * @throws IOException
 	 *             upon failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static void copyFile(File copyFrom, OutputStream copyTo)
 			throws IOException {
@@ -204,7 +204,7 @@ public class GeoPackageIOUtils {
 	 *            progress tracker
 	 * @throws IOException
 	 *             upon failure
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public static void copyFile(File copyFrom, OutputStream copyTo,
 			GeoPackageProgress progress) throws IOException {

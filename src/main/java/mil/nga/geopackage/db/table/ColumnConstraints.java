@@ -74,7 +74,7 @@ public class ColumnConstraints {
 	 * 
 	 * @param constraints
 	 *            constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public void addConstraints(Constraints constraints) {
 		this.constraints.add(constraints);
@@ -84,7 +84,7 @@ public class ColumnConstraints {
 	 * Get the constraints
 	 * 
 	 * @return constraints
-	 * @since 4.0.1
+	 * @since 5.0.0
 	 */
 	public Constraints getConstraints() {
 		return constraints;
