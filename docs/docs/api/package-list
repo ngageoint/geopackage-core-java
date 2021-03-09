@@ -40,6 +40,7 @@ mil.nga.geopackage.style
 mil.nga.geopackage.tiles
 mil.nga.geopackage.tiles.matrix
 mil.nga.geopackage.tiles.matrixset
+mil.nga.geopackage.tiles.reproject
 mil.nga.geopackage.tiles.user
 mil.nga.geopackage.user
 mil.nga.geopackage.user.custom
