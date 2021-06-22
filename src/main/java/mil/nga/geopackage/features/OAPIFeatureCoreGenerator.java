@@ -24,11 +24,11 @@ import mil.nga.oapi.features.json.Crs;
 import mil.nga.oapi.features.json.FeatureCollection;
 import mil.nga.oapi.features.json.FeaturesConverter;
 import mil.nga.oapi.features.json.Link;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionFactory;
+import mil.nga.proj.Projections;
 import mil.nga.sf.geojson.Feature;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionFactory;
-import mil.nga.sf.proj.Projections;
 
 /**
  * OGC API Features Generator

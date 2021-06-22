@@ -3,9 +3,10 @@ package mil.nga.geopackage;
 import org.locationtech.proj4j.units.Units;
 
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
+import mil.nga.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionTransform;
 import mil.nga.sf.GeometryEnvelope;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -379,6 +380,18 @@ public class BoundingBox {
 	 * @since 3.0.0
 	 */
 	public BoundingBox transform(ProjectionTransform transform) {
+		return transform(GeometryTransform.create(transform));
+	}
+
+	/**
+	 * Transform the bounding box using the provided projection transform
+	 * 
+	 * @param transform
+	 *            geometry transform
+	 * @return transformed bounding box
+	 * @since 6.0.0
+	 */
+	public BoundingBox transform(GeometryTransform transform) {
 		BoundingBox transformed = this;
 		if (transform.isSameProjection()) {
 			transformed = new BoundingBox(transformed);

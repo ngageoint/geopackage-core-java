@@ -2,7 +2,7 @@ package mil.nga.geopackage.tiles.reproject;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.TileGrid;
-import mil.nga.sf.proj.Projection;
+import mil.nga.proj.Projection;
 
 /**
  * Tile Reprojection Optimizations

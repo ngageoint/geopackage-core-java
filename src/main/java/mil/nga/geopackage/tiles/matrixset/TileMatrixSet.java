@@ -8,8 +8,8 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.proj.Projection;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Tile Matrix Set object. Defines the minimum bounding box (min_x, min_y,
@@ -236,8 +236,8 @@ public class TileMatrixSet {
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
 		if (projection != null) {
-			ProjectionTransform transform = getProjection()
-					.getTransformation(projection);
+			GeometryTransform transform = GeometryTransform
+					.create(getProjection(), projection);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}

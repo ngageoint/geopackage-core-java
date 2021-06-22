@@ -17,8 +17,8 @@ import mil.nga.geopackage.persister.DatePersister;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.proj.Projection;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Contents object. Provides identifying and descriptive information that an
@@ -613,8 +613,8 @@ public class Contents {
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
 		if (boundingBox != null && projection != null) {
-			ProjectionTransform transform = getProjection()
-					.getTransformation(projection);
+			GeometryTransform transform = GeometryTransform
+					.create(getProjection(), projection);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}

@@ -70,4 +70,9 @@ public class GeoPackageConstants {
 	 */
 	public static final String GEOMETRY_EXTENSION_PREFIX = "geom";
 
+	/**
+	 * Optional undefined Spatial Reference System definition value
+	 */
+	public static final String UNDEFINED_DEFINITION = "undefined";
+
 }

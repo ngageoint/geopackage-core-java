@@ -8,8 +8,8 @@ import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.db.TableColumnKey;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
+import mil.nga.proj.Projection;
 import mil.nga.sf.GeometryType;
-import mil.nga.sf.proj.Projection;
 
 /**
  * Geometry Columns object. Identifies the geometry columns in tables that

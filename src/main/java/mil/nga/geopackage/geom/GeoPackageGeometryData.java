@@ -10,9 +10,10 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.GeometryExtensions;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.proj.ProjectionTransform;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryEnvelope;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 import mil.nga.sf.util.ByteReader;
 import mil.nga.sf.util.ByteWriter;
 import mil.nga.sf.util.GeometryEnvelopeBuilder;
@@ -1763,6 +1764,19 @@ public class GeoPackageGeometryData {
 	 * @since 4.0.0
 	 */
 	public GeoPackageGeometryData transform(ProjectionTransform transform) {
+		return transform(GeometryTransform.create(transform));
+	}
+
+	/**
+	 * Transform the geometry data using the provided geometry projection
+	 * transform
+	 * 
+	 * @param transform
+	 *            geometry projection transform
+	 * @return transformed geometry data
+	 * @since 6.0.0
+	 */
+	public GeoPackageGeometryData transform(GeometryTransform transform) {
 		GeoPackageGeometryData transformed = this;
 		if (transform.isSameProjection()) {
 			transformed = new GeoPackageGeometryData(transformed);

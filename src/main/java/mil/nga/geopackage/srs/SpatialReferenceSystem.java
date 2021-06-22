@@ -1,16 +1,17 @@
 package mil.nga.geopackage.srs;
 
-import mil.nga.geopackage.contents.Contents;
-import mil.nga.geopackage.features.columns.GeometryColumns;
-import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionFactory;
-import mil.nga.sf.proj.ProjectionTransform;
-
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import mil.nga.geopackage.GeoPackageConstants;
+import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.features.columns.GeometryColumns;
+import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionFactory;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Spatial Reference System object. The coordinate reference system definitions
@@ -338,12 +339,21 @@ public class SpatialReferenceSystem {
 		String authority = getOrganization();
 		long code = getOrganizationCoordsysId();
 		String definition = getDefinition_12_063();
-		if (definition == null) {
+		if (definition == null || definition.trim().isEmpty()
+				|| definition.trim().equalsIgnoreCase(
+						GeoPackageConstants.UNDEFINED_DEFINITION)) {
+
 			definition = getDefinition();
+
+			if (definition != null && (definition.trim().isEmpty()
+					|| definition.trim().equalsIgnoreCase(
+							GeoPackageConstants.UNDEFINED_DEFINITION))) {
+				definition = null;
+			}
 		}
 
-		Projection projection = ProjectionFactory.getProjection(authority,
-				code, null, definition);
+		Projection projection = ProjectionFactory.getProjection(authority, code,
+				null, definition);
 
 		return projection;
 	}
@@ -357,9 +367,8 @@ public class SpatialReferenceSystem {
 	 * @return projection transform
 	 * @since 3.0.0
 	 */
-	public ProjectionTransform getTransformation(Projection projection) {
-		Projection projectionTo = getProjection();
-		return projection.getTransformation(projectionTo);
+	public GeometryTransform getTransformation(Projection projection) {
+		return GeometryTransform.create(projection, getProjection());
 	}
 
 }

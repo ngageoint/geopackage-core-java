@@ -23,8 +23,8 @@ import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
 
 /**
  * Spatial Reference System Data Access Object

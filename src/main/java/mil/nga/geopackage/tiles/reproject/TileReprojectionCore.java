@@ -23,8 +23,8 @@ import mil.nga.geopackage.tiles.user.TileColumns;
 import mil.nga.geopackage.tiles.user.TileTable;
 import mil.nga.geopackage.tiles.user.TileTableMetadata;
 import mil.nga.geopackage.user.UserCoreDao;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.proj.Projection;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Tile Reprojection for reprojecting an existing tile table
@@ -942,15 +942,15 @@ public abstract class TileReprojectionCore {
 			optimizeZoom = 0;
 			optimizeTileGrid = optimize.getTileGrid();
 			boundingBox = optimize.getBoundingBox();
-			ProjectionTransform transform = optimize.getProjection()
-					.getTransformation(projection);
+			GeometryTransform transform = GeometryTransform
+					.create(optimize.getProjection(), projection);
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}
 		} else {
 			optimizeZoom = getOptimizeZoom();
-			ProjectionTransform transform = projection
-					.getTransformation(optimize.getProjection());
+			GeometryTransform transform = GeometryTransform.create(projection,
+					optimize.getProjection());
 			if (!transform.isSameProjection()) {
 				boundingBox = boundingBox.transform(transform);
 			}

@@ -19,9 +19,9 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Abstract User DAO for reading user tables
@@ -124,8 +124,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public BoundingBox projectBoundingBox(BoundingBox boundingBox,
 			Projection projection) {
-		ProjectionTransform projectionTransform = projection
-				.getTransformation(getProjection());
+		GeometryTransform projectionTransform = GeometryTransform
+				.create(projection, getProjection());
 		BoundingBox projectedBoundingBox = boundingBox
 				.transform(projectionTransform);
 		return projectedBoundingBox;
@@ -4831,8 +4831,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 						.boundDegreesBoundingBoxWithWebMercatorLimits(
 								boundingBox);
 			}
-			ProjectionTransform webMercatorTransform = projection
-					.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+			GeometryTransform webMercatorTransform = GeometryTransform
+					.create(projection, ProjectionConstants.EPSG_WEB_MERCATOR);
 			BoundingBox webMercatorBoundingBox = boundingBox
 					.transform(webMercatorTransform);
 			zoomLevel = TileBoundingBoxUtils

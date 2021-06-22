@@ -2,11 +2,11 @@ package mil.nga.geopackage.tiles;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionFactory;
 import mil.nga.sf.Point;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionFactory;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Tile Bounding Box utility methods
@@ -435,8 +435,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
 		if (code != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(authority, code);
+			GeometryTransform transform = GeometryTransform.create(webMercator,
+					authority, code);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -463,8 +463,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(x, y, zoom);
 
 		if (projection != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(projection);
+			GeometryTransform transform = GeometryTransform.create(webMercator,
+					projection);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -510,8 +510,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
 		if (code != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(authority, code);
+			GeometryTransform transform = GeometryTransform.create(webMercator,
+					authority, code);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -535,8 +535,8 @@ public class TileBoundingBoxUtils {
 		BoundingBox boundingBox = getWebMercatorBoundingBox(tileGrid, zoom);
 
 		if (projection != null) {
-			ProjectionTransform transform = webMercator
-					.getTransformation(projection);
+			GeometryTransform transform = GeometryTransform.create(webMercator,
+					projection);
 			boundingBox = boundingBox.transform(transform);
 		}
 
@@ -573,8 +573,8 @@ public class TileBoundingBoxUtils {
 	 */
 	public static TileGrid getTileGrid(Point point, long zoom,
 			Projection projection) {
-		ProjectionTransform toWebMercator = projection
-				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+		GeometryTransform toWebMercator = GeometryTransform.create(projection,
+				ProjectionConstants.EPSG_WEB_MERCATOR);
 		Point webMercatorPoint = toWebMercator.transform(point);
 		BoundingBox boundingBox = new BoundingBox(webMercatorPoint.getX(),
 				webMercatorPoint.getY(), webMercatorPoint.getX(),
@@ -640,9 +640,9 @@ public class TileBoundingBoxUtils {
 		Point upperRightPoint = new Point(false, false,
 				boundingBox.getMaxLongitude(), maxLatitude);
 
-		ProjectionTransform toWebMercator = ProjectionFactory
-				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM)
-				.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+		GeometryTransform toWebMercator = GeometryTransform.create(
+				ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM,
+				ProjectionConstants.EPSG_WEB_MERCATOR);
 		lowerLeftPoint = toWebMercator.transform(lowerLeftPoint);
 		upperRightPoint = toWebMercator.transform(upperRightPoint);
 

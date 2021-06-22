@@ -28,9 +28,9 @@ import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.GeoPackageProgress;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.proj.Projection;
 import mil.nga.sf.GeometryEnvelope;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Abstract core Feature Table Index NGA Extension implementation. This
@@ -806,8 +806,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	public BoundingBox getBoundingBox(Projection projection) {
 		BoundingBox boundingBox = getBoundingBox();
 		if (boundingBox != null && projection != null) {
-			ProjectionTransform projectionTransform = getProjection()
-					.getTransformation(projection);
+			GeometryTransform projectionTransform = GeometryTransform
+					.create(getProjection(), projection);
 			boundingBox = boundingBox.transform(projectionTransform);
 		}
 		return boundingBox;
@@ -1033,8 +1033,8 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	protected BoundingBox getFeatureBoundingBox(BoundingBox boundingBox,
 			Projection projection) {
-		ProjectionTransform projectionTransform = projection
-				.getTransformation(getProjection());
+		GeometryTransform projectionTransform = GeometryTransform
+				.create(projection, getProjection());
 		BoundingBox featureBoundingBox = boundingBox
 				.transform(projectionTransform);
 		return featureBoundingBox;
