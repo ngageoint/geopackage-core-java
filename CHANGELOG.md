@@ -4,9 +4,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 5.0.1 (TBD)
+## 6.0.0 (TBD)
 
-* TBD
+* ormlite-core version 5.5
+* sf-proj version 4.0.0
+* Changes for sf-proj dependency, with new sub dependencies proj and crs
+* maven plugin version updates
 
 ## [5.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/5.0.0) (03-09-2021)
 
