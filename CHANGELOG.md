@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.0.0 (TBD)
 
-* ormlite-core version 5.5
+* ormlite-core version 5.6
 * sf-proj version 4.0.0
 * Changes for sf-proj dependency, with new sub dependencies proj and crs
 * maven plugin version updates
