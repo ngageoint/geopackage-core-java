@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 6.0.1 (TBD)
+
+* TBD
+
 ## [6.0.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.0.0) (07-06-2021)
 
 * ormlite-core version 5.6
