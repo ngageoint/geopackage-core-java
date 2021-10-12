@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-proj</artifactId>
-			<version>4.0.0</version>
+			<version>4.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.oapi.features</groupId>
@@ -94,7 +94,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.3.1</version>
 				<configuration>
 					<links>
 						<link>https://ngageoint.github.io/projections-java/docs/api/</link>
