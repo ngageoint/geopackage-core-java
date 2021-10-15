@@ -18,8 +18,14 @@ public class TileBoundingBoxUtils {
 	/**
 	 * Web mercator projection
 	 */
-	private static Projection webMercator = ProjectionFactory
+	private static final Projection webMercator = ProjectionFactory
 			.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
+
+	/**
+	 * WGS84 projection
+	 */
+	private static final Projection wgs84 = ProjectionFactory
+			.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
 
 	/**
 	 * Get the overlapping bounding box between the two bounding boxes
@@ -346,21 +352,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox getWebMercatorBoundingBox(long x, long y,
 			long zoom) {
-
-		double tileSize = tileSizeWithZoom(zoom);
-
-		double minLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				+ (x * tileSize);
-		double maxLon = (-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				+ ((x + 1) * tileSize);
-		double minLat = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH
-				- ((y + 1) * tileSize);
-		double maxLat = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH
-				- (y * tileSize);
-
-		BoundingBox box = new BoundingBox(minLon, minLat, maxLon, maxLat);
-
-		return box;
+		return getWebMercatorBoundingBox(new TileGrid(x, y, x, y), zoom);
 	}
 
 	/**
@@ -536,6 +528,162 @@ public class TileBoundingBoxUtils {
 
 		if (projection != null) {
 			GeometryTransform transform = GeometryTransform.create(webMercator,
+					projection);
+			boundingBox = boundingBox.transform(transform);
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile coordinates
+	 * and zoom level
+	 *
+	 * @param projectionEpsg
+	 *            projection epsg
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(
+			Long projectionEpsg, int x, int y, long zoom) {
+		return getProjectedBoundingBoxFromWGS84(
+				ProjectionConstants.AUTHORITY_EPSG, projectionEpsg, x, y, zoom);
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile coordinates
+	 * and zoom level
+	 *
+	 * @param authority
+	 *            projection authority
+	 * @param code
+	 *            projection code
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(String authority,
+			Long code, int x, int y, long zoom) {
+
+		BoundingBox boundingBox = getWGS84BoundingBox(x, y, zoom);
+
+		if (code != null) {
+			GeometryTransform transform = GeometryTransform.create(wgs84,
+					authority, code);
+			boundingBox = boundingBox.transform(transform);
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile coordinates
+	 * and zoom level
+	 *
+	 * @param projection
+	 *            projection
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(
+			Projection projection, long x, long y, long zoom) {
+
+		BoundingBox boundingBox = getWGS84BoundingBox(x, y, zoom);
+
+		if (projection != null) {
+			GeometryTransform transform = GeometryTransform.create(wgs84,
+					projection);
+			boundingBox = boundingBox.transform(transform);
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile tileGrid and
+	 * zoom level
+	 *
+	 * @param projectionEpsg
+	 *            projection epsg
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(
+			Long projectionEpsg, TileGrid tileGrid, long zoom) {
+		return getProjectedBoundingBoxFromWGS84(
+				ProjectionConstants.AUTHORITY_EPSG, projectionEpsg, tileGrid,
+				zoom);
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the XYZ tile tileGrid and zoom
+	 * level
+	 *
+	 * @param authority
+	 *            projection authority
+	 * @param code
+	 *            projection code
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(String authority,
+			Long code, TileGrid tileGrid, long zoom) {
+
+		BoundingBox boundingBox = getWGS84BoundingBox(tileGrid, zoom);
+
+		if (code != null) {
+			GeometryTransform transform = GeometryTransform.create(wgs84,
+					authority, code);
+			boundingBox = boundingBox.transform(transform);
+		}
+
+		return boundingBox;
+	}
+
+	/**
+	 * Get the Projected tile bounding box from the XYZ tile grid and zoom level
+	 *
+	 * @param projection
+	 *            projection
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getProjectedBoundingBoxFromWGS84(
+			Projection projection, TileGrid tileGrid, long zoom) {
+
+		BoundingBox boundingBox = getWGS84BoundingBox(tileGrid, zoom);
+
+		if (projection != null) {
+			GeometryTransform transform = GeometryTransform.create(wgs84,
 					projection);
 			boundingBox = boundingBox.transform(transform);
 		}
@@ -1207,6 +1355,23 @@ public class TileBoundingBoxUtils {
 		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
 
 		return grid;
+	}
+
+	/**
+	 * Get the Web Mercator tile bounding box from the XYZ tile coordinates and
+	 * zoom level
+	 *
+	 * @param x
+	 *            x coordinate
+	 * @param y
+	 *            y coordinate
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.0.1
+	 */
+	public static BoundingBox getWGS84BoundingBox(long x, long y, long zoom) {
+		return getWGS84BoundingBox(new TileGrid(x, y, x, y), zoom);
 	}
 
 	/**
