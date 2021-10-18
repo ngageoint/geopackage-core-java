@@ -637,8 +637,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the XYZ tile tileGrid and zoom
-	 * level
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile tileGrid and
+	 * zoom level
 	 *
 	 * @param authority
 	 *            projection authority
@@ -666,7 +666,8 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Projected tile bounding box from the XYZ tile grid and zoom level
+	 * Get the Projected tile bounding box from the WGS84 XYZ tile grid and zoom
+	 * level
 	 *
 	 * @param projection
 	 *            projection
@@ -1358,7 +1359,7 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the Web Mercator tile bounding box from the XYZ tile coordinates and
+	 * Get the WGS84 tile bounding box from the WGS84 XYZ tile coordinates and
 	 * zoom level
 	 *
 	 * @param x
@@ -1375,7 +1376,7 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the WGS84 tile bounding box from the tile grid and zoom level
+	 * Get the WGS84 tile bounding box from the WGS84 tile grid and zoom level
 	 *
 	 * @param tileGrid
 	 *            tile grid
