@@ -4,9 +4,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.0.1 (TBD)
+## [6.1.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.0) (11-04-2021)
 
-* sf-proj version 4.0.1
+* sf-proj version 4.1.0
 * oapi-features-json version 2.0.0
 * TileBoundingBoxUtils bounding box from WGS84 tile grid methods
 
