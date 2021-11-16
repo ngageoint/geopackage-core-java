@@ -2,13 +2,18 @@ package mil.nga.geopackage.dgiwg;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+
+import mil.nga.geopackage.db.DateConverter;
+import mil.nga.geopackage.io.GeoPackageIOUtils;
 
 /**
  * DGIWG (Defence Geospatial Information Working Group) GeoPackage File Name
  * 
  * @author osbornb
+ * @since 6.1.2
  */
 public class DGIWGFileName {
 
@@ -26,6 +31,11 @@ public class DGIWGFileName {
 	 * Version prefix
 	 */
 	public static final String VERSION_PREFIX = "v";
+
+	/**
+	 * Date format
+	 */
+	public static final String DATE_FORMAT = "ddMMMyyyy";
 
 	/**
 	 * GeoPackage producer
@@ -78,6 +88,11 @@ public class DGIWGFileName {
 	private String creationDateText;
 
 	/**
+	 * GeoPackage Creation Date
+	 */
+	private Date creationDate;
+
+	/**
 	 * Optional additional elements, for mission or agency specific use
 	 */
 	private List<String> additional;
@@ -100,11 +115,13 @@ public class DGIWGFileName {
 	 */
 	public DGIWGFileName(String name) {
 
+		name = GeoPackageIOUtils.getPathFileNameWithoutExtension(name);
+
 		String[] elements = name.split(DELIMITER_ELEMENTS);
 
 		for (int i = 0; i < elements.length; i++) {
 
-			String value = elements[0];
+			String value = elements[i];
 
 			switch (i) {
 
@@ -129,14 +146,14 @@ public class DGIWGFileName {
 				break;
 
 			case 5:
-				creationDateText = delimitersToSpaces(value); // TODO
+				setCreationDateText(value);
 				break;
 
 			case 6:
 				additional = new ArrayList<>();
 
 			default:
-				additional.add(value);
+				additional.add(delimitersToSpaces(value));
 				break;
 			}
 
@@ -219,7 +236,7 @@ public class DGIWGFileName {
 	public void setZoomLevels(String zoomLevels) {
 		this.zoomLevels = zoomLevels;
 
-		String[] parts = version.split(":|" + DELIMITER_WORDS);
+		String[] parts = zoomLevels.split(":|" + DELIMITER_WORDS);
 		if (parts.length == 2) {
 
 			String zoom1 = parts[0];
@@ -232,7 +249,7 @@ public class DGIWGFileName {
 				this.zoomLevel1 = zoomLevel1;
 				this.zoomLevel2 = zoomLevel2;
 				String delimiter = ":";
-				if (zoomLevel1 >= 0 && zoomLevel1 <= 28) {
+				if (zoomLevel1 >= 0 && zoomLevel2 <= 28) {
 					delimiter = DELIMITER_WORDS;
 				}
 				this.zoomLevels = zoomLevel1 + delimiter + zoomLevel2;
@@ -420,6 +437,29 @@ public class DGIWGFileName {
 	 */
 	public void setCreationDateText(String creationDateText) {
 		this.creationDateText = creationDateText;
+		DateConverter converter = getDateConverter();
+		creationDate = converter.dateValue(creationDateText);
+	}
+
+	/**
+	 * Get the creation date
+	 * 
+	 * @return creation date
+	 */
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	/**
+	 * Set the creation date
+	 * 
+	 * @param creationDate
+	 *            creation date
+	 */
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+		DateConverter converter = getDateConverter();
+		this.creationDateText = converter.stringValue(creationDate);
 	}
 
 	/**
@@ -482,7 +522,7 @@ public class DGIWGFileName {
 	 * @return space replaced value
 	 */
 	public String delimitersToSpaces(String value) {
-		return value.replaceAll(DELIMITER_WORDS, " ");
+		return value.replaceAll(DELIMITER_WORDS, " ").trim();
 	}
 
 	/**
@@ -499,12 +539,118 @@ public class DGIWGFileName {
 			if (scanner.hasNextInt()) {
 				scanner.next();
 				if (!scanner.hasNext()) {
-					integer = Integer.getInteger(value);
+					integer = Integer.parseInt(value);
 				}
 			}
 			scanner.close();
 		}
 		return integer;
+	}
+
+	/**
+	 * Get a date converter
+	 * 
+	 * @return date converter
+	 */
+	private DateConverter getDateConverter() {
+		DateConverter converter = new DateConverter(DATE_FORMAT,
+				DateConverter.DATE_FORMAT, DateConverter.DATE_FORMAT2);
+		converter.setExpected(false);
+		return converter;
+	}
+
+	/**
+	 * Add a value to the string builder
+	 * 
+	 * @param builder
+	 *            string builder
+	 * @param value
+	 *            string value
+	 */
+	private void addValue(StringBuilder builder, String value) {
+		if (value != null) {
+			addDelimiter(builder);
+			builder.append(value.trim().replaceAll(" ", DELIMITER_WORDS));
+		}
+	}
+
+	/**
+	 * Add an element delimiter
+	 * 
+	 * @param builder
+	 *            string builder
+	 */
+	private void addDelimiter(StringBuilder builder) {
+		if (builder.length() > 0) {
+			builder.append(DELIMITER_ELEMENTS);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		addValue(builder, producer);
+		addValue(builder, dataProduct);
+		addValue(builder, geographicCoverageArea);
+		if (zoomLevel1 != null) {
+			addDelimiter(builder);
+			builder.append(zoomLevel1);
+			if (zoomLevel2 != null) {
+				builder.append(DELIMITER_WORDS);
+				builder.append(zoomLevel2);
+			}
+		} else {
+			addValue(builder, zoomLevels);
+		}
+		if (majorVersion != null) {
+			addDelimiter(builder);
+			builder.append(VERSION_PREFIX);
+			builder.append(majorVersion);
+			if (minorVersion != null) {
+				builder.append(DELIMITER_WORDS);
+				builder.append(minorVersion);
+			}
+		} else {
+			addValue(builder, version);
+		}
+		addValue(builder, creationDateText);
+		if (additional != null) {
+			for (String value : additional) {
+				addValue(builder, value);
+			}
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + toString().hashCode();
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DGIWGFileName other = (DGIWGFileName) obj;
+		if (!toString().equals(other.toString()))
+			return false;
+		return true;
 	}
 
 }
