@@ -21,19 +21,17 @@ import mil.nga.geopackage.io.GeoPackageIOUtils;
  * 
  * @author osbornb
  */
-public class DGIWGFileNameTest {
+public class GeoPackageFileNameTest {
 
 	/**
 	 * Test file name example 1
-	 * 
-	 * 
 	 */
 	@Test
 	public void testExample1() {
 
 		String name = "AGC_BUCK_Ft-Bliss_14-20_v1-0_29AUG2016.gpkg";
 
-		DGIWGFileName fileName = new DGIWGFileName(name);
+		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
 		testFileName(name, fileName);
 
@@ -66,7 +64,7 @@ public class DGIWGFileNameTest {
 
 		String name = "OGL_BOUND_UK_1-10000_v1-0_09APR2020.gpkg”";
 
-		DGIWGFileName fileName = new DGIWGFileName(name);
+		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
 		testFileName(name, fileName);
 
@@ -99,7 +97,7 @@ public class DGIWGFileNameTest {
 
 		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2_2021-11-16_Additional_Additional-Two.gpkg”";
 
-		DGIWGFileName fileName = new DGIWGFileName(name);
+		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
 		testFileName(name, fileName);
 
@@ -135,7 +133,7 @@ public class DGIWGFileNameTest {
 
 		String name = "Producer_Data-Product_Geographic-Coverage-Area_Zoom-Levels_Version_20211116.gpkg”";
 
-		DGIWGFileName fileName = new DGIWGFileName(name);
+		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
 		testFileName(name, fileName);
 
@@ -168,7 +166,7 @@ public class DGIWGFileNameTest {
 
 		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2.gpkg”";
 
-		DGIWGFileName fileName = new DGIWGFileName(name);
+		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
 		testFileName(name, fileName);
 
@@ -201,7 +199,7 @@ public class DGIWGFileNameTest {
 	 * @param fileName
 	 *            DGIWG file name
 	 */
-	private void testFileName(String name, DGIWGFileName fileName) {
+	private void testFileName(String name, GeoPackageFileName fileName) {
 
 		File file = new File(name);
 
@@ -224,12 +222,13 @@ public class DGIWGFileNameTest {
 	 * @param fileName
 	 *            DGIWG file name
 	 */
-	private void testFileName(String name, File file, DGIWGFileName fileName) {
+	private void testFileName(String name, File file,
+			GeoPackageFileName fileName) {
 
-		assertEquals(fileName, new DGIWGFileName(file));
-		assertEquals(fileName, new DGIWGFileName(
+		assertEquals(fileName, new GeoPackageFileName(file));
+		assertEquals(fileName, new GeoPackageFileName(
 				GeoPackageIOUtils.getFileNameWithoutExtension(name)));
-		assertEquals(fileName, new DGIWGFileName(
+		assertEquals(fileName, new GeoPackageFileName(
 				GeoPackageIOUtils.getFileNameWithoutExtension(file)));
 
 	}

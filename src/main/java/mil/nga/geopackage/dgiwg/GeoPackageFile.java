@@ -8,7 +8,7 @@ import java.io.File;
  * @author osbornb
  * @since 6.1.2
  */
-public class DGIWGFile {
+public class GeoPackageFile {
 
 	/**
 	 * GeoPackage File
@@ -18,7 +18,7 @@ public class DGIWGFile {
 	/**
 	 * DGIWG File Name
 	 */
-	private DGIWGFileName fileName;
+	private GeoPackageFileName fileName;
 
 	/**
 	 * Constructor
@@ -28,7 +28,7 @@ public class DGIWGFile {
 	 * @param fileName
 	 *            DGIWG File Name
 	 */
-	public DGIWGFile(File file, DGIWGFileName fileName) {
+	public GeoPackageFile(File file, GeoPackageFileName fileName) {
 		this.file = file;
 		this.fileName = fileName;
 	}
@@ -47,7 +47,7 @@ public class DGIWGFile {
 	 * 
 	 * @return DGIWG file name
 	 */
-	public DGIWGFileName getFileName() {
+	public GeoPackageFileName getFileName() {
 		return fileName;
 	}
 

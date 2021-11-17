@@ -15,7 +15,7 @@ import mil.nga.geopackage.io.GeoPackageIOUtils;
  * @author osbornb
  * @since 6.1.2
  */
-public class DGIWGFileName {
+public class GeoPackageFileName {
 
 	/**
 	 * Delimiter between elements
@@ -103,7 +103,7 @@ public class DGIWGFileName {
 	 * @param file
 	 *            GeoPackage file
 	 */
-	public DGIWGFileName(File file) {
+	public GeoPackageFileName(File file) {
 		this(file.getName());
 	}
 
@@ -113,7 +113,7 @@ public class DGIWGFileName {
 	 * @param name
 	 *            GeoPackage file name
 	 */
-	public DGIWGFileName(String name) {
+	public GeoPackageFileName(String name) {
 
 		name = GeoPackageIOUtils.getPathFileNameWithoutExtension(name);
 
@@ -647,7 +647,7 @@ public class DGIWGFileName {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DGIWGFileName other = (DGIWGFileName) obj;
+		GeoPackageFileName other = (GeoPackageFileName) obj;
 		if (!toString().equals(other.toString()))
 			return false;
 		return true;
