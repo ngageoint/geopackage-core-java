@@ -1,5 +1,13 @@
 package mil.nga.geopackage.dgiwg;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import mil.nga.crs.CRSType;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.ProjectionConstants;
@@ -18,14 +26,54 @@ public enum CoordinateReferenceSystem {
 	 */
 	EPSG_3395(3395, "WGS 84 / World Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3395,
-			"Euro-centric view of world excluding polar areas for very small scale mapping"),
+			"Euro-centric view of world excluding polar areas for very small scale mapping",
+			DataType.TILES_2D, DataType.TILES_3D),
+
+	/**
+	 * WGS 84 / Pseudo-Mercator
+	 */
+	EPSG_3857(3857, "WGS 84 / Pseudo-Mercator", CRSType.PROJECTED, 2,
+			WellKnownText.EPSG_3857,
+			"Uses spherical development of ellipsoidal coordinates. This should only be used for visualization purposes.",
+			DataType.TILES_2D),
+
+	/**
+	 * WGS 84 Geographic 2D
+	 */
+	EPSG_4326(4326, "WGS 84 Geographic 2D", CRSType.GEOGRAPHIC, 2,
+			WellKnownText.EPSG_4326,
+			"Horizontal component of 3D system. Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
+			DataType.TILES_3D, DataType.FEATURES_2D),
 
 	/**
 	 * WGS 84 Geographic 3D
 	 */
-	EPSG_4979(4979, "WGS 84 Geographic 3D", CRSType.GEODETIC, 3,
+	EPSG_4979(4979, "WGS 84 Geographic 3D", CRSType.GEOGRAPHIC, 3,
 			WellKnownText.EPSG_4979,
-			"Used by the GPS satellite navigation system and for NATO military geodetic surveying."),
+			"Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
+			DataType.TILES_3D, DataType.FEATURES_3D),
+
+	/**
+	 * WGS 84 / UPS North (E,N)
+	 */
+	EPSG_5041(5041, "WGS 84 / UPS North (E,N)", CRSType.PROJECTED, 2,
+			WellKnownText.EPSG_5041, "Military mapping by NATO north of 60° N",
+			DataType.TILES_2D, DataType.TILES_3D),
+
+	/**
+	 * WGS 84 / UPS South (E,N)
+	 */
+	EPSG_5042(5042, "WGS 84 / UPS South (E,N)", CRSType.PROJECTED, 2,
+			WellKnownText.EPSG_5042, "Military mapping by NATO south of 60° S",
+			DataType.TILES_2D, DataType.TILES_3D),
+
+	/**
+	 * WGS84 4326 + EGM2008 height 3855
+	 */
+	EPSG_9518(9518, "WGS84 4326 + EGM2008 height 3855", CRSType.COMPOUND, 3,
+			WellKnownText.EPSG_9518,
+			"Geodetic position based on the World Geodetic System 1984 (WGS 84), extended by height position based on the Earth Gravity Model 2008 (EGM08).",
+			DataType.FEATURES_3D),
 
 	/**
 	 * WGS 84 / UTM zone 1N
@@ -628,6 +676,16 @@ public enum CoordinateReferenceSystem {
 	EPSG_32760(32760);
 
 	/**
+	 * Map between authority and codes to Coordinate Reference Systems
+	 */
+	private static Map<String, Map<Long, CoordinateReferenceSystem>> authorityCodeCRS;
+
+	/**
+	 * Map between data types and supported Coordinate Reference Systems
+	 */
+	private static Map<DataType, Set<CoordinateReferenceSystem>> dataTypeCRS;
+
+	/**
 	 * Authority
 	 */
 	private final String authority;
@@ -663,6 +721,11 @@ public enum CoordinateReferenceSystem {
 	private final String description;
 
 	/**
+	 * Data Types
+	 */
+	private final Set<DataType> dataTypes;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param epsgCode
@@ -677,11 +740,14 @@ public enum CoordinateReferenceSystem {
 	 *            Well-Known Text
 	 * @param description
 	 *            description
+	 * @param dataTypes
+	 *            data types
 	 */
 	private CoordinateReferenceSystem(long epsgCode, String name, CRSType type,
-			int dimension, String wkt, String description) {
+			int dimension, String wkt, String description,
+			DataType... dataTypes) {
 		this(ProjectionConstants.AUTHORITY_EPSG, epsgCode, name, type,
-				dimension, wkt, description);
+				dimension, wkt, description, dataTypes);
 	}
 
 	/**
@@ -701,9 +767,12 @@ public enum CoordinateReferenceSystem {
 	 *            Well-Known Text
 	 * @param description
 	 *            description
+	 * @param dataTypes
+	 *            data types
 	 */
 	private CoordinateReferenceSystem(String authority, long code, String name,
-			CRSType type, int dimension, String wkt, String description) {
+			CRSType type, int dimension, String wkt, String description,
+			DataType... dataTypes) {
 		this.authority = authority;
 		this.code = code;
 		this.name = name;
@@ -711,6 +780,8 @@ public enum CoordinateReferenceSystem {
 		this.dimension = dimension;
 		this.wkt = wkt;
 		this.description = description;
+		this.dataTypes = new HashSet<>(Arrays.asList(dataTypes));
+		initialize(this);
 	}
 
 	/**
@@ -755,6 +826,9 @@ public enum CoordinateReferenceSystem {
 		}
 		description.append(", onshore and offshore.");
 		this.description = description.toString();
+		this.dataTypes = new HashSet<>();
+		this.dataTypes.add(DataType.TILES_2D);
+		initialize(this);
 	}
 
 	/**
@@ -821,6 +895,37 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get the data types
+	 * 
+	 * @return data types
+	 */
+	public Set<DataType> getDataTypes() {
+		return dataTypes;
+	}
+
+	/**
+	 * Is the CRS Type
+	 * 
+	 * @param type
+	 *            crs type
+	 * @return true if type
+	 */
+	public boolean isType(CRSType type) {
+		return this.type == type;
+	}
+
+	/**
+	 * Is valid for the Data Type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return true if valid for data type
+	 */
+	public boolean isDataType(DataType dataType) {
+		return this.dataTypes.contains(dataType);
+	}
+
+	/**
 	 * Create a Spatial Reference System
 	 * 
 	 * @return Spatial Reference System
@@ -840,6 +945,94 @@ public enum CoordinateReferenceSystem {
 		}
 
 		return srs;
+	}
+
+	/**
+	 * Get the coordinate reference system for the EPSG code
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @return crs
+	 */
+	public static CoordinateReferenceSystem getCoordinateReferenceSystem(
+			long epsgCode) {
+		return getCoordinateReferenceSystem(ProjectionConstants.AUTHORITY_EPSG,
+				epsgCode);
+	}
+
+	/**
+	 * Get the coordinate reference system for the authority and code
+	 * 
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @return crs
+	 */
+	public static CoordinateReferenceSystem getCoordinateReferenceSystem(
+			String authority, long code) {
+		CoordinateReferenceSystem crs = null;
+		Map<Long, CoordinateReferenceSystem> codeMap = authorityCodeCRS
+				.get(authority);
+		if (codeMap != null) {
+			crs = codeMap.get(code);
+		}
+		return crs;
+	}
+
+	/**
+	 * Get the supported coordinate reference systems for the data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return coordinate reference systems
+	 */
+	public static Set<CoordinateReferenceSystem> getCoordinateReferenceSystems(
+			DataType dataType) {
+
+		Set<CoordinateReferenceSystem> crs = dataTypeCRS.get(dataType);
+		if (crs != null) {
+			crs = Collections.unmodifiableSet(crs);
+		}
+
+		return crs;
+	}
+
+	/**
+	 * Initialize static mappings
+	 * 
+	 * @param crs
+	 *            CRS
+	 */
+	private static void initialize(CoordinateReferenceSystem crs) {
+
+		if (authorityCodeCRS == null) {
+			authorityCodeCRS = new HashMap<>();
+		}
+
+		Map<Long, CoordinateReferenceSystem> codeMap = authorityCodeCRS
+				.get(crs.getAuthority());
+		if (codeMap == null) {
+			codeMap = new HashMap<>();
+			authorityCodeCRS.put(crs.getAuthority(), codeMap);
+		}
+		codeMap.put(crs.getCode(), crs);
+
+		if (dataTypeCRS == null) {
+			dataTypeCRS = new HashMap<>();
+		}
+
+		for (DataType dataType : crs.getDataTypes()) {
+
+			Set<CoordinateReferenceSystem> crsSet = dataTypeCRS.get(dataType);
+			if (crsSet == null) {
+				crsSet = new LinkedHashSet<>();
+				dataTypeCRS.put(dataType, crsSet);
+			}
+
+			crsSet.add(crs);
+		}
+
 	}
 
 }
