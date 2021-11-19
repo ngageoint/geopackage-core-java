@@ -850,6 +850,15 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get the authority and code
+	 * 
+	 * @return authority:code
+	 */
+	public String getAuthorityAndCode() {
+		return authority + ":" + code;
+	}
+
+	/**
 	 * Get the name
 	 * 
 	 * @return name

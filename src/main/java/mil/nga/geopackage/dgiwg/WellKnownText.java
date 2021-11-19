@@ -14,38 +14,40 @@ public class WellKnownText {
 	 */
 	public static String EPSG_3395 = "PROJCRS[\"WGS 84 / World Mercator\","
 			+ "BASEGEOGCRS[\"WGS 84\","
-			+ "DATUM[\"World Geodetic System 1984\"," + "ELLIPSOID[\"WGS"
-			+ "84\",6378137,298.257223563]]]," + "CONVERSION[\"Mercator\","
-			+ "METHOD[\"Mercator (variant" + "A)\",ID[\"EPSG\",\"9804\"]],"
+			+ "DATUM[\"World Geodetic System 1984\","
+			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563]]],"
+			+ "CONVERSION[\"Mercator\","
+			+ "METHOD[\"Mercator (variant A)\",ID[\"EPSG\",\"9804\"]],"
 			+ "PARAMETER[\"Latitude of natural origin\",0,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "PARAMETER[\"Longitude of natural origin\",0,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "PARAMETER[\"Scale factor at natural origin\",1,"
-			+ "SCALEUNIT[\"unity\",1.0]]," + "PARAMETER[\"False"
-			+ "easting\",0,LENGTHUNIT[\"metre\",1.0]]," + "PARAMETER[\"False"
-			+ "northing\",0,LENGTHUNIT[\"metre\",1.0]],"
-			+ "ID[\"EPSG\",\"19833\"]]," + "CS[Cartesian,2],"
+			+ "SCALEUNIT[\"unity\",1.0]],"
+			+ "PARAMETER[\"False easting\",0,LENGTHUNIT[\"metre\",1.0]],"
+			+ "PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1.0]],"
+			+ "ID[\"EPSG\",\"19833\"]],CS[Cartesian,2],"
 			+ "AXIS[\"Easting (E)\",east,ORDER[1]],"
 			+ "AXIS[\"Northing (N)\",north,ORDER[2]],"
-			+ "LENGTHUNIT[\"metre\",1.0]" + "ID[\"EPSG\",\"3395\"]]";
+			+ "LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"3395\"]]";
 
 	/**
 	 * WGS 84 / Pseudo-Mercator
 	 */
 	public static String EPSG_3857 = "PROJCS[\"WGS 84 / Pseudo-Mercator\","
-			+ "GEOGCRS[\"WGS 84\"," + "DATUM[\"WGS_1984\","
+			+ "GEOGCRS[\"WGS 84\",DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS 84\",6378137,298.257223563,"
-			+ "ID[\"EPSG\",\"7030\"]]," + "ID[\"EPSG\",\"6326\"]],"
-			+ "PRIMEM[\"Greenwich\",0," + "ID[\"EPSG\",\"8901\"]],"
-			+ "UNIT[\"degree\",0.0174532925199433," + "ID[\"EPSG\",\"9122\"]],"
-			+ "ID[\"EPSG\",\"4326\"]]," + "PROJECTION[\"Mercator_1SP\"],"
+			+ "ID[\"EPSG\",\"7030\"]],ID[\"EPSG\",\"6326\"]],"
+			+ "PRIMEM[\"Greenwich\",0,ID[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\",0.0174532925199433,"
+			+ "ID[\"EPSG\",\"9122\"]],ID[\"EPSG\",\"4326\"]],"
+			+ "PROJECTION[\"Mercator_1SP\"],"
 			+ "PARAMETER[\"central_meridian\",0],"
 			+ "PARAMETER[\"scale_factor\",1],"
 			+ "PARAMETER[\"false_easting\",0],"
-			+ "PARAMETER[\"false_northing\",0]," + "UNIT[\"metre\",1,"
-			+ "ID[\"EPSG\",\"9001\"]]," + "AXIS[\"X\",EAST],"
-			+ "AXIS[\"Y\",NORTH]," + "ID[\"EPSG\",\"3857\"]]";
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "UNIT[\"metre\",1,ID[\"EPSG\",\"9001\"]],"
+			+ "AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],ID[\"EPSG\",\"3857\"]]";
 
 	/**
 	 * WGS 84 Geographic 2D
@@ -62,13 +64,13 @@ public class WellKnownText {
 	public static String EPSG_4979 = "GEOGCRS[\"WGS 84\","
 			+ "DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
-			+ "LENGTHUNIT[\"metre\",1.0]]]," + "CS[ellipsoidal,3],"
+			+ "LENGTHUNIT[\"metre\",1.0]]],CS[ellipsoidal,3],"
 			+ "AXIS[\"Geodetic latitude (Lat)\",north,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "AXIS[\"Geodetic longitude (Long)\",east,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "AXIS[\"Ellipsoidal height (h)\",up,"
-			+ "LENGTHUNIT[\"metre\",1.0]]," + "ID[\"EPSG\",4979]]";
+			+ "LENGTHUNIT[\"metre\",1.0]],ID[\"EPSG\",4979]]";
 
 	/**
 	 * WGS 84 / UPS North (E,N)
@@ -78,25 +80,23 @@ public class WellKnownText {
 			+ "DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
 			+ "LENGTHUNIT[\"metre\",1.0]]]],"
-			+ "CONVERSION[\"Universal Polar Stereographic" + "North\","
-			+ "METHOD[\"Polar Stereographic (variant"
-			+ "A)\",ID[\"EPSG\",\"9810\"]],"
+			+ "CONVERSION[\"Universal Polar Stereographic North\","
+			+ "METHOD[\"Polar Stereographic (variant A)\",ID[\"EPSG\",\"9810\"]],"
 			+ "PARAMETER[\"Latitude of natural origin\",90,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "PARAMETER[\"Longitude of natural origin\",0,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
-			+ "PARAMETER[\"Scale factor at natural" + "origin\",0.994,"
+			+ "PARAMETER[\"Scale factor at natural origin\",0.994,"
 			+ "SCALEUNIT[\"unity\",1.0]],"
 			+ "PARAMETER[\"False easting\",2000000,"
 			+ "LENGTHUNIT[\"metre\",1.0]],"
 			+ "PARAMETER[\"False northing\",2000000,"
-			+ "LENGTHUNIT[\"metre\",1.0]]," + "ID[\"EPSG\",\"16061\"]],"
-			+ "CS[Cartesian,2]," + "AXIS[\"Easting (E)\",south,"
-			+ "MERIDIAN[90,ANGLEUNIT[\"degree\",0.01745329" + "25199433]],"
-			+ "ORDER[1]]," + "AXIS[\"Northing (N)\",south,"
-			+ "MERIDIAN[180,ANGLEUNIT[\"degree\",0.0174532" + "925199433]],"
-			+ "ORDER[2]]," + "LENGTHUNIT[\"metre\",1.0],"
-			+ "ID[\"EPSG\",\"5041\"]]";
+			+ "LENGTHUNIT[\"metre\",1.0]],ID[\"EPSG\",\"16061\"]],"
+			+ "CS[Cartesian,2],AXIS[\"Easting (E)\",south,"
+			+ "MERIDIAN[90,ANGLEUNIT[\"degree\",0.0174532925199433]],"
+			+ "ORDER[1]],AXIS[\"Northing (N)\",south,"
+			+ "MERIDIAN[180,ANGLEUNIT[\"degree\",0.0174532925199433]],"
+			+ "ORDER[2]],LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"5041\"]]";
 
 	/**
 	 * WGS 84 / UPS South (E,N)
@@ -106,42 +106,39 @@ public class WellKnownText {
 			+ "DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
 			+ "LENGTHUNIT[\"metre\",1.0]]]],"
-			+ "CONVERSION[\"Universal Polar Stereographic" + "North\","
-			+ "METHOD[\"Polar Stereographic (variant"
-			+ "A)\",ID[\"EPSG\",\"9810\"]],"
+			+ "CONVERSION[\"Universal Polar Stereographic North\","
+			+ "METHOD[\"Polar Stereographic (variant A)\",ID[\"EPSG\",\"9810\"]],"
 			+ "PARAMETER[\"Latitude of natural origin\",-90,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
 			+ "PARAMETER[\"Longitude of natural origin\",0,"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433]],"
-			+ "PARAMETER[\"Scale factor at natural" + "origin\",0.994,"
+			+ "PARAMETER[\"Scale factor at natural origin\",0.994,"
 			+ "SCALEUNIT[\"unity\",1.0]],"
 			+ "PARAMETER[\"False easting\",2000000,"
 			+ "LENGTHUNIT[\"metre\",1.0]],"
 			+ "PARAMETER[\"False northing\",2000000,"
-			+ "LENGTHUNIT[\"metre\",1.0]]," + "ID[\"EPSG\",\"16161\"]],"
-			+ "CS[Cartesian,2]," + "AXIS[\"Easting (E)\",north,"
-			+ "MERIDIAN[90,ANGLEUNIT[\"degree\",0.01745329" + "25199433]],"
-			+ "ORDER[1]]," + "AXIS[\"Northing (N)\",north,"
-			+ "MERIDIAN[0,ANGLEUNIT[\"degree\",0.017453292" + "5199433]],"
-			+ "ORDER[2]]," + "LENGTHUNIT[\"metre\",1.0],"
-			+ "ID[\"EPSG\",\"5042\"]]";
+			+ "LENGTHUNIT[\"metre\",1.0]],ID[\"EPSG\",\"16161\"]],"
+			+ "CS[Cartesian,2],AXIS[\"Easting (E)\",north,"
+			+ "MERIDIAN[90,ANGLEUNIT[\"degree\",0.0174532925199433]],"
+			+ "ORDER[1]],AXIS[\"Northing (N)\",north,"
+			+ "MERIDIAN[0,ANGLEUNIT[\"degree\",0.0174532925199433]],"
+			+ "ORDER[2]],LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"5042\"]]";
 
 	/**
 	 * WGS84 4326 + EGM2008 height 3855
 	 */
-	// TODO
-	public static String EPSG_9518 = "COMPOUNDCRS[" + "“WGS84 Height (EGM08)”,"
-			+ "GEODCRS[\"WGS 84\"," + "DATUM[\"World Geodetic System 1984\","
+	public static String EPSG_9518 = "COMPOUNDCRS[\"WGS84 Height (EGM08)\","
+			+ "GEODCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
-			+ "LENGTHUNIT[\"metre\",1.0]]]," + "CS[ellipsoidal,2],"
+			+ "LENGTHUNIT[\"metre\",1.0]]],CS[ellipsoidal,2],"
 			+ "AXIS[\"Geodetic latitude (Lat)\",north],"
 			+ "AXIS[\"Geodetic longitude (Long)\",east],"
-			+ "ANGLEUNIT[\"degree\",0.0174532925199433]" + "ID[\"EPSG\",4326]],"
-			+ "VERTCRS[\"EGM2008 geoid height\"," + "VDATUM[\"EGM2008 geoid\","
-			+ "ANCHOR[\"WGS 84 ellipsoid\"]]," + "CS[vertical,1],"
+			+ "ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",4326]],"
+			+ "VERTCRS[\"EGM2008 geoid height\",VDATUM[\"EGM2008 geoid\","
+			+ "ANCHOR[\"WGS 84 ellipsoid\"]],CS[vertical,1],"
 			+ "AXIS[\"Gravity-related height (H)\",up],"
-			+ "LENGTHUNIT[\"metre\",1.0]" + "ID[\"EPSG\",\"3855\"]],"
-			+ "ID[“EPSG”,”9518”]]";
+			+ "LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"3855\"]],"
+			+ "ID[\"EPSG\",\"9518\"]]";
 
 	/**
 	 * UTM Zone number replacement
@@ -172,19 +169,20 @@ public class WellKnownText {
 	 * UTM zone 01 - 60N, 01 - 60S with substitutions
 	 */
 	private static String EPSG_32___ = "PROJCS[\"WGS 84 / UTM zone " + ZONE
-			+ DIRECTION + "\"," + "GEOGCRS[\"WGS 84\"," + "DATUM[\"WGS_1984\","
+			+ DIRECTION + "\",GEOGCRS[\"WGS 84\",DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS84\",6378137,298.257223563,"
-			+ "ID[\"EPSG\", \"7030\"]]," + "ID[\"EPSG\", \"6326\"]],"
-			+ "PRIMEM[\"Greenwich\",0," + "ID[\"EPSG\",\"8901\"]],"
-			+ "UNIT[\"degree\", 0.0174532925199433," + "ID[\"EPSG\",\"9122\"]],"
-			+ "ID[\"EPSG\",\"4326\"]]," + "PROJECTION[\"Transverse_Mercator\"],"
+			+ "ID[\"EPSG\", \"7030\"]],ID[\"EPSG\", \"6326\"]],"
+			+ "PRIMEM[\"Greenwich\",0,ID[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\", 0.0174532925199433,"
+			+ "ID[\"EPSG\",\"9122\"]],ID[\"EPSG\",\"4326\"]],"
+			+ "PROJECTION[\"Transverse_Mercator\"],"
 			+ "PARAMETER[\"latitude_of_origin\", 0],"
 			+ "PARAMETER[\"central_meridian\", " + CENTRAL_MERIDIAN + "],"
 			+ "PARAMETER[\"scale_factor\",0.9996],"
 			+ "PARAMETER[\"false_easting\",500000],"
 			+ "PARAMETER[\"false_northing\"," + FALSE_NORTHING + "],"
-			+ "UNIT[\"metre\", 1," + "ID[\"EPSG\",\"9001\"]],"
-			+ "AXIS[\"Easting\",EAST]," + "AXIS[\"Northing\",NORTH],"
+			+ "UNIT[\"metre\", 1,ID[\"EPSG\",\"9001\"]],"
+			+ "AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH],"
 			+ "ID[\"EPSG\",\"" + EPSG + "\"]]";
 
 	/**

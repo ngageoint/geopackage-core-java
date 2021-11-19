@@ -11,6 +11,12 @@ import org.junit.Test;
 import org.locationtech.proj4j.datum.Datum;
 import org.locationtech.proj4j.datum.Ellipsoid;
 
+import mil.nga.crs.CRS;
+import mil.nga.crs.CRSType;
+import mil.nga.crs.CompoundCoordinateReferenceSystem;
+import mil.nga.crs.SimpleCoordinateReferenceSystem;
+import mil.nga.crs.common.Identifier;
+import mil.nga.crs.wkt.CRSReader;
 import mil.nga.crs.wkt.CRSWriter;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.Projection;
@@ -22,6 +28,11 @@ import mil.nga.proj.ProjectionFactory;
  * @author osbornb
  */
 public class CoordinateReferenceSystemTest {
+
+	/**
+	 * Print out each CRS as pretty
+	 */
+	private static final boolean PRINT_CRS = false;
 
 	/**
 	 * Test the Coordinate Reference Systems
@@ -49,8 +60,13 @@ public class CoordinateReferenceSystemTest {
 				assertNull(srs.getDefinition_12_063());
 			}
 
-			// TODO
-			System.out.println(CRSWriter.writePretty(crs.getWkt()));
+			if (PRINT_CRS) {
+				System.out.println();
+				System.out.println(crs.getAuthorityAndCode());
+				System.out.println();
+				System.out.println(CRSWriter.writePretty(crs.getWkt()));
+				System.out.println();
+			}
 
 			Projection projection = ProjectionFactory
 					.getCachelessProjectionByDefinition(crs.getWkt());
@@ -67,11 +83,23 @@ public class CoordinateReferenceSystemTest {
 			assertEquals(crs.getType(),
 					projection.getDefinitionCRS().getType());
 
-			Projection projection2 = ProjectionFactory
-					.getCachelessProjection(crs.getAuthority(), crs.getCode());
+			String authority = crs.getAuthority();
+			long code = crs.getCode();
 
-			// TODO
-			// compare(projection, projection2);
+			CRS crsObject = CRSReader.read(crs.getWkt());
+			if (crsObject.getType() == CRSType.COMPOUND) {
+				CompoundCoordinateReferenceSystem compound = (CompoundCoordinateReferenceSystem) crsObject;
+				SimpleCoordinateReferenceSystem simple = compound
+						.getCoordinateReferenceSystem(0);
+				Identifier identifier = simple.getIdentifier(0);
+				authority = identifier.getName();
+				code = Long.valueOf(identifier.getUniqueIdentifier());
+			}
+
+			Projection projection2 = ProjectionFactory
+					.getCachelessProjection(authority, code);
+
+			compare(projection, projection2);
 
 		}
 
@@ -171,13 +199,6 @@ public class CoordinateReferenceSystemTest {
 
 		double delta = 0.0000000000001;
 
-		if (projection.getAuthority() != null
-				&& !projection.getAuthority().isEmpty()
-				&& projection.getCode() != null
-				&& !projection.getCode().isEmpty()) {
-			assertEquals(projection, projection2);
-		}
-
 		org.locationtech.proj4j.CoordinateReferenceSystem crs = projection
 				.getCrs();
 		org.locationtech.proj4j.CoordinateReferenceSystem crs2 = projection2
@@ -274,9 +295,9 @@ public class CoordinateReferenceSystemTest {
 				proj2.getProjectionLongitudeDegrees(), delta);
 		assertEquals(proj.getScaleFactor(), proj2.getScaleFactor(), 0);
 		assertEquals(proj.getTrueScaleLatitude(), proj2.getTrueScaleLatitude(),
-				0);
+				delta);
 		assertEquals(proj.getTrueScaleLatitudeDegrees(),
-				proj2.getTrueScaleLatitudeDegrees(), 0);
+				proj2.getTrueScaleLatitudeDegrees(), delta);
 		assertEquals(proj.getUnits(), proj2.getUnits());
 
 	}
