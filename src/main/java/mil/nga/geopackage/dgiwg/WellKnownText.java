@@ -32,6 +32,14 @@ public class WellKnownText {
 			+ "LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"3395\"]]";
 
 	/**
+	 * EGM2008 geoid height
+	 */
+	public static String EPSG_3855 = "VERTCRS[\"EGM2008 geoid height\",VDATUM[\"EGM2008 geoid\","
+			+ "ANCHOR[\"WGS 84 ellipsoid\"]],CS[vertical,1],"
+			+ "AXIS[\"Gravity-related height (H)\",up],"
+			+ "LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"3855\"]]";
+
+	/**
 	 * WGS 84 / Pseudo-Mercator
 	 */
 	public static String EPSG_3857 = "PROJCS[\"WGS 84 / Pseudo-Mercator\","
@@ -134,11 +142,42 @@ public class WellKnownText {
 			+ "AXIS[\"Geodetic latitude (Lat)\",north],"
 			+ "AXIS[\"Geodetic longitude (Long)\",east],"
 			+ "ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",4326]],"
-			+ "VERTCRS[\"EGM2008 geoid height\",VDATUM[\"EGM2008 geoid\","
-			+ "ANCHOR[\"WGS 84 ellipsoid\"]],CS[vertical,1],"
-			+ "AXIS[\"Gravity-related height (H)\",up],"
-			+ "LENGTHUNIT[\"metre\",1.0],ID[\"EPSG\",\"3855\"]],"
-			+ "ID[\"EPSG\",\"9518\"]]";
+			+ EPSG_3855 + ",ID[\"EPSG\",\"9518\"]]";
+
+	/**
+	 * Lambert Conformal Conic 1SP
+	 */
+	public static String EPSG_9801 = "PROJCS[\"Lambert_Conformal_Conic (1SP)\","
+			+ "GEODCRS[\"GCS_North_American_1983\","
+			+ "DATUM[\"North_American_Datum_1983\","
+			+ "SPHEROID[\"GRS_1980\",6371000,0]]," + "PRIMEM[\"Greenwich\",0],"
+			+ "UNIT[\"Degree\",0.017453292519943295]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_1SP\"],"
+			+ "PARAMETER[\"latitude_of_origin\",25],"
+			+ "PARAMETER[\"central_meridian\",-95],"
+			+ "PARAMETER[\"scale_factor\",1],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "PARAMETER[\"standard_parallel_1\",25],"
+			+ "UNIT[\"Meter\",1],AUTHORITY[\"EPSG\",\"9801\"]]";
+
+	/**
+	 * Lambert Conformal Conic 2SP
+	 */
+	public static String EPSG_9802 = "PROJCS[\"Lambert Conic Conformal (2SP)\","
+			+ "GEODCRS[\"GCS_North_American_1983\","
+			+ "DATUM[\"North_American_Datum_1983\","
+			+ "SPHEROID[\"GRS_1980\",6378160,298.2539162964695]],"
+			+ "PRIMEM[\"Greenwich\",0],"
+			+ "UNIT[\"degree\",0.0174532925199433]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_2SP\"],"
+			+ "PARAMETER[\"standard_parallel_1\",30],"
+			+ "PARAMETER[\"standard_parallel_2\",60],"
+			+ "PARAMETER[\"latitude_of_origin\",30],"
+			+ "PARAMETER[\"central_meridian\",126],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "AUTHORITY[\"EPSG\",\"9802\"]]";
 
 	/**
 	 * UTM Zone number replacement
@@ -168,7 +207,7 @@ public class WellKnownText {
 	/**
 	 * UTM zone 01 - 60N, 01 - 60S with substitutions
 	 */
-	private static String EPSG_32___ = "PROJCS[\"WGS 84 / UTM zone " + ZONE
+	private static String EPSG_UTM_ZONE = "PROJCS[\"WGS 84 / UTM zone " + ZONE
 			+ DIRECTION + "\",GEOGCRS[\"WGS 84\",DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS84\",6378137,298.257223563,"
 			+ "ID[\"EPSG\", \"7030\"]],ID[\"EPSG\", \"6326\"]],"
@@ -199,7 +238,7 @@ public class WellKnownText {
 		long centralMeridian = UTMZone.getCentralMeridian(zone);
 		long falseNorthing = UTMZone.getFalseNorthing(epsg);
 
-		String wkt = EPSG_32___;
+		String wkt = EPSG_UTM_ZONE;
 
 		wkt = wkt.replaceAll(ZONE, String.valueOf(zone));
 		wkt = wkt.replaceAll(DIRECTION, direction);
