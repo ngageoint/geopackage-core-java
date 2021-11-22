@@ -40,7 +40,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 Geographic 2D
 	 */
-	EPSG_4326(4326, "WGS 84 Geographic 2D", CRSType.GEOGRAPHIC, 2,
+	EPSG_4326(4326, "WGS 84 Geographic 2D", CRSType.GEODETIC, 2,
 			WellKnownText.EPSG_4326,
 			"Horizontal component of 3D system. Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
 			DataType.TILES_3D, DataType.FEATURES_2D),
@@ -48,7 +48,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 Geographic 3D
 	 */
-	EPSG_4979(4979, "WGS 84 Geographic 3D", CRSType.GEOGRAPHIC, 3,
+	EPSG_4979(4979, "WGS 84 Geographic 3D", CRSType.GEODETIC, 3,
 			WellKnownText.EPSG_4979,
 			"Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
 			DataType.TILES_3D, DataType.FEATURES_3D),

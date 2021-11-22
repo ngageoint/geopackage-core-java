@@ -13,7 +13,7 @@ public class WellKnownText {
 	 * WGS 84 / World Mercator
 	 */
 	public static String EPSG_3395 = "PROJCRS[\"WGS 84 / World Mercator\","
-			+ "BASEGEOGCRS[\"WGS 84\","
+			+ "BASEGEODCRS[\"WGS 84\","
 			+ "DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563]]],"
 			+ "CONVERSION[\"Mercator\","
@@ -52,7 +52,7 @@ public class WellKnownText {
 	/**
 	 * WGS 84 Geographic 2D
 	 */
-	public static String EPSG_4326 = "GEOGCS[\"WGS 84\","
+	public static String EPSG_4326 = "GEOCCS[\"WGS 84\","
 			+ "DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS84\",6378137,298.257223563]],"
 			+ "PRIMEM[\"Greenwich\",0],"
@@ -61,7 +61,7 @@ public class WellKnownText {
 	/**
 	 * WGS 84 Geographic 3D
 	 */
-	public static String EPSG_4979 = "GEOGCRS[\"WGS 84\","
+	public static String EPSG_4979 = "GEODCRS[\"WGS 84\","
 			+ "DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
 			+ "LENGTHUNIT[\"metre\",1.0]]],CS[ellipsoidal,3],"
