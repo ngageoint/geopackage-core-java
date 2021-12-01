@@ -10,6 +10,120 @@ package mil.nga.geopackage.dgiwg;
 public class WellKnownText {
 
 	/**
+	 * CRS name replacement
+	 */
+	private static final String CRS_NAME = wrapReplacement("crs_name");
+
+	/**
+	 * Base CRS name replacement
+	 */
+	private static final String BASE_NAME = wrapReplacement("base_name");
+
+	/**
+	 * Reference name replacement
+	 */
+	private static final String REFERENCE_NAME = wrapReplacement(
+			"reference_name");
+
+	/**
+	 * Ellipsoid name replacement
+	 */
+	private static final String ELLIPSOID_NAME = wrapReplacement(
+			"ellipsoid_name");
+
+	/**
+	 * Semi major axis replacement
+	 */
+	private static final String SEMI_MAJOR_AXIS = wrapReplacement(
+			"semi_major_axis");
+
+	/**
+	 * Inverse flattening replacement
+	 */
+	private static final String INVERSE_FLATTENING = wrapReplacement(
+			"inverse_flattening");
+
+	/**
+	 * Prime meridian name replacement
+	 */
+	private static final String PRIME_MERIDIAN_NAME = wrapReplacement(
+			"prime_meridian_name");
+
+	/**
+	 * Prime meridian international reference meridian longitude replacement
+	 */
+	private static final String IRM_LONGITUDE = wrapReplacement(
+			"irm_longitude");
+
+	/**
+	 * Latitude of origin replacement
+	 */
+	private static final String LATITUDE_OF_ORIGIN = wrapReplacement(
+			"latitude_of_origin");
+
+	/**
+	 * Central meridian replacement
+	 */
+	private static final String CENTRAL_MERIDIAN = wrapReplacement(
+			"central_meridian");
+
+	/**
+	 * Scale factor replacement
+	 */
+	private static final String SCALE_FACTOR = wrapReplacement("scale_factor");
+
+	/**
+	 * False easting replacement
+	 */
+	private static final String FALSE_EASTING = wrapReplacement(
+			"false_easting");
+
+	/**
+	 * False northing replacement
+	 */
+	private static final String FALSE_NORTHING = wrapReplacement(
+			"false_northing");
+
+	/**
+	 * Standard parallel 1 replacement
+	 */
+	private static final String STANDARD_PARALLEL_1 = wrapReplacement(
+			"standard_parallel_1");
+
+	/**
+	 * Standard parallel 2 replacement
+	 */
+	private static final String STANDARD_PARALLEL_2 = wrapReplacement(
+			"standard_parallel_2");
+
+	/**
+	 * Identifier unique identifier
+	 */
+	private static final String IDENTIFIER_UNIQUE_ID = wrapReplacement(
+			"identifier_id");
+
+	/**
+	 * UTM Zone number replacement
+	 */
+	private static final String ZONE = wrapReplacement("zone");
+
+	/**
+	 * UTM Zone direction replacement
+	 */
+	private static final String DIRECTION = wrapReplacement("direction");
+
+	/**
+	 * Wrap the replacement value with < and >
+	 * 
+	 * @param value
+	 *            replacement value
+	 * @return wrapped value
+	 */
+	private static final String wrapReplacement(String value) {
+		return "<" + value + ">";
+	}
+
+	/**
 	 * WGS 84 / World Mercator
 	 */
 	public static String EPSG_3395 = "PROJCRS[\"WGS 84 / World Mercator\","
@@ -145,7 +259,7 @@ public class WellKnownText {
 			+ EPSG_3855 + ",ID[\"EPSG\",\"9518\"]]";
 
 	/**
-	 * Lambert Conformal Conic 1SP
+	 * Lambert Conformal Conic 1SP TODO
 	 */
 	public static String EPSG_9801 = "PROJCS[\"Lambert_Conformal_Conic (1SP)\","
 			+ "GEODCRS[\"GCS_North_American_1983\","
@@ -161,8 +275,49 @@ public class WellKnownText {
 			+ "PARAMETER[\"standard_parallel_1\",25],"
 			+ "UNIT[\"Meter\",1],AUTHORITY[\"EPSG\",\"9801\"]]";
 
+	// TODO just validate CRS has either Lambert Conformal Conic 1SP or 2SP?
+
+	public static String TEMP_1SP = "PROJCS[\"Unnamed Lambert_Conformal_Conic using 1SP\","
+			+ "GEOGCS[\"NAD83\"," + "DATUM[\"North_American_Datum_1983\","
+			+ "SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],"
+			+ "AUTHORITY[\"EPSG\",\"6269\"]],"
+			+ "PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_1SP\"],"
+			+ "PARAMETER[\"latitude_of_origin\",49],"
+			+ "PARAMETER[\"central_meridian\",-95],"
+			+ "PARAMETER[\"scale_factor\",1],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0]," + "UNIT[\"Meter\",1]],"
+			+ "AUTHORITY[\"EPSG\",\"0000\"]],"
+			+ "AXIS[\"X\",EAST],AXIS[\"Y\",NORTH]]";
+
+	public static String EPSG_LAMBERT_CONFORMAL_CONIC_1SP = "PROJCS[\""
+			+ CRS_NAME + "\"," + "GEODCRS[\"" + BASE_NAME + "\"," + "DATUM[\""
+			+ REFERENCE_NAME + "\"," + "SPHEROID[\"" + ELLIPSOID_NAME + "\","
+			+ SEMI_MAJOR_AXIS + "," + INVERSE_FLATTENING + "]]," + "PRIMEM[\""
+			+ PRIME_MERIDIAN_NAME + "\"," + IRM_LONGITUDE + "],"
+			+ "UNIT[\"degree\",0.0174532925199433]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_1SP\"],"
+			+ "PARAMETER[\"latitude_of_origin\",<latitude>],"
+			+ "PARAMETER[\"central_meridian\",<longitude>],"
+			+ "PARAMETER[\"scale_factor\",1],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "PARAMETER[\"standard_parallel_1\",25]," + "UNIT[\"Meter\",1],"
+			+ "AUTHORITY[\"EPSG\",\"" + IDENTIFIER_UNIQUE_ID + "\"]]";
+
+	/*
+	 * If PROJECTION is Lambert_Conformal_Conic_1SP, then DATUM = WGS84,
+	 * European_Terrestrial_Reference_System_1989 , North_American_Datum_1983
+	 * SPHEROID = WGS84, GRS 1980 PRIMEM = Greenwich, <irm_longitude> value
+	 * between 0.0 and 359.0. PARAMETER – values according to a valid Lambert
+	 * Conic Conformal projection for 1 standard parallel in Table-20 in section
+	 * 7.2. PROJECTION AUTHORITY = Valid EPSG code for this LCC 1SP projection.
+	 */
+
 	/**
-	 * Lambert Conformal Conic 2SP
+	 * Lambert Conformal Conic 2SP TODO
 	 */
 	public static String EPSG_9802 = "PROJCS[\"Lambert Conic Conformal (2SP)\","
 			+ "GEODCRS[\"GCS_North_American_1983\","
@@ -179,30 +334,59 @@ public class WellKnownText {
 			+ "PARAMETER[\"false_northing\",0],"
 			+ "AUTHORITY[\"EPSG\",\"9802\"]]";
 
-	/**
-	 * UTM Zone number replacement
-	 */
-	private static final String ZONE = "<zone>";
+	public static String TEMP_2SP = "PROJCS[\"NAD83 / Canada Atlas Lambert\","
+			+ "GEOGCS[\"NAD83\"," + "DATUM[\"North_American_Datum_1983\","
+			+ "SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],"
+			+ "AUTHORITY[\"EPSG\",\"6269\"]],"
+			+ "PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],"
+			+ "AUTHORITY[\"EPSG\",\"4269\"]],"
+			+ "UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_2SP\"],"
+			+ "PARAMETER[\"standard_parallel_1\",49],"
+			+ "PARAMETER[\"standard_parallel_2\",77],"
+			+ "PARAMETER[\"latitude_of_origin\",49],"
+			+ "PARAMETER[\"central_meridian\",-95],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "AUTHORITY[\"EPSG\",\"3978\"],"
+			+ "AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
 
-	/**
-	 * UTM Zone direction replacement
-	 */
-	private static final String DIRECTION = "<direction>";
+	public static String EPSG_LAMBERT_CONFORMAL_CONIC_2SP = "PROJCS[\""
+			+ CRS_NAME + "\"," + "GEODCS[\"" + BASE_NAME + "\"," + "DATUM[\""
+			+ REFERENCE_NAME + "\"," + "SPHEROID[\"" + ELLIPSOID_NAME + "\","
+			+ SEMI_MAJOR_AXIS + "," + INVERSE_FLATTENING + "]]," + "PRIMEM[\""
+			+ PRIME_MERIDIAN_NAME + "\"," + IRM_LONGITUDE + "],"
+			+ "UNIT[\"degree\",0.01745329251994328]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_2SP\"],"
+			+ "PARAMETER[\"standard_parallel_1\",<latitude>],"
+			+ "PARAMETER[\"standard_parallel_2\",<longitude>],"
+			+ "PARAMETER[\"latitude_of_origin\",<latitude>],"
+			+ "PARAMETER[\"central_meridian\",126],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0]," + "AUTHORITY[\"EPSG\",\""
+			+ IDENTIFIER_UNIQUE_ID + "\"]]";
 
-	/**
-	 * UTM Zone central meridian replacement
+	/*
+	 * If PROJECTION is Lambert_Conformal_Conic_2SP, then DATUM = WGS84,
+	 * European_Terrestrial_Reference_System_1989 , North_American_Datum_1983
+	 * SPHEROID = WGS84, GRS 1980 PRIMEM = Greenwich, <irm_longitude> value
+	 * between 0.0 and 359.0. PARAMETER – values according to a valid Lambert
+	 * Conic Conformal projection for 2 standard parallels in Table-21 in
+	 * section 7.2. PROJECTION AUTHORITY = Valid EPSG code for this LCC 2SP
+	 * projection.
 	 */
-	private static final String CENTRAL_MERIDIAN = "<central_meridian>";
 
-	/**
-	 * UTM Zone false northing replacement
-	 */
-	private static final String FALSE_NORTHING = "<false_northing>";
-
-	/**
-	 * UTM Zone epsg replacement
-	 */
-	private static final String EPSG = "<epsg>";
+	// CRS_NAME = name
+	// GeoDatums = WGS84, ETRS89, NAD83
+	// BASE_NAME = GeoDatums.code
+	// REFERENCE_NAME = GeoDatums.name
+	// ELLIPSOID_NAME = GeoDatums.Ellipsoids.name
+	// SEMI_MAJOR_AXIS = GeoDatums.Ellipsoids.equatorRadius
+	// INVERSE_FLATTENING = GeoDatums.Ellipsoids.reciprocalFlattening
+	// PRIME_MERIDIAN_NAME = PrimeMeridians.name
+	// IRM_LONGITUDE = PrimeMeridians.offsetFromGreenwichDegrees
+	// IDENTIFIER_UNIQUE_ID = epsg
 
 	/**
 	 * UTM zone 01 - 60N, 01 - 60S with substitutions
@@ -222,7 +406,7 @@ public class WellKnownText {
 			+ "PARAMETER[\"false_northing\"," + FALSE_NORTHING + "],"
 			+ "UNIT[\"metre\", 1,ID[\"EPSG\",\"9001\"]],"
 			+ "AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH],"
-			+ "ID[\"EPSG\",\"" + EPSG + "\"]]";
+			+ "ID[\"EPSG\",\"" + IDENTIFIER_UNIQUE_ID + "\"]]";
 
 	/**
 	 * Get the UTM Zone Well-Known Text
@@ -244,7 +428,7 @@ public class WellKnownText {
 		wkt = wkt.replaceAll(DIRECTION, direction);
 		wkt = wkt.replaceAll(CENTRAL_MERIDIAN, String.valueOf(centralMeridian));
 		wkt = wkt.replaceAll(FALSE_NORTHING, String.valueOf(falseNorthing));
-		wkt = wkt.replaceAll(EPSG, String.valueOf(epsg));
+		wkt = wkt.replaceAll(IDENTIFIER_UNIQUE_ID, String.valueOf(epsg));
 
 		return wkt;
 	}
