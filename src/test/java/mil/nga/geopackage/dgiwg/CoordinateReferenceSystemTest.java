@@ -16,10 +16,19 @@ import mil.nga.crs.CRSType;
 import mil.nga.crs.CompoundCoordinateReferenceSystem;
 import mil.nga.crs.SimpleCoordinateReferenceSystem;
 import mil.nga.crs.common.Identifier;
+import mil.nga.crs.geo.Ellipsoids;
+import mil.nga.crs.geo.GeoCoordinateReferenceSystem;
+import mil.nga.crs.geo.GeoDatum;
+import mil.nga.crs.geo.GeoDatums;
+import mil.nga.crs.geo.PrimeMeridian;
+import mil.nga.crs.geo.PrimeMeridians;
+import mil.nga.crs.operation.OperationMethod;
+import mil.nga.crs.projected.ProjectedCoordinateReferenceSystem;
 import mil.nga.crs.wkt.CRSReader;
 import mil.nga.crs.wkt.CRSWriter;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
 import mil.nga.proj.ProjectionFactory;
 
 /**
@@ -300,6 +309,322 @@ public class CoordinateReferenceSystemTest {
 				proj2.getTrueScaleLatitudeDegrees(), delta);
 		assertEquals(proj.getUnits(), proj2.getUnits());
 
+	}
+
+	/**
+	 * Test Lambert Conic Conformal 1SP
+	 * 
+	 * @throws IOException
+	 *             upon error
+	 */
+	@Test
+	public void testLambertConicConformal1SP() throws IOException {
+
+		long epsg = 9801;
+		String name = "Lambert_Conformal_Conic (1SP)";
+		GeoDatums datum = GeoDatums.NAD83;
+		double latitudeOfOrigin = 25;
+		double centralMeridian = -95;
+		double scaleFactor = 1;
+		double falseEasting = 0;
+		double falseNorthing = 0;
+		double standardParallel1 = 25;
+
+		SpatialReferenceSystem srs = CoordinateReferenceSystem
+				.createLambertConicConformal1SP(epsg, name, datum,
+						latitudeOfOrigin, centralMeridian, scaleFactor,
+						falseEasting, falseNorthing, standardParallel1);
+
+		String wkt = WellKnownText.getLambertConicConformal1SP(epsg, name,
+				datum, latitudeOfOrigin, centralMeridian, scaleFactor,
+				falseEasting, falseNorthing, standardParallel1);
+
+		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
+				centralMeridian, scaleFactor, falseEasting, falseNorthing,
+				standardParallel1, wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
+				srs);
+
+		epsg = 0000;
+		name = "Unnamed Lambert_Conformal_Conic using 1SP";
+		datum = GeoDatums.NAD83;
+		latitudeOfOrigin = 49;
+		centralMeridian = -95;
+		scaleFactor = 1;
+		falseEasting = 0;
+		falseNorthing = 0;
+		standardParallel1 = 49;
+
+		srs = CoordinateReferenceSystem.createLambertConicConformal1SP(epsg,
+				name, datum, latitudeOfOrigin, centralMeridian, scaleFactor,
+				falseEasting, falseNorthing, standardParallel1);
+
+		wkt = WellKnownText.getLambertConicConformal1SP(epsg, name, datum,
+				latitudeOfOrigin, centralMeridian, scaleFactor, falseEasting,
+				falseNorthing, standardParallel1);
+
+		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
+				centralMeridian, scaleFactor, falseEasting, falseNorthing,
+				standardParallel1, wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
+				srs);
+
+	}
+
+	/**
+	 * Test Lambert Conic Conformal 2SP
+	 * 
+	 * @throws IOException
+	 *             upon error
+	 */
+	@Test
+	public void testLambertConicConformal2SP() throws IOException {
+
+		long epsg = 9802;
+		String name = "Lambert Conic Conformal (2SP)";
+		GeoDatums datum = GeoDatums.NAD83;
+		double standardParallel1 = 30;
+		double standardParallel2 = 60;
+		double latitudeOfOrigin = 30;
+		double centralMeridian = 126;
+		double falseEasting = 0;
+		double falseNorthing = 0;
+
+		SpatialReferenceSystem srs = CoordinateReferenceSystem
+				.createLambertConicConformal2SP(epsg, name, datum,
+						standardParallel1, standardParallel2, latitudeOfOrigin,
+						centralMeridian, falseEasting, falseNorthing);
+
+		String wkt = WellKnownText.getLambertConicConformal2SP(epsg, name,
+				datum, standardParallel1, standardParallel2, latitudeOfOrigin,
+				centralMeridian, falseEasting, falseNorthing);
+
+		testLambertConicConformal2SP(epsg, name, datum, standardParallel1,
+				standardParallel2, latitudeOfOrigin, centralMeridian,
+				falseEasting, falseNorthing, wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
+				srs);
+
+		epsg = 3978;
+		name = "NAD83 / Canada Atlas Lambert";
+		datum = GeoDatums.NAD83;
+		standardParallel1 = 49;
+		standardParallel2 = 77;
+		latitudeOfOrigin = 49;
+		centralMeridian = -95;
+		falseEasting = 0;
+		falseNorthing = 0;
+
+		srs = CoordinateReferenceSystem.createLambertConicConformal2SP(epsg,
+				name, datum, standardParallel1, standardParallel2,
+				latitudeOfOrigin, centralMeridian, falseEasting, falseNorthing);
+
+		wkt = WellKnownText.getLambertConicConformal2SP(epsg, name, datum,
+				standardParallel1, standardParallel2, latitudeOfOrigin,
+				centralMeridian, falseEasting, falseNorthing);
+
+		testLambertConicConformal2SP(epsg, name, datum, standardParallel1,
+				standardParallel2, latitudeOfOrigin, centralMeridian,
+				falseEasting, falseNorthing, wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
+				srs);
+
+	}
+
+	/**
+	 * Test Lambert Conic Conformal 1SP
+	 * 
+	 * @param epsg
+	 *            EPSG code
+	 * @param name
+	 *            name
+	 * @param datum
+	 *            geo datum
+	 * @param latitudeOfOrigin
+	 *            latitude of origin
+	 * @param centralMeridian
+	 *            central meridian
+	 * @param scaleFactor
+	 *            scale factor
+	 * @param falseEasting
+	 *            false easting
+	 * @param falseNorthing
+	 *            false northing
+	 * @param standardParallel1
+	 *            standard parallel 1
+	 * @param wkt
+	 *            well-known text
+	 * @param description
+	 *            description
+	 * @param srs
+	 *            spatial reference system
+	 * @throws IOException
+	 *             upon error
+	 */
+	private void testLambertConicConformal1SP(long epsg, String name,
+			GeoDatums datum, double latitudeOfOrigin, double centralMeridian,
+			double scaleFactor, double falseEasting, double falseNorthing,
+			double standardParallel1, String wkt, String description,
+			SpatialReferenceSystem srs) throws IOException {
+
+		OperationMethod method = testLambertConicConformal(epsg, name, datum,
+				wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
+				srs);
+
+		assertEquals("Lambert_Conformal_Conic_1SP", method.getName());
+		assertEquals("latitude_of_origin", method.getParameter(0).getName());
+		assertEquals(latitudeOfOrigin, method.getParameter(0).getValue(), 0.0);
+		assertEquals("central_meridian", method.getParameter(1).getName());
+		assertEquals(centralMeridian, method.getParameter(1).getValue(), 0.0);
+		assertEquals("scale_factor", method.getParameter(2).getName());
+		assertEquals(scaleFactor, method.getParameter(2).getValue(), 0.0);
+		assertEquals("false_easting", method.getParameter(3).getName());
+		assertEquals(falseEasting, method.getParameter(3).getValue(), 0.0);
+		assertEquals("false_northing", method.getParameter(4).getName());
+		assertEquals(falseNorthing, method.getParameter(4).getValue(), 0.0);
+		assertEquals("standard_parallel_1", method.getParameter(5).getName());
+		assertEquals(standardParallel1, method.getParameter(5).getValue(), 0.0);
+
+	}
+
+	/**
+	 * Test Lambert Conic Conformal 2SP
+	 * 
+	 * @param epsg
+	 *            EPSG code
+	 * @param name
+	 *            name
+	 * @param datum
+	 *            geo datum
+	 * @param standardParallel1
+	 *            standard parallel 1
+	 * @param standardParallel2
+	 *            standard parallel 2
+	 * @param latitudeOfOrigin
+	 *            latitude of origin
+	 * @param centralMeridian
+	 *            central meridian
+	 * @param falseEasting
+	 *            false easting
+	 * @param falseNorthing
+	 *            false northing
+	 * @param wkt
+	 *            well-known text
+	 * @param description
+	 *            description
+	 * @param srs
+	 *            spatial reference system
+	 * @throws IOException
+	 *             upon error
+	 */
+	private void testLambertConicConformal2SP(long epsg, String name,
+			GeoDatums datum, double standardParallel1, double standardParallel2,
+			double latitudeOfOrigin, double centralMeridian,
+			double falseEasting, double falseNorthing, String wkt,
+			String description, SpatialReferenceSystem srs) throws IOException {
+
+		OperationMethod method = testLambertConicConformal(epsg, name, datum,
+				wkt,
+				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
+				srs);
+
+		assertEquals("Lambert_Conformal_Conic_2SP", method.getName());
+		assertEquals("standard_parallel_1", method.getParameter(0).getName());
+		assertEquals(standardParallel1, method.getParameter(0).getValue(), 0.0);
+		assertEquals("standard_parallel_2", method.getParameter(1).getName());
+		assertEquals(standardParallel2, method.getParameter(1).getValue(), 0.0);
+		assertEquals("latitude_of_origin", method.getParameter(2).getName());
+		assertEquals(latitudeOfOrigin, method.getParameter(2).getValue(), 0.0);
+		assertEquals("central_meridian", method.getParameter(3).getName());
+		assertEquals(centralMeridian, method.getParameter(3).getValue(), 0.0);
+		assertEquals("false_easting", method.getParameter(4).getName());
+		assertEquals(falseEasting, method.getParameter(4).getValue(), 0.0);
+		assertEquals("false_northing", method.getParameter(5).getName());
+		assertEquals(falseNorthing, method.getParameter(5).getValue(), 0.0);
+
+	}
+
+	/**
+	 * Test Lambert Conic Conformal
+	 * 
+	 * @param epsg
+	 *            EPSG code
+	 * @param name
+	 *            name
+	 * @param datum
+	 *            geo datum
+	 * @param wkt
+	 *            well-known text
+	 * @param description
+	 *            description
+	 * @param srs
+	 *            spatial reference system
+	 * @return operation method
+	 * @throws IOException
+	 *             upon error
+	 */
+	private OperationMethod testLambertConicConformal(long epsg, String name,
+			GeoDatums datum, String wkt, String description,
+			SpatialReferenceSystem srs) throws IOException {
+
+		assertEquals(name, srs.getSrsName());
+		assertEquals(epsg, srs.getSrsId());
+		assertEquals(ProjectionConstants.AUTHORITY_EPSG, srs.getOrganization());
+		assertEquals(epsg, srs.getOrganizationCoordsysId());
+		assertEquals(wkt, srs.getDefinition());
+		assertEquals(description, srs.getDescription());
+		assertNull(srs.getDefinition_12_063());
+
+		if (PRINT_CRS) {
+			System.out.println();
+			System.out.println(ProjectionConstants.AUTHORITY_EPSG + ":" + epsg);
+			System.out.println();
+			System.out.println(CRSWriter.writePretty(wkt));
+			System.out.println();
+		}
+
+		Projection projection = ProjectionFactory
+				.getCachelessProjectionByDefinition(wkt);
+		if (projection.getAuthority() != null
+				&& !projection.getAuthority().isEmpty()) {
+			assertEquals(ProjectionConstants.AUTHORITY_EPSG,
+					projection.getAuthority());
+		}
+		if (projection.getCode() != null && !projection.getCode().isEmpty()) {
+			assertEquals(String.valueOf(epsg), projection.getCode());
+		}
+		assertEquals(wkt, projection.getDefinition());
+
+		CRS crs = projection.getDefinitionCRS();
+		assertEquals(CRSType.PROJECTED, crs.getType());
+
+		ProjectedCoordinateReferenceSystem projected = (ProjectedCoordinateReferenceSystem) crs;
+		assertEquals(name, projected.getName());
+		GeoCoordinateReferenceSystem geo = projected.getBase();
+		assertEquals(datum.getCode(), geo.getName());
+		GeoDatum geoDatum = geo.getGeoDatum();
+		assertEquals(datum.getName(), geoDatum.getName());
+		Ellipsoids datumEllipsoid = datum.getEllipsoid();
+		mil.nga.crs.geo.Ellipsoid ellipsoid = geoDatum.getEllipsoid();
+		assertEquals(datumEllipsoid.getName(), ellipsoid.getName());
+		assertEquals(datumEllipsoid.getEquatorRadius(),
+				ellipsoid.getSemiMajorAxis(), 0.0);
+		assertEquals(datumEllipsoid.getReciprocalFlattening(),
+				ellipsoid.getInverseFlattening(), 0.0);
+		PrimeMeridian primeMeridian = geoDatum.getPrimeMeridian();
+		assertEquals(PrimeMeridians.GREENWICH.getName(),
+				primeMeridian.getName());
+		assertEquals(PrimeMeridians.GREENWICH.getOffsetFromGreenwichDegrees(),
+				primeMeridian.getLongitude(), 0.0);
+		OperationMethod operationMethod = projected.getMapProjection()
+				.getMethod();
+		assertEquals(ProjectionConstants.AUTHORITY_EPSG,
+				projected.getIdentifier(0).getName());
+		assertEquals(String.valueOf(epsg),
+				projected.getIdentifier(0).getUniqueIdentifier());
+
+		return operationMethod;
 	}
 
 }

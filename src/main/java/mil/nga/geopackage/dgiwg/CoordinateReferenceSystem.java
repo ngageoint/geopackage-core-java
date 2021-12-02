@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mil.nga.crs.CRSType;
+import mil.nga.crs.geo.GeoDatums;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.ProjectionConstants;
 
@@ -952,6 +953,126 @@ public enum CoordinateReferenceSystem {
 		if (this == EPSG_4979) {
 			srs.setDefinition_12_063(wkt);
 		}
+
+		return srs;
+	}
+
+	/**
+	 * Lambert Conic Conformal 1SP Description
+	 */
+	public static final String LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION = "For a one standard parallel Lambert the natural "
+			+ "origin of the projected coordinate system is the "
+			+ "intersection of the standard parallel with the "
+			+ "longitude of origin (central meridian).";
+
+	/**
+	 * Lambert Conic Conformal 2SP Description
+	 */
+	public static final String LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION = "Two standard parallels will usually be made "
+			+ "according to the latitudinal extent of the area "
+			+ "which it is wished to map, the parallels usually "
+			+ "being chosen so that they each lie a proportion "
+			+ "inboard of the north and south margins of the " + "mapped area.";
+
+	/**
+	 * Create a Lambert Conic Conformal 1SP Spatial Reference System
+	 * 
+	 * @param epsg
+	 *            Lambert Conic Conformal 1SP EPSG
+	 * @param name
+	 *            CRS name
+	 * @param geoDatum
+	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
+	 *            {@link GeoDatums#NAD83}
+	 * @param latitudeOfOrigin
+	 *            latitude of origin
+	 * @param centralMeridian
+	 *            central meridian
+	 * @param scaleFactor
+	 *            scale factor
+	 * @param falseEasting
+	 *            false easting
+	 * @param falseNorthing
+	 *            false northing
+	 * @param standardParallel1
+	 *            standard parallel 1
+	 * @return Spatial Reference System
+	 */
+	public static SpatialReferenceSystem createLambertConicConformal1SP(
+			long epsg, String name, GeoDatums geoDatum, double latitudeOfOrigin,
+			double centralMeridian, double scaleFactor, double falseEasting,
+			double falseNorthing, double standardParallel1) {
+
+		String definition = WellKnownText.getLambertConicConformal1SP(epsg,
+				name, geoDatum, latitudeOfOrigin, centralMeridian, scaleFactor,
+				falseEasting, falseNorthing, standardParallel1);
+
+		return createLambertConicConformal(epsg, name, definition,
+				LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION);
+	}
+
+	/**
+	 * Create a Lambert Conic Conformal 2SP Spatial Reference System
+	 * 
+	 * @param epsg
+	 *            Lambert Conic Conformal 2SP EPSG
+	 * @param name
+	 *            CRS name
+	 * @param geoDatum
+	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
+	 *            {@link GeoDatums#NAD83}
+	 * @param standardParallel1
+	 *            standard parallel 1
+	 * @param standardParallel2
+	 *            standard parallel 2
+	 * @param latitudeOfOrigin
+	 *            latitude of origin
+	 * @param centralMeridian
+	 *            central meridian
+	 * @param falseEasting
+	 *            false easting
+	 * @param falseNorthing
+	 *            false northing
+	 * @return Spatial Reference System
+	 */
+	public static SpatialReferenceSystem createLambertConicConformal2SP(
+			long epsg, String name, GeoDatums geoDatum,
+			double standardParallel1, double standardParallel2,
+			double latitudeOfOrigin, double centralMeridian,
+			double falseEasting, double falseNorthing) {
+
+		String definition = WellKnownText.getLambertConicConformal2SP(epsg,
+				name, geoDatum, standardParallel1, standardParallel2,
+				latitudeOfOrigin, centralMeridian, falseEasting, falseNorthing);
+
+		return createLambertConicConformal(epsg, name, definition,
+				LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION);
+	}
+
+	/**
+	 * Create a Lambert Conic Conformal Spatial Reference System
+	 * 
+	 * @param epsg
+	 *            Lambert Conic Conformal EPSG
+	 * @param name
+	 *            CRS name
+	 * @param definition
+	 *            well-known text definition
+	 * @param description
+	 *            srs description
+	 * @return Spatial Reference System
+	 */
+	private static SpatialReferenceSystem createLambertConicConformal(long epsg,
+			String name, String definition, String description) {
+
+		SpatialReferenceSystem srs = new SpatialReferenceSystem();
+
+		srs.setSrsName(name);
+		srs.setSrsId(epsg);
+		srs.setOrganization(ProjectionConstants.AUTHORITY_EPSG);
+		srs.setOrganizationCoordsysId(epsg);
+		srs.setDefinition(definition);
+		srs.setDescription(description);
 
 		return srs;
 	}
