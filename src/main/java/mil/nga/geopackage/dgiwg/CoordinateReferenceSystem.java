@@ -10,6 +10,7 @@ import java.util.Set;
 
 import mil.nga.crs.CRSType;
 import mil.nga.crs.geo.GeoDatums;
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.ProjectionConstants;
 
@@ -28,6 +29,9 @@ public enum CoordinateReferenceSystem {
 	EPSG_3395(3395, "WGS 84 / World Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3395,
 			"Euro-centric view of world excluding polar areas for very small scale mapping",
+			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					-80.0, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					84.0),
 			DataType.TILES_2D, DataType.TILES_3D),
 
 	/**
@@ -36,6 +40,10 @@ public enum CoordinateReferenceSystem {
 	EPSG_3857(3857, "WGS 84 / Pseudo-Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3857,
 			"Uses spherical development of ellipsoidal coordinates. This should only be used for visualization purposes.",
+			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE,
+					ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE),
 			DataType.TILES_2D),
 
 	/**
@@ -59,6 +67,9 @@ public enum CoordinateReferenceSystem {
 	 */
 	EPSG_5041(5041, "WGS 84 / UPS North (E,N)", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_5041, "Military mapping by NATO north of 60° N",
+			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					60.0, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT),
 			DataType.TILES_2D, DataType.TILES_3D),
 
 	/**
@@ -66,6 +77,9 @@ public enum CoordinateReferenceSystem {
 	 */
 	EPSG_5042(5042, "WGS 84 / UPS South (E,N)", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_5042, "Military mapping by NATO south of 60° S",
+			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+					-ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT,
+					ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH, -60.0),
 			DataType.TILES_2D, DataType.TILES_3D),
 
 	/**
@@ -722,6 +736,11 @@ public enum CoordinateReferenceSystem {
 	private final String description;
 
 	/**
+	 * Bounds extent in degrees
+	 */
+	private final BoundingBox bounds;
+
+	/**
 	 * Data Types
 	 */
 	private final Set<DataType> dataTypes;
@@ -747,8 +766,35 @@ public enum CoordinateReferenceSystem {
 	private CoordinateReferenceSystem(long epsgCode, String name, CRSType type,
 			int dimension, String wkt, String description,
 			DataType... dataTypes) {
+		this(epsgCode, name, type, dimension, wkt, description,
+				new BoundingBox(), dataTypes);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @param name
+	 *            name
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param bounds
+	 *            bounds extent in degrees
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(long epsgCode, String name, CRSType type,
+			int dimension, String wkt, String description, BoundingBox bounds,
+			DataType... dataTypes) {
 		this(ProjectionConstants.AUTHORITY_EPSG, epsgCode, name, type,
-				dimension, wkt, description, dataTypes);
+				dimension, wkt, description, bounds, dataTypes);
 	}
 
 	/**
@@ -774,6 +820,35 @@ public enum CoordinateReferenceSystem {
 	private CoordinateReferenceSystem(String authority, long code, String name,
 			CRSType type, int dimension, String wkt, String description,
 			DataType... dataTypes) {
+		this(authority, code, name, type, dimension, wkt, description,
+				new BoundingBox(), dataTypes);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @param name
+	 *            name
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param bounds
+	 *            bounds extent in degrees
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(String authority, long code, String name,
+			CRSType type, int dimension, String wkt, String description,
+			BoundingBox bounds, DataType... dataTypes) {
 		this.authority = authority;
 		this.code = code;
 		this.name = name;
@@ -781,6 +856,7 @@ public enum CoordinateReferenceSystem {
 		this.dimension = dimension;
 		this.wkt = wkt;
 		this.description = description;
+		this.bounds = bounds;
 		this.dataTypes = new HashSet<>(Arrays.asList(dataTypes));
 		initialize(this);
 	}
@@ -805,12 +881,22 @@ public enum CoordinateReferenceSystem {
 		String lonDirection = centralMedian < 0 ? "W" : "S";
 		boolean north = UTMZone.isNorth(epsgCode);
 
+		double minLongitude = centralMedian - 3;
+		double maxLongitude = centralMedian + 3;
+		double minLatitude = 0.0;
+		double maxLatitude = 0.0;
+		if (north) {
+			maxLatitude = 84.0;
+		} else {
+			minLatitude = -80.0;
+		}
+
 		StringBuilder description = new StringBuilder("Between ");
-		description.append(Math.abs(centralMedian - 3));
+		description.append(Math.abs(minLongitude));
 		description.append("°");
 		description.append(lonDirection);
 		description.append(" and ");
-		description.append(Math.abs(centralMedian + 3));
+		description.append(Math.abs(maxLongitude));
 		description.append("°");
 		description.append(lonDirection);
 		description.append(", ");
@@ -827,6 +913,9 @@ public enum CoordinateReferenceSystem {
 		}
 		description.append(", onshore and offshore.");
 		this.description = description.toString();
+
+		this.bounds = new BoundingBox(minLongitude, minLatitude, maxLongitude,
+				maxLatitude);
 		this.dataTypes = new HashSet<>();
 		this.dataTypes.add(DataType.TILES_2D);
 		initialize(this);
@@ -902,6 +991,15 @@ public enum CoordinateReferenceSystem {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * Get the bounds extent in degrees
+	 * 
+	 * @return bounding box in degrees
+	 */
+	public BoundingBox getBounds() {
+		return bounds;
 	}
 
 	/**
