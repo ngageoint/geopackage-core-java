@@ -12,7 +12,10 @@ import mil.nga.crs.CRSType;
 import mil.nga.crs.geo.GeoDatums;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
+import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionFactory;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * DGIWG (Defence Geospatial Information Working Group) Coordinate Reference
@@ -1056,6 +1059,28 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get spatial reference system bounds
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @return projected bounds
+	 */
+	public BoundingBox getBounds(SpatialReferenceSystem srs) {
+		return getBounds(bounds, srs);
+	}
+
+	/**
+	 * Get projected bounds
+	 * 
+	 * @param projection
+	 *            desired projection
+	 * @return projected bounds
+	 */
+	public BoundingBox getBounds(Projection projection) {
+		return getBounds(bounds, projection);
+	}
+
+	/**
 	 * Lambert Conic Conformal 1SP Description
 	 */
 	public static final String LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION = "For a one standard parallel Lambert the natural "
@@ -1261,6 +1286,72 @@ public enum CoordinateReferenceSystem {
 			crsSet.add(crs);
 		}
 
+	}
+
+	/**
+	 * Get spatial reference system bounds from the WGS84 bounds
+	 * 
+	 * @param bounds
+	 *            WGS84 bounds
+	 * @param srs
+	 *            spatial reference system
+	 * @return projected bounds
+	 */
+	public static BoundingBox getBounds(BoundingBox bounds,
+			SpatialReferenceSystem srs) {
+		return getBounds(bounds, srs.getProjection());
+	}
+
+	/**
+	 * Get spatial reference system bounds from the bounds in the provided
+	 * projection
+	 * 
+	 * @param bounds
+	 *            bounds
+	 * @param boundsProjection
+	 *            bounds projection
+	 * @param srs
+	 *            spatial reference system
+	 * @return projected bounds
+	 */
+	public static BoundingBox getBounds(BoundingBox bounds,
+			Projection boundsProjection, SpatialReferenceSystem srs) {
+		return getBounds(bounds, boundsProjection, srs.getProjection());
+	}
+
+	/**
+	 * Get projected bounds from the WGS84 bounds
+	 * 
+	 * @param bounds
+	 *            WGS84 bounds
+	 * @param projection
+	 *            desired projection
+	 * @return projected bounds
+	 */
+	public static BoundingBox getBounds(BoundingBox bounds,
+			Projection projection) {
+		return getBounds(bounds,
+				ProjectionFactory.getProjection(
+						ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM),
+				projection);
+	}
+
+	/**
+	 * Get projected bounds from the bounds in the provided projection
+	 * 
+	 * @param bounds
+	 *            bounds
+	 * @param boundsProjection
+	 *            bounds projection
+	 * @param projection
+	 *            desired projection
+	 * @return projected bounds
+	 */
+	public static BoundingBox getBounds(BoundingBox bounds,
+			Projection boundsProjection, Projection projection) {
+		GeometryTransform transform = GeometryTransform.create(boundsProjection,
+				projection);
+		return bounds.transform(transform);
 	}
 
 }
