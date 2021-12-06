@@ -396,7 +396,10 @@ public class BoundingBox {
 		if (transform.isSameProjection()) {
 			transformed = new BoundingBox(transformed);
 		} else {
-			if (transform.getFromProjection().isUnit(Units.DEGREES)) {
+			if (transform.getFromProjection().isUnit(Units.DEGREES)
+					&& transform.getToProjection().equals(
+							ProjectionConstants.AUTHORITY_EPSG,
+							ProjectionConstants.EPSG_WEB_MERCATOR)) {
 				transformed = TileBoundingBoxUtils
 						.boundDegreesBoundingBoxWithWebMercatorLimits(
 								transformed);
