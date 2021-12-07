@@ -716,7 +716,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * Name
 	 */
-	private final String name;
+	private final String crsName;
 
 	/**
 	 * CRS Type
@@ -854,7 +854,7 @@ public enum CoordinateReferenceSystem {
 			BoundingBox bounds, DataType... dataTypes) {
 		this.authority = authority;
 		this.code = code;
-		this.name = name;
+		this.crsName = name;
 		this.type = type;
 		this.dimension = dimension;
 		this.wkt = wkt;
@@ -876,7 +876,7 @@ public enum CoordinateReferenceSystem {
 		this.code = epsgCode;
 		long zone = UTMZone.getZone(epsgCode);
 		String latDirection = UTMZone.getLatDirection(epsgCode);
-		this.name = "WGS 84 / UTM zone " + zone + latDirection;
+		this.crsName = "WGS 84 / UTM zone " + zone + latDirection;
 		this.type = CRSType.PROJECTED;
 		this.dimension = 2;
 
@@ -957,7 +957,7 @@ public enum CoordinateReferenceSystem {
 	 * @return name
 	 */
 	public String getName() {
-		return name;
+		return crsName;
 	}
 
 	/**
@@ -1045,7 +1045,7 @@ public enum CoordinateReferenceSystem {
 
 		SpatialReferenceSystem srs = new SpatialReferenceSystem();
 
-		srs.setSrsName(name);
+		srs.setSrsName(crsName);
 		srs.setSrsId(code);
 		srs.setOrganization(authority);
 		srs.setOrganizationCoordsysId(code);
