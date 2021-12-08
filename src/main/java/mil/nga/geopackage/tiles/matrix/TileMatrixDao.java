@@ -8,7 +8,9 @@ import java.util.Map;
 
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.PreparedUpdate;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -108,6 +110,27 @@ public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 	@Override
 	public TileMatrix queryForSameId(TileMatrix data) throws SQLException {
 		return queryForId(data.getId());
+	}
+
+	/**
+	 * Query tile matrices for a table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @return tile matrices
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.1.2
+	 */
+	public List<TileMatrix> queryForTableName(String tableName)
+			throws SQLException {
+		QueryBuilder<TileMatrix, TileMatrixKey> qb = queryBuilder();
+		qb.where().eq(TileMatrix.COLUMN_TABLE_NAME, tableName);
+		qb.orderBy(TileMatrix.COLUMN_ZOOM_LEVEL, true);
+		qb.orderBy(TileMatrix.COLUMN_PIXEL_X_SIZE, false);
+		qb.orderBy(TileMatrix.COLUMN_PIXEL_Y_SIZE, false);
+		PreparedQuery<TileMatrix> query = qb.prepare();
+		return query(query);
 	}
 
 	/**

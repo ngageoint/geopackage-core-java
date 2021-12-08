@@ -1214,6 +1214,19 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get the coordinate reference system for the spatial reference system
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @return crs
+	 */
+	public static CoordinateReferenceSystem getCoordinateReferenceSystem(
+			SpatialReferenceSystem srs) {
+		return getCoordinateReferenceSystem(srs.getOrganization(),
+				srs.getOrganizationCoordsysId());
+	}
+
+	/**
 	 * Get the coordinate reference system for the authority and code
 	 * 
 	 * @param authority
