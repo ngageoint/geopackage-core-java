@@ -17,6 +17,7 @@ import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
 
 /**
  * Performs DGIWG (Defence Geospatial Information Working Group) GeoPackage
@@ -35,7 +36,7 @@ public class DGIWGValidate {
 	 * @return true if valid
 	 */
 	public static boolean isValid(GeoPackageCore geoPackage) {
-		return false; // TODO
+		return validate(geoPackage).isValid();
 	}
 
 	/**
@@ -43,17 +44,21 @@ public class DGIWGValidate {
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
+	 * @return validation errors
 	 */
-	public static void validate(GeoPackageCore geoPackage) {
+	public static DGIWGValidationErrors validate(GeoPackageCore geoPackage) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		for (String tileTable : geoPackage.getTileTables()) {
-			validateTileTable(geoPackage, tileTable);
+			errors.add(validateTileTable(geoPackage, tileTable));
 		}
 
 		for (String featureTable : geoPackage.getFeatureTables()) {
-			validateFeatureTable(geoPackage, featureTable);
+			errors.add(validateFeatureTable(geoPackage, featureTable));
 		}
 
+		return errors;
 	}
 
 	/**
@@ -63,26 +68,34 @@ public class DGIWGValidate {
 	 *            tile table
 	 * @param srs
 	 *            spatial reference system
+	 * @return validation errors
 	 */
-	public static void validateTileCoordinateReferenceSystem(String tileTable,
-			SpatialReferenceSystem srs) {
+	public static DGIWGValidationErrors validateTileCoordinateReferenceSystem(
+			String tileTable, SpatialReferenceSystem srs) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
-				tileTable, srs, ContentsDataType.TILES);
+				errors, tileTable, srs, ContentsDataType.TILES);
 
 		if (crs == null) {
 
 			Projection projection = srs.getProjection();
+			String definition = projection.getDefinition();
 
 			CRS definitionCrs = projection.getDefinitionCRS();
 			if (definitionCrs == null) {
-				String definition = projection.getDefinition();
 				if (definition != null) {
 					try {
 						definitionCrs = CRSReader.read(definition);
 					} catch (IOException e) {
-						// TODO validation error
-						throw new GeoPackageException("TODO");
+						errors.add(new DGIWGValidationError(
+								SpatialReferenceSystem.TABLE_NAME,
+								SpatialReferenceSystem.COLUMN_DEFINITION,
+								definition,
+								"Failed to read tiles coordinate reference system definition: "
+										+ e.getMessage(),
+								primaryKey(srs)));
 					}
 				}
 			}
@@ -106,17 +119,25 @@ public class DGIWGValidate {
 				}
 
 				if (!valid) {
-					// TODO validation error
-					throw new GeoPackageException("TODO");
+					errors.add(new DGIWGValidationError(
+							SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DEFINITION,
+							definition,
+							"Unsupported tiles coordinate reference system",
+							primaryKey(srs)));
 				}
 
-			} else {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+			} else if (!errors.hasErrors()) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_DEFINITION, definition,
+						"Failed to read tiles coordinate reference system definition",
+						primaryKey(srs)));
 			}
 
 		}
 
+		return errors;
 	}
 
 	/**
@@ -126,23 +147,33 @@ public class DGIWGValidate {
 	 *            feature table
 	 * @param srs
 	 *            spatial reference system
+	 * @return validation errors
 	 */
-	public static void validateFeatureCoordinateReferenceSystem(
+	public static DGIWGValidationErrors validateFeatureCoordinateReferenceSystem(
 			String featureTable, SpatialReferenceSystem srs) {
 
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
+
 		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
-				featureTable, srs, ContentsDataType.FEATURES);
+				errors, featureTable, srs, ContentsDataType.FEATURES);
 
 		if (crs == null) {
-			// TODO validation error
-			throw new GeoPackageException("TODO");
+			errors.add(
+					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DEFINITION,
+							srs.getProjectionDefinition(),
+							"Unsupported features coordinate reference system",
+							primaryKey(srs)));
 		}
 
+		return errors;
 	}
 
 	/**
 	 * Validate the coordinate reference system
 	 * 
+	 * @param errors
+	 *            validation errors
 	 * @param table
 	 *            table name
 	 * @param srs
@@ -152,7 +183,8 @@ public class DGIWGValidate {
 	 * @return coordinate reference system
 	 */
 	private static CoordinateReferenceSystem validateCoordinateReferenceSystem(
-			String table, SpatialReferenceSystem srs, ContentsDataType type) {
+			DGIWGValidationErrors errors, String table,
+			SpatialReferenceSystem srs, ContentsDataType type) {
 
 		CoordinateReferenceSystem crs = CoordinateReferenceSystem
 				.getCoordinateReferenceSystem(srs);
@@ -169,28 +201,54 @@ public class DGIWGValidate {
 			}
 
 			if (!valid) {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_DEFINITION,
+						srs.getProjectionDefinition(),
+						"Unsupported " + type.getName()
+								+ " coordinate reference system",
+						primaryKey(srs)));
 			}
 
 			if (!srs.getSrsName().equalsIgnoreCase(crs.getName())) {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_SRS_NAME,
+						srs.getSrsName(), crs.getName(), primaryKey(srs)));
 			}
 
 			if (srs.getSrsId() != crs.getCode()) {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_SRS_ID, srs.getSrsId(),
+						crs.getCode(), primaryKey(srs)));
 			}
 
 			if (!srs.getOrganization().equalsIgnoreCase(crs.getAuthority())) {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION,
+						srs.getOrganization(), crs.getAuthority(),
+						primaryKey(srs)));
 			}
 
 			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
-				// TODO validation error
-				throw new GeoPackageException("TODO");
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
+						srs.getOrganizationCoordsysId(), crs.getCode(),
+						primaryKey(srs)));
+			}
+
+		} else {
+
+			if (!srs.getOrganization()
+					.equalsIgnoreCase(ProjectionConstants.AUTHORITY_EPSG)) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION,
+						srs.getOrganization(),
+						ProjectionConstants.AUTHORITY_EPSG, primaryKey(srs)));
 			}
 
 		}
@@ -205,9 +263,12 @@ public class DGIWGValidate {
 	 *            GeoPackage
 	 * @param tileTable
 	 *            tile table
+	 * @return validation errors
 	 */
-	public static void validateTileTable(GeoPackageCore geoPackage,
-			String tileTable) {
+	public static DGIWGValidationErrors validateTileTable(
+			GeoPackageCore geoPackage, String tileTable) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		TileMatrixSet tileMatrixSet = null;
 		try {
@@ -220,8 +281,14 @@ public class DGIWGValidate {
 					e);
 		}
 
-		validateTileCoordinateReferenceSystem(tileTable,
-				tileMatrixSet.getSrs());
+		if (tileMatrixSet != null) {
+			errors.add(validateTileCoordinateReferenceSystem(tileTable,
+					tileMatrixSet.getSrs()));
+		} else {
+			errors.add(new DGIWGValidationError(TileMatrixSet.TABLE_NAME,
+					TileMatrixSet.COLUMN_TABLE_NAME, tileTable,
+					"No Tile Matrix Set for tile table"));
+		}
 
 		List<TileMatrix> tileMatrices;
 		try {
@@ -235,8 +302,9 @@ public class DGIWGValidate {
 		}
 
 		if (tileMatrices == null || tileMatrices.isEmpty()) {
-			// TODO validation error
-			throw new GeoPackageException("TODO");
+			errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
+					TileMatrix.COLUMN_TABLE_NAME, tileTable,
+					"No Tile Matrices for tile table"));
 		} else {
 
 			TileMatrix previousTileMatrix = null;
@@ -244,13 +312,19 @@ public class DGIWGValidate {
 			for (TileMatrix tileMatrix : tileMatrices) {
 
 				if (tileMatrix.getTileWidth() != DGIWGConstants.TILE_WIDTH) {
-					// TODO validation error
-					throw new GeoPackageException("TODO");
+					errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
+							TileMatrix.COLUMN_TILE_WIDTH,
+							tileMatrix.getTileWidth(),
+							DGIWGConstants.TILE_WIDTH,
+							primaryKeys(tileMatrix)));
 				}
 
 				if (tileMatrix.getTileHeight() != DGIWGConstants.TILE_HEIGHT) {
-					// TODO validation error
-					throw new GeoPackageException("TODO");
+					errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
+							TileMatrix.COLUMN_TILE_HEIGHT,
+							tileMatrix.getTileHeight(),
+							DGIWGConstants.TILE_HEIGHT,
+							primaryKeys(tileMatrix)));
 				}
 
 				if (previousTileMatrix != null) {
@@ -264,13 +338,19 @@ public class DGIWGValidate {
 							/ factor;
 
 					if (tileMatrix.getPixelXSize() != pixelXSize) {
-						// TODO validation error
-						throw new GeoPackageException("TODO");
+						errors.add(
+								new DGIWGValidationError(TileMatrix.TABLE_NAME,
+										TileMatrix.COLUMN_PIXEL_X_SIZE,
+										tileMatrix.getPixelXSize(), pixelXSize,
+										primaryKeys(tileMatrix)));
 					}
 
 					if (tileMatrix.getPixelYSize() != pixelYSize) {
-						// TODO validation error
-						throw new GeoPackageException("TODO");
+						errors.add(
+								new DGIWGValidationError(TileMatrix.TABLE_NAME,
+										TileMatrix.COLUMN_PIXEL_Y_SIZE,
+										tileMatrix.getPixelYSize(), pixelYSize,
+										primaryKeys(tileMatrix)));
 					}
 
 				}
@@ -280,6 +360,7 @@ public class DGIWGValidate {
 
 		}
 
+		return errors;
 	}
 
 	/**
@@ -289,9 +370,12 @@ public class DGIWGValidate {
 	 *            GeoPackage
 	 * @param featureTable
 	 *            feature table
+	 * @return validation errors
 	 */
-	public static void validateFeatureTable(GeoPackageCore geoPackage,
-			String featureTable) {
+	public static DGIWGValidationErrors validateFeatureTable(
+			GeoPackageCore geoPackage, String featureTable) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		GeometryColumns geometryColumns = null;
 		try {
@@ -304,9 +388,71 @@ public class DGIWGValidate {
 					e);
 		}
 
-		validateFeatureCoordinateReferenceSystem(featureTable,
-				geometryColumns.getSrs());
+		if (geometryColumns != null) {
+			errors.add(validateFeatureCoordinateReferenceSystem(featureTable,
+					geometryColumns.getSrs()));
+		} else {
+			errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
+					GeometryColumns.COLUMN_TABLE_NAME, featureTable,
+					"No Geometry Columns for feature table"));
+		}
 
+		return errors;
+	}
+
+	/**
+	 * Get the Spatial Reference System primary key
+	 * 
+	 * @param srs
+	 *            spatial reference system
+	 * @return primary key
+	 */
+	private static DGIWGValidationKey primaryKey(SpatialReferenceSystem srs) {
+		return new DGIWGValidationKey(SpatialReferenceSystem.COLUMN_ID,
+				srs.getId());
+	}
+
+	/**
+	 * Get the Tile Matrix Set primary key
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 * @return primary key
+	 */
+	private static DGIWGValidationKey primaryKey(TileMatrixSet tileMatrixSet) {
+		return new DGIWGValidationKey(TileMatrixSet.COLUMN_ID,
+				tileMatrixSet.getId());
+	}
+
+	/**
+	 * Get the Tile Matrix primary keys
+	 * 
+	 * @param tileMatrix
+	 *            tile matrix
+	 * @return primary keys
+	 */
+	private static DGIWGValidationKey[] primaryKeys(TileMatrix tileMatrix) {
+		return new DGIWGValidationKey[] {
+				new DGIWGValidationKey(TileMatrix.COLUMN_ID_1,
+						tileMatrix.getId().getTableName()),
+				new DGIWGValidationKey(TileMatrix.COLUMN_ID_2,
+						tileMatrix.getId().getZoomLevel()) };
+	}
+
+	/**
+	 * Get the Geometry Columns primary keys
+	 * 
+	 * @param geometryColumns
+	 *            geometry columns
+	 * @return primary keys
+	 */
+	private static DGIWGValidationKey[] primaryKeys(
+			GeometryColumns geometryColumns) {
+		return new DGIWGValidationKey[] {
+				new DGIWGValidationKey(GeometryColumns.COLUMN_ID_1,
+						geometryColumns.getId().getTableName()),
+				new DGIWGValidationKey(GeometryColumns.COLUMN_ID_2,
+						geometryColumns.getId().getColumnName()) };
 	}
 
 }
