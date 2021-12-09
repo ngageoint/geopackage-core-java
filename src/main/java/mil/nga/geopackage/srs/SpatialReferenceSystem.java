@@ -338,6 +338,22 @@ public class SpatialReferenceSystem {
 
 		String authority = getOrganization();
 		long code = getOrganizationCoordsysId();
+		String definition = getProjectionDefinition();
+
+		Projection projection = ProjectionFactory.getProjection(authority, code,
+				null, definition);
+
+		return projection;
+	}
+
+	/**
+	 * Get the projection definition
+	 * 
+	 * @return definition
+	 * @since 6.1.2
+	 */
+	public String getProjectionDefinition() {
+
 		String definition = getDefinition_12_063();
 		if (definition == null || definition.trim().isEmpty()
 				|| definition.trim().equalsIgnoreCase(
@@ -352,10 +368,7 @@ public class SpatialReferenceSystem {
 			}
 		}
 
-		Projection projection = ProjectionFactory.getProjection(authority, code,
-				null, definition);
-
-		return projection;
+		return definition;
 	}
 
 	/**
