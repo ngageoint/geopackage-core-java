@@ -72,7 +72,7 @@ public class PlatteCarreOptimize extends TileReprojectionOptimize {
 	 */
 	@Override
 	public BoundingBox getBoundingBox() {
-		return new BoundingBox();
+		return BoundingBox.worldWGS84();
 	}
 
 	/**

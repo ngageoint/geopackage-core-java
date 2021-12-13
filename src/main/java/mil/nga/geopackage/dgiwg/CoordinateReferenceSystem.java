@@ -770,7 +770,7 @@ public enum CoordinateReferenceSystem {
 			int dimension, String wkt, String description,
 			DataType... dataTypes) {
 		this(epsgCode, name, type, dimension, wkt, description,
-				new BoundingBox(), dataTypes);
+				BoundingBox.worldWGS84(), dataTypes);
 	}
 
 	/**
@@ -824,7 +824,7 @@ public enum CoordinateReferenceSystem {
 			CRSType type, int dimension, String wkt, String description,
 			DataType... dataTypes) {
 		this(authority, code, name, type, dimension, wkt, description,
-				new BoundingBox(), dataTypes);
+				BoundingBox.worldWGS84(), dataTypes);
 	}
 
 	/**

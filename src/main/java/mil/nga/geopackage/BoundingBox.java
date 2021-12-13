@@ -36,6 +36,28 @@ public class BoundingBox {
 	private double maxLatitude;
 
 	/**
+	 * Create a new WGS84 bounding box with world bounds (degrees)
+	 *
+	 * @return new bounding box
+	 */
+	public static BoundingBox worldWGS84() {
+		return new BoundingBox();
+	}
+
+	/**
+	 * Create a new Web Mercator bounding box with world bounds (meters)
+	 *
+	 * @return new bounding box
+	 */
+	public static BoundingBox worldWebMercator() {
+		return new BoundingBox(
+				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
 	 * Constructor
 	 */
 	public BoundingBox() {
