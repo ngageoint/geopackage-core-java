@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.j256.ormlite</groupId>
 			<artifactId>ormlite-core</artifactId>
-			<version>5.7</version>
+			<version>6.1</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.sf</groupId>

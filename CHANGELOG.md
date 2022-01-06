@@ -6,6 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.1.2 (TBD)
 
+* ormlite-core version 6.1
 * Bounding Box world bounds shortcuts for WGS84 and Web Mercator
 
 ## [6.1.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.1) (11-10-2021)

@@ -1,6 +1,5 @@
 package mil.nga.geopackage.extension.nga.index;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -782,7 +781,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 			if (results != null) {
 				try {
 					results.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					logger.log(Level.WARNING,
 							"Failed to close bounds query results", e);
 				}
