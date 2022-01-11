@@ -36,6 +36,30 @@ public class BoundingBox {
 	private double maxLatitude;
 
 	/**
+	 * Create a new WGS84 bounding box with world bounds (degrees)
+	 *
+	 * @return new bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox worldWGS84() {
+		return new BoundingBox();
+	}
+
+	/**
+	 * Create a new Web Mercator bounding box with world bounds (meters)
+	 *
+	 * @return new bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox worldWebMercator() {
+		return new BoundingBox(
+				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
 	 * Constructor
 	 */
 	public BoundingBox() {
@@ -396,7 +420,10 @@ public class BoundingBox {
 		if (transform.isSameProjection()) {
 			transformed = new BoundingBox(transformed);
 		} else {
-			if (transform.getFromProjection().isUnit(Units.DEGREES)) {
+			if (transform.getFromProjection().isUnit(Units.DEGREES)
+					&& transform.getToProjection().equals(
+							ProjectionConstants.AUTHORITY_EPSG,
+							ProjectionConstants.EPSG_WEB_MERCATOR)) {
 				transformed = TileBoundingBoxUtils
 						.boundDegreesBoundingBoxWithWebMercatorLimits(
 								transformed);

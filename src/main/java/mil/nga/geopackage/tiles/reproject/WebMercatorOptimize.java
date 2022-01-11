@@ -72,11 +72,7 @@ public class WebMercatorOptimize extends TileReprojectionOptimize {
 	 */
 	@Override
 	public BoundingBox getBoundingBox() {
-		return new BoundingBox(
-				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
-				-ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
-				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH,
-				ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+		return BoundingBox.worldWebMercator();
 	}
 
 	/**

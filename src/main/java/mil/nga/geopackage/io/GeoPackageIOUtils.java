@@ -145,6 +145,30 @@ public class GeoPackageIOUtils {
 	}
 
 	/**
+	 * Get the path file name
+	 * 
+	 * @param path
+	 *            file path
+	 * @return file name
+	 * @since 6.1.2
+	 */
+	public static String getPathFileName(String path) {
+		return new File(path).getName();
+	}
+
+	/**
+	 * Get the path file name
+	 * 
+	 * @param path
+	 *            file path
+	 * @return file name
+	 * @since 6.1.2
+	 */
+	public static String getPathFileNameWithoutExtension(String path) {
+		return getFileNameWithoutExtension(getPathFileName(path));
+	}
+
+	/**
 	 * Copy a file to a file location
 	 * 
 	 * @param copyFrom

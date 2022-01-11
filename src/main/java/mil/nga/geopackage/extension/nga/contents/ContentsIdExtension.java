@@ -1,6 +1,5 @@
 package mil.nga.geopackage.extension.nga.contents;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -590,7 +589,7 @@ public class ContentsIdExtension extends BaseExtension {
 			if (results != null) {
 				try {
 					results.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					logger.log(Level.WARNING,
 							"Failed to close generic raw results from missing contents ids query. type: "
 									+ type,

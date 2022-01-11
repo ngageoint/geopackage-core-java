@@ -1,6 +1,5 @@
 package mil.nga.geopackage.contents;
 
-import java.io.IOException;
 import java.util.Date;
 
 import com.j256.ormlite.dao.CloseableIterator;
@@ -539,7 +538,7 @@ public class Contents {
 			} finally {
 				try {
 					iterator.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					throw new GeoPackageException(
 							"Failed to close the Geometry Columns iterator", e);
 				}
@@ -569,7 +568,7 @@ public class Contents {
 			} finally {
 				try {
 					iterator.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					throw new GeoPackageException(
 							"Failed to close the Tile Matrix Set iterator", e);
 				}

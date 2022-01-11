@@ -133,17 +133,55 @@ public class DateConverter {
 	private final List<SimpleDateFormat> formatters = new ArrayList<>();
 
 	/**
+	 * Is parsing a date value from a string always expected
+	 */
+	private boolean expected = true;
+
+	/**
 	 * Constructor
+	 * 
+	 * @param formats
+	 *            date formats
+	 * @since 6.1.2
+	 */
+	public DateConverter(String... formats) {
+		for (String format : formats) {
+			addFormat(format);
+		}
+	}
+
+	/**
+	 * Add date format
 	 * 
 	 * @param format
 	 *            date format
+	 * @since 6.1.2
 	 */
-	private DateConverter(String... formats) {
-		for (String format : formats) {
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-			formatters.add(sdf);
-		}
+	public void addFormat(String format) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		formatters.add(sdf);
+	}
+
+	/**
+	 * Is a parsed date value always expected
+	 * 
+	 * @return true if always expected
+	 * @since 6.1.2
+	 */
+	public boolean isExpected() {
+		return expected;
+	}
+
+	/**
+	 * Set if a parsed date value is always expected
+	 * 
+	 * @param expected
+	 *            true if always expected
+	 * @since 6.1.2
+	 */
+	public void setExpected(boolean expected) {
+		this.expected = expected;
 	}
 
 	/**
@@ -192,7 +230,7 @@ public class DateConverter {
 
 			// If no value could be parsed throw the first expected parse
 			// format exception
-			if (value == null) {
+			if (value == null && expected) {
 				throw new GeoPackageException(
 						"Failed to parse date string: " + date, exception);
 			}

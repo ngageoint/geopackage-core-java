@@ -6,7 +6,15 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.1.2 (TBD)
 
-* TBD
+* ormlite-core version 6.1
+* sf-wkb version 2.0.5
+* sf-wkt version 1.0.2
+* sf-proj version 4.1.1
+* oapi-features-json version 2.0.1
+* Bounding Box world bounds shortcuts for WGS84 and Web Mercator
+* SpatialReferenceSystem getProjectionDefinition method
+* TIleMatrixDao queryForTableName method
+* Additional file name, tile bounding box, and date converter utilities
 
 ## [6.1.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.1) (11-10-2021)
 

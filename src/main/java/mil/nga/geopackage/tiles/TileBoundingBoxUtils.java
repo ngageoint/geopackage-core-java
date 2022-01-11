@@ -810,8 +810,8 @@ public class TileBoundingBoxUtils {
 	 * @return tile size
 	 */
 	public static double tileSize(int tilesPerSide) {
-		return (2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				/ tilesPerSide;
+		return tileSize(tilesPerSide,
+				2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
 	}
 
 	/**
@@ -823,10 +823,55 @@ public class TileBoundingBoxUtils {
 	 * @since 1.2.0
 	 */
 	public static double zoomLevelOfTileSize(double tileSize) {
-		double tilesPerSide = (2
-				* ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize;
+		return zoomLevelOfTileSize(tileSize,
+				2 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH);
+	}
+
+	/**
+	 * Get the tile size in length units
+	 * 
+	 * @param tilesPerSide
+	 *            tiles per side
+	 * @param totalLength
+	 *            total length
+	 * @return tile size
+	 * @since 6.1.2
+	 */
+	public static double tileSize(int tilesPerSide, double totalLength) {
+		return totalLength / tilesPerSide;
+	}
+
+	/**
+	 * Get the zoom level from the tile size in length units
+	 * 
+	 * @param tileSize
+	 *            tile size in units
+	 * @param totalLength
+	 *            total length
+	 * @return zoom level
+	 * @since 6.1.2
+	 */
+	public static double zoomLevelOfTileSize(double tileSize,
+			double totalLength) {
+		double tilesPerSide = totalLength / tileSize;
 		double zoom = Math.log(tilesPerSide) / Math.log(2);
 		return zoom;
+	}
+
+	/**
+	 * Get the tile size in length units at the zoom level
+	 *
+	 * @param zoom
+	 *            zoom level
+	 * @param totalLength
+	 *            total length
+	 * @return tile size in units
+	 * @since 6.1.2
+	 */
+	public static double tileSizeWithZoom(long zoom, double totalLength) {
+		int tilesPerSide = tilesPerSide(zoom);
+		double tileSize = tileSize(tilesPerSide, totalLength);
+		return tileSize;
 	}
 
 	/**
