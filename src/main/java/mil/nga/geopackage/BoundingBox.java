@@ -10,7 +10,7 @@ import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
- * 
+ *
  * @author osbornb
  */
 public class BoundingBox {
@@ -39,6 +39,7 @@ public class BoundingBox {
 	 * Create a new WGS84 bounding box with world bounds (degrees)
 	 *
 	 * @return new bounding box
+	 * @since 6.1.2
 	 */
 	public static BoundingBox worldWGS84() {
 		return new BoundingBox();
@@ -48,6 +49,7 @@ public class BoundingBox {
 	 * Create a new Web Mercator bounding box with world bounds (meters)
 	 *
 	 * @return new bounding box
+	 * @since 6.1.2
 	 */
 	public static BoundingBox worldWebMercator() {
 		return new BoundingBox(
@@ -69,7 +71,7 @@ public class BoundingBox {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param minLongitude
 	 *            min longitude
 	 * @param minLatitude
@@ -90,7 +92,7 @@ public class BoundingBox {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param boundingBox
 	 *            bounding box
 	 * @since 1.1.6
@@ -102,7 +104,7 @@ public class BoundingBox {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param envelope
 	 *            geometry envelope
 	 * @since 2.0.0
@@ -114,7 +116,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the min longitude
-	 * 
+	 *
 	 * @return min longitude
 	 */
 	public double getMinLongitude() {
@@ -123,7 +125,7 @@ public class BoundingBox {
 
 	/**
 	 * Set the min longitude
-	 * 
+	 *
 	 * @param minLongitude
 	 *            min longitude
 	 */
@@ -133,7 +135,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the max longitude
-	 * 
+	 *
 	 * @return max longitude
 	 */
 	public double getMaxLongitude() {
@@ -142,7 +144,7 @@ public class BoundingBox {
 
 	/**
 	 * Set the max longitude
-	 * 
+	 *
 	 * @param maxLongitude
 	 *            max longitude
 	 */
@@ -152,7 +154,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the min latitude
-	 * 
+	 *
 	 * @return min latitude
 	 */
 	public double getMinLatitude() {
@@ -161,7 +163,7 @@ public class BoundingBox {
 
 	/**
 	 * Set the min latitude
-	 * 
+	 *
 	 * @param minLatitude
 	 *            min latitude
 	 */
@@ -171,7 +173,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the max latitude
-	 * 
+	 *
 	 * @return max latitude
 	 */
 	public double getMaxLatitude() {
@@ -180,7 +182,7 @@ public class BoundingBox {
 
 	/**
 	 * Set the max latitude
-	 * 
+	 *
 	 * @param maxLatitude
 	 *            max latitude
 	 */
@@ -190,7 +192,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the longitude range
-	 * 
+	 *
 	 * @return longitude range
 	 * @since 3.5.0
 	 */
@@ -200,7 +202,7 @@ public class BoundingBox {
 
 	/**
 	 * Get the latitude range
-	 * 
+	 *
 	 * @return latitude range
 	 * @since 3.5.0
 	 */
@@ -210,7 +212,7 @@ public class BoundingBox {
 
 	/**
 	 * Build a Geometry Envelope from the bounding box
-	 * 
+	 *
 	 * @return geometry envelope
 	 * @since 1.1.0
 	 */
@@ -220,7 +222,7 @@ public class BoundingBox {
 
 	/**
 	 * Build a Geometry Envelope from the bounding box
-	 * 
+	 *
 	 * @param boundingBox
 	 *            bounding box
 	 * @return geometry envelope
@@ -298,7 +300,7 @@ public class BoundingBox {
 	 * Bound the bounding box longitudes within the min and max possible
 	 * projection values. This may result in a max longitude numerically lower
 	 * than the min longitude.
-	 * 
+	 *
 	 * @param maxProjectionLongitude
 	 *            max longitude of the world for the current bounding box units
 	 * @return bounded bounding box
@@ -321,7 +323,7 @@ public class BoundingBox {
 
 	/**
 	 * Bound the bounding box coordinates within WGS84 range values
-	 * 
+	 *
 	 * @return bounded bounding box
 	 * @since 2.0.0
 	 */
@@ -331,7 +333,7 @@ public class BoundingBox {
 
 	/**
 	 * Bound the bounding box coordinates within Web Mercator range values
-	 * 
+	 *
 	 * @return bounded bounding box
 	 * @since 2.0.0
 	 */
@@ -344,7 +346,7 @@ public class BoundingBox {
 	 * Expand the bounding box max longitude above the max possible projection
 	 * value if needed to create a bounding box where the max longitude is
 	 * numerically larger than the min longitude.
-	 * 
+	 *
 	 * @param maxProjectionLongitude
 	 *            max longitude of the world for the current bounding box units
 	 * @return expanded bounding box
@@ -371,7 +373,7 @@ public class BoundingBox {
 	 * Expand the bounding box max longitude above the max WGS84 projection
 	 * value if needed to create a bounding box where the max longitude is
 	 * numerically larger than the min longitude.
-	 * 
+	 *
 	 * @return expanded bounding box
 	 * @since 2.0.0
 	 */
@@ -384,7 +386,7 @@ public class BoundingBox {
 	 * Expand the bounding box max longitude above the max Web Mercator
 	 * projection value if needed to create a bounding box where the max
 	 * longitude is numerically larger than the min longitude.
-	 * 
+	 *
 	 * @return expanded bounding box
 	 * @since 2.0.0
 	 */
@@ -395,7 +397,7 @@ public class BoundingBox {
 
 	/**
 	 * Transform the bounding box using the provided projection transform
-	 * 
+	 *
 	 * @param transform
 	 *            projection transform
 	 * @return transformed bounding box
@@ -407,7 +409,7 @@ public class BoundingBox {
 
 	/**
 	 * Transform the bounding box using the provided projection transform
-	 * 
+	 *
 	 * @param transform
 	 *            geometry transform
 	 * @return transformed bounding box
@@ -553,7 +555,7 @@ public class BoundingBox {
 
 	/**
 	 * Expand the bounding box to an equally sized width and height bounding box
-	 * 
+	 *
 	 * @return new square expanded bounding box
 	 * @since 3.5.0
 	 */
@@ -564,7 +566,7 @@ public class BoundingBox {
 	/**
 	 * Expand the bounding box to an equally sized width and height bounding box
 	 * with optional empty edge buffer
-	 * 
+	 *
 	 * @param bufferPercentage
 	 *            bounding box edge buffer percentage. A value of 0.1 adds a 10%
 	 *            buffer on each side of the squared bounding box.
@@ -620,7 +622,7 @@ public class BoundingBox {
 
 	/**
 	 * Determine if the bounding box is of a single point
-	 * 
+	 *
 	 * @return true if a single point bounds
 	 * @since 3.5.0
 	 */
