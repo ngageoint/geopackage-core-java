@@ -3,10 +3,14 @@ package mil.nga.geopackage;
 import org.locationtech.proj4j.units.Units;
 
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
+import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
 import mil.nga.proj.ProjectionTransform;
+import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.Point;
 import mil.nga.sf.proj.GeometryTransform;
+import mil.nga.sf.util.GeometryUtils;
 
 /**
  * Bounding Box with longitude and latitude ranges in degrees
@@ -211,6 +215,88 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Get the bounding box centroid point
+	 * 
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public Point getCentroid() {
+		return getCentroid(this);
+	}
+
+	/**
+	 * Get the bounding box centroid point
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * 
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public static Point getCentroid(BoundingBox boundingBox) {
+		double x = (boundingBox.getMinLongitude()
+				+ boundingBox.getMaxLongitude()) / 2.0;
+		double y = (boundingBox.getMinLatitude() + boundingBox.getMaxLatitude())
+				/ 2.0;
+		return new Point(x, y);
+	}
+
+	/**
+	 * Get the centroid for the bounding box and projection
+	 * 
+	 * @param projection
+	 *            projection of the bounding box
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public Point getCentroid(Projection projection) {
+		return getCentroid(this, projection);
+	}
+
+	/**
+	 * Get the centroid for the bounding box and projection
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param projection
+	 *            projection of the bounding box
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public static Point getCentroid(BoundingBox boundingBox,
+			Projection projection) {
+		Point centroid = null;
+		if (projection.isUnit(Units.DEGREES)) {
+			centroid = getDegreesCentroid(boundingBox);
+		} else {
+			centroid = getCentroid(boundingBox);
+		}
+		return centroid;
+	}
+
+	/**
+	 * Get the centroid for the bounding box in degrees
+	 * 
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public Point getDegreesCentroid() {
+		return getDegreesCentroid(this);
+	}
+
+	/**
+	 * Get the centroid for a bounding box in degrees
+	 * 
+	 * @param boundingBox
+	 *            bounding box in degrees
+	 * @return centroid point
+	 * @since 6.1.2
+	 */
+	public static Point getDegreesCentroid(BoundingBox boundingBox) {
+		return GeometryUtils.getDegreesCentroid(buildGeometry(boundingBox));
+	}
+
+	/**
 	 * Build a Geometry Envelope from the bounding box
 	 * 
 	 * @return geometry envelope
@@ -235,6 +321,29 @@ public class BoundingBox {
 		envelope.setMinY(boundingBox.getMinLatitude());
 		envelope.setMaxY(boundingBox.getMaxLatitude());
 		return envelope;
+	}
+
+	/**
+	 * Build a geometry representation of the bounding box
+	 * 
+	 * @return geometry, polygon or point
+	 * @since 6.1.2
+	 */
+	public Geometry buildGeometry() {
+		return buildGeometry(this);
+	}
+
+	/**
+	 * Build a geometry representation of the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * 
+	 * @return geometry, polygon or point
+	 * @since 6.1.2
+	 */
+	public static Geometry buildGeometry(BoundingBox boundingBox) {
+		return buildEnvelope(boundingBox).buildGeometry();
 	}
 
 	/**
@@ -264,7 +373,7 @@ public class BoundingBox {
 		}
 
 		if (adjust != null) {
-			complementary = new BoundingBox(this);
+			complementary = copy();
 			complementary
 					.setMinLongitude(complementary.getMinLongitude() + adjust);
 			complementary
@@ -308,7 +417,7 @@ public class BoundingBox {
 	 */
 	public BoundingBox boundCoordinates(double maxProjectionLongitude) {
 
-		BoundingBox bounded = new BoundingBox(this);
+		BoundingBox bounded = copy();
 
 		double minLongitude = (getMinLongitude() + maxProjectionLongitude)
 				% (2 * maxProjectionLongitude) - maxProjectionLongitude;
@@ -354,7 +463,7 @@ public class BoundingBox {
 	 */
 	public BoundingBox expandCoordinates(double maxProjectionLongitude) {
 
-		BoundingBox expanded = new BoundingBox(this);
+		BoundingBox expanded = copy();
 
 		double minLongitude = getMinLongitude();
 		double maxLongitude = getMaxLongitude();
@@ -418,7 +527,7 @@ public class BoundingBox {
 	public BoundingBox transform(GeometryTransform transform) {
 		BoundingBox transformed = this;
 		if (transform.isSameProjection()) {
-			transformed = new BoundingBox(transformed);
+			transformed = transformed.copy();
 		} else {
 			if (transform.getFromProjection().isUnit(Units.DEGREES)
 					&& transform.getToProjection().equals(
@@ -575,7 +684,7 @@ public class BoundingBox {
 	 */
 	public BoundingBox squareExpand(double bufferPercentage) {
 
-		BoundingBox boundingBox = new BoundingBox(this);
+		BoundingBox boundingBox = copy();
 
 		if (boundingBox.isPoint() && bufferPercentage > 0.0) {
 
@@ -629,6 +738,16 @@ public class BoundingBox {
 	public boolean isPoint() {
 		return Double.compare(minLongitude, maxLongitude) == 0
 				&& Double.compare(minLatitude, maxLatitude) == 0;
+	}
+
+	/**
+	 * Copy the bounding box
+	 * 
+	 * @return bounding box copy
+	 * @since 6.1.2
+	 */
+	public BoundingBox copy() {
+		return new BoundingBox(this);
 	}
 
 	/**

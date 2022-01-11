@@ -12,6 +12,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * sf-proj version 4.1.1
 * oapi-features-json version 2.0.1
 * Bounding Box world bounds shortcuts for WGS84 and Web Mercator
+* Bounding Box centroid, geometry, and copy methods
 * SpatialReferenceSystem getProjectionDefinition method
 * TIleMatrixDao queryForTableName method
 * Additional file name, tile bounding box, and date converter utilities

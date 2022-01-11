@@ -116,7 +116,7 @@ public class TileBoundingBoxUtils {
 		}
 
 		if (adjustment != 0.0) {
-			bbox2 = new BoundingBox(boundingBox2);
+			bbox2 = boundingBox2.copy();
 			bbox2.setMinLongitude(bbox2.getMinLongitude() + adjustment);
 			bbox2.setMaxLongitude(bbox2.getMaxLongitude() + adjustment);
 		}
@@ -1294,7 +1294,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox boundWebMercatorBoundingBox(
 			BoundingBox boundingBox) {
-		BoundingBox bounded = new BoundingBox(boundingBox);
+		BoundingBox bounded = boundingBox.copy();
 		bounded.setMinLongitude(Math.max(bounded.getMinLongitude(),
 				-1 * ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH));
 		bounded.setMaxLongitude(Math.min(bounded.getMaxLongitude(),
@@ -1331,7 +1331,7 @@ public class TileBoundingBoxUtils {
 	 */
 	public static BoundingBox boundDegreesBoundingBoxWithWebMercatorLimits(
 			BoundingBox boundingBox) {
-		BoundingBox bounded = new BoundingBox(boundingBox);
+		BoundingBox bounded = boundingBox.copy();
 		if (bounded
 				.getMinLatitude() < ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE) {
 			bounded.setMinLatitude(
