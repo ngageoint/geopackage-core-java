@@ -6,7 +6,6 @@ import junit.framework.TestCase;
 import mil.nga.proj.ProjectionConstants;
 import mil.nga.proj.ProjectionFactory;
 import mil.nga.sf.Point;
-import mil.nga.sf.util.GeometryUtils;
 
 /**
  * Bounding Box Tests
@@ -34,8 +33,7 @@ public class BoundingBoxTest {
 		TestCase.assertEquals(centroid.getX(), centroid2.getX());
 		TestCase.assertEquals(centroid.getY(), centroid2.getY());
 
-		Point geometryCentroid = GeometryUtils
-				.getCentroid(boundingBox.buildGeometry());
+		Point geometryCentroid = boundingBox.buildGeometry().getCentroid();
 
 		TestCase.assertEquals(geometryCentroid.getX(), centroid.getX());
 		TestCase.assertEquals(geometryCentroid.getY(), centroid.getY());
@@ -51,8 +49,8 @@ public class BoundingBoxTest {
 		TestCase.assertEquals(degreesCentroid.getX(), degreesCentroid2.getX());
 		TestCase.assertEquals(degreesCentroid.getY(), degreesCentroid2.getY());
 
-		Point geometryDegreesCentroid = GeometryUtils
-				.getDegreesCentroid(boundingBox.buildGeometry());
+		Point geometryDegreesCentroid = boundingBox.buildGeometry()
+				.getDegreesCentroid();
 
 		TestCase.assertEquals(geometryDegreesCentroid.getX(),
 				degreesCentroid.getX());
