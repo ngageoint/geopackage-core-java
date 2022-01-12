@@ -536,6 +536,23 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the WGS84 tile bounding box from the XYZ tile tileGrid and zoom level
+	 *
+	 * @param tileGrid
+	 *            tile grid
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getBoundingBoxAsWGS84(TileGrid tileGrid,
+			long zoom) {
+		return getProjectedBoundingBox(
+				(long) ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM, tileGrid,
+				zoom);
+	}
+
+	/**
 	 * Get the Projected tile bounding box from the WGS84 XYZ tile coordinates
 	 * and zoom level
 	 *
@@ -725,9 +742,22 @@ public class TileBoundingBoxUtils {
 		GeometryTransform toWebMercator = GeometryTransform.create(projection,
 				ProjectionConstants.EPSG_WEB_MERCATOR);
 		Point webMercatorPoint = toWebMercator.transform(point);
-		BoundingBox boundingBox = new BoundingBox(webMercatorPoint.getX(),
-				webMercatorPoint.getY(), webMercatorPoint.getX(),
-				webMercatorPoint.getY());
+		return getTileGridFromWebMercator(webMercatorPoint, zoom);
+	}
+
+	/**
+	 * Get the tile grid for the location specified as web mercator
+	 * 
+	 * @param point
+	 *            point
+	 * @param zoom
+	 *            zoom level
+	 * @return tile grid
+	 * @since 6.1.2
+	 */
+	public static TileGrid getTileGridFromWebMercator(Point point, long zoom) {
+		BoundingBox boundingBox = new BoundingBox(point.getX(), point.getY(),
+				point.getX(), point.getY());
 		return getTileGrid(boundingBox, zoom);
 	}
 
