@@ -119,6 +119,17 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Constructor
+	 * 
+	 * @param geometry
+	 *            geometry
+	 * @since 6.1.2
+	 */
+	public BoundingBox(Geometry geometry) {
+		this(geometry.getEnvelope());
+	}
+
+	/**
 	 * Get the min longitude
 	 * 
 	 * @return min longitude

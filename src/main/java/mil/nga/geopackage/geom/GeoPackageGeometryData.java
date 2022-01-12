@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.GeometryExtensions;
@@ -16,7 +17,6 @@ import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.GeometryTransform;
 import mil.nga.sf.util.ByteReader;
 import mil.nga.sf.util.ByteWriter;
-import mil.nga.sf.util.GeometryEnvelopeBuilder;
 import mil.nga.sf.util.filter.GeometryFilter;
 import mil.nga.sf.util.filter.PointFiniteFilter;
 import mil.nga.sf.wkb.GeometryReader;
@@ -1452,6 +1452,20 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Get the bounding box of the geometry envelope
+	 * 
+	 * @return bounding box
+	 * @since 6.1.2
+	 */
+	public BoundingBox getBoundingBox() {
+		BoundingBox boundingBox = null;
+		if (envelope != null) {
+			boundingBox = new BoundingBox(envelope);
+		}
+		return boundingBox;
+	}
+
+	/**
 	 * Get the geometry
 	 * 
 	 * @return geometry
@@ -1728,10 +1742,26 @@ public class GeoPackageGeometryData {
 		GeometryEnvelope envelope = null;
 		Geometry geometry = getGeometry();
 		if (geometry != null) {
-			envelope = GeometryEnvelopeBuilder.buildEnvelope(geometry);
+			envelope = geometry.getEnvelope();
 		}
 		setEnvelope(envelope);
 		return envelope;
+	}
+
+	/**
+	 * Get the bounding box of the geometry envelope if it exists or build, set
+	 * and retrieve it from the geometry
+	 * 
+	 * @return bounding box
+	 * @since 6.1.2
+	 */
+	public BoundingBox getOrBuildBoundingBox() {
+		BoundingBox boundingBox = null;
+		GeometryEnvelope envelope = getOrBuildEnvelope();
+		if (envelope != null) {
+			boundingBox = new BoundingBox(envelope);
+		}
+		return boundingBox;
 	}
 
 	/**

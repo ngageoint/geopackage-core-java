@@ -13,8 +13,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * oapi-features-json version 2.0.1
 * Bounding Box world bounds shortcuts for WGS84 and Web Mercator
 * Bounding Box centroid, geometry, and copy methods
+* GeoPackageGeometryData bounding box methods
 * SpatialReferenceSystem getProjectionDefinition method
-* TIleMatrixDao queryForTableName method
+* TileMatrixDao queryForTableName method
 * Additional file name, tile bounding box, and date converter utilities
 
 ## [6.1.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.1) (11-10-2021)
