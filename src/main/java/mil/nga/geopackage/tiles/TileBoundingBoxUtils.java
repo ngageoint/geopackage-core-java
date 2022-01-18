@@ -801,6 +801,111 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
+	 * Get the bounds of the XYZ tile at the point and zoom level
+	 *
+	 * @param projection
+	 *            point and bounding box projection
+	 * @param point
+	 *            point location
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getTileBounds(Projection projection, Point point,
+			int zoom) {
+		TileGrid tileGrid = getTileGrid(point, zoom, projection);
+		return getProjectedBoundingBox(projection, tileGrid, zoom);
+	}
+
+	/**
+	 * Get the WGS84 bounds of the XYZ tile at the WGS84 point and zoom level
+	 *
+	 * @param point
+	 *            WGS84 point
+	 * @param zoom
+	 *            zoom level
+	 * @return WGS84 bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getTileBoundsForWGS84(Point point, int zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+		return getTileBounds(projection, point, zoom);
+	}
+
+	/**
+	 * Get the web mercator bounds of the XYZ tile at the web mercator point and
+	 * zoom level
+	 *
+	 * @param point
+	 *            web mercator point
+	 * @param zoom
+	 *            zoom level
+	 * @return web mercator bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getTileBoundsForWebMercator(Point point,
+			int zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
+		return getTileBounds(projection, point, zoom);
+	}
+
+	/**
+	 * Get the bounds of the WGS84 tile at the point and zoom level
+	 *
+	 * @param projection
+	 *            point and bounding box projection
+	 * @param point
+	 *            point location
+	 * @param zoom
+	 *            zoom level
+	 * @return bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getWGS84TileBounds(Projection projection,
+			Point point, int zoom) {
+		TileGrid tileGrid = getTileGridWGS84(point, zoom, projection);
+		return getProjectedBoundingBoxFromWGS84(projection, tileGrid, zoom);
+	}
+
+	/**
+	 * Get the WGS84 bounds of the WGS84 tile at the WGS84 point and zoom level
+	 *
+	 * @param point
+	 *            WGS84 point
+	 * @param zoom
+	 *            zoom level
+	 * @return WGS84 bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getWGS84TileBoundsForWGS84(Point point,
+			int zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+		return getWGS84TileBounds(projection, point, zoom);
+	}
+
+	/**
+	 * Get the web mercator bounds of the WGS84 tile at the web mercator point
+	 * and zoom level
+	 *
+	 * @param point
+	 *            web mercator point
+	 * @param zoom
+	 *            zoom level
+	 * @return web mercator bounding box
+	 * @since 6.1.2
+	 */
+	public static BoundingBox getWGS84TileBoundsForWebMercator(Point point,
+			int zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
+		return getWGS84TileBounds(projection, point, zoom);
+	}
+
+	/**
 	 * Convert the bounding box coordinates to a new web mercator bounding box
 	 *
 	 * @param boundingBox
@@ -1386,7 +1491,60 @@ public class TileBoundingBoxUtils {
 	}
 
 	/**
-	 * Get the tile grid that includes the entire tile bounding box
+	 * Get the WGS84 tile grid for the point specified as WGS84
+	 * 
+	 * @param point
+	 *            point
+	 * @param zoom
+	 *            zoom level
+	 * @return tile grid
+	 * @since 6.1.2
+	 */
+	public static TileGrid getTileGridWGS84FromWGS84(Point point, long zoom) {
+		BoundingBox boundingBox = new BoundingBox(point.getX(), point.getY(),
+				point.getX(), point.getY());
+		return getTileGridWGS84(boundingBox, zoom);
+	}
+
+	/**
+	 * Get the WGS84 tile grid for the point specified as the projection
+	 * 
+	 * @param point
+	 *            point
+	 * @param zoom
+	 *            zoom level
+	 * @param projection
+	 *            projection
+	 * @return tile grid
+	 * @since 6.1.2
+	 */
+	public static TileGrid getTileGridWGS84(Point point, long zoom,
+			Projection projection) {
+		GeometryTransform toWGS84 = GeometryTransform.create(projection,
+				ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+		Point wgs84Point = toWGS84.transform(point);
+		return getTileGridWGS84FromWGS84(wgs84Point, zoom);
+	}
+
+	/**
+	 * Get the WGS84 tile grid for the point specified as web mercator
+	 * 
+	 * @param point
+	 *            point
+	 * @param zoom
+	 *            zoom level
+	 * @return tile grid
+	 * @since 6.1.2
+	 */
+	public static TileGrid getTileGridWGS84FromWebMercator(Point point,
+			long zoom) {
+		Projection projection = ProjectionFactory
+				.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
+		return getTileGridWGS84(point, zoom, projection);
+	}
+
+	/**
+	 * Get the WGS84 tile grid that includes the entire tile bounding box
 	 *
 	 * @param boundingBox
 	 *            wgs84 bounding box
