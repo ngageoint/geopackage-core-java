@@ -1696,7 +1696,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -1708,7 +1708,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -1722,7 +1722,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -1736,7 +1736,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -1795,7 +1795,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -1809,7 +1809,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -1826,7 +1826,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -1843,7 +1843,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -1912,7 +1912,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -1926,7 +1926,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -1944,7 +1944,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -1961,7 +1961,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2030,7 +2030,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -2047,7 +2047,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2067,7 +2067,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -2086,7 +2086,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2170,7 +2170,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -2187,7 +2187,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2207,7 +2207,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -2226,7 +2226,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2303,7 +2303,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -2317,7 +2317,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2333,7 +2333,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -2349,7 +2349,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2417,7 +2417,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -2433,7 +2433,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2453,7 +2453,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -2472,7 +2472,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2549,7 +2549,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param nestedSQL
 	 *            nested SQL
@@ -2568,7 +2568,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2590,7 +2590,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param columns
 	 *            columns
@@ -2611,7 +2611,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
-	 * Query for ids in the nested SQL query
+	 * Query for rows by ids in the nested SQL query
 	 * 
 	 * @param distinct
 	 *            distinct rows
@@ -2633,6 +2633,2638 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		String whereClause = buildWhereIn(nestedSQL, where);
 		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
 		return query(distinct, columns, whereClause, args);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, int limit, long offset) {
+		return queryInForChunk(nestedSQL, table.getPkColumn().getName(), limit,
+				offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, table.getColumnNames(), nestedSQL, null,
+				null, null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, groupBy, having, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				null, null, null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, null, null, null,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, columns, nestedSQL, groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, null, null, null,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, null, null, null,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			int limit, long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, table.getColumnNames(), nestedSQL,
+				nestedArgs, null, null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, nestedSQL, nestedArgs, groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				nestedArgs, null, null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				nestedArgs, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String orderBy, int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, null,
+				null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, null,
+				null, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, null,
+				null, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL,
+			Map<String, Object> fieldValues, int limit, long offset) {
+		return queryInForChunk(nestedSQL, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL,
+			Map<String, Object> fieldValues, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(nestedSQL, fieldValues, null, null, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL,
+			Map<String, Object> fieldValues, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, fieldValues, groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			Map<String, Object> fieldValues, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			Map<String, Object> fieldValues, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, nestedSQL, fieldValues, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			Map<String, Object> fieldValues, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				fieldValues, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			Map<String, Object> fieldValues, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			Map<String, Object> fieldValues, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(columns, nestedSQL, fieldValues, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			Map<String, Object> fieldValues, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, fieldValues, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, Map<String, Object> fieldValues, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, Map<String, Object> fieldValues, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, fieldValues, null,
+				null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, Map<String, Object> fieldValues, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, null, fieldValues,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, int limit, long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, fieldValues, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, nestedArgs, fieldValues,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues, int limit,
+			long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, fieldValues,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				nestedArgs, fieldValues, groupBy, having, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues, int limit,
+			long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, fieldValues,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, fieldValues,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, Map<String, Object> fieldValues,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs,
+				fieldValues, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs,
+				fieldValues, table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs,
+				fieldValues, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param fieldValues
+	 *            field values
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs,
+			Map<String, Object> fieldValues, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		String where = buildWhere(fieldValues.entrySet());
+		String[] whereArgs = buildWhereArgs(fieldValues.values());
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(String nestedSQL, String[] nestedArgs,
+			String where, int limit, long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String where, String orderBy, int limit, long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, where, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String where, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, nestedArgs, where, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, where, null,
+				null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				nestedArgs, where, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, where, null,
+				null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, where,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				null, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(String nestedSQL, String where,
+			int limit, long offset) {
+		return queryInForChunk(nestedSQL, where, table.getPkColumn().getName(),
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String where,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(nestedSQL, where, null, null, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String where,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, nestedSQL, where, groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(boolean distinct, String nestedSQL,
+			String where, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String where, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, where, null, null, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String where, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				where, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(String[] columns, String nestedSQL,
+			String where, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String where, String orderBy, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, where, null, null, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String where, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, where, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunkWhere(boolean distinct, String[] columns,
+			String nestedSQL, String where, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, where,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String where, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, where, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String where, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, null, where, null,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String where,
+			String[] whereArgs, int limit, long offset) {
+		return queryInForChunk(nestedSQL, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String where,
+			String[] whereArgs, String orderBy, int limit, long offset) {
+		return queryInForChunk(nestedSQL, where, whereArgs, null, null, orderBy,
+				limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, where, whereArgs, groupBy,
+				having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String where, String[] whereArgs, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String where, String[] whereArgs, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, nestedSQL, where, whereArgs, null,
+				null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String where, String[] whereArgs, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				where, whereArgs, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String where, String[] whereArgs, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String where, String[] whereArgs, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(columns, nestedSQL, where, whereArgs, null, null,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String where, String[] whereArgs, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, columns, nestedSQL, where, whereArgs,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String where, String[] whereArgs, int limit,
+			long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String where, String[] whereArgs, String orderBy,
+			int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, where, whereArgs,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String where, String[] whereArgs, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, null, where,
+				whereArgs, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for idordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String where, String[] whereArgs, int limit, long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String where, String[] whereArgs, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(nestedSQL, nestedArgs, where, whereArgs, null,
+				null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
+			String where, String[] whereArgs, String groupBy, String having,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(false, nestedSQL, nestedArgs, where, whereArgs,
+				groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs, int limit,
+			long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, where,
+				whereArgs, table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, nestedSQL, nestedArgs, where,
+				whereArgs, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(distinct, table.getColumnNames(), nestedSQL,
+				nestedArgs, where, whereArgs, groupBy, having, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs, int limit,
+			long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, where, whereArgs,
+				table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String orderBy, int limit, long offset) {
+		return queryInForChunk(columns, nestedSQL, nestedArgs, where, whereArgs,
+				null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, where,
+				whereArgs, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for id ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs, table.getPkColumn().getName(), limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, String orderBy, int limit, long offset) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs, null, null, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		String whereClause = buildWhereIn(nestedSQL, where);
+		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
+		return queryForChunk(distinct, columns, whereClause, args, groupBy,
+				having, orderBy, limit, offset);
 	}
 
 	/**
@@ -3344,8 +5976,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String orderBy, int limit, long offset) {
-		return queryForChunk(distinct, columns, null, null, orderBy, limit,
-				offset);
+		return queryForChunk(distinct, columns, null, null, null, null, orderBy,
+				limit, offset);
 	}
 
 	/**
@@ -3446,6 +6078,106 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			long offset) {
 		return queryForChunk(distinct, columns, where, whereArgs, null, null,
 				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(String groupBy, String having, String orderBy,
+			int limit, long offset) {
+		return queryForChunk(false, groupBy, having, orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(boolean distinct, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryForChunk(distinct, table.getColumnNames(), groupBy, having,
+				orderBy, limit, offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(String[] columns, String groupBy,
+			String having, String orderBy, int limit, long offset) {
+		return queryForChunk(false, columns, groupBy, having, orderBy, limit,
+				offset);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @param offset
+	 *            chunk query offset
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String groupBy, String having, String orderBy, int limit,
+			long offset) {
+		return queryForChunk(distinct, columns, null, null, null, null, orderBy,
+				limit, offset);
 	}
 
 	/**
