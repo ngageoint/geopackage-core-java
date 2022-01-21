@@ -203,6 +203,46 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Check if the table has a primary key column
+	 * 
+	 * @return true if has a primary key
+	 * @since 6.1.2
+	 */
+	public boolean hasPkColumn() {
+		return table.hasPkColumn();
+	}
+
+	/**
+	 * Get the primary key column index
+	 * 
+	 * @return primary key column index
+	 * @since 6.1.2
+	 */
+	public int getPkColumnIndex() {
+		return table.getPkColumnIndex();
+	}
+
+	/**
+	 * Get the primary key column
+	 * 
+	 * @return primary key column
+	 * @since 6.1.2
+	 */
+	public TColumn getPkColumn() {
+		return table.getPkColumn();
+	}
+
+	/**
+	 * Get the primary key column name
+	 * 
+	 * @return primary key column name
+	 * @since 6.1.2
+	 */
+	public String getPkColumnName() {
+		return table.getPkColumnName();
+	}
+
+	/**
 	 * Get the table columns
 	 * 
 	 * @return columns
@@ -497,8 +537,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 4.0.0
 	 */
 	public String queryIdsSQL(boolean distinct) {
-		return querySQL(distinct,
-				new String[] { table.getPkColumn().getName() });
+		return querySQL(distinct, new String[] { table.getPkColumnName() });
 	}
 
 	/**
@@ -2649,7 +2688,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 6.1.2
 	 */
 	public TResult queryInForChunk(String nestedSQL, int limit, long offset) {
-		return queryInForChunk(nestedSQL, table.getPkColumn().getName(), limit,
+		return queryInForChunk(nestedSQL, table.getPkColumnName(), limit,
 				offset);
 	}
 
@@ -2716,8 +2755,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryInForChunk(boolean distinct, String nestedSQL,
 			int limit, long offset) {
-		return queryInForChunk(distinct, nestedSQL,
-				table.getPkColumn().getName(), limit, offset);
+		return queryInForChunk(distinct, nestedSQL, table.getPkColumnName(),
+				limit, offset);
 	}
 
 	/**
@@ -2788,8 +2827,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryInForChunk(String[] columns, String nestedSQL,
 			int limit, long offset) {
-		return queryInForChunk(columns, nestedSQL,
-				table.getPkColumn().getName(), limit, offset);
+		return queryInForChunk(columns, nestedSQL, table.getPkColumnName(),
+				limit, offset);
 	}
 
 	/**
@@ -2863,7 +2902,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(boolean distinct, String[] columns,
 			String nestedSQL, int limit, long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -2938,8 +2977,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
 			int limit, long offset) {
-		return queryInForChunk(nestedSQL, nestedArgs,
-				table.getPkColumn().getName(), limit, offset);
+		return queryInForChunk(nestedSQL, nestedArgs, table.getPkColumnName(),
+				limit, offset);
 	}
 
 	/**
@@ -3013,7 +3052,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(boolean distinct, String nestedSQL,
 			String[] nestedArgs, int limit, long offset) {
 		return queryInForChunk(distinct, nestedSQL, nestedArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3091,7 +3130,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String[] columns, String nestedSQL,
 			String[] nestedArgs, int limit, long offset) {
 		return queryInForChunk(columns, nestedSQL, nestedArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3171,7 +3210,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(boolean distinct, String[] columns,
 			String nestedSQL, String[] nestedArgs, int limit, long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3251,8 +3290,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryInForChunk(String nestedSQL,
 			Map<String, Object> fieldValues, int limit, long offset) {
-		return queryInForChunk(nestedSQL, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+		return queryInForChunk(nestedSQL, fieldValues, table.getPkColumnName(),
+				limit, offset);
 	}
 
 	/**
@@ -3327,7 +3366,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(boolean distinct, String nestedSQL,
 			Map<String, Object> fieldValues, int limit, long offset) {
 		return queryInForChunk(distinct, nestedSQL, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3406,7 +3445,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String[] columns, String nestedSQL,
 			Map<String, Object> fieldValues, int limit, long offset) {
 		return queryInForChunk(columns, nestedSQL, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3488,7 +3527,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String nestedSQL, Map<String, Object> fieldValues, int limit,
 			long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3571,7 +3610,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues, int limit, long offset) {
 		return queryInForChunk(nestedSQL, nestedArgs, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3653,7 +3692,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String[] nestedArgs, Map<String, Object> fieldValues, int limit,
 			long offset) {
 		return queryInForChunk(distinct, nestedSQL, nestedArgs, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3741,7 +3780,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String[] nestedArgs, Map<String, Object> fieldValues, int limit,
 			long offset) {
 		return queryInForChunk(columns, nestedSQL, nestedArgs, fieldValues,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3830,7 +3869,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String nestedSQL, String[] nestedArgs,
 			Map<String, Object> fieldValues, int limit, long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs,
-				fieldValues, table.getPkColumn().getName(), limit, offset);
+				fieldValues, table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -3921,7 +3960,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(String nestedSQL, String[] nestedArgs,
 			String where, int limit, long offset) {
 		return queryInForChunk(nestedSQL, nestedArgs, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4001,7 +4040,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(boolean distinct, String nestedSQL,
 			String[] nestedArgs, String where, int limit, long offset) {
 		return queryInForChunk(distinct, nestedSQL, nestedArgs, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4086,7 +4125,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(String[] columns, String nestedSQL,
 			String[] nestedArgs, String where, int limit, long offset) {
 		return queryInForChunk(columns, nestedSQL, nestedArgs, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4174,7 +4213,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String nestedSQL, String[] nestedArgs, String where, int limit,
 			long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4258,8 +4297,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryInForChunkWhere(String nestedSQL, String where,
 			int limit, long offset) {
-		return queryInForChunk(nestedSQL, where, table.getPkColumn().getName(),
-				limit, offset);
+		return queryInForChunk(nestedSQL, where, table.getPkColumnName(), limit,
+				offset);
 	}
 
 	/**
@@ -4333,7 +4372,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(boolean distinct, String nestedSQL,
 			String where, int limit, long offset) {
 		return queryInForChunk(distinct, nestedSQL, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4411,7 +4450,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(String[] columns, String nestedSQL,
 			String where, int limit, long offset) {
 		return queryInForChunk(columns, nestedSQL, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4491,7 +4530,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunkWhere(boolean distinct, String[] columns,
 			String nestedSQL, String where, int limit, long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, where,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4574,7 +4613,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String nestedSQL, String where,
 			String[] whereArgs, int limit, long offset) {
 		return queryInForChunk(nestedSQL, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4654,7 +4693,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(boolean distinct, String nestedSQL,
 			String where, String[] whereArgs, int limit, long offset) {
 		return queryInForChunk(distinct, nestedSQL, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4739,7 +4778,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String[] columns, String nestedSQL,
 			String where, String[] whereArgs, int limit, long offset) {
 		return queryInForChunk(columns, nestedSQL, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4827,7 +4866,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String nestedSQL, String where, String[] whereArgs, int limit,
 			long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -4916,7 +4955,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryInForChunk(String nestedSQL, String[] nestedArgs,
 			String where, String[] whereArgs, int limit, long offset) {
 		return queryInForChunk(nestedSQL, nestedArgs, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -5004,7 +5043,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String[] nestedArgs, String where, String[] whereArgs, int limit,
 			long offset) {
 		return queryInForChunk(distinct, nestedSQL, nestedArgs, where,
-				whereArgs, table.getPkColumn().getName(), limit, offset);
+				whereArgs, table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -5098,7 +5137,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String[] nestedArgs, String where, String[] whereArgs, int limit,
 			long offset) {
 		return queryInForChunk(columns, nestedSQL, nestedArgs, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -5193,7 +5232,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String nestedSQL, String[] nestedArgs, String where,
 			String[] whereArgs, int limit, long offset) {
 		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
-				whereArgs, table.getPkColumn().getName(), limit, offset);
+				whereArgs, table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -5504,8 +5543,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 4.0.0
 	 */
 	public String queryIdsSQL(boolean distinct, String where) {
-		return querySQL(distinct,
-				new String[] { table.getPkColumn().getName() }, where);
+		return querySQL(distinct, new String[] { table.getPkColumnName() },
+				where);
 	}
 
 	/**
@@ -5896,7 +5935,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String where, String[] whereArgs, int limit, long offset) {
 		return queryForChunk(distinct, columns, where, whereArgs,
-				table.getPkColumn().getName(), limit, offset);
+				table.getPkColumnName(), limit, offset);
 	}
 
 	/**
@@ -6479,7 +6518,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @return primary key where clause
 	 */
 	protected String getPkWhere(long id) {
-		return buildWhere(table.getPkColumn().getName(), id);
+		return buildWhere(table.getPkColumnName(), id);
 	}
 
 	/**
@@ -6734,8 +6773,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public String buildWhereIn(String nestedSQL, String where) {
 
-		String nestedWhere = CoreSQLUtils.quoteWrap(
-				table.getPkColumn().getName()) + " IN (" + nestedSQL + ")";
+		String nestedWhere = CoreSQLUtils.quoteWrap(table.getPkColumnName())
+				+ " IN (" + nestedSQL + ")";
 
 		String whereClause;
 		if (where == null) {

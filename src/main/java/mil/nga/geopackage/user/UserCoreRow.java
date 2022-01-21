@@ -481,7 +481,7 @@ public abstract class UserCoreRow<TColumn extends UserColumn, TTable extends Use
 				throw new GeoPackageException(
 						"Can not update the primary key of the row. Table Name: "
 								+ table.getTableName() + ", Index: " + index
-								+ ", Name: " + table.getPkColumn().getName());
+								+ ", Name: " + table.getPkColumnName());
 			}
 			values[index] = id;
 		}
