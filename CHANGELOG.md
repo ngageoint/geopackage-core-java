@@ -17,7 +17,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * SpatialReferenceSystem getProjectionDefinition method
 * TileMatrixDao queryForTableName method
 * Additional file name, tile bounding box, and date converter utilities
-* UserCoreDao paginated "query in" support
+* Improved pagination query support
 
 ## [6.1.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.1) (11-10-2021)
 

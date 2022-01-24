@@ -15,7 +15,7 @@ import mil.nga.geopackage.db.Result;
  * @author osbornb
  */
 public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserTable<TColumn>, TRow extends UserCoreRow<TColumn, TTable>>
-		extends Result {
+		extends Result, Iterable<TRow> {
 
 	/**
 	 * Get a row using the column types and values
@@ -101,5 +101,21 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * @return count, -1 if not able to determine
 	 */
 	public int getCount();
+
+	/**
+	 * Get the SQL statement (if available)
+	 * 
+	 * @return SQL statement
+	 * @since 6.1.2
+	 */
+	public String getSql();
+
+	/**
+	 * Get the SQL selection arguments (if available)
+	 * 
+	 * @return selection arguments
+	 * @since 6.1.2
+	 */
+	public String[] getSelectionArgs();
 
 }
