@@ -77,6 +77,24 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 	}
 
 	/**
+	 * Get the DAO
+	 * 
+	 * @return data access object
+	 */
+	public UserCoreDao<TColumn, TTable, TRow, TResult> getDao() {
+		return dao;
+	}
+
+	/**
+	 * Get the current paginated results
+	 * 
+	 * @return current results
+	 */
+	public UserCoreResult<TColumn, TTable, TRow> getResults() {
+		return results;
+	}
+
+	/**
 	 * Get the initial SQL statement
 	 * 
 	 * @return SQL statement
@@ -92,6 +110,15 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 	 */
 	public String[] getArgs() {
 		return args;
+	}
+
+	/**
+	 * Get the SQL column names
+	 * 
+	 * @return SQL column names
+	 */
+	public String[] getColumns() {
+		return columns;
 	}
 
 	/**
@@ -132,7 +159,7 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 			public boolean hasNext() {
 				boolean hasNext = rows.hasNext();
 				if (!hasNext) {
-					results.close();
+					close();
 					if (pagination.hasLimit()) {
 						pagination.incrementOffset();
 						String query = pagination.replace(sql);
@@ -140,7 +167,7 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 						rows = results.iterator();
 						hasNext = results.moveToNext();
 						if (!hasNext) {
-							results.close();
+							close();
 						}
 					}
 				}
@@ -155,6 +182,13 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 				return rows.next();
 			}
 		};
+	}
+
+	/**
+	 * Close the current results
+	 */
+	public void close() {
+		results.close();
 	}
 
 }
