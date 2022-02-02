@@ -7733,6 +7733,187 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String limit) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, where,
+				whereArgs, limit);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String orderBy, String limit) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, where,
+				whereArgs, orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(String[] columns, String nestedSQL,
+			String[] nestedArgs, String where, String[] whereArgs,
+			String groupBy, String having, String orderBy, String limit) {
+		return queryInForChunk(false, columns, nestedSQL, nestedArgs, where,
+				whereArgs, groupBy, having, orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, String limit) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs, null, limit);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, String orderBy, String limit) {
+		return queryInForChunk(distinct, columns, nestedSQL, nestedArgs, where,
+				whereArgs, null, null, orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows by ids in the nested SQL query, starting at the
+	 * offset and returning no more than the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param nestedSQL
+	 *            nested SQL
+	 * @param nestedArgs
+	 *            nested SQL args
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryInForChunk(boolean distinct, String[] columns,
+			String nestedSQL, String[] nestedArgs, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			String limit) {
+		String whereClause = buildWhereIn(nestedSQL, where);
+		String[] args = buildWhereInArgs(nestedArgs, whereArgs);
+		return queryForChunk(distinct, columns, whereClause, args, groupBy,
+				having, orderBy, limit);
+	}
+
+	/**
 	 * Get the count in the nested SQL query
 	 * 
 	 * @param nestedSQL
@@ -8203,6 +8384,91 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				whereArgs, groupBy, having, orderBy, limit);
 		prepareResult(result);
 		return result;
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult query(String[] columns, String where, String[] whereArgs,
+			String orderBy, String limit) {
+		return query(false, columns, where, whereArgs, orderBy, limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult query(String[] columns, String where, String[] whereArgs,
+			String limit) {
+		return query(false, columns, where, whereArgs, limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult query(boolean distinct, String[] columns, String where,
+			String[] whereArgs, String orderBy, String limit) {
+		return query(distinct, columns, where, whereArgs, null, null, orderBy,
+				limit);
+	}
+
+	/**
+	 * Query for rows
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult query(boolean distinct, String[] columns, String where,
+			String[] whereArgs, String limit) {
+		return query(distinct, columns, where, whereArgs, null, limit);
 	}
 
 	/**
@@ -9266,6 +9532,153 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			String orderBy, int limit, long offset) {
 		return query(distinct, columns, where, whereArgs, groupBy, having,
 				orderBy, buildLimit(limit, offset));
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, String limit) {
+		return queryForChunk(false, columns, where, whereArgs, limit);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, String orderBy, String limit) {
+		return queryForChunk(false, columns, where, whereArgs, orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(String[] columns, String where,
+			String[] whereArgs, String groupBy, String having, String orderBy,
+			String limit) {
+		return queryForChunk(false, columns, where, whereArgs, groupBy, having,
+				orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, String limit) {
+		return queryForChunk(distinct, columns, where, whereArgs, null, limit);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, String orderBy, String limit) {
+		return queryForChunk(distinct, columns, where, whereArgs, null, null,
+				orderBy, limit);
+	}
+
+	/**
+	 * Query for ordered rows starting at the offset and returning no more than
+	 * the limit.
+	 * 
+	 * @param distinct
+	 *            distinct rows
+	 * @param columns
+	 *            columns
+	 * @param where
+	 *            where clause
+	 * @param whereArgs
+	 *            where arguments
+	 * @param groupBy
+	 *            group by
+	 * @param having
+	 *            having
+	 * @param orderBy
+	 *            order by
+	 * @param limit
+	 *            chunk limit
+	 * @return result
+	 * @since 6.1.2
+	 */
+	public TResult queryForChunk(boolean distinct, String[] columns,
+			String where, String[] whereArgs, String groupBy, String having,
+			String orderBy, String limit) {
+		return query(distinct, columns, where, whereArgs, groupBy, having,
+				orderBy, limit);
 	}
 
 	/**
