@@ -4,7 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.1.2 (TBD)
+## 6.2.1 (TBD)
+
+* TBD
+
+## [6.2.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.2.0) (02-03-2022)
 
 * ormlite-core version 6.1
 * sf-wkb version 2.0.5
@@ -12,9 +16,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * sf-proj version 4.1.1
 * oapi-features-json version 2.0.1
 * Bounding Box world bounds shortcuts for WGS84 and Web Mercator
+* Bounding Box centroid, geometry, and copy methods
+* GeoPackageGeometryData bounding box methods
 * SpatialReferenceSystem getProjectionDefinition method
-* TIleMatrixDao queryForTableName method
+* TileMatrixDao queryForTableName method
 * Additional file name, tile bounding box, and date converter utilities
+* Improved pagination query support
 
 ## [6.1.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.1.1) (11-10-2021)
 

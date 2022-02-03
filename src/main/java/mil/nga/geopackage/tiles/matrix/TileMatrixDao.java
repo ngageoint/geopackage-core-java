@@ -120,7 +120,7 @@ public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 	 * @return tile matrices
 	 * @throws SQLException
 	 *             upon failure
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public List<TileMatrix> queryForTableName(String tableName)
 			throws SQLException {

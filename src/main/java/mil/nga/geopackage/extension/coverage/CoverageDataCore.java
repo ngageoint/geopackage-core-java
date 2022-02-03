@@ -1555,7 +1555,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 		Double value = null;
 		if (!isDataNull(unsignedPixelValue)) {
 			value = pixelValueToValue(griddedTile,
-					new Double(unsignedPixelValue));
+					Double.valueOf(unsignedPixelValue));
 		}
 
 		return value;
@@ -1741,7 +1741,7 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 
 		Double value = null;
 		if (!isDataNull(pixelValue)) {
-			value = pixelValueToValue(griddedTile, new Double(pixelValue));
+			value = pixelValueToValue(griddedTile, Double.valueOf(pixelValue));
 		}
 
 		return value;

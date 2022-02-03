@@ -862,7 +862,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	public CloseableIterator<GeometryIndex> query(BoundingBox boundingBox,
 			Projection projection) {
 
-		BoundingBox featureBoundingBox = getFeatureBoundingBox(boundingBox,
+		BoundingBox featureBoundingBox = projectBoundingBox(boundingBox,
 				projection);
 
 		CloseableIterator<GeometryIndex> geometryIndices = query(
@@ -897,7 +897,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	public long count(BoundingBox boundingBox, Projection projection) {
 
-		BoundingBox featureBoundingBox = getFeatureBoundingBox(boundingBox,
+		BoundingBox featureBoundingBox = projectBoundingBox(boundingBox,
 				projection);
 
 		long count = count(featureBoundingBox);
@@ -1021,22 +1021,23 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	}
 
 	/**
-	 * Get the bounding box in the feature projection from the bounding box in
-	 * the provided projection
+	 * Project the provided bounding box in the declared projection to the user
+	 * DAO projection
 	 * 
 	 * @param boundingBox
 	 *            bounding box
 	 * @param projection
 	 *            projection
-	 * @return feature projected bounding box
+	 * @return projected bounding box
+	 * @since 6.2.0
 	 */
-	protected BoundingBox getFeatureBoundingBox(BoundingBox boundingBox,
+	public BoundingBox projectBoundingBox(BoundingBox boundingBox,
 			Projection projection) {
 		GeometryTransform projectionTransform = GeometryTransform
 				.create(projection, getProjection());
-		BoundingBox featureBoundingBox = boundingBox
+		BoundingBox projectedBoundingBox = boundingBox
 				.transform(projectionTransform);
-		return featureBoundingBox;
+		return projectedBoundingBox;
 	}
 
 	/**

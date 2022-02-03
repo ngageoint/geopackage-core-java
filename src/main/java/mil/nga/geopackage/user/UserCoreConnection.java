@@ -22,12 +22,28 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * result set.
 	 * 
 	 * @param sql
-	 *            sql statement
+	 *            SQL statement
 	 * @param selectionArgs
 	 *            selection arguments
 	 * @return result
 	 */
 	public abstract TResult rawQuery(String sql, String[] selectionArgs);
+
+	/**
+	 * Runs the provided SQL and returns a {@link UserCoreResult} over the
+	 * result set.
+	 * 
+	 * @param sql
+	 *            SQL statement
+	 * @param columns
+	 *            subset of table columns defined in the SQL
+	 * @param selectionArgs
+	 *            selection arguments
+	 * @return result
+	 * @since 6.2.0
+	 */
+	public abstract TResult rawQuery(String sql, String[] columns,
+			String[] selectionArgs);
 
 	/**
 	 * Query the given table, returning a {@link UserCoreResult} over the result

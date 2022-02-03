@@ -375,7 +375,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public Extensions create(FeatureTable featureTable) {
 		return create(featureTable.getTableName(),
 				featureTable.getGeometryColumnName(),
-				featureTable.getPkColumn().getName());
+				featureTable.getPkColumnName());
 	}
 
 	/**
@@ -476,7 +476,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void loadRTreeIndex(FeatureTable featureTable) {
 		loadRTreeIndex(featureTable.getTableName(),
 				featureTable.getGeometryColumnName(),
-				featureTable.getPkColumn().getName());
+				featureTable.getPkColumnName());
 	}
 
 	/**
@@ -506,7 +506,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void createAllTriggers(FeatureTable featureTable) {
 		createAllTriggers(featureTable.getTableName(),
 				featureTable.getGeometryColumnName(),
-				featureTable.getPkColumn().getName());
+				featureTable.getPkColumnName());
 	}
 
 	/**
