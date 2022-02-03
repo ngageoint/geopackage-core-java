@@ -150,7 +150,7 @@ public class GeoPackageIOUtils {
 	 * @param path
 	 *            file path
 	 * @return file name
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static String getPathFileName(String path) {
 		return new File(path).getName();
@@ -162,7 +162,7 @@ public class GeoPackageIOUtils {
 	 * @param path
 	 *            file path
 	 * @return file name
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static String getPathFileNameWithoutExtension(String path) {
 		return getFileNameWithoutExtension(getPathFileName(path));

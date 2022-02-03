@@ -18,7 +18,7 @@ import mil.nga.geopackage.db.Pagination;
  *            result type
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.2.0
  */
 public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTable extends UserTable<TColumn>, TRow extends UserCoreRow<TColumn, TTable>, TResult extends UserCoreResult<TColumn, TTable, TRow>>
 		implements Iterable<TRow> {

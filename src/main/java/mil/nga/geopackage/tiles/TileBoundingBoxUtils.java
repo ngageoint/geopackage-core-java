@@ -543,7 +543,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getBoundingBoxAsWGS84(TileGrid tileGrid,
 			long zoom) {
@@ -753,7 +753,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return tile grid
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static TileGrid getTileGridFromWebMercator(Point point, long zoom) {
 		BoundingBox boundingBox = new BoundingBox(point.getX(), point.getY(),
@@ -810,7 +810,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getTileBounds(Projection projection, Point point,
 			int zoom) {
@@ -826,7 +826,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return WGS84 bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getTileBoundsForWGS84(Point point, int zoom) {
 		Projection projection = ProjectionFactory
@@ -843,7 +843,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return web mercator bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getTileBoundsForWebMercator(Point point,
 			int zoom) {
@@ -862,7 +862,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getWGS84TileBounds(Projection projection,
 			Point point, int zoom) {
@@ -878,7 +878,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return WGS84 bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getWGS84TileBoundsForWGS84(Point point,
 			int zoom) {
@@ -896,7 +896,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return web mercator bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox getWGS84TileBoundsForWebMercator(Point point,
 			int zoom) {
@@ -970,7 +970,7 @@ public class TileBoundingBoxUtils {
 	 * @param totalLength
 	 *            total length
 	 * @return tile size
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static double tileSize(int tilesPerSide, double totalLength) {
 		return totalLength / tilesPerSide;
@@ -984,7 +984,7 @@ public class TileBoundingBoxUtils {
 	 * @param totalLength
 	 *            total length
 	 * @return zoom level
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static double zoomLevelOfTileSize(double tileSize,
 			double totalLength) {
@@ -1001,7 +1001,7 @@ public class TileBoundingBoxUtils {
 	 * @param totalLength
 	 *            total length
 	 * @return tile size in units
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static double tileSizeWithZoom(long zoom, double totalLength) {
 		int tilesPerSide = tilesPerSide(zoom);
@@ -1498,7 +1498,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return tile grid
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static TileGrid getTileGridWGS84FromWGS84(Point point, long zoom) {
 		BoundingBox boundingBox = new BoundingBox(point.getX(), point.getY(),
@@ -1516,7 +1516,7 @@ public class TileBoundingBoxUtils {
 	 * @param projection
 	 *            projection
 	 * @return tile grid
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static TileGrid getTileGridWGS84(Point point, long zoom,
 			Projection projection) {
@@ -1534,7 +1534,7 @@ public class TileBoundingBoxUtils {
 	 * @param zoom
 	 *            zoom level
 	 * @return tile grid
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static TileGrid getTileGridWGS84FromWebMercator(Point point,
 			long zoom) {

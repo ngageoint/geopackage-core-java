@@ -43,7 +43,7 @@ public class BoundingBox {
 	 * Create a new WGS84 bounding box with world bounds (degrees)
 	 *
 	 * @return new bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox worldWGS84() {
 		return new BoundingBox();
@@ -53,7 +53,7 @@ public class BoundingBox {
 	 * Create a new Web Mercator bounding box with world bounds (meters)
 	 *
 	 * @return new bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static BoundingBox worldWebMercator() {
 		return new BoundingBox(
@@ -123,7 +123,7 @@ public class BoundingBox {
 	 * 
 	 * @param geometry
 	 *            geometry
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public BoundingBox(Geometry geometry) {
 		this(geometry.getEnvelope());
@@ -229,7 +229,7 @@ public class BoundingBox {
 	 * Get the bounding box centroid point
 	 * 
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public Point getCentroid() {
 		return getCentroid(this);
@@ -242,7 +242,7 @@ public class BoundingBox {
 	 *            bounding box
 	 * 
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static Point getCentroid(BoundingBox boundingBox) {
 		double x = (boundingBox.getMinLongitude()
@@ -258,7 +258,7 @@ public class BoundingBox {
 	 * @param projection
 	 *            projection of the bounding box
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public Point getCentroid(Projection projection) {
 		return getCentroid(this, projection);
@@ -272,7 +272,7 @@ public class BoundingBox {
 	 * @param projection
 	 *            projection of the bounding box
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static Point getCentroid(BoundingBox boundingBox,
 			Projection projection) {
@@ -289,7 +289,7 @@ public class BoundingBox {
 	 * Get the centroid for the bounding box in degrees
 	 * 
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public Point getDegreesCentroid() {
 		return getDegreesCentroid(this);
@@ -301,7 +301,7 @@ public class BoundingBox {
 	 * @param boundingBox
 	 *            bounding box in degrees
 	 * @return centroid point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static Point getDegreesCentroid(BoundingBox boundingBox) {
 		return GeometryUtils.getDegreesCentroid(buildGeometry(boundingBox));
@@ -338,7 +338,7 @@ public class BoundingBox {
 	 * Build a geometry representation of the bounding box
 	 * 
 	 * @return geometry, polygon or point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public Geometry buildGeometry() {
 		return buildGeometry(this);
@@ -351,7 +351,7 @@ public class BoundingBox {
 	 *            bounding box
 	 * 
 	 * @return geometry, polygon or point
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public static Geometry buildGeometry(BoundingBox boundingBox) {
 		return buildEnvelope(boundingBox).buildGeometry();
@@ -755,7 +755,7 @@ public class BoundingBox {
 	 * Copy the bounding box
 	 * 
 	 * @return bounding box copy
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public BoundingBox copy() {
 		return new BoundingBox(this);

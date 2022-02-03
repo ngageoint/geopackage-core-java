@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.1.2 (TBD)
+## 6.2.0 (TBD)
 
 * ormlite-core version 6.1
 * sf-wkb version 2.0.5

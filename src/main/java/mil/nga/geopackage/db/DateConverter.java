@@ -142,7 +142,7 @@ public class DateConverter {
 	 * 
 	 * @param formats
 	 *            date formats
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public DateConverter(String... formats) {
 		for (String format : formats) {
@@ -155,7 +155,7 @@ public class DateConverter {
 	 * 
 	 * @param format
 	 *            date format
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public void addFormat(String format) {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -167,7 +167,7 @@ public class DateConverter {
 	 * Is a parsed date value always expected
 	 * 
 	 * @return true if always expected
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public boolean isExpected() {
 		return expected;
@@ -178,7 +178,7 @@ public class DateConverter {
 	 * 
 	 * @param expected
 	 *            true if always expected
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public void setExpected(boolean expected) {
 		this.expected = expected;

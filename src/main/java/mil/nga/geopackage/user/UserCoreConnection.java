@@ -40,7 +40,7 @@ public abstract class UserCoreConnection<TColumn extends UserColumn, TTable exte
 	 * @param selectionArgs
 	 *            selection arguments
 	 * @return result
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public abstract TResult rawQuery(String sql, String[] columns,
 			String[] selectionArgs);

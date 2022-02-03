@@ -350,7 +350,7 @@ public class SpatialReferenceSystem {
 	 * Get the projection definition
 	 * 
 	 * @return definition
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public String getProjectionDefinition() {
 

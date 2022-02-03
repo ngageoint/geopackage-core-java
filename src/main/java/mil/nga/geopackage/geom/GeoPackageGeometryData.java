@@ -1455,7 +1455,7 @@ public class GeoPackageGeometryData {
 	 * Get the bounding box of the geometry envelope
 	 * 
 	 * @return bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public BoundingBox getBoundingBox() {
 		BoundingBox boundingBox = null;
@@ -1753,7 +1753,7 @@ public class GeoPackageGeometryData {
 	 * and retrieve it from the geometry
 	 * 
 	 * @return bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public BoundingBox getOrBuildBoundingBox() {
 		BoundingBox boundingBox = null;

@@ -106,7 +106,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Get the SQL statement (if available)
 	 * 
 	 * @return SQL statement
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public String getSql();
 
@@ -114,7 +114,7 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 * Get the SQL selection arguments (if available)
 	 * 
 	 * @return selection arguments
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public String[] getSelectionArgs();
 

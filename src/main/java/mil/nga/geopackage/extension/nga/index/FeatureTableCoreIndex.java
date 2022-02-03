@@ -1029,7 +1029,7 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 * @param projection
 	 *            projection
 	 * @return projected bounding box
-	 * @since 6.1.2
+	 * @since 6.2.0
 	 */
 	public BoundingBox projectBoundingBox(BoundingBox boundingBox,
 			Projection projection) {

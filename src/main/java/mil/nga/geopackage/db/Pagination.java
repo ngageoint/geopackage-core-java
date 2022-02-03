@@ -9,7 +9,7 @@ import mil.nga.geopackage.GeoPackageException;
  * Query pagination configuration
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.2.0
  */
 public class Pagination {
 
