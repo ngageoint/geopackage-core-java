@@ -185,6 +185,62 @@ public abstract class UserCorePaginatedResults<TColumn extends UserColumn, TTabl
 	}
 
 	/**
+	 * Iterable for iterating over result ids in place of rows
+	 *
+	 * @return iterable ids
+	 * @since 6.2.1
+	 */
+	public Iterable<Long> ids() {
+		return new Iterable<Long>() {
+
+			/**
+			 * Ids iterator
+			 */
+			private Iterator<Long> ids = results.ids().iterator();
+
+			/**
+			 * {@inheritDoc}
+			 */
+			@Override
+			public Iterator<Long> iterator() {
+				return new Iterator<Long>() {
+
+					/**
+					 * {@inheritDoc}
+					 */
+					@Override
+					public boolean hasNext() {
+						boolean hasNext = ids.hasNext();
+						if (!hasNext) {
+							close();
+							if (pagination.hasLimit()) {
+								pagination.incrementOffset();
+								String query = pagination.replace(sql);
+								results = dao.rawQuery(query, columns, args);
+								ids = results.ids().iterator();
+								hasNext = results.moveToNext();
+								if (!hasNext) {
+									close();
+								}
+							}
+						}
+						return hasNext;
+					}
+
+					/**
+					 * {@inheritDoc}
+					 */
+					@Override
+					public Long next() {
+						return ids.next();
+					}
+
+				};
+			}
+		};
+	}
+
+	/**
 	 * Close the current results
 	 */
 	public void close() {
