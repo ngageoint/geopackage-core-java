@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.2.1 (TBD)
+## [6.2.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.2.1) (03-11-2022)
 
 * Iterable result ids for User Results and User Pagninated Results
 
