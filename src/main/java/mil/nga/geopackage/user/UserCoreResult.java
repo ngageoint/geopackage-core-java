@@ -118,4 +118,12 @@ public interface UserCoreResult<TColumn extends UserColumn, TTable extends UserT
 	 */
 	public String[] getSelectionArgs();
 
+	/**
+	 * Iterable for iterating over result ids in place of rows
+	 *
+	 * @return iterable ids
+	 * @since 6.2.1
+	 */
+	public Iterable<Long> ids();
+
 }
