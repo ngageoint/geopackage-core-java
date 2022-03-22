@@ -179,6 +179,26 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	}
 
 	/**
+	 * Create style table
+	 * 
+	 * @return true if created, false if the table already existed
+	 * @since 6.3.0
+	 */
+	public boolean createStyleTable() {
+		return relatedTables.createRelatedTable(new StyleTable());
+	}
+
+	/**
+	 * Create icon table
+	 * 
+	 * @return true if created, false if the table already existed
+	 * @since 6.3.0
+	 */
+	public boolean createIconTable() {
+		return relatedTables.createRelatedTable(new IconTable());
+	}
+
+	/**
 	 * Create style, icon, table style, and table icon relationships for the
 	 * feature table
 	 * 
