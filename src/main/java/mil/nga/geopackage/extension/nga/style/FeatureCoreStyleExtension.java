@@ -12,6 +12,7 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.nga.NGAExtensions;
 import mil.nga.geopackage.extension.nga.contents.ContentsId;
 import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
+import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
@@ -412,6 +413,54 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 			}
 		}
 
+	}
+
+	/**
+	 * Get style table relations
+	 * 
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getStyleTableRelations() throws SQLException {
+		return relatedTables.getRelatedTableRelations(StyleTable.TABLE_NAME);
+	}
+
+	/**
+	 * Determine if there are style table relations
+	 * 
+	 * @return true if has style table relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasStyleTableRelations() throws SQLException {
+		return relatedTables.hasRelatedTableRelations(StyleTable.TABLE_NAME);
+	}
+
+	/**
+	 * Get icon table relations
+	 * 
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getIconTableRelations() throws SQLException {
+		return relatedTables.getRelatedTableRelations(IconTable.TABLE_NAME);
+	}
+
+	/**
+	 * Determine if there are icon table relations
+	 * 
+	 * @return true if has icon table relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasIconTableRelations() throws SQLException {
+		return relatedTables.hasRelatedTableRelations(IconTable.TABLE_NAME);
 	}
 
 	/**

@@ -1330,4 +1330,115 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 		return "x-" + author + "_" + name;
 	}
 
+	/**
+	 * Get the relations to the base table
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getBaseTableRelations(String baseTable)
+			throws SQLException {
+		List<ExtendedRelation> extendedRelations = null;
+		ExtendedRelationsDao dao = getExtendedRelationsDao();
+		if (dao.isTableExists()) {
+			extendedRelations = getExtendedRelationsDao()
+					.getBaseTableRelations(baseTable);
+		}
+		return extendedRelations;
+	}
+
+	/**
+	 * Determine if there are relations to the base table
+	 * 
+	 * @param baseTable
+	 *            base table name
+	 * @return true if has extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasBaseTableRelations(String baseTable) throws SQLException {
+		List<ExtendedRelation> extendedRelations = getBaseTableRelations(
+				baseTable);
+		return extendedRelations != null && !extendedRelations.isEmpty();
+	}
+
+	/**
+	 * Get the relations to the related table
+	 * 
+	 * @param relatedTable
+	 *            related table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getRelatedTableRelations(String relatedTable)
+			throws SQLException {
+		List<ExtendedRelation> extendedRelations = null;
+		ExtendedRelationsDao dao = getExtendedRelationsDao();
+		if (dao.isTableExists()) {
+			extendedRelations = getExtendedRelationsDao()
+					.getRelatedTableRelations(relatedTable);
+		}
+		return extendedRelations;
+	}
+
+	/**
+	 * Determine if there are relations to the related table
+	 * 
+	 * @param relatedTable
+	 *            related table name
+	 * @return true if has extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasRelatedTableRelations(String relatedTable)
+			throws SQLException {
+		List<ExtendedRelation> extendedRelations = getRelatedTableRelations(
+				relatedTable);
+		return extendedRelations != null && !extendedRelations.isEmpty();
+	}
+
+	/**
+	 * Get the relations to the table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getTableRelations(String table)
+			throws SQLException {
+		List<ExtendedRelation> extendedRelations = null;
+		ExtendedRelationsDao dao = getExtendedRelationsDao();
+		if (dao.isTableExists()) {
+			extendedRelations = getExtendedRelationsDao()
+					.getTableRelations(table);
+		}
+		return extendedRelations;
+	}
+
+	/**
+	 * Determine if there are relations to the table
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if has extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasTableRelations(String table) throws SQLException {
+		List<ExtendedRelation> extendedRelations = getTableRelations(table);
+		return extendedRelations != null && !extendedRelations.isEmpty();
+	}
+
 }
