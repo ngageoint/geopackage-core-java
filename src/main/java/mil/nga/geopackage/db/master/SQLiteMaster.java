@@ -456,7 +456,6 @@ public class SQLiteMaster {
 	}
 
 	/**
-	 * 
 	 * Count the sqlite_master table
 	 * 
 	 * @param db
@@ -471,7 +470,6 @@ public class SQLiteMaster {
 	}
 
 	/**
-	 * 
 	 * Query the sqlite_master table
 	 * 
 	 * @param db
@@ -488,7 +486,6 @@ public class SQLiteMaster {
 	}
 
 	/**
-	 * 
 	 * Query the sqlite_master table
 	 * 
 	 * @param db

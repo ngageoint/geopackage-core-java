@@ -48,7 +48,7 @@ public abstract class GeoPackageDao<T, ID> extends BaseDaoImpl<T, ID> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Check if the DAO is backed by a table or a view
 	 * 
 	 * @return true if a table or view exists

@@ -18,8 +18,9 @@ import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 
 /**
  * Tile Matrix Set Extension
- * 
- * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/14-tile-matrix-set.adoc
+ * <p>
+ * <a href=
+ * "https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/14-tile-matrix-set.adoc">https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/14-tile-matrix-set.adoc</a>
  * 
  * @author jyutzler
  * @since 4.0.0

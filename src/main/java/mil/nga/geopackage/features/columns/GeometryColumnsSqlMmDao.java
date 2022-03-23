@@ -186,7 +186,7 @@ public class GeometryColumnsSqlMmDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

@@ -26,8 +26,9 @@ import mil.nga.geopackage.property.PropertyConstants;
  * This extension assigns a unique integer identifier to tables defined in the
  * contents. Allows foreign key referencing to a contents (text based primary
  * key) by an integer identifier.
- * 
- * http://ngageoint.github.io/GeoPackage/docs/extensions/contents-id.html
+ * <p>
+ * <a href=
+ * "http://ngageoint.github.io/GeoPackage/docs/extensions/contents-id.html">http://ngageoint.github.io/GeoPackage/docs/extensions/contents-id.html</a>
  * 
  * @author osbornb
  * @since 3.2.0

@@ -86,7 +86,7 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Verify optional tables have been created
 	 */
 	@Override
@@ -97,7 +97,7 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Verify optional tables have been created
 	 */
 	@Override
@@ -108,7 +108,7 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Verify optional tables have been created
 	 */
 	@Override

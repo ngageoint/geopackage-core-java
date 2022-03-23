@@ -199,7 +199,7 @@ public class GeometryColumnsDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

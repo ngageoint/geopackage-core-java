@@ -27,8 +27,9 @@ import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
  * Related Tables core extension
- * 
- * http://docs.opengeospatial.org/is/18-000/18-000.html
+ * <p>
+ * <a href=
+ * "http://docs.opengeospatial.org/is/18-000/18-000.html">http://docs.opengeospatial.org/is/18-000/18-000.html</a>
  * 
  * @author jyutzler
  * @author osbornb

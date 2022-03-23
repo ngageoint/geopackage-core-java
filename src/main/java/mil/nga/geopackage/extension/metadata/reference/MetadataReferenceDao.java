@@ -64,7 +64,7 @@ public class MetadataReferenceDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the foreign key columns
 	 */
 	@Override
@@ -93,7 +93,7 @@ public class MetadataReferenceDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Delete using the foreign key columns
 	 */
 	@Override

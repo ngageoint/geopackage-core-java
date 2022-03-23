@@ -63,7 +63,7 @@ public class ExtensionsDao extends GeoPackageDao<Extensions, Void> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the unique columns
 	 */
 	@Override
@@ -86,7 +86,7 @@ public class ExtensionsDao extends GeoPackageDao<Extensions, Void> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Delete using the unique columns
 	 */
 	@Override

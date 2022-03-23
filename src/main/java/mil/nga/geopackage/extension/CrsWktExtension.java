@@ -13,8 +13,9 @@ import mil.nga.geopackage.srs.SpatialReferenceSystem;
 
 /**
  * OGC Well known text representation of Coordinate Reference Systems extension
- * 
- * http://www.geopackage.org/spec/#extension_crs_wkt
+ * <p>
+ * <a href=
+ * "http://www.geopackage.org/spec/#extension_crs_wkt">http://www.geopackage.org/spec/#extension_crs_wkt</a>
  * 
  * @author osbornb
  * @since 1.1.8

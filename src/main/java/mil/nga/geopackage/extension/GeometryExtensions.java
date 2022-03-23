@@ -10,8 +10,9 @@ import mil.nga.sf.wkb.GeometryCodes;
 
 /**
  * Geometry Extensions utility methods and constants
- * 
- * https://www.geopackage.org/spec/#extension_geometry_types
+ * <p>
+ * <a href=
+ * "https://www.geopackage.org/spec/#extension_geometry_types">https://www.geopackage.org/spec/#extension_geometry_types</a>
  * 
  * @author osbornb
  */
@@ -63,8 +64,8 @@ public class GeometryExtensions extends BaseExtension {
 			GeometryType geometryType) {
 
 		String extensionName = getExtensionName(geometryType);
-		Extensions extension = getOrCreate(extensionName, tableName,
-				columnName, GEOMETRY_TYPES_EXTENSION_DEFINITION,
+		Extensions extension = getOrCreate(extensionName, tableName, columnName,
+				GEOMETRY_TYPES_EXTENSION_DEFINITION,
 				ExtensionScopeType.READ_WRITE);
 
 		return extension;
@@ -145,10 +146,9 @@ public class GeometryExtensions extends BaseExtension {
 		}
 
 		if (!isGeoPackageExtension(geometryType)) {
-			throw new GeoPackageException(
-					GeometryType.class.getSimpleName()
-							+ " is not a GeoPackage extension, User-Defined requires an author: "
-							+ geometryType.getName());
+			throw new GeoPackageException(GeometryType.class.getSimpleName()
+					+ " is not a GeoPackage extension, User-Defined requires an author: "
+					+ geometryType.getName());
 		}
 
 		String extensionName = GeoPackageConstants.EXTENSION_AUTHOR
@@ -180,10 +180,11 @@ public class GeometryExtensions extends BaseExtension {
 			String author, GeometryType geometryType) {
 
 		String extensionName = getExtensionName(author, geometryType);
-		String description = isGeoPackageExtension(geometryType) ? GEOMETRY_TYPES_EXTENSION_DEFINITION
+		String description = isGeoPackageExtension(geometryType)
+				? GEOMETRY_TYPES_EXTENSION_DEFINITION
 				: USER_GEOMETRY_TYPES_EXTENSION_DEFINITION;
-		Extensions extension = getOrCreate(extensionName, tableName,
-				columnName, description, ExtensionScopeType.READ_WRITE);
+		Extensions extension = getOrCreate(extensionName, tableName, columnName,
+				description, ExtensionScopeType.READ_WRITE);
 
 		return extension;
 	}
@@ -235,9 +236,9 @@ public class GeometryExtensions extends BaseExtension {
 					+ " is not an extension: " + geometryType.getName());
 		}
 
-		String extensionName = (isGeoPackageExtension(geometryType) ? GeoPackageConstants.EXTENSION_AUTHOR
-				: author)
-				+ Extensions.EXTENSION_NAME_DIVIDER
+		String extensionName = (isGeoPackageExtension(geometryType)
+				? GeoPackageConstants.EXTENSION_AUTHOR
+				: author) + Extensions.EXTENSION_NAME_DIVIDER
 				+ GeoPackageConstants.GEOMETRY_EXTENSION_PREFIX
 				+ Extensions.EXTENSION_NAME_DIVIDER + geometryType.getName();
 

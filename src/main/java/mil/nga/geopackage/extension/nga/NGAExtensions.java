@@ -40,8 +40,9 @@ import mil.nga.geopackage.user.custom.UserCustomTableReader;
 
 /**
  * NGA Extensions
- * 
- * http://ngageoint.github.io/GeoPackage/docs/extensions/
+ * <p>
+ * <a href=
+ * "http://ngageoint.github.io/GeoPackage/docs/extensions/">http://ngageoint.github.io/GeoPackage/docs/extensions/</a>
  * 
  * @author osbornb
  * @since 4.0.0

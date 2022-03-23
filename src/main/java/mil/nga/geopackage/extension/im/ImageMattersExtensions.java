@@ -6,8 +6,9 @@ import mil.nga.geopackage.extension.im.portrayal.PortrayalExtension;
 
 /**
  * Image Matters Extensions
- * 
- * https://gitlab.com/imagemattersllc/ogc-vtp2/-/tree/master/extensions
+ * <p>
+ * <a href=
+ * "https://gitlab.com/imagemattersllc/ogc-vtp2/-/tree/master/extensions">https://gitlab.com/imagemattersllc/ogc-vtp2/-/tree/master/extensions</a>
  * 
  * @author osbornb
  * @since 4.0.0

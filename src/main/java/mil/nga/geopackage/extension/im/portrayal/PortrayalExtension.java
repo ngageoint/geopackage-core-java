@@ -16,8 +16,9 @@ import mil.nga.geopackage.property.PropertyConstants;
 
 /**
  * Portrayal Extension
- * 
- * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/5-portrayal.adoc
+ * <p>
+ * <a href=
+ * "https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/5-portrayal.adoc">https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/5-portrayal.adoc</a>
  * 
  * @author jyutzler
  * @since 4.0.0

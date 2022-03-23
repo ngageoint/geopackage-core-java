@@ -17,8 +17,9 @@ import mil.nga.geopackage.tiles.user.TileTable;
 
 /**
  * Vector Tiles Extension
- * 
- * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/1-vte.adoc
+ * <p>
+ * <a href=
+ * "https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/1-vte.adoc">https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/1-vte.adoc</a>
  * 
  * @author jyutzler
  * @since 4.0.0
