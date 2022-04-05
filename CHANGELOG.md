@@ -9,6 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * GeoPackageGeometryData non parsed raw byte support for faster inserts
 * OGC Related Tables Extension relation methods
 * NGA Feature Style Extension create table and relation methods
+* Feature Style expanded pixel bounds
 
 ## [6.2.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.2.1) (03-11-2022)
 
