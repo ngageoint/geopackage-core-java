@@ -226,4 +226,31 @@ public class PixelBounds {
 		expandHeight(length);
 	}
 
+	/**
+	 * Get the total pixel width
+	 * 
+	 * @return pixel width
+	 */
+	public double getWidth() {
+		return left + right;
+	}
+
+	/**
+	 * Get the total pixel height
+	 * 
+	 * @return pixel height
+	 */
+	public double getHeight() {
+		return up + down;
+	}
+
+	/**
+	 * Get the pixel area
+	 * 
+	 * @return pixel area
+	 */
+	public double getArea() {
+		return getWidth() * getHeight();
+	}
+
 }
