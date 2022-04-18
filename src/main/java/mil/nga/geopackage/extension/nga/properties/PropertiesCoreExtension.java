@@ -28,8 +28,9 @@ import mil.nga.geopackage.user.UserCoreRow;
 /**
  * GeoPackage properties core extension for defining GeoPackage specific
  * properties, attributes, and metadata
- * 
- * http://ngageoint.github.io/GeoPackage/docs/extensions/properties.html
+ * <p>
+ * <a href=
+ * "http://ngageoint.github.io/GeoPackage/docs/extensions/properties.html">http://ngageoint.github.io/GeoPackage/docs/extensions/properties.html</a>
  * 
  * @param <TGeoPackage>
  *            GeoPackage type

@@ -177,7 +177,7 @@ public class DataColumnConstraintsDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the unique columns
 	 */
 	@Override
@@ -208,7 +208,7 @@ public class DataColumnConstraintsDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Delete using the unique columns
 	 */
 	@Override

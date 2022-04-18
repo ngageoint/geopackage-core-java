@@ -4,9 +4,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.2.2 (TBD)
+## 6.3.1 (TBD)
 
 * TBD
+
+## [6.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.3.0) (04-18-2022)
+
+* sf-wkb version 2.0.6
+* sf-wkt version 1.0.3
+* sf-proj version 4.1.2
+* oapi-features-json version 2.0.2
+* GeoPackageGeometryData non parsed raw byte support for faster inserts
+* OGC Related Tables Extension relation methods
+* NGA Feature Style Extension create table and relation methods
+* Feature Style expanded pixel bounds
 
 ## [6.2.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.2.1) (03-11-2022)
 

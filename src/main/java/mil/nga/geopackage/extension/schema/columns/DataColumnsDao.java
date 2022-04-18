@@ -175,7 +175,7 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

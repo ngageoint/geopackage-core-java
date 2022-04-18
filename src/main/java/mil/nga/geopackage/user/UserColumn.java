@@ -950,7 +950,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Sort by index
 	 */
 	@Override

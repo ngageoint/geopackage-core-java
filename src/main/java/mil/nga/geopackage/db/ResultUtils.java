@@ -49,7 +49,7 @@ public class ResultUtils {
 
 	/**
 	 * Get the value from the result from the provided column
-	 * 
+	 * <p>
 	 * Assumes {@link Result#getType(int)} returns one of:
 	 * {@link #FIELD_TYPE_INTEGER}, {@link #FIELD_TYPE_FLOAT},
 	 * {@link #FIELD_TYPE_STRING}, {@link #FIELD_TYPE_BLOB}, or
@@ -67,7 +67,7 @@ public class ResultUtils {
 
 	/**
 	 * Get the value from the result from the provided column
-	 * 
+	 * <p>
 	 * Assumes {@link Result#getType(int)} returns one of:
 	 * {@link #FIELD_TYPE_INTEGER}, {@link #FIELD_TYPE_FLOAT},
 	 * {@link #FIELD_TYPE_STRING}, {@link #FIELD_TYPE_BLOB}, or

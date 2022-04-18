@@ -51,6 +51,16 @@ public class GeoPackageGeometryData {
 	private byte[] bytes;
 
 	/**
+	 * Geometry header bytes
+	 */
+	private byte[] headerBytes;
+
+	/**
+	 * Geometry well-known bytes
+	 */
+	private byte[] geometryBytes;
+
+	/**
 	 * True if an extended geometry, false if standard
 	 */
 	private boolean extended = false;
@@ -78,7 +88,7 @@ public class GeoPackageGeometryData {
 	/**
 	 * Well-Known Binary Geometry index of where the bytes start
 	 */
-	private int wkbGeometryIndex;
+	private int wkbGeometryIndex = -1;
 
 	/**
 	 * Geometry
@@ -856,9 +866,6 @@ public class GeoPackageGeometryData {
 	 */
 	public static byte[] wkb(GeoPackageGeometryData geometryData)
 			throws IOException {
-		if (geometryData.getBytes() == null) {
-			geometryData.toBytes();
-		}
 		return geometryData.getWkb();
 	}
 
@@ -1085,24 +1092,24 @@ public class GeoPackageGeometryData {
 	 * @since 4.0.0
 	 */
 	public GeoPackageGeometryData(GeoPackageGeometryData geometryData) {
-		setSrsId(geometryData.getSrsId());
-		Geometry geometry = geometryData.getGeometry();
+		this.srsId = geometryData.srsId;
+		Geometry geometry = geometryData.geometry;
 		if (geometry != null) {
 			geometry = geometry.copy();
 		}
 		setGeometry(geometry);
-		GeometryEnvelope envelope = geometryData.getEnvelope();
+		GeometryEnvelope envelope = geometryData.envelope;
 		if (envelope != null) {
 			envelope = envelope.copy();
 		}
-		setEnvelope(envelope);
-		byte[] bytes = geometryData.getBytes();
+		this.envelope = envelope;
+		byte[] bytes = geometryData.bytes;
 		if (bytes != null) {
 			bytes = Arrays.copyOf(bytes, bytes.length);
 		}
 		this.bytes = bytes;
 		this.wkbGeometryIndex = geometryData.wkbGeometryIndex;
-		setByteOrder(geometryData.getByteOrder());
+		this.byteOrder = geometryData.byteOrder;
 	}
 
 	/**
@@ -1122,7 +1129,6 @@ public class GeoPackageGeometryData {
 	 *            geometry bytes
 	 */
 	public void fromBytes(byte[] bytes) {
-		this.bytes = bytes;
 
 		ByteReader reader = new ByteReader(bytes);
 
@@ -1196,38 +1202,54 @@ public class GeoPackageGeometryData {
 	 */
 	public byte[] toBytes() throws IOException {
 
-		ByteWriter writer = new ByteWriter();
+		if (bytes == null) {
 
-		// Write GP as the 2 byte magic number
-		writer.writeString(GeoPackageConstants.GEOMETRY_MAGIC_NUMBER);
+			ByteWriter writer = new ByteWriter();
 
-		// Write a byte as the version, value of 0 = version 1
-		writer.writeByte(GeoPackageConstants.GEOMETRY_VERSION_1);
+			if (headerBytes != null) {
+				writer.getOutputStream().write(headerBytes);
+			} else {
 
-		// Build and write a flags byte
-		byte flags = buildFlagsByte();
-		writer.writeByte(flags);
-		writer.setByteOrder(byteOrder);
+				// Write GP as the 2 byte magic number
+				writer.writeString(GeoPackageConstants.GEOMETRY_MAGIC_NUMBER);
 
-		// Write the 4 byte srs id int
-		writer.writeInt(srsId);
+				// Write a byte as the version, value of 0 = version 1
+				writer.writeByte(GeoPackageConstants.GEOMETRY_VERSION_1);
 
-		// Write the envelope
-		writeEnvelope(writer);
+				// Build and write a flags byte
+				byte flags = buildFlagsByte();
+				writer.writeByte(flags);
+				writer.setByteOrder(byteOrder);
 
-		// Save off where the WKB bytes start
-		wkbGeometryIndex = writer.size();
+				// Write the 4 byte srs id int
+				writer.writeInt(srsId);
 
-		// Write the Well-Known Binary Geometry if not marked as empty
-		if (!empty) {
-			GeometryWriter.writeGeometry(writer, geometry);
+				// Write the envelope
+				writeEnvelope(writer);
+
+			}
+
+			// Save off where the WKB bytes start
+			wkbGeometryIndex = writer.size();
+
+			// Write the Well-Known Binary Geometry if not marked as empty
+			if (!empty) {
+
+				if (geometryBytes != null) {
+					writer.getOutputStream().write(geometryBytes);
+				} else if (geometry != null) {
+					GeometryWriter.writeGeometry(writer, geometry);
+				}
+
+			}
+
+			// Get the bytes
+			bytes = writer.getBytes();
+
+			// Close the writer
+			writer.close();
+
 		}
-
-		// Get the bytes
-		bytes = writer.getBytes();
-
-		// Close the writer
-		writer.close();
 
 		return bytes;
 	}
@@ -1475,13 +1497,32 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Get the geometry or read it from geometry bytes
+	 * 
+	 * @return geometry
+	 * @throws IOException
+	 *             upon failure to read geometry bytes
+	 * @since 6.3.0
+	 */
+	public Geometry getOrReadGeometry() throws IOException {
+		if (geometry == null && geometryBytes != null) {
+			geometry = GeometryReader.readGeometry(geometryBytes,
+					geometryFilter);
+		}
+		return geometry;
+	}
+
+	/**
 	 * Set the extended flag
 	 * 
 	 * @param extended
 	 *            extended value
 	 */
 	public void setExtended(boolean extended) {
-		this.extended = extended;
+		if (this.extended != extended) {
+			clearHeaderBytes();
+			this.extended = extended;
+		}
 	}
 
 	/**
@@ -1491,7 +1532,10 @@ public class GeoPackageGeometryData {
 	 *            empty value
 	 */
 	public void setEmpty(boolean empty) {
-		this.empty = empty;
+		if (this.empty != empty) {
+			clearHeaderBytes();
+			this.empty = empty;
+		}
 	}
 
 	/**
@@ -1501,7 +1545,13 @@ public class GeoPackageGeometryData {
 	 *            byte order
 	 */
 	public void setByteOrder(ByteOrder byteOrder) {
-		this.byteOrder = byteOrder;
+		if (byteOrder == null) {
+			byteOrder = defaultByteOrder;
+		}
+		if (this.byteOrder != byteOrder) {
+			clearHeaderBytes();
+			this.byteOrder = byteOrder;
+		}
 	}
 
 	/**
@@ -1511,7 +1561,10 @@ public class GeoPackageGeometryData {
 	 *            SRS id
 	 */
 	public void setSrsId(int srsId) {
-		this.srsId = srsId;
+		if (this.srsId != srsId) {
+			clearHeaderBytes();
+			this.srsId = srsId;
+		}
 	}
 
 	/**
@@ -1521,13 +1574,56 @@ public class GeoPackageGeometryData {
 	 *            geometry envelope
 	 */
 	public void setEnvelope(GeometryEnvelope envelope) {
-		this.envelope = envelope;
+		if (envelope != null ? !envelope.equals(this.envelope)
+				: this.envelope != null) {
+			clearHeaderBytes();
+			this.envelope = envelope;
+		}
 	}
 
 	/**
-	 * Set the geometry. Updates the empty flag and if the geometry is not null,
-	 * the extended flag. Following invoking this method and upon setting the
-	 * SRS id, call {@link #toBytes()} to convert the geometry to bytes.
+	 * Set the bytes
+	 * 
+	 * @param bytes
+	 *            bytes
+	 * @since 6.3.0
+	 */
+	public void setBytes(byte[] bytes) {
+		setBytes(bytes, -1);
+	}
+
+	/**
+	 * Set the bytes
+	 * 
+	 * @param bytes
+	 *            bytes
+	 * @param wkbGeometryIndex
+	 *            well-known geometry bytes start index
+	 * @since 6.3.0
+	 */
+	public void setBytes(byte[] bytes, int wkbGeometryIndex) {
+		clearHeaderBytes();
+		clearGeometryBytes();
+		this.bytes = bytes;
+		this.wkbGeometryIndex = wkbGeometryIndex;
+	}
+
+	/**
+	 * Set the geometry header bytes
+	 * 
+	 * @param bytes
+	 *            header bytes
+	 * @since 6.3.0
+	 */
+	public void setHeaderBytes(byte[] bytes) {
+		clearBytes();
+		this.headerBytes = bytes;
+	}
+
+	/**
+	 * Set the geometry. Updates the empty flag. Updates the extended flag if
+	 * the geometry is not null. Following invoking this method and upon setting
+	 * the SRS id, call {@link #toBytes()} to convert the geometry to bytes.
 	 * Alternatively call {@link #setGeometryToBytes(Geometry)} or
 	 * {@link #setGeometryAndBuildEnvelopeToBytes(Geometry)} to perform both
 	 * operations.
@@ -1536,12 +1632,28 @@ public class GeoPackageGeometryData {
 	 *            geometry
 	 */
 	public void setGeometry(Geometry geometry) {
+		clearGeometryBytes();
 		this.geometry = geometry;
 		empty = geometry == null;
 		if (geometry != null) {
 			extended = GeometryExtensions
 					.isNonStandard(geometry.getGeometryType());
 		}
+	}
+
+	/**
+	 * Set the geometry bytes. Updates the empty flag. Extended flag should be
+	 * manually set with {@link #setExtended(boolean)} as needed.
+	 * 
+	 * @param bytes
+	 *            geometry bytes
+	 * @since 6.3.0
+	 */
+	public void setGeometryBytes(byte[] bytes) {
+		clearBytes();
+		this.geometry = null;
+		this.geometryBytes = bytes;
+		empty = bytes == null;
 	}
 
 	/**
@@ -1621,23 +1733,72 @@ public class GeoPackageGeometryData {
 	}
 
 	/**
+	 * Clear the bytes
+	 * 
+	 * @since 6.3.0
+	 */
+	public void clearBytes() {
+		bytes = null;
+		wkbGeometryIndex = -1;
+	}
+
+	/**
+	 * Clear the header bytes and overall bytes
+	 * 
+	 * @since 6.3.0
+	 */
+	public void clearHeaderBytes() {
+		clearBytes();
+		headerBytes = null;
+	}
+
+	/**
+	 * Clear the geometry bytes and overall bytes
+	 * 
+	 * @since 6.3.0
+	 */
+	public void clearGeometryBytes() {
+		clearBytes();
+		geometryBytes = null;
+	}
+
+	/**
 	 * Get the bytes of the entire GeoPackage geometry including GeoPackage
 	 * header and WKB bytes
 	 * 
 	 * @return bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
 	 */
-	public byte[] getBytes() {
-		return bytes;
+	public byte[] getBytes() throws IOException {
+		return toBytes();
+	}
+
+	/**
+	 * Get the bytes already ordered in a Byte Buffer
+	 * 
+	 * @return byte buffer
+	 * @since 6.3.0
+	 * @throws IOException
+	 *             upon failure to write bytes
+	 */
+	public ByteBuffer getByteBuffer() throws IOException {
+		ByteBuffer buffer = null;
+		if (toBytes() != null) {
+			buffer = ByteBuffer.wrap(bytes).order(byteOrder);
+		}
+		return buffer;
 	}
 
 	/**
 	 * Get the GeoPackage header bytes
 	 * 
 	 * @return header bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
 	 */
-	public byte[] getHeaderBytes() {
-		byte[] headerBytes = null;
-		if (bytes != null) {
+	public byte[] getHeaderBytes() throws IOException {
+		if (headerBytes == null && toBytes() != null) {
 			headerBytes = new byte[wkbGeometryIndex];
 			System.arraycopy(bytes, 0, headerBytes, 0, wkbGeometryIndex);
 		}
@@ -1648,10 +1809,14 @@ public class GeoPackageGeometryData {
 	 * Get the GeoPackage header bytes already ordered in a Byte Buffer
 	 * 
 	 * @return byte buffer
+	 * @throws IOException
+	 *             upon failure to write bytes
 	 */
-	public ByteBuffer getHeaderByteBuffer() {
+	public ByteBuffer getHeaderByteBuffer() throws IOException {
 		ByteBuffer buffer = null;
-		if (bytes != null) {
+		if (headerBytes != null) {
+			buffer = ByteBuffer.wrap(headerBytes).order(byteOrder);
+		} else if (toBytes() != null) {
 			buffer = ByteBuffer.wrap(bytes, 0, wkbGeometryIndex)
 					.order(byteOrder);
 		}
@@ -1662,28 +1827,33 @@ public class GeoPackageGeometryData {
 	 * Get the Well-Known Binary Geometry bytes
 	 * 
 	 * @return bytes
+	 * @throws IOException
+	 *             upon failure to write bytes
 	 * @since 4.0.0
 	 */
-	public byte[] getWkb() {
-		byte[] wkbBytes = null;
-		if (bytes != null) {
+	public byte[] getWkb() throws IOException {
+		if (geometryBytes == null && toBytes() != null) {
 			int wkbByteCount = bytes.length - wkbGeometryIndex;
-			wkbBytes = new byte[wkbByteCount];
-			System.arraycopy(bytes, wkbGeometryIndex, wkbBytes, 0,
+			geometryBytes = new byte[wkbByteCount];
+			System.arraycopy(bytes, wkbGeometryIndex, geometryBytes, 0,
 					wkbByteCount);
 		}
-		return wkbBytes;
+		return geometryBytes;
 	}
 
 	/**
 	 * Get the Well-Known Binary Geometry bytes already ordered in a Byte Buffer
 	 * 
 	 * @return byte buffer
+	 * @throws IOException
+	 *             upon failure to write bytes
 	 * @since 4.0.0
 	 */
-	public ByteBuffer getWkbBuffer() {
+	public ByteBuffer getWkbBuffer() throws IOException {
 		ByteBuffer buffer = null;
-		if (bytes != null) {
+		if (geometryBytes != null) {
+			buffer = ByteBuffer.wrap(geometryBytes).order(byteOrder);
+		} else if (toBytes() != null) {
 			buffer = ByteBuffer.wrap(bytes, wkbGeometryIndex,
 					bytes.length - wkbGeometryIndex).order(byteOrder);
 		}
@@ -1703,16 +1873,18 @@ public class GeoPackageGeometryData {
 	 * Get a Well-Known text string from the geometry
 	 * 
 	 * @return well-known text string
+	 * @since 4.0.0
 	 */
 	public String getWkt() {
 		String wkt = null;
-		if (geometry != null) {
-			try {
+		try {
+			Geometry geometry = getOrReadGeometry();
+			if (geometry != null) {
 				wkt = mil.nga.sf.wkt.GeometryWriter.writeGeometry(geometry);
-			} catch (IOException e) {
-				throw new GeoPackageException(
-						"Failed to write the geometry WKT", e);
 			}
+		} catch (IOException e) {
+			throw new GeoPackageException("Failed to write the geometry WKT",
+					e);
 		}
 		return wkt;
 	}
@@ -1766,7 +1938,7 @@ public class GeoPackageGeometryData {
 
 	/**
 	 * Get the envelope flag indicator
-	 * 
+	 * <p>
 	 * 1 for xy, 2 for xyz, 3 for xym, 4 for xyzm (null would be 0)
 	 * 
 	 * @param envelope

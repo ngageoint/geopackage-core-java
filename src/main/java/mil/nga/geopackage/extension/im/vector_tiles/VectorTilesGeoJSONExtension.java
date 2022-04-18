@@ -8,8 +8,9 @@ import mil.nga.geopackage.property.PropertyConstants;
 
 /**
  * GeoJSON encoding for vector tiles
- * 
- * https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/3-gvte.adoc
+ * <p>
+ * <a href=
+ * "https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/3-gvte.adoc">https://gitlab.com/imagemattersllc/ogc-vtp2/-/blob/master/extensions/3-gvte.adoc</a>
  * 
  * @author jyutzler
  * @since 4.0.0

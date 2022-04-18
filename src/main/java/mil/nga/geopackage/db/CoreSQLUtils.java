@@ -86,7 +86,7 @@ public class CoreSQLUtils {
 	 * as" values for use in select statements. The columns as size should equal
 	 * the number of columns and only provide values at the indices for desired
 	 * columns.
-	 * 
+	 * <p>
 	 * Example: columns = [column1, column2], columnsAs = [null, value] creates
 	 * [column1, value as column2]
 	 * 
@@ -162,7 +162,7 @@ public class CoreSQLUtils {
 
 	/**
 	 * Create the column SQL in the format:
-	 * 
+	 * <p>
 	 * "column_name" column_type[(max)] [NOT NULL] [PRIMARY KEY AUTOINCREMENT]
 	 * 
 	 * @param column
@@ -177,7 +177,7 @@ public class CoreSQLUtils {
 
 	/**
 	 * Create the column definition SQL in the format:
-	 * 
+	 * <p>
 	 * column_type[(max)] [NOT NULL] [PRIMARY KEY AUTOINCREMENT]
 	 * 
 	 * @param column

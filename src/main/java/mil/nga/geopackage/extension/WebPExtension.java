@@ -8,8 +8,9 @@ import mil.nga.geopackage.tiles.user.TileTable;
 
 /**
  * WebP extension
- * 
- * https://www.geopackage.org/spec/#extension_tiles_webp
+ * <p>
+ * <a href=
+ * "https://www.geopackage.org/spec/#extension_tiles_webp">https://www.geopackage.org/spec/#extension_tiles_webp</a>
  * 
  * @author osbornb
  * @since 1.1.8
@@ -30,8 +31,8 @@ public class WebPExtension extends BaseExtension {
 	/**
 	 * Extension definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties.getProperty(
-			PropertyConstants.EXTENSIONS, NAME);
+	public static final String DEFINITION = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME);
 
 	/**
 	 * Constructor

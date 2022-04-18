@@ -179,7 +179,7 @@ public class GeometryIndexDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

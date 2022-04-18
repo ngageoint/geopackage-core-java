@@ -20,8 +20,9 @@ import mil.nga.geopackage.property.PropertyConstants;
 
 /**
  * Schema extension
- * 
- * https://www.geopackage.org/spec/#extension_schema
+ * <p>
+ * <a href=
+ * "https://www.geopackage.org/spec/#extension_schema">https://www.geopackage.org/spec/#extension_schema</a>
  * 
  * @author osbornb
  * @since 1.1.8

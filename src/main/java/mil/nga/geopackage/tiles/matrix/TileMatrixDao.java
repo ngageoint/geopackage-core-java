@@ -212,7 +212,7 @@ public class TileMatrixDao extends GeoPackageDao<TileMatrix, TileMatrixKey> {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

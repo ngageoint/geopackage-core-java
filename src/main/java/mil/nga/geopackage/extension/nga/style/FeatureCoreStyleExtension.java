@@ -12,14 +12,16 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.nga.NGAExtensions;
 import mil.nga.geopackage.extension.nga.contents.ContentsId;
 import mil.nga.geopackage.extension.nga.contents.ContentsIdExtension;
+import mil.nga.geopackage.extension.related.ExtendedRelation;
 import mil.nga.geopackage.extension.related.RelatedTablesCoreExtension;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
 
 /**
  * Feature Core Style extension
- * 
- * http://ngageoint.github.io/GeoPackage/docs/extensions/feature-style.html
+ * <p>
+ * <a href=
+ * "http://ngageoint.github.io/GeoPackage/docs/extensions/feature-style.html">http://ngageoint.github.io/GeoPackage/docs/extensions/feature-style.html</a>
  * 
  * @author osbornb
  * @since 3.2.0
@@ -176,6 +178,26 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 	 */
 	public ContentsIdExtension getContentsId() {
 		return contentsId;
+	}
+
+	/**
+	 * Create style table
+	 * 
+	 * @return true if created, false if the table already existed
+	 * @since 6.3.0
+	 */
+	public boolean createStyleTable() {
+		return relatedTables.createRelatedTable(new StyleTable());
+	}
+
+	/**
+	 * Create icon table
+	 * 
+	 * @return true if created, false if the table already existed
+	 * @since 6.3.0
+	 */
+	public boolean createIconTable() {
+		return relatedTables.createRelatedTable(new IconTable());
 	}
 
 	/**
@@ -392,6 +414,54 @@ public abstract class FeatureCoreStyleExtension extends BaseExtension {
 			}
 		}
 
+	}
+
+	/**
+	 * Get style table relations
+	 * 
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getStyleTableRelations() throws SQLException {
+		return relatedTables.getRelatedTableRelations(StyleTable.TABLE_NAME);
+	}
+
+	/**
+	 * Determine if there are style table relations
+	 * 
+	 * @return true if has style table relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasStyleTableRelations() throws SQLException {
+		return relatedTables.hasRelatedTableRelations(StyleTable.TABLE_NAME);
+	}
+
+	/**
+	 * Get icon table relations
+	 * 
+	 * @return extended relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public List<ExtendedRelation> getIconTableRelations() throws SQLException {
+		return relatedTables.getRelatedTableRelations(IconTable.TABLE_NAME);
+	}
+
+	/**
+	 * Determine if there are icon table relations
+	 * 
+	 * @return true if has icon table relations
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.3.0
+	 */
+	public boolean hasIconTableRelations() throws SQLException {
+		return relatedTables.hasRelatedTableRelations(IconTable.TABLE_NAME);
 	}
 
 	/**

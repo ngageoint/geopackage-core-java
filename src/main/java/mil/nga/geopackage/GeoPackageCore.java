@@ -659,7 +659,7 @@ public interface GeoPackageCore extends Closeable {
 
 	/**
 	 * Create a new feature table
-	 * 
+	 * <p>
 	 * WARNING: only creates the feature table, call
 	 * {@link #createFeatureTable(FeatureTableMetadata)}) instead to create both
 	 * the table and required GeoPackage metadata
@@ -710,7 +710,7 @@ public interface GeoPackageCore extends Closeable {
 
 	/**
 	 * Create a new tile table
-	 * 
+	 * <p>
 	 * WARNING: only creates the tile table, call
 	 * {@link #createTileTable(TileTableMetadata)}) instead to create both the
 	 * table and required GeoPackage metadata
@@ -733,7 +733,7 @@ public interface GeoPackageCore extends Closeable {
 
 	/**
 	 * Create a new attributes table
-	 * 
+	 * <p>
 	 * WARNING: only creates the attributes table, call
 	 * {@link #createAttributesTable(AttributesTableMetadata)}) instead to
 	 * create both the table and required GeoPackage metadata

@@ -187,7 +187,7 @@ public class GeometryColumnsSfSqlDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override

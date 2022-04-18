@@ -184,7 +184,7 @@ public class FeatureTileLinkDao
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * <p>
 	 * Update using the complex key
 	 */
 	@Override
