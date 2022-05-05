@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.3.1 (TBD)
 
-* TBD
+* sf-proj version 4.1.3
 
 ## [6.3.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.3.0) (04-18-2022)
 
