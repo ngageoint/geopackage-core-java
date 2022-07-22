@@ -14,7 +14,7 @@ import mil.nga.sf.util.GeometryUtils;
  * Geometry Crop utilities
  * 
  * @author osbornb
- * @since 6.4.1
+ * @since 6.5.0
  */
 public class GeometryCrop {
 
