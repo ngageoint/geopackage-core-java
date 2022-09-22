@@ -4,9 +4,17 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.4.1 (TBD)
+## 6.5.1 (TBD)
 
 * TBD
+
+## [6.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.5.0) (09-22-2022)
+
+* sf-wkb version 2.2.0
+* sf-wkt version 1.2.0
+* sf-proj version 4.3.0
+* oapi-features-json version 2.2.0
+* Geometry crop utility
 
 ## [6.4.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.4.0) (07-11-2022)
 

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.geopackage</groupId>
 	<artifactId>geopackage-core</artifactId>
-	<version>6.4.1</version>
+	<version>6.5.1</version>
 	<packaging>jar</packaging>
 	<name>GeoPackage Core</name>
 	<url>https://github.com/ngageoint/geopackage-core-java</url>
@@ -51,22 +51,22 @@
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-wkb</artifactId>
-			<version>2.1.0</version>
+			<version>2.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-wkt</artifactId>
-			<version>1.1.0</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-proj</artifactId>
-			<version>4.2.0</version>
+			<version>4.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.oapi.features</groupId>
 			<artifactId>oapi-features-json</artifactId>
-			<version>2.1.0</version>
+			<version>2.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga</groupId>
@@ -99,7 +99,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.4.1</version>
 				<configuration>
 					<links>
 						<link>https://ngageoint.github.io/projections-java/docs/api/</link>
