@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.5.1 (TBD)
 
-* TBD
+* oapi-features-json version 2.3.0
 
 ## [6.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.5.0) (09-22-2022)
 
