@@ -4,7 +4,7 @@ package mil.nga.geopackage.dgiwg;
  * DGIWG (Defence Geospatial Information Working Group) Constants
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public class DGIWGConstants {
 

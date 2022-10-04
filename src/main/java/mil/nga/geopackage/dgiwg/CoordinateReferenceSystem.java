@@ -22,7 +22,7 @@ import mil.nga.sf.proj.GeometryTransform;
  * Systems
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public enum CoordinateReferenceSystem {
 

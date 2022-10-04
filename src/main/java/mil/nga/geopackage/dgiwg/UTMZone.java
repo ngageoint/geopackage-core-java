@@ -6,7 +6,7 @@ import mil.nga.geopackage.GeoPackageException;
  * UTM Zone utilities
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public class UTMZone {
 

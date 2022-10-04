@@ -7,7 +7,7 @@ import java.util.List;
  * DGIWG (Defence Geospatial Information Working Group) validation error
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public class DGIWGValidationError {
 

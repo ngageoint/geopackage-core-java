@@ -24,7 +24,7 @@ import mil.nga.proj.ProjectionConstants;
  * validations
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public class DGIWGValidate {
 

@@ -13,7 +13,7 @@ import mil.nga.geopackage.io.GeoPackageIOUtils;
  * DGIWG (Defence Geospatial Information Working Group) GeoPackage File Name
  * 
  * @author osbornb
- * @since 6.1.2
+ * @since 6.5.1
  */
 public class GeoPackageFileName {
 
