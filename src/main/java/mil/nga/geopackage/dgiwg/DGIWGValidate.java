@@ -12,6 +12,7 @@ import mil.nga.crs.wkt.CRSReader;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -51,6 +52,13 @@ public class DGIWGValidate {
 	public static DGIWGValidationErrors validate(GeoPackageCore geoPackage) {
 
 		DGIWGValidationErrors errors = new DGIWGValidationErrors();
+
+		CrsWktExtension crsWktExtension = new CrsWktExtension(geoPackage);
+		if (!crsWktExtension.has()) {
+			errors.add(new DGIWGValidationError(
+					SpatialReferenceSystem.TABLE_NAME,
+					CrsWktExtension.COLUMN_NAME, "No CRS WKT extension"));
+		}
 
 		for (String tileTable : geoPackage.getTileTables()) {
 			errors.add(validateTileTable(geoPackage, tileTable));
