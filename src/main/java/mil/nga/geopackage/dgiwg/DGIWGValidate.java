@@ -12,6 +12,8 @@ import mil.nga.crs.wkt.CRSReader;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.extension.ExtensionManager;
+import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
@@ -450,6 +452,14 @@ public class DGIWGValidate {
 						GeometryColumns.COLUMN_Z, z,
 						"Geometry Columns z values of prohibited (0) or mandatory (1)",
 						primaryKeys(geometryColumns)));
+			}
+
+			RTreeIndexCoreExtension rTreeIndexExtension = ExtensionManager
+					.getRTreeIndexExtension(geoPackage);
+			if (!rTreeIndexExtension.has(featureTable)) {
+				errors.add(new DGIWGValidationError(featureTable,
+						geometryColumns.getColumnName(),
+						"No RTree extension for feature table"));
 			}
 
 		} else {

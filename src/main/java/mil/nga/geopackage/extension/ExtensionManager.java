@@ -267,6 +267,19 @@ public class ExtensionManager extends ExtensionManagement {
 	 * @return RTree index extension
 	 */
 	private RTreeIndexCoreExtension getRTreeIndexExtension() {
+		return getRTreeIndexExtension(geoPackage);
+	}
+
+	/**
+	 * Get a RTree Index Extension used only for checking if exists and
+	 * deletions
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return RTree index extension
+	 */
+	public static RTreeIndexCoreExtension getRTreeIndexExtension(
+			GeoPackageCore geoPackage) {
 		return new RTreeIndexCoreExtension(geoPackage) {
 			@Override
 			public void createMinYFunction() {
