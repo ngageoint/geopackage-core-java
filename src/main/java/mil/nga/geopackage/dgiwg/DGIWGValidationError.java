@@ -162,7 +162,8 @@ public class DGIWGValidationError {
 	public DGIWGValidationError(String table, String column, String value,
 			String constraint, DGIWGValidationKey... primaryKeys) {
 		this(table, column, value, constraint);
-		if (primaryKeys.length > 0) {
+		if (primaryKeys != null && primaryKeys.length > 0
+				&& primaryKeys[0] != null) {
 			this.primaryKeys = Arrays.asList(primaryKeys);
 		}
 	}

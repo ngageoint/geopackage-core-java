@@ -253,6 +253,20 @@ public class DGIWGValidate {
 
 		}
 
+		String description = srs.getDescription();
+		if (description == null || description.isBlank()
+				|| description
+						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_UNKNOWN)
+				|| description
+						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_TBD)) {
+			errors.add(
+					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DESCRIPTION,
+							srs.getDescription(),
+							"Invalid empty or unspecified description",
+							primaryKey(srs)));
+		}
+
 		return crs;
 	}
 
@@ -304,12 +318,25 @@ public class DGIWGValidate {
 		if (tileMatrices == null || tileMatrices.isEmpty()) {
 			errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
 					TileMatrix.COLUMN_TABLE_NAME, tileTable,
-					"No Tile Matrices for tile table"));
+					"No Tile Matrices for tile table",
+					primaryKey(tileMatrixSet)));
 		} else {
 
 			TileMatrix previousTileMatrix = null;
 
 			for (TileMatrix tileMatrix : tileMatrices) {
+
+				long zoomLevel = tileMatrix.getZoomLevel();
+				if (zoomLevel < DGIWGConstants.MIN_ZOOM_LEVEL
+						|| zoomLevel > DGIWGConstants.MAX_ZOOM_LEVEL) {
+					errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
+							TileMatrix.COLUMN_ZOOM_LEVEL,
+							tileMatrix.getZoomLevel(),
+							DGIWGConstants.MIN_ZOOM_LEVEL + " <= "
+									+ TileMatrix.COLUMN_ZOOM_LEVEL + " <= "
+									+ DGIWGConstants.MAX_ZOOM_LEVEL,
+							primaryKeys(tileMatrix)));
+				}
 
 				if (tileMatrix.getTileWidth() != DGIWGConstants.TILE_WIDTH) {
 					errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
@@ -389,8 +416,42 @@ public class DGIWGValidate {
 		}
 
 		if (geometryColumns != null) {
+			SpatialReferenceSystem srs = geometryColumns.getSrs();
 			errors.add(validateFeatureCoordinateReferenceSystem(featureTable,
-					geometryColumns.getSrs()));
+					srs));
+
+			int z = geometryColumns.getZ();
+			CoordinateReferenceSystem crs = CoordinateReferenceSystem
+					.getCoordinateReferenceSystem(srs);
+			if (crs != null && (z == 0 || z == 1)) {
+
+				if (z == 0) {
+					if (!crs.isDataType(DataType.FEATURES_2D)) {
+						errors.add(new DGIWGValidationError(
+								GeometryColumns.TABLE_NAME,
+								GeometryColumns.COLUMN_Z, z,
+								"Geometry Columns z value of prohibited (0) is for 2-D CRS. CRS "
+										+ crs.getAuthorityAndCode() + " Types: "
+										+ crs.getDataTypes(),
+								primaryKeys(geometryColumns)));
+					}
+				} else if (!crs.isDataType(DataType.FEATURES_3D)) {
+					errors.add(new DGIWGValidationError(
+							GeometryColumns.TABLE_NAME,
+							GeometryColumns.COLUMN_Z, z,
+							"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
+									+ crs.getAuthorityAndCode() + " Types: "
+									+ crs.getDataTypes(),
+							primaryKeys(geometryColumns)));
+				}
+
+			} else {
+				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
+						GeometryColumns.COLUMN_Z, z,
+						"Geometry Columns z values of prohibited (0) or mandatory (1)",
+						primaryKeys(geometryColumns)));
+			}
+
 		} else {
 			errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 					GeometryColumns.COLUMN_TABLE_NAME, featureTable,
@@ -408,8 +469,12 @@ public class DGIWGValidate {
 	 * @return primary key
 	 */
 	private static DGIWGValidationKey primaryKey(SpatialReferenceSystem srs) {
-		return new DGIWGValidationKey(SpatialReferenceSystem.COLUMN_ID,
-				srs.getId());
+		DGIWGValidationKey key = null;
+		if (srs != null) {
+			key = new DGIWGValidationKey(SpatialReferenceSystem.COLUMN_ID,
+					srs.getId());
+		}
+		return key;
 	}
 
 	/**
@@ -420,8 +485,12 @@ public class DGIWGValidate {
 	 * @return primary key
 	 */
 	private static DGIWGValidationKey primaryKey(TileMatrixSet tileMatrixSet) {
-		return new DGIWGValidationKey(TileMatrixSet.COLUMN_ID,
-				tileMatrixSet.getId());
+		DGIWGValidationKey key = null;
+		if (tileMatrixSet != null) {
+			key = new DGIWGValidationKey(TileMatrixSet.COLUMN_ID,
+					tileMatrixSet.getId());
+		}
+		return key;
 	}
 
 	/**
@@ -432,11 +501,15 @@ public class DGIWGValidate {
 	 * @return primary keys
 	 */
 	private static DGIWGValidationKey[] primaryKeys(TileMatrix tileMatrix) {
-		return new DGIWGValidationKey[] {
-				new DGIWGValidationKey(TileMatrix.COLUMN_ID_1,
-						tileMatrix.getId().getTableName()),
-				new DGIWGValidationKey(TileMatrix.COLUMN_ID_2,
-						tileMatrix.getId().getZoomLevel()) };
+		DGIWGValidationKey[] keys = null;
+		if (tileMatrix != null) {
+			keys = new DGIWGValidationKey[] {
+					new DGIWGValidationKey(TileMatrix.COLUMN_ID_1,
+							tileMatrix.getId().getTableName()),
+					new DGIWGValidationKey(TileMatrix.COLUMN_ID_2,
+							tileMatrix.getId().getZoomLevel()) };
+		}
+		return keys;
 	}
 
 	/**
@@ -448,11 +521,15 @@ public class DGIWGValidate {
 	 */
 	private static DGIWGValidationKey[] primaryKeys(
 			GeometryColumns geometryColumns) {
-		return new DGIWGValidationKey[] {
-				new DGIWGValidationKey(GeometryColumns.COLUMN_ID_1,
-						geometryColumns.getId().getTableName()),
-				new DGIWGValidationKey(GeometryColumns.COLUMN_ID_2,
-						geometryColumns.getId().getColumnName()) };
+		DGIWGValidationKey[] keys = null;
+		if (geometryColumns != null) {
+			keys = new DGIWGValidationKey[] {
+					new DGIWGValidationKey(GeometryColumns.COLUMN_ID_1,
+							geometryColumns.getId().getTableName()),
+					new DGIWGValidationKey(GeometryColumns.COLUMN_ID_2,
+							geometryColumns.getId().getColumnName()) };
+		}
+		return keys;
 	}
 
 }

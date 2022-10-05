@@ -11,11 +11,18 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.features.columns.GeometryColumns;
+import mil.nga.geopackage.features.user.FeatureColumn;
+import mil.nga.geopackage.features.user.FeatureTable;
+import mil.nga.geopackage.features.user.FeatureTableMetadata;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.user.TileTable;
+import mil.nga.geopackage.user.UserTable;
+import mil.nga.geopackage.user.UserTableMetadata;
+import mil.nga.sf.GeometryType;
 
 /**
  * DGIWG (Defence Geospatial Information Working Group) GeoPackage utilities
@@ -55,7 +62,7 @@ public class DGIWGGeoPackageUtils {
 		SpatialReferenceSystemDao srsDao = geoPackage
 				.getSpatialReferenceSystemDao();
 		try {
-			srs = srsDao.createIfNotExists(srs);
+			srsDao.createOrUpdate(srs);
 		} catch (SQLException e) {
 			throw new GeoPackageException(
 					"Failed to create Spatial Reference System: "
@@ -253,6 +260,95 @@ public class DGIWGGeoPackageUtils {
 					+ tileMatrix.getTableName(), e);
 		}
 
+	}
+
+	/**
+	 * Create features table
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table name
+	 * @param identifier
+	 *            contents identifier
+	 * @param description
+	 *            contents description
+	 * @param bounds
+	 *            contents bounds
+	 * @param geometryType
+	 *            geometry type
+	 * @param dataType
+	 *            data type
+	 * @param columns
+	 *            feature columns
+	 * @param srs
+	 *            spatial reference system
+	 * @return created tile matrix set
+	 */
+	public static GeometryColumns createFeatures(GeoPackageCore geoPackage,
+			String table, String identifier, String description,
+			BoundingBox bounds, GeometryType geometryType, DataType dataType,
+			List<FeatureColumn> columns, SpatialReferenceSystem srs) {
+
+		geoPackage.createGeometryColumnsTable();
+
+		SpatialReferenceSystemDao srsDao = geoPackage
+				.getSpatialReferenceSystemDao();
+		try {
+			srsDao.createOrUpdate(srs);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to create Spatial Reference System: "
+							+ srs.getSrsName(),
+					e);
+		}
+
+		Contents contents = new Contents();
+		contents.setTableName(table);
+		contents.setDataType(ContentsDataType.FEATURES);
+		contents.setIdentifier(identifier);
+		contents.setDescription(description);
+		contents.setMinX(bounds.getMinLongitude());
+		contents.setMinY(bounds.getMinLatitude());
+		contents.setMaxX(bounds.getMaxLongitude());
+		contents.setMaxY(bounds.getMaxLatitude());
+		contents.setSrs(srs);
+
+		if (columns == null) {
+			columns = new ArrayList<>();
+			columns.add(FeatureColumn.createPrimaryKeyColumn(
+					UserTableMetadata.DEFAULT_ID_COLUMN_NAME,
+					UserTable.DEFAULT_AUTOINCREMENT));
+			columns.add(FeatureColumn.createGeometryColumn(
+					FeatureTableMetadata.DEFAULT_COLUMN_NAME, geometryType));
+		}
+
+		FeatureTable featureTable = new FeatureTable(table, columns);
+		geoPackage.createFeatureTable(featureTable);
+
+		try {
+			geoPackage.getContentsDao().create(contents);
+		} catch (SQLException e) {
+			throw new GeoPackageException(
+					"Failed to create Contents: " + contents.getTableName(), e);
+		}
+
+		GeometryColumns geometryColumns = new GeometryColumns();
+		geometryColumns.setContents(contents);
+		geometryColumns.setColumnName(featureTable.getGeometryColumnName());
+		geometryColumns.setGeometryType(geometryType);
+		geometryColumns.setSrs(srs);
+		geometryColumns.setZ(dataType.getZ());
+		geometryColumns.setM((byte) 0);
+
+		try {
+			geoPackage.getGeometryColumnsDao().create(geometryColumns);
+		} catch (SQLException e) {
+			throw new GeoPackageException("Failed to create Geometry Columns: "
+					+ geometryColumns.getTableName(), e);
+		}
+
+		return geometryColumns;
 	}
 
 }

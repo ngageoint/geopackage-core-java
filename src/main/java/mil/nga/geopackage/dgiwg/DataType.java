@@ -107,4 +107,13 @@ public enum DataType {
 		return dimension == 3;
 	}
 
+	/**
+	 * Get a geometry columns z value, 0 for prohibited and 1 for mandatory
+	 * 
+	 * @return z value
+	 */
+	public byte getZ() {
+		return (byte) (dimension - 2);
+	}
+
 }

@@ -11,6 +11,8 @@ import java.util.Set;
 import mil.nga.crs.CRSType;
 import mil.nga.crs.geo.GeoDatums;
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
@@ -749,6 +751,11 @@ public enum CoordinateReferenceSystem {
 	private final Set<DataType> dataTypes;
 
 	/**
+	 * Contents Data Types
+	 */
+	private final Map<ContentsDataType, Set<DataType>> contentsDataTypes;
+
+	/**
 	 * Constructor
 	 * 
 	 * @param epsgCode
@@ -861,6 +868,17 @@ public enum CoordinateReferenceSystem {
 		this.description = description;
 		this.bounds = bounds;
 		this.dataTypes = new HashSet<>(Arrays.asList(dataTypes));
+		this.contentsDataTypes = new HashMap<>();
+		for (DataType dataType : dataTypes) {
+			ContentsDataType contentsDataType = dataType.getDataType();
+			Set<DataType> dataTypesSet = this.contentsDataTypes
+					.get(contentsDataType);
+			if (dataTypesSet == null) {
+				dataTypesSet = new HashSet<>();
+				this.contentsDataTypes.put(contentsDataType, dataTypesSet);
+			}
+			dataTypesSet.add(dataType);
+		}
 		initialize(this);
 	}
 
@@ -921,6 +939,8 @@ public enum CoordinateReferenceSystem {
 				maxLatitude);
 		this.dataTypes = new HashSet<>();
 		this.dataTypes.add(DataType.TILES_2D);
+		this.contentsDataTypes = new HashMap<>();
+		this.contentsDataTypes.put(ContentsDataType.TILES, this.dataTypes);
 		initialize(this);
 	}
 
@@ -1037,6 +1057,64 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get the contents data types
+	 * 
+	 * @return contents data types
+	 */
+	public Map<ContentsDataType, Set<DataType>> getContentsDataTypes() {
+		return contentsDataTypes;
+	}
+
+	/**
+	 * Get the tiles data types
+	 * 
+	 * @return tiles data types
+	 */
+	public Set<DataType> getTilesDataTypes() {
+		return getDataTypes(ContentsDataType.TILES);
+	}
+
+	/**
+	 * Has tiles data types
+	 * 
+	 * @return true if has tiles data types
+	 */
+	public boolean hasTilesDataTypes() {
+		Set<DataType> tiles = getTilesDataTypes();
+		return tiles != null && !tiles.isEmpty();
+	}
+
+	/**
+	 * Get the features data types
+	 * 
+	 * @return features data types
+	 */
+	public Set<DataType> getFeaturesDataTypes() {
+		return getDataTypes(ContentsDataType.FEATURES);
+	}
+
+	/**
+	 * Has features data types
+	 * 
+	 * @return true if has features data types
+	 */
+	public boolean hasFeaturesDataTypes() {
+		Set<DataType> features = getFeaturesDataTypes();
+		return features != null && !features.isEmpty();
+	}
+
+	/**
+	 * Get the data types for the contents data type
+	 * 
+	 * @param contentsDataType
+	 *            contents data type
+	 * @return data types
+	 */
+	public Set<DataType> getDataTypes(ContentsDataType contentsDataType) {
+		return contentsDataTypes.get(contentsDataType);
+	}
+
+	/**
 	 * Create a Spatial Reference System
 	 * 
 	 * @return Spatial Reference System
@@ -1056,6 +1134,32 @@ public enum CoordinateReferenceSystem {
 		}
 
 		return srs;
+	}
+
+	/**
+	 * Validate the CRS for tiles and get the SRS
+	 * 
+	 * @return srs
+	 */
+	public SpatialReferenceSystem createTilesSpatialReferenceSystem() {
+		if (!hasTilesDataTypes()) {
+			throw new GeoPackageException(
+					"CRS is not valid for tiles: " + getAuthorityAndCode());
+		}
+		return createSpatialReferenceSystem();
+	}
+
+	/**
+	 * Validate the CRS for features and get the SRS
+	 * 
+	 * @return srs
+	 */
+	public SpatialReferenceSystem createFeaturesSpatialReferenceSystem() {
+		if (!hasFeaturesDataTypes()) {
+			throw new GeoPackageException(
+					"CRS is not valid for features: " + getAuthorityAndCode());
+		}
+		return createSpatialReferenceSystem();
 	}
 
 	/**
