@@ -390,6 +390,23 @@ public class DGIWGValidate {
 										primaryKeys(tileMatrix)));
 					}
 
+					if (zoomChange > 1) {
+						StringBuilder zoomMissing = new StringBuilder();
+						zoomMissing
+								.append(previousTileMatrix.getZoomLevel() + 1);
+						if (zoomChange > 2) {
+							zoomMissing.append(" - ");
+							zoomMissing.append(tileMatrix.getZoomLevel() - 1);
+						}
+						errors.add(
+								new DGIWGValidationError(TileMatrix.TABLE_NAME,
+										TileMatrix.COLUMN_ZOOM_LEVEL,
+										tileMatrix.getZoomLevel(),
+										"Missing adjacent zoom level(s): "
+												+ zoomMissing,
+										primaryKeys(tileMatrix)));
+					}
+
 				}
 
 				previousTileMatrix = tileMatrix;
