@@ -575,7 +575,7 @@ public class DGIWGValidate {
 				errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
 						Extensions.COLUMN_EXTENSION_NAME,
 						RTreeIndexCoreExtension.EXTENSION_NAME,
-						"No RTree extension for feature table",
+						"No mandatory RTree extension for feature table",
 						extensionPrimaryKeys(featureTable, geomColumn,
 								RTreeIndexCoreExtension.EXTENSION_NAME)));
 			}
@@ -677,17 +677,6 @@ public class DGIWGValidate {
 							geometryColumns.getId().getColumnName()) };
 		}
 		return keys;
-	}
-
-	/**
-	 * Get the Extension primary keys
-	 * 
-	 * @param extension
-	 *            extension name
-	 * @return primary keys
-	 */
-	private static DGIWGValidationKey[] extensionPrimaryKeys(String extension) {
-		return extensionPrimaryKeys(null, extension);
 	}
 
 	/**
