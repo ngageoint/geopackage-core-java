@@ -9,6 +9,7 @@ import mil.nga.crs.CRSType;
 import mil.nga.crs.operation.OperationMethods;
 import mil.nga.crs.projected.ProjectedCoordinateReferenceSystem;
 import mil.nga.crs.wkt.CRSReader;
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
@@ -306,8 +307,59 @@ public class DGIWGValidate {
 		}
 
 		if (tileMatrixSet != null) {
-			errors.add(validateTileCoordinateReferenceSystem(tileTable,
-					tileMatrixSet.getSrs()));
+			SpatialReferenceSystem srs = tileMatrixSet.getSrs();
+			errors.add(validateTileCoordinateReferenceSystem(tileTable, srs));
+
+			CoordinateReferenceSystem crs = CoordinateReferenceSystem
+					.getCoordinateReferenceSystem(srs);
+			if (crs != null) {
+
+				BoundingBox boundingBox = crs.getBounds(srs);
+				if (!boundingBox.contains(tileMatrixSet.getBoundingBox())) {
+
+					String crsBounds = "CRS " + crs.getAuthorityAndCode()
+							+ " Bounds: " + boundingBox;
+
+					if (tileMatrixSet.getMinX() < boundingBox
+							.getMinLongitude()) {
+						errors.add(new DGIWGValidationError(
+								TileMatrixSet.TABLE_NAME,
+								TileMatrixSet.COLUMN_MIN_X,
+								tileMatrixSet.getMinX(), crsBounds,
+								primaryKey(tileMatrixSet)));
+					}
+
+					if (tileMatrixSet.getMinY() < boundingBox
+							.getMinLatitude()) {
+						errors.add(new DGIWGValidationError(
+								TileMatrixSet.TABLE_NAME,
+								TileMatrixSet.COLUMN_MIN_Y,
+								tileMatrixSet.getMinY(), crsBounds,
+								primaryKey(tileMatrixSet)));
+					}
+
+					if (tileMatrixSet.getMaxX() > boundingBox
+							.getMaxLongitude()) {
+						errors.add(new DGIWGValidationError(
+								TileMatrixSet.TABLE_NAME,
+								TileMatrixSet.COLUMN_MAX_X,
+								tileMatrixSet.getMaxX(), crsBounds,
+								primaryKey(tileMatrixSet)));
+					}
+
+					if (tileMatrixSet.getMaxY() > boundingBox
+							.getMaxLatitude()) {
+						errors.add(new DGIWGValidationError(
+								TileMatrixSet.TABLE_NAME,
+								TileMatrixSet.COLUMN_MAX_Y,
+								tileMatrixSet.getMaxY(), crsBounds,
+								primaryKey(tileMatrixSet)));
+					}
+
+				}
+
+			}
+
 		} else {
 			errors.add(new DGIWGValidationError(TileMatrixSet.TABLE_NAME,
 					TileMatrixSet.COLUMN_TABLE_NAME, tileTable,
