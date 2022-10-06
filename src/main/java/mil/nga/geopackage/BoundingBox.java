@@ -765,6 +765,15 @@ public class BoundingBox {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String toString() {
+		return minLongitude + "," + minLatitude + "," + maxLongitude + ","
+				+ maxLatitude;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
