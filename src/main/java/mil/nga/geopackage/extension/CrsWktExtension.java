@@ -75,8 +75,9 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public Extensions getOrCreate() {
 
-		Extensions extension = getOrCreate(EXTENSION_NAME, null, null,
-				DEFINITION, ExtensionScopeType.READ_WRITE);
+		Extensions extension = getOrCreate(EXTENSION_NAME,
+				SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME, DEFINITION,
+				ExtensionScopeType.READ_WRITE);
 
 		if (!hasColumn()) {
 			createColumn();
@@ -92,7 +93,7 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public boolean has() {
 
-		boolean exists = has(EXTENSION_NAME, null, null);
+		boolean exists = has(EXTENSION_NAME);
 
 		if (exists) {
 			exists = hasColumn();
