@@ -15,6 +15,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
+import mil.nga.geopackage.extension.GeometryExtensions;
 import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
@@ -22,6 +23,8 @@ import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
+import mil.nga.sf.GeometryType;
+import mil.nga.sf.wkb.GeometryCodes;
 
 /**
  * Performs DGIWG (Defence Geospatial Information Working Group) GeoPackage
@@ -499,6 +502,8 @@ public class DGIWGValidate {
 			errors.add(validateFeatureCoordinateReferenceSystem(featureTable,
 					srs));
 
+			String geomColumn = geometryColumns.getColumnName();
+
 			int z = geometryColumns.getZ();
 			CoordinateReferenceSystem crs = CoordinateReferenceSystem
 					.getCoordinateReferenceSystem(srs);
@@ -534,9 +539,24 @@ public class DGIWGValidate {
 			RTreeIndexCoreExtension rTreeIndexExtension = ExtensionManager
 					.getRTreeIndexExtension(geoPackage);
 			if (!rTreeIndexExtension.has(featureTable)) {
-				errors.add(new DGIWGValidationError(featureTable,
-						geometryColumns.getColumnName(),
-						"No RTree extension for feature table"));
+				errors.add(new DGIWGValidationError(featureTable, geomColumn,
+						"No RTree extension for feature table",
+						primaryKeys(geometryColumns)));
+			}
+
+			GeometryExtensions geometryExtensions = new GeometryExtensions(
+					geoPackage);
+			for (int i = GeometryCodes
+					.getCode(GeometryType.CIRCULARSTRING); i <= GeometryCodes
+							.getCode(GeometryType.SURFACE); i++) {
+				GeometryType geometryType = GeometryCodes.getGeometryType(i);
+				if (geometryExtensions.has(featureTable, geomColumn,
+						geometryType)) {
+					errors.add(new DGIWGValidationError(featureTable,
+							geomColumn, geometryType.getName(),
+							"Nonlinear geometry type",
+							primaryKeys(geometryColumns)));
+				}
 			}
 
 		} else {
