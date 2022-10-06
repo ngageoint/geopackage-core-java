@@ -18,6 +18,7 @@ import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.GeometryExtensions;
+import mil.nga.geopackage.extension.WebPExtension;
 import mil.nga.geopackage.extension.ZoomOtherExtension;
 import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
@@ -371,17 +372,6 @@ public class DGIWGValidate {
 
 			}
 
-			ZoomOtherExtension zoomOtherExtension = new ZoomOtherExtension(
-					geoPackage);
-			if (zoomOtherExtension.has(tileTable)) {
-				errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
-						Extensions.COLUMN_EXTENSION_NAME,
-						ZoomOtherExtension.EXTENSION_NAME,
-						"Zoom other intervals not allowed",
-						extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
-								ZoomOtherExtension.EXTENSION_NAME)));
-			}
-
 		} else {
 			errors.add(new DGIWGValidationError(TileMatrixSet.TABLE_NAME,
 					TileMatrixSet.COLUMN_TABLE_NAME, tileTable,
@@ -486,6 +476,26 @@ public class DGIWGValidate {
 				previousTileMatrix = tileMatrix;
 			}
 
+		}
+
+		ZoomOtherExtension zoomOtherExtension = new ZoomOtherExtension(
+				geoPackage);
+		if (zoomOtherExtension.has(tileTable)) {
+			errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+					Extensions.COLUMN_EXTENSION_NAME,
+					ZoomOtherExtension.EXTENSION_NAME,
+					"Zoom other intervals not allowed",
+					extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
+							ZoomOtherExtension.EXTENSION_NAME)));
+		}
+
+		WebPExtension webPExtension = new WebPExtension(geoPackage);
+		if (webPExtension.has(tileTable)) {
+			errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+					Extensions.COLUMN_EXTENSION_NAME,
+					WebPExtension.EXTENSION_NAME, "WebP encoding not allowed",
+					extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
+							WebPExtension.EXTENSION_NAME)));
 		}
 
 		return errors;
