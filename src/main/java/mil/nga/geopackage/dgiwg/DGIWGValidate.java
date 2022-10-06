@@ -2,6 +2,7 @@ package mil.nga.geopackage.dgiwg;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.crs.CRS;
@@ -15,12 +16,15 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
+import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.GeometryExtensions;
+import mil.nga.geopackage.extension.ZoomOtherExtension;
 import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
+import mil.nga.geopackage.tiles.user.TileColumns;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
 import mil.nga.sf.GeometryType;
@@ -59,9 +63,13 @@ public class DGIWGValidate {
 
 		CrsWktExtension crsWktExtension = new CrsWktExtension(geoPackage);
 		if (!crsWktExtension.has()) {
-			errors.add(new DGIWGValidationError(
-					SpatialReferenceSystem.TABLE_NAME,
-					CrsWktExtension.COLUMN_NAME, "No CRS WKT extension"));
+			errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+					Extensions.COLUMN_EXTENSION_NAME,
+					CrsWktExtension.EXTENSION_NAME,
+					"No mandatory CRS WKT extension",
+					extensionPrimaryKeys(SpatialReferenceSystem.TABLE_NAME,
+							CrsWktExtension.COLUMN_NAME,
+							CrsWktExtension.EXTENSION_NAME)));
 		}
 
 		for (String tileTable : geoPackage.getTileTables()) {
@@ -363,6 +371,17 @@ public class DGIWGValidate {
 
 			}
 
+			ZoomOtherExtension zoomOtherExtension = new ZoomOtherExtension(
+					geoPackage);
+			if (zoomOtherExtension.has(tileTable)) {
+				errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+						Extensions.COLUMN_EXTENSION_NAME,
+						ZoomOtherExtension.EXTENSION_NAME,
+						"Zoom other intervals not allowed",
+						extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
+								ZoomOtherExtension.EXTENSION_NAME)));
+			}
+
 		} else {
 			errors.add(new DGIWGValidationError(TileMatrixSet.TABLE_NAME,
 					TileMatrixSet.COLUMN_TABLE_NAME, tileTable,
@@ -505,9 +524,16 @@ public class DGIWGValidate {
 			String geomColumn = geometryColumns.getColumnName();
 
 			int z = geometryColumns.getZ();
+			if (z != 0 && z != 1) {
+				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
+						GeometryColumns.COLUMN_Z, z,
+						"Geometry Columns z values of prohibited (0) or mandatory (1)",
+						primaryKeys(geometryColumns)));
+			}
+
 			CoordinateReferenceSystem crs = CoordinateReferenceSystem
 					.getCoordinateReferenceSystem(srs);
-			if (crs != null && (z == 0 || z == 1)) {
+			if (crs != null) {
 
 				if (z == 0) {
 					if (!crs.isDataType(DataType.FEATURES_2D)) {
@@ -519,29 +545,29 @@ public class DGIWGValidate {
 										+ crs.getDataTypes(),
 								primaryKeys(geometryColumns)));
 					}
-				} else if (!crs.isDataType(DataType.FEATURES_3D)) {
-					errors.add(new DGIWGValidationError(
-							GeometryColumns.TABLE_NAME,
-							GeometryColumns.COLUMN_Z, z,
-							"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
-									+ crs.getAuthorityAndCode() + " Types: "
-									+ crs.getDataTypes(),
-							primaryKeys(geometryColumns)));
+				} else if (z == 1) {
+					if (!crs.isDataType(DataType.FEATURES_3D)) {
+						errors.add(new DGIWGValidationError(
+								GeometryColumns.TABLE_NAME,
+								GeometryColumns.COLUMN_Z, z,
+								"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
+										+ crs.getAuthorityAndCode() + " Types: "
+										+ crs.getDataTypes(),
+								primaryKeys(geometryColumns)));
+					}
 				}
 
-			} else {
-				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
-						GeometryColumns.COLUMN_Z, z,
-						"Geometry Columns z values of prohibited (0) or mandatory (1)",
-						primaryKeys(geometryColumns)));
 			}
 
 			RTreeIndexCoreExtension rTreeIndexExtension = ExtensionManager
 					.getRTreeIndexExtension(geoPackage);
 			if (!rTreeIndexExtension.has(featureTable)) {
-				errors.add(new DGIWGValidationError(featureTable, geomColumn,
+				errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+						Extensions.COLUMN_EXTENSION_NAME,
+						RTreeIndexCoreExtension.EXTENSION_NAME,
 						"No RTree extension for feature table",
-						primaryKeys(geometryColumns)));
+						extensionPrimaryKeys(featureTable, geomColumn,
+								RTreeIndexCoreExtension.EXTENSION_NAME)));
 			}
 
 			GeometryExtensions geometryExtensions = new GeometryExtensions(
@@ -552,10 +578,14 @@ public class DGIWGValidate {
 				GeometryType geometryType = GeometryCodes.getGeometryType(i);
 				if (geometryExtensions.has(featureTable, geomColumn,
 						geometryType)) {
-					errors.add(new DGIWGValidationError(featureTable,
-							geomColumn, geometryType.getName(),
-							"Nonlinear geometry type",
-							primaryKeys(geometryColumns)));
+					String geometryExtensionName = GeometryExtensions
+							.getExtensionName(geometryType);
+					errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+							Extensions.COLUMN_EXTENSION_NAME,
+							geometryExtensionName,
+							"Nonlinear geometry type not allowed",
+							extensionPrimaryKeys(featureTable, geomColumn,
+									geometryExtensionName)));
 				}
 			}
 
@@ -637,6 +667,63 @@ public class DGIWGValidate {
 							geometryColumns.getId().getColumnName()) };
 		}
 		return keys;
+	}
+
+	/**
+	 * Get the Extension primary keys
+	 * 
+	 * @param extension
+	 *            extension name
+	 * @return primary keys
+	 */
+	private static DGIWGValidationKey[] extensionPrimaryKeys(String extension) {
+		return extensionPrimaryKeys(null, extension);
+	}
+
+	/**
+	 * Get the Extension primary keys
+	 * 
+	 * @param table
+	 *            table name
+	 * @param extension
+	 *            extension name
+	 * @return primary keys
+	 */
+	private static DGIWGValidationKey[] extensionPrimaryKeys(String table,
+			String extension) {
+		return extensionPrimaryKeys(table, null, extension);
+	}
+
+	/**
+	 * Get the Extension primary keys
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @param extension
+	 *            extension name
+	 * @return primary keys
+	 */
+	private static DGIWGValidationKey[] extensionPrimaryKeys(String table,
+			String column, String extension) {
+
+		List<DGIWGValidationKey> keys = new ArrayList<>();
+
+		if (table != null) {
+			keys.add(new DGIWGValidationKey(Extensions.COLUMN_TABLE_NAME,
+					table));
+		}
+
+		if (column != null) {
+			keys.add(new DGIWGValidationKey(Extensions.COLUMN_COLUMN_NAME,
+					column));
+		}
+
+		keys.add(new DGIWGValidationKey(Extensions.COLUMN_EXTENSION_NAME,
+				extension));
+
+		return keys.toArray(new DGIWGValidationKey[] {});
 	}
 
 }
