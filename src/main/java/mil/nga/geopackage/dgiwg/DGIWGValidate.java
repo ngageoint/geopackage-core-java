@@ -68,6 +68,7 @@ public class DGIWGValidate {
 					Extensions.COLUMN_EXTENSION_NAME,
 					CrsWktExtension.EXTENSION_NAME,
 					"No mandatory CRS WKT extension",
+					DGIWGRequirement.EXTENSIONS_MANDATORY,
 					extensionPrimaryKeys(SpatialReferenceSystem.TABLE_NAME,
 							CrsWktExtension.COLUMN_NAME,
 							CrsWktExtension.EXTENSION_NAME)));
@@ -118,6 +119,7 @@ public class DGIWGValidate {
 								definition,
 								"Failed to read tiles coordinate reference system definition: "
 										+ e.getMessage(),
+								DGIWGRequirement.CRS_RASTER_ALLOWED,
 								primaryKey(srs)));
 					}
 				}
@@ -147,6 +149,7 @@ public class DGIWGValidate {
 							SpatialReferenceSystem.COLUMN_DEFINITION,
 							definition,
 							"Unsupported tiles coordinate reference system",
+							DGIWGRequirement.CRS_RASTER_ALLOWED,
 							primaryKey(srs)));
 				}
 
@@ -155,7 +158,7 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_DEFINITION, definition,
 						"Failed to read tiles coordinate reference system definition",
-						primaryKey(srs)));
+						DGIWGRequirement.CRS_RASTER_ALLOWED, primaryKey(srs)));
 			}
 
 		}
@@ -186,7 +189,7 @@ public class DGIWGValidate {
 							SpatialReferenceSystem.COLUMN_DEFINITION,
 							srs.getProjectionDefinition(),
 							"Unsupported features coordinate reference system",
-							primaryKey(srs)));
+							DGIWGRequirement.CRS_2D_VECTOR, primaryKey(srs)));
 		}
 
 		return errors;
@@ -230,21 +233,23 @@ public class DGIWGValidate {
 						srs.getProjectionDefinition(),
 						"Unsupported " + type.getName()
 								+ " coordinate reference system",
-						primaryKey(srs)));
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
 			}
 
 			if (!srs.getSrsName().equalsIgnoreCase(crs.getName())) {
 				errors.add(new DGIWGValidationError(
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_SRS_NAME,
-						srs.getSrsName(), crs.getName(), primaryKey(srs)));
+						srs.getSrsName(), crs.getName(),
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
 			}
 
 			if (srs.getSrsId() != crs.getCode()) {
 				errors.add(new DGIWGValidationError(
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_SRS_ID, srs.getSrsId(),
-						crs.getCode(), primaryKey(srs)));
+						crs.getCode(), DGIWGRequirement.CRS_WKT,
+						primaryKey(srs)));
 			}
 
 			if (!srs.getOrganization().equalsIgnoreCase(crs.getAuthority())) {
@@ -252,7 +257,7 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(), crs.getAuthority(),
-						primaryKey(srs)));
+						DGIWGRequirement.VALIDITY, primaryKey(srs)));
 			}
 
 			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
@@ -260,7 +265,7 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
 						srs.getOrganizationCoordsysId(), crs.getCode(),
-						primaryKey(srs)));
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
 			}
 
 		} else {
@@ -271,7 +276,8 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(),
-						ProjectionConstants.AUTHORITY_EPSG, primaryKey(srs)));
+						ProjectionConstants.AUTHORITY_EPSG,
+						DGIWGRequirement.VALIDITY, primaryKey(srs)));
 			}
 
 		}
@@ -287,7 +293,7 @@ public class DGIWGValidate {
 							SpatialReferenceSystem.COLUMN_DESCRIPTION,
 							srs.getDescription(),
 							"Invalid empty or unspecified description",
-							primaryKey(srs)));
+							DGIWGRequirement.VALIDITY, primaryKey(srs)));
 		}
 
 		return crs;
@@ -338,6 +344,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_X,
 								tileMatrixSet.getMinX(), crsBounds,
+								DGIWGRequirement.VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -347,6 +354,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_Y,
 								tileMatrixSet.getMinY(), crsBounds,
+								DGIWGRequirement.VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -356,6 +364,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_X,
 								tileMatrixSet.getMaxX(), crsBounds,
+								DGIWGRequirement.VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -365,6 +374,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_Y,
 								tileMatrixSet.getMaxY(), crsBounds,
+								DGIWGRequirement.VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -375,7 +385,8 @@ public class DGIWGValidate {
 		} else {
 			errors.add(new DGIWGValidationError(TileMatrixSet.TABLE_NAME,
 					TileMatrixSet.COLUMN_TABLE_NAME, tileTable,
-					"No Tile Matrix Set for tile table"));
+					"No Tile Matrix Set for tile table",
+					DGIWGRequirement.CRS_RASTER_TILE_MATRIX_SET));
 		}
 
 		List<TileMatrix> tileMatrices;
@@ -393,6 +404,7 @@ public class DGIWGValidate {
 			errors.add(new DGIWGValidationError(TileMatrix.TABLE_NAME,
 					TileMatrix.COLUMN_TABLE_NAME, tileTable,
 					"No Tile Matrices for tile table",
+					DGIWGRequirement.CRS_RASTER_TILE_MATRIX_SET,
 					primaryKey(tileMatrixSet)));
 		} else {
 
@@ -409,6 +421,7 @@ public class DGIWGValidate {
 							DGIWGConstants.MIN_ZOOM_LEVEL + " <= "
 									+ TileMatrix.COLUMN_ZOOM_LEVEL + " <= "
 									+ DGIWGConstants.MAX_ZOOM_LEVEL,
+							DGIWGRequirement.VALIDITY,
 							primaryKeys(tileMatrix)));
 				}
 
@@ -417,6 +430,7 @@ public class DGIWGValidate {
 							TileMatrix.COLUMN_TILE_WIDTH,
 							tileMatrix.getTileWidth(),
 							DGIWGConstants.TILE_WIDTH,
+							DGIWGRequirement.TILE_SIZE_MATRIX,
 							primaryKeys(tileMatrix)));
 				}
 
@@ -425,6 +439,7 @@ public class DGIWGValidate {
 							TileMatrix.COLUMN_TILE_HEIGHT,
 							tileMatrix.getTileHeight(),
 							DGIWGConstants.TILE_HEIGHT,
+							DGIWGRequirement.TILE_SIZE_MATRIX,
 							primaryKeys(tileMatrix)));
 				}
 
@@ -443,6 +458,7 @@ public class DGIWGValidate {
 								new DGIWGValidationError(TileMatrix.TABLE_NAME,
 										TileMatrix.COLUMN_PIXEL_X_SIZE,
 										tileMatrix.getPixelXSize(), pixelXSize,
+										DGIWGRequirement.ZOOM_FACTOR,
 										primaryKeys(tileMatrix)));
 					}
 
@@ -451,6 +467,7 @@ public class DGIWGValidate {
 								new DGIWGValidationError(TileMatrix.TABLE_NAME,
 										TileMatrix.COLUMN_PIXEL_Y_SIZE,
 										tileMatrix.getPixelYSize(), pixelYSize,
+										DGIWGRequirement.ZOOM_FACTOR,
 										primaryKeys(tileMatrix)));
 					}
 
@@ -462,13 +479,14 @@ public class DGIWGValidate {
 							zoomMissing.append(" - ");
 							zoomMissing.append(tileMatrix.getZoomLevel() - 1);
 						}
-						errors.add(
-								new DGIWGValidationError(TileMatrix.TABLE_NAME,
-										TileMatrix.COLUMN_ZOOM_LEVEL,
-										tileMatrix.getZoomLevel(),
-										"Missing adjacent zoom level(s): "
-												+ zoomMissing,
-										primaryKeys(tileMatrix)));
+						errors.add(new DGIWGValidationError(
+								TileMatrix.TABLE_NAME,
+								TileMatrix.COLUMN_ZOOM_LEVEL,
+								tileMatrix.getZoomLevel(),
+								"Missing adjacent zoom level(s): "
+										+ zoomMissing,
+								DGIWGRequirement.MATRIX_SETS_MULTIPLE_ZOOM,
+								primaryKeys(tileMatrix)));
 					}
 
 				}
@@ -485,6 +503,7 @@ public class DGIWGValidate {
 					Extensions.COLUMN_EXTENSION_NAME,
 					ZoomOtherExtension.EXTENSION_NAME,
 					"Zoom other intervals not allowed",
+					DGIWGRequirement.EXTENSIONS_NOT_ALLOWED,
 					extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
 							ZoomOtherExtension.EXTENSION_NAME)));
 		}
@@ -494,6 +513,7 @@ public class DGIWGValidate {
 			errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
 					Extensions.COLUMN_EXTENSION_NAME,
 					WebPExtension.EXTENSION_NAME, "WebP encoding not allowed",
+					DGIWGRequirement.EXTENSIONS_NOT_ALLOWED,
 					extensionPrimaryKeys(tileTable, TileColumns.TILE_DATA,
 							WebPExtension.EXTENSION_NAME)));
 		}
@@ -538,6 +558,7 @@ public class DGIWGValidate {
 				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 						GeometryColumns.COLUMN_Z, z,
 						"Geometry Columns z values of prohibited (0) or mandatory (1)",
+						DGIWGRequirement.VALIDITY,
 						primaryKeys(geometryColumns)));
 			}
 
@@ -553,6 +574,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of prohibited (0) is for 2-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
+								DGIWGRequirement.VALIDITY,
 								primaryKeys(geometryColumns)));
 					}
 				} else if (z == 1) {
@@ -563,6 +585,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
+								DGIWGRequirement.VALIDITY,
 								primaryKeys(geometryColumns)));
 					}
 				}
@@ -576,6 +599,7 @@ public class DGIWGValidate {
 						Extensions.COLUMN_EXTENSION_NAME,
 						RTreeIndexCoreExtension.EXTENSION_NAME,
 						"No mandatory RTree extension for feature table",
+						DGIWGRequirement.EXTENSIONS_MANDATORY,
 						extensionPrimaryKeys(featureTable, geomColumn,
 								RTreeIndexCoreExtension.EXTENSION_NAME)));
 			}
@@ -594,6 +618,7 @@ public class DGIWGValidate {
 							Extensions.COLUMN_EXTENSION_NAME,
 							geometryExtensionName,
 							"Nonlinear geometry type not allowed",
+							DGIWGRequirement.EXTENSIONS_NOT_ALLOWED,
 							extensionPrimaryKeys(featureTable, geomColumn,
 									geometryExtensionName)));
 				}
@@ -602,7 +627,8 @@ public class DGIWGValidate {
 		} else {
 			errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 					GeometryColumns.COLUMN_TABLE_NAME, featureTable,
-					"No Geometry Columns for feature table"));
+					"No Geometry Columns for feature table",
+					DGIWGRequirement.VALIDITY));
 		}
 
 		return errors;

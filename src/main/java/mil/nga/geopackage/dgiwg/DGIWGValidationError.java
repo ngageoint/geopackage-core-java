@@ -32,6 +32,11 @@ public class DGIWGValidationError {
 	private String constraint = null;
 
 	/**
+	 * Requirement
+	 */
+	private DGIWGRequirement requirement = null;
+
+	/**
 	 * Row primary keys
 	 */
 	private List<DGIWGValidationKey> primaryKeys = null;
@@ -47,10 +52,12 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 */
 	public DGIWGValidationError(String table, String column, String value,
-			String constraint) {
-		this(table, value, constraint);
+			String constraint, DGIWGRequirement requirement) {
+		this(table, value, constraint, requirement);
 		this.column = column;
 	}
 
@@ -65,11 +72,13 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 */
 	public DGIWGValidationError(String table, String column, Number value,
-			String constraint) {
-		this(table, column, value != null ? value.toString() : null,
-				constraint);
+			String constraint, DGIWGRequirement requirement) {
+		this(table, column, value != null ? value.toString() : null, constraint,
+				requirement);
 	}
 
 	/**
@@ -83,11 +92,13 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint value
+	 * @param requirement
+	 *            requirement
 	 */
 	public DGIWGValidationError(String table, String column, Number value,
-			Number constraint) {
+			Number constraint, DGIWGRequirement requirement) {
 		this(table, column, value,
-				constraint != null ? constraint.toString() : null);
+				constraint != null ? constraint.toString() : null, requirement);
 	}
 
 	/**
@@ -99,9 +110,12 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 */
-	public DGIWGValidationError(String table, String value, String constraint) {
-		this(value, constraint);
+	public DGIWGValidationError(String table, String value, String constraint,
+			DGIWGRequirement requirement) {
+		this(value, constraint, requirement);
 		this.table = table;
 	}
 
@@ -112,9 +126,12 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 */
-	public DGIWGValidationError(String value, String constraint) {
-		this(constraint);
+	public DGIWGValidationError(String value, String constraint,
+			DGIWGRequirement requirement) {
+		this(constraint, requirement);
 		this.value = value;
 	}
 
@@ -123,9 +140,13 @@ public class DGIWGValidationError {
 	 * 
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 */
-	public DGIWGValidationError(String constraint) {
+	public DGIWGValidationError(String constraint,
+			DGIWGRequirement requirement) {
 		this.constraint = constraint;
+		this.requirement = requirement;
 	}
 
 	/**
@@ -137,12 +158,14 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 * @param primaryKeys
 	 *            primary keys
 	 */
 	public DGIWGValidationError(String table, String value, String constraint,
-			DGIWGValidationKey... primaryKeys) {
-		this(table, null, value, constraint, primaryKeys);
+			DGIWGRequirement requirement, DGIWGValidationKey... primaryKeys) {
+		this(table, null, value, constraint, requirement, primaryKeys);
 	}
 
 	/**
@@ -156,12 +179,15 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 * @param primaryKeys
 	 *            primary keys
 	 */
 	public DGIWGValidationError(String table, String column, String value,
-			String constraint, DGIWGValidationKey... primaryKeys) {
-		this(table, column, value, constraint);
+			String constraint, DGIWGRequirement requirement,
+			DGIWGValidationKey... primaryKeys) {
+		this(table, column, value, constraint, requirement);
 		if (primaryKeys != null && primaryKeys.length > 0
 				&& primaryKeys[0] != null) {
 			this.primaryKeys = Arrays.asList(primaryKeys);
@@ -179,13 +205,16 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 * @param primaryKeys
 	 *            primary keys
 	 */
 	public DGIWGValidationError(String table, String column, Number value,
-			String constraint, DGIWGValidationKey... primaryKeys) {
+			String constraint, DGIWGRequirement requirement,
+			DGIWGValidationKey... primaryKeys) {
 		this(table, column, value != null ? value.toString() : null, constraint,
-				primaryKeys);
+				requirement, primaryKeys);
 	}
 
 	/**
@@ -199,13 +228,17 @@ public class DGIWGValidationError {
 	 *            error causing value
 	 * @param constraint
 	 *            constraint or error description
+	 * @param requirement
+	 *            requirement
 	 * @param primaryKeys
 	 *            primary keys
 	 */
 	public DGIWGValidationError(String table, String column, Number value,
-			Number constraint, DGIWGValidationKey... primaryKeys) {
+			Number constraint, DGIWGRequirement requirement,
+			DGIWGValidationKey... primaryKeys) {
 		this(table, column, value,
-				constraint != null ? constraint.toString() : null, primaryKeys);
+				constraint != null ? constraint.toString() : null, requirement,
+				primaryKeys);
 	}
 
 	/**
@@ -242,6 +275,15 @@ public class DGIWGValidationError {
 	 */
 	public String getConstraint() {
 		return constraint;
+	}
+
+	/**
+	 * Get the requirement
+	 * 
+	 * @return requirement
+	 */
+	public DGIWGRequirement getRequirement() {
+		return requirement;
 	}
 
 	/**
@@ -284,11 +326,17 @@ public class DGIWGValidationError {
 				}
 			}
 		}
-		if (value != null) {
+		if (constraint != null) {
 			if (toString.length() > 0) {
 				toString.append(", ");
 			}
 			toString.append("Constraint: ").append(constraint);
+		}
+		if (requirement != null) {
+			if (toString.length() > 0) {
+				toString.append(", ");
+			}
+			toString.append("Requirement: [").append(requirement).append("]");
 		}
 		return toString.toString();
 	}
