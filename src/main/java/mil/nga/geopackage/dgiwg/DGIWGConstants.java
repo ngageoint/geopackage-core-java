@@ -54,6 +54,11 @@ public class DGIWGConstants {
 	public static final String DMF_2_0_URI = DMF_BASE_URI + "2.0";
 
 	/**
+	 * DGIWG Metadata Foundation (DMF) Default URI
+	 */
+	public static final String DMF_DEFAULT_URI = DMF_2_0_URI;
+
+	/**
 	 * NSG Metadata Foundation (NMF) NSG Application Schema (NAS) base URI
 	 */
 	public static final String NMF_NAS_BASE_URI = "https://nsgregapi.nga.mil/schema/nas/";

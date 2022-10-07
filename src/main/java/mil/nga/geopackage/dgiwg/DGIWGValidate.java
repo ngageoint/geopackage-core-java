@@ -20,6 +20,11 @@ import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.GeometryExtensions;
 import mil.nga.geopackage.extension.WebPExtension;
 import mil.nga.geopackage.extension.ZoomOtherExtension;
+import mil.nga.geopackage.extension.metadata.Metadata;
+import mil.nga.geopackage.extension.metadata.MetadataExtension;
+import mil.nga.geopackage.extension.metadata.MetadataScopeType;
+import mil.nga.geopackage.extension.metadata.reference.MetadataReference;
+import mil.nga.geopackage.extension.metadata.reference.ReferenceScopeType;
 import mil.nga.geopackage.extension.rtree.RTreeIndexCoreExtension;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
@@ -74,6 +79,8 @@ public class DGIWGValidate {
 							CrsWktExtension.EXTENSION_NAME)));
 		}
 
+		errors.add(validateMetadata(geoPackage));
+
 		for (String tileTable : geoPackage.getTileTables()) {
 			errors.add(validateTileTable(geoPackage, tileTable));
 		}
@@ -86,217 +93,114 @@ public class DGIWGValidate {
 	}
 
 	/**
-	 * Validate the tile coordinate reference system
+	 * Validate the GeoPackage metadata
 	 * 
-	 * @param tileTable
-	 *            tile table
-	 * @param srs
-	 *            spatial reference system
+	 * @param geoPackage
+	 *            GeoPackage
 	 * @return validation errors
 	 */
-	public static DGIWGValidationErrors validateTileCoordinateReferenceSystem(
-			String tileTable, SpatialReferenceSystem srs) {
+	public static DGIWGValidationErrors validateMetadata(
+			GeoPackageCore geoPackage) {
 
 		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
-		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
-				errors, tileTable, srs, ContentsDataType.TILES);
+		List<MetadataReference> metadataReferences = DGIWGMetadata
+				.queryGeoPackageDMFMetadata(geoPackage);
+		if (metadataReferences != null && !metadataReferences.isEmpty()) {
 
-		if (crs == null) {
+			DGIWGValidationErrors metadataErrors = new DGIWGValidationErrors();
 
-			Projection projection = srs.getProjection();
-			String definition = projection.getDefinition();
+			for (MetadataReference reference : metadataReferences) {
 
-			CRS definitionCrs = projection.getDefinitionCRS();
-			if (definitionCrs == null) {
-				if (definition != null) {
-					try {
-						definitionCrs = CRSReader.read(definition);
-					} catch (IOException e) {
-						errors.add(new DGIWGValidationError(
-								SpatialReferenceSystem.TABLE_NAME,
-								SpatialReferenceSystem.COLUMN_DEFINITION,
-								definition,
-								"Failed to read tiles coordinate reference system definition: "
-										+ e.getMessage(),
-								DGIWGRequirement.CRS_RASTER_ALLOWED,
-								primaryKey(srs)));
-					}
-				}
-			}
+				DGIWGValidationErrors mdErrors = new DGIWGValidationErrors();
 
-			if (definitionCrs != null) {
+				Metadata metadata = reference.getMetadata();
 
-				boolean valid = false;
-
-				if (definitionCrs.getType() == CRSType.PROJECTED
-						&& definitionCrs instanceof ProjectedCoordinateReferenceSystem) {
-					ProjectedCoordinateReferenceSystem projected = (ProjectedCoordinateReferenceSystem) definitionCrs;
-					OperationMethods operationMethod = projected
-							.getMapProjection().getMethod().getMethod();
-					switch (operationMethod) {
-					case LAMBERT_CONIC_CONFORMAL_1SP:
-					case LAMBERT_CONIC_CONFORMAL_2SP:
-						valid = true;
-						break;
-					default:
-					}
+				String scope = metadata.getMetadataScopeName();
+				if (!scope.equalsIgnoreCase(MetadataScopeType.SERIES.getName())
+						&& !scope.equalsIgnoreCase(
+								MetadataScopeType.DATASET.getName())) {
+					mdErrors.add(new DGIWGValidationError(Metadata.TABLE_NAME,
+							Metadata.COLUMN_SCOPE, scope,
+							MetadataScopeType.SERIES.getName() + " or "
+									+ MetadataScopeType.DATASET.getName(),
+							DGIWGRequirement.VALIDITY, primaryKey(metadata)));
 				}
 
-				if (!valid) {
-					errors.add(new DGIWGValidationError(
-							SpatialReferenceSystem.TABLE_NAME,
-							SpatialReferenceSystem.COLUMN_DEFINITION,
-							definition,
-							"Unsupported tiles coordinate reference system",
-							DGIWGRequirement.CRS_RASTER_ALLOWED,
-							primaryKey(srs)));
-				}
+				// TODO
 
-			} else if (!errors.hasErrors()) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_DEFINITION, definition,
-						"Failed to read tiles coordinate reference system definition",
-						DGIWGRequirement.CRS_RASTER_ALLOWED, primaryKey(srs)));
-			}
-
-		}
-
-		return errors;
-	}
-
-	/**
-	 * Validate the feature coordinate reference system
-	 * 
-	 * @param featureTable
-	 *            feature table
-	 * @param srs
-	 *            spatial reference system
-	 * @return validation errors
-	 */
-	public static DGIWGValidationErrors validateFeatureCoordinateReferenceSystem(
-			String featureTable, SpatialReferenceSystem srs) {
-
-		DGIWGValidationErrors errors = new DGIWGValidationErrors();
-
-		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
-				errors, featureTable, srs, ContentsDataType.FEATURES);
-
-		if (crs == null) {
-			errors.add(
-					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
-							SpatialReferenceSystem.COLUMN_DEFINITION,
-							srs.getProjectionDefinition(),
-							"Unsupported features coordinate reference system",
-							DGIWGRequirement.CRS_2D_VECTOR, primaryKey(srs)));
-		}
-
-		return errors;
-	}
-
-	/**
-	 * Validate the coordinate reference system
-	 * 
-	 * @param errors
-	 *            validation errors
-	 * @param table
-	 *            table name
-	 * @param srs
-	 *            spatial reference system
-	 * @param type
-	 *            contents data type
-	 * @return coordinate reference system
-	 */
-	private static CoordinateReferenceSystem validateCoordinateReferenceSystem(
-			DGIWGValidationErrors errors, String table,
-			SpatialReferenceSystem srs, ContentsDataType type) {
-
-		CoordinateReferenceSystem crs = CoordinateReferenceSystem
-				.getCoordinateReferenceSystem(srs);
-
-		if (crs != null) {
-
-			boolean valid = false;
-
-			for (DataType dataType : crs.getDataTypes()) {
-				if (dataType.getDataType() == type) {
-					valid = true;
+				if (mdErrors.isValid()) {
+					metadataErrors = null;
 					break;
 				}
+
+				metadataErrors.add(mdErrors);
 			}
 
-			if (!valid) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_DEFINITION,
-						srs.getProjectionDefinition(),
-						"Unsupported " + type.getName()
-								+ " coordinate reference system",
-						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
-			}
-
-			if (!srs.getSrsName().equalsIgnoreCase(crs.getName())) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_SRS_NAME,
-						srs.getSrsName(), crs.getName(),
-						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
-			}
-
-			if (srs.getSrsId() != crs.getCode()) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_SRS_ID, srs.getSrsId(),
-						crs.getCode(), DGIWGRequirement.CRS_WKT,
-						primaryKey(srs)));
-			}
-
-			if (!srs.getOrganization().equalsIgnoreCase(crs.getAuthority())) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_ORGANIZATION,
-						srs.getOrganization(), crs.getAuthority(),
-						DGIWGRequirement.VALIDITY, primaryKey(srs)));
-			}
-
-			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
-						srs.getOrganizationCoordsysId(), crs.getCode(),
-						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			if (metadataErrors != null) {
+				errors.add(metadataErrors);
 			}
 
 		} else {
 
-			if (!srs.getOrganization()
-					.equalsIgnoreCase(ProjectionConstants.AUTHORITY_EPSG)) {
-				errors.add(new DGIWGValidationError(
-						SpatialReferenceSystem.TABLE_NAME,
-						SpatialReferenceSystem.COLUMN_ORGANIZATION,
-						srs.getOrganization(),
-						ProjectionConstants.AUTHORITY_EPSG,
-						DGIWGRequirement.VALIDITY, primaryKey(srs)));
+			MetadataExtension metadataExtension = new MetadataExtension(
+					geoPackage);
+			if (!metadataExtension.has()) {
+
+				boolean metadataTableExists = false;
+				try {
+					metadataTableExists = metadataExtension.getMetadataDao()
+							.isTableExists();
+				} catch (SQLException e) {
+				}
+
+				if (!metadataTableExists) {
+
+					errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+							Extensions.COLUMN_EXTENSION_NAME,
+							MetadataExtension.EXTENSION_NAME,
+							"No mandatory Metadata extension",
+							DGIWGRequirement.EXTENSIONS_MANDATORY,
+							extensionPrimaryKeys(Metadata.TABLE_NAME,
+									MetadataExtension.EXTENSION_NAME)));
+
+				}
+
+				boolean referenceTableExists = false;
+				try {
+					referenceTableExists = metadataExtension
+							.getMetadataReferenceDao().isTableExists();
+				} catch (SQLException e) {
+				}
+
+				if (!referenceTableExists) {
+
+					errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
+							Extensions.COLUMN_EXTENSION_NAME,
+							MetadataExtension.EXTENSION_NAME,
+							"No mandatory Metadata extension",
+							DGIWGRequirement.EXTENSIONS_MANDATORY,
+							extensionPrimaryKeys(MetadataReference.TABLE_NAME,
+									MetadataExtension.EXTENSION_NAME)));
+
+				}
+
 			}
 
+			DGIWGValidationKey[] keys = new DGIWGValidationKey[2];
+			keys[0] = new DGIWGValidationKey(Metadata.COLUMN_STANDARD_URI,
+					DGIWGConstants.DMF_BASE_URI);
+			keys[1] = new DGIWGValidationKey(
+					MetadataReference.COLUMN_REFERENCE_SCOPE,
+					ReferenceScopeType.GEOPACKAGE.getValue());
+			errors.add(new DGIWGValidationError(Metadata.TABLE_NAME,
+					Metadata.COLUMN_STANDARD_URI, DGIWGConstants.DMF_BASE_URI,
+					"No required metadata with DMF base URI and metadata reference 'geopackage' scope",
+					DGIWGRequirement.METADATA_DMF, keys));
+
 		}
 
-		String description = srs.getDescription();
-		if (description == null || description.isBlank()
-				|| description
-						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_UNKNOWN)
-				|| description
-						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_TBD)) {
-			errors.add(
-					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
-							SpatialReferenceSystem.COLUMN_DESCRIPTION,
-							srs.getDescription(),
-							"Invalid empty or unspecified description",
-							DGIWGRequirement.VALIDITY, primaryKey(srs)));
-		}
-
-		return crs;
+		return errors;
 	}
 
 	/**
@@ -522,6 +426,87 @@ public class DGIWGValidate {
 	}
 
 	/**
+	 * Validate the tile coordinate reference system
+	 * 
+	 * @param tileTable
+	 *            tile table
+	 * @param srs
+	 *            spatial reference system
+	 * @return validation errors
+	 */
+	public static DGIWGValidationErrors validateTileCoordinateReferenceSystem(
+			String tileTable, SpatialReferenceSystem srs) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
+
+		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
+				errors, tileTable, srs, ContentsDataType.TILES);
+
+		if (crs == null) {
+
+			Projection projection = srs.getProjection();
+			String definition = projection.getDefinition();
+
+			CRS definitionCrs = projection.getDefinitionCRS();
+			if (definitionCrs == null) {
+				if (definition != null) {
+					try {
+						definitionCrs = CRSReader.read(definition);
+					} catch (IOException e) {
+						errors.add(new DGIWGValidationError(
+								SpatialReferenceSystem.TABLE_NAME,
+								SpatialReferenceSystem.COLUMN_DEFINITION,
+								definition,
+								"Failed to read tiles coordinate reference system definition: "
+										+ e.getMessage(),
+								DGIWGRequirement.CRS_RASTER_ALLOWED,
+								primaryKey(srs)));
+					}
+				}
+			}
+
+			if (definitionCrs != null) {
+
+				boolean valid = false;
+
+				if (definitionCrs.getType() == CRSType.PROJECTED
+						&& definitionCrs instanceof ProjectedCoordinateReferenceSystem) {
+					ProjectedCoordinateReferenceSystem projected = (ProjectedCoordinateReferenceSystem) definitionCrs;
+					OperationMethods operationMethod = projected
+							.getMapProjection().getMethod().getMethod();
+					switch (operationMethod) {
+					case LAMBERT_CONIC_CONFORMAL_1SP:
+					case LAMBERT_CONIC_CONFORMAL_2SP:
+						valid = true;
+						break;
+					default:
+					}
+				}
+
+				if (!valid) {
+					errors.add(new DGIWGValidationError(
+							SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DEFINITION,
+							definition,
+							"Unsupported tiles coordinate reference system",
+							DGIWGRequirement.CRS_RASTER_ALLOWED,
+							primaryKey(srs)));
+				}
+
+			} else if (!errors.hasErrors()) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_DEFINITION, definition,
+						"Failed to read tiles coordinate reference system definition",
+						DGIWGRequirement.CRS_RASTER_ALLOWED, primaryKey(srs)));
+			}
+
+		}
+
+		return errors;
+	}
+
+	/**
 	 * Validate feature table
 	 * 
 	 * @param geoPackage
@@ -635,6 +620,139 @@ public class DGIWGValidate {
 	}
 
 	/**
+	 * Validate the feature coordinate reference system
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @param srs
+	 *            spatial reference system
+	 * @return validation errors
+	 */
+	public static DGIWGValidationErrors validateFeatureCoordinateReferenceSystem(
+			String featureTable, SpatialReferenceSystem srs) {
+
+		DGIWGValidationErrors errors = new DGIWGValidationErrors();
+
+		CoordinateReferenceSystem crs = validateCoordinateReferenceSystem(
+				errors, featureTable, srs, ContentsDataType.FEATURES);
+
+		if (crs == null) {
+			errors.add(
+					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DEFINITION,
+							srs.getProjectionDefinition(),
+							"Unsupported features coordinate reference system",
+							DGIWGRequirement.CRS_2D_VECTOR, primaryKey(srs)));
+		}
+
+		return errors;
+	}
+
+	/**
+	 * Validate the coordinate reference system
+	 * 
+	 * @param errors
+	 *            validation errors
+	 * @param table
+	 *            table name
+	 * @param srs
+	 *            spatial reference system
+	 * @param type
+	 *            contents data type
+	 * @return coordinate reference system
+	 */
+	private static CoordinateReferenceSystem validateCoordinateReferenceSystem(
+			DGIWGValidationErrors errors, String table,
+			SpatialReferenceSystem srs, ContentsDataType type) {
+
+		CoordinateReferenceSystem crs = CoordinateReferenceSystem
+				.getCoordinateReferenceSystem(srs);
+
+		if (crs != null) {
+
+			boolean valid = false;
+
+			for (DataType dataType : crs.getDataTypes()) {
+				if (dataType.getDataType() == type) {
+					valid = true;
+					break;
+				}
+			}
+
+			if (!valid) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_DEFINITION,
+						srs.getProjectionDefinition(),
+						"Unsupported " + type.getName()
+								+ " coordinate reference system",
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			}
+
+			if (!srs.getSrsName().equalsIgnoreCase(crs.getName())) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_SRS_NAME,
+						srs.getSrsName(), crs.getName(),
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			}
+
+			if (srs.getSrsId() != crs.getCode()) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_SRS_ID, srs.getSrsId(),
+						crs.getCode(), DGIWGRequirement.CRS_WKT,
+						primaryKey(srs)));
+			}
+
+			if (!srs.getOrganization().equalsIgnoreCase(crs.getAuthority())) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION,
+						srs.getOrganization(), crs.getAuthority(),
+						DGIWGRequirement.VALIDITY, primaryKey(srs)));
+			}
+
+			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION_COORDSYS_ID,
+						srs.getOrganizationCoordsysId(), crs.getCode(),
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			}
+
+		} else {
+
+			if (!srs.getOrganization()
+					.equalsIgnoreCase(ProjectionConstants.AUTHORITY_EPSG)) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						SpatialReferenceSystem.COLUMN_ORGANIZATION,
+						srs.getOrganization(),
+						ProjectionConstants.AUTHORITY_EPSG,
+						DGIWGRequirement.VALIDITY, primaryKey(srs)));
+			}
+
+		}
+
+		String description = srs.getDescription();
+		if (description == null || description.isBlank()
+				|| description
+						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_UNKNOWN)
+				|| description
+						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_TBD)) {
+			errors.add(
+					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DESCRIPTION,
+							srs.getDescription(),
+							"Invalid empty or unspecified description",
+							DGIWGRequirement.VALIDITY, primaryKey(srs)));
+		}
+
+		return crs;
+	}
+
+	/**
 	 * Get the Spatial Reference System primary key
 	 * 
 	 * @param srs
@@ -646,6 +764,21 @@ public class DGIWGValidate {
 		if (srs != null) {
 			key = new DGIWGValidationKey(SpatialReferenceSystem.COLUMN_ID,
 					srs.getId());
+		}
+		return key;
+	}
+
+	/**
+	 * Get the Metadata primary key
+	 * 
+	 * @param metadata
+	 *            metadata
+	 * @return primary key
+	 */
+	private static DGIWGValidationKey primaryKey(Metadata metadata) {
+		DGIWGValidationKey key = null;
+		if (metadata != null) {
+			key = new DGIWGValidationKey(Metadata.COLUMN_ID, metadata.getId());
 		}
 		return key;
 	}
