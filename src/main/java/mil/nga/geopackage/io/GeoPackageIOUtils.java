@@ -296,6 +296,43 @@ public class GeoPackageIOUtils {
 	}
 
 	/**
+	 * Get the file string
+	 * 
+	 * @param file
+	 *            input file
+	 * @return file string
+	 * @throws IOException
+	 *             upon failure
+	 * @since 6.5.1
+	 */
+	public static String fileString(File file) throws IOException {
+
+		FileInputStream fis = new FileInputStream(file);
+
+		return streamString(fis);
+	}
+
+	/**
+	 * Get the file string
+	 * 
+	 * @param file
+	 *            input file
+	 * @param charsetName
+	 *            character set name
+	 * @return file string
+	 * @throws IOException
+	 *             upon failure
+	 * @since 6.5.1
+	 */
+	public static String fileString(File file, String charsetName)
+			throws IOException {
+
+		FileInputStream fis = new FileInputStream(file);
+
+		return streamString(fis, charsetName);
+	}
+
+	/**
 	 * Get the stream bytes
 	 * 
 	 * @param stream

@@ -38,4 +38,29 @@ public class DGIWGConstants {
 	 */
 	public static final String DESCRIPTION_TBD = "tbd";
 
+	/**
+	 * MIME encoding of metadata
+	 */
+	public static final String METADATA_MIME_TYPE = "text/xml";
+
+	/**
+	 * DGIWG Metadata Foundation (DMF) base URI
+	 */
+	public static final String DMF_BASE_URI = "https://dgiwg.org/std/dmf/";
+
+	/**
+	 * DGIWG Metadata Foundation (DMF) 2.0 URI
+	 */
+	public static final String DMF_2_0_URI = DMF_BASE_URI + "2.0";
+
+	/**
+	 * NSG Metadata Foundation (NMF) NSG Application Schema (NAS) base URI
+	 */
+	public static final String NMF_NAS_BASE_URI = "https://nsgregapi.nga.mil/schema/nas/";
+
+	/**
+	 * NSG Metadata Foundation (NMF) NSG Application Schema (NAS) 8.0 URI
+	 */
+	public static final String NMF_NAS_8_0_URI = NMF_NAS_BASE_URI + "8.0";
+
 }
