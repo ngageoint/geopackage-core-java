@@ -124,10 +124,75 @@ public class DGIWGValidate {
 							Metadata.COLUMN_SCOPE, scope,
 							MetadataScopeType.SERIES.getName() + " or "
 									+ MetadataScopeType.DATASET.getName(),
-							DGIWGRequirement.VALIDITY, primaryKey(metadata)));
+							DGIWGRequirement.METADATA_GPKG,
+							primaryKey(metadata)));
 				}
 
-				// TODO
+				if (!metadata.getStandardUri().toLowerCase().startsWith(
+						DGIWGConstants.DMF_BASE_URI.toLowerCase())) {
+					mdErrors.add(new DGIWGValidationError(Metadata.TABLE_NAME,
+							Metadata.COLUMN_STANDARD_URI,
+							metadata.getStandardUri(),
+							DGIWGConstants.DMF_BASE_URI + "<version>",
+							DGIWGRequirement.METADATA_GPKG,
+							primaryKey(metadata)));
+				}
+
+				if (!metadata.getMimeType()
+						.equalsIgnoreCase(DGIWGConstants.METADATA_MIME_TYPE)) {
+					mdErrors.add(new DGIWGValidationError(Metadata.TABLE_NAME,
+							Metadata.COLUMN_MIME_TYPE, metadata.getMimeType(),
+							DGIWGConstants.METADATA_MIME_TYPE,
+							DGIWGRequirement.METADATA_GPKG,
+							primaryKey(metadata)));
+				}
+
+				if (!reference.getReferenceScopeName().equalsIgnoreCase(
+						ReferenceScopeType.GEOPACKAGE.getValue())) {
+					mdErrors.add(new DGIWGValidationError(
+							MetadataReference.TABLE_NAME,
+							MetadataReference.COLUMN_REFERENCE_SCOPE,
+							reference.getReferenceScopeName(),
+							ReferenceScopeType.GEOPACKAGE.getValue(),
+							DGIWGRequirement.METADATA_ROW,
+							primaryKey(reference)));
+				}
+
+				if (reference.getTableName() != null) {
+					mdErrors.add(new DGIWGValidationError(
+							MetadataReference.TABLE_NAME,
+							MetadataReference.COLUMN_TABLE_NAME,
+							reference.getTableName(), "NULL",
+							DGIWGRequirement.METADATA_ROW,
+							primaryKey(reference)));
+				}
+
+				if (reference.getColumnName() != null) {
+					mdErrors.add(new DGIWGValidationError(
+							MetadataReference.TABLE_NAME,
+							MetadataReference.COLUMN_COLUMN_NAME,
+							reference.getColumnName(), "NULL",
+							DGIWGRequirement.METADATA_ROW,
+							primaryKey(reference)));
+				}
+
+				if (reference.getRowIdValue() != null) {
+					mdErrors.add(new DGIWGValidationError(
+							MetadataReference.TABLE_NAME,
+							MetadataReference.COLUMN_ROW_ID_VALUE,
+							reference.getRowIdValue(), "NULL",
+							DGIWGRequirement.METADATA_ROW,
+							primaryKey(reference)));
+				}
+
+				if (reference.getParentId() != null) {
+					mdErrors.add(new DGIWGValidationError(
+							MetadataReference.TABLE_NAME,
+							MetadataReference.COLUMN_PARENT_ID,
+							reference.getParentId(), "NULL",
+							DGIWGRequirement.METADATA_ROW,
+							primaryKey(reference)));
+				}
 
 				if (mdErrors.isValid()) {
 					metadataErrors = null;
@@ -613,7 +678,7 @@ public class DGIWGValidate {
 			errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 					GeometryColumns.COLUMN_TABLE_NAME, featureTable,
 					"No Geometry Columns for feature table",
-					DGIWGRequirement.VALIDITY));
+					DGIWGRequirement.GEOPACKAGE_BASE));
 		}
 
 		return errors;
@@ -781,6 +846,30 @@ public class DGIWGValidate {
 			key = new DGIWGValidationKey(Metadata.COLUMN_ID, metadata.getId());
 		}
 		return key;
+	}
+
+	/**
+	 * Get the Metadata Reference primary key
+	 * 
+	 * @param reference
+	 *            metadata reference
+	 * @return primary key
+	 */
+	private static DGIWGValidationKey[] primaryKey(
+			MetadataReference reference) {
+		List<DGIWGValidationKey> keys = new ArrayList<>();
+
+		if (reference != null) {
+			keys.add(new DGIWGValidationKey(MetadataReference.COLUMN_FILE_ID,
+					reference.getFileId()));
+			if (reference.getParentId() != null) {
+				keys.add(
+						new DGIWGValidationKey(MetadataReference.COLUMN_FILE_ID,
+								reference.getFileId()));
+			}
+		}
+
+		return keys.toArray(new DGIWGValidationKey[] {});
 	}
 
 	/**
