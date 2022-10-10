@@ -2,13 +2,13 @@ package mil.nga.geopackage.extension.metadata.reference;
 
 import java.util.Date;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.extension.metadata.Metadata;
 import mil.nga.geopackage.persister.DatePersister;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * Links metadata in the gpkg_metadata table to data in the feature, and tiles
@@ -149,10 +149,21 @@ public class MetadataReference {
 		parentId = metadataReference.parentId;
 	}
 
+	/**
+	 * Get the reference scope
+	 * 
+	 * @return reference scope
+	 */
 	public ReferenceScopeType getReferenceScope() {
 		return ReferenceScopeType.fromValue(referenceScope);
 	}
 
+	/**
+	 * Set the reference scope
+	 * 
+	 * @param referenceScope
+	 *            reference scope
+	 */
 	public void setReferenceScope(ReferenceScopeType referenceScope) {
 		this.referenceScope = referenceScope.getValue();
 		switch (referenceScope) {
@@ -178,10 +189,31 @@ public class MetadataReference {
 		}
 	}
 
+	/**
+	 * Get the reference scope name
+	 * 
+	 * @return reference scope name
+	 * @since 6.5.1
+	 */
+	public String getReferenceScopeName() {
+		return referenceScope;
+	}
+
+	/**
+	 * Get the table name
+	 * 
+	 * @return table name
+	 */
 	public String getTableName() {
 		return tableName;
 	}
 
+	/**
+	 * Set the table name
+	 * 
+	 * @param tableName
+	 *            table name
+	 */
 	public void setTableName(String tableName) {
 		if (referenceScope != null && tableName != null
 				&& getReferenceScope().equals(ReferenceScopeType.GEOPACKAGE)) {
@@ -192,10 +224,21 @@ public class MetadataReference {
 
 	}
 
+	/**
+	 * Get the column name
+	 * 
+	 * @return column name
+	 */
 	public String getColumnName() {
 		return columnName;
 	}
 
+	/**
+	 * Set the column name
+	 * 
+	 * @param columnName
+	 *            column name
+	 */
 	public void setColumnName(String columnName) {
 		if (referenceScope != null && columnName != null) {
 			ReferenceScopeType scopeType = getReferenceScope();
@@ -210,10 +253,21 @@ public class MetadataReference {
 		this.columnName = columnName;
 	}
 
+	/**
+	 * Get the row id value
+	 * 
+	 * @return row id value
+	 */
 	public Long getRowIdValue() {
 		return rowIdValue;
 	}
 
+	/**
+	 * Set the row id value
+	 * 
+	 * @param rowIdValue
+	 *            row id value
+	 */
 	public void setRowIdValue(Long rowIdValue) {
 		if (referenceScope != null && rowIdValue != null) {
 			ReferenceScopeType scopeType = getReferenceScope();
@@ -228,36 +282,79 @@ public class MetadataReference {
 		this.rowIdValue = rowIdValue;
 	}
 
+	/**
+	 * Get the timestamp
+	 * 
+	 * @return timestamp
+	 */
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
+	/**
+	 * Set the timestamp
+	 * 
+	 * @param timestamp
+	 *            timestamp
+	 */
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * Get the metadata
+	 * 
+	 * @return metadata
+	 */
 	public Metadata getMetadata() {
 		return metadata;
 	}
 
+	/**
+	 * Set the metadata
+	 * 
+	 * @param metadata
+	 *            metadata
+	 */
 	public void setMetadata(Metadata metadata) {
 		this.metadata = metadata;
 		fileId = metadata != null ? metadata.getId() : -1;
 	}
 
+	/**
+	 * Get the file id
+	 * 
+	 * @return file id
+	 */
 	public long getFileId() {
 		return fileId;
 	}
 
+	/**
+	 * Get the parent metadata
+	 * 
+	 * @return parent metadata
+	 */
 	public Metadata getParentMetadata() {
 		return parentMetadata;
 	}
 
+	/**
+	 * Set the parent metadata
+	 * 
+	 * @param parentMetadata
+	 *            parent metadata
+	 */
 	public void setParentMetadata(Metadata parentMetadata) {
 		this.parentMetadata = parentMetadata;
 		parentId = parentMetadata != null ? parentMetadata.getId() : -1;
 	}
 
+	/**
+	 * Get the parent id
+	 * 
+	 * @return parent id
+	 */
 	public Long getParentId() {
 		return parentId;
 	}
