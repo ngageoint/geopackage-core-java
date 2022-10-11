@@ -70,20 +70,13 @@ public class CoordinateReferenceSystemTest {
 				assertNull(srs.getDefinition_12_063());
 			}
 
-			BoundingBox bounds = crs.getBounds(srs);
-
 			if (PRINT_CRS) {
+
+				BoundingBox bounds = crs.getBounds();
+				BoundingBox wgs84Bounds = crs.getWGS84Bounds();
+
 				System.out.println();
 				System.out.println(crs.getAuthorityAndCode());
-				System.out.println();
-				System.out.println(
-						"Min Longitude: " + crs.getBounds().getMinLongitude());
-				System.out.println(
-						"Min Latitude: " + crs.getBounds().getMinLatitude());
-				System.out.println(
-						"Max Longitude: " + crs.getBounds().getMaxLongitude());
-				System.out.println(
-						"Max Latitude: " + crs.getBounds().getMaxLatitude());
 				System.out.println();
 				System.out
 						.println("Min Longitude: " + bounds.getMinLongitude());
@@ -91,6 +84,19 @@ public class CoordinateReferenceSystemTest {
 				System.out
 						.println("Max Longitude: " + bounds.getMaxLongitude());
 				System.out.println("Max Latitude: " + bounds.getMaxLatitude());
+
+				if (!bounds.equals(wgs84Bounds)) {
+					System.out.println();
+					System.out.println(
+							"Min Longitude: " + wgs84Bounds.getMinLongitude());
+					System.out.println(
+							"Min Latitude: " + wgs84Bounds.getMinLatitude());
+					System.out.println(
+							"Max Longitude: " + wgs84Bounds.getMaxLongitude());
+					System.out.println(
+							"Max Latitude: " + wgs84Bounds.getMaxLatitude());
+				}
+
 				System.out.println();
 				System.out.println(CRSWriter.writePretty(crs.getWkt()));
 				System.out.println();
@@ -348,7 +354,6 @@ public class CoordinateReferenceSystemTest {
 		double falseEasting = 0;
 		double falseNorthing = 0;
 		double standardParallel1 = 25;
-		BoundingBox bounds = null;
 
 		SpatialReferenceSystem srs = CoordinateReferenceSystem
 				.createLambertConicConformal1SP(epsg, name, datum,
@@ -363,7 +368,7 @@ public class CoordinateReferenceSystemTest {
 				centralMeridian, scaleFactor, falseEasting, falseNorthing,
 				standardParallel1, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 		epsg = 0000;
 		name = "Unnamed Lambert_Conformal_Conic using 1SP";
@@ -374,7 +379,6 @@ public class CoordinateReferenceSystemTest {
 		falseEasting = 0;
 		falseNorthing = 0;
 		standardParallel1 = 49;
-		bounds = null;
 
 		srs = CoordinateReferenceSystem.createLambertConicConformal1SP(epsg,
 				name, datum, latitudeOfOrigin, centralMeridian, scaleFactor,
@@ -388,7 +392,7 @@ public class CoordinateReferenceSystemTest {
 				centralMeridian, scaleFactor, falseEasting, falseNorthing,
 				standardParallel1, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 	}
 
@@ -410,7 +414,6 @@ public class CoordinateReferenceSystemTest {
 		double centralMeridian = 126;
 		double falseEasting = 0;
 		double falseNorthing = 0;
-		BoundingBox bounds = null;
 
 		SpatialReferenceSystem srs = CoordinateReferenceSystem
 				.createLambertConicConformal2SP(epsg, name, datum,
@@ -425,7 +428,7 @@ public class CoordinateReferenceSystemTest {
 				standardParallel2, latitudeOfOrigin, centralMeridian,
 				falseEasting, falseNorthing, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 		epsg = 3978;
 		name = "NAD83 / Canada Atlas Lambert";
@@ -436,7 +439,6 @@ public class CoordinateReferenceSystemTest {
 		centralMeridian = -95;
 		falseEasting = 0;
 		falseNorthing = 0;
-		bounds = new BoundingBox(-141.01, 38.21, -40.72, 86.46);
 
 		srs = CoordinateReferenceSystem.createLambertConicConformal2SP(epsg,
 				name, datum, standardParallel1, standardParallel2,
@@ -450,7 +452,7 @@ public class CoordinateReferenceSystemTest {
 				standardParallel2, latitudeOfOrigin, centralMeridian,
 				falseEasting, falseNorthing, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 	}
 
@@ -481,8 +483,6 @@ public class CoordinateReferenceSystemTest {
 	 *            description
 	 * @param srs
 	 *            spatial reference system
-	 * @param bounds
-	 *            bounds
 	 * @throws IOException
 	 *             upon error
 	 */
@@ -490,12 +490,12 @@ public class CoordinateReferenceSystemTest {
 			GeoDatums datum, double latitudeOfOrigin, double centralMeridian,
 			double scaleFactor, double falseEasting, double falseNorthing,
 			double standardParallel1, String wkt, String description,
-			SpatialReferenceSystem srs, BoundingBox bounds) throws IOException {
+			SpatialReferenceSystem srs) throws IOException {
 
 		OperationMethod method = testLambertConicConformal(epsg, name, datum,
 				wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 		assertEquals("Lambert_Conformal_Conic_1SP", method.getName());
 		assertEquals("latitude_of_origin", method.getParameter(0).getName());
@@ -540,8 +540,6 @@ public class CoordinateReferenceSystemTest {
 	 *            description
 	 * @param srs
 	 *            spatial reference system
-	 * @param bounds
-	 *            bounds
 	 * @throws IOException
 	 *             upon error
 	 */
@@ -549,13 +547,12 @@ public class CoordinateReferenceSystemTest {
 			GeoDatums datum, double standardParallel1, double standardParallel2,
 			double latitudeOfOrigin, double centralMeridian,
 			double falseEasting, double falseNorthing, String wkt,
-			String description, SpatialReferenceSystem srs, BoundingBox bounds)
-			throws IOException {
+			String description, SpatialReferenceSystem srs) throws IOException {
 
 		OperationMethod method = testLambertConicConformal(epsg, name, datum,
 				wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_2SP_DESCRIPTION,
-				srs, bounds);
+				srs);
 
 		assertEquals("Lambert_Conformal_Conic_2SP", method.getName());
 		assertEquals("standard_parallel_1", method.getParameter(0).getName());
@@ -588,15 +585,13 @@ public class CoordinateReferenceSystemTest {
 	 *            description
 	 * @param srs
 	 *            spatial reference system
-	 * @param bounds
-	 *            bounds
 	 * @return operation method
 	 * @throws IOException
 	 *             upon error
 	 */
 	private OperationMethod testLambertConicConformal(long epsg, String name,
 			GeoDatums datum, String wkt, String description,
-			SpatialReferenceSystem srs, BoundingBox bounds) throws IOException {
+			SpatialReferenceSystem srs) throws IOException {
 
 		assertEquals(name, srs.getSrsName());
 		assertEquals(epsg, srs.getSrsId());
@@ -606,34 +601,9 @@ public class CoordinateReferenceSystemTest {
 		assertEquals(description, srs.getDescription());
 		assertNull(srs.getDefinition_12_063());
 
-		BoundingBox projectedBounds = null;
-		if (bounds != null) {
-			projectedBounds = CoordinateReferenceSystem.getBounds(bounds, srs);
-		}
-
 		if (PRINT_CRS) {
 			System.out.println();
 			System.out.println(ProjectionConstants.AUTHORITY_EPSG + ":" + epsg);
-			if (bounds != null) {
-				System.out.println();
-				System.out
-						.println("Min Longitude: " + bounds.getMinLongitude());
-				System.out.println("Min Latitude: " + bounds.getMinLatitude());
-				System.out
-						.println("Max Longitude: " + bounds.getMaxLongitude());
-				System.out.println("Max Latitude: " + bounds.getMaxLatitude());
-			}
-			if (projectedBounds != null) {
-				System.out.println();
-				System.out.println(
-						"Min Longitude: " + projectedBounds.getMinLongitude());
-				System.out.println(
-						"Min Latitude: " + projectedBounds.getMinLatitude());
-				System.out.println(
-						"Max Longitude: " + projectedBounds.getMaxLongitude());
-				System.out.println(
-						"Max Latitude: " + projectedBounds.getMaxLatitude());
-			}
 			System.out.println();
 			System.out.println(CRSWriter.writePretty(wkt));
 			System.out.println();

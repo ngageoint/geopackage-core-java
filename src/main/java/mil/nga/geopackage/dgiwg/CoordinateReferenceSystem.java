@@ -14,10 +14,7 @@ import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
-import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
-import mil.nga.proj.ProjectionFactory;
-import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * DGIWG (Defence Geospatial Information Working Group) Coordinate Reference
@@ -34,6 +31,7 @@ public enum CoordinateReferenceSystem {
 	EPSG_3395(3395, "WGS 84 / World Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3395,
 			"Euro-centric view of world excluding polar areas for very small scale mapping",
+			BoundingBox.worldWebMercator(),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					-80.0, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					84.0),
@@ -45,11 +43,8 @@ public enum CoordinateReferenceSystem {
 	EPSG_3857(3857, "WGS 84 / Pseudo-Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3857,
 			"Uses spherical development of ellipsoidal coordinates. This should only be used for visualization purposes.",
-			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
-					ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE,
-					ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
-					ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE),
-			DataType.TILES_2D),
+			BoundingBox.worldWebMercator(),
+			BoundingBox.worldWGS84WithWebMercatorLimits(), DataType.TILES_2D),
 
 	/**
 	 * WGS 84 Geographic 2D
@@ -72,6 +67,8 @@ public enum CoordinateReferenceSystem {
 	 */
 	EPSG_5041(5041, "WGS 84 / UPS North (E,N)", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_5041, "Military mapping by NATO north of 60° N",
+			new BoundingBox(-14440759.350252, -14440759.350252, 18440759.350252,
+					18440759.350252),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					60.0, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT),
@@ -82,6 +79,8 @@ public enum CoordinateReferenceSystem {
 	 */
 	EPSG_5042(5042, "WGS 84 / UPS South (E,N)", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_5042, "Military mapping by NATO south of 60° S",
+			new BoundingBox(-14440759.350252, -14440759.350252, 18440759.350252,
+					18440759.350252),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					-ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT,
 					ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH, -60.0),
@@ -741,9 +740,14 @@ public enum CoordinateReferenceSystem {
 	private final String description;
 
 	/**
-	 * Bounds extent in degrees
+	 * Bounds
 	 */
 	private final BoundingBox bounds;
+
+	/**
+	 * WGS84 bounds extent
+	 */
+	private final BoundingBox wgs84Bounds;
 
 	/**
 	 * Data Types
@@ -756,7 +760,7 @@ public enum CoordinateReferenceSystem {
 	private final Map<ContentsDataType, Set<DataType>> contentsDataTypes;
 
 	/**
-	 * Constructor
+	 * Constructor with EPSG code and world WGS84 bounds
 	 * 
 	 * @param epsgCode
 	 *            EPSG code
@@ -781,7 +785,34 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with EPSG code and WGS84 bounds
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @param name
+	 *            name
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(long epsgCode, String name, CRSType type,
+			int dimension, String wkt, String description,
+			BoundingBox wgs84Bounds, DataType... dataTypes) {
+		this(epsgCode, name, type, dimension, wkt, description, wgs84Bounds,
+				wgs84Bounds, dataTypes);
+	}
+
+	/**
+	 * Constructor with EPSG code, bounds (tile matrix set), and WGS84 bounds
 	 * 
 	 * @param epsgCode
 	 *            EPSG code
@@ -796,19 +827,21 @@ public enum CoordinateReferenceSystem {
 	 * @param description
 	 *            description
 	 * @param bounds
-	 *            bounds extent in degrees
+	 *            bounds
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
 	 * @param dataTypes
 	 *            data types
 	 */
 	private CoordinateReferenceSystem(long epsgCode, String name, CRSType type,
 			int dimension, String wkt, String description, BoundingBox bounds,
-			DataType... dataTypes) {
+			BoundingBox wgs84Bounds, DataType... dataTypes) {
 		this(ProjectionConstants.AUTHORITY_EPSG, epsgCode, name, type,
-				dimension, wkt, description, bounds, dataTypes);
+				dimension, wkt, description, bounds, wgs84Bounds, dataTypes);
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with authority code and world WGS84 bounds
 	 * 
 	 * @param authority
 	 *            authority
@@ -835,7 +868,37 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor with authority code and WGS84 bounds
+	 * 
+	 * @param authority
+	 *            authority
+	 * @param code
+	 *            code
+	 * @param name
+	 *            name
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(String authority, long code, String name,
+			CRSType type, int dimension, String wkt, String description,
+			BoundingBox wgs84Bounds, DataType... dataTypes) {
+		this(authority, code, name, type, dimension, wkt, description,
+				wgs84Bounds, wgs84Bounds, dataTypes);
+	}
+
+	/**
+	 * Constructor with authority code, bounds (tile matrix set), and WGS84
+	 * bounds
 	 * 
 	 * @param authority
 	 *            authority
@@ -852,13 +915,16 @@ public enum CoordinateReferenceSystem {
 	 * @param description
 	 *            description
 	 * @param bounds
-	 *            bounds extent in degrees
+	 *            bounds
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
 	 * @param dataTypes
 	 *            data types
 	 */
 	private CoordinateReferenceSystem(String authority, long code, String name,
 			CRSType type, int dimension, String wkt, String description,
-			BoundingBox bounds, DataType... dataTypes) {
+			BoundingBox bounds, BoundingBox wgs84Bounds,
+			DataType... dataTypes) {
 		this.authority = authority;
 		this.code = code;
 		this.crsName = name;
@@ -867,6 +933,7 @@ public enum CoordinateReferenceSystem {
 		this.wkt = wkt;
 		this.description = description;
 		this.bounds = bounds;
+		this.wgs84Bounds = wgs84Bounds;
 		this.dataTypes = new HashSet<>(Arrays.asList(dataTypes));
 		this.contentsDataTypes = new HashMap<>();
 		for (DataType dataType : dataTypes) {
@@ -935,8 +1002,10 @@ public enum CoordinateReferenceSystem {
 		description.append(", onshore and offshore.");
 		this.description = description.toString();
 
-		this.bounds = new BoundingBox(minLongitude, minLatitude, maxLongitude,
-				maxLatitude);
+		this.bounds = new BoundingBox(-9501965.72931276, -20003931.4586255,
+				10501965.7293128, 20003931.4586255);
+		this.wgs84Bounds = new BoundingBox(minLongitude, minLatitude,
+				maxLongitude, maxLatitude);
 		this.dataTypes = new HashSet<>();
 		this.dataTypes.add(DataType.TILES_2D);
 		this.contentsDataTypes = new HashMap<>();
@@ -1017,12 +1086,21 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
-	 * Get the bounds extent in degrees
+	 * Get the bounds
 	 * 
-	 * @return bounding box in degrees
+	 * @return bounding box
 	 */
 	public BoundingBox getBounds() {
 		return bounds;
+	}
+
+	/**
+	 * Get the WGS84 bounds extent
+	 * 
+	 * @return bounding box
+	 */
+	public BoundingBox getWGS84Bounds() {
+		return wgs84Bounds;
 	}
 
 	/**
@@ -1160,28 +1238,6 @@ public enum CoordinateReferenceSystem {
 					"CRS is not valid for features: " + getAuthorityAndCode());
 		}
 		return createSpatialReferenceSystem();
-	}
-
-	/**
-	 * Get spatial reference system bounds
-	 * 
-	 * @param srs
-	 *            spatial reference system
-	 * @return projected bounds
-	 */
-	public BoundingBox getBounds(SpatialReferenceSystem srs) {
-		return getBounds(bounds, srs);
-	}
-
-	/**
-	 * Get projected bounds
-	 * 
-	 * @param projection
-	 *            desired projection
-	 * @return projected bounds
-	 */
-	public BoundingBox getBounds(Projection projection) {
-		return getBounds(bounds, projection);
 	}
 
 	/**
@@ -1369,6 +1425,30 @@ public enum CoordinateReferenceSystem {
 	}
 
 	/**
+	 * Get the supported coordinate reference systems for the contents data type
+	 * 
+	 * @param dataType
+	 *            data type
+	 * @return coordinate reference systems
+	 */
+	public static Set<CoordinateReferenceSystem> getCoordinateReferenceSystems(
+			ContentsDataType dataType) {
+
+		Set<CoordinateReferenceSystem> crss = new HashSet<>();
+
+		for (DataType dt : DataType.getDataTypes(dataType)) {
+
+			Set<CoordinateReferenceSystem> crs = dataTypeCRS.get(dt);
+			if (crs != null) {
+				crss.addAll(crs);
+			}
+
+		}
+
+		return crss;
+	}
+
+	/**
 	 * Initialize static mappings
 	 * 
 	 * @param crs
@@ -1403,72 +1483,6 @@ public enum CoordinateReferenceSystem {
 			crsSet.add(crs);
 		}
 
-	}
-
-	/**
-	 * Get spatial reference system bounds from the WGS84 bounds
-	 * 
-	 * @param bounds
-	 *            WGS84 bounds
-	 * @param srs
-	 *            spatial reference system
-	 * @return projected bounds
-	 */
-	public static BoundingBox getBounds(BoundingBox bounds,
-			SpatialReferenceSystem srs) {
-		return getBounds(bounds, srs.getProjection());
-	}
-
-	/**
-	 * Get spatial reference system bounds from the bounds in the provided
-	 * projection
-	 * 
-	 * @param bounds
-	 *            bounds
-	 * @param boundsProjection
-	 *            bounds projection
-	 * @param srs
-	 *            spatial reference system
-	 * @return projected bounds
-	 */
-	public static BoundingBox getBounds(BoundingBox bounds,
-			Projection boundsProjection, SpatialReferenceSystem srs) {
-		return getBounds(bounds, boundsProjection, srs.getProjection());
-	}
-
-	/**
-	 * Get projected bounds from the WGS84 bounds
-	 * 
-	 * @param bounds
-	 *            WGS84 bounds
-	 * @param projection
-	 *            desired projection
-	 * @return projected bounds
-	 */
-	public static BoundingBox getBounds(BoundingBox bounds,
-			Projection projection) {
-		return getBounds(bounds,
-				ProjectionFactory.getProjection(
-						ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM),
-				projection);
-	}
-
-	/**
-	 * Get projected bounds from the bounds in the provided projection
-	 * 
-	 * @param bounds
-	 *            bounds
-	 * @param boundsProjection
-	 *            bounds projection
-	 * @param projection
-	 *            desired projection
-	 * @return projected bounds
-	 */
-	public static BoundingBox getBounds(BoundingBox bounds,
-			Projection boundsProjection, Projection projection) {
-		GeometryTransform transform = GeometryTransform.create(boundsProjection,
-				projection);
-		return bounds.transform(transform);
 	}
 
 }

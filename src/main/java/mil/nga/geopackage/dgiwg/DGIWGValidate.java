@@ -65,6 +65,29 @@ public class DGIWGValidate {
 	 */
 	public static DGIWGValidationErrors validate(GeoPackageCore geoPackage) {
 
+		DGIWGValidationErrors errors = validateBase(geoPackage);
+
+		for (String tileTable : geoPackage.getTileTables()) {
+			errors.add(validateTileTable(geoPackage, tileTable));
+		}
+
+		for (String featureTable : geoPackage.getFeatureTables()) {
+			errors.add(validateFeatureTable(geoPackage, featureTable));
+		}
+
+		return errors;
+	}
+
+	/**
+	 * Validate the base GeoPackage against the DGIWG GeoPackage Profile
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @return validation errors
+	 */
+	public static DGIWGValidationErrors validateBase(
+			GeoPackageCore geoPackage) {
+
 		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		CrsWktExtension crsWktExtension = new CrsWktExtension(geoPackage);
@@ -81,12 +104,53 @@ public class DGIWGValidate {
 
 		errors.add(validateMetadata(geoPackage));
 
-		for (String tileTable : geoPackage.getTileTables()) {
-			errors.add(validateTileTable(geoPackage, tileTable));
-		}
+		return errors;
+	}
 
-		for (String featureTable : geoPackage.getFeatureTables()) {
-			errors.add(validateFeatureTable(geoPackage, featureTable));
+	/**
+	 * Validate the GeoPackage table against the DGIWG GeoPackage Profile
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param table
+	 *            table
+	 * @return validation errors
+	 */
+	public static DGIWGValidationErrors validate(GeoPackageCore geoPackage,
+			String table) {
+		List<String> tables = new ArrayList<>();
+		tables.add(table);
+		return validate(geoPackage, tables);
+	}
+
+	/**
+	 * Validate the GeoPackage tables against the DGIWG GeoPackage Profile
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param tables
+	 *            tables
+	 * @return validation errors
+	 */
+	public static DGIWGValidationErrors validate(GeoPackageCore geoPackage,
+			List<String> tables) {
+
+		DGIWGValidationErrors errors = validateBase(geoPackage);
+
+		for (String table : tables) {
+			ContentsDataType dataType = geoPackage.getTableDataType(table);
+			if (dataType != null) {
+				switch (dataType) {
+				case FEATURES:
+					errors.add(validateFeatureTable(geoPackage, table));
+					break;
+				case TILES:
+					errors.add(validateTileTable(geoPackage, table));
+					break;
+				default:
+				}
+			}
+
 		}
 
 		return errors;
@@ -301,7 +365,7 @@ public class DGIWGValidate {
 					.getCoordinateReferenceSystem(srs);
 			if (crs != null) {
 
-				BoundingBox boundingBox = crs.getBounds(srs);
+				BoundingBox boundingBox = crs.getBounds();
 				if (!boundingBox.contains(tileMatrixSet.getBoundingBox())) {
 
 					String crsBounds = "CRS " + crs.getAuthorityAndCode()

@@ -1,5 +1,8 @@
 package mil.nga.geopackage.dgiwg;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import mil.nga.geopackage.contents.ContentsDataType;
 
 /**
@@ -114,6 +117,26 @@ public enum DataType {
 	 */
 	public byte getZ() {
 		return (byte) (dimension - 2);
+	}
+
+	/**
+	 * Get the data types for the contents data type
+	 * 
+	 * @param type
+	 *            contents data type
+	 * @return data types
+	 */
+	public static Set<DataType> getDataTypes(ContentsDataType type) {
+
+		Set<DataType> dataTypes = new HashSet<>();
+
+		for (DataType dataType : values()) {
+			if (dataType.getDataType() == type) {
+				dataTypes.add(dataType);
+			}
+		}
+
+		return dataTypes;
 	}
 
 }
