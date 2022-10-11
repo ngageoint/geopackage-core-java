@@ -64,6 +64,19 @@ public class BoundingBox {
 	}
 
 	/**
+	 * Create a new WGS84 bounding box bounded by Web Mercator limits
+	 * 
+	 * @return new bounding box
+	 * @since 6.5.1
+	 */
+	public static BoundingBox worldWGS84WithWebMercatorLimits() {
+		return new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_MIN_LAT_RANGE,
+				ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
+				ProjectionConstants.WEB_MERCATOR_MAX_LAT_RANGE);
+	}
+
+	/**
 	 * Constructor
 	 */
 	public BoundingBox() {
