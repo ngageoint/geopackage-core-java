@@ -11,6 +11,7 @@ import java.util.Set;
 import mil.nga.crs.CRSType;
 import mil.nga.crs.geo.GeoDatums;
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
@@ -1205,11 +1206,13 @@ public enum CoordinateReferenceSystem {
 		srs.setSrsId(code);
 		srs.setOrganization(authority);
 		srs.setOrganizationCoordsysId(code);
-		srs.setDefinition(wkt);
-		srs.setDescription(description);
-		if (this == EPSG_4979) {
-			srs.setDefinition_12_063(wkt);
+		String definition = wkt;
+		if (type == CRSType.COMPOUND) {
+			definition = GeoPackageConstants.UNDEFINED_DEFINITION;
 		}
+		srs.setDefinition(definition);
+		srs.setDescription(description);
+		srs.setDefinition_12_063(wkt);
 
 		return srs;
 	}

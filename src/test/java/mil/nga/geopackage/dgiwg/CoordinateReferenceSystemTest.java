@@ -27,6 +27,7 @@ import mil.nga.crs.projected.ProjectedCoordinateReferenceSystem;
 import mil.nga.crs.wkt.CRSReader;
 import mil.nga.crs.wkt.CRSWriter;
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
@@ -62,13 +63,13 @@ public class CoordinateReferenceSystemTest {
 			assertEquals(crs.getCode(), srs.getSrsId());
 			assertEquals(crs.getAuthority(), srs.getOrganization());
 			assertEquals(crs.getCode(), srs.getOrganizationCoordsysId());
-			assertEquals(crs.getWkt(), srs.getDefinition());
 			assertEquals(crs.getDescription(), srs.getDescription());
-			if (crs == CoordinateReferenceSystem.EPSG_4979) {
-				assertEquals(crs.getWkt(), srs.getDefinition_12_063());
-			} else {
-				assertNull(srs.getDefinition_12_063());
+			String definition = crs.getWkt();
+			if (crs.getType() == CRSType.COMPOUND) {
+				definition = GeoPackageConstants.UNDEFINED_DEFINITION;
 			}
+			assertEquals(definition, srs.getDefinition());
+			assertEquals(crs.getWkt(), srs.getDefinition_12_063());
 
 			if (PRINT_CRS) {
 
