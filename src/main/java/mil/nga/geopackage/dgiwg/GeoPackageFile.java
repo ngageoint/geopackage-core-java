@@ -34,6 +34,38 @@ public class GeoPackageFile {
 	}
 
 	/**
+	 * Constructor
+	 * 
+	 * @param path
+	 *            GeoPackage path
+	 */
+	public GeoPackageFile(String path) {
+		this(path, new GeoPackageFileName(path));
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param path
+	 *            GeoPackage path
+	 * @param fileName
+	 *            DGIWG file name
+	 */
+	public GeoPackageFile(String path, GeoPackageFileName fileName) {
+		this(new File(path), fileName);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            GeoPackage file
+	 */
+	public GeoPackageFile(File file) {
+		this(file, new GeoPackageFileName(file));
+	}
+
+	/**
 	 * Get the GeoPackage file
 	 * 
 	 * @return GeoPackage file

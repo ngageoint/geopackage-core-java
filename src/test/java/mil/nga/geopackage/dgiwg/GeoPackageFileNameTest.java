@@ -52,7 +52,7 @@ public class GeoPackageFileNameTest {
 		assertNull(fileName.getAdditional());
 
 		assertEquals(GeoPackageIOUtils.getFileNameWithoutExtension(name),
-				fileName.toString());
+				fileName.getName());
 
 	}
 
@@ -85,7 +85,7 @@ public class GeoPackageFileNameTest {
 		assertNull(fileName.getAdditional());
 
 		assertEquals(GeoPackageIOUtils.getFileNameWithoutExtension(name),
-				fileName.toString());
+				fileName.getName());
 
 	}
 
@@ -121,7 +121,7 @@ public class GeoPackageFileNameTest {
 		assertEquals("Additional Two", fileName.getAdditional().get(1));
 
 		assertEquals(GeoPackageIOUtils.getFileNameWithoutExtension(name),
-				fileName.toString());
+				fileName.getName());
 
 	}
 
@@ -154,7 +154,7 @@ public class GeoPackageFileNameTest {
 		assertNull(fileName.getAdditional());
 
 		assertEquals(GeoPackageIOUtils.getFileNameWithoutExtension(name),
-				fileName.toString());
+				fileName.getName());
 
 	}
 
@@ -187,7 +187,7 @@ public class GeoPackageFileNameTest {
 		assertNull(fileName.getAdditional());
 
 		assertEquals(GeoPackageIOUtils.getFileNameWithoutExtension(name),
-				fileName.toString());
+				fileName.getName());
 
 	}
 

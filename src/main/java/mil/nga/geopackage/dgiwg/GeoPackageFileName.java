@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.db.DateConverter;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 
@@ -96,6 +97,13 @@ public class GeoPackageFileName {
 	 * Optional additional elements, for mission or agency specific use
 	 */
 	private List<String> additional;
+
+	/**
+	 * Constructor
+	 */
+	public GeoPackageFileName() {
+
+	}
 
 	/**
 	 * Constructor
@@ -460,6 +468,9 @@ public class GeoPackageFileName {
 		this.creationDate = creationDate;
 		DateConverter converter = getDateConverter();
 		this.creationDateText = converter.stringValue(creationDate);
+		if (this.creationDateText != null) {
+			this.creationDateText = this.creationDateText.toUpperCase();
+		}
 	}
 
 	/**
@@ -512,6 +523,34 @@ public class GeoPackageFileName {
 		return producer != null && dataProduct != null
 				&& geographicCoverageArea != null && zoomLevels != null
 				&& version != null && creationDateText != null;
+	}
+
+	/**
+	 * Get the file name
+	 * 
+	 * @return file name
+	 */
+	public String getName() {
+		return toString();
+	}
+
+	/**
+	 * Get the file name with GeoPackage extension
+	 * 
+	 * @return file name with extension
+	 */
+	public String getNameWithExtension() {
+		return GeoPackageIOUtils.addFileExtension(getName(),
+				GeoPackageConstants.EXTENSION);
+	}
+
+	/**
+	 * Get a local file from the name with GeoPackage extension
+	 * 
+	 * @return file
+	 */
+	public File getFile() {
+		return new File(getNameWithExtension());
 	}
 
 	/**

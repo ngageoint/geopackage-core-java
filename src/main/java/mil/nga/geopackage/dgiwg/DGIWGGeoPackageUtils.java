@@ -320,13 +320,34 @@ public class DGIWGGeoPackageUtils {
 		contents.setMaxY(bounds.getMaxLatitude());
 		contents.setSrs(srs);
 
+		boolean hasPk = false;
+		boolean hasGeometry = false;
 		if (columns == null) {
 			columns = new ArrayList<>();
-			columns.add(FeatureColumn.createPrimaryKeyColumn(
-					UserTableMetadata.DEFAULT_ID_COLUMN_NAME,
-					UserTable.DEFAULT_AUTOINCREMENT));
-			columns.add(FeatureColumn.createGeometryColumn(
+		} else {
+			for (FeatureColumn column : columns) {
+				if (column.isPrimaryKey()) {
+					hasPk = true;
+					if (hasGeometry) {
+						break;
+					}
+				} else if (column.isGeometry()) {
+					hasGeometry = true;
+					if (hasPk) {
+						break;
+					}
+				}
+			}
+		}
+		if (!hasGeometry) {
+			columns.add(0, FeatureColumn.createGeometryColumn(
 					FeatureTableMetadata.DEFAULT_COLUMN_NAME, geometryType));
+		}
+		if (!hasPk) {
+			columns.add(0,
+					FeatureColumn.createPrimaryKeyColumn(
+							UserTableMetadata.DEFAULT_ID_COLUMN_NAME,
+							UserTable.DEFAULT_AUTOINCREMENT));
 		}
 
 		FeatureTable featureTable = new FeatureTable(table, columns);
