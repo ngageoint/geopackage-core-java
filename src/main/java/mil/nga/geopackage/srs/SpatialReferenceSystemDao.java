@@ -60,6 +60,35 @@ public class SpatialReferenceSystemDao
 	}
 
 	/**
+	 * Set extension values into the spatial reference system
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param srs
+	 *            spatial reference system
+	 */
+	public static void setExtensionValues(GeoPackageCore geoPackage,
+			SpatialReferenceSystem srs) {
+		setExtensionValues(geoPackage.getDatabase(), srs);
+	}
+
+	/**
+	 * Set extension values into the spatial reference system
+	 * 
+	 * @param db
+	 *            database connection
+	 * @param srs
+	 *            spatial reference system
+	 */
+	public static void setExtensionValues(GeoPackageCoreConnection db,
+			SpatialReferenceSystem srs) {
+		if (srs != null) {
+			SpatialReferenceSystemDao dao = create(db);
+			dao.setDefinition_12_063(srs);
+		}
+	}
+
+	/**
 	 * Contents DAO
 	 */
 	private ContentsDao contentsDao;

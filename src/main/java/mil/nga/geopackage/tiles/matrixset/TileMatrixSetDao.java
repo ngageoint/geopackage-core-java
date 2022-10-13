@@ -7,8 +7,10 @@ import java.util.List;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 
 /**
  * Tile Matrix Set Data Access Object
@@ -73,6 +75,48 @@ public class TileMatrixSetDao extends GeoPackageDao<TileMatrixSet, String> {
 		}
 
 		return tableNames;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public TileMatrixSet queryForId(String id) throws SQLException {
+		TileMatrixSet tileMatrixSet = super.queryForId(id);
+		if (tileMatrixSet != null) {
+			updateSRS(tileMatrixSet);
+		}
+		return tileMatrixSet;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<TileMatrixSet> queryForEq(String fieldName, Object value)
+			throws SQLException {
+		List<TileMatrixSet> tileMatrixSets = super.queryForEq(fieldName, value);
+		if (tileMatrixSets != null) {
+			for (TileMatrixSet tileMatrixSet : tileMatrixSets) {
+				updateSRS(tileMatrixSet);
+			}
+		}
+		return tileMatrixSets;
+	}
+
+	/**
+	 * Update the spatial reference system
+	 * 
+	 * @param tileMatrixSet
+	 *            tile matrix set
+	 */
+	private void updateSRS(TileMatrixSet tileMatrixSet) {
+		SpatialReferenceSystemDao.setExtensionValues(db,
+				tileMatrixSet.getSrs());
+		Contents contents = tileMatrixSet.getContents();
+		if (contents != null) {
+			SpatialReferenceSystemDao.setExtensionValues(db, contents.getSrs());
+		}
 	}
 
 }

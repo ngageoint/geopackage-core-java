@@ -17,6 +17,7 @@ import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
+import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.matrix.TileMatrixDao;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
@@ -116,6 +117,28 @@ public class ContentsDao extends GeoPackageDao<Contents, String> {
 			throws SQLException {
 		verifyCreate(contents);
 		return super.createOrUpdate(contents);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Contents queryForId(String id) throws SQLException {
+		Contents contents = super.queryForId(id);
+		if (contents != null) {
+			updateSRS(contents);
+		}
+		return contents;
+	}
+
+	/**
+	 * Update the spatial reference system
+	 * 
+	 * @param contents
+	 *            contents
+	 */
+	private void updateSRS(Contents contents) {
+		SpatialReferenceSystemDao.setExtensionValues(db, contents.getSrs());
 	}
 
 	/**

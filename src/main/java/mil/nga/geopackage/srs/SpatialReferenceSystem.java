@@ -355,13 +355,12 @@ public class SpatialReferenceSystem {
 	public String getProjectionDefinition() {
 
 		String definition = getDefinition_12_063();
-		if (definition == null || definition.trim().isEmpty()
-				|| definition.trim().equalsIgnoreCase(
-						GeoPackageConstants.UNDEFINED_DEFINITION)) {
+		if (definition == null || definition.isBlank() || definition.trim()
+				.equalsIgnoreCase(GeoPackageConstants.UNDEFINED_DEFINITION)) {
 
 			definition = getDefinition();
 
-			if (definition != null && (definition.trim().isEmpty()
+			if (definition != null && (definition.isBlank()
 					|| definition.trim().equalsIgnoreCase(
 							GeoPackageConstants.UNDEFINED_DEFINITION))) {
 				definition = null;

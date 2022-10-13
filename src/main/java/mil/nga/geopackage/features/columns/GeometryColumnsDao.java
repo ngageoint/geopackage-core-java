@@ -14,9 +14,11 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.TableColumnKey;
+import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 
 /**
  * Geometry Columns Data Access Object
@@ -106,6 +108,23 @@ public class GeometryColumnsDao
 							+ key.getColumnName());
 				}
 				geometryColumns = results.get(0);
+				updateSRS(geometryColumns);
+			}
+		}
+		return geometryColumns;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<GeometryColumns> queryForEq(String fieldName, Object value)
+			throws SQLException {
+		List<GeometryColumns> geometryColumns = super.queryForEq(fieldName,
+				value);
+		if (geometryColumns != null) {
+			for (GeometryColumns geometryColumn : geometryColumns) {
+				updateSRS(geometryColumn);
 			}
 		}
 		return geometryColumns;
@@ -247,9 +266,25 @@ public class GeometryColumnsDao
 							+ " returned for Table Name: " + tableName);
 				}
 				geometryColumns = results.get(0);
+				updateSRS(geometryColumns);
 			}
 		}
 		return geometryColumns;
+	}
+
+	/**
+	 * Update the spatial reference system
+	 * 
+	 * @param geometryColumns
+	 *            geometry columns
+	 */
+	private void updateSRS(GeometryColumns geometryColumns) {
+		SpatialReferenceSystemDao.setExtensionValues(db,
+				geometryColumns.getSrs());
+		Contents contents = geometryColumns.getContents();
+		if (contents != null) {
+			SpatialReferenceSystemDao.setExtensionValues(db, contents.getSrs());
+		}
 	}
 
 }
