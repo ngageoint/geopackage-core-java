@@ -11,6 +11,7 @@ import mil.nga.crs.operation.OperationMethods;
 import mil.nga.crs.projected.ProjectedCoordinateReferenceSystem;
 import mil.nga.crs.wkt.CRSReader;
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
@@ -815,6 +816,25 @@ public class DGIWGValidate {
 						srs.getProjectionDefinition(),
 						"Unsupported " + type.getName()
 								+ " coordinate reference system",
+						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			}
+
+			String definition = null;
+			if (crs.getType() == CRSType.COMPOUND) {
+				definition = srs.getDefinition_12_063();
+			} else {
+				definition = srs.getProjectionDefinition();
+			}
+			if (definition == null || definition.isBlank()
+					|| definition.trim().equalsIgnoreCase(
+							GeoPackageConstants.UNDEFINED_DEFINITION)) {
+				errors.add(new DGIWGValidationError(
+						SpatialReferenceSystem.TABLE_NAME,
+						crs.getType() == CRSType.COMPOUND
+								? CrsWktExtension.COLUMN_NAME
+								: SpatialReferenceSystem.COLUMN_DEFINITION,
+						definition,
+						"Missing required coordinate reference system well-known text definition",
 						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
 			}
 

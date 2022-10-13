@@ -1359,6 +1359,7 @@ public enum CoordinateReferenceSystem {
 		srs.setOrganizationCoordsysId(epsg);
 		srs.setDefinition(definition);
 		srs.setDescription(description);
+		srs.setDefinition_12_063(definition);
 
 		return srs;
 	}

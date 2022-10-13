@@ -1,7 +1,6 @@
 package mil.nga.geopackage.dgiwg;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -600,7 +599,7 @@ public class CoordinateReferenceSystemTest {
 		assertEquals(epsg, srs.getOrganizationCoordsysId());
 		assertEquals(wkt, srs.getDefinition());
 		assertEquals(description, srs.getDescription());
-		assertNull(srs.getDefinition_12_063());
+		assertEquals(wkt, srs.getDefinition_12_063());
 
 		if (PRINT_CRS) {
 			System.out.println();
