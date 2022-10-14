@@ -733,12 +733,10 @@ public abstract class CoverageDataCore<TImage extends CoverageDataImage>
 			ProjectionTransform transformRequestToCoverage,
 			BoundingBox coverageBoundingBox) {
 
-		final double requestedWidthUnitsPerPixel = (requestBoundingBox
-				.getMaxLongitude() - requestBoundingBox.getMinLongitude())
-				/ requestedCoverageWidth;
-		final double requestedHeightUnitsPerPixel = (requestBoundingBox
-				.getMaxLatitude() - requestBoundingBox.getMinLatitude())
-				/ requestedCoverageHeight;
+		final double requestedWidthUnitsPerPixel = requestBoundingBox
+				.getLongitudeRange() / requestedCoverageWidth;
+		final double requestedHeightUnitsPerPixel = requestBoundingBox
+				.getLatitudeRange() / requestedCoverageHeight;
 
 		final double tilesDistanceWidth = coverageBoundingBox.getMaxLongitude()
 				- coverageBoundingBox.getMinLongitude();
