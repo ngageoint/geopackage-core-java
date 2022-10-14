@@ -867,7 +867,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(tableName);
 			contents.setDataTypeName(metadata.getDataType(),
 					ContentsDataType.FEATURES);
-			contents.setIdentifier(tableName);
+			contents.setIdentifier(metadata.getIdentifier());
+			contents.setDescription(metadata.getDescription());
 			// contents.setLastChange(new Date());
 			BoundingBox boundingBox = metadata.getBoundingBox();
 			if (boundingBox != null) {
@@ -993,7 +994,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(tableName);
 			contents.setDataTypeName(metadata.getDataType(),
 					ContentsDataType.TILES);
-			contents.setIdentifier(tableName);
+			contents.setIdentifier(metadata.getIdentifier());
+			contents.setDescription(metadata.getDescription());
 			// contents.setLastChange(new Date());
 			BoundingBox contentsBoundingBox = metadata.getContentsBoundingBox();
 			contents.setMinX(contentsBoundingBox.getMinLongitude());
@@ -1088,7 +1090,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			contents.setTableName(tableName);
 			contents.setDataTypeName(metadata.getDataType(),
 					ContentsDataType.ATTRIBUTES);
-			contents.setIdentifier(tableName);
+			contents.setIdentifier(metadata.getIdentifier());
+			contents.setDescription(metadata.getDescription());
 			// contents.setLastChange(new Date());
 			getContentsDao().create(contents);
 

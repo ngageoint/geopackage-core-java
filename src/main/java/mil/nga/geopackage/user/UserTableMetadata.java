@@ -29,6 +29,16 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	protected String dataType;
 
 	/**
+	 * Identifier
+	 */
+	protected String identifier;
+
+	/**
+	 * Description
+	 */
+	protected String description;
+
+	/**
 	 * ID column name
 	 */
 	protected String idColumnName;
@@ -105,6 +115,48 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	 */
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
+	}
+
+	/**
+	 * Get the identifier
+	 * 
+	 * @return identifier
+	 * @since 6.5.1
+	 */
+	public String getIdentifier() {
+		return identifier != null ? identifier : getTableName();
+	}
+
+	/**
+	 * Set the identifier
+	 * 
+	 * @param identifier
+	 *            identifier
+	 * @since 6.5.1
+	 */
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	/**
+	 * Get the description
+	 * 
+	 * @return description
+	 * @since 6.5.1
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Set the description
+	 * 
+	 * @param description
+	 *            description
+	 * @since 6.5.1
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
