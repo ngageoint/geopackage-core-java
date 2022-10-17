@@ -129,6 +129,27 @@ public class WellKnownText {
 	}
 
 	/**
+	 * ETRS89-extended / LAEA Europe
+	 */
+	public static String EPSG_3035 = "PROJCS[\"ETRS89-extended / LAEA Europe\","
+			+ "GEOGCS[\"ETRS89\","
+			+ "DATUM[\"European_Terrestrial_Reference_System_1989\","
+			+ "SPHEROID[\"GRS 1980\",6378137,298.257222101,"
+			+ "AUTHORITY[\"EPSG\",\"7019\"]],"
+			+ "AUTHORITY[\"EPSG\",\"6258\"]],"
+			+ "PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\",0.0174532925199433,"
+			+ "AUTHORITY[\"EPSG\",\"9122\"]],"
+			+ "AUTHORITY[\"EPSG\",\"4258\"]],"
+			+ "PROJECTION[\"Lambert_Azimuthal_Equal_Area\"],"
+			+ "PARAMETER[\"latitude_of_center\",52],"
+			+ "PARAMETER[\"longitude_of_center\",10],"
+			+ "PARAMETER[\"false_easting\",4321000],"
+			+ "PARAMETER[\"false_northing\",3210000],"
+			+ "UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],"
+			+ "AUTHORITY[\"EPSG\",\"3035\"]]";
+
+	/**
 	 * WGS 84 / World Mercator
 	 */
 	public static String EPSG_3395 = "PROJCRS[\"WGS 84 / World Mercator\","
@@ -175,6 +196,27 @@ public class WellKnownText {
 			+ "PARAMETER[\"false_northing\",0],"
 			+ "UNIT[\"metre\",1,ID[\"EPSG\",\"9001\"]],"
 			+ "AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],ID[\"EPSG\",\"3857\"]]";
+
+	/**
+	 * NAD83 / Canada Atlas Lambert
+	 */
+	public static String EPSG_3978 = "PROJCS[\"NAD83 / Canada Atlas Lambert\","
+			+ "GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\","
+			+ "SPHEROID[\"GRS 1980\",6378137,298.257222101]],"
+			+ "PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
+			+ "UNIT[\"degree\",0.0174532925199433,"
+			+ "AUTHORITY[\"EPSG\",\"9122\"]],"
+			+ "AUTHORITY[\"EPSG\",\"4269\"]],"
+			+ "PROJECTION[\"Lambert_Conformal_Conic_2SP\"],"
+			+ "PARAMETER[\"latitude_of_origin\",49],"
+			+ "PARAMETER[\"central_meridian\",-95],"
+			+ "PARAMETER[\"standard_parallel_1\",49],"
+			+ "PARAMETER[\"standard_parallel_2\",77],"
+			+ "PARAMETER[\"false_easting\",0],"
+			+ "PARAMETER[\"false_northing\",0],"
+			+ "UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],"
+			+ "AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH],"
+			+ "AUTHORITY[\"EPSG\",\"3978\"]]";
 
 	/**
 	 * WGS 84 Geographic 2D
@@ -323,8 +365,8 @@ public class WellKnownText {
 			+ "PARAMETER[\"scale_factor\"," + SCALE_FACTOR + "],"
 			+ "PARAMETER[\"false_easting\"," + FALSE_EASTING + "],"
 			+ "PARAMETER[\"false_northing\"," + FALSE_NORTHING + "],"
-			+ "PARAMETER[\"standard_parallel_1\"," + STANDARD_PARALLEL_1 + "],"
-			+ "UNIT[\"Meter\",1]," + "AUTHORITY[\"EPSG\",\""
+			+ "UNIT[\"Meter\",1],"
+			+ "AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\""
 			+ IDENTIFIER_UNIQUE_ID + "\"]]";
 
 	/**
@@ -343,7 +385,8 @@ public class WellKnownText {
 			+ "PARAMETER[\"central_meridian\"," + CENTRAL_MERIDIAN + "],"
 			+ "PARAMETER[\"false_easting\"," + FALSE_EASTING + "],"
 			+ "PARAMETER[\"false_northing\"," + FALSE_NORTHING + "],"
-			+ "AUTHORITY[\"EPSG\",\"" + IDENTIFIER_UNIQUE_ID + "\"]]";
+			+ "AXIS[\"X\",EAST],AXIS[\"Y\",NORTH],AUTHORITY[\"EPSG\",\""
+			+ IDENTIFIER_UNIQUE_ID + "\"]]";
 
 	/**
 	 * Get Lambert Conic Conformal 1SP well-known text
@@ -365,18 +408,15 @@ public class WellKnownText {
 	 *            false easting
 	 * @param falseNorthing
 	 *            false northing
-	 * @param standardParallel1
-	 *            standard parallel 1
 	 * @return well-known text
 	 */
 	public static String getLambertConicConformal1SP(long epsg, String name,
 			GeoDatums geoDatum, double latitudeOfOrigin, double centralMeridian,
-			double scaleFactor, double falseEasting, double falseNorthing,
-			double standardParallel1) {
+			double scaleFactor, double falseEasting, double falseNorthing) {
 
 		String wkt = getLambertConicConformal(EPSG_LAMBERT_CONFORMAL_CONIC_1SP,
 				epsg, name, geoDatum, latitudeOfOrigin, centralMeridian,
-				falseEasting, falseNorthing, standardParallel1);
+				falseEasting, falseNorthing);
 
 		wkt = wkt.replaceAll(SCALE_FACTOR, String.valueOf(scaleFactor));
 
@@ -414,8 +454,10 @@ public class WellKnownText {
 
 		String wkt = getLambertConicConformal(EPSG_LAMBERT_CONFORMAL_CONIC_2SP,
 				epsg, name, geoDatum, latitudeOfOrigin, centralMeridian,
-				falseEasting, falseNorthing, standardParallel1);
+				falseEasting, falseNorthing);
 
+		wkt = wkt.replaceAll(STANDARD_PARALLEL_1,
+				String.valueOf(standardParallel1));
 		wkt = wkt.replaceAll(STANDARD_PARALLEL_2,
 				String.valueOf(standardParallel2));
 
@@ -442,14 +484,11 @@ public class WellKnownText {
 	 *            false easting
 	 * @param falseNorthing
 	 *            false northing
-	 * @param standardParallel1
-	 *            standard parallel 1
 	 * @return well-known text
 	 */
 	private static String getLambertConicConformal(String wkt, long epsg,
 			String name, GeoDatums geoDatum, double latitudeOfOrigin,
-			double centralMeridian, double falseEasting, double falseNorthing,
-			double standardParallel1) {
+			double centralMeridian, double falseEasting, double falseNorthing) {
 
 		switch (geoDatum) {
 		case WGS84:
@@ -480,8 +519,6 @@ public class WellKnownText {
 		wkt = wkt.replaceAll(CENTRAL_MERIDIAN, String.valueOf(centralMeridian));
 		wkt = wkt.replaceAll(FALSE_EASTING, String.valueOf(falseEasting));
 		wkt = wkt.replaceAll(FALSE_NORTHING, String.valueOf(falseNorthing));
-		wkt = wkt.replaceAll(STANDARD_PARALLEL_1,
-				String.valueOf(standardParallel1));
 		wkt = wkt.replaceAll(IDENTIFIER_UNIQUE_ID, String.valueOf(epsg));
 
 		return wkt;

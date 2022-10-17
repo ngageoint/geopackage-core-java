@@ -106,7 +106,7 @@ public enum DGIWGRequirement {
 	/**
 	 * Requirement 20
 	 */
-	VALIDITY("GeoPackage Data Validity"),
+	VALIDITY_DATA_VALIDITY("GeoPackage Data Validity"),
 
 	/**
 	 * Requirement 21
@@ -121,17 +121,17 @@ public enum DGIWGRequirement {
 	/**
 	 * Requirement 23
 	 */
-	ZOOM_FACTOR("Zoom levels"),
+	ZOOM_FACTOR("Zoom level factor"),
 
 	/**
 	 * Requirement 24
 	 */
-	MATRIX_SETS_MULTIPLE_ZOOM("Multiple Zoom Tile Matrix Sets"),
+	ZOOM_MATRIX_SETS_MULTIPLE("Tile Matrix Set with Multiple Zoom Levels"),
 
 	/**
 	 * Requirement 25
 	 */
-	MATRIX_SETS_ONE_ZOOM("Tile Matrix sets with one Zoom Level"),
+	ZOOM_MATRIX_SETS_ONE("Tile Matrix Set with one Zoom Level"),
 
 	/**
 	 * Requirement 26
@@ -141,17 +141,12 @@ public enum DGIWGRequirement {
 	/**
 	 * Requirement 27
 	 */
-	BBOX_TILE_PYRAMID_MBR("Bounding box Tile Pyramid"),
+	METADATA_TILE("Tile layer Metadata"),
 
 	/**
 	 * Requirement 28
 	 */
-	TILE_METADATA("Tile layer Metadata"),
-
-	/**
-	 * Requirement 29
-	 */
-	VECTOR_METADATA("Vector layer Metadata");
+	METADATA_FEATURE("Feature layer Metadata");
 
 	/**
 	 * Identifier prefix

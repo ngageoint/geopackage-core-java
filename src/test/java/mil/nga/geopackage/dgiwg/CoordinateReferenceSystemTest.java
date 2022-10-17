@@ -353,20 +353,18 @@ public class CoordinateReferenceSystemTest {
 		double scaleFactor = 1;
 		double falseEasting = 0;
 		double falseNorthing = 0;
-		double standardParallel1 = 25;
 
 		SpatialReferenceSystem srs = CoordinateReferenceSystem
 				.createLambertConicConformal1SP(epsg, name, datum,
 						latitudeOfOrigin, centralMeridian, scaleFactor,
-						falseEasting, falseNorthing, standardParallel1);
+						falseEasting, falseNorthing);
 
 		String wkt = WellKnownText.getLambertConicConformal1SP(epsg, name,
 				datum, latitudeOfOrigin, centralMeridian, scaleFactor,
-				falseEasting, falseNorthing, standardParallel1);
+				falseEasting, falseNorthing);
 
 		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
-				centralMeridian, scaleFactor, falseEasting, falseNorthing,
-				standardParallel1, wkt,
+				centralMeridian, scaleFactor, falseEasting, falseNorthing, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
 				srs);
 
@@ -378,19 +376,17 @@ public class CoordinateReferenceSystemTest {
 		scaleFactor = 1;
 		falseEasting = 0;
 		falseNorthing = 0;
-		standardParallel1 = 49;
 
 		srs = CoordinateReferenceSystem.createLambertConicConformal1SP(epsg,
 				name, datum, latitudeOfOrigin, centralMeridian, scaleFactor,
-				falseEasting, falseNorthing, standardParallel1);
+				falseEasting, falseNorthing);
 
 		wkt = WellKnownText.getLambertConicConformal1SP(epsg, name, datum,
 				latitudeOfOrigin, centralMeridian, scaleFactor, falseEasting,
-				falseNorthing, standardParallel1);
+				falseNorthing);
 
 		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
-				centralMeridian, scaleFactor, falseEasting, falseNorthing,
-				standardParallel1, wkt,
+				centralMeridian, scaleFactor, falseEasting, falseNorthing, wkt,
 				CoordinateReferenceSystem.LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION,
 				srs);
 
@@ -475,8 +471,6 @@ public class CoordinateReferenceSystemTest {
 	 *            false easting
 	 * @param falseNorthing
 	 *            false northing
-	 * @param standardParallel1
-	 *            standard parallel 1
 	 * @param wkt
 	 *            well-known text
 	 * @param description
@@ -489,8 +483,8 @@ public class CoordinateReferenceSystemTest {
 	private void testLambertConicConformal1SP(long epsg, String name,
 			GeoDatums datum, double latitudeOfOrigin, double centralMeridian,
 			double scaleFactor, double falseEasting, double falseNorthing,
-			double standardParallel1, String wkt, String description,
-			SpatialReferenceSystem srs) throws IOException {
+			String wkt, String description, SpatialReferenceSystem srs)
+			throws IOException {
 
 		OperationMethod method = testLambertConicConformal(epsg, name, datum,
 				wkt,
@@ -508,8 +502,6 @@ public class CoordinateReferenceSystemTest {
 		assertEquals(falseEasting, method.getParameter(3).getValue(), 0.0);
 		assertEquals("false_northing", method.getParameter(4).getName());
 		assertEquals(falseNorthing, method.getParameter(4).getValue(), 0.0);
-		assertEquals("standard_parallel_1", method.getParameter(5).getName());
-		assertEquals(standardParallel1, method.getParameter(5).getValue(), 0.0);
 
 	}
 

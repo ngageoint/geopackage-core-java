@@ -27,11 +27,21 @@ import mil.nga.proj.ProjectionConstants;
 public enum CoordinateReferenceSystem {
 
 	/**
+	 * ETRS89-extended / LAEA Europe
+	 */
+	EPSG_3035(3035, "ETRS89-extended / LAEA Europe", CRSType.PROJECTED, 2,
+			WellKnownText.EPSG_3035,
+			"Lambert Azimuthal Equal Area ETRS89 for Europe",
+			new BoundingBox(2000000.0, 1000000.0, 6500000, 5500000.0),
+			new BoundingBox(-16.1, 32.88, 40.18, 84.73), DataType.TILES_2D,
+			DataType.TILES_3D),
+
+	/**
 	 * WGS 84 / World Mercator
 	 */
 	EPSG_3395(3395, "WGS 84 / World Mercator", CRSType.PROJECTED, 2,
 			WellKnownText.EPSG_3395,
-			"Euro-centric view of world excluding polar areas for very small scale mapping",
+			"Mercator view of world excluding polar areas for very small scale mapping",
 			BoundingBox.worldWebMercator(),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
 					-80.0, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
@@ -46,6 +56,15 @@ public enum CoordinateReferenceSystem {
 			"Uses spherical development of ellipsoidal coordinates. This should only be used for visualization purposes.",
 			BoundingBox.worldWebMercator(),
 			BoundingBox.worldWGS84WithWebMercatorLimits(), DataType.TILES_2D),
+
+	/**
+	 * NAD83 / Canada Atlas Lambert
+	 */
+	EPSG_3978(3978, "NAD83 / Canada Atlas Lambert", CRSType.PROJECTED, 2,
+			WellKnownText.EPSG_3978, "Lambert Conformal Conic NAD83 for Canada",
+			new BoundingBox(-7786476.885838887, -5153821.09213678,
+					7148753.233541353, 7928343.534071138),
+			new BoundingBox(-172.54, 23.81, -47.74, 86.46), DataType.TILES_2D),
 
 	/**
 	 * WGS 84 Geographic 2D
@@ -1280,18 +1299,16 @@ public enum CoordinateReferenceSystem {
 	 *            false easting
 	 * @param falseNorthing
 	 *            false northing
-	 * @param standardParallel1
-	 *            standard parallel 1
 	 * @return Spatial Reference System
 	 */
 	public static SpatialReferenceSystem createLambertConicConformal1SP(
 			long epsg, String name, GeoDatums geoDatum, double latitudeOfOrigin,
 			double centralMeridian, double scaleFactor, double falseEasting,
-			double falseNorthing, double standardParallel1) {
+			double falseNorthing) {
 
 		String definition = WellKnownText.getLambertConicConformal1SP(epsg,
 				name, geoDatum, latitudeOfOrigin, centralMeridian, scaleFactor,
-				falseEasting, falseNorthing, standardParallel1);
+				falseEasting, falseNorthing);
 
 		return createLambertConicConformal(epsg, name, definition,
 				LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION);

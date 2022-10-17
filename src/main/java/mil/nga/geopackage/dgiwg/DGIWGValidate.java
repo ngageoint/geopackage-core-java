@@ -378,7 +378,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_X,
 								tileMatrixSet.getMinX(), crsBounds,
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -388,7 +388,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_Y,
 								tileMatrixSet.getMinY(), crsBounds,
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -398,7 +398,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_X,
 								tileMatrixSet.getMaxX(), crsBounds,
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -408,7 +408,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_Y,
 								tileMatrixSet.getMaxY(), crsBounds,
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -455,7 +455,7 @@ public class DGIWGValidate {
 							DGIWGConstants.MIN_ZOOM_LEVEL + " <= "
 									+ TileMatrix.COLUMN_ZOOM_LEVEL + " <= "
 									+ DGIWGConstants.MAX_ZOOM_LEVEL,
-							DGIWGRequirement.VALIDITY,
+							DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 							primaryKeys(tileMatrix)));
 				}
 
@@ -519,7 +519,7 @@ public class DGIWGValidate {
 								tileMatrix.getZoomLevel(),
 								"Missing adjacent zoom level(s): "
 										+ zoomMissing,
-								DGIWGRequirement.MATRIX_SETS_MULTIPLE_ZOOM,
+								DGIWGRequirement.ZOOM_MATRIX_SETS_MULTIPLE,
 								primaryKeys(tileMatrix)));
 					}
 
@@ -673,7 +673,7 @@ public class DGIWGValidate {
 				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 						GeometryColumns.COLUMN_Z, z,
 						"Geometry Columns z values of prohibited (0) or mandatory (1)",
-						DGIWGRequirement.VALIDITY,
+						DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 						primaryKeys(geometryColumns)));
 			}
 
@@ -689,7 +689,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of prohibited (0) is for 2-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKeys(geometryColumns)));
 					}
 				} else if (z == 1) {
@@ -700,7 +700,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
-								DGIWGRequirement.VALIDITY,
+								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKeys(geometryColumns)));
 					}
 				}
@@ -859,7 +859,7 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(), crs.getAuthority(),
-						DGIWGRequirement.VALIDITY, primaryKey(srs)));
+						DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
 			}
 
 			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
@@ -879,7 +879,7 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(),
 						ProjectionConstants.AUTHORITY_EPSG,
-						DGIWGRequirement.VALIDITY, primaryKey(srs)));
+						DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
 			}
 
 		}
@@ -895,7 +895,7 @@ public class DGIWGValidate {
 							SpatialReferenceSystem.COLUMN_DESCRIPTION,
 							srs.getDescription(),
 							"Invalid empty or unspecified description",
-							DGIWGRequirement.VALIDITY, primaryKey(srs)));
+							DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
 		}
 
 		return crs;
