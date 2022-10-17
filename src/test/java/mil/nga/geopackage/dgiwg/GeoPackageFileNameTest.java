@@ -17,7 +17,7 @@ import org.junit.Test;
 import mil.nga.geopackage.io.GeoPackageIOUtils;
 
 /**
- * DGIWG File Name test
+ * DGIWG File Name test (informative)
  * 
  * @author osbornb
  */
@@ -35,7 +35,7 @@ public class GeoPackageFileNameTest {
 
 		testFileName(name, fileName);
 
-		assertTrue(fileName.isValid());
+		assertTrue(fileName.isInformative());
 
 		assertEquals("AGC", fileName.getProducer());
 		assertEquals("BUCK", fileName.getDataProduct());
@@ -68,7 +68,7 @@ public class GeoPackageFileNameTest {
 
 		testFileName(name, fileName);
 
-		assertTrue(fileName.isValid());
+		assertTrue(fileName.isInformative());
 
 		assertEquals("OGL", fileName.getProducer());
 		assertEquals("BOUND", fileName.getDataProduct());
@@ -101,7 +101,7 @@ public class GeoPackageFileNameTest {
 
 		testFileName(name, fileName);
 
-		assertTrue(fileName.isValid());
+		assertTrue(fileName.isInformative());
 
 		assertEquals("Producer", fileName.getProducer());
 		assertEquals("Data Product", fileName.getDataProduct());
@@ -137,7 +137,7 @@ public class GeoPackageFileNameTest {
 
 		testFileName(name, fileName);
 
-		assertTrue(fileName.isValid());
+		assertTrue(fileName.isInformative());
 
 		assertEquals("Producer", fileName.getProducer());
 		assertEquals("Data Product", fileName.getDataProduct());
@@ -170,7 +170,7 @@ public class GeoPackageFileNameTest {
 
 		testFileName(name, fileName);
 
-		assertFalse(fileName.isValid());
+		assertFalse(fileName.isInformative());
 
 		assertEquals("Producer", fileName.getProducer());
 		assertEquals("Data Product", fileName.getDataProduct());

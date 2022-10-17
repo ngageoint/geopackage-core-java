@@ -515,11 +515,11 @@ public class GeoPackageFileName {
 	}
 
 	/**
-	 * Determine if valid
+	 * Determine if a complete informative file name
 	 * 
-	 * @return true if valid
+	 * @return true if informative
 	 */
-	public boolean isValid() {
+	public boolean isInformative() {
 		return producer != null && dataProduct != null
 				&& geographicCoverageArea != null && zoomLevels != null
 				&& version != null && creationDateText != null;
