@@ -89,7 +89,7 @@ public class SpatialReferenceSystem {
 	private long organizationCoordsysId;
 
 	/**
-	 * Well-known Text [32] Representation of the Spatial Reference System
+	 * Well-known Text Representation of the Spatial Reference System
 	 */
 	@DatabaseField(columnName = COLUMN_DEFINITION, canBeNull = false)
 	private String definition;
@@ -101,9 +101,14 @@ public class SpatialReferenceSystem {
 	private String description;
 
 	/**
-	 * Well-known Text [34] Representation of the Spatial Reference System
+	 * Well-known Text extension Representation of the Spatial Reference System
 	 */
 	private String definition_12_063;
+
+	/**
+	 * Coordinate epoch
+	 */
+	private Double epoch;
 
 	/**
 	 * Contents
@@ -145,6 +150,7 @@ public class SpatialReferenceSystem {
 		definition = srs.definition;
 		description = srs.description;
 		definition_12_063 = srs.definition_12_063;
+		epoch = srs.epoch;
 	}
 
 	/**
@@ -299,6 +305,27 @@ public class SpatialReferenceSystem {
 	 */
 	public void setDefinition_12_063(String definition_12_063) {
 		this.definition_12_063 = definition_12_063;
+	}
+
+	/**
+	 * Get the coordinate epoch
+	 * 
+	 * @return coordinate epoch
+	 * @since 6.5.1
+	 */
+	public Double getEpoch() {
+		return epoch;
+	}
+
+	/**
+	 * Set the coordinate epoch
+	 * 
+	 * @param epoch
+	 *            coordinate epoch
+	 * @since 6.5.1
+	 */
+	public void setEpoch(Double epoch) {
+		this.epoch = epoch;
 	}
 
 	/**

@@ -99,7 +99,7 @@ public class DGIWGValidate {
 					"No mandatory CRS WKT extension",
 					DGIWGRequirement.EXTENSIONS_MANDATORY,
 					extensionPrimaryKeys(SpatialReferenceSystem.TABLE_NAME,
-							CrsWktExtension.COLUMN_NAME,
+							CrsWktExtension.DEFINITION_COLUMN_NAME,
 							CrsWktExtension.EXTENSION_NAME)));
 		}
 
@@ -831,7 +831,7 @@ public class DGIWGValidate {
 				errors.add(new DGIWGValidationError(
 						SpatialReferenceSystem.TABLE_NAME,
 						crs.getType() == CRSType.COMPOUND
-								? CrsWktExtension.COLUMN_NAME
+								? CrsWktExtension.DEFINITION_COLUMN_NAME
 								: SpatialReferenceSystem.COLUMN_DEFINITION,
 						definition,
 						"Missing required coordinate reference system well-known text definition",

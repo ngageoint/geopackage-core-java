@@ -84,7 +84,7 @@ public class SpatialReferenceSystemDao
 			SpatialReferenceSystem srs) {
 		if (srs != null) {
 			SpatialReferenceSystemDao dao = create(db);
-			dao.setDefinition_12_063(srs);
+			dao.setExtension(srs);
 		}
 	}
 
@@ -142,7 +142,18 @@ public class SpatialReferenceSystemDao
 	 * @since 1.2.1
 	 */
 	public boolean hasDefinition_12_063() {
-		return crsWktExtension != null && crsWktExtension.has();
+		return crsWktExtension != null && crsWktExtension.has(); // TODO version
+	}
+
+	/**
+	 * Determine if the SRS table contains the extension epoch column for CRS
+	 * WKT
+	 * 
+	 * @return true if has extension
+	 * @since 6.5.1
+	 */
+	public boolean hasEpoch() {
+		return crsWktExtension != null && crsWktExtension.has(); // TODO version
 	}
 
 	/**
@@ -356,34 +367,52 @@ public class SpatialReferenceSystemDao
 	}
 
 	/**
-	 * Query and set the definition 12 063 in the srs object if the extension
-	 * exists
+	 * Query to get the epoch value if the extension exists
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @return epoch or null
+	 * @since 6.5.1
+	 */
+	public Double getEpoch(long srsId) {
+		Double epoch = null;
+		if (hasEpoch()) {
+			epoch = crsWktExtension.getEpoch(srsId);
+		}
+		return epoch;
+	}
+
+	/**
+	 * Query and set the values in the srs object if the extension exists
 	 * 
 	 * @param srs
 	 *            spatial reference system
-	 * @since 1.2.1
+	 * @since 6.5.1
 	 */
-	public void setDefinition_12_063(SpatialReferenceSystem srs) {
+	public void setExtension(SpatialReferenceSystem srs) {
 		if (srs != null) {
-			String definition = getDefinition_12_063(srs.getSrsId());
+			long srsId = srs.getSrsId();
+			String definition = getDefinition_12_063(srsId);
 			if (definition != null) {
 				srs.setDefinition_12_063(definition);
+			}
+			Double epoch = getEpoch(srsId);
+			if (epoch != null) {
+				srs.setEpoch(epoch);
 			}
 		}
 	}
 
 	/**
-	 * Query and set the definition 12 063 in the srs objects if the extension
-	 * exists
+	 * Query and set the values in the srs objects if the extension exists
 	 * 
 	 * @param srsList
 	 *            srs list
-	 * @since 1.2.1
+	 * @since 6.5.1
 	 */
-	public void setDefinition_12_063(
-			Collection<SpatialReferenceSystem> srsList) {
+	public void setExtension(Collection<SpatialReferenceSystem> srsList) {
 		for (SpatialReferenceSystem srs : srsList) {
-			setDefinition_12_063(srs);
+			setExtension(srs);
 		}
 	}
 
@@ -403,17 +432,36 @@ public class SpatialReferenceSystemDao
 	}
 
 	/**
-	 * Update the definition 12 063 in the database if the extension exists
+	 * Update the epoch in the database if the extension exists
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @param epoch
+	 *            epoch
+	 * @since 6.5.1
+	 */
+	public void updateEpoch(long srsId, Double epoch) {
+		if (hasEpoch()) {
+			crsWktExtension.updateEpoch(srsId, epoch);
+		}
+	}
+
+	/**
+	 * Update the extension if exists
 	 * 
 	 * @param srs
 	 *            srs
-	 * @since 1.2.1
+	 * @since 6.5.1
 	 */
-	public void updateDefinition_12_063(SpatialReferenceSystem srs) {
+	public void updateExtension(SpatialReferenceSystem srs) {
 		if (srs != null) {
 			String definition = srs.getDefinition_12_063();
 			if (definition != null) {
 				updateDefinition_12_063(srs.getSrsId(), definition);
+			}
+			Double epoch = srs.getEpoch();
+			if (epoch != null) {
+				updateEpoch(srs.getSrsId(), epoch);
 			}
 		}
 	}
@@ -424,7 +472,7 @@ public class SpatialReferenceSystemDao
 	@Override
 	public SpatialReferenceSystem queryForId(Long id) throws SQLException {
 		SpatialReferenceSystem srs = super.queryForId(id);
-		setDefinition_12_063(srs);
+		setExtension(srs);
 		return srs;
 	}
 
@@ -436,7 +484,7 @@ public class SpatialReferenceSystemDao
 			PreparedQuery<SpatialReferenceSystem> preparedQuery)
 			throws SQLException {
 		SpatialReferenceSystem srs = super.queryForFirst(preparedQuery);
-		setDefinition_12_063(srs);
+		setExtension(srs);
 		return srs;
 	}
 
@@ -446,7 +494,7 @@ public class SpatialReferenceSystemDao
 	@Override
 	public List<SpatialReferenceSystem> queryForAll() throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForAll();
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -458,7 +506,7 @@ public class SpatialReferenceSystemDao
 			Object value) throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForEq(fieldName,
 				value);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -470,7 +518,7 @@ public class SpatialReferenceSystemDao
 			PreparedQuery<SpatialReferenceSystem> preparedQuery)
 			throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.query(preparedQuery);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -481,7 +529,7 @@ public class SpatialReferenceSystemDao
 	public List<SpatialReferenceSystem> queryForMatching(
 			SpatialReferenceSystem matchObj) throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForMatching(matchObj);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -493,7 +541,7 @@ public class SpatialReferenceSystemDao
 			SpatialReferenceSystem matchObj) throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForMatchingArgs(
 				matchObj);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -505,7 +553,7 @@ public class SpatialReferenceSystemDao
 			Map<String, Object> fieldValues) throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForFieldValues(
 				fieldValues);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -517,7 +565,7 @@ public class SpatialReferenceSystemDao
 			Map<String, Object> fieldValues) throws SQLException {
 		List<SpatialReferenceSystem> srsList = super.queryForFieldValuesArgs(
 				fieldValues);
-		setDefinition_12_063(srsList);
+		setExtension(srsList);
 		return srsList;
 	}
 
@@ -528,7 +576,7 @@ public class SpatialReferenceSystemDao
 	public SpatialReferenceSystem queryForSameId(SpatialReferenceSystem data)
 			throws SQLException {
 		SpatialReferenceSystem srs = super.queryForSameId(data);
-		setDefinition_12_063(srs);
+		setExtension(srs);
 		return srs;
 	}
 
@@ -538,7 +586,7 @@ public class SpatialReferenceSystemDao
 	@Override
 	public int create(SpatialReferenceSystem srs) throws SQLException {
 		int result = super.create(srs);
-		updateDefinition_12_063(srs);
+		updateExtension(srs);
 		return result;
 	}
 
@@ -549,7 +597,7 @@ public class SpatialReferenceSystemDao
 	public SpatialReferenceSystem createIfNotExists(SpatialReferenceSystem data)
 			throws SQLException {
 		SpatialReferenceSystem srs = super.createIfNotExists(data);
-		updateDefinition_12_063(srs);
+		updateExtension(srs);
 		return srs;
 	}
 
@@ -560,7 +608,7 @@ public class SpatialReferenceSystemDao
 	public CreateOrUpdateStatus createOrUpdate(SpatialReferenceSystem data)
 			throws SQLException {
 		CreateOrUpdateStatus status = super.createOrUpdate(data);
-		updateDefinition_12_063(data);
+		updateExtension(data);
 		return status;
 	}
 
@@ -570,7 +618,7 @@ public class SpatialReferenceSystemDao
 	@Override
 	public int update(SpatialReferenceSystem data) throws SQLException {
 		int result = super.update(data);
-		updateDefinition_12_063(data);
+		updateExtension(data);
 		return result;
 	}
 
@@ -740,7 +788,7 @@ public class SpatialReferenceSystemDao
 								+ organization + ", id: " + id);
 			}
 		} else {
-			setDefinition_12_063(srs);
+			setExtension(srs);
 		}
 
 		return srs;

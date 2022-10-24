@@ -1,6 +1,8 @@
 package mil.nga.geopackage.extension;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
@@ -32,6 +34,12 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public static final String EXTENSION_NAME = GeoPackageConstants.EXTENSION_AUTHOR
 			+ Extensions.EXTENSION_NAME_DIVIDER + NAME;
+	/**
+	 * Latest supported extension version
+	 * 
+	 * @since 6.5.1
+	 */
+	public static final CrsWktExtensionVersion VERSION = CrsWktExtensionVersion.V_1_1;
 
 	/**
 	 * Extension definition URL
@@ -41,15 +49,39 @@ public class CrsWktExtension extends BaseExtension {
 
 	/**
 	 * Extension new column name
+	 * 
+	 * @since 6.5.1
 	 */
-	public static final String COLUMN_NAME = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, NAME, "column_name");
+	public static final String DEFINITION_COLUMN_NAME = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "definition",
+					"column_name");
 
 	/**
 	 * Extension new column definition
+	 * 
+	 * @since 6.5.1
 	 */
-	public static final String COLUMN_DEF = GeoPackageProperties
-			.getProperty(PropertyConstants.EXTENSIONS, NAME, "column_def");
+	public static final String DEFINITION_COLUMN_DEF = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "definition",
+					"column_def");
+
+	/**
+	 * Extension epoch column name
+	 * 
+	 * @since 6.5.1
+	 */
+	public static final String EPOCH_COLUMN_NAME = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "epoch",
+					"column_name");
+
+	/**
+	 * Extension epoch column definition
+	 * 
+	 * @since 6.5.1
+	 */
+	public static final String EPOCH_COLUMN_DEF = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS, NAME, "epoch",
+					"column_def");
 
 	/**
 	 * Connection
@@ -72,18 +104,49 @@ public class CrsWktExtension extends BaseExtension {
 	 * Get or create the extension
 	 * 
 	 * @return extension
+	 * @since 6.5.1
 	 */
-	public Extensions getOrCreate() {
+	public List<Extensions> getOrCreate() {
+		return getOrCreate(VERSION);
+	}
 
-		Extensions extension = getOrCreate(EXTENSION_NAME,
-				SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME, DEFINITION,
-				ExtensionScopeType.READ_WRITE);
+	/**
+	 * Get or create the extension
+	 * 
+	 * @param version
+	 *            extension version
+	 * @return extension
+	 * @since 6.5.1
+	 */
+	public List<Extensions> getOrCreate(CrsWktExtensionVersion version) {
 
-		if (!hasColumn()) {
-			createColumn();
+		List<Extensions> extensions = new ArrayList<>();
+
+		extensions.add(getOrCreate(EXTENSION_NAME,
+				SpatialReferenceSystem.TABLE_NAME, DEFINITION_COLUMN_NAME,
+				DEFINITION, ExtensionScopeType.READ_WRITE));
+
+		if (!hasDefinitionColumn()) {
+			createDefinitionColumn();
 		}
 
-		return extension;
+		if (version == CrsWktExtensionVersion.V_1_1) {
+
+			String name = getExtensionName(version);
+			extensions.add(getOrCreate(name, SpatialReferenceSystem.TABLE_NAME,
+					DEFINITION_COLUMN_NAME, DEFINITION,
+					ExtensionScopeType.READ_WRITE));
+			extensions.add(getOrCreate(name, SpatialReferenceSystem.TABLE_NAME,
+					EPOCH_COLUMN_NAME, DEFINITION,
+					ExtensionScopeType.READ_WRITE));
+
+			if (!hasEpochColumn()) {
+				createEpochColumn();
+			}
+
+		}
+
+		return extensions;
 	}
 
 	/**
@@ -93,13 +156,27 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public boolean has() {
 
+		// TODO
+
 		boolean exists = has(EXTENSION_NAME);
 
 		if (exists) {
-			exists = hasColumn();
+			exists = hasDefinitionColumn();
 		}
 
 		return exists;
+	}
+
+	/**
+	 * Get the extension name for the version
+	 * 
+	 * @param version
+	 *            extension version
+	 * @return extension name
+	 * @since 6.5.1
+	 */
+	public String getExtensionName(CrsWktExtensionVersion version) {
+		return EXTENSION_NAME + version.getSuffix();
 	}
 
 	/**
@@ -112,8 +189,9 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public void updateDefinition(long srsId, String definition) {
 		connection.execSQL("UPDATE " + SpatialReferenceSystem.TABLE_NAME
-				+ " SET " + COLUMN_NAME + " = '" + definition + "' WHERE "
-				+ SpatialReferenceSystem.COLUMN_SRS_ID + " = " + srsId);
+				+ " SET " + DEFINITION_COLUMN_NAME + " = '" + definition
+				+ "' WHERE " + SpatialReferenceSystem.COLUMN_SRS_ID + " = "
+				+ srsId);
 	}
 
 	/**
@@ -125,7 +203,7 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public String getDefinition(long srsId) {
 		String definition = connection.querySingleTypedResult(
-				"SELECT " + COLUMN_NAME + " FROM "
+				"SELECT " + DEFINITION_COLUMN_NAME + " FROM "
 						+ SpatialReferenceSystem.TABLE_NAME + " WHERE "
 						+ SpatialReferenceSystem.COLUMN_SRS_ID + " = ?",
 				new String[] { String.valueOf(srsId) });
@@ -133,12 +211,44 @@ public class CrsWktExtension extends BaseExtension {
 	}
 
 	/**
-	 * Create the extension column
+	 * Update the extension epoch
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @param epoch
+	 *            epoch
+	 * @since 6.5.1
 	 */
-	private void createColumn() {
+	public void updateEpoch(long srsId, Double epoch) {
+		connection.execSQL("UPDATE " + SpatialReferenceSystem.TABLE_NAME
+				+ " SET " + EPOCH_COLUMN_NAME + " = '" + epoch + "' WHERE "
+				+ SpatialReferenceSystem.COLUMN_SRS_ID + " = " + srsId);
+	}
+
+	/**
+	 * Get the extension epoch
+	 * 
+	 * @param srsId
+	 *            srs id
+	 * @return epoch
+	 * @since 6.5.1
+	 */
+	public Double getEpoch(long srsId) {
+		Double epoch = connection.querySingleTypedResult(
+				"SELECT " + EPOCH_COLUMN_NAME + " FROM "
+						+ SpatialReferenceSystem.TABLE_NAME + " WHERE "
+						+ SpatialReferenceSystem.COLUMN_SRS_ID + " = ?",
+				new String[] { String.valueOf(srsId) });
+		return epoch;
+	}
+
+	/**
+	 * Create the extension definition column
+	 */
+	private void createDefinitionColumn() {
 
 		AlterTable.addColumn(connection, SpatialReferenceSystem.TABLE_NAME,
-				COLUMN_NAME, COLUMN_DEF);
+				DEFINITION_COLUMN_NAME, DEFINITION_COLUMN_DEF);
 
 		// Update the existing known SRS values
 		updateDefinition(
@@ -167,14 +277,32 @@ public class CrsWktExtension extends BaseExtension {
 	}
 
 	/**
-	 * Determine if the GeoPackage SRS table has the extension column
-	 * 
-	 * @return
+	 * Create the extension epoch column
 	 */
-	private boolean hasColumn() {
-		boolean exists = connection
-				.columnExists(SpatialReferenceSystem.TABLE_NAME, COLUMN_NAME);
+	private void createEpochColumn() {
+		AlterTable.addColumn(connection, SpatialReferenceSystem.TABLE_NAME,
+				EPOCH_COLUMN_NAME, EPOCH_COLUMN_DEF);
+	}
+
+	/**
+	 * Determine if the GeoPackage SRS table has the extension definition column
+	 * 
+	 * @return true if has column
+	 */
+	private boolean hasDefinitionColumn() {
+		boolean exists = connection.columnExists(
+				SpatialReferenceSystem.TABLE_NAME, DEFINITION_COLUMN_NAME);
 		return exists;
+	}
+
+	/**
+	 * Determine if the GeoPackage SRS table has the extension epoch column
+	 * 
+	 * @return true if has column
+	 */
+	private boolean hasEpochColumn() {
+		return connection.columnExists(SpatialReferenceSystem.TABLE_NAME,
+				EPOCH_COLUMN_NAME);
 	}
 
 	/**
@@ -183,6 +311,8 @@ public class CrsWktExtension extends BaseExtension {
 	 * @since 3.2.0
 	 */
 	public void removeExtension() {
+
+		// TODO
 
 		try {
 			if (extensionsDao.isTableExists()) {
