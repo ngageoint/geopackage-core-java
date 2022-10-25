@@ -25,12 +25,12 @@ public enum CrsWktExtensionVersion {
 	/**
 	 * First version
 	 */
-	public static CrsWktExtensionVersion FIRST = V_1;
+	public static final CrsWktExtensionVersion FIRST = V_1;
 
 	/**
 	 * Latest supported version
 	 */
-	public static CrsWktExtensionVersion LATEST = V_1_1;
+	public static final CrsWktExtensionVersion LATEST = V_1_1;
 
 	/**
 	 * Version

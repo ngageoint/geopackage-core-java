@@ -207,6 +207,13 @@ public class CrsWktExtension extends BaseExtension {
 		boolean exists = has(name, SpatialReferenceSystem.TABLE_NAME,
 				DEFINITION_COLUMN_NAME);
 
+		if (!exists && version == CrsWktExtensionVersion.FIRST) {
+			// Handle: "In (GeoPackage version) 1.1.0 and 1.2.0, the table_name
+			// and column_name column values of the required gpkg_extensions row
+			// were inadvertently left unspecified"
+			exists = has(name);
+		}
+
 		if (exists) {
 
 			exists = hasDefinitionColumn();
