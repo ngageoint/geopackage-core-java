@@ -32,11 +32,11 @@ public class GeoPackageConstants {
 	public static final String APPLICATION_ID = "GPKG";
 
 	/**
-	 * GeoPackage user version
+	 * GeoPackage user version 1.3.1
 	 * 
 	 * @since 1.2.1
 	 */
-	public static final int USER_VERSION = 10300;
+	public static final int USER_VERSION = 10301;
 
 	/**
 	 * Expected magic number
