@@ -16,6 +16,7 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.ContentsDataType;
 import mil.nga.geopackage.extension.CrsWktExtension;
+import mil.nga.geopackage.extension.CrsWktExtensionVersion;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.GeometryExtensions;
@@ -92,7 +93,7 @@ public class DGIWGValidate {
 		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
 		CrsWktExtension crsWktExtension = new CrsWktExtension(geoPackage);
-		if (!crsWktExtension.has()) {
+		if (!crsWktExtension.hasMinimum(CrsWktExtensionVersion.V_1)) {
 			errors.add(new DGIWGValidationError(Extensions.TABLE_NAME,
 					Extensions.COLUMN_EXTENSION_NAME,
 					CrsWktExtension.EXTENSION_NAME,
@@ -859,7 +860,8 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.TABLE_NAME,
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(), crs.getAuthority(),
-						DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
+						DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+						primaryKey(srs)));
 			}
 
 			if (srs.getOrganizationCoordsysId() != crs.getCode()) {
@@ -879,7 +881,8 @@ public class DGIWGValidate {
 						SpatialReferenceSystem.COLUMN_ORGANIZATION,
 						srs.getOrganization(),
 						ProjectionConstants.AUTHORITY_EPSG,
-						DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
+						DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+						primaryKey(srs)));
 			}
 
 		}
@@ -890,12 +893,12 @@ public class DGIWGValidate {
 						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_UNKNOWN)
 				|| description
 						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_TBD)) {
-			errors.add(
-					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
-							SpatialReferenceSystem.COLUMN_DESCRIPTION,
-							srs.getDescription(),
-							"Invalid empty or unspecified description",
-							DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
+			errors.add(new DGIWGValidationError(
+					SpatialReferenceSystem.TABLE_NAME,
+					SpatialReferenceSystem.COLUMN_DESCRIPTION,
+					srs.getDescription(),
+					"Invalid empty or unspecified description",
+					DGIWGRequirement.VALIDITY_DATA_VALIDITY, primaryKey(srs)));
 		}
 
 		return crs;

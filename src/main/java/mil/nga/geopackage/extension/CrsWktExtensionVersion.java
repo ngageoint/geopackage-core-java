@@ -1,5 +1,8 @@
 package mil.nga.geopackage.extension;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * OGC Well known text representation of Coordinate Reference Systems extension
  * version enumeration
@@ -10,14 +13,24 @@ package mil.nga.geopackage.extension;
 public enum CrsWktExtensionVersion {
 
 	/**
-	 * 1
+	 * 1.0
 	 */
-	V_1(),
+	V_1("1.0"),
 
 	/**
 	 * 1.1
 	 */
 	V_1_1("1.1");
+
+	/**
+	 * First version
+	 */
+	public static CrsWktExtensionVersion FIRST = V_1;
+
+	/**
+	 * Latest supported version
+	 */
+	public static CrsWktExtensionVersion LATEST = V_1_1;
 
 	/**
 	 * Version
@@ -35,23 +48,12 @@ public enum CrsWktExtensionVersion {
 	 * @param version
 	 *            version
 	 */
-	private CrsWktExtensionVersion() {
-		this(null);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param version
-	 *            version
-	 */
 	private CrsWktExtensionVersion(String version) {
-		if (version == null) {
-			this.version = "1";
+		this.version = version;
+		if (version.equals("1.0")) {
 			this.suffix = "";
 		} else {
-			this.version = version;
-			this.suffix = "_" + version.replaceAll(".", "_");
+			this.suffix = "_" + version.replaceAll("\\.", "_");
 		}
 	}
 
@@ -71,6 +73,27 @@ public enum CrsWktExtensionVersion {
 	 */
 	public String getSuffix() {
 		return suffix;
+	}
+
+	/**
+	 * Is the version at or above the minimum version
+	 * 
+	 * @param version
+	 *            extension version
+	 * @return true if at or above the minimum version
+	 */
+	public boolean isMinimum(CrsWktExtensionVersion version) {
+		return compareTo(version) >= 0;
+	}
+
+	/**
+	 * Versions at and above this version
+	 * 
+	 * @return versions at minimum
+	 */
+	public List<CrsWktExtensionVersion> atMinimum() {
+		List<CrsWktExtensionVersion> list = Arrays.asList(values());
+		return list.subList(ordinal(), list.size());
 	}
 
 }

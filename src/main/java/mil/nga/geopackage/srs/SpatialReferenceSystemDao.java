@@ -17,6 +17,7 @@ import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.extension.CrsWktExtension;
+import mil.nga.geopackage.extension.CrsWktExtensionVersion;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.property.GeoPackageProperties;
@@ -142,7 +143,8 @@ public class SpatialReferenceSystemDao
 	 * @since 1.2.1
 	 */
 	public boolean hasDefinition_12_063() {
-		return crsWktExtension != null && crsWktExtension.has(); // TODO version
+		return crsWktExtension != null
+				&& crsWktExtension.hasMinimum(CrsWktExtensionVersion.V_1);
 	}
 
 	/**
@@ -153,7 +155,8 @@ public class SpatialReferenceSystemDao
 	 * @since 6.5.1
 	 */
 	public boolean hasEpoch() {
-		return crsWktExtension != null && crsWktExtension.has(); // TODO version
+		return crsWktExtension != null
+				&& crsWktExtension.hasMinimum(CrsWktExtensionVersion.V_1_1);
 	}
 
 	/**
@@ -427,6 +430,9 @@ public class SpatialReferenceSystemDao
 	 */
 	public void updateDefinition_12_063(long srsId, String definition) {
 		if (hasDefinition_12_063()) {
+			if (definition == null) {
+				definition = "";
+			}
 			crsWktExtension.updateDefinition(srsId, definition);
 		}
 	}
@@ -455,14 +461,9 @@ public class SpatialReferenceSystemDao
 	 */
 	public void updateExtension(SpatialReferenceSystem srs) {
 		if (srs != null) {
-			String definition = srs.getDefinition_12_063();
-			if (definition != null) {
-				updateDefinition_12_063(srs.getSrsId(), definition);
-			}
-			Double epoch = srs.getEpoch();
-			if (epoch != null) {
-				updateEpoch(srs.getSrsId(), epoch);
-			}
+			long srsId = srs.getSrsId();
+			updateDefinition_12_063(srsId, srs.getDefinition_12_063());
+			updateEpoch(srsId, srs.getEpoch());
 		}
 	}
 

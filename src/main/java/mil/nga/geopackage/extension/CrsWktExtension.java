@@ -34,21 +34,22 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public static final String EXTENSION_NAME = GeoPackageConstants.EXTENSION_AUTHOR
 			+ Extensions.EXTENSION_NAME_DIVIDER + NAME;
-	/**
-	 * Latest supported extension version
-	 * 
-	 * @since 6.5.1
-	 */
-	public static final CrsWktExtensionVersion VERSION = CrsWktExtensionVersion.V_1_1;
 
 	/**
-	 * Extension definition URL
+	 * Extension version 1 definition URL
 	 */
-	public static final String DEFINITION = GeoPackageProperties
+	public static final String DEFINITION_V_1 = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS, NAME);
 
 	/**
-	 * Extension new column name
+	 * Extension version 1.1 definition URL
+	 */
+	public static final String DEFINITION_V_1_1 = GeoPackageProperties
+			.getProperty(PropertyConstants.EXTENSIONS,
+					NAME + CrsWktExtensionVersion.V_1_1.getSuffix());
+
+	/**
+	 * Extension definition column name
 	 * 
 	 * @since 6.5.1
 	 */
@@ -57,7 +58,7 @@ public class CrsWktExtension extends BaseExtension {
 					"column_name");
 
 	/**
-	 * Extension new column definition
+	 * Extension definition column definition
 	 * 
 	 * @since 6.5.1
 	 */
@@ -101,17 +102,17 @@ public class CrsWktExtension extends BaseExtension {
 	}
 
 	/**
-	 * Get or create the extension
+	 * Get or create the latest version of the extension
 	 * 
 	 * @return extension
 	 * @since 6.5.1
 	 */
 	public List<Extensions> getOrCreate() {
-		return getOrCreate(VERSION);
+		return getOrCreate(CrsWktExtensionVersion.LATEST);
 	}
 
 	/**
-	 * Get or create the extension
+	 * Get or create the version of the extension
 	 * 
 	 * @param version
 	 *            extension version
@@ -124,20 +125,20 @@ public class CrsWktExtension extends BaseExtension {
 
 		extensions.add(getOrCreate(EXTENSION_NAME,
 				SpatialReferenceSystem.TABLE_NAME, DEFINITION_COLUMN_NAME,
-				DEFINITION, ExtensionScopeType.READ_WRITE));
+				DEFINITION_V_1, ExtensionScopeType.READ_WRITE));
 
 		if (!hasDefinitionColumn()) {
 			createDefinitionColumn();
 		}
 
-		if (version == CrsWktExtensionVersion.V_1_1) {
+		if (version.isMinimum(CrsWktExtensionVersion.V_1_1)) {
 
 			String name = getExtensionName(version);
 			extensions.add(getOrCreate(name, SpatialReferenceSystem.TABLE_NAME,
-					DEFINITION_COLUMN_NAME, DEFINITION,
+					DEFINITION_COLUMN_NAME, DEFINITION_V_1_1,
 					ExtensionScopeType.READ_WRITE));
 			extensions.add(getOrCreate(name, SpatialReferenceSystem.TABLE_NAME,
-					EPOCH_COLUMN_NAME, DEFINITION,
+					EPOCH_COLUMN_NAME, DEFINITION_V_1_1,
 					ExtensionScopeType.READ_WRITE));
 
 			if (!hasEpochColumn()) {
@@ -150,18 +151,79 @@ public class CrsWktExtension extends BaseExtension {
 	}
 
 	/**
-	 * Determine if the GeoPackage has the extension
+	 * Determine if the GeoPackage has any version of the extension
 	 * 
 	 * @return true if has extension
 	 */
 	public boolean has() {
 
-		// TODO
+		boolean has = false;
 
-		boolean exists = has(EXTENSION_NAME);
+		for (CrsWktExtensionVersion version : CrsWktExtensionVersion.values()) {
+			has = has(version);
+			if (has) {
+				break;
+			}
+		}
+
+		return has;
+	}
+
+	/**
+	 * Determine if the GeoPackage has at least the minimum version of the
+	 * extension
+	 * 
+	 * @param version
+	 *            extension version
+	 * @return true if has extension minimum
+	 * @since 6.5.1
+	 */
+	public boolean hasMinimum(CrsWktExtensionVersion version) {
+
+		boolean has = false;
+
+		for (CrsWktExtensionVersion ver : version.atMinimum()) {
+			has = has(ver);
+			if (has) {
+				break;
+			}
+		}
+
+		return has;
+	}
+
+	/**
+	 * Determine if the GeoPackage has the version of the extension
+	 * 
+	 * @param version
+	 *            extension version
+	 * @return true if has extension
+	 * @since 6.5.1
+	 */
+	public boolean has(CrsWktExtensionVersion version) {
+
+		String name = getExtensionName(version);
+
+		boolean exists = has(name, SpatialReferenceSystem.TABLE_NAME,
+				DEFINITION_COLUMN_NAME);
 
 		if (exists) {
+
 			exists = hasDefinitionColumn();
+
+			if (exists && version.isMinimum(CrsWktExtensionVersion.V_1_1)) {
+
+				exists = has(name, SpatialReferenceSystem.TABLE_NAME,
+						EPOCH_COLUMN_NAME);
+
+				if (exists) {
+
+					exists = hasEpochColumn();
+
+				}
+
+			}
+
 		}
 
 		return exists;
@@ -221,7 +283,7 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public void updateEpoch(long srsId, Double epoch) {
 		connection.execSQL("UPDATE " + SpatialReferenceSystem.TABLE_NAME
-				+ " SET " + EPOCH_COLUMN_NAME + " = '" + epoch + "' WHERE "
+				+ " SET " + EPOCH_COLUMN_NAME + " = " + epoch + " WHERE "
 				+ SpatialReferenceSystem.COLUMN_SRS_ID + " = " + srsId);
 	}
 
@@ -288,19 +350,20 @@ public class CrsWktExtension extends BaseExtension {
 	 * Determine if the GeoPackage SRS table has the extension definition column
 	 * 
 	 * @return true if has column
+	 * @since 6.5.1
 	 */
-	private boolean hasDefinitionColumn() {
-		boolean exists = connection.columnExists(
-				SpatialReferenceSystem.TABLE_NAME, DEFINITION_COLUMN_NAME);
-		return exists;
+	public boolean hasDefinitionColumn() {
+		return connection.columnExists(SpatialReferenceSystem.TABLE_NAME,
+				DEFINITION_COLUMN_NAME);
 	}
 
 	/**
 	 * Determine if the GeoPackage SRS table has the extension epoch column
 	 * 
 	 * @return true if has column
+	 * @since 6.5.1
 	 */
-	private boolean hasEpochColumn() {
+	public boolean hasEpochColumn() {
 		return connection.columnExists(SpatialReferenceSystem.TABLE_NAME,
 				EPOCH_COLUMN_NAME);
 	}
@@ -312,15 +375,30 @@ public class CrsWktExtension extends BaseExtension {
 	 */
 	public void removeExtension() {
 
-		// TODO
+		for (CrsWktExtensionVersion version : CrsWktExtensionVersion.values()) {
+			removeExtension(version);
+		}
+
+	}
+
+	/**
+	 * Remove the extension. Leaves the column and values.
+	 * 
+	 * @param version
+	 *            extension version
+	 * @since 6.5.1
+	 */
+	public void removeExtension(CrsWktExtensionVersion version) {
 
 		try {
 			if (extensionsDao.isTableExists()) {
-				extensionsDao.deleteByExtension(EXTENSION_NAME);
+				String name = getExtensionName(version);
+				extensionsDao.deleteByExtension(name);
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
-					"Failed to delete CRS WKT extension. GeoPackage: "
+					"Failed to delete CRS WKT extension version "
+							+ version.getVersion() + ". GeoPackage: "
 							+ geoPackage.getName(),
 					e);
 		}
