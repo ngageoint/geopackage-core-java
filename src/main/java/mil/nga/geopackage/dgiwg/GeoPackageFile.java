@@ -29,8 +29,8 @@ public class GeoPackageFile {
 	 *            DGIWG File Name
 	 */
 	public GeoPackageFile(File file, GeoPackageFileName fileName) {
-		this.file = file;
-		this.fileName = fileName;
+		setFile(file);
+		setFileName(fileName);
 	}
 
 	/**
@@ -40,7 +40,8 @@ public class GeoPackageFile {
 	 *            GeoPackage path
 	 */
 	public GeoPackageFile(String path) {
-		this(path, new GeoPackageFileName(path));
+		setFile(path);
+		setFileName(path);
 	}
 
 	/**
@@ -52,7 +53,8 @@ public class GeoPackageFile {
 	 *            DGIWG file name
 	 */
 	public GeoPackageFile(String path, GeoPackageFileName fileName) {
-		this(new File(path), fileName);
+		setFile(path);
+		setFileName(fileName);
 	}
 
 	/**
@@ -62,7 +64,8 @@ public class GeoPackageFile {
 	 *            GeoPackage file
 	 */
 	public GeoPackageFile(File file) {
-		this(file, new GeoPackageFileName(file));
+		setFile(file);
+		setFileName(file);
 	}
 
 	/**
@@ -75,12 +78,62 @@ public class GeoPackageFile {
 	}
 
 	/**
+	 * Set the GeoPackage file
+	 * 
+	 * @param file
+	 *            GeoPackage file
+	 */
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	/**
+	 * Set the GeoPackage file by path
+	 * 
+	 * @param path
+	 *            GeoPackage file path
+	 */
+	public void setFile(String path) {
+		this.file = path != null ? new File(path) : null;
+	}
+
+	/**
 	 * Get the DGIWG file name
 	 * 
 	 * @return DGIWG file name
 	 */
 	public GeoPackageFileName getFileName() {
 		return fileName;
+	}
+
+	/**
+	 * Set the DGIWG file name
+	 * 
+	 * @param fileName
+	 *            DGIWG file name
+	 */
+	public void setFileName(GeoPackageFileName fileName) {
+		this.fileName = fileName;
+	}
+
+	/**
+	 * Set the DGIWG file name
+	 * 
+	 * @param file
+	 *            GeoPackage file
+	 */
+	public void setFileName(File file) {
+		this.fileName = file != null ? new GeoPackageFileName(file) : null;
+	}
+
+	/**
+	 * Set the DGIWG file name
+	 * 
+	 * @param path
+	 *            GeoPackage file path
+	 */
+	public void setFileName(String path) {
+		this.fileName = path != null ? new GeoPackageFileName(path) : null;
 	}
 
 }
