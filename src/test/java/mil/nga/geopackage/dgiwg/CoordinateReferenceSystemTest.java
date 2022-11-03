@@ -347,6 +347,7 @@ public class CoordinateReferenceSystemTest {
 
 		long epsg = 9801;
 		String name = "Lambert_Conformal_Conic (1SP)";
+		CRSType crsType = CRSType.GEODETIC;
 		GeoDatums datum = GeoDatums.NAD83;
 		double latitudeOfOrigin = 25;
 		double centralMeridian = -95;
@@ -355,12 +356,12 @@ public class CoordinateReferenceSystemTest {
 		double falseNorthing = 0;
 
 		SpatialReferenceSystem srs = CoordinateReferenceSystem
-				.createLambertConicConformal1SP(epsg, name, datum,
+				.createLambertConicConformal1SP(epsg, name, crsType, datum,
 						latitudeOfOrigin, centralMeridian, scaleFactor,
 						falseEasting, falseNorthing);
 
 		String wkt = WellKnownText.getLambertConicConformal1SP(epsg, name,
-				datum, latitudeOfOrigin, centralMeridian, scaleFactor,
+				crsType, datum, latitudeOfOrigin, centralMeridian, scaleFactor,
 				falseEasting, falseNorthing);
 
 		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
@@ -370,6 +371,7 @@ public class CoordinateReferenceSystemTest {
 
 		epsg = 0000;
 		name = "Unnamed Lambert_Conformal_Conic using 1SP";
+		crsType = CRSType.GEOGRAPHIC;
 		datum = GeoDatums.NAD83;
 		latitudeOfOrigin = 49;
 		centralMeridian = -95;
@@ -378,12 +380,12 @@ public class CoordinateReferenceSystemTest {
 		falseNorthing = 0;
 
 		srs = CoordinateReferenceSystem.createLambertConicConformal1SP(epsg,
-				name, datum, latitudeOfOrigin, centralMeridian, scaleFactor,
-				falseEasting, falseNorthing);
+				name, crsType, datum, latitudeOfOrigin, centralMeridian,
+				scaleFactor, falseEasting, falseNorthing);
 
-		wkt = WellKnownText.getLambertConicConformal1SP(epsg, name, datum,
-				latitudeOfOrigin, centralMeridian, scaleFactor, falseEasting,
-				falseNorthing);
+		wkt = WellKnownText.getLambertConicConformal1SP(epsg, name, crsType,
+				datum, latitudeOfOrigin, centralMeridian, scaleFactor,
+				falseEasting, falseNorthing);
 
 		testLambertConicConformal1SP(epsg, name, datum, latitudeOfOrigin,
 				centralMeridian, scaleFactor, falseEasting, falseNorthing, wkt,
@@ -403,6 +405,7 @@ public class CoordinateReferenceSystemTest {
 
 		long epsg = 9802;
 		String name = "Lambert Conic Conformal (2SP)";
+		CRSType crsType = CRSType.GEODETIC;
 		GeoDatums datum = GeoDatums.NAD83;
 		double standardParallel1 = 30;
 		double standardParallel2 = 60;
@@ -412,13 +415,13 @@ public class CoordinateReferenceSystemTest {
 		double falseNorthing = 0;
 
 		SpatialReferenceSystem srs = CoordinateReferenceSystem
-				.createLambertConicConformal2SP(epsg, name, datum,
+				.createLambertConicConformal2SP(epsg, name, crsType, datum,
 						standardParallel1, standardParallel2, latitudeOfOrigin,
 						centralMeridian, falseEasting, falseNorthing);
 
 		String wkt = WellKnownText.getLambertConicConformal2SP(epsg, name,
-				datum, standardParallel1, standardParallel2, latitudeOfOrigin,
-				centralMeridian, falseEasting, falseNorthing);
+				crsType, datum, standardParallel1, standardParallel2,
+				latitudeOfOrigin, centralMeridian, falseEasting, falseNorthing);
 
 		testLambertConicConformal2SP(epsg, name, datum, standardParallel1,
 				standardParallel2, latitudeOfOrigin, centralMeridian,
@@ -428,6 +431,7 @@ public class CoordinateReferenceSystemTest {
 
 		epsg = 3978;
 		name = "NAD83 / Canada Atlas Lambert";
+		crsType = CRSType.GEOGRAPHIC;
 		datum = GeoDatums.NAD83;
 		standardParallel1 = 49;
 		standardParallel2 = 77;
@@ -437,11 +441,11 @@ public class CoordinateReferenceSystemTest {
 		falseNorthing = 0;
 
 		srs = CoordinateReferenceSystem.createLambertConicConformal2SP(epsg,
-				name, datum, standardParallel1, standardParallel2,
+				name, crsType, datum, standardParallel1, standardParallel2,
 				latitudeOfOrigin, centralMeridian, falseEasting, falseNorthing);
 
-		wkt = WellKnownText.getLambertConicConformal2SP(epsg, name, datum,
-				standardParallel1, standardParallel2, latitudeOfOrigin,
+		wkt = WellKnownText.getLambertConicConformal2SP(epsg, name, crsType,
+				datum, standardParallel1, standardParallel2, latitudeOfOrigin,
 				centralMeridian, falseEasting, falseNorthing);
 
 		testLambertConicConformal2SP(epsg, name, datum, standardParallel1,

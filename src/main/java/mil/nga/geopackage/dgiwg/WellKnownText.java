@@ -1,8 +1,10 @@
 package mil.nga.geopackage.dgiwg;
 
+import mil.nga.crs.CRSType;
 import mil.nga.crs.geo.Ellipsoids;
 import mil.nga.crs.geo.GeoDatums;
 import mil.nga.crs.geo.PrimeMeridians;
+import mil.nga.crs.wkt.CRSKeyword;
 import mil.nga.geopackage.GeoPackageException;
 
 /**
@@ -18,6 +20,11 @@ public class WellKnownText {
 	 * CRS name replacement
 	 */
 	private static final String CRS_NAME = wrapReplacement("crs_name");
+
+	/**
+	 * CRS type replacement
+	 */
+	private static final String CRS_TYPE = wrapReplacement("crs_type");
 
 	/**
 	 * Base CRS name replacement
@@ -183,7 +190,7 @@ public class WellKnownText {
 	 * WGS 84 / Pseudo-Mercator
 	 */
 	public static String EPSG_3857 = "PROJCS[\"WGS 84 / Pseudo-Mercator\","
-			+ "GEOGCRS[\"WGS 84\",DATUM[\"WGS_1984\","
+			+ "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS 84\",6378137,298.257223563,"
 			+ "ID[\"EPSG\",\"7030\"]],ID[\"EPSG\",\"6326\"]],"
 			+ "PRIMEM[\"Greenwich\",0,ID[\"EPSG\",\"8901\"]],"
@@ -296,7 +303,7 @@ public class WellKnownText {
 	/**
 	 * WGS84 4326 + EGM2008 height 3855
 	 */
-	public static String EPSG_9518 = "COMPOUNDCRS[\"WGS84 Height (EGM08)\","
+	public static String EPSG_9518 = "COMPOUNDCRS[\"WGS84 Height EGM08\","
 			+ "GEODCRS[\"WGS 84\",DATUM[\"World Geodetic System 1984\","
 			+ "ELLIPSOID[\"WGS 84\",6378137,298.257223563,"
 			+ "LENGTHUNIT[\"metre\",1.0]]],CS[ellipsoidal,2],"
@@ -309,7 +316,7 @@ public class WellKnownText {
 	 * UTM zone 01 - 60N, 01 - 60S with substitutions
 	 */
 	private static String EPSG_UTM_ZONE = "PROJCS[\"WGS 84 / UTM zone " + ZONE
-			+ DIRECTION + "\",GEOGCRS[\"WGS 84\",DATUM[\"WGS_1984\","
+			+ DIRECTION + "\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\","
 			+ "SPHEROID[\"WGS84\",6378137,298.257223563,"
 			+ "ID[\"EPSG\", \"7030\"]],ID[\"EPSG\", \"6326\"]],"
 			+ "PRIMEM[\"Greenwich\",0,ID[\"EPSG\",\"8901\"]],"
@@ -354,10 +361,11 @@ public class WellKnownText {
 	 * Lambert Conic Conformal 1SP with substitutions
 	 */
 	private static String EPSG_LAMBERT_CONFORMAL_CONIC_1SP = "PROJCS[\""
-			+ CRS_NAME + "\"," + "GEODCRS[\"" + BASE_NAME + "\"," + "DATUM[\""
-			+ REFERENCE_NAME + "\"," + "SPHEROID[\"" + ELLIPSOID_NAME + "\","
-			+ SEMI_MAJOR_AXIS + "," + INVERSE_FLATTENING + "]]," + "PRIMEM[\""
-			+ PRIME_MERIDIAN_NAME + "\"," + IRM_LONGITUDE + "],"
+			+ CRS_NAME + "\"," + CRS_TYPE + "[\"" + BASE_NAME + "\","
+			+ "DATUM[\"" + REFERENCE_NAME + "\"," + "SPHEROID[\""
+			+ ELLIPSOID_NAME + "\"," + SEMI_MAJOR_AXIS + ","
+			+ INVERSE_FLATTENING + "]]," + "PRIMEM[\"" + PRIME_MERIDIAN_NAME
+			+ "\"," + IRM_LONGITUDE + "],"
 			+ "UNIT[\"degree\",0.0174532925199433]],"
 			+ "PROJECTION[\"Lambert_Conformal_Conic_1SP\"],"
 			+ "PARAMETER[\"latitude_of_origin\"," + LATITUDE_OF_ORIGIN + "],"
@@ -373,10 +381,11 @@ public class WellKnownText {
 	 * Lambert Conic Conformal 2SP with substitutions
 	 */
 	private static String EPSG_LAMBERT_CONFORMAL_CONIC_2SP = "PROJCS[\""
-			+ CRS_NAME + "\"," + "GEODCRS[\"" + BASE_NAME + "\"," + "DATUM[\""
-			+ REFERENCE_NAME + "\"," + "SPHEROID[\"" + ELLIPSOID_NAME + "\","
-			+ SEMI_MAJOR_AXIS + "," + INVERSE_FLATTENING + "]]," + "PRIMEM[\""
-			+ PRIME_MERIDIAN_NAME + "\"," + IRM_LONGITUDE + "],"
+			+ CRS_NAME + "\"," + CRS_TYPE + "[\"" + BASE_NAME + "\","
+			+ "DATUM[\"" + REFERENCE_NAME + "\"," + "SPHEROID[\""
+			+ ELLIPSOID_NAME + "\"," + SEMI_MAJOR_AXIS + ","
+			+ INVERSE_FLATTENING + "]]," + "PRIMEM[\"" + PRIME_MERIDIAN_NAME
+			+ "\"," + IRM_LONGITUDE + "],"
 			+ "UNIT[\"degree\",0.01745329251994328]],"
 			+ "PROJECTION[\"Lambert_Conformal_Conic_2SP\"],"
 			+ "PARAMETER[\"standard_parallel_1\"," + STANDARD_PARALLEL_1 + "],"
@@ -395,6 +404,8 @@ public class WellKnownText {
 	 *            Lambert Conic Conformal 1SP EPSG
 	 * @param name
 	 *            CRS name
+	 * @param crsType
+	 *            CRS type
 	 * @param geoDatum
 	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
 	 *            {@link GeoDatums#NAD83}
@@ -411,12 +422,13 @@ public class WellKnownText {
 	 * @return well-known text
 	 */
 	public static String getLambertConicConformal1SP(long epsg, String name,
-			GeoDatums geoDatum, double latitudeOfOrigin, double centralMeridian,
-			double scaleFactor, double falseEasting, double falseNorthing) {
+			CRSType crsType, GeoDatums geoDatum, double latitudeOfOrigin,
+			double centralMeridian, double scaleFactor, double falseEasting,
+			double falseNorthing) {
 
 		String wkt = getLambertConicConformal(EPSG_LAMBERT_CONFORMAL_CONIC_1SP,
-				epsg, name, geoDatum, latitudeOfOrigin, centralMeridian,
-				falseEasting, falseNorthing);
+				epsg, name, crsType, geoDatum, latitudeOfOrigin,
+				centralMeridian, falseEasting, falseNorthing);
 
 		wkt = wkt.replaceAll(SCALE_FACTOR, String.valueOf(scaleFactor));
 
@@ -430,6 +442,8 @@ public class WellKnownText {
 	 *            Lambert Conic Conformal 2SP EPSG
 	 * @param name
 	 *            CRS name
+	 * @param crsType
+	 *            CRS type
 	 * @param geoDatum
 	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
 	 *            {@link GeoDatums#NAD83}
@@ -448,13 +462,13 @@ public class WellKnownText {
 	 * @return well-known text
 	 */
 	public static String getLambertConicConformal2SP(long epsg, String name,
-			GeoDatums geoDatum, double standardParallel1,
+			CRSType crsType, GeoDatums geoDatum, double standardParallel1,
 			double standardParallel2, double latitudeOfOrigin,
 			double centralMeridian, double falseEasting, double falseNorthing) {
 
 		String wkt = getLambertConicConformal(EPSG_LAMBERT_CONFORMAL_CONIC_2SP,
-				epsg, name, geoDatum, latitudeOfOrigin, centralMeridian,
-				falseEasting, falseNorthing);
+				epsg, name, crsType, geoDatum, latitudeOfOrigin,
+				centralMeridian, falseEasting, falseNorthing);
 
 		wkt = wkt.replaceAll(STANDARD_PARALLEL_1,
 				String.valueOf(standardParallel1));
@@ -473,6 +487,8 @@ public class WellKnownText {
 	 *            Lambert Conic Conformal EPSG
 	 * @param name
 	 *            CRS name
+	 * @param crsType
+	 *            CRS type
 	 * @param geoDatum
 	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
 	 *            {@link GeoDatums#NAD83}
@@ -487,8 +503,22 @@ public class WellKnownText {
 	 * @return well-known text
 	 */
 	private static String getLambertConicConformal(String wkt, long epsg,
-			String name, GeoDatums geoDatum, double latitudeOfOrigin,
-			double centralMeridian, double falseEasting, double falseNorthing) {
+			String name, CRSType crsType, GeoDatums geoDatum,
+			double latitudeOfOrigin, double centralMeridian,
+			double falseEasting, double falseNorthing) {
+
+		String crsKeyword;
+		switch (crsType) {
+		case GEODETIC:
+			crsKeyword = CRSKeyword.GEODCRS.name();
+			break;
+		case GEOGRAPHIC:
+			crsKeyword = CRSKeyword.GEOGCS.name();
+			break;
+		default:
+			throw new GeoPackageException("Invalid Lambert Conformal CRS type: "
+					+ (crsType != null ? crsType.name() : crsType));
+		}
 
 		switch (geoDatum) {
 		case WGS84:
@@ -504,6 +534,7 @@ public class WellKnownText {
 		PrimeMeridians primeMeridian = PrimeMeridians.GREENWICH;
 
 		wkt = wkt.replaceAll(CRS_NAME, name);
+		wkt = wkt.replaceAll(CRS_TYPE, crsKeyword);
 		wkt = wkt.replaceAll(BASE_NAME, geoDatum.getCode());
 		wkt = wkt.replaceAll(REFERENCE_NAME, geoDatum.getName());
 		wkt = wkt.replaceAll(ELLIPSOID_NAME, ellipsoids.getName());

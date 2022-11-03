@@ -1286,6 +1286,8 @@ public enum CoordinateReferenceSystem {
 	 *            Lambert Conic Conformal 1SP EPSG
 	 * @param name
 	 *            CRS name
+	 * @param crsType
+	 *            CRS type
 	 * @param geoDatum
 	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
 	 *            {@link GeoDatums#NAD83}
@@ -1302,13 +1304,13 @@ public enum CoordinateReferenceSystem {
 	 * @return Spatial Reference System
 	 */
 	public static SpatialReferenceSystem createLambertConicConformal1SP(
-			long epsg, String name, GeoDatums geoDatum, double latitudeOfOrigin,
-			double centralMeridian, double scaleFactor, double falseEasting,
-			double falseNorthing) {
+			long epsg, String name, CRSType crsType, GeoDatums geoDatum,
+			double latitudeOfOrigin, double centralMeridian, double scaleFactor,
+			double falseEasting, double falseNorthing) {
 
 		String definition = WellKnownText.getLambertConicConformal1SP(epsg,
-				name, geoDatum, latitudeOfOrigin, centralMeridian, scaleFactor,
-				falseEasting, falseNorthing);
+				name, crsType, geoDatum, latitudeOfOrigin, centralMeridian,
+				scaleFactor, falseEasting, falseNorthing);
 
 		return createLambertConicConformal(epsg, name, definition,
 				LAMBERT_CONIC_CONFORMAL_1SP_DESCRIPTION);
@@ -1321,6 +1323,8 @@ public enum CoordinateReferenceSystem {
 	 *            Lambert Conic Conformal 2SP EPSG
 	 * @param name
 	 *            CRS name
+	 * @param crsType
+	 *            CRS type
 	 * @param geoDatum
 	 *            {@link GeoDatums#WGS84}, {@link GeoDatums#ETRS89}, or
 	 *            {@link GeoDatums#NAD83}
@@ -1339,13 +1343,13 @@ public enum CoordinateReferenceSystem {
 	 * @return Spatial Reference System
 	 */
 	public static SpatialReferenceSystem createLambertConicConformal2SP(
-			long epsg, String name, GeoDatums geoDatum,
+			long epsg, String name, CRSType crsType, GeoDatums geoDatum,
 			double standardParallel1, double standardParallel2,
 			double latitudeOfOrigin, double centralMeridian,
 			double falseEasting, double falseNorthing) {
 
 		String definition = WellKnownText.getLambertConicConformal2SP(epsg,
-				name, geoDatum, standardParallel1, standardParallel2,
+				name, crsType, geoDatum, standardParallel1, standardParallel2,
 				latitudeOfOrigin, centralMeridian, falseEasting, falseNorthing);
 
 		return createLambertConicConformal(epsg, name, definition,
