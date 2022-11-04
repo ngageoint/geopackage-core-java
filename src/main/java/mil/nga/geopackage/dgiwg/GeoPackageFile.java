@@ -60,6 +60,32 @@ public class GeoPackageFile {
 	/**
 	 * Constructor
 	 * 
+	 * @param path
+	 *            GeoPackage path
+	 * @param fileName
+	 *            file name
+	 */
+	public GeoPackageFile(String path, String fileName) {
+		setFile(path);
+		setFileName(fileName);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param file
+	 *            GeoPackage file
+	 * @param fileName
+	 *            file name
+	 */
+	public GeoPackageFile(File file, String fileName) {
+		setFile(file);
+		setFileName(fileName);
+	}
+
+	/**
+	 * Constructor
+	 * 
 	 * @param file
 	 *            GeoPackage file
 	 */
@@ -104,6 +130,15 @@ public class GeoPackageFile {
 	 */
 	public GeoPackageFileName getFileName() {
 		return fileName;
+	}
+
+	/**
+	 * Get the file name
+	 * 
+	 * @return file name
+	 */
+	public String getName() {
+		return fileName != null ? fileName.getName() : null;
 	}
 
 	/**
