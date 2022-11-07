@@ -4,9 +4,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.5.1 (TBD)
+## 6.6.0 (TBD)
 
 * oapi-features-json version 2.3.0
+* WKT for CRS Extension version 1.1 support
+* DGIWG (Defence Geospatial Information Working Group) GeoPackage Profile support
+* GeoPackage user version 1.3.1
 
 ## [6.5.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.5.0) (09-22-2022)
 

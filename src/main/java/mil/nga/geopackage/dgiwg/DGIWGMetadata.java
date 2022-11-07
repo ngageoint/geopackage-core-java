@@ -20,7 +20,7 @@ import mil.nga.geopackage.extension.metadata.reference.ReferenceScopeType;
  * DGIWG (Defence Geospatial Information Working Group) Metadata utilities
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public class DGIWGMetadata {
 

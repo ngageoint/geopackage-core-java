@@ -9,7 +9,7 @@ import mil.nga.geopackage.contents.ContentsDataType;
  * DGIWG (Defence Geospatial Information Working Group) Data Types
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public enum DataType {
 

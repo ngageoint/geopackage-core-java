@@ -311,7 +311,7 @@ public class SpatialReferenceSystem {
 	 * Get the coordinate epoch
 	 * 
 	 * @return coordinate epoch
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public Double getEpoch() {
 		return epoch;
@@ -322,7 +322,7 @@ public class SpatialReferenceSystem {
 	 * 
 	 * @param epoch
 	 *            coordinate epoch
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void setEpoch(Double epoch) {
 		this.epoch = epoch;

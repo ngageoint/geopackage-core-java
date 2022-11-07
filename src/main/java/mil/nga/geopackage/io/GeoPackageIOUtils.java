@@ -303,7 +303,7 @@ public class GeoPackageIOUtils {
 	 * @return file string
 	 * @throws IOException
 	 *             upon failure
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static String fileString(File file) throws IOException {
 
@@ -322,7 +322,7 @@ public class GeoPackageIOUtils {
 	 * @return file string
 	 * @throws IOException
 	 *             upon failure
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static String fileString(File file, String charsetName)
 			throws IOException {

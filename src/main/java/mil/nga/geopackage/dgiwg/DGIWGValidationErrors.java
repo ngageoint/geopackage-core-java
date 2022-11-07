@@ -10,7 +10,7 @@ import java.util.List;
  * DGIWG (Defence Geospatial Information Working Group) validation errors
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 

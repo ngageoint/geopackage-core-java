@@ -193,7 +193,7 @@ public class MetadataReference {
 	 * Get the reference scope name
 	 * 
 	 * @return reference scope name
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public String getReferenceScopeName() {
 		return referenceScope;

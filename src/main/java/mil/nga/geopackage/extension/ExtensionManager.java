@@ -277,7 +277,7 @@ public class ExtensionManager extends ExtensionManagement {
 	 * @param geoPackage
 	 *            GeoPackage
 	 * @return RTree index extension
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static RTreeIndexCoreExtension getRTreeIndexExtension(
 			GeoPackageCore geoPackage) {

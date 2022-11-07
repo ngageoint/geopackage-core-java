@@ -51,7 +51,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Extension definition column name
 	 * 
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static final String DEFINITION_COLUMN_NAME = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS, NAME, "definition",
@@ -60,7 +60,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Extension definition column definition
 	 * 
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static final String DEFINITION_COLUMN_DEF = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS, NAME, "definition",
@@ -69,7 +69,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Extension epoch column name
 	 * 
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static final String EPOCH_COLUMN_NAME = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS, NAME, "epoch",
@@ -78,7 +78,7 @@ public class CrsWktExtension extends BaseExtension {
 	/**
 	 * Extension epoch column definition
 	 * 
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public static final String EPOCH_COLUMN_DEF = GeoPackageProperties
 			.getProperty(PropertyConstants.EXTENSIONS, NAME, "epoch",
@@ -105,7 +105,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * Get or create the latest version of the extension
 	 * 
 	 * @return extension
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public List<Extensions> getOrCreate() {
 		return getOrCreate(CrsWktExtensionVersion.LATEST);
@@ -117,7 +117,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @param version
 	 *            extension version
 	 * @return extension
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public List<Extensions> getOrCreate(CrsWktExtensionVersion version) {
 
@@ -176,7 +176,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @param version
 	 *            extension version
 	 * @return true if has extension minimum
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public boolean hasMinimum(CrsWktExtensionVersion version) {
 
@@ -198,7 +198,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @param version
 	 *            extension version
 	 * @return true if has extension
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public boolean has(CrsWktExtensionVersion version) {
 
@@ -242,7 +242,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @param version
 	 *            extension version
 	 * @return extension name
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public String getExtensionName(CrsWktExtensionVersion version) {
 		return EXTENSION_NAME + version.getSuffix();
@@ -286,7 +286,7 @@ public class CrsWktExtension extends BaseExtension {
 	 *            srs id
 	 * @param epoch
 	 *            epoch
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void updateEpoch(long srsId, Double epoch) {
 		connection.execSQL("UPDATE " + SpatialReferenceSystem.TABLE_NAME
@@ -300,7 +300,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * @param srsId
 	 *            srs id
 	 * @return epoch
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public Double getEpoch(long srsId) {
 		Double epoch = connection.querySingleTypedResult(
@@ -357,7 +357,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * Determine if the GeoPackage SRS table has the extension definition column
 	 * 
 	 * @return true if has column
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public boolean hasDefinitionColumn() {
 		return connection.columnExists(SpatialReferenceSystem.TABLE_NAME,
@@ -368,7 +368,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * Determine if the GeoPackage SRS table has the extension epoch column
 	 * 
 	 * @return true if has column
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public boolean hasEpochColumn() {
 		return connection.columnExists(SpatialReferenceSystem.TABLE_NAME,
@@ -393,7 +393,7 @@ public class CrsWktExtension extends BaseExtension {
 	 * 
 	 * @param version
 	 *            extension version
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void removeExtension(CrsWktExtensionVersion version) {
 

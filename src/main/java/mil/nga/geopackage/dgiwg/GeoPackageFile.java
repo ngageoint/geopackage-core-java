@@ -6,7 +6,7 @@ import java.io.File;
  * DGIWG (Defence Geospatial Information Working Group) GeoPackage File
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public class GeoPackageFile {
 

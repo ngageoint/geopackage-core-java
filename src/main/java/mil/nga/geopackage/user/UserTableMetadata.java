@@ -121,7 +121,7 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	 * Get the identifier
 	 * 
 	 * @return identifier
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public String getIdentifier() {
 		return identifier != null ? identifier : getTableName();
@@ -132,7 +132,7 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	 * 
 	 * @param identifier
 	 *            identifier
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
@@ -142,7 +142,7 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	 * Get the description
 	 * 
 	 * @return description
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public String getDescription() {
 		return description;
@@ -153,7 +153,7 @@ public abstract class UserTableMetadata<TColumn extends UserColumn> {
 	 * 
 	 * @param description
 	 *            description
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void setDescription(String description) {
 		this.description = description;

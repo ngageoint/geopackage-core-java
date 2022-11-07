@@ -12,7 +12,7 @@ import mil.nga.geopackage.GeoPackageException;
  * constants
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public class WellKnownText {
 

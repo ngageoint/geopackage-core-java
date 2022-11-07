@@ -152,7 +152,7 @@ public class SpatialReferenceSystemDao
 	 * WKT
 	 * 
 	 * @return true if has extension
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public boolean hasEpoch() {
 		return crsWktExtension != null
@@ -375,7 +375,7 @@ public class SpatialReferenceSystemDao
 	 * @param srsId
 	 *            srs id
 	 * @return epoch or null
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public Double getEpoch(long srsId) {
 		Double epoch = null;
@@ -390,7 +390,7 @@ public class SpatialReferenceSystemDao
 	 * 
 	 * @param srs
 	 *            spatial reference system
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void setExtension(SpatialReferenceSystem srs) {
 		if (srs != null) {
@@ -411,7 +411,7 @@ public class SpatialReferenceSystemDao
 	 * 
 	 * @param srsList
 	 *            srs list
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void setExtension(Collection<SpatialReferenceSystem> srsList) {
 		for (SpatialReferenceSystem srs : srsList) {
@@ -444,7 +444,7 @@ public class SpatialReferenceSystemDao
 	 *            srs id
 	 * @param epoch
 	 *            epoch
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void updateEpoch(long srsId, Double epoch) {
 		if (hasEpoch()) {
@@ -457,7 +457,7 @@ public class SpatialReferenceSystemDao
 	 * 
 	 * @param srs
 	 *            srs
-	 * @since 6.5.1
+	 * @since 6.6.0
 	 */
 	public void updateExtension(SpatialReferenceSystem srs) {
 		if (srs != null) {

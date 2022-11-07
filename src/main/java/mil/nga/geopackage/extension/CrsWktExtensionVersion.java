@@ -8,7 +8,7 @@ import java.util.List;
  * version enumeration
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public enum CrsWktExtensionVersion {
 

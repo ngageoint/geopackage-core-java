@@ -22,7 +22,7 @@ import mil.nga.proj.ProjectionConstants;
  * Systems
  * 
  * @author osbornb
- * @since 6.5.1
+ * @since 6.6.0
  */
 public enum CoordinateReferenceSystem {
 
