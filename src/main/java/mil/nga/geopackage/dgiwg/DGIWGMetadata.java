@@ -121,7 +121,7 @@ public class DGIWGMetadata {
 	public static List<MetadataReference> queryGeoPackageNASMetadata(
 			GeoPackageCore geoPackage) {
 		return queryGeoPackageMetadata(geoPackage,
-				DGIWGConstants.NMF_NAS_BASE_URI);
+				DGIWGConstants.NMIS_BASE_URI);
 	}
 
 	/**
