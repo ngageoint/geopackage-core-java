@@ -29,6 +29,11 @@ public class GeoPackageFileName {
 	public static final String DELIMITER_WORDS = "-";
 
 	/**
+	 * Delimiter between zoom scale
+	 */
+	public static final String DELIMITER_SCALE = ":";
+
+	/**
 	 * Version prefix
 	 */
 	public static final String VERSION_PREFIX = "v";
@@ -256,7 +261,7 @@ public class GeoPackageFileName {
 			if (zoomLevel1 != null && zoomLevel2 != null) {
 				this.zoomLevel1 = zoomLevel1;
 				this.zoomLevel2 = zoomLevel2;
-				String delimiter = ":";
+				String delimiter = DELIMITER_SCALE;
 				if (zoomLevel1 >= 0 && zoomLevel2 <= 28) {
 					delimiter = DELIMITER_WORDS;
 				}
@@ -332,7 +337,7 @@ public class GeoPackageFileName {
 	public void setZoomLevelScale(int mapUnits, int surfaceUnits) {
 		this.zoomLevel1 = mapUnits;
 		this.zoomLevel2 = surfaceUnits;
-		this.zoomLevels = zoomLevel1 + ":" + zoomLevel2;
+		this.zoomLevels = mapUnits + DELIMITER_SCALE + surfaceUnits;
 	}
 
 	/**
@@ -425,7 +430,7 @@ public class GeoPackageFileName {
 	public void setVersion(int majorVersion, int minorVersion) {
 		this.majorVersion = majorVersion;
 		this.minorVersion = minorVersion;
-		this.version = this.majorVersion + "." + this.minorVersion;
+		this.version = majorVersion + "." + minorVersion;
 	}
 
 	/**
