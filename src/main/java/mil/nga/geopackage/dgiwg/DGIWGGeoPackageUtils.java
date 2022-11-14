@@ -120,7 +120,7 @@ public class DGIWGGeoPackageUtils {
 	}
 
 	/**
-	 * Create a tile matrix for a zoom level
+	 * Create tile matrices for zoom levels
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
@@ -149,7 +149,7 @@ public class DGIWGGeoPackageUtils {
 	}
 
 	/**
-	 * Create a tile matrix for a zoom level
+	 * Create tile matrices for zoom levels
 	 * 
 	 * @param geoPackage
 	 *            GeoPackage
@@ -176,7 +176,7 @@ public class DGIWGGeoPackageUtils {
 		for (long zoom = minZoom; zoom <= maxZoom; zoom++) {
 
 			if (zooms.contains(zoom)) {
-				createTileMatrices(geoPackage, table, boundingBox, zoom,
+				createTileMatrix(geoPackage, table, boundingBox, zoom,
 						matrixWidth, matrixHeight);
 			}
 
@@ -203,8 +203,8 @@ public class DGIWGGeoPackageUtils {
 	 * @param matrixHeight
 	 *            matrix height
 	 */
-	public static void createTileMatrices(GeoPackageCore geoPackage,
-			String table, BoundingBox boundingBox, long zoom, long matrixWidth,
+	public static void createTileMatrix(GeoPackageCore geoPackage, String table,
+			BoundingBox boundingBox, long zoom, long matrixWidth,
 			long matrixHeight) {
 
 		double pixelXSize = boundingBox.getLongitudeRange() / matrixWidth
