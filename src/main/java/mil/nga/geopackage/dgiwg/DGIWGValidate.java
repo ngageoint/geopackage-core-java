@@ -221,7 +221,7 @@ public class DGIWGValidate {
 							reference.getReferenceScopeName(),
 							ReferenceScopeType.GEOPACKAGE.getValue(),
 							DGIWGRequirement.METADATA_ROW,
-							primaryKey(reference)));
+							primaryKeys(reference)));
 				}
 
 				if (reference.getTableName() != null) {
@@ -230,7 +230,7 @@ public class DGIWGValidate {
 							MetadataReference.COLUMN_TABLE_NAME,
 							reference.getTableName(), "NULL",
 							DGIWGRequirement.METADATA_ROW,
-							primaryKey(reference)));
+							primaryKeys(reference)));
 				}
 
 				if (reference.getColumnName() != null) {
@@ -239,7 +239,7 @@ public class DGIWGValidate {
 							MetadataReference.COLUMN_COLUMN_NAME,
 							reference.getColumnName(), "NULL",
 							DGIWGRequirement.METADATA_ROW,
-							primaryKey(reference)));
+							primaryKeys(reference)));
 				}
 
 				if (reference.getRowIdValue() != null) {
@@ -248,7 +248,7 @@ public class DGIWGValidate {
 							MetadataReference.COLUMN_ROW_ID_VALUE,
 							reference.getRowIdValue(), "NULL",
 							DGIWGRequirement.METADATA_ROW,
-							primaryKey(reference)));
+							primaryKeys(reference)));
 				}
 
 				if (reference.getParentId() != null) {
@@ -257,7 +257,7 @@ public class DGIWGValidate {
 							MetadataReference.COLUMN_PARENT_ID,
 							reference.getParentId(), "NULL",
 							DGIWGRequirement.METADATA_ROW,
-							primaryKey(reference)));
+							primaryKeys(reference)));
 				}
 
 				if (mdErrors.isValid()) {
@@ -889,9 +889,9 @@ public class DGIWGValidate {
 
 		String description = srs.getDescription();
 		if (description == null || description.isBlank()
-				|| description
+				|| description.trim()
 						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_UNKNOWN)
-				|| description
+				|| description.trim()
 						.equalsIgnoreCase(DGIWGConstants.DESCRIPTION_TBD)) {
 			errors.add(new DGIWGValidationError(
 					SpatialReferenceSystem.TABLE_NAME,
@@ -942,7 +942,7 @@ public class DGIWGValidate {
 	 *            metadata reference
 	 * @return primary key
 	 */
-	private static DGIWGValidationKey[] primaryKey(
+	private static DGIWGValidationKey[] primaryKeys(
 			MetadataReference reference) {
 		List<DGIWGValidationKey> keys = new ArrayList<>();
 
@@ -950,9 +950,9 @@ public class DGIWGValidate {
 			keys.add(new DGIWGValidationKey(MetadataReference.COLUMN_FILE_ID,
 					reference.getFileId()));
 			if (reference.getParentId() != null) {
-				keys.add(
-						new DGIWGValidationKey(MetadataReference.COLUMN_FILE_ID,
-								reference.getFileId()));
+				keys.add(new DGIWGValidationKey(
+						MetadataReference.COLUMN_PARENT_ID,
+						reference.getParentId()));
 			}
 		}
 
