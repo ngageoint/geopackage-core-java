@@ -1,6 +1,6 @@
 package mil.nga.geopackage.dgiwg;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import mil.nga.geopackage.contents.ContentsDataType;
@@ -128,7 +128,7 @@ public enum DataType {
 	 */
 	public static Set<DataType> getDataTypes(ContentsDataType type) {
 
-		Set<DataType> dataTypes = new HashSet<>();
+		Set<DataType> dataTypes = new LinkedHashSet<>();
 
 		for (DataType dataType : values()) {
 			if (dataType.getDataType() == type) {

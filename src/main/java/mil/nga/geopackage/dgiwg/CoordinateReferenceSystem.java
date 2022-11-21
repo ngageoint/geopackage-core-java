@@ -3,7 +3,6 @@ package mil.nga.geopackage.dgiwg;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -954,14 +953,14 @@ public enum CoordinateReferenceSystem {
 		this.description = description;
 		this.bounds = bounds;
 		this.wgs84Bounds = wgs84Bounds;
-		this.dataTypes = new HashSet<>(Arrays.asList(dataTypes));
+		this.dataTypes = new LinkedHashSet<>(Arrays.asList(dataTypes));
 		this.contentsDataTypes = new HashMap<>();
 		for (DataType dataType : dataTypes) {
 			ContentsDataType contentsDataType = dataType.getDataType();
 			Set<DataType> dataTypesSet = this.contentsDataTypes
 					.get(contentsDataType);
 			if (dataTypesSet == null) {
-				dataTypesSet = new HashSet<>();
+				dataTypesSet = new LinkedHashSet<>();
 				this.contentsDataTypes.put(contentsDataType, dataTypesSet);
 			}
 			dataTypesSet.add(dataType);
@@ -1026,7 +1025,7 @@ public enum CoordinateReferenceSystem {
 				10501965.7293128, 20003931.4586255);
 		this.wgs84Bounds = new BoundingBox(minLongitude, minLatitude,
 				maxLongitude, maxLatitude);
-		this.dataTypes = new HashSet<>();
+		this.dataTypes = new LinkedHashSet<>();
 		this.dataTypes.add(DataType.TILES_2D);
 		this.contentsDataTypes = new HashMap<>();
 		this.contentsDataTypes.put(ContentsDataType.TILES, this.dataTypes);
@@ -1459,7 +1458,7 @@ public enum CoordinateReferenceSystem {
 	public static Set<CoordinateReferenceSystem> getCoordinateReferenceSystems(
 			ContentsDataType dataType) {
 
-		Set<CoordinateReferenceSystem> crss = new HashSet<>();
+		Set<CoordinateReferenceSystem> crss = new LinkedHashSet<>();
 
 		for (DataType dt : DataType.getDataTypes(dataType)) {
 
