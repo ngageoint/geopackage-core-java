@@ -62,7 +62,7 @@ public class GeoPackageFileNameTest {
 	@Test
 	public void testExample2() {
 
-		String name = "OGL_BOUND_UK_1-10000_v1-0_09APR2020.gpkg”";
+		String name = "OGL_BOUND_UK_1-10000_v1-0_09APR2020.gpkg";
 
 		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
@@ -95,7 +95,7 @@ public class GeoPackageFileNameTest {
 	@Test
 	public void testAdditionalElements() {
 
-		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2_2021-11-16_Additional_Additional-Two.gpkg”";
+		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2_2021-11-16_Additional_Additional-Two.gpkg";
 
 		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
@@ -131,7 +131,7 @@ public class GeoPackageFileNameTest {
 	@Test
 	public void testUnknownElements() {
 
-		String name = "Producer_Data-Product_Geographic-Coverage-Area_Zoom-Levels_Version_20211116.gpkg”";
+		String name = "Producer_Data-Product_Geographic-Coverage-Area_Zoom-Levels_Version_20211116.gpkg";
 
 		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
@@ -164,7 +164,7 @@ public class GeoPackageFileNameTest {
 	@Test
 	public void testInvalid() {
 
-		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2.gpkg”";
+		String name = "Producer_Data-Product_Geographic-Coverage-Area_1-12_v3-2.gpkg";
 
 		GeoPackageFileName fileName = new GeoPackageFileName(name);
 
