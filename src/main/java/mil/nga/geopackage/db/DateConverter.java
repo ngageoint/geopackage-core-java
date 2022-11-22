@@ -228,8 +228,7 @@ public class DateConverter {
 				}
 			}
 
-			// If no value could be parsed throw the first expected parse
-			// format exception
+			// If no value could be parsed when expected
 			if (value == null && expected) {
 				throw new GeoPackageException(
 						"Failed to parse date string: " + date, exception);
