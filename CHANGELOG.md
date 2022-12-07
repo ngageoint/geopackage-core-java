@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.6.0 (TBD)
+## [6.6.0](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.0) (12-07-2022)
 
 * oapi-features-json version 2.3.0
 * WKT for CRS Extension version 1.1 support
