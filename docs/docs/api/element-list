@@ -4,6 +4,7 @@ mil.nga.geopackage.contents
 mil.nga.geopackage.db
 mil.nga.geopackage.db.master
 mil.nga.geopackage.db.table
+mil.nga.geopackage.dgiwg
 mil.nga.geopackage.extension
 mil.nga.geopackage.extension.coverage
 mil.nga.geopackage.extension.ecere
