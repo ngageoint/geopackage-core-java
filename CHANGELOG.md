@@ -4,10 +4,12 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.6.2 (TBD)
+## [6.6.2](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.2) (01-23-2023)
 
-* sf-wkb version 2.2.1
-* sf-wkt version 1.2.1
+* sf-wkb version 2.2.2
+* sf-wkt version 1.2.2
+* sf-proj version 4.3.1
+* oapi-features-json version 2.3.2
 
 ## [6.6.1](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.1) (12-07-2022)
 
