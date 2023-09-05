@@ -33,9 +33,14 @@ public class DateConverter {
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 	/**
-	 * Secondary Date Time format w/o milliseconds for parsing string dates
+	 * Date Time format w/o milliseconds for parsing string dates
 	 */
 	public static final String DATETIME_FORMAT2 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+	/**
+	 * Date Time format w/o seconds for parsing string dates
+	 */
+	public static final String DATETIME_FORMAT3 = "yyyy-MM-dd'T'HH:mm'Z'";
 
 	/**
 	 * SQLite date function
@@ -112,7 +117,8 @@ public class DateConverter {
 	 * @return date converter
 	 */
 	public static DateConverter dateTimeConverter() {
-		return new DateConverter(DATETIME_FORMAT, DATETIME_FORMAT2);
+		return new DateConverter(DATETIME_FORMAT, DATETIME_FORMAT2,
+				DATETIME_FORMAT3);
 	}
 
 	/**
