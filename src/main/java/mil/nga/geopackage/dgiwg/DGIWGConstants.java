@@ -29,6 +29,13 @@ public class DGIWGConstants {
 	public static final int MAX_ZOOM_LEVEL = 24;
 
 	/**
+	 * EPSG base URL
+	 * 
+	 * @since 6.6.3
+	 */
+	public static final String EPSG_URL = "http://www.opengis.net/def/crs/EPSG/0/";
+
+	/**
 	 * Invalid unknown description
 	 */
 	public static final String DESCRIPTION_UNKNOWN = "unknown";

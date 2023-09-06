@@ -28,8 +28,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * ETRS89-extended / LAEA Europe
 	 */
-	EPSG_3035(3035, "ETRS89-extended / LAEA Europe", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_3035,
+	EPSG_3035(3035, CRSType.PROJECTED, 2, WellKnownText.EPSG_3035,
 			"Lambert Azimuthal Equal Area ETRS89 for Europe",
 			new BoundingBox(2000000.0, 1000000.0, 6500000, 5500000.0),
 			new BoundingBox(-16.1, 32.88, 40.18, 84.73), DataType.TILES_2D,
@@ -38,8 +37,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 / World Mercator
 	 */
-	EPSG_3395(3395, "WGS 84 / World Mercator", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_3395,
+	EPSG_3395(3395, CRSType.PROJECTED, 2, WellKnownText.EPSG_3395,
 			"Mercator view of world excluding polar areas for very small scale mapping",
 			BoundingBox.worldWebMercator(),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
@@ -50,8 +48,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 / Pseudo-Mercator
 	 */
-	EPSG_3857(3857, "WGS 84 / Pseudo-Mercator", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_3857,
+	EPSG_3857(3857, CRSType.PROJECTED, 2, WellKnownText.EPSG_3857,
 			"Uses spherical development of ellipsoidal coordinates. This should only be used for visualization purposes.",
 			BoundingBox.worldWebMercator(),
 			BoundingBox.worldWGS84WithWebMercatorLimits(), DataType.TILES_2D),
@@ -59,8 +56,8 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * NAD83 / Canada Atlas Lambert
 	 */
-	EPSG_3978(3978, "NAD83 / Canada Atlas Lambert", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_3978, "Lambert Conformal Conic NAD83 for Canada",
+	EPSG_3978(3978, CRSType.PROJECTED, 2, WellKnownText.EPSG_3978,
+			"Lambert Conformal Conic NAD83 for Canada",
 			new BoundingBox(-7786476.885838887, -5153821.09213678,
 					7148753.233541353, 7928343.534071138),
 			new BoundingBox(-172.54, 23.81, -47.74, 86.46), DataType.TILES_2D),
@@ -68,24 +65,22 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 Geographic 2D
 	 */
-	EPSG_4326(4326, "WGS 84 Geographic 2D", CRSType.GEODETIC, 2,
-			WellKnownText.EPSG_4326,
+	EPSG_4326(4326, CRSType.GEODETIC, 2, WellKnownText.EPSG_4326,
 			"Horizontal component of 3D system. Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
 			DataType.TILES_3D, DataType.FEATURES_2D),
 
 	/**
 	 * WGS 84 Geographic 3D
 	 */
-	EPSG_4979(4979, "WGS 84 Geographic 3D", CRSType.GEODETIC, 3,
-			WellKnownText.EPSG_4979,
+	EPSG_4979(4979, CRSType.GEODETIC, 3, WellKnownText.EPSG_4979,
 			"Used by the GPS satellite navigation system and for NATO military geodetic surveying.",
 			DataType.TILES_3D, DataType.FEATURES_3D),
 
 	/**
 	 * WGS 84 / UPS North (E,N)
 	 */
-	EPSG_5041(5041, "WGS 84 / UPS North (E,N)", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_5041, "Military mapping by NATO north of 60° N",
+	EPSG_5041(5041, CRSType.PROJECTED, 2, WellKnownText.EPSG_5041,
+			"Military mapping by NATO north of 60° N",
 			new BoundingBox(-14440759.350252, -14440759.350252, 18440759.350252,
 					18440759.350252),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
@@ -96,8 +91,8 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS 84 / UPS South (E,N)
 	 */
-	EPSG_5042(5042, "WGS 84 / UPS South (E,N)", CRSType.PROJECTED, 2,
-			WellKnownText.EPSG_5042, "Military mapping by NATO south of 60° S",
+	EPSG_5042(5042, CRSType.PROJECTED, 2, WellKnownText.EPSG_5042,
+			"Military mapping by NATO south of 60° S",
 			new BoundingBox(-14440759.350252, -14440759.350252, 18440759.350252,
 					18440759.350252),
 			new BoundingBox(-ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH,
@@ -108,8 +103,7 @@ public enum CoordinateReferenceSystem {
 	/**
 	 * WGS84 4326 + EGM2008 height 3855
 	 */
-	EPSG_9518(9518, "WGS84 4326 + EGM2008 height 3855", CRSType.COMPOUND, 3,
-			WellKnownText.EPSG_9518,
+	EPSG_9518(9518, CRSType.COMPOUND, 3, WellKnownText.EPSG_9518,
 			"Geodetic position based on the World Geodetic System 1984 (WGS 84), extended by height position based on the Earth Gravity Model 2008 (EGM08).",
 			DataType.FEATURES_3D),
 
@@ -783,6 +777,29 @@ public enum CoordinateReferenceSystem {
 	 * 
 	 * @param epsgCode
 	 *            EPSG code
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(long epsgCode, CRSType type,
+			int dimension, String wkt, String description,
+			DataType... dataTypes) {
+		this(epsgCode, epsgURL(epsgCode), type, dimension, wkt, description,
+				dataTypes);
+	}
+
+	/**
+	 * Constructor with EPSG code and world WGS84 bounds
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
 	 * @param name
 	 *            name
 	 * @param type
@@ -801,6 +818,31 @@ public enum CoordinateReferenceSystem {
 			DataType... dataTypes) {
 		this(epsgCode, name, type, dimension, wkt, description,
 				BoundingBox.worldWGS84(), dataTypes);
+	}
+
+	/**
+	 * Constructor with EPSG code and WGS84 bounds
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(long epsgCode, CRSType type,
+			int dimension, String wkt, String description,
+			BoundingBox wgs84Bounds, DataType... dataTypes) {
+		this(epsgCode, epsgURL(epsgCode), type, dimension, wkt, description,
+				wgs84Bounds, dataTypes);
 	}
 
 	/**
@@ -828,6 +870,33 @@ public enum CoordinateReferenceSystem {
 			BoundingBox wgs84Bounds, DataType... dataTypes) {
 		this(epsgCode, name, type, dimension, wkt, description, wgs84Bounds,
 				wgs84Bounds, dataTypes);
+	}
+
+	/**
+	 * Constructor with EPSG code, bounds (tile matrix set), and WGS84 bounds
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @param type
+	 *            CRS type
+	 * @param dimension
+	 *            1-3 dimensional
+	 * @param wkt
+	 *            Well-Known Text
+	 * @param description
+	 *            description
+	 * @param bounds
+	 *            bounds
+	 * @param wgs84Bounds
+	 *            WGS84 bounds
+	 * @param dataTypes
+	 *            data types
+	 */
+	private CoordinateReferenceSystem(long epsgCode, CRSType type,
+			int dimension, String wkt, String description, BoundingBox bounds,
+			BoundingBox wgs84Bounds, DataType... dataTypes) {
+		this(epsgCode, epsgURL(epsgCode), type, dimension, wkt, description,
+				bounds, wgs84Bounds, dataTypes);
 	}
 
 	/**
@@ -979,8 +1048,7 @@ public enum CoordinateReferenceSystem {
 		this.authority = ProjectionConstants.AUTHORITY_EPSG;
 		this.code = epsgCode;
 		long zone = UTMZone.getZone(epsgCode);
-		String latDirection = UTMZone.getLatDirection(epsgCode);
-		this.crsName = "WGS 84 / UTM zone " + zone + latDirection;
+		this.crsName = epsgURL(epsgCode);
 		this.type = CRSType.PROJECTED;
 		this.dimension = 2;
 
@@ -1470,6 +1538,18 @@ public enum CoordinateReferenceSystem {
 		}
 
 		return crss;
+	}
+
+	/**
+	 * Get the EPSG URL for the code
+	 * 
+	 * @param epsgCode
+	 *            EPSG code
+	 * @return EPSG URL
+	 * @since 6.6.3
+	 */
+	public static String epsgURL(long epsgCode) {
+		return DGIWGConstants.EPSG_URL + epsgCode;
 	}
 
 	/**

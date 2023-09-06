@@ -82,6 +82,82 @@ public class CoreSQLUtils {
 	}
 
 	/**
+	 * Wrap the name in single quotes
+	 *
+	 * @param name
+	 *            name
+	 * @return quoted name
+	 * @since 6.6.3
+	 */
+	public static String singleQuoteWrap(String name) {
+		String quoteName = null;
+		if (name != null) {
+			if (name.startsWith("'") && name.endsWith("'")) {
+				quoteName = name;
+			} else {
+				quoteName = "'" + name + "'";
+			}
+		}
+		return quoteName;
+	}
+
+	/**
+	 * Wrap the names in single quotes
+	 *
+	 * @param names
+	 *            names
+	 * @return quoted names
+	 * @since 6.6.3
+	 */
+	public static String[] singleQuoteWrap(String[] names) {
+		String[] quoteNames = null;
+		if (names != null) {
+			quoteNames = new String[names.length];
+			for (int i = 0; i < names.length; i++) {
+				quoteNames[i] = singleQuoteWrap(names[i]);
+			}
+		}
+		return quoteNames;
+	}
+
+	/**
+	 * Determine if the name contains whitespace
+	 * 
+	 * @param name
+	 *            name
+	 * @return true if contains whitespace
+	 * @since 6.6.3
+	 */
+	public static boolean containsWhitespace(String name) {
+		boolean whiteSpace = false;
+		if (name != null && !name.isEmpty()) {
+			for (int i = 0; i < name.length(); i++) {
+				if (Character.isWhitespace(name.charAt(i))) {
+					whiteSpace = true;
+					break;
+				}
+			}
+		}
+		return whiteSpace;
+	}
+
+	/**
+	 * Determine if the name is empty or contains whitespace
+	 * 
+	 * @param name
+	 *            name
+	 * @return true if empty or contains whitespace
+	 * @since 6.6.3
+	 */
+	public static boolean isEmptyOrContainsWhitespace(String name) {
+		boolean emptyOrWhitespace = false;
+		if (name != null) {
+			emptyOrWhitespace = name.isEmpty() || containsWhitespace(name);
+		}
+		return emptyOrWhitespace;
+	}
+
+	/**
 	 * Build the "columns as" query values for the provided columns and "columns
 	 * as" values for use in select statements. The columns as size should equal
 	 * the number of columns and only provide values at the indices for desired

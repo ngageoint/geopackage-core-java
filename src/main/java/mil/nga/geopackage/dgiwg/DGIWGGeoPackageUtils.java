@@ -11,6 +11,7 @@ import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDataType;
+import mil.nga.geopackage.db.CoreSQLUtils;
 import mil.nga.geopackage.extension.metadata.Metadata;
 import mil.nga.geopackage.extension.metadata.MetadataDao;
 import mil.nga.geopackage.extension.metadata.MetadataExtension;
@@ -540,6 +541,24 @@ public class DGIWGGeoPackageUtils {
 		Metadata md = DGIWGMetadata.createMetadata(scope, uri, metadata);
 		createMetadata(geoPackage, md, reference);
 		return reference;
+	}
+
+	/**
+	 * Wrap the value in single quotes if an empty string or contains whitespace
+	 * 
+	 * @param value
+	 *            value
+	 * @return wrapped value
+	 * @since 6.6.3
+	 */
+	public static String wrapIfEmptyOrContainsWhitespace(String value) {
+		String wrapped = null;
+		if (CoreSQLUtils.isEmptyOrContainsWhitespace(value)) {
+			wrapped = CoreSQLUtils.singleQuoteWrap(value);
+		} else {
+			wrapped = value;
+		}
+		return wrapped;
 	}
 
 }

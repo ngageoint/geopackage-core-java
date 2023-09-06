@@ -314,7 +314,8 @@ public class DGIWGValidationError {
 			if (toString.length() > 0) {
 				toString.append(", ");
 			}
-			toString.append("Value: ").append(value);
+			toString.append("Value: ").append(DGIWGGeoPackageUtils
+					.wrapIfEmptyOrContainsWhitespace(value));
 		}
 		if (primaryKeys != null) {
 			for (DGIWGValidationKey key : primaryKeys) {
@@ -330,7 +331,8 @@ public class DGIWGValidationError {
 			if (toString.length() > 0) {
 				toString.append(", ");
 			}
-			toString.append("Constraint: ").append(constraint);
+			toString.append("Constraint: ").append(DGIWGGeoPackageUtils
+					.wrapIfEmptyOrContainsWhitespace(constraint));
 		}
 		if (requirement != null) {
 			if (toString.length() > 0) {

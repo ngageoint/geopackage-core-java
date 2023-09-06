@@ -119,7 +119,7 @@ public enum DGIWGRequirement {
 	/**
 	 * Requirement 22
 	 */
-	TILE_SIZE_DATA("Tile Pyramid Width Height", "tile/size-data"),
+	TILE_SIZE_DATA("Tile Pyramid Data Width Height", "tile/size-data"),
 
 	/**
 	 * Requirement 23
@@ -230,7 +230,8 @@ public enum DGIWGRequirement {
 	public String toString() {
 		StringBuilder toString = new StringBuilder();
 		toString.append("Number: ").append(number);
-		toString.append(", Name: ").append(name);
+		toString.append(", Name: ").append(
+				DGIWGGeoPackageUtils.wrapIfEmptyOrContainsWhitespace(name));
 		toString.append(", Identifier: ").append(getFullIdentifier());
 		return toString.toString();
 	}
