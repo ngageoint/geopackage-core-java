@@ -670,6 +670,65 @@ public class GeoPackageFileName {
 	}
 
 	/**
+	 * Multiline file name information string with metadata headers
+	 * 
+	 * @return information string
+	 * @since 6.6.3
+	 */
+	public String info() {
+		StringBuilder builder = new StringBuilder();
+		if (dataProduct != null) {
+			builder.append("Data Product: ");
+			builder.append(dataProduct);
+		}
+		if (geographicCoverageArea != null) {
+			if (builder.length() > 0) {
+				builder.append("\n");
+			}
+			builder.append("Geographic Coverage Area: ");
+			builder.append(geographicCoverageArea);
+		}
+		if (zoomLevels != null) {
+			if (builder.length() > 0) {
+				builder.append("\n");
+			}
+			builder.append("Zoom Levels: ");
+			builder.append(zoomLevels);
+		}
+		if (version != null) {
+			if (builder.length() > 0) {
+				builder.append("\n");
+			}
+			builder.append("Version: ");
+			builder.append(version);
+		}
+		if (creationDateText != null) {
+			if (builder.length() > 0) {
+				builder.append("\n");
+			}
+			builder.append("Creation Date: ");
+			builder.append(creationDateText);
+		}
+		if (hasAdditional()) {
+			for (String value : additional) {
+				if (builder.length() > 0) {
+					builder.append("\n");
+				}
+				builder.append(value);
+			}
+		}
+		if (builder.length() > 0) {
+			builder.insert(0, "\n");
+			builder.insert(0, producer);
+			builder.insert(0, "Producer: ");
+		} else {
+			builder.append("File Name: ");
+			builder.append(producer);
+		}
+		return builder.toString();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
