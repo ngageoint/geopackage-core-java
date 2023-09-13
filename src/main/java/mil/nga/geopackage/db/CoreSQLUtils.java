@@ -20,6 +20,13 @@ import mil.nga.geopackage.user.UserTable;
 public class CoreSQLUtils {
 
 	/**
+	 * SQLite table rowid column name
+	 * 
+	 * @since 6.6.3
+	 */
+	public static final String ROWID_COLUMN = "rowid";
+
+	/**
 	 * Pattern for matching numbers
 	 */
 	private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
