@@ -693,6 +693,15 @@ public class DGIWGValidate {
 								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
 								primaryKeys(geometryColumns)));
 					}
+					if (crs.isType(CRSType.COMPOUND)) {
+						errors.add(new DGIWGValidationError(
+								SpatialReferenceSystem.TABLE_NAME,
+								CrsWktExtension.DEFINITION_COLUMN_NAME,
+								srs.getProjectionDefinition(),
+								"Compound CRS not allowed for Geometry Columns value of prohibited (0)",
+								DGIWGRequirement.CRS_COMPOUND,
+								primaryKey(srs)));
+					}
 				} else if (z == 1) {
 					if (!crs.isDataType(DataType.FEATURES_3D)) {
 						errors.add(new DGIWGValidationError(
