@@ -4,6 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## 6.6.4 (TBD)
+
+* TBD
+
 ## [6.6.3](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.3) (09-18-2023)
 
 * Date Time format w/o seconds support
