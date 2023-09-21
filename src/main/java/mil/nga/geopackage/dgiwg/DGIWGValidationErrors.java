@@ -2,9 +2,10 @@ package mil.nga.geopackage.dgiwg;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DGIWG (Defence Geospatial Information Working Group) validation errors
@@ -17,7 +18,7 @@ public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 	/**
 	 * Errors
 	 */
-	private final List<DGIWGValidationError> errors = new ArrayList<>();
+	private final Set<DGIWGValidationError> errors = new LinkedHashSet<>();
 
 	/**
 	 * Constructor
@@ -119,7 +120,7 @@ public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 	 * @return errors
 	 */
 	public List<DGIWGValidationError> getErrors() {
-		return Collections.unmodifiableList(errors);
+		return new ArrayList<>(errors);
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 	 * @return error
 	 */
 	public DGIWGValidationError getError(int index) {
-		return errors.get(index);
+		return getErrors().get(index);
 	}
 
 	/**
@@ -147,10 +148,13 @@ public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 	@Override
 	public String toString() {
 		StringBuilder value = new StringBuilder();
+		int number = 1;
 		for (DGIWGValidationError error : this) {
-			if (value.length() > 0) {
+			if (number > 1) {
 				value.append("\n");
 			}
+			value.append(number++);
+			value.append(" - ");
 			value.append(error);
 		}
 		return value.toString();
