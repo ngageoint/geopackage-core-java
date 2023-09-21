@@ -379,7 +379,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_X,
 								tileMatrixSet.getMinX(), crsBounds,
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.BBOX_CRS,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -389,7 +389,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_Y,
 								tileMatrixSet.getMinY(), crsBounds,
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.BBOX_CRS,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -399,7 +399,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_X,
 								tileMatrixSet.getMaxX(), crsBounds,
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.BBOX_CRS,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -409,7 +409,7 @@ public class DGIWGValidate {
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_Y,
 								tileMatrixSet.getMaxY(), crsBounds,
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.BBOX_CRS,
 								primaryKey(tileMatrixSet)));
 					}
 
@@ -663,13 +663,14 @@ public class DGIWGValidate {
 		}
 
 		if (geometryColumns != null) {
-			SpatialReferenceSystem srs = geometryColumns.getSrs();
-			errors.add(validateFeatureCoordinateReferenceSystem(featureTable,
-					srs));
 
 			String geomColumn = geometryColumns.getColumnName();
-
 			int z = geometryColumns.getZ();
+
+			SpatialReferenceSystem srs = geometryColumns.getSrs();
+			errors.add(validateFeatureCoordinateReferenceSystem(featureTable,
+					srs, z));
+
 			if (z != 0 && z != 1) {
 				errors.add(new DGIWGValidationError(GeometryColumns.TABLE_NAME,
 						GeometryColumns.COLUMN_Z, z,
@@ -690,7 +691,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of prohibited (0) is for 2-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.CRS_2D_VECTOR,
 								primaryKeys(geometryColumns)));
 					}
 					if (crs.isType(CRSType.COMPOUND)) {
@@ -710,7 +711,7 @@ public class DGIWGValidate {
 								"Geometry Columns z value of mandatory (1) is for 3-D CRS. CRS "
 										+ crs.getAuthorityAndCode() + " Types: "
 										+ crs.getDataTypes(),
-								DGIWGRequirement.VALIDITY_DATA_VALIDITY,
+								DGIWGRequirement.CRS_3D_VECTOR,
 								primaryKeys(geometryColumns)));
 					}
 				}
@@ -770,6 +771,23 @@ public class DGIWGValidate {
 	 */
 	public static DGIWGValidationErrors validateFeatureCoordinateReferenceSystem(
 			String featureTable, SpatialReferenceSystem srs) {
+		return validateFeatureCoordinateReferenceSystem(featureTable, srs, 0);
+	}
+
+	/**
+	 * Validate the feature coordinate reference system
+	 * 
+	 * @param featureTable
+	 *            feature table
+	 * @param srs
+	 *            spatial reference system
+	 * @param z
+	 *            geometry z value
+	 * @return validation errors
+	 * @since 6.6.4
+	 */
+	public static DGIWGValidationErrors validateFeatureCoordinateReferenceSystem(
+			String featureTable, SpatialReferenceSystem srs, int z) {
 
 		DGIWGValidationErrors errors = new DGIWGValidationErrors();
 
@@ -777,12 +795,15 @@ public class DGIWGValidate {
 				errors, featureTable, srs, ContentsDataType.FEATURES);
 
 		if (crs == null) {
+			DGIWGRequirement requirement = z == 1
+					? DGIWGRequirement.CRS_3D_VECTOR
+					: DGIWGRequirement.CRS_2D_VECTOR;
 			errors.add(
 					new DGIWGValidationError(SpatialReferenceSystem.TABLE_NAME,
 							SpatialReferenceSystem.COLUMN_DEFINITION,
 							srs.getProjectionDefinition(),
 							"Unsupported features coordinate reference system",
-							DGIWGRequirement.CRS_2D_VECTOR, primaryKey(srs)));
+							requirement, primaryKey(srs)));
 		}
 
 		return errors;

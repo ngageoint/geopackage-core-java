@@ -505,12 +505,33 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 	 */
 	@Override
 	public ContentsDataType getTableDataType(String table) {
-		ContentsDataType tableType = null;
+		ContentsDataType dataType = null;
 		Contents contents = getTableContents(table);
 		if (contents != null) {
-			tableType = contents.getDataType();
+			dataType = contents.getDataType();
 		}
-		return tableType;
+		return dataType;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ContentsDataType getTableCoreDataType(String table) {
+		ContentsDataType dataType = null;
+		String tableType = getTableType(table);
+		if (tableType != null) {
+			dataType = ContentsDataType.fromCoreName(tableType);
+		}
+		return dataType;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isTableCoreDataType(String table) {
+		return getTableCoreDataType(table) != null;
 	}
 
 	/**

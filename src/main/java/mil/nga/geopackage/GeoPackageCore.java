@@ -390,6 +390,28 @@ public interface GeoPackageCore extends Closeable {
 	public ContentsDataType getTableDataType(String table);
 
 	/**
+	 * Get the data type of the user table only if it is a core data type
+	 * (features, tiles, attributes)
+	 * 
+	 * @param table
+	 *            table name
+	 * @return core data type or null
+	 * @since 6.6.4
+	 */
+	public ContentsDataType getTableCoreDataType(String table);
+
+	/**
+	 * Determine if the user table is one of the core data types (features,
+	 * tiles, attributes)
+	 * 
+	 * @param table
+	 *            table name
+	 * @return true if a core data type
+	 * @since 6.6.4
+	 */
+	public boolean isTableCoreDataType(String table);
+
+	/**
 	 * Get the bounding box for all table contents in the provided projection
 	 * 
 	 * @param projection
