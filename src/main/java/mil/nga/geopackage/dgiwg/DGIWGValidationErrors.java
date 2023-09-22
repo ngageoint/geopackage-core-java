@@ -148,16 +148,32 @@ public class DGIWGValidationErrors implements Iterable<DGIWGValidationError> {
 	@Override
 	public String toString() {
 		StringBuilder value = new StringBuilder();
-		int number = 1;
+		int countLength = length(numErrors());
+		int number = 0;
 		for (DGIWGValidationError error : this) {
-			if (number > 1) {
+			if (number > 0) {
 				value.append("\n");
 			}
-			value.append(number++);
+			value.append(++number);
+			int padding = countLength - length(number);
+			for (int i = 0; i < padding; i++) {
+				value.append(" ");
+			}
 			value.append(" - ");
 			value.append(error);
 		}
 		return value.toString();
+	}
+
+	/**
+	 * Get the string length of the number
+	 * 
+	 * @param number
+	 *            number
+	 * @return string length
+	 */
+	private static int length(int number) {
+		return (int) (Math.log10(number) + 1);
 	}
 
 }
