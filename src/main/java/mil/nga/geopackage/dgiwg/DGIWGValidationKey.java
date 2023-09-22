@@ -67,7 +67,7 @@ public class DGIWGValidationKey {
 	@Override
 	public String toString() {
 		StringBuilder toString = new StringBuilder();
-		toString.append("Key Column: ").append(column);
+		toString.append("Column: ").append(column);
 		toString.append(", Value: ").append(
 				DGIWGGeoPackageUtils.wrapIfEmptyOrContainsWhitespace(value));
 		return toString.toString();

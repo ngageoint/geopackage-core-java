@@ -323,7 +323,7 @@ public class DGIWGValidationError {
 					if (toString.length() > 0) {
 						toString.append(", ");
 					}
-					toString.append(key);
+					toString.append("PK: [").append(key).append("]");
 				}
 			}
 		}
