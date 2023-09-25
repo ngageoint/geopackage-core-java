@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.6.4 (TBD)
+## [6.6.4](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.4) (09-25-2023)
 
 * GeoPackage core data type (features, tiles, attributes) retrieval and detection methods
 * DGIWG validation updates: requirement error updates, unique errors, formatting
