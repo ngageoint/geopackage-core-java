@@ -4,9 +4,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.6.5 (TBD)
+## [6.6.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.5) (11-29-2023)
 
-* TBD
+* Geometry column generic type of BLOB support as base geometry
 
 ## [6.6.4](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.4) (09-25-2023)
 

@@ -17,7 +17,7 @@ public class FeatureColumn extends UserColumn {
 	/**
 	 * Geometry type if a geometry column
 	 */
-	private final GeometryType geometryType;
+	private GeometryType geometryType;
 
 	/**
 	 * Create a new primary key column
@@ -445,6 +445,16 @@ public class FeatureColumn extends UserColumn {
 	public FeatureColumn(FeatureColumn featureColumn) {
 		super(featureColumn);
 		this.geometryType = featureColumn.geometryType;
+	}
+
+	/**
+	 * Set the geometry type
+	 * 
+	 * @param geometryType
+	 *            geometry type
+	 */
+	protected void setGeometryType(GeometryType geometryType) {
+		this.geometryType = geometryType;
 	}
 
 	/**

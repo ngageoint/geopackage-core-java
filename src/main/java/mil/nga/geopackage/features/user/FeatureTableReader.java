@@ -5,6 +5,7 @@ import java.util.List;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.user.UserTableReader;
+import mil.nga.sf.GeometryType;
 
 /**
  * Reads the metadata from an existing feature table
@@ -59,7 +60,13 @@ public class FeatureTableReader
 	@Override
 	protected FeatureTable createTable(String tableName,
 			List<FeatureColumn> columnList) {
-		return new FeatureTable(tableName, columnName, columnList);
+		FeatureTable table = new FeatureTable(tableName, columnName,
+				columnList);
+		FeatureColumn geometryColumn = table.getGeometryColumn();
+		if (geometryColumn != null && !geometryColumn.isGeometry()) {
+			geometryColumn.setGeometryType(GeometryType.GEOMETRY);
+		}
+		return table;
 	}
 
 	/**
