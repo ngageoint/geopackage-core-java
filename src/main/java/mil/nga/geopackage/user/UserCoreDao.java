@@ -21,6 +21,7 @@ import mil.nga.geopackage.db.GeoPackageDataType;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
+import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.GeometryTransform;
 
 /**
@@ -8031,7 +8032,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * @since 4.0.0
 	 */
 	public TResult query(boolean distinct, String[] columns, String where) {
-		return query(distinct, columns, where, null);
+		return query(distinct, columns, where, new String[] {});
 	}
 
 	/**
@@ -8919,8 +8920,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 */
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String orderBy, int limit, long offset) {
-		return queryForChunk(distinct, columns, null, null, null, null, orderBy,
-				limit, offset);
+		return queryForChunk(distinct, columns, null, new String[] {}, null,
+				null, orderBy, limit, offset);
 	}
 
 	/**
@@ -9299,8 +9300,8 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	public TResult queryForChunk(boolean distinct, String[] columns,
 			String groupBy, String having, String orderBy, int limit,
 			long offset) {
-		return queryForChunk(distinct, columns, null, null, null, null, orderBy,
-				limit, offset);
+		return queryForChunk(distinct, columns, null, new String[] {}, null,
+				null, orderBy, limit, offset);
 	}
 
 	/**
@@ -9955,6 +9956,18 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	}
 
 	/**
+	 * Build where (or selection) statement for a single field being null
+	 * 
+	 * @param field
+	 *            field
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhereNull(String field) {
+		return CoreSQLUtils.quoteWrap(field) + " IS NULL";
+	}
+
+	/**
 	 * Build where (or selection) statement for a single field
 	 * 
 	 * @param field
@@ -9978,7 +9991,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 				where = buildWhere(field, value.getValue());
 			}
 		} else {
-			where = buildWhere(field, null, null);
+			where = buildWhereNull(field);
 		}
 		return where;
 	}
@@ -10004,7 +10017,7 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 			}
 			where = buildWhereLike(field, value.getValue());
 		} else {
-			where = buildWhere(field, null, null);
+			where = buildWhereNull(field);
 		}
 		return where;
 	}
@@ -10153,6 +10166,386 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 		}
 
 		return args;
+	}
+
+	/**
+	 * Build where statement for a range on a column
+	 * 
+	 * @param field
+	 *            field
+	 * @param range
+	 *            column range
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String field, ColumnRange range) {
+		return buildWhere(field, field, range);
+	}
+
+	/**
+	 * Build where statement for a range on a minimum and maximum column
+	 * 
+	 * @param minField
+	 *            minimum field
+	 * @param maxField
+	 *            maximum field
+	 * @param range
+	 *            column range
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String minField, String maxField,
+			ColumnRange range) {
+		String where;
+		if (range != null
+				&& (range.getMin() != null || range.getMax() != null)) {
+			where = "";
+			if (range.getMin() != null) {
+				where += CoreSQLUtils.quoteWrap(maxField) + " >= ?";
+			}
+			if (range.getMax() != null) {
+				if (where.length() > 0) {
+					where += " AND ";
+				}
+				where += CoreSQLUtils.quoteWrap(minField) + " <= ?";
+			}
+		} else {
+			where = buildWhereNull(minField);
+			if (!minField.equalsIgnoreCase(maxField)) {
+				where += " AND " + buildWhereNull(maxField);
+			}
+		}
+		return where;
+	}
+
+	/**
+	 * Build where (or selection) args for the range
+	 * 
+	 * @param range
+	 *            column range
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(ColumnRange range) {
+		List<String> selectionArgs = new ArrayList<String>();
+		if (range != null) {
+			if (range.getMin() != null) {
+				double minValue = range.getMin().doubleValue();
+				if (range.getTolerance() != null) {
+					minValue -= range.getTolerance().doubleValue();
+				}
+				selectionArgs.add(Double.toString(minValue));
+			}
+			if (range.getMax() != null) {
+				double maxValue = range.getMax().doubleValue();
+				if (range.getTolerance() != null) {
+					maxValue += range.getTolerance().doubleValue();
+				}
+				selectionArgs.add(Double.toString(maxValue));
+			}
+		}
+		return selectionArgs.isEmpty() ? null
+				: selectionArgs.toArray(new String[] {});
+	}
+
+	/**
+	 * Build where statement for ranges on columns
+	 * 
+	 * @param field1
+	 *            first field
+	 * @param range1
+	 *            first range
+	 * @param field2
+	 *            second field
+	 * @param range2
+	 *            second range
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String field1, ColumnRange range1, String field2,
+			ColumnRange range2) {
+		return buildWhere(field1, field1, range1, field2, field2, range2);
+	}
+
+	/**
+	 * Build where statement for ranges on minimum and maximum columns
+	 * 
+	 * @param minField1
+	 *            first minimum field
+	 * @param maxField1
+	 *            first maximum field
+	 * @param range1
+	 *            first column range
+	 * @param minField2
+	 *            second minimum field
+	 * @param maxField2
+	 *            second maximum field
+	 * @param range2
+	 *            second column range
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String minField1, String maxField1,
+			ColumnRange range1, String minField2, String maxField2,
+			ColumnRange range2) {
+		String where = buildWhere(minField1, maxField1, range1);
+		where += " AND ";
+		where += buildWhere(minField2, maxField2, range2);
+		return where;
+	}
+
+	/**
+	 * Build where (or selection) args for the ranges
+	 * 
+	 * @param range1
+	 *            first column range
+	 * @param range2
+	 *            second column range
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(ColumnRange range1, ColumnRange range2) {
+		List<String> selectionArgs = new ArrayList<String>();
+		String[] range1Args = buildWhereArgs(range1);
+		if (range1Args != null) {
+			for (String arg : range1Args) {
+				selectionArgs.add(arg);
+			}
+		}
+		String[] range2Args = buildWhereArgs(range2);
+		if (range2Args != null) {
+			for (String arg : range2Args) {
+				selectionArgs.add(arg);
+			}
+		}
+		return selectionArgs.isEmpty() ? null
+				: selectionArgs.toArray(new String[] {});
+	}
+
+	/**
+	 * Build where statement for a geometry envelope on a x and y field
+	 * 
+	 * @param xField
+	 *            x field
+	 * @param yField
+	 *            y field
+	 * @param envelope
+	 *            geometry envelope
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String xField, String yField,
+			GeometryEnvelope envelope) {
+		return buildWhere(xField, yField, xField, yField, envelope);
+	}
+
+	/**
+	 * Build where statement for a geometry envelope on x and y range fields
+	 * 
+	 * @param minXField
+	 *            min x field
+	 * @param minYField
+	 *            min y field
+	 * @param maxXField
+	 *            max x field
+	 * @param maxYField
+	 *            max y field
+	 * @param envelope
+	 *            geometry envelope
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String minXField, String minYField,
+			String maxXField, String maxYField, GeometryEnvelope envelope) {
+		ColumnRange xRange = getXRange(envelope);
+		ColumnRange yRange = getYRange(envelope);
+		return buildWhere(minXField, maxXField, xRange, minYField, maxYField,
+				yRange);
+	}
+
+	/**
+	 * Build where (or selection) args for the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(GeometryEnvelope envelope) {
+		return buildWhereArgs(envelope, null);
+	}
+
+	/**
+	 * Build where (or selection) args for the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @param tolerance
+	 *            tolerance
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(GeometryEnvelope envelope,
+			Double tolerance) {
+		return buildWhereArgs(envelope, tolerance, tolerance);
+	}
+
+	/**
+	 * Build where (or selection) args for the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @param xTolerance
+	 *            x tolerance
+	 * @param yTolerance
+	 *            y tolerance
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(GeometryEnvelope envelope, Double xTolerance,
+			Double yTolerance) {
+		ColumnRange xRange = getXRange(envelope, xTolerance);
+		ColumnRange yRange = getYRange(envelope, yTolerance);
+		return buildWhereArgs(xRange, yRange);
+	}
+
+	/**
+	 * Get the x column range of the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @return column range
+	 * @since 6.6.7
+	 */
+	public ColumnRange getXRange(GeometryEnvelope envelope) {
+		return getXRange(envelope, null);
+	}
+
+	/**
+	 * Get the x column range of the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @param tolerance
+	 *            tolerance
+	 * @return column range
+	 * @since 6.6.7
+	 */
+	public ColumnRange getXRange(GeometryEnvelope envelope, Double tolerance) {
+		return new ColumnRange(envelope.getMinX(), envelope.getMaxX(),
+				tolerance);
+	}
+
+	/**
+	 * Get the y column range of the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @return column range
+	 * @since 6.6.7
+	 */
+	public ColumnRange getYRange(GeometryEnvelope envelope) {
+		return getYRange(envelope, null);
+	}
+
+	/**
+	 * Get the y column range of the geometry envelope
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @param tolerance
+	 *            tolerance
+	 * @return column range
+	 * @since 6.6.7
+	 */
+	public ColumnRange getYRange(GeometryEnvelope envelope, Double tolerance) {
+		return new ColumnRange(envelope.getMinY(), envelope.getMaxY(),
+				tolerance);
+	}
+
+	/**
+	 * Build where statement for a bounding box on a longitude and latitude
+	 * field
+	 * 
+	 * @param lonField
+	 *            longitude field
+	 * @param latField
+	 *            latitude field
+	 * @param boundingBox
+	 *            bounding box
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String lonField, String latField,
+			BoundingBox boundingBox) {
+		return buildWhere(lonField, latField, lonField, latField, boundingBox);
+	}
+
+	/**
+	 * Build where statement for a bounding box on longitude and latitude range
+	 * fields
+	 * 
+	 * @param minLonField
+	 *            min longitude field
+	 * @param minLatField
+	 *            min latitude field
+	 * @param maxLonField
+	 *            max longitude field
+	 * @param maxLatField
+	 *            max latitude field
+	 * @param boundingBox
+	 *            bounding box
+	 * @return where clause
+	 * @since 6.6.7
+	 */
+	public String buildWhere(String minLonField, String minLatField,
+			String maxLonField, String maxLatField, BoundingBox boundingBox) {
+		return buildWhere(minLonField, minLatField, maxLonField, maxLatField,
+				boundingBox.buildEnvelope());
+	}
+
+	/**
+	 * Build where (or selection) args for the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(BoundingBox boundingBox) {
+		return buildWhereArgs(boundingBox, null);
+	}
+
+	/**
+	 * Build where (or selection) args for the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param tolerance
+	 *            tolerance
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(BoundingBox boundingBox, Double tolerance) {
+		return buildWhereArgs(boundingBox, tolerance, tolerance);
+	}
+
+	/**
+	 * Build where (or selection) args for the bounding box
+	 * 
+	 * @param boundingBox
+	 *            bounding box
+	 * @param xTolerance
+	 *            x tolerance
+	 * @param yTolerance
+	 *            y tolerance
+	 * @return where args
+	 * @since 6.6.7
+	 */
+	public String[] buildWhereArgs(BoundingBox boundingBox, Double xTolerance,
+			Double yTolerance) {
+		return buildWhereArgs(boundingBox.buildEnvelope(), xTolerance,
+				yTolerance);
 	}
 
 	/**
