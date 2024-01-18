@@ -6,6 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.6.7 (TBD)
 
+* DAO column range support (including geometry envelopes & bounding boxes) to build where clauses & args for queries
 * oapi-features-json version 2.3.3
 
 ## [6.6.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.5) (11-29-2023)
