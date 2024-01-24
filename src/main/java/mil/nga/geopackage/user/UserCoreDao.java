@@ -10535,17 +10535,17 @@ public abstract class UserCoreDao<TColumn extends UserColumn, TTable extends Use
 	 * 
 	 * @param boundingBox
 	 *            bounding box
-	 * @param xTolerance
-	 *            x tolerance
-	 * @param yTolerance
-	 *            y tolerance
+	 * @param lonTolerance
+	 *            longitude tolerance
+	 * @param latTolerance
+	 *            latitude tolerance
 	 * @return where args
 	 * @since 6.6.7
 	 */
-	public String[] buildWhereArgs(BoundingBox boundingBox, Double xTolerance,
-			Double yTolerance) {
-		return buildWhereArgs(boundingBox.buildEnvelope(), xTolerance,
-				yTolerance);
+	public String[] buildWhereArgs(BoundingBox boundingBox, Double lonTolerance,
+			Double latTolerance) {
+		return buildWhereArgs(boundingBox.buildEnvelope(), lonTolerance,
+				latTolerance);
 	}
 
 	/**
