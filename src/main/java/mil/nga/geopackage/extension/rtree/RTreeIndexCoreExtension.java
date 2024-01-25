@@ -105,6 +105,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 
 	/**
 	 * Trigger update 1 name
+	 * 
+	 * @deprecated replaced by update6 and update7
 	 */
 	public static final String TRIGGER_UPDATE1_NAME = "update1";
 
@@ -115,6 +117,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 
 	/**
 	 * Trigger update 3 name
+	 * 
+	 * @deprecated replaced by update5
 	 */
 	public static final String TRIGGER_UPDATE3_NAME = "update3";
 
@@ -122,6 +126,21 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Trigger update 4 name
 	 */
 	public static final String TRIGGER_UPDATE4_NAME = "update4";
+
+	/**
+	 * Trigger update 5 name
+	 */
+	public static final String TRIGGER_UPDATE5_NAME = "update5";
+
+	/**
+	 * Trigger update 6 name
+	 */
+	public static final String TRIGGER_UPDATE6_NAME = "update6";
+
+	/**
+	 * Trigger update 7 name
+	 */
+	public static final String TRIGGER_UPDATE7_NAME = "update7";
 
 	/**
 	 * Trigger delete name
@@ -524,10 +543,13 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 			String idColumnName) {
 
 		createInsertTrigger(tableName, geometryColumnName, idColumnName);
-		createUpdate1Trigger(tableName, geometryColumnName, idColumnName);
+		// createUpdate1Trigger(tableName, geometryColumnName, idColumnName);
 		createUpdate2Trigger(tableName, geometryColumnName, idColumnName);
-		createUpdate3Trigger(tableName, geometryColumnName, idColumnName);
+		// createUpdate3Trigger(tableName, geometryColumnName, idColumnName);
 		createUpdate4Trigger(tableName, geometryColumnName, idColumnName);
+		createUpdate5Trigger(tableName, geometryColumnName, idColumnName);
+		createUpdate6Trigger(tableName, geometryColumnName, idColumnName);
+		createUpdate7Trigger(tableName, geometryColumnName, idColumnName);
 		createDeleteTrigger(tableName, geometryColumnName, idColumnName);
 
 	}
@@ -537,7 +559,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * 
 	 * <pre>
 	 * Conditions: Insertion of non-empty geometry
-	 * Actions   : Insert record into rtree
+	 * Actions   : Insert record into R-tree
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -561,7 +583,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * <pre>
 	 * Conditions: Update of geometry column to non-empty geometry
 	 *             No row ID change
-	 * Actions   : Update record in rtree
+	 * Actions   : Update record in R-tree
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -570,6 +592,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 * @param idColumnName
 	 *            id column name
+	 * @deprecated replaced by update6 and update7
 	 */
 	public void createUpdate1Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
@@ -585,7 +608,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * <pre>
 	 * Conditions: Update of geometry column to empty geometry
 	 *             No row ID change
-	 * Actions   : Remove record from rtree
+	 * Actions   : Remove record from R-tree
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -610,8 +633,8 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Conditions: Update of any column
 	 *             Row ID change
 	 *             Non-empty geometry
-	 * Actions   : Remove record from rtree for old {@literal <i>}
-	 *             Insert record into rtree for new {@literal <i>}
+	 * Actions   : Remove record from R-tree for old {@literal <i>}
+	 *             Insert record into R-tree for new {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -620,6 +643,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 *            geometry column name
 	 * @param idColumnName
 	 *            id column name
+	 * @deprecated replaced by update5
 	 */
 	public void createUpdate3Trigger(String tableName,
 			String geometryColumnName, String idColumnName) {
@@ -636,7 +660,7 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * Conditions: Update of any column
 	 *             Row ID change
 	 *             Empty geometry
-	 * Actions   : Remove record from rtree for old and new {@literal <i>}
+	 * Actions   : Remove record from R-tree for old and new {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -655,11 +679,83 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	}
 
 	/**
+	 * Create update 5 trigger
+	 * 
+	 * <pre>
+	 * Conditions: Update of any column
+	 *             Row ID change
+	 *             Non-empty geometry
+	 * Actions   : Remove record from R-tree for old {@literal <i>}
+	 *             Insert record into R-tree for new {@literal <i>}
+	 * </pre>
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @param idColumnName
+	 *            id column name
+	 */
+	public void createUpdate5Trigger(String tableName,
+			String geometryColumnName, String idColumnName) {
+
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE5_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
+	}
+
+	/**
+	 * Create update 6 trigger
+	 * 
+	 * <pre>
+	 * Conditions: Update a non-empty geometry with another non-empty geometry
+	 * Actions   : Replace record from R-tree for {@literal <i>}
+	 * </pre>
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @param idColumnName
+	 *            id column name
+	 */
+	public void createUpdate6Trigger(String tableName,
+			String geometryColumnName, String idColumnName) {
+
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE6_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
+	}
+
+	/**
+	 * Create update 7 trigger
+	 * 
+	 * <pre>
+	 * Conditions: Update a null/empty geometry with a non-empty geometry
+	 * Actions   : Insert record into R-tree for new {@literal <i>}
+	 * </pre>
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 * @param idColumnName
+	 *            id column name
+	 */
+	public void createUpdate7Trigger(String tableName,
+			String geometryColumnName, String idColumnName) {
+
+		String sqlName = GeoPackageProperties.getProperty(TRIGGER_PROPERTY,
+				TRIGGER_UPDATE7_NAME);
+		executeSQL(sqlName, tableName, geometryColumnName, idColumnName);
+	}
+
+	/**
 	 * Create delete trigger
 	 * 
 	 * <pre>
 	 * Conditions: Row deleted
-	 * Actions   : Remove record from rtree for old {@literal <i>}
+	 * Actions   : Remove record from R-tree for old {@literal <i>}
 	 * </pre>
 	 * 
 	 * @param tableName
@@ -887,6 +983,9 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 		dropUpdate2Trigger(tableName, geometryColumnName);
 		dropUpdate3Trigger(tableName, geometryColumnName);
 		dropUpdate4Trigger(tableName, geometryColumnName);
+		dropUpdate5Trigger(tableName, geometryColumnName);
+		dropUpdate6Trigger(tableName, geometryColumnName);
+		dropUpdate7Trigger(tableName, geometryColumnName);
 		dropDeleteTrigger(tableName, geometryColumnName);
 
 	}
@@ -953,6 +1052,45 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	public void dropUpdate4Trigger(String tableName,
 			String geometryColumnName) {
 		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE4_NAME);
+	}
+
+	/**
+	 * Drop update 5 trigger
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 */
+	public void dropUpdate5Trigger(String tableName,
+			String geometryColumnName) {
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE5_NAME);
+	}
+
+	/**
+	 * Drop update 6 trigger
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 */
+	public void dropUpdate6Trigger(String tableName,
+			String geometryColumnName) {
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE6_NAME);
+	}
+
+	/**
+	 * Drop update 7 trigger
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param geometryColumnName
+	 *            geometry column name
+	 */
+	public void dropUpdate7Trigger(String tableName,
+			String geometryColumnName) {
+		dropTrigger(tableName, geometryColumnName, TRIGGER_UPDATE7_NAME);
 	}
 
 	/**

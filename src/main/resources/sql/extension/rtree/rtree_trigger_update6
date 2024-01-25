@@ -1,0 +1,12 @@
+CREATE TRIGGER "rtree_<t>_<c>_update6" AFTER UPDATE OF "<c>" ON "<t>"
+  WHEN OLD."<i>" = NEW."<i>" AND
+       (NEW."<c>" NOTNULL AND NOT ST_IsEmpty(NEW."<c>")) AND
+       (OLD."<c>" NOTNULL AND NOT ST_IsEmpty(OLD."<c>"))
+BEGIN
+  UPDATE "rtree_<t>_<c>" SET
+    minx = ST_MinX(NEW."<c>"),
+    maxx = ST_MaxX(NEW."<c>"),
+    miny = ST_MinY(NEW."<c>"),
+    maxy = ST_MaxY(NEW."<c>")
+  WHERE id = NEW."<i>";
+END;
