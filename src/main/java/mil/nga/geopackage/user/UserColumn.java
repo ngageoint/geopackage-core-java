@@ -14,6 +14,7 @@ import mil.nga.geopackage.db.table.ConstraintType;
 import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.db.table.TableColumn;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 
 /**
  * Metadata about a single column from a user table
@@ -114,6 +115,14 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	 * List of column constraints
 	 */
 	private final Constraints constraints;
+
+	/**
+	 * Column title, not saved as part of the column, saved using
+	 * {@link DataColumnsDao}
+	 * 
+	 * @since 6.6.7
+	 */
+	private String title;
 
 	/**
 	 * Constructor
@@ -220,6 +229,7 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
 		this.constraints = userColumn.constraints.copy();
+		this.title = userColumn.title;
 	}
 
 	/**
@@ -946,6 +956,29 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 			sql = constraint.buildSql();
 		}
 		return sql;
+	}
+
+	/**
+	 * Get the column title. The title is not saved as part of the column but
+	 * can be loaded using {@link DataColumnsDao}.
+	 * 
+	 * @return column title or null
+	 * @since 6.6.7
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Set the column title. The title is not saved as part of the column but
+	 * can be saved using {@link DataColumnsDao}.
+	 * 
+	 * @param title
+	 *            column title
+	 * @since 6.6.7
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

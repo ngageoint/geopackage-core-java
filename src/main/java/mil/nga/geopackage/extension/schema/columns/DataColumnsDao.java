@@ -13,9 +13,13 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.TableColumnKey;
+import mil.nga.geopackage.user.UserColumn;
+import mil.nga.geopackage.user.UserColumns;
+import mil.nga.geopackage.user.UserTable;
 
 /**
  * Data Columns Data Access Object
@@ -263,6 +267,196 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 		PreparedDelete<DataColumns> deleteQuery = db.prepare();
 		int deleted = delete(deleteQuery);
 		return deleted;
+	}
+
+	/**
+	 * Save the column titles as data columns
+	 * 
+	 * @param table
+	 *            user table
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void saveColumnTitles(UserTable<? extends UserColumn> table)
+			throws SQLException {
+		saveColumnTitles(table.getContents(), table.getUserColumns());
+	}
+
+	/**
+	 * Save the column titles as data columns
+	 * 
+	 * @param contents
+	 *            user table contents
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void saveColumnTitles(Contents contents,
+			UserColumns<? extends UserColumn> columns) throws SQLException {
+		saveColumnTitles(contents, columns.getColumns());
+	}
+
+	/**
+	 * Save the column titles as data columns
+	 * 
+	 * @param contents
+	 *            user table contents
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void saveColumnTitles(Contents contents,
+			List<? extends UserColumn> columns) throws SQLException {
+
+		for (UserColumn column : columns) {
+
+			saveColumnTitle(contents, column);
+
+		}
+
+	}
+
+	/**
+	 * Save the column title as a data column
+	 * 
+	 * @param contents
+	 *            user table contents
+	 * @param column
+	 *            user column
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void saveColumnTitle(Contents contents, UserColumn column)
+			throws SQLException {
+
+		String table = contents.getTableName();
+		String name = column.getName();
+		String title = column.getTitle();
+
+		DataColumns dataColumns = getDataColumn(table, name);
+		if (dataColumns != null) {
+			dataColumns.setName(title);
+			dataColumns.setTitle(title);
+			update(dataColumns);
+		} else if (title != null) {
+			dataColumns = new DataColumns();
+			dataColumns.setContents(contents);
+			dataColumns.setColumnName(name);
+			dataColumns.setName(title);
+			dataColumns.setTitle(title);
+			create(dataColumns);
+		}
+
+	}
+
+	/**
+	 * Load the column titles from data columns
+	 * 
+	 * @param table
+	 *            user table
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadColumnTitles(UserTable<? extends UserColumn> table)
+			throws SQLException {
+		loadColumnTitles(table.getUserColumns());
+	}
+
+	/**
+	 * Load the column titles from data columns
+	 * 
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadColumnTitles(UserColumns<? extends UserColumn> columns)
+			throws SQLException {
+		loadColumnTitles(columns.getTableName(), columns.getColumns());
+	}
+
+	/**
+	 * Load the column titles from data columns
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadColumnTitles(String table,
+			List<? extends UserColumn> columns) throws SQLException {
+
+		if (isTableExists()) {
+
+			for (UserColumn column : columns) {
+
+				loadColumnTitle(table, column);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Load the column title from a data column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            user column
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadColumnTitle(String table, UserColumn column)
+			throws SQLException {
+
+		column.setTitle(getColumnTitle(table, column.getName()));
+
+	}
+
+	/**
+	 * Get the column title from a data column
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            column name
+	 * @return column title or null
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public String getColumnTitle(String table, String column)
+			throws SQLException {
+
+		String title = null;
+
+		if (isTableExists()) {
+
+			DataColumns dataColumns = getDataColumn(table, column);
+			if (dataColumns != null) {
+				title = dataColumns.getName();
+				if (title == null) {
+					title = dataColumns.getTitle();
+				}
+			}
+
+		}
+
+		return title;
 	}
 
 }
