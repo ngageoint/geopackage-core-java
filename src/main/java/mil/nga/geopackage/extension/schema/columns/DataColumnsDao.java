@@ -366,16 +366,13 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 
 			if (existing != null) {
 				schema.setContents(existing.getContents());
-				update(schema);
-			} else {
-				if (schema.getContents() == null) {
-					ContentsDao contentsDao = getContentsDao();
-					Contents contents = contentsDao.queryForId(table);
-					schema.setContents(contents);
-				}
-				if (schema.getContents() != null) {
-					create(schema);
-				}
+			} else if (schema.getContents() == null) {
+				ContentsDao contentsDao = getContentsDao();
+				Contents contents = contentsDao.queryForId(table);
+				schema.setContents(contents);
+			}
+			if (schema.getContents() != null) {
+				createOrUpdate(schema);
 			}
 
 		} else if (existing != null) {
