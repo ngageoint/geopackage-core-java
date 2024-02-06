@@ -14,6 +14,7 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import mil.nga.geopackage.GeoPackageCore;
 import mil.nga.geopackage.contents.Contents;
+import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.TableColumnKey;
@@ -51,6 +52,11 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	public static DataColumnsDao create(GeoPackageCoreConnection db) {
 		return GeoPackageDao.createDao(db, DataColumns.class);
 	}
+
+	/**
+	 * Contents DAO
+	 */
+	private ContentsDao contentsDao;
 
 	/**
 	 * Constructor, required by ORMLite
@@ -163,6 +169,24 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	}
 
 	/**
+	 * Delete by id with table name and column name
+	 * 
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @return number of rows deleted
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public int deleteById(String tableName, String columnName)
+			throws SQLException {
+		TableColumnKey id = new TableColumnKey(tableName, columnName);
+		return deleteById(id);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -270,7 +294,7 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	}
 
 	/**
-	 * Save the column titles as data columns
+	 * Save the table schema
 	 * 
 	 * @param table
 	 *            user table
@@ -278,99 +302,13 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	 *             upon failure
 	 * @since 6.6.7
 	 */
-	public void saveColumnTitles(UserTable<? extends UserColumn> table)
+	public void saveSchema(UserTable<? extends UserColumn> table)
 			throws SQLException {
-		saveColumnTitles(table.getContents(), table.getUserColumns());
+		saveSchema(table.getUserColumns());
 	}
 
 	/**
-	 * Save the column titles as data columns
-	 * 
-	 * @param contents
-	 *            user table contents
-	 * @param columns
-	 *            user columns
-	 * @throws SQLException
-	 *             upon failure
-	 * @since 6.6.7
-	 */
-	public void saveColumnTitles(Contents contents,
-			UserColumns<? extends UserColumn> columns) throws SQLException {
-		saveColumnTitles(contents, columns.getColumns());
-	}
-
-	/**
-	 * Save the column titles as data columns
-	 * 
-	 * @param contents
-	 *            user table contents
-	 * @param columns
-	 *            user columns
-	 * @throws SQLException
-	 *             upon failure
-	 * @since 6.6.7
-	 */
-	public void saveColumnTitles(Contents contents,
-			List<? extends UserColumn> columns) throws SQLException {
-
-		for (UserColumn column : columns) {
-
-			saveColumnTitle(contents, column);
-
-		}
-
-	}
-
-	/**
-	 * Save the column title as a data column
-	 * 
-	 * @param contents
-	 *            user table contents
-	 * @param column
-	 *            user column
-	 * @throws SQLException
-	 *             upon failure
-	 * @since 6.6.7
-	 */
-	public void saveColumnTitle(Contents contents, UserColumn column)
-			throws SQLException {
-
-		String table = contents.getTableName();
-		String name = column.getName();
-		String title = column.getTitle();
-
-		DataColumns dataColumns = getDataColumn(table, name);
-		if (dataColumns != null) {
-			dataColumns.setName(title);
-			dataColumns.setTitle(title);
-			update(dataColumns);
-		} else if (title != null) {
-			dataColumns = new DataColumns();
-			dataColumns.setContents(contents);
-			dataColumns.setColumnName(name);
-			dataColumns.setName(title);
-			dataColumns.setTitle(title);
-			create(dataColumns);
-		}
-
-	}
-
-	/**
-	 * Load the column titles from data columns
-	 * 
-	 * @param table
-	 *            user table
-	 * @throws SQLException
-	 *             upon failure
-	 * @since 6.6.7
-	 */
-	public void loadColumnTitles(UserTable<? extends UserColumn> table)
-			throws SQLException {
-		loadColumnTitles(table.getUserColumns());
-	}
-
-	/**
-	 * Load the column titles from data columns
+	 * Save the columns schema
 	 * 
 	 * @param columns
 	 *            user columns
@@ -378,13 +316,13 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	 *             upon failure
 	 * @since 6.6.7
 	 */
-	public void loadColumnTitles(UserColumns<? extends UserColumn> columns)
+	public void saveSchema(UserColumns<? extends UserColumn> columns)
 			throws SQLException {
-		loadColumnTitles(columns.getTableName(), columns.getColumns());
+		saveSchema(columns.getTableName(), columns.getColumns());
 	}
 
 	/**
-	 * Load the column titles from data columns
+	 * Save the columns schema
 	 * 
 	 * @param table
 	 *            table name
@@ -394,14 +332,105 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	 *             upon failure
 	 * @since 6.6.7
 	 */
-	public void loadColumnTitles(String table,
-			List<? extends UserColumn> columns) throws SQLException {
+	public void saveSchema(String table, List<? extends UserColumn> columns)
+			throws SQLException {
+
+		for (UserColumn column : columns) {
+			saveSchema(table, column);
+		}
+
+	}
+
+	/**
+	 * Save the column schema
+	 * 
+	 * @param table
+	 *            table name
+	 * @param column
+	 *            user column
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void saveSchema(String table, UserColumn column)
+			throws SQLException {
+
+		String columnName = column.getName();
+
+		DataColumns schema = column.getSchema();
+		DataColumns existing = getSchema(table, columnName);
+
+		if (schema != null) {
+
+			schema.setColumnName(columnName);
+
+			if (existing != null) {
+				schema.setContents(existing.getContents());
+				update(schema);
+			} else {
+				if (schema.getContents() == null) {
+					ContentsDao contentsDao = getContentsDao();
+					Contents contents = contentsDao.queryForId(table);
+					schema.setContents(contents);
+				}
+				if (schema.getContents() != null) {
+					create(schema);
+				}
+			}
+
+		} else if (existing != null) {
+			deleteById(table, columnName);
+		}
+
+	}
+
+	/**
+	 * Load the table schema
+	 * 
+	 * @param table
+	 *            user table
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadSchema(UserTable<? extends UserColumn> table)
+			throws SQLException {
+		loadSchema(table.getUserColumns());
+	}
+
+	/**
+	 * Load the columns schema
+	 * 
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadSchema(UserColumns<? extends UserColumn> columns)
+			throws SQLException {
+		loadSchema(columns.getTableName(), columns.getColumns());
+	}
+
+	/**
+	 * Load the columns schema
+	 * 
+	 * @param table
+	 *            table name
+	 * @param columns
+	 *            user columns
+	 * @throws SQLException
+	 *             upon failure
+	 * @since 6.6.7
+	 */
+	public void loadSchema(String table, List<? extends UserColumn> columns)
+			throws SQLException {
 
 		if (isTableExists()) {
 
 			for (UserColumn column : columns) {
 
-				loadColumnTitle(table, column);
+				loadSchema(table, column);
 
 			}
 
@@ -410,7 +439,7 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	}
 
 	/**
-	 * Load the column title from a data column
+	 * Load the column schema
 	 * 
 	 * @param table
 	 *            table name
@@ -420,43 +449,47 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 	 *             upon failure
 	 * @since 6.6.7
 	 */
-	public void loadColumnTitle(String table, UserColumn column)
+	public void loadSchema(String table, UserColumn column)
 			throws SQLException {
 
-		column.setTitle(getColumnTitle(table, column.getName()));
+		column.setSchema(getSchema(table, column.getName()));
 
 	}
 
 	/**
-	 * Get the column title from a data column
+	 * Get the column schema
 	 * 
 	 * @param table
 	 *            table name
 	 * @param column
 	 *            column name
-	 * @return column title or null
+	 * @return column schema or null
 	 * @throws SQLException
 	 *             upon failure
 	 * @since 6.6.7
 	 */
-	public String getColumnTitle(String table, String column)
+	public DataColumns getSchema(String table, String column)
 			throws SQLException {
 
-		String title = null;
+		DataColumns schema = null;
 
 		if (isTableExists()) {
-
-			DataColumns dataColumns = getDataColumn(table, column);
-			if (dataColumns != null) {
-				title = dataColumns.getName();
-				if (title == null) {
-					title = dataColumns.getTitle();
-				}
-			}
-
+			schema = getDataColumn(table, column);
 		}
 
-		return title;
+		return schema;
+	}
+
+	/**
+	 * Get or create a Contents DAO
+	 * 
+	 * @return contents dao
+	 */
+	private ContentsDao getContentsDao() {
+		if (contentsDao == null) {
+			contentsDao = ContentsDao.create(db);
+		}
+		return contentsDao;
 	}
 
 }

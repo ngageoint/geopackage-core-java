@@ -14,6 +14,7 @@ import mil.nga.geopackage.db.table.ConstraintType;
 import mil.nga.geopackage.db.table.Constraints;
 import mil.nga.geopackage.db.table.RawConstraint;
 import mil.nga.geopackage.db.table.TableColumn;
+import mil.nga.geopackage.extension.schema.columns.DataColumns;
 import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 
 /**
@@ -117,12 +118,12 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	private final Constraints constraints;
 
 	/**
-	 * Column title, not saved as part of the column, saved using
+	 * Column schema, not saved as part of the column, saved using
 	 * {@link DataColumnsDao}
 	 * 
 	 * @since 6.6.7
 	 */
-	private String title;
+	private DataColumns schema;
 
 	/**
 	 * Constructor
@@ -229,7 +230,9 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 		this.type = userColumn.type;
 		this.dataType = userColumn.dataType;
 		this.constraints = userColumn.constraints.copy();
-		this.title = userColumn.title;
+		if (userColumn.schema != null) {
+			this.schema = new DataColumns(userColumn.schema);
+		}
 	}
 
 	/**
@@ -959,26 +962,26 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
-	 * Get the column title. The title is not saved as part of the column but
-	 * can be loaded using {@link DataColumnsDao}.
+	 * Get the data columns schema. Not saved as part of the column, loaded
+	 * using {@link DataColumnsDao}.
 	 * 
-	 * @return column title or null
+	 * @return column schema or null
 	 * @since 6.6.7
 	 */
-	public String getTitle() {
-		return title;
+	public DataColumns getSchema() {
+		return schema;
 	}
 
 	/**
-	 * Set the column title. The title is not saved as part of the column but
-	 * can be saved using {@link DataColumnsDao}.
+	 * Set the data columns schema. Not saved as part of the column, saved using
+	 * {@link DataColumnsDao}.
 	 * 
-	 * @param title
-	 *            column title
+	 * @param schema
+	 *            data columns schema
 	 * @since 6.6.7
 	 */
-	public void setTitle(String title) {
-		this.title = title;
+	public void setSchema(DataColumns schema) {
+		this.schema = schema;
 	}
 
 	/**
