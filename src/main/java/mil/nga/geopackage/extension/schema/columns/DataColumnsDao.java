@@ -17,6 +17,7 @@ import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.contents.ContentsDao;
 import mil.nga.geopackage.db.GeoPackageCoreConnection;
 import mil.nga.geopackage.db.GeoPackageDao;
+import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.db.TableColumnKey;
 import mil.nga.geopackage.user.UserColumn;
 import mil.nga.geopackage.user.UserColumns;
@@ -372,6 +373,9 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 				schema.setContents(contents);
 			}
 			if (schema.getContents() != null) {
+				if (!isTableExists()) {
+					getTableCreator().createDataColumns();
+				}
 				createOrUpdate(schema);
 			}
 
@@ -475,6 +479,15 @@ public class DataColumnsDao extends GeoPackageDao<DataColumns, TableColumnKey> {
 		}
 
 		return schema;
+	}
+
+	/**
+	 * Get the Table Creator
+	 * 
+	 * @return table creator
+	 */
+	private GeoPackageTableCreator getTableCreator() {
+		return new GeoPackageTableCreator(db);
 	}
 
 	/**

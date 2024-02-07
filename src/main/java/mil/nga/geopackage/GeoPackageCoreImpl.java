@@ -24,6 +24,8 @@ import mil.nga.geopackage.extension.CrsWktExtension;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.Extensions;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.schema.SchemaExtension;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.user.FeatureTable;
@@ -907,6 +909,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			geometryColumns.setContents(contents);
 			getGeometryColumnsDao().create(geometryColumns);
 
+			saveSchema(table);
+
 		} catch (RuntimeException e) {
 			deleteTableQuietly(tableName);
 			throw e;
@@ -1040,6 +1044,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			tileMatrixSet.setMaxY(tileMatrixSetBoundingBox.getMaxLatitude());
 			getTileMatrixSetDao().create(tileMatrixSet);
 
+			saveSchema(table);
+
 		} catch (RuntimeException e) {
 			deleteTableQuietly(tableName);
 			throw e;
@@ -1117,6 +1123,8 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 			getContentsDao().create(contents);
 
 			table.setContents(contents);
+
+			saveSchema(table);
 
 		} catch (RuntimeException e) {
 			deleteTableQuietly(tableName);
@@ -1589,6 +1597,25 @@ public abstract class GeoPackageCoreImpl implements GeoPackageCore {
 		verifyWritable();
 
 		tableCreator.createTable(table);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void saveSchema(UserTable<? extends UserColumn> table) {
+		if (table.hasSchema()) {
+			SchemaExtension schemaExtension = new SchemaExtension(this);
+			DataColumnsDao dataColumnsDao = schemaExtension.getDataColumnsDao();
+			try {
+				dataColumnsDao.saveSchema(table);
+			} catch (SQLException e) {
+				throw new GeoPackageException(
+						"Failed to save schema for table: "
+								+ table.getTableName(),
+						e);
+			}
+		}
 	}
 
 }

@@ -117,6 +117,8 @@ public class DGIWGGeoPackageUtils {
 					+ tileMatrixSet.getTableName(), e);
 		}
 
+		geoPackage.saveSchema(tileTable);
+
 		return tileMatrixSet;
 	}
 
@@ -375,6 +377,8 @@ public class DGIWGGeoPackageUtils {
 			throw new GeoPackageException("Failed to create Geometry Columns: "
 					+ geometryColumns.getTableName(), e);
 		}
+
+		geoPackage.saveSchema(featureTable);
 
 		return geometryColumns;
 	}

@@ -64,6 +64,10 @@ public class SchemaExtension extends BaseExtension {
 	 */
 	public List<Extensions> getOrCreate() {
 
+		// Create tables
+		createDataColumnConstraintsTable();
+		createDataColumnsTable();
+
 		List<Extensions> extensions = new ArrayList<>();
 
 		extensions.add(getOrCreate(EXTENSION_NAME, DataColumns.TABLE_NAME, null,
@@ -166,6 +170,10 @@ public class SchemaExtension extends BaseExtension {
 		try {
 			if (!dao.isTableExists()) {
 				created = geoPackage.getTableCreator().createDataColumns() > 0;
+				if (created) {
+					// Create the schema extension record
+					createDataColumnsRecord();
+				}
 			}
 		} catch (SQLException e) {
 			throw new GeoPackageException(
@@ -174,6 +182,17 @@ public class SchemaExtension extends BaseExtension {
 					e);
 		}
 		return created;
+	}
+
+	/**
+	 * Create the Data Columns extension record if it does not already exist
+	 * 
+	 * @return extension
+	 * @since 6.6.7
+	 */
+	public Extensions createDataColumnsRecord() {
+		return getOrCreate(EXTENSION_NAME, DataColumns.TABLE_NAME, null,
+				DEFINITION, ExtensionScopeType.READ_WRITE);
 	}
 
 	/**
@@ -231,7 +250,7 @@ public class SchemaExtension extends BaseExtension {
 						.createDataColumnConstraints() > 0;
 				if (created) {
 					// Create the schema extension record
-					getOrCreate();
+					createDataColumnConstraintsRecord();
 				}
 			}
 		} catch (SQLException e) {
@@ -240,6 +259,18 @@ public class SchemaExtension extends BaseExtension {
 					+ " table exists and create it", e);
 		}
 		return created;
+	}
+
+	/**
+	 * Create the Data Column Constraints extension record if it does not
+	 * already exist
+	 * 
+	 * @return extension
+	 * @since 6.6.7
+	 */
+	public Extensions createDataColumnConstraintsRecord() {
+		return getOrCreate(EXTENSION_NAME, DataColumnConstraints.TABLE_NAME,
+				null, DEFINITION, ExtensionScopeType.READ_WRITE);
 	}
 
 }

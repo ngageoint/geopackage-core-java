@@ -611,4 +611,23 @@ public abstract class UserColumns<TColumn extends UserColumn> {
 		columns.set(column.getIndex(), column);
 	}
 
+	/**
+	 * Check if any columns have an in-memory data columns schema
+	 * 
+	 * @return true if has a column schema
+	 * @since 6.6.7
+	 */
+	public boolean hasSchema() {
+		boolean schema = false;
+		if (columns != null) {
+			for (TColumn column : columns) {
+				schema = column.hasSchema();
+				if (schema) {
+					break;
+				}
+			}
+		}
+		return schema;
+	}
+
 }

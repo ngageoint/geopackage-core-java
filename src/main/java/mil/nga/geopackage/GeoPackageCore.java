@@ -15,6 +15,7 @@ import mil.nga.geopackage.db.GeoPackageDao;
 import mil.nga.geopackage.db.GeoPackageTableCreator;
 import mil.nga.geopackage.extension.ExtensionManager;
 import mil.nga.geopackage.extension.ExtensionsDao;
+import mil.nga.geopackage.extension.schema.SchemaExtension;
 import mil.nga.geopackage.features.columns.GeometryColumnsDao;
 import mil.nga.geopackage.features.user.FeatureTable;
 import mil.nga.geopackage.features.user.FeatureTableMetadata;
@@ -1021,5 +1022,14 @@ public interface GeoPackageCore extends Closeable {
 	 * @since 3.0.1
 	 */
 	public void createUserTable(UserTable<? extends UserColumn> table);
+
+	/**
+	 * Save the table schema using the {@link SchemaExtension}
+	 * 
+	 * @param table
+	 *            user table
+	 * @since 6.6.7
+	 */
+	public void saveSchema(UserTable<? extends UserColumn> table);
 
 }

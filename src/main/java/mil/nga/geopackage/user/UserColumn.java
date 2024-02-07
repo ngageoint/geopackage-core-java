@@ -962,14 +962,24 @@ public abstract class UserColumn implements Comparable<UserColumn> {
 	}
 
 	/**
-	 * Get the data columns schema. Not saved as part of the column, loaded
-	 * using {@link DataColumnsDao}.
+	 * Get the in-memory data columns schema. Not saved as part of the column,
+	 * loaded using {@link DataColumnsDao}.
 	 * 
 	 * @return column schema or null
 	 * @since 6.6.7
 	 */
 	public DataColumns getSchema() {
 		return schema;
+	}
+
+	/**
+	 * Check if the column has an in-memory data columns schema
+	 * 
+	 * @return true if has column schema
+	 * @since 6.6.7
+	 */
+	public boolean hasSchema() {
+		return schema != null;
 	}
 
 	/**

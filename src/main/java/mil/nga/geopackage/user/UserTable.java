@@ -579,4 +579,14 @@ public abstract class UserTable<TColumn extends UserColumn> {
 		columns.alterColumn(column);
 	}
 
+	/**
+	 * Check if any columns have an in-memory data columns schema
+	 * 
+	 * @return true if has a column schema
+	 * @since 6.6.7
+	 */
+	public boolean hasSchema() {
+		return columns != null && columns.hasSchema();
+	}
+
 }

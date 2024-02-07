@@ -952,6 +952,8 @@ public abstract class RelatedTablesCoreExtension extends BaseExtension {
 
 				relatedTable.setContents(contents);
 
+				geoPackage.saveSchema(relatedTable);
+
 			} catch (RuntimeException e) {
 				geoPackage.deleteTableQuietly(relatedTableName);
 				throw e;
