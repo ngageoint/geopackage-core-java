@@ -1,5 +1,6 @@
 package mil.nga.geopackage.user;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import mil.nga.geopackage.db.table.ColumnConstraints;
 import mil.nga.geopackage.db.table.TableColumn;
 import mil.nga.geopackage.db.table.TableConstraints;
 import mil.nga.geopackage.db.table.TableInfo;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
 
 /**
  * Reads the metadata from an existing user table
@@ -85,6 +87,7 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 
 		TableConstraints constraints = SQLiteMaster.queryForConstraints(db,
 				tableName);
+		DataColumnsDao dataColumnsDao = DataColumnsDao.create(db);
 
 		for (TableColumn tableColumn : tableInfo.getColumns()) {
 			if (tableColumn.getDataType() == null) {
@@ -101,6 +104,13 @@ public abstract class UserTableReader<TColumn extends UserColumn, TTable extends
 					&& columnConstraints.hasConstraints()) {
 				column.clearConstraints(false);
 				column.addConstraints(columnConstraints);
+			}
+
+			try {
+				dataColumnsDao.loadSchema(tableName, column);
+			} catch (SQLException e) {
+				log.log(Level.WARNING, "Failed to load column schema. table: "
+						+ tableName + ", column: " + column.getName(), e);
 			}
 
 			columnList.add(column);
