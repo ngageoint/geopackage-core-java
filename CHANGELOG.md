@@ -10,6 +10,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * R-tree update trigger modifications
 * DAO column range support (including geometry envelopes & bounding boxes) to build where clauses & args for queries
 * User Column integrated Data Columns Schema support
+* sf-wkb version 2.2.3
+* sf-wkt version 1.2.3
+* sf-proj version 4.3.2
 * oapi-features-json version 2.3.3
 
 ## [6.6.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.5) (11-29-2023)

@@ -51,17 +51,17 @@
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-wkb</artifactId>
-			<version>2.2.2</version>
+			<version>2.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-wkt</artifactId>
-			<version>1.2.2</version>
+			<version>1.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.sf</groupId>
 			<artifactId>sf-proj</artifactId>
-			<version>4.3.1</version>
+			<version>4.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.oapi.features</groupId>
