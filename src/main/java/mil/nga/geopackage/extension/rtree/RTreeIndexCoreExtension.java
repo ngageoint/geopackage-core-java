@@ -2,7 +2,11 @@ package mil.nga.geopackage.extension.rtree;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import mil.nga.geopackage.GeoPackageConstants;
 import mil.nga.geopackage.GeoPackageCore;
@@ -17,9 +21,12 @@ import mil.nga.geopackage.features.user.FeatureTable;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.property.GeoPackageProperties;
 import mil.nga.geopackage.property.PropertyConstants;
+import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.user.custom.UserCustomColumn;
 import mil.nga.geopackage.user.custom.UserCustomTable;
+import mil.nga.proj.Projection;
 import mil.nga.sf.GeometryEnvelope;
+import mil.nga.sf.proj.ProjectionGeometryUtils;
 
 /**
  * RTree Index abstract core extension
@@ -31,6 +38,12 @@ import mil.nga.sf.GeometryEnvelope;
  * @since 2.0.1
  */
 public abstract class RTreeIndexCoreExtension extends BaseExtension {
+
+	/**
+	 * Logger
+	 */
+	private static final Logger log = Logger
+			.getLogger(RTreeIndexCoreExtension.class.getName());
 
 	/**
 	 * Name
@@ -253,6 +266,20 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	protected GeoPackageCoreConnection connection = null;
 
 	/**
+	 * Index geometries using geodesic lines
+	 * 
+	 * @since 6.6.7
+	 */
+	protected boolean geodesic = false;
+
+	/**
+	 * Mapping between srs ids and projections
+	 * 
+	 * @since 6.6.7
+	 */
+	protected Map<Integer, Projection> projections = new HashMap<>();
+
+	/**
 	 * Constructor
 	 * 
 	 * @param geoPackage
@@ -260,8 +287,97 @@ public abstract class RTreeIndexCoreExtension extends BaseExtension {
 	 * 
 	 */
 	protected RTreeIndexCoreExtension(GeoPackageCore geoPackage) {
+		this(geoPackage, false);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param geodesic
+	 *            index using geodesic bounds
+	 * @since 6.6.7
+	 * 
+	 */
+	protected RTreeIndexCoreExtension(GeoPackageCore geoPackage,
+			boolean geodesic) {
 		super(geoPackage);
 		connection = geoPackage.getDatabase();
+		this.geodesic = geodesic;
+	}
+
+	/**
+	 * Geometries indexed using geodesic lines
+	 * 
+	 * @return geodesic flag
+	 * @since 6.6.7
+	 */
+	public boolean isGeodesic() {
+		return geodesic;
+	}
+
+	/**
+	 * Set the geodestic flag, true to index geodesic geometries
+	 * 
+	 * @param geodesic
+	 *            index geodesic geometries flag
+	 * @since 6.6.7
+	 */
+	public void setGeodesic(boolean geodesic) {
+		this.geodesic = geodesic;
+	}
+
+	/**
+	 * Expand the vertical bounds of a geometry envelope by geodesic bounds
+	 * 
+	 * @param envelope
+	 *            geometry envelope
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return geometry envelope
+	 * @since 6.6.7
+	 */
+	protected GeometryEnvelope geodesicEnvelope(GeometryEnvelope envelope,
+			int srsId) {
+
+		GeometryEnvelope result = envelope;
+		if (geodesic) {
+			Projection projection = getProjection(srsId);
+			result = ProjectionGeometryUtils.geodesicEnvelope(envelope,
+					projection);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Get the projection of the spatial reference system id
+	 * 
+	 * @param srsId
+	 *            spatial reference system id
+	 * @return projection
+	 * @since 6.6.7
+	 */
+	protected Projection getProjection(int srsId) {
+		Projection projection = projections.get(srsId);
+		if (projection == null) {
+			try {
+				SpatialReferenceSystem srs = geoPackage
+						.getSpatialReferenceSystemDao()
+						.queryForId((long) srsId);
+				if (srs != null) {
+					projection = srs.getProjection();
+					projections.put(srsId, projection);
+				}
+			} catch (SQLException e) {
+				log.log(Level.WARNING,
+						"Failed to retrieve projection through querying srs id: "
+								+ srsId,
+						e);
+			}
+		}
+		return projection;
 	}
 
 	/**

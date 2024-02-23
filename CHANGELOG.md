@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * R-tree update trigger modifications
 * DAO column range support (including geometry envelopes & bounding boxes) to build where clauses & args for queries
 * User Column integrated Data Columns Schema support
+* RTree Index and Feature Table Index geodesic support
 * sf-wkb version 2.2.3
 * sf-wkt version 1.2.3
 * sf-proj version 4.3.2

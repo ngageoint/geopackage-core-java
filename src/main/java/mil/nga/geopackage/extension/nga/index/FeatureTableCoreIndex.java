@@ -30,6 +30,7 @@ import mil.nga.geopackage.property.PropertyConstants;
 import mil.nga.proj.Projection;
 import mil.nga.sf.GeometryEnvelope;
 import mil.nga.sf.proj.GeometryTransform;
+import mil.nga.sf.proj.ProjectionGeometryUtils;
 
 /**
  * Abstract core Feature Table Index NGA Extension implementation. This
@@ -86,6 +87,13 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	private final String columnName;
 
 	/**
+	 * Index geometries using geodesic lines
+	 * 
+	 * @since 6.6.7
+	 */
+	protected boolean geodesic = false;
+
+	/**
 	 * Table Index DAO
 	 */
 	private final TableIndexDao tableIndexDao;
@@ -122,9 +130,28 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	protected FeatureTableCoreIndex(GeoPackageCore geoPackage, String tableName,
 			String columnName) {
+		this(geoPackage, tableName, columnName, false);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param geoPackage
+	 *            GeoPackage
+	 * @param tableName
+	 *            table name
+	 * @param columnName
+	 *            column name
+	 * @param geodesic
+	 *            index using geodesic bounds
+	 * @since 6.6.7
+	 */
+	protected FeatureTableCoreIndex(GeoPackageCore geoPackage, String tableName,
+			String columnName, boolean geodesic) {
 		super(geoPackage);
 		this.tableName = tableName;
 		this.columnName = columnName;
+		this.geodesic = geodesic;
 		tableIndexDao = getTableIndexDao();
 		geometryIndexDao = getGeometryIndexDao();
 	}
@@ -162,6 +189,27 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 	 */
 	public String getColumnName() {
 		return columnName;
+	}
+
+	/**
+	 * Geometries indexed using geodesic lines
+	 * 
+	 * @return geodesic flag
+	 * @since 6.6.7
+	 */
+	public boolean isGeodesic() {
+		return geodesic;
+	}
+
+	/**
+	 * Set the geodestic flag, true to index geodesic geometries
+	 * 
+	 * @param geodesic
+	 *            index geodesic geometries flag
+	 * @since 6.6.7
+	 */
+	public void setGeodesic(boolean geodesic) {
+		this.geodesic = geodesic;
 	}
 
 	/**
@@ -278,6 +326,12 @@ public abstract class FeatureTableCoreIndex extends BaseExtension {
 
 			// Create the new index row
 			if (envelope != null) {
+
+				if (geodesic) {
+					envelope = ProjectionGeometryUtils
+							.geodesicEnvelope(envelope, getProjection());
+				}
+
 				GeometryIndex geometryIndex = geometryIndexDao
 						.populate(tableIndex, geomId, envelope);
 				try {
