@@ -14,7 +14,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * sf-wkb version 2.2.3
 * sf-wkt version 1.2.3
 * sf-proj version 4.3.2
-* oapi-features-json version 2.3.3
+* oapi-features-json version 3.0.0
 
 ## [6.6.5](https://github.com/ngageoint/geopackage-core-java/releases/tag/6.6.5) (11-29-2023)
 
