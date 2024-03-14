@@ -48,6 +48,12 @@ import mil.nga.sf.wkb.GeometryCodes;
 public class DGIWGValidate {
 
 	/**
+	 * Tile Matrix Set bounds tolerance in meters. 1 meter as defined in
+	 * "Conformance Class Bounding Box (bbox)".
+	 */
+	public static final double TILE_MATRIX_SET_BOUNDS_TOLERANCE = 1.0;
+
+	/**
 	 * Is the GeoPackage valid according to the DGIWG GeoPackage Profile
 	 * 
 	 * @param geoPackage
@@ -373,8 +379,8 @@ public class DGIWGValidate {
 					String crsBounds = "CRS " + crs.getAuthorityAndCode()
 							+ " Bounds: " + boundingBox;
 
-					if (tileMatrixSet.getMinX() < boundingBox
-							.getMinLongitude()) {
+					if (tileMatrixSet.getMinX() < boundingBox.getMinLongitude()
+							- TILE_MATRIX_SET_BOUNDS_TOLERANCE) {
 						errors.add(new DGIWGValidationError(
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_X,
@@ -383,8 +389,8 @@ public class DGIWGValidate {
 								primaryKey(tileMatrixSet)));
 					}
 
-					if (tileMatrixSet.getMinY() < boundingBox
-							.getMinLatitude()) {
+					if (tileMatrixSet.getMinY() < boundingBox.getMinLatitude()
+							- TILE_MATRIX_SET_BOUNDS_TOLERANCE) {
 						errors.add(new DGIWGValidationError(
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MIN_Y,
@@ -393,8 +399,8 @@ public class DGIWGValidate {
 								primaryKey(tileMatrixSet)));
 					}
 
-					if (tileMatrixSet.getMaxX() > boundingBox
-							.getMaxLongitude()) {
+					if (tileMatrixSet.getMaxX() > boundingBox.getMaxLongitude()
+							+ TILE_MATRIX_SET_BOUNDS_TOLERANCE) {
 						errors.add(new DGIWGValidationError(
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_X,
@@ -403,8 +409,8 @@ public class DGIWGValidate {
 								primaryKey(tileMatrixSet)));
 					}
 
-					if (tileMatrixSet.getMaxY() > boundingBox
-							.getMaxLatitude()) {
+					if (tileMatrixSet.getMaxY() > boundingBox.getMaxLatitude()
+							+ TILE_MATRIX_SET_BOUNDS_TOLERANCE) {
 						errors.add(new DGIWGValidationError(
 								TileMatrixSet.TABLE_NAME,
 								TileMatrixSet.COLUMN_MAX_Y,
