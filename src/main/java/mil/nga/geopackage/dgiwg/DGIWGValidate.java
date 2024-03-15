@@ -1,12 +1,12 @@
 package mil.nga.geopackage.dgiwg;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import mil.nga.crs.CRS;
 import mil.nga.crs.CRSType;
+import mil.nga.crs.common.Identifier;
 import mil.nga.crs.operation.OperationMethods;
 import mil.nga.crs.projected.ProjectedCoordinateReferenceSystem;
 import mil.nga.crs.wkt.CRSReader;
@@ -589,7 +589,7 @@ public class DGIWGValidate {
 				if (definition != null) {
 					try {
 						definitionCrs = CRSReader.read(definition);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						errors.add(new DGIWGValidationError(
 								SpatialReferenceSystem.TABLE_NAME,
 								SpatialReferenceSystem.COLUMN_DEFINITION,
@@ -873,6 +873,48 @@ public class DGIWGValidate {
 						definition,
 						"Missing required coordinate reference system well-known text definition",
 						DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+			} else {
+				CRS definitionCrs = null;
+				try {
+					definitionCrs = CRSReader.read(definition);
+				} catch (Exception e) {
+					errors.add(new DGIWGValidationError(
+							SpatialReferenceSystem.TABLE_NAME,
+							SpatialReferenceSystem.COLUMN_DEFINITION,
+							definition,
+							"Failed to read coordinate reference system definition: "
+									+ e.getMessage(),
+							DGIWGRequirement.CRS_WKT, primaryKey(srs)));
+				}
+				if (definitionCrs != null) {
+					if (definitionCrs.hasIdentifiers()) {
+						boolean found = false;
+						for (Identifier identifier : definitionCrs
+								.getIdentifiers()) {
+							if (crs.getAuthority()
+									.equalsIgnoreCase(identifier.getName())
+									&& String.valueOf(crs.getCode())
+											.equalsIgnoreCase(identifier
+													.getUniqueIdentifier())) {
+								found = true;
+							}
+						}
+						if (!found) {
+							for (Identifier identifier : definitionCrs
+									.getIdentifiers()) {
+								errors.add(new DGIWGValidationError(
+										SpatialReferenceSystem.TABLE_NAME,
+										SpatialReferenceSystem.COLUMN_DEFINITION,
+										identifier.toString(),
+										new Identifier(crs.getAuthority(),
+												String.valueOf(crs.getCode()))
+														.toString(),
+										DGIWGRequirement.CRS_WKT,
+										primaryKey(srs)));
+							}
+						}
+					}
+				}
 			}
 
 			if (!srs.getSrsName().equalsIgnoreCase(crs.getName())) {
