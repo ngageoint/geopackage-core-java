@@ -219,6 +219,15 @@ public class DGIWGValidate {
 							primaryKey(metadata)));
 				}
 
+				if (metadata.getMetadata() == null
+						|| metadata.getMetadata().isBlank()) {
+					mdErrors.add(new DGIWGValidationError(Metadata.TABLE_NAME,
+							Metadata.COLUMN_METADATA, metadata.getMetadata(),
+							DGIWGConstants.DMF_BASE_URI,
+							DGIWGRequirement.METADATA_GPKG,
+							primaryKey(metadata)));
+				}
+
 				if (!reference.getReferenceScopeName().equalsIgnoreCase(
 						ReferenceScopeType.GEOPACKAGE.getValue())) {
 					mdErrors.add(new DGIWGValidationError(
