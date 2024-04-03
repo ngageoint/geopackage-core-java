@@ -906,6 +906,7 @@ public class DGIWGValidate {
 											.equalsIgnoreCase(identifier
 													.getUniqueIdentifier())) {
 								found = true;
+								break;
 							}
 						}
 						if (!found) {
