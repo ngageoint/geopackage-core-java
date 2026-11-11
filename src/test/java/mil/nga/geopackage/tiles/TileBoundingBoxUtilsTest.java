@@ -84,4 +84,55 @@ public class TileBoundingBoxUtilsTest {
 
 	}
 
+	/**
+	 * Test the tile grid of a point on a tile edge is the tile that starts
+	 * there, and that edge points stay inside the tile matrix
+	 */
+	@Test
+	public void testPointTileGrid() {
+
+		double h = ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH;
+
+		// (0, 0) used to give [1,1 .. 0,0] at zoom 1
+		assertTileGrid(1, 1, TileBoundingBoxUtils
+				.getTileGridFromWebMercator(new Point(0, 0), 1));
+		assertTileGrid(4, 4, TileBoundingBoxUtils
+				.getTileGridFromWebMercator(new Point(0, 0), 3));
+		assertTileGrid(4, 4,
+				TileBoundingBoxUtils.getTileGridFromWGS84(new Point(0, 0), 3));
+		// east and south edges of the world are in the last tile
+		assertTileGrid(7, 7, TileBoundingBoxUtils
+				.getTileGridFromWebMercator(new Point(h, -h), 3));
+		assertTileGrid(0, 0, TileBoundingBoxUtils
+				.getTileGridFromWebMercator(new Point(-h, h), 3));
+
+		for (int zoom = 0; zoom <= 20; zoom++) {
+			int tiles = TileBoundingBoxUtils.tilesPerSide(zoom);
+			double size = TileBoundingBoxUtils.tileSize(tiles);
+			for (int i = 0; i < tiles; i += Math.max(1, tiles / 7)) {
+				TileGrid grid = TileBoundingBoxUtils.getTileGridFromWebMercator(
+						new Point(-h + i * size, h - i * size), zoom);
+				assertTileGrid(i, i, grid);
+			}
+
+			int lonTiles = TileBoundingBoxUtils.tilesPerWGS84LonSide(zoom);
+			int latTiles = TileBoundingBoxUtils.tilesPerWGS84LatSide(zoom);
+			for (int i = 0; i < latTiles; i += Math.max(1, latTiles / 7)) {
+				double lon = -180 + i * 360.0 / lonTiles;
+				double lat = 90 - i * 180.0 / latTiles;
+				TileGrid grid = TileBoundingBoxUtils.getTileGridWGS84(
+						new BoundingBox(lon, lat, lon, lat), zoom);
+				assertTileGrid(i, i, grid);
+			}
+		}
+
+	}
+
+	private void assertTileGrid(long x, long y, TileGrid grid) {
+		TestCase.assertEquals(x, grid.getMinX());
+		TestCase.assertEquals(x, grid.getMaxX());
+		TestCase.assertEquals(y, grid.getMinY());
+		TestCase.assertEquals(y, grid.getMaxY());
+	}
+
 }
