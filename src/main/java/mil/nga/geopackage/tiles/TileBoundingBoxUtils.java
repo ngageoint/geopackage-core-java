@@ -776,18 +776,18 @@ public class TileBoundingBoxUtils {
 		int tilesPerSide = tilesPerSide(zoom);
 		double tileSize = tileSize(tilesPerSide);
 
-		int minX = (int) ((webMercatorBoundingBox.getMinLongitude()
+		int minX = (int) Math.floor((webMercatorBoundingBox.getMinLongitude()
 				+ ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH)
-				/ tileSize);
+				/ tileSize + ProjectionConstants.WEB_MERCATOR_PRECISION);
 		double tempMaxX = (webMercatorBoundingBox.getMaxLongitude()
 				+ ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) / tileSize;
 		int maxX = (int) (tempMaxX
 				- ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxX = Math.min(maxX, tilesPerSide - 1);
 
-		int minY = (int) (((webMercatorBoundingBox.getMaxLatitude()
+		int minY = (int) Math.floor(((webMercatorBoundingBox.getMaxLatitude()
 				- ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
-				/ tileSize);
+				/ tileSize + ProjectionConstants.WEB_MERCATOR_PRECISION);
 		double tempMaxY = ((webMercatorBoundingBox.getMinLatitude()
 				- ProjectionConstants.WEB_MERCATOR_HALF_WORLD_WIDTH) * -1)
 				/ tileSize;
@@ -795,9 +795,39 @@ public class TileBoundingBoxUtils {
 				- ProjectionConstants.WEB_MERCATOR_PRECISION);
 		maxY = Math.min(maxY, tilesPerSide - 1);
 
-		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
+		TileGrid grid = boundedTileGrid(minX, minY, maxX, maxY, tilesPerSide,
+				tilesPerSide);
 
 		return grid;
+	}
+
+	/**
+	 * Create a tile grid within the tile matrix. A box with no width or
+	 * height on a tile edge (such as a point) keeps the tile that starts at
+	 * that edge: the max side is pulled back off the edge, which used to
+	 * leave it one tile before the min side.
+	 *
+	 * @param minX
+	 *            min x
+	 * @param minY
+	 *            min y
+	 * @param maxX
+	 *            max x
+	 * @param maxY
+	 *            max y
+	 * @param tilesWide
+	 *            tiles across
+	 * @param tilesHigh
+	 *            tiles down
+	 * @return tile grid
+	 */
+	private static TileGrid boundedTileGrid(int minX, int minY, int maxX,
+			int maxY, int tilesWide, int tilesHigh) {
+		minX = Math.max(0, Math.min(minX, tilesWide - 1));
+		minY = Math.max(0, Math.min(minY, tilesHigh - 1));
+		maxX = Math.max(minX, Math.min(maxX, tilesWide - 1));
+		maxY = Math.max(minY, Math.min(maxY, tilesHigh - 1));
+		return new TileGrid(minX, minY, maxX, maxY);
 	}
 
 	/**
@@ -1563,7 +1593,7 @@ public class TileBoundingBoxUtils {
 		double tileSizeLat = tileSizeLatPerWGS84Side(tilesPerLat);
 		double tileSizeLon = tileSizeLonPerWGS84Side(tilesPerLon);
 
-		int minX = (int) ((boundingBox.getMinLongitude()
+		int minX = (int) Math.floor((boundingBox.getMinLongitude()
 				+ ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)
 				/ tileSizeLon);
 		double tempMaxX = (boundingBox.getMaxLongitude()
@@ -1574,7 +1604,7 @@ public class TileBoundingBoxUtils {
 		}
 		maxX = Math.min(maxX, tilesPerLon - 1);
 
-		int minY = (int) (((boundingBox.getMaxLatitude()
+		int minY = (int) Math.floor(((boundingBox.getMaxLatitude()
 				- ProjectionConstants.WGS84_HALF_WORLD_LAT_HEIGHT) * -1)
 				/ tileSizeLat);
 		double tempMaxY = ((boundingBox.getMinLatitude()
@@ -1586,7 +1616,8 @@ public class TileBoundingBoxUtils {
 		}
 		maxY = Math.min(maxY, tilesPerLat - 1);
 
-		TileGrid grid = new TileGrid(minX, minY, maxX, maxY);
+		TileGrid grid = boundedTileGrid(minX, minY, maxX, maxY, tilesPerLon,
+				tilesPerLat);
 
 		return grid;
 	}
